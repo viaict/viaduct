@@ -8,7 +8,7 @@ See [tutorial](TUTORIAL.md).
 ## Setup:
 Ubuntu install packages (other OS's should install similar stuff):
 ```bash
-sudo apt-get install python3 python3-pip virtualenv mysql-server git-flow npm \
+sudo apt-get install python3 python3-pip python-virtualenv mysql-server git-flow npm \
 nodejs libjpeg-dev libffi-dev ruby
 ln -s /usr/bin/nodejs /usr/bin/node
 ```
