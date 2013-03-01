@@ -1,0 +1,13 @@
+{% from "macros/flash.htm" import render_flash %}
+
+{% extends "base.htm" %}
+
+{% block content %}
+{{ render_flash() }}
+
+<h1>{{ revision.title }}</h1>
+
+{{ revision.content }}
+
+{% endblock %}
+

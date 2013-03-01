@@ -1,0 +1,18 @@
+<ul class="nav nav-pills">
+	<li class="active">
+		<a href="#">Home</a>
+	</li>
+
+	{% if subpages %}
+		<li class="dropdown">
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ page }}</a>
+
+			<ul class="dropdown-menu">
+				{% for subpage in subpages %}
+					<li><a href="{{ url_for('page.view_page', page_path=subpage.path) }}">{{ subpage.path }}</a></li>
+				{% endfor %}
+			</ul>
+		</li>
+	{% endif %}
+</ul>
+
