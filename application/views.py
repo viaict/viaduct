@@ -9,7 +9,7 @@ from application.page.views import retrieve_page
 def index():
 	blocks = [ retrieve_page("index/" + str(i)) for i in range(1, 5) ]
 
-	return Markup(render_template('index.htm'), blocks = blocks)
+	return render_template('index.htm', blocks = blocks)
 
 def test():
 	return 'testing'
