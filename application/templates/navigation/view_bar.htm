@@ -2,26 +2,23 @@
 	<li>
 		<a href="">Home</a>
 	</li>
-    pages <br>
-
-
 
     {% for page in pages %}
         {% if page.subpages %}
             <li class="dropdown {% if page.path == current_page %}active{% endif %}">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="{{ page.main.path }}">
-                    {{ page.main.title }}
+                <a class="dropdown-toggle" data-toggle="dropdown" href="{{ page.path }}">
+                    {{ page.title }}
                 </a>
 
                 <ul class="dropdown-menu">
-                    {% for subpage in page.subpages %}
-                        <li><a href="{{ subpage.path) }}">{{ subpage.title }}</a></li>
+                    {% for subpage in subpages %}
+                        <li><a href="{{ url_for('page.view_page', page_path=subpage.path) }}">{{ subpage.path }}</a></li>
                     {% endfor %}
                 </ul>
             </li>
         {% else %}
         <li class="{% if page.path == current_page %}active{% endif %}">
-            <a href="{{ page.path }}">{{ page.main.title }}</a>
+            <a href="{{ page.path }}">{{ page.title }}</a>
         </li>
         {% endif %}
 	{% endfor %}
