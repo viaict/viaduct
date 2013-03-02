@@ -26,9 +26,9 @@
 		<div class="control-group">
 			<div class="controls">
                 <!--
-				<a href="{{ url_for('page.delete_page', page_path=page) }}" class="btn">Delete this page</a>
-                -->
 				<a href="{{ url_for('deletePageConfirmation', filename='deletePageConfirmation.js') }}" class="btn">Delete this page</a>
+                -->
+				<a href="{{ url_for('page.delete_page', page_path=page) }}" class="btn">Delete this page</a>
 				<button type="submit" class="btn">Save</button>
 			</div>
 		</div>
