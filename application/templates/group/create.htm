@@ -1,5 +1,3 @@
-{% from "macros/flash.htm" import render_flash %}
-
 {% extends "content.htm" %}
 
 {% block title %}Create Group{% endblock %}
@@ -8,8 +6,6 @@
 <form action="" method="post" name="add" class="form-horizontal">
 	<fieldset>
 		<legend>Add group</legend>
-
-		{{ render_flash() }}
 
 		<div class="control-group">
 			<label for="name" class="control-label">Group name</label>

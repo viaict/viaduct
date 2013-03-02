@@ -1,3 +1,5 @@
+{% from "macros/flash.htm" import render_flash %}
+
 <!DOCTYPE html>
 
 <html>
@@ -26,12 +28,19 @@
 					<a href="/"><img class="logo" src="/static/img/via.png" alt="VIA" /></a>
 				</div>
 			</div>
+
 			<div class="row">
 				<div class="span12">
 					{{ render_navigation_bar() }}
-
 				</div>
 			</div>
+
+			<div class="row">
+				<div class="span12">
+					{{ render_flash() }}
+				</div>
+			</div>
+
 			{% block page %}{% endblock %}
 		</div>
 	</body>
