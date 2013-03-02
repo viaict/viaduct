@@ -3,11 +3,13 @@ from flask import Markup
 from flask.ext.login import current_user
 
 from application import application
-from application.page.views import view_page
+from application.page.views import retrieve_page
 
 @application.route('/')
 def index():
-	return view_page()
+	blocks = [ retrieve_page("index/" + str(i)) for i in range(1, 5) ]
+
+	return render_template('index.htm', blocks=blocks)
 
 def test():
 	return 'testing'
