@@ -5,9 +5,6 @@ from flask import flash, get_flashed_messages, redirect, render_template, \
 from flask import Blueprint, Markup
 from flask.ext.login import current_user, login_user, logout_user
 
-from recaptcha.client import captcha
-from validate_email import validate_email
-
 from application import application, db, login_manager
 from application.user.forms import SignUpForm, SignInForm
 from application.user.models import User
