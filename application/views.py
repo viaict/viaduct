@@ -7,6 +7,7 @@ from application.page.views import retrieve_page
 
 @application.route('/')
 def index():
+	return true
 	# Hardcoded behavior for today, 4 subblock
 	#blocks = [ retrieve_page('index/' + str(i))[0] for i in range(1,5) ]
 
