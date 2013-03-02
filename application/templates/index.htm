@@ -1,12 +1,26 @@
 {% extends "base.htm" %}
 
-{% block content %}
+{% block page %}
 
-{% if name %}
-	<h1>Hello, {{ name }}!</h1>
-{% else %}
-	<h1>Hello, world!</h1>
-{% endif %}
+
+<div class="row">
+	<div class="span6">
+		{{ blocks[0].content }}
+	</div>
+	<div class="span6">
+		{{ blocks[1].content }}
+	</div>
+</div>
+<div class="row">
+	<div class="span6">
+		{{ blocks[2].content }}
+	</div>
+	<div class="span6">
+		{{ blocks[3].content }}
+	</div>
+</div>
+	
+
 
 {% endblock %}
 
