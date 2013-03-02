@@ -61,10 +61,13 @@ class PagePermission(db.Model):
 			'delete': False}
 		groups = user.groups.all()
 
+		print('What?')
+
 		for group in groups:
 			current_path = page_path
 
 			while True:
+				print('path: ' + current_path)
 				page = Page.query.filter(Page.path==current_path).first()
 
 				if page:
