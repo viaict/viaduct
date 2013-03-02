@@ -7,7 +7,7 @@ from application.page.views import retrieve_page
 
 @application.route('/')
 def index():
-	blocks = [ z.content if z = retrieve_page("index/" + str(i)) for i in range(1, 5) ]
+	blocks = [ retrieve_page("index/" + str(i)) for i in range(1, 5) ]
 
 	return render_template('index.htm', blocks=blocks)
 
