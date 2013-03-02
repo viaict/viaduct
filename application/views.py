@@ -8,10 +8,10 @@ from application.page.views import view_page
 @application.route('/')
 def index():
 	return view_page()
+#def test():
+#	return 'testing'
 
-def test():
-	return 'testing'
+#def view_navigation_bar():
+#	return Markup(render_template('navigation/view_bar.htm'))
 
-def view_navigation_bar():
-	return Markup(render_template('navigation/view_bar.htm'))
 
