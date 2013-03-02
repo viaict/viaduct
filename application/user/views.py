@@ -145,7 +145,7 @@ def view(page=1):
 
 		db.session.commit()
 
-		if len(users) > 1:
+		if len(groups) > 1:
 			flash('The selected users have been deleted.', 'success')
 		else:
 			flash('The selected user has been deleted.', 'success')
