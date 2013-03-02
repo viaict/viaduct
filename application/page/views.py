@@ -35,6 +35,7 @@ def retrieve_page(page_path=''):
 	return revision
 
 
+@page_module.route('/page/delete/')
 @page_module.route('/page/delete/<path:page_path>')
 def delete_page(page_path='', revision=''):
 	page = Page.query.filter(Page.path==page_path).first()
