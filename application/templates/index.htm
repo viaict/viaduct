@@ -2,7 +2,25 @@
 
 {% block page %}
 
-<h1>Hello, world!</h1>
+
+<div class="row">
+	<div class="span6">
+		{{ blocks[0].content }}
+	</div>
+	<div class="span6">
+		{{ blocks[1].content }}
+	</div>
+</div>
+<div class="row">
+	<div class="span6">
+		{{ blocks[2].content }}
+	</div>
+	<div class="span6">
+		{{ blocks[3].content }}
+	</div>
+</div>
+	
+
 
 {% endblock %}
 
