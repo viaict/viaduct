@@ -73,7 +73,6 @@ def edit(group_id):
 	form = GroupEditForm(request.form)
 
 	if form.validate_on_submit():
-		if form.edit_group.data:
 			UserPermission.set_group_rights(form.permission.entries[0])
 			GroupPermission.set_group_rights(form.permission.entries[1])
 
