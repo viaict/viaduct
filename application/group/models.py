@@ -17,7 +17,8 @@ class Group(db.Model):
 		backref='group')
 	group_permissions = db.relationship('GroupPermission', uselist=False,
 		backref='group')
-	page_permissions = db.relationship('PagePermission', backref='group')
+	page_permissions = db.relationship('PagePermission', backref='group',
+		lazy='dynamic')
 
 	def __init__(self, name):
 		self.name = name
