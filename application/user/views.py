@@ -9,6 +9,7 @@ from recaptcha.client import captcha
 from validate_email import validate_email
 
 from application import application, db, login_manager
+from application.user.forms import SignUpForm, SignInForm
 from application.user.models import User
 
 user = Blueprint('user', __name__)
@@ -26,68 +27,26 @@ def sign_up():
 	if current_user and current_user.is_authenticated():
 		return redirect(url_for('index'))
 
-	if request.method == 'POST':
-		email = request.form['e-mail'].strip()
-		password = request.form['password'].strip()
-		repeat_password = request.form['repeat-password'].strip()
-		first_name = request.form['first-name'].strip()
-		last_name = request.form['last-name'].strip()
-		challenge = request.form['recaptcha_challenge_field'].strip()
-		response = request.form['recaptcha_response_field'].strip()
-		valid_form = True
+	form = SignUpForm(request.form)
 
-		response = captcha.submit(challenge, response,
-			application.config['RECAPTCHA_PRIVATE_KEY'], request.remote_addr)
+	if form.validate_on_submit():
+		user = User(email, bcrypt.hashpw(password, bcrypt.gensalt()),
+			first_name, last_name)
 
-		if not email:
-			flash('No e-mail address has been specified.', 'error')
-			valid_form = False
-		elif not validate_email(email, check_mx=True):
-			flash('The e-mail address that has been specified is invalid.',
-				'error')
-			valid_form = False
-		elif User.query.filter(User.email==email).count() > 0:
-			flash('The e-mail address that has been specified is in use already.', 'error')
-			valid_form = False
+		db.session.add(user)
+		db.session.commit()
 
-		if not password:
-			flash('No password has been specified.', 'error')
-			valid_form = False
-		elif password != repeat_password:
-			flash('The passwords that have been specified do not match.',
-				'error')
-			valid_form = False
+		flash('You\'ve signed up successfully.')
 
-		if not first_name:
-			flash('No first name has been specified.', 'error')
-			valid_form = False
+		login_user(user)
 
-		if not last_name:
-			flash('No last name has been specified.', 'error')
-			valid_form = False
+		return redirect(url_for('index'))
 
-		if not response.is_valid:
-			flash('The captcha is invalid.', 'error')
-			valid_form = False
+	for errors, field in enumerate(form.errors):
+		for error in errors:
+			flash(error, 'error')
 
-		if valid_form:
-			user = User(email, bcrypt.hashpw(password, bcrypt.gensalt()),
-				first_name, last_name)
-
-			db.session.add(user)
-			db.session.commit()
-
-			flash('You\'ve signed up successfully.')
-
-			login_user(user)
-
-			return redirect(url_for('index'))
-
-	captcha_data = Markup(captcha.displayhtml(
-		application.config['RECAPTCHA_PUBLIC_KEY'],
-		use_ssl=application.config['RECAPTCHA_USE_SSL']))
-
-	return render_template('user/sign_up.htm', captcha=captcha_data)
+	return render_template('user/sign_up.htm', form=form)
 
 @user.route('/signin/', methods=['GET', 'POST'])
 def sign_in():
@@ -96,17 +55,13 @@ def sign_in():
 	if current_user and current_user.is_authenticated():
 		return redirect(url_for('index'))
 
-	if request.method == 'POST':
-		email = request.form['e-mail'].strip()
-		password = request.form['password'].strip()
-		remember_me = request.form.get('remember-me')
+	form = SignInForm()
+
+	if form.validate_on_submit():
 		valid_form = True
 
-		# Get the user from the database if he or she exists.
-		user = User.query.filter(User.email==email).first()
-
 		# Check if the user does exist, and if the passwords do match.
-		if not user or bcrypt.hashpw(password, user.password) != user.password:
+		if not user or bcrypt.hashpw(form.password.data, user.password) != user.password:
 			flash('The credentials that have been specified are invalid.', 'error')
 			valid_form = False
 
@@ -118,7 +73,11 @@ def sign_in():
 
 			return redirect(url_for('index'))
 
-	return render_template('user/sign_in.htm')
+	for errors, field in enumerate(form.errors):
+		for error in errors:
+			flash(error, 'error')
+
+	return render_template('user/sign_in.htm', form=form)
 
 @user.route('/signout/')
 def sign_out():
