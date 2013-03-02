@@ -51,7 +51,7 @@ class UserPermission(db.Model):
 	def get_group_rights(group):
 		rights = {'view': False, 'create': False, 'edit': False,
 			'delete': False}
-		permissions = group.group_permissions
+		permissions = group.user_permissions
 
 		if permissions:
 			rights['view'] = permissions.view
