@@ -34,6 +34,11 @@ def retrieve_page(page_path=''):
 	
 	return (revision, page_path)
 
+
+@page_module.route('/page/delete/<path:page_path>')
+def delete_page(page_path=''):
+	return render_template('page/view_page.htm', revision=revision, page=page_path)
+
 @page_module.route('/page/edit/', methods=['GET', 'POST'])
 @page_module.route('/page/edit/<path:page_path>', methods=['GET', 'POST'])
 def edit_page(page_path=''):
