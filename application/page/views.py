@@ -12,7 +12,7 @@ page_module = Blueprint('page', __name__)
 @page_module.route('/page/')
 @page_module.route('/page/<path:page_path>')
 def view_page(page_path=''):
-	(revision, page_path) = retrieve_page(page_path)
+	revision = retrieve_page(page_path)
 
 	if not revision:
 		return render_template('page/page_not_found.htm', page=page_path)
@@ -23,7 +23,7 @@ def retrieve_page(page_path=''):
 	page = Page.query.filter(Page.path==page_path).first()
 
 	if not page:
-		return (False, page_path)
+		return False
 
 	revision = PageRevision.query.filter(PageRevision.page_id==page.id).order_by(
 		PageRevision.id.desc()).first()
@@ -32,7 +32,7 @@ def retrieve_page(page_path=''):
 	revision.content = Markup(markdown.markdown(revision.content,
 		safe_mode='escape', enable_attributes=False))
 	
-	return (revision, page_path)
+	return revision
 
 
 @page_module.route('/page/delete/<path:page_path>')
