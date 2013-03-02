@@ -16,7 +16,6 @@ def find_subpages(pages, parent):
 def view_bar(current_page=''):
 	pages = Page.get_all_pages()
 	all_pages = []
-	print pages
 
 	for page in pages:
 		if not '/' in page.path:
