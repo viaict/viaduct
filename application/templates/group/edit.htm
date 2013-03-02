@@ -1,3 +1,4 @@
+{% from "macros/form.htm" import render_button %}
 {% extends "content.htm" %}
 
 {% block title %}Edit Group{% endblock %}
@@ -31,12 +32,7 @@
 			</tbody>
 		</table>
 
-
-		<div class="control-group">
-			<div class="controls">
-				<button type="submit" class="btn">Edit group</button>
-			</div>
-		</div>
+		{{ render_button(form.edit_group) }}
 	</fieldset>
 </form>
 {% endblock %}

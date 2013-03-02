@@ -1,4 +1,4 @@
-from flask.ext.wtf import Form, BooleanField, FormField, FieldList
+from flask.ext.wtf import Form, BooleanField, FormField, FieldList, SubmitField
 
 class GroupEditEntry(Form):
 	view = BooleanField('View')
@@ -8,4 +8,5 @@ class GroupEditEntry(Form):
 
 class GroupEditForm(Form):
 	permissions = FieldList(FormField(GroupEditEntry))
+	edit_group = SubmitField('Edit group')
 

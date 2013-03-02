@@ -73,15 +73,16 @@ def edit(group_id):
 	form = GroupEditForm(request.form)
 
 	if form.validate_on_submit():
-		UserPermission.set_group_rights(form.permission.entries[0])
-		GroupPermission.set_group_rights(form.permission.entries[1])
+		if form.edit_group.data:
+			UserPermission.set_group_rights(form.permission.entries[0])
+			GroupPermission.set_group_rights(form.permission.entries[1])
 
-		flash('The group has been edited successfully.', 'success')
+			flash('The group has been edited successfully.', 'success')
 
-		return redirect(url_for('group.view'))
-	else:
-		form.permissions.append_entry(UserPermission.get_group_rights(group))
-		form.permissions.append_entry(GroupPermission.get_group_rights(group))
+			return redirect(url_for('group.view'))
+		else:
+			form.permissions.append_entry(UserPermission.get_group_rights(group))
+			form.permissions.append_entry(GroupPermission.get_group_rights(group))
 
 	return render_template('group/edit.htm', form=form)
 
