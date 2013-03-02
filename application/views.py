@@ -7,7 +7,7 @@ from application.page.views import view_page
 
 @application.route('/')
 def index():
-	return view_page()
+	return Markup(render_template('index.htm'))
 
 def test():
 	return 'testing'
