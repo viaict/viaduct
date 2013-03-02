@@ -2,6 +2,7 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask.ext.login import current_user
 
 from application import db
+from application.helpers import flash_form_errors
 from application.group.forms import GroupEditForm
 from application.group.models import user_group, Group, GroupPermission
 from application.user.models import User, UserPermission
@@ -82,6 +83,8 @@ def edit(group_id):
 	else:
 		form.permissions.append_entry(UserPermission.get_group_rights(group))
 		form.permissions.append_entry(GroupPermission.get_group_rights(group))
+
+	flash_form_errors(form)
 
 	return render_template('group/edit.htm', form=form)
 
