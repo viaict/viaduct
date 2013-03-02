@@ -13,6 +13,8 @@ def index():
 
 @application.route('/via')
 @application.route('/page/via')
+@application.route('/page')
+@application.route('/page/')
 def viavia():
 	return redirect(url_for('.index'))
 
