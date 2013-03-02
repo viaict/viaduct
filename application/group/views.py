@@ -62,6 +62,11 @@ def create():
 
 	return render_template('group/create.htm')
 
+@group.route('/groups/<int:group_id>/edit/', methods=['GET', 'POST'])
+@group.route('/groups/<int:group_id>/edit/<int:page>/', methods=['GET', 'POST'])
+def edit(group_id, page=1):
+	return render_template('group/edit.htm')
+
 @group.route('/groups/<int:group_id>/users/', methods=['GET', 'POST'])
 @group.route('/groups/<int:group_id>/users/<int:page>/', methods=['GET', 'POST'])
 def view_users(group_id, page=1):
