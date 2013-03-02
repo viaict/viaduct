@@ -6,6 +6,7 @@ from flask import Blueprint, Markup
 from flask.ext.login import current_user, login_user, logout_user
 
 from application import application, db, login_manager
+from application.helpers import flash_form_errors
 from application.user.forms import SignUpForm, SignInForm
 from application.user.models import User
 
@@ -38,10 +39,8 @@ def sign_up():
 		login_user(user)
 
 		return redirect(url_for('index'))
-
-	for errors, field in enumerate(form.errors):
-		for error in errors:
-			flash(error, 'error')
+	else:
+		flash_form_errors(form)
 
 	return render_template('user/sign_up.htm', form=form)
 
@@ -71,10 +70,8 @@ def sign_in():
 			flash('You\'ve been signed in successfully.')
 
 			return redirect(url_for('index'))
-
-	for errors, field in enumerate(form.errors):
-		for error in errors:
-			flash(error, 'error')
+	else:
+		flash_form_errors(form)
 
 	return render_template('user/sign_in.htm', form=form)
 
