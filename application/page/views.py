@@ -23,7 +23,7 @@ def retrieve_page(page_path=''):
 	page = Page.query.filter(Page.path==page_path).first()
 
 	if not page:
-		return (false, page_path)
+		return (False, page_path)
 
 	revision = PageRevision.query.filter(PageRevision.page_id==page.id).order_by(
 		PageRevision.id.desc()).first()
