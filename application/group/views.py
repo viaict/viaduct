@@ -70,7 +70,7 @@ def edit(group_id):
 
 	group = Group.query.filter(Group.id==group_id).first()
 
-	form = GroupEditForm(request.form)
+	form = GroupEditForm()
 
 	if form.validate_on_submit():
 		UserPermission.set_group_rights(form.permission.entries[0])
