@@ -28,7 +28,9 @@ def retrieve_page(page_path=''):
 
 	revision = PageRevision.query.filter(PageRevision.page_id==page.id).order_by(
 		PageRevision.id.desc()).first()
-
+	
+	if not revision:
+		return False
 
 	revision.content = Markup(markdown.markdown(revision.content,
 		safe_mode='escape', enable_attributes=False))
