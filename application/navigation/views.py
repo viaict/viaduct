@@ -15,12 +15,8 @@ def find_subpages(pages, parent):
 	return subpages
 
 def view_bar(current_page=''):
-	application.logger.debug('bla')
-	print Page.query.all()
-	print 'bloe'
 	all_pages = map(lambda x: x.get_most_recent(), Page.query.all())
 	pages = []
-	print all_pages
 	mainpages = filter(lambda x: '/' not in x.path, all_pages)
 
 	#if len(current_page) == 0:
