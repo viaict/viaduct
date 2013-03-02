@@ -6,7 +6,7 @@
     {% for page in pages %}
         {% if page.subpages %}
             <li class="dropdown {% if page.main.path == current_page %}active{% endif %}">
-				<a class="dropdown-toggle" data-hover="dropdown" data-delay="1000" data-close-others="false" href="{{ url_for('page.view_page', page_path=page.main.path) }}">
+				<a class="dropdown-toggle" data-hover="dropdown" data-delay="1000" data-close-others="true" href="{{ url_for('page.view_page', page_path=page.main.path) }}">
                     {{ page.main.title }}
                 </a>
 
