@@ -8,7 +8,3 @@ Install these modules:
  - py-bcrypt
  - markdown
 
-These may be eliminated in the future, but they are required for now:
- - recaptcha-client
- - validate_email
- - pyDNS
