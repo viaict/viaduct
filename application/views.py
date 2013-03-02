@@ -11,6 +11,11 @@ def index():
 
 	return render_template('index.htm', blocks=blocks, path="index")
 
+@application.route('/via')
+@application.route('/page/via')
+def viavia():
+	return url_for('.index')
+
 def test():
 	return 'testing'
 
