@@ -13,6 +13,7 @@
 			<thead>
 				<tr>
 					<th>Group name</th>
+					<th></th>
 				</tr>
 			</thead>
 
@@ -24,6 +25,12 @@
 								<input type=checkbox name="select" value="{{ group.id }}"/>
 								<a href="{{ url_for('group.view_users', group_id=group.id) }}">{{ group.name }}</a>
 							</label>
+						</td>
+
+						<td>
+							<a href="{{ url_for('group.edit', group_id=group.id) }}">
+								<i class="icon-pencil"></i>
+							</a>
 						</td>
 					</tr>
 				{% endfor %}

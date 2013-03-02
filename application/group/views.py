@@ -79,8 +79,21 @@ def edit(group_id):
 	form = GroupEditForm()
 
 	if form.validate_on_submit():
-			UserPermission.set_group_rights(group, form.permissions.entries[0])
-			GroupPermission.set_group_rights(group, form.permissions.entries[1])
+			rights = {}
+
+			rights['view'] = form.permissions.entries[0].view.data
+			rights['create'] = form.permissions.entries[0].create.data
+			rights['edit'] = form.permissions.entries[0].edit.data
+			rights['delete'] = form.permissions.entries[0].delete.data
+
+			UserPermission.set_group_rights(group, rights)
+
+			rights['view'] = form.permissions.entries[1].view.data
+			rights['create'] = form.permissions.entries[1].create.data
+			rights['edit'] = form.permissions.entries[1].edit.data
+			rights['delete'] = form.permissions.entries[1].delete.data
+
+			GroupPermission.set_group_rights(group, rights)
 
 			flash('The group has been edited successfully.', 'success')
 
