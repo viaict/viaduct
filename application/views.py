@@ -4,6 +4,7 @@ from flask.ext.login import current_user
 
 from application import application
 from application.page.views import retrieve_page
+from application.user.models import UserPermission
 
 @application.route('/')
 def index():

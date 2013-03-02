@@ -8,7 +8,7 @@ from flask.ext.login import current_user, login_user, logout_user
 from application import application, db, login_manager
 from application.helpers import flash_form_errors
 from application.user.forms import SignUpForm, SignInForm
-from application.user.models import User
+from application.user.models import User, UserPermission
 
 user = Blueprint('user', __name__)
 
@@ -17,6 +17,9 @@ def load_user(id):
 	# The hook used by the login manager to get the user from the database by
 	# user ID.
 	return User.query.get(int(id))
+
+def load_anonymous_user():
+	return User.query.filter(User.email=='anonymous').first()
 
 @user.route('/signup/', methods=['GET', 'POST'])
 def sign_up():
@@ -87,6 +90,8 @@ def sign_out():
 @user.route('/users/', methods=['GET', 'POST'])
 @user.route('/users/<int:page>/', methods=['GET', 'POST'])
 def view(page=1):
+	if not 'view' in UserPermission.get_rights(current_user):
+		return redirect(url_for('index'))
 
 	# persumably, if the method is a post we have selected stuff to delete,
 	# similary to groups
@@ -106,7 +111,6 @@ def view(page=1):
 			flash('The selected user has been deleted.', 'success')
 
 		redirect(url_for('user.view'))
-
 
 	# Get a list of users to render for the current page.
 	users = User.query.paginate(page, 15, False)

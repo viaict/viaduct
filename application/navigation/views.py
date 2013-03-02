@@ -15,17 +15,13 @@ def find_subpages(pages, parent):
 	return subpages
 
 def view_bar(current_page=''):
-	all_pages = map(lambda x: x.get_most_recent(), Page.query.all())
-	pages = []
-	mainpages = filter(lambda x: '/' not in x.path, all_pages)
+	pages = Page.query.all()
+	all_pages = []
 
-	#if len(current_page) == 0:
-	#	return 'TODO: what?'
+	for page in pages:
+		if not '/' in page.path and page.revisions.count() > 0:
+			all_pages.append({'main': page,
+				'subpages': find_subpages(pages, page)})
 
-	for page in mainpages:
-		pages.append({'main': page,
-					  'subpages': find_subpages(all_pages, page)})
-
-
-	return Markup(render_template('navigation/view_bar.htm', pages=pages, current_page=current_page))
+	return Markup(render_template('navigation/view_bar.htm', pages=all_pages, current_page=current_page))
 

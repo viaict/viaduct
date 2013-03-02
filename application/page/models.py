@@ -13,13 +13,8 @@ class Page(db.Model):
 	def __init__(self, path):
 		self.path = path
 
-	def get_most_recent(self):
-		revision = PageRevision.query.filter(PageRevision.page_id == self.id)
-		revision = revision.order_by(PageRevision.timestamp.desc()).first()
-		if revision is not None:
-			revision.path = self.path
-		return revision
-
+	def get_most_recent_revision(self):
+		return Page.revisions.order_by(PageRevision.timestamp.desc()).first()
 
 class PageRevision(db.Model):
 	__tablename__ = 'page_revision'
@@ -39,4 +34,63 @@ class PageRevision(db.Model):
 		self.user_id = author.id
 		self.page_id = page.id
 		self.timestamp = timestamp
+
+class PagePermission(db.Model):
+	__tablename__ = 'page_permission'
+
+	id = db.Column(db.Integer, primary_key=True)
+	view = db.Column(db.Boolean)
+	create = db.Column(db.Boolean)
+	edit = db.Column(db.Boolean)
+	delete = db.Column(db.Boolean)
+	page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
+	group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
+
+	def __init__(self, group, page, view=False, create=False, edit=False,
+		delete=False):
+		self.view = view
+		self.create = create
+		self.edit = edit
+		self.delete = delete
+		self.group_id = group.id
+		self.page_id = page.id
+
+	@staticmethod
+	def get_rights(user, page_path):
+		rights = []
+		groups = user.groups.all()
+
+		for group in groups:
+			current_path = page_path
+
+			while True:
+				page = Page.query.filter(Page.path==current_path)
+
+				if page:
+					permissions = group.page_permissions.filter(Page.id==page.id).first()
+
+					if permissions:
+						if permissions.view and not 'view' in rights:
+							rights.append('view')
+
+						if permissions.create and not 'create' in rights:
+							rights.append('create')
+
+						if permissions.edit and not 'edit' in rights:
+							rights.append('edit')
+
+						if permissions.delete and not 'delete' in rights:
+							rights.append('delete')
+
+						break
+
+				if len(current_path) == 0:
+					break
+
+				if not '/' in current_path:
+					current_path = ''
+				else:
+					current_path = current_path.rsplit('/', 1)[0]
+
+		return rights
 

@@ -3,24 +3,24 @@
 		<a href="">Home</a>
 	</li>
 
-    {% for page in pages %}
-        {% if page.subpages %}
-            <li class="dropdown {% if page.main.path == current_page %}active{% endif %}">
+	{% for page in pages %}
+		{% if page.subpages %}
+			<li class="dropdown {% if page.main.path == current_page %}active{% endif %}">
 				<a class="dropdown-toggle" data-hover="dropdown" data-delay="200" data-close-others="true" href="{{ url_for('page.view_page', page_path=page.main.path) }}">
-                    {{ page.main.title }}
-                </a>
+					{{ page.get_most_recent_revision().title }}
+				</a>
 
-                <ul class="dropdown-menu">
-                    {% for subpage in page.subpages %}
-                        <li><a href="{{ url_for('page.view_page', page_path=subpage.path) }}">{{ subpage.title }}</a></li>
-                    {% endfor %}
-                </ul>
-            </li>
-        {% else %}
-        <li class="{% if page.main.path == current_page %}active{% endif %}">
-            <a href="{{ url_for('page.view_page', page_path=page.main.path) }}">{{ page.main.title }}</a>
-        </li>
-        {% endif %}
+				<ul class="dropdown-menu">
+					{% for subpage in page.subpages %}
+						<li><a href="{{ url_for('page.view_page', page_path=subpage.path) }}">{{ subpage.get_most_recent_revision().title }}</a></li>
+					{% endfor %}
+				</ul>
+			</li>
+		{% else %}
+		<li class="{% if page.main.path == current_page %}active{% endif %}">
+			<a href="{{ url_for('page.view_page', page_path=page.main.path) }}">{{ page.get_most_recent_revision().title }}</a>
+		</li>
+		{% endif %}
 	{% endfor %}
 </ul>
 

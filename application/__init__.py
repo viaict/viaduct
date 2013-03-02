@@ -32,3 +32,8 @@ application.register_blueprint(page_module)
 application.jinja_env.globals.update(test=views.test)
 application.jinja_env.globals.update(render_navigation_bar=view_bar)
 
+# Register the loader for the anonymous user.
+from application.user.views import load_anonymous_user
+
+login_manager.anonymous_user = load_anonymous_user
+
