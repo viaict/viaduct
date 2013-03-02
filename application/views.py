@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, redirect, url_for
 from flask import Markup
 from flask.ext.login import current_user
 
@@ -14,7 +14,7 @@ def index():
 @application.route('/via')
 @application.route('/page/via')
 def viavia():
-	return url_for('.index')
+	return redirect(url_for('.index'))
 
 def test():
 	return 'testing'
