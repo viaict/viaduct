@@ -6,6 +6,10 @@ class GroupEditEntry(Form):
 	edit = BooleanField('Edit')
 	delete = BooleanField('Delete')
 
+	def __init__(self, *args, **kwargs):
+		kwargs['csrf_enabled'] = False
+		super(GroupEditEntry, self).__init__(*args, **kwargs)
+
 class GroupEditForm(Form):
 	permissions = FieldList(FormField(GroupEditEntry))
 	edit_group = SubmitField('Edit group')
