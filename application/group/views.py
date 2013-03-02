@@ -64,16 +64,16 @@ def create():
 	return render_template('group/create.htm')
 
 @group.route('/groups/<int:group_id>/edit/', methods=['GET', 'POST'])
-@group.route('/groups/<int:group_id>/edit/<int:page>/', methods=['GET', 'POST'])
-def edit(group_id, page=1):
+def edit(group_id):
+	if not GroupPermission.get_user_rights(current_user)['edit']:
+		return redirect(url_for('index'))
+
 	group = Group.query.filter(Group.id==group_id).first()
 
 	form = GroupEditForm(request.form)
 
 	form.permissions.append_entry(UserPermission.get_group_rights(group))
 	form.permissions.append_entry(GroupPermission.get_group_rights(group))
-
-	print(form.data)
 
 	return render_template('group/edit.htm', form=form)
 
