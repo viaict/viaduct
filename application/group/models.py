@@ -60,25 +60,33 @@ class GroupPermission(db.Model):
 		self.group_id = group.id
 
 	@staticmethod
-	def get_rights(user):
-		rights = []
+	def get_group_rights(group):
+		rights = {'view': False, 'create': False, 'edit': False,
+			'delete': False}
+		permissions = group.group_permissions
+
+		if permissions:
+			rights['view'] = permissions.view
+			rights['create'] = permissions.create
+			rights['edit'] = permissions.edit
+			rights['delete'] = permissions.delete
+
+		return rights
+
+	@staticmethod
+	def get_user_rights(user):
+		rights = {'view': False, 'create': False, 'edit': False,
+			'delete': False}
 		groups = user.groups.all()
 
 		for group in groups:
 			permissions = group.group_permissions
 
 			if permissions:
-				if permissions.view and not 'view' in rights:
-					rights.append('view')
-
-				if permissions.create and not 'create' in rights:
-					rights.append('create')
-
-				if permissions.edit and not 'edit' in rights:
-					rights.append('edit')
-
-				if permissions.delete and not 'delete' in rights:
-					rights.append('delete')
+				rights['view'] = rights['view'] or permissions.view
+				rights['create'] = rights['create'] or permissions.create
+				rights['edit'] = rights['edit'] or permissions.edit
+				rights['delete'] = rights['delete'] or permissions.delete
 
 		return rights
 

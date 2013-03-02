@@ -56,8 +56,9 @@ class PagePermission(db.Model):
 		self.page_id = page.id
 
 	@staticmethod
-	def get_rights(user, page_path):
-		rights = []
+	def get_user_rights(user, page_path):
+		rights = {'view': False, 'create': False, 'edit': False,
+			'delete': False}
 		groups = user.groups.all()
 
 		for group in groups:
@@ -70,17 +71,10 @@ class PagePermission(db.Model):
 					permissions = group.page_permissions.filter(Page.id==page.id).first()
 
 					if permissions:
-						if permissions.view and not 'view' in rights:
-							rights.append('view')
-
-						if permissions.create and not 'create' in rights:
-							rights.append('create')
-
-						if permissions.edit and not 'edit' in rights:
-							rights.append('edit')
-
-						if permissions.delete and not 'delete' in rights:
-							rights.append('delete')
+						rights['view'] = rights['view'] or permissions.view
+						rights['create'] = rights['create'] or permissions.create
+						rights['edit'] = rights['edit'] or permissions.edit
+						rights['delete'] = rights['delete'] or permissions.delete
 
 						break
 

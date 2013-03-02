@@ -90,7 +90,7 @@ def sign_out():
 @user.route('/users/', methods=['GET', 'POST'])
 @user.route('/users/<int:page>/', methods=['GET', 'POST'])
 def view(page=1):
-	if not 'view' in UserPermission.get_rights(current_user):
+	if not UserPermission.get_user_rights(current_user)['view']:
 		return redirect(url_for('index'))
 
 	# persumably, if the method is a post we have selected stuff to delete,

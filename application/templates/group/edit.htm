@@ -19,12 +19,15 @@
 			</thead>
 
 			<tbody>
-				<tr>
-				<th>Users</th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
+				{% for permission in form.permissions %}
+					<tr>
+						<th></th>
+						<th>{{ permission.view }}</th>
+						<th>{{ permission.create }}</th>
+						<th>{{ permission.edit }}</th>
+						<th>{{ permission.delete }}</th>
+					</tr>
+				{% endfor %}
 			</tbody>
 		</table>
 

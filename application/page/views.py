@@ -14,8 +14,8 @@ page_module = Blueprint('page', __name__)
 def view_page(page_path=''):
 	revision = retrieve_page(page_path)
 
-	if not revision or not 'view' in PagePermission.get_rights(current_user,
-		page_path):
+	if not revision or not PagePermission.get_user_rights(current_user,
+		page_path)['view']:
 		return render_template('page/page_not_found.htm', page=page_path)
 
 	return render_template('page/view_page.htm', revision=revision, page=page_path)
@@ -52,7 +52,7 @@ def delete_page(page_path='', revision=''):
 @page_module.route('/page/edit/', methods=['GET', 'POST'])
 @page_module.route('/page/edit/<path:page_path>', methods=['GET', 'POST'])
 def edit_page(page_path=''):
-	if not 'edit' in PagePermission.get_rights(current_user, page_path):
+	if not PagePermission.get_user_rights(current_user, page_path)['edit']:
 		return redirect(url_for('index'))
 
 	page = Page.query.filter(Page.path==page_path).first()

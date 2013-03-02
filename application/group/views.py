@@ -2,8 +2,9 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask.ext.login import current_user
 
 from application import db
+from application.group.forms import GroupEditForm
 from application.group.models import user_group, Group, GroupPermission
-from application.user.models import User
+from application.user.models import User, UserPermission
 
 group = Blueprint('group', __name__)
 
@@ -36,7 +37,7 @@ def view(page=1):
 
 @group.route('/groups/create/', methods=['GET', 'POST'])
 def create():
-	if not 'create' in UserPermission.get_rights(current_user):
+	if not UserPermission.get_user_rights(current_user)['create']:
 		return redirect(url_for('index'))
 
 	if request.method == 'POST':
@@ -65,12 +66,21 @@ def create():
 @group.route('/groups/<int:group_id>/edit/', methods=['GET', 'POST'])
 @group.route('/groups/<int:group_id>/edit/<int:page>/', methods=['GET', 'POST'])
 def edit(group_id, page=1):
-	return render_template('group/edit.htm')
+	group = Group.query.filter(Group.id==group_id).first()
+
+	form = GroupEditForm(request.form)
+
+	form.permissions.append_entry(UserPermission.get_group_rights(group))
+	form.permissions.append_entry(GroupPermission.get_group_rights(group))
+
+	print(form.data)
+
+	return render_template('group/edit.htm', form=form)
 
 @group.route('/groups/<int:group_id>/users/', methods=['GET', 'POST'])
 @group.route('/groups/<int:group_id>/users/<int:page>/', methods=['GET', 'POST'])
 def view_users(group_id, page=1):
-	if not 'view' in GroupPermission.get_rights(current_user):
+	if GroupPermission.get_user_rights(current_user)['view']:
 		return redirect(url_for('index'))
 
 	group = Group.query.filter(Group.id==group_id).first()
@@ -105,7 +115,7 @@ def view_users(group_id, page=1):
 @group.route('/groups/<int:group_id>/users/add/', methods=['GET', 'POST'])
 @group.route('/groups/<int:group_id>/users/add/<int:page_id>', methods=['GET', 'POST'])
 def add_users(group_id, page=1):
-	if not 'edit' in GroupPermission.get_rights(current_user):
+	if not GroupPermission.get_user_rights(current_user)['edit']:
 		return redirect(url_for('index'))
 
 	group = Group.query.filter(Group.id==group_id).first()
