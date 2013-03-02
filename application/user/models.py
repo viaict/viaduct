@@ -62,6 +62,22 @@ class UserPermission(db.Model):
 		return rights
 
 	@staticmethod
+	def set_group_rights(group, rights):
+		permissions = group.user_permissions
+
+		if not permissions:
+			permissions = UserPermission(rights['view'], rights['create'],
+				rights['edit'], rights['delete'])
+		else:
+			permissions.view = rights['view']
+			permissions.create = rights['create']
+			permissions.edit = rights['edit']
+			permissions.delete = rights['delete']
+
+		db.session.add(permissions)
+		db.session.commit()
+
+	@staticmethod
 	def get_user_rights(user):
 		rights = {'view': False, 'create': False, 'edit': False,
 			'delete': False}
