@@ -71,11 +71,16 @@ def edit(group_id):
 
 	group = Group.query.filter(Group.id==group_id).first()
 
+	if not group:
+		flash('There is no such group.')
+
+		return redirect(url_for('group.view'))
+
 	form = GroupEditForm()
 
 	if form.validate_on_submit():
-			UserPermission.set_group_rights(form.permissions.entries[0])
-			GroupPermission.set_group_rights(form.permissions.entries[1])
+			UserPermission.set_group_rights(group, form.permissions.entries[0])
+			GroupPermission.set_group_rights(group, form.permissions.entries[1])
 
 			flash('The group has been edited successfully.', 'success')
 
