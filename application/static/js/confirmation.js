@@ -1,4 +1,9 @@
-function deletePageConfirmation()
+$(document).ready(function()
 {
-    alert("wait, wut?!");
+    $("confirmation").click(function()
+    {
+        alert("oooh yeah");
+    }
+
+
 }
