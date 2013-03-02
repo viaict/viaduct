@@ -59,6 +59,8 @@ class UserPermission(db.Model):
 			rights['edit'] = permissions.edit
 			rights['delete'] = permissions.delete
 
+		return rights
+
 	@staticmethod
 	def get_user_rights(user):
 		rights = {'view': False, 'create': False, 'edit': False,
