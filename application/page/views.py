@@ -12,7 +12,6 @@ page_module = Blueprint('page', __name__)
 @page_module.route('/page/')
 @page_module.route('/page/<path:page_path>')
 def view_page(page_path=''):
-
 	page = Page.query.filter(Page.path==page_path).first()
 
 	if not page:
@@ -27,7 +26,6 @@ def view_page(page_path=''):
 	revision.content = Markup(markdown.markdown(revision.content,
 		safe_mode='escape', enable_attributes=False))
 
-	
 	return render_template('page/view_page.htm', revision=revision, page=page_path)
 
 @page_module.route('/page/edit/', methods=['GET', 'POST'])
