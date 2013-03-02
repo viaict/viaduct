@@ -8,7 +8,6 @@ from application.page.views import retrieve_page
 @application.route('/')
 def index():
 	blocks = [ retrieve_page("index/" + str(i))[0] for i in range(1, 5) ]
-	blocks = [ "foo", "bar", "baz", "quux" ]
 
 	return render_template('index.htm', blocks=blocks)
 
