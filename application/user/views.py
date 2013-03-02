@@ -60,7 +60,7 @@ def sign_in():
 	if form.validate_on_submit():
 		valid_form = True
 
-		user = User.query.filter(email==form.email.data).first()
+		user = User.query.filter(User.email==form.email.data).first()
 
 		# Check if the user does exist, and if the passwords do match.
 		if not user or bcrypt.hashpw(form.password.data, user.password) != user.password:
