@@ -16,7 +16,8 @@ class Page(db.Model):
 	def get_most_recent(self):
 		revision = PageRevision.query.filter(PageRevision.page_id == self.id)
 		revision = revision.order_by(PageRevision.timestamp.desc()).first()
-		revision.path = self.path
+		if revision is not None:
+			revision.path = self.path
 		return revision
 
 
