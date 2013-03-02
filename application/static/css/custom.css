@@ -9,6 +9,15 @@
 	height 110px;
 	padding: 2em;
 }
+.mainblock {
+	border-radius: 6px 6px 6px 6px;
+	border: 1px solid #ddd;
+	margin-bottom: 20px;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+	padding-left: 1em;
+	padding-right: 1em;
+}
 
 
 /* Sidebar */
@@ -33,7 +42,3 @@
 	padding: 0;
 }
 
-.mainblock {
-	border-radius: 6px 6px 6px 6px;
-	border: 1px solid #ddd;
-}
