@@ -40,7 +40,7 @@ def retrieve_page(page_path=''):
 @page_module.route('/page/delete/<path:page_path>')
 def delete_page(page_path='', revision=''):
 	page = Page.query.filter(Page.path==page_path).first()
-	revisions = PageRevision.query.filter((PageRevision.page_id==page.id).all())
+	revisions = PageRevision.query.filter(PageRevision.page_id==page.id).all()
 	for revision in revisions:
 		db.session.delete(revision)
 	db.session.delete(page)
