@@ -12,7 +12,9 @@ page_module = Blueprint('page', __name__)
 @page_module.route('/page/')
 @page_module.route('/page/<path:page_path>')
 def view_page(page_path=''):
-	if not PagePermission.get_user_rights(current_user, page_path)['view']:
+	rights = PagePermission.get_user_rights(current_user, page_path)
+
+	if not rights['view']:
 		return render_template('page/page_not_found.htm', page=page_path)
 
 	revision = retrieve_page(page_path)
@@ -20,7 +22,8 @@ def view_page(page_path=''):
 	if not revision:
 		return render_template('page/page_not_found.htm', page=page_path)
 
-	return render_template('page/view_page.htm', revision=revision, page=page_path)
+	return render_template('page/view_page.htm', revision=revision,
+		page=page_path, rights=rights)
 
 def retrieve_page(page_path=''):
 	page = Page.query.filter(Page.path==page_path).first()
