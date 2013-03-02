@@ -30,8 +30,8 @@ def sign_up():
 	form = SignUpForm(request.form)
 
 	if form.validate_on_submit():
-		user = User(email, bcrypt.hashpw(password, bcrypt.gensalt()),
-			first_name, last_name)
+		user = User(form.email.data, bcrypt.hashpw(form.password.data, bcrypt.gensalt()),
+			form.first_name.data, form.last_name.data)
 
 		db.session.add(user)
 		db.session.commit()
@@ -59,6 +59,8 @@ def sign_in():
 
 	if form.validate_on_submit():
 		valid_form = True
+
+		user = User.query.filter(email==form.email.data).first()
 
 		# Check if the user does exist, and if the passwords do match.
 		if not user or bcrypt.hashpw(form.password.data, user.password) != user.password:
