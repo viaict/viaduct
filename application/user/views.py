@@ -132,6 +132,27 @@ def sign_out():
 @user.route('/users/', methods=['GET', 'POST'])
 @user.route('/users/<int:page>/', methods=['GET', 'POST'])
 def view(page=1):
+
+	# persumably, if the method is a post we have selected stuff to delete,
+	# similary to groups
+	if request.method == 'POST':
+		used_ids = request.form.getlist('select')
+
+		users = User.query.filter(User.id.in_(user_ids)).all()
+
+		for user in users:
+			db.session.delete(user)
+
+		db.session.commit()
+
+		if len(groups) > 1:
+			flash('The selected users have been deleted.', 'success')
+		else:
+			flash('The selected user has been deleted.', 'success')
+
+		redirect(url_for('user.view'))
+
+
 	# Get a list of users to render for the current page.
 	users = User.query.paginate(page, 15, False)
 
