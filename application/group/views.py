@@ -11,7 +11,7 @@ group = Blueprint('group', __name__)
 @group.route('/groups/', methods=['GET', 'POST'])
 @group.route('/groups/<int:page>/', methods=['GET', 'POST'])
 def view(page=1):
-	if not 'view' in GroupPermission.get_rights(current_user):
+	if not GroupPermission.get_user_rights(current_user)['view']:
 		return redirect(url_for('index'))
 
 	if request.method == 'POST':
