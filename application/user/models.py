@@ -55,7 +55,7 @@ class UserPermission(db.Model):
 
 		if permissions:
 			rights['view'] = permissions.view
-			rights['create'] = permission.create
+			rights['create'] = permissions.create
 			rights['edit'] = permissions.edit
 			rights['delete'] = permissions.delete
 
