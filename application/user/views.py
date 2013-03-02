@@ -136,7 +136,7 @@ def view(page=1):
 	# persumably, if the method is a post we have selected stuff to delete,
 	# similary to groups
 	if request.method == 'POST':
-		used_ids = request.form.getlist('select')
+		user_ids = request.form.getlist('select')
 
 		users = User.query.filter(User.id.in_(user_ids)).all()
 
