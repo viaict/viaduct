@@ -1,3 +1,3 @@
 $(document).ready(function() {
-	$('div.expandable').expander();
+	$('div.expander').expander();
 });
