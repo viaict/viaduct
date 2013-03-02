@@ -28,7 +28,10 @@
 					{{ render_navigation_bar() }}
 				</div>
 			</div>
-			{% block content %}{% endblock %}
+			<div class="row">
+				<div class="span2">Navigation</div>
+				<div class="span10">{% block content %}{% endblock %}</div>
+			</div>
 		</div>
 	</body>
 </html>
