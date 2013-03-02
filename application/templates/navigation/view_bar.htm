@@ -1,18 +1,26 @@
 <ul class="nav nav-pills">
-	<li class="active">
-		<a href="#">Home</a>
+	<li>
+		<a href="">Home</a>
 	</li>
 
-	{% if subpages %}
-		<li class="dropdown">
-			<a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ page }}</a>
+    {% for page in pages %}
+        {% if page.subpages %}
+            <li class="dropdown {% if page.path == current_page %}active{% endif %}">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="{{ url_for('page.view_page', page_path=page.path) }}">
+                    {{ page.main.title }}
+                </a>
 
-			<ul class="dropdown-menu">
-				{% for subpage in subpages %}
-					<li><a href="{{ url_for('page.view_page', page_path=subpage.path) }}">{{ subpage.path }}</a></li>
-				{% endfor %}
-			</ul>
-		</li>
-	{% endif %}
+                <ul class="dropdown-menu">
+                    {% for subpage in page.subpages %}
+                        <li><a href="{{ url_for('page.view_page', page_path=subpage.path) }}">{{ subpage.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% else %}
+        <li class="{% if page.path == current_page %}active{% endif %}">
+            <a href="{{ url_for('page.view_page', page_path=page.path) }}">{{ page.main.title }}</a>
+        </li>
+        {% endif %}
+	{% endfor %}
 </ul>
 
