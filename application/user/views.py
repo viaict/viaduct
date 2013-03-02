@@ -46,7 +46,7 @@ def sign_up():
 		for error in errors:
 			flash(error, 'error')
 
-	return render_template('user/sign_up.htm')
+	return render_template('user/sign_up.htm', form=form)
 
 @user.route('/signin/', methods=['GET', 'POST'])
 def sign_in():
@@ -77,7 +77,7 @@ def sign_in():
 		for error in errors:
 			flash(error, 'error')
 
-	return render_template('user/sign_in.htm')
+	return render_template('user/sign_in.htm', form=form)
 
 @user.route('/signout/')
 def sign_out():
