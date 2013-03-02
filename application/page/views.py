@@ -14,19 +14,20 @@ page_module = Blueprint('page', __name__)
 def view_page(page_path=''):
 	(revision, page_path) = retrieve_page(page_path)
 
+if not revision:
+		return render_template('page/page_not_found.htm', page=page_path)
+
 	return render_template('page/view_page.htm', revision=revision, page=page_path)
 
 def retrieve_page(page_path=''):
 	page = Page.query.filter(Page.path==page_path).first()
 
 	if not page:
-		return render_template('page/page_not_found.htm', page=page_path)
+		return (false, page_path)
 
 	revision = PageRevision.query.filter(PageRevision.page_id==page.id).order_by(
 		PageRevision.id.desc()).first()
 
-	if not revision:
-		return render_template('page/page_not_found.htm', page=page_path)
 
 	revision.content = Markup(markdown.markdown(revision.content,
 		safe_mode='escape', enable_attributes=False))
