@@ -46,7 +46,7 @@ def sign_up():
 		for error in errors:
 			flash(error, 'error')
 
-	return render_template('user/sign_up.htm')
+	return render_template('user/sign_up.htm', form=form)
 
 @user.route('/signin/', methods=['GET', 'POST'])
 def sign_in():
@@ -61,7 +61,7 @@ def sign_in():
 		valid_form = True
 
 		# Check if the user does exist, and if the passwords do match.
-		if not user or bcrypt.hashpw(password, user.password) != user.password:
+		if not user or bcrypt.hashpw(form.password.data, user.password) != user.password:
 			flash('The credentials that have been specified are invalid.', 'error')
 			valid_form = False
 
@@ -77,7 +77,7 @@ def sign_in():
 		for error in errors:
 			flash(error, 'error')
 
-	return render_template('user/sign_in.htm')
+	return render_template('user/sign_in.htm', form=form)
 
 @user.route('/signout/')
 def sign_out():

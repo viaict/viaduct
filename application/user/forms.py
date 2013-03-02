@@ -6,7 +6,7 @@ class SignUpForm(Form):
 	email = TextField('E-mail address', validators=[Required(), Email()])
 	password = PasswordField('Password', validators=[Required()])
 	repeat_password = PasswordField('Repeat password', validators=[Required(),
-		Equalto('password', message='The passwords do not match.')])
+		EqualTo('password', message='The passwords do not match.')])
 	first_name = TextField('First name', validators=[Required()])
 	last_name = TextField('Last name', validators=[Required()])
 	recaptcha = RecaptchaField()
