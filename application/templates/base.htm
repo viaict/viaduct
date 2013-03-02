@@ -28,11 +28,7 @@
 					{{ render_navigation_bar() }}
 				</div>
 			</div>
-
-			<div class="row">
-				<div class="span2">Navigation</div>
-				<div class="span10">{% block content %}{% endblock %}</div>
-			</div>
+			{% block page %}{% endblock %}  
 		</div>
 	</body>
 </html>
