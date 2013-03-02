@@ -1,3 +1,7 @@
+body {
+	overflow-y: scroll;
+}
+
 .logo {
 	margin: 10px;
 }
