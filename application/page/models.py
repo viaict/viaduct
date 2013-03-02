@@ -1,5 +1,4 @@
 import datetime
-from sqlalchemy import desc
 
 from application import db
 
@@ -12,16 +11,6 @@ class Page(db.Model):
 
 	def __init__(self, path):
 		self.path = path
-
-	def get_most_recent(self):
-		revision = PageRevision.query.filter(PageRevision.page_id == self.id)
-		print revision
-		revision = revision.order_by(PageRevision.timestamp.desc()).first()
-		print revision
-		print PageRevision.query.all()
-		revision['path'] = self.path
-		return revision
-
 
 class PageRevision(db.Model):
 	__tablename__ = 'page_revision'
