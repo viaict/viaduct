@@ -91,7 +91,7 @@ def edit(group_id):
 			rights['view'] = form.permissions.entries[1].view.data
 			rights['create'] = form.permissions.entries[1].create.data
 			rights['edit'] = form.permissions.entries[1].edit.data
-			rights['delete'] = forms.permissions.entries[1].delete.data
+			rights['delete'] = form.permissions.entries[1].delete.data
 
 			GroupPermission.set_group_rights(group, rights)
 
