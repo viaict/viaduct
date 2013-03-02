@@ -61,7 +61,7 @@ def sign_in():
 		valid_form = True
 
 		# Check if the user does exist, and if the passwords do match.
-		if not user or bcrypt.hashpw(password, user.password) != user.password:
+		if not user or bcrypt.hashpw(form.password.data, user.password) != user.password:
 			flash('The credentials that have been specified are invalid.', 'error')
 			valid_form = False
 
