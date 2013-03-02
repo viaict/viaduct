@@ -12,21 +12,27 @@ page_module = Blueprint('page', __name__)
 @page_module.route('/page/')
 @page_module.route('/page/<path:page_path>')
 def view_page(page_path=''):
-	page = Page.query.filter(Page.path==page_path).first()
-
-	if not page:
-		return render_template('page/page_not_found.htm', page=page_path)
-
-	revision = PageRevision.query.filter(PageRevision.page_id==page.id).order_by(
-		PageRevision.id.desc()).first()
+	(revision, page_path) = retrieve_page(page_path)
 
 	if not revision:
 		return render_template('page/page_not_found.htm', page=page_path)
 
+	return render_template('page/view_page.htm', revision=revision, page=page_path)
+
+def retrieve_page(page_path=''):
+	page = Page.query.filter(Page.path==page_path).first()
+
+	if not page:
+		return (False, page_path)
+
+	revision = PageRevision.query.filter(PageRevision.page_id==page.id).order_by(
+		PageRevision.id.desc()).first()
+
+
 	revision.content = Markup(markdown.markdown(revision.content,
 		safe_mode='escape', enable_attributes=False))
-
-	return render_template('page/view_page.htm', revision=revision, page=page_path)
+	
+	return (revision, page_path)
 
 
 @page_module.route('/page/delete/<path:page_path>')
