@@ -80,7 +80,7 @@ def edit(group_id, page=1):
 @group.route('/groups/<int:group_id>/users/', methods=['GET', 'POST'])
 @group.route('/groups/<int:group_id>/users/<int:page>/', methods=['GET', 'POST'])
 def view_users(group_id, page=1):
-	if GroupPermission.get_user_rights(current_user)['view']:
+	if not GroupPermission.get_user_rights(current_user)['view']:
 		return redirect(url_for('index'))
 
 	group = Group.query.filter(Group.id==group_id).first()
