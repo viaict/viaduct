@@ -1,9 +1,7 @@
 $(document).ready(function()
 {
-    $("confirmation").click(function()
+    $(".confirmation").click(function()
     {
         alert("oooh yeah");
-    }
-
-
-}
+    });
+})
