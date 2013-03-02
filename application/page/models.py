@@ -14,7 +14,7 @@ class Page(db.Model):
 		self.path = path
 
 	def get_most_recent_revision(self):
-		return Page.revisions.order_by(PageRevision.timestamp.desc()).first()
+		return Page.revisions.query.order_by(PageRevision.timestamp.desc()).first()
 
 class PageRevision(db.Model):
 	__tablename__ = 'page_revision'
