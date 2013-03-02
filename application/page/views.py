@@ -14,7 +14,7 @@ page_module = Blueprint('page', __name__)
 def view_page(page_path=''):
 	(revision, page_path) = retrieve_page(page_path)
 
-if not revision:
+	if not revision:
 		return render_template('page/page_not_found.htm', page=page_path)
 
 	return render_template('page/view_page.htm', revision=revision, page=page_path)
