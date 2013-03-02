@@ -1,4 +1,5 @@
 {% from "macros/flash.htm" import render_flash %}
+{% from "macros/form.htm" import render_field, render_captcha %}
 
 {% extends "base.htm" %}
 
@@ -9,51 +10,13 @@
 
 		{{ render_flash() }}
 
-		<div class="control-group">
-			<label for="e-mail" class="content-label">E-mail address</label>
-
-			<div class="controls">
-				<input type="text" placeholder="E-mail address" name="e-mail" />
-			</div>
-		</div>
-
-		<div class="control-group">
-			<label for="password" class="content-label">Password</label>
-
-			<div class="controls">
-				<input type="password" placeholder="Password" name="password" />
-			</div>
-		</div>
-
-		<div class="control-group">
-			<label for="repeat-password" class="content-label">Repeat password</label>
-
-			<div class="controls">
-				<input type="password" placeholder="Repeat password" name="repeat-password" />
-			</div>
-		</div>
-
-		<div class="control-group">
-			<label for="first-name" class="content-label">First name(s)</label>
-
-			<div class="controls">
-				<input type="text" placeholder="First name(s)" name="first-name" />
-			</div>
-		</div>
-
-		<div class="control-group">
-			<label for="last-name" class="content-label">Last name</label>
-
-			<div class="controls">
-				<input type="text" placeholder="Last name" name="last-name" />
-			</div>
-		</div>
-
-		<div class="control-group">
-			<div class="controls">
-				{{ captcha }}
-			</div>
-		</div>
+		{{ form.csrf_token }}
+		{{ render_field(form.email) }}
+		{{ render_field(form.password) }}
+		{{ render_field(form.repeat_password) }}
+		{{ render_field(form.first_name) }}
+		{{ render_field(form.last_name) }}
+		{{ render_captcha(form.captcha) }}
 
 		<div class="control-group">
 			<div class="controls">
