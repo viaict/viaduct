@@ -39,9 +39,7 @@ def retrieve_page(page_path=''):
 def delete_page(page_path='', revision=''):
 	page = Page.query.filter(Page.path==page_path).first()
 	db.session.delete(page)
-
 	db.session.commit()
-
 	return redirect('/')
 
 @page_module.route('/page/edit/', methods=['GET', 'POST'])
