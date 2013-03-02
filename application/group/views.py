@@ -80,9 +80,9 @@ def edit(group_id):
 			flash('The group has been edited successfully.', 'success')
 
 			return redirect(url_for('group.view'))
-		else:
-			form.permissions.append_entry(UserPermission.get_group_rights(group))
-			form.permissions.append_entry(GroupPermission.get_group_rights(group))
+	else:
+		form.permissions.append_entry(UserPermission.get_group_rights(group))
+		form.permissions.append_entry(GroupPermission.get_group_rights(group))
 
 	return render_template('group/edit.htm', form=form)
 
