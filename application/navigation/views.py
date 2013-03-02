@@ -1,7 +1,6 @@
 from flask import Markup
 from flask import render_template
 
-from application import db, application
 from application.page.models import Page
 
 def find_subpages(pages, parent):
@@ -15,11 +14,12 @@ def find_subpages(pages, parent):
 	return subpages
 
 def view_bar(current_page=''):
-	pages = Page.query.all()
+	pages = Page.get_all_pages()
 	all_pages = []
+	print pages
 
 	for page in pages:
-		if not '/' in page.path and page.revisions.count() > 0:
+		if not '/' in page.path:
 			all_pages.append({'main': page,
 				'subpages': find_subpages(pages, page)})
 
