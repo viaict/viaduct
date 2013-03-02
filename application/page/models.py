@@ -64,7 +64,7 @@ class PagePermission(db.Model):
 			current_path = page_path
 
 			while True:
-				page = Page.query.filter(Page.path==current_path)
+				page = Page.query.filter(Page.path==current_path).first()
 
 				if page:
 					permissions = group.page_permissions.filter(Page.id==page.id).first()
