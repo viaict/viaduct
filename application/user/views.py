@@ -54,7 +54,7 @@ def sign_in():
 	if current_user and current_user.is_authenticated():
 		return redirect(url_for('index'))
 
-	form = SignInForm()
+	form = SignInForm(request.form)
 
 	if form.validate_on_submit():
 		valid_form = True
