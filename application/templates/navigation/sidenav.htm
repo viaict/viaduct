@@ -1,4 +1,9 @@
 <ul class="nav nav-stacked nav-tabs">
+    {% if current_page.count('/') > 1 %}
+    <li>
+        <a href="{{ url_for('page.view_page', page_path='/'.join(current_page.split('/')[:-1])) }}"><i class="icon-chevron-left"></i> Go back</a>
+    {% endif %}
+
 	{% for sibbling in sibblings %}
 		{% if sibbling.path == current_page %}
 			<li class="active">
