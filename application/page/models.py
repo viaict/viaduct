@@ -13,36 +13,57 @@ class Page(db.Model):
 		self.path = path
 
 	def get_most_recent_revision(self):
-		page = self.revisions.order_by(PageRevision.timestamp.desc()).first()
+		page = self.revisions.order_by(PageRevision.id.desc()).first()
 		if page is not None:
 			page.path = self.path
 		return page
+
 
 	@classmethod
 	def get_all_pages(self):
 		pages = map(lambda x: x.get_most_recent_revision(), Page.query.all())
 		return filter(lambda x: x is not None, pages)
 
+	@classmethod
+	def get_children(self, prefix):
+		pages = Page.query.filter(Page.path.startswith(prefix + '/')).all()
+		pages = filter(lambda x: x.path.count('/') == prefix.count('/') + 1,
+					   pages)
+		return map(lambda x: x.get_most_recent_revision(), pages)
+
 
 
 class PageRevision(db.Model):
 	__tablename__ = 'page_revision'
 
+	def __repr__(self):
+		return '<PageRevision("%s", %s)>' % (self.title, self.priority)
+
+	def __cmp__(self, other):
+		if cmp(self.priority, other.priority) == 0:
+			return cmp(self.title, other.title)
+		return -cmp(self.priority, other.priority)
+
+
+
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(128))
 	content = db.Column(db.Text)
+	priority = db.Column(db.Integer, default=0)
 	timestamp = db.Column(db.DateTime)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
 
-	def __init__(self, page, author, title, content,
+	def __init__(self, page, author, title, content, priority,
 		timestamp=datetime.datetime.utcnow()):
 		self.title = title
-		self.path = ''
 		self.content = content
+		self.priority = priority
 		self.user_id = author.id
 		self.page_id = page.id
 		self.timestamp = timestamp
+		self.path = ''
+
 
 class PagePermission(db.Model):
 	__tablename__ = 'page_permission'

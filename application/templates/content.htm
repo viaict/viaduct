@@ -1,10 +1,12 @@
 
 {% extends "base.htm" %}
 {% block page %}
-			<div class="row">
-				<div class="span2">Navigation</div>
-				<div class="span10">{% block content %}{% endblock %}</div>
-			</div>
+<div class="row">
+	<div class="span2">
+		{{ render_sidenav() }}
+	</div>
+	<div class="span10">{% block content %}{% endblock %}</div>
+</div>
 
 <!-- Modal -->
 <div id="confirmationModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

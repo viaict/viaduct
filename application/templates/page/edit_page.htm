@@ -24,6 +24,14 @@
 		</div>
 
 		<div class="control-group">
+			<label for="priority" class="content-label">Priority</label>
+
+			<div class="controls">
+				<input type="text" placeholder="Priority" name="priority" value="{{ revision.priority }}" />
+			</div>
+		</div>
+
+		<div class="control-group">
 			<div class="controls">
 				<a href="{{ url_for('page.delete_page', page_path=page) }}" class="btn confirmation">Delete this page</a>
 				<button type="submit" class="btn">Save</button>

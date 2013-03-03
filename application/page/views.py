@@ -31,15 +31,14 @@ def retrieve_page(page_path=''):
 	if not page:
 		return False
 
-	revision = PageRevision.query.filter(PageRevision.page_id==page.id).order_by(
-		PageRevision.id.desc()).first()
-	
+	revision = page.get_most_recent_revision()
+
 	if not revision:
 		return False
 
 	revision.content = Markup(markdown.markdown(revision.content,
 		safe_mode='escape', enable_attributes=False))
-	
+
 	return revision
 
 
@@ -64,12 +63,15 @@ def edit_page(page_path=''):
 	revision = None
 
 	if page:
-		revision = PageRevision.query.filter(PageRevision.page_id==page.id).order_by(
-			PageRevision.id.desc()).first()
+		revision = page.get_most_recent_revision()
 
 	if request.method == 'POST':
 		title = request.form['title'].strip()
 		content = request.form['content'].strip()
+		try:
+			priority = int(request.form['priority'].strip())
+		except:
+			priority = 0
 
 		if not page:
 			page = Page(page_path)
@@ -77,7 +79,7 @@ def edit_page(page_path=''):
 			db.session.add(page)
 			db.session.commit()
 
-		revision = PageRevision(page, current_user, title, content)
+		revision = PageRevision(page, current_user, title, content, priority)
 
 		db.session.add(revision)
 		db.session.commit()
