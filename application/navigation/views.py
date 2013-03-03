@@ -23,8 +23,6 @@ def view_side_bar():
 	current_page = get_current_page()
 	level = current_page.count('/')
 	children = Page.get_children('/'.join(current_page.split('/')[:level + 1]))
-	print current_page
-	print children
 	if level > 0:
 		sibblings = Page.get_children('/'.join(current_page.split('/')[:level]))
 	else:
