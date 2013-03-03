@@ -22,7 +22,7 @@ from application import views
 from application.user.views import user
 from application.group.views import group
 from application.page.views import page_module
-from application.navigation.views import view_bar
+from application.navigation.views import view_bar, view_side_bar
 
 application.register_blueprint(user)
 application.register_blueprint(group)
@@ -31,6 +31,7 @@ application.register_blueprint(page_module)
 # Register global views to be used within the template engine.
 application.jinja_env.globals.update(test=views.test)
 application.jinja_env.globals.update(render_navigation_bar=view_bar)
+application.jinja_env.globals.update(render_sidenav=view_side_bar)
 
 # Register the loader for the anonymous user.
 from application.user.views import load_anonymous_user
