@@ -1,4 +1,6 @@
-from flask import flash, request
+from flask import flash, request, Markup
+from application import application
+from markdown import markdown
 
 def flash_form_errors(form):
 	for field, errors in form.errors.items():
@@ -19,3 +21,7 @@ def get_current_page():
 	if request.path.startswith('/page/'):
 		return request.path[6:]
 	return 'via'
+
+@application.template_filter('markdown')
+def markdown_filter(data):
+	return Markup(markdown(data, safe_mode='escape', enable_attributes=False))

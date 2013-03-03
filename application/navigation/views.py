@@ -22,9 +22,9 @@ def view_bar():
 def view_side_bar():
 	current_page = get_current_page()
 	level = current_page.count('/')
-	children = Page.get_children('/'.join(current_page.split('/')[:level + 1]))
+	children = Page.get_direct_children('/'.join(current_page.split('/')[:level + 1]))
 	if level > 0:
-		sibblings = Page.get_children('/'.join(current_page.split('/')[:level]))
+		sibblings = Page.get_direct_children('/'.join(current_page.split('/')[:level]))
 	else:
 		sibblings = children
 

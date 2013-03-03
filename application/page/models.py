@@ -5,6 +5,9 @@ from application import db
 class Page(db.Model):
 	__tablename__ = 'page'
 
+	def __repr__(self):
+		return '<Page(%s, "%s")>' % (self.id, self.path)
+
 	id = db.Column(db.Integer, primary_key=True)
 	path = db.Column(db.String(256), unique=True)
 	revisions = db.relationship('PageRevision', backref='page', lazy='dynamic')
@@ -27,6 +30,11 @@ class Page(db.Model):
 	@classmethod
 	def get_children(self, prefix):
 		pages = Page.query.filter(Page.path.startswith(prefix + '/')).all()
+		return map(lambda x: x.get_most_recent_revision(), pages)
+
+	@classmethod
+	def get_direct_children(self, prefix):
+		pages = Page.query.filter(Page.path.startswith(prefix + '/')).all()
 		pages = filter(lambda x: x.path.count('/') == prefix.count('/') + 1,
 					   pages)
 		return map(lambda x: x.get_most_recent_revision(), pages)
@@ -37,7 +45,7 @@ class PageRevision(db.Model):
 	__tablename__ = 'page_revision'
 
 	def __repr__(self):
-		return '<PageRevision("%s", %s)>' % (self.title, self.priority)
+		return '<PageRevision(%s, "%s", %s)>' % (self.id, self.title, self.priority)
 
 	def __cmp__(self, other):
 		if cmp(self.priority, other.priority) == 0:

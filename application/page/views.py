@@ -1,29 +1,77 @@
-import markdown
-
 from flask import Blueprint, flash, redirect, render_template, request, url_for
-from flask import Markup
 from flask.ext.login import current_user
 
 from application import db
+from application.helpers import flash_form_errors
 from application.page.models import Page, PageRevision, PagePermission
+from application.page.forms import ChangePathForm
 
 page_module = Blueprint('page', __name__)
 
-@page_module.route('/page/')
-@page_module.route('/page/<path:page_path>')
+@page_module.route('/page/', methods=['GET', 'POST'])
+@page_module.route('/page/<path:page_path>', methods=['GET', 'POST'])
 def view_page(page_path=''):
 	rights = PagePermission.get_user_rights(current_user, page_path)
+	form = ChangePathForm()
 
 	if not rights['view']:
 		return render_template('page/page_not_found.htm', page=page_path)
 
-	revision = retrieve_page(page_path)
+	old_page = Page.query.filter(Page.path==page_path).first()
+
+	if not old_page:
+		return render_template('page/page_not_found.htm', page=page_path)
+
+	revision, page = retrieve_page(page_path)
 
 	if not revision:
 		return render_template('page/page_not_found.htm', page=page_path)
 
+	if form.validate_on_submit():
+		error = False
+		if not rights['edit']:
+			return redirect(url_for('index'))
+
+		new_path = form.path.data.strip().strip('/')
+		new_page = Page.query.filter(Page.path==new_path).first()
+
+		if page_path == new_path:
+			flash('Path stayed the same', 'success')
+
+		elif new_page:
+			flash('The path already exists', 'error')
+			error = True
+
+		else:
+			old_page.path = new_path
+
+		if form.move_children.data and not error:
+			# Move this and children
+			print 'bla'
+			prefix = page_path + '/'
+			children = Page.query.filter(Page.path.startswith(prefix)).all()
+			for child in children:
+				new_child_path = new_path + child.path[len(page_path):]
+
+				if Page.query.filter(Page.path==new_child_path).first():
+					db.session.rollback()
+					flash('The subpath ' + new_child_path + ' already exists',
+							  'error')
+					error = True
+					break
+
+				child.path = new_child_path
+
+
+		if not error:
+			db.session.commit()
+			return redirect(url_for('page.view_page', page_path=new_path))
+
+
+	flash_form_errors(form)
+
 	return render_template('page/view_page.htm', revision=revision,
-		page=page_path, rights=rights)
+		page=page_path, rights=rights, form=form)
 
 def retrieve_page(page_path=''):
 	page = Page.query.filter(Page.path==page_path).first()
@@ -36,10 +84,7 @@ def retrieve_page(page_path=''):
 	if not revision:
 		return False
 
-	revision.content = Markup(markdown.markdown(revision.content,
-		safe_mode='escape', enable_attributes=False))
-
-	return revision
+	return revision, page
 
 
 @page_module.route('/page/delete/')
@@ -73,6 +118,8 @@ def edit_page(page_path=''):
 		except:
 			priority = 0
 
+
+		# A new page is being created
 		if not page:
 			page = Page(page_path)
 
