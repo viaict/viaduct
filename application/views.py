@@ -1,14 +1,13 @@
 from flask import render_template, redirect, url_for
 from flask import Markup
-from flask.ext.login import current_user
 
 from application import application
 from application.page.views import retrieve_page
-from application.user.models import UserPermission
 
 @application.route('/')
 def index():
-	blocks = [ retrieve_page("index/" + str(i)) for i in range(1, 5) ]
+	blocks = [ retrieve_page("index/" + str(i))[0] for i in range(1, 5) ]
+	print blocks
 
 	return render_template('index.htm', blocks=blocks, path="index")
 
