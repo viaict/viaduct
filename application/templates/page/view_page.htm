@@ -8,25 +8,25 @@
 {{ revision.content | markdown}}
 
 {% if rights['edit'] %}
-<div class="btn-toolbar">
-	<div class="btn-group">
+<div class="btn-toolbar clearfix">
+	<div class="btn-group pull-left edit-group">
 		<a href="{{ url_for('page.edit_page', page_path=page)}}" class="btn">Edit page</a>
 	</div>
-</div>
-<form action="{{url_for('page.view_page', page_path=page)}}" method="post" name="edit_path" class="form-horizontal">
-	{{ form.csrf_token }}
-	<div class="input-append">
-		{{ form.path(placeholder=form.path.label.text, value=page) }}
-		<div class="btn-group">
-			<button class="btn dropdown-toggle" data-toggle="dropdown">Change Path <span class="caret"></span>
-			</button>
-			<ul class="dropdown-menu">
-				<li>{{form.move_only_this() }}</li>
-				<li>{{form.move_children() }}</li>
-			</ul>
+	<form action="{{url_for('page.view_page', page_path=page)}}" method="post" name="edit_path" class="form-horizontal pull-left">
+		{{ form.csrf_token }}
+		<div class="input-append">
+			{{ form.path(placeholder=form.path.label.text, value=page) }}
+			<div class="btn-group">
+				<button class="btn dropdown-toggle" data-toggle="dropdown">Change Path <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					<li>{{form.move_only_this() }}</li>
+					<li>{{form.move_children() }}</li>
+				</ul>
+			</div>
 		</div>
-	</div>
-</form>
+	</form>
+</div>
 
 
 {% endif %}
