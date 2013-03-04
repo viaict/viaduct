@@ -10,7 +10,8 @@
 {% if rights['edit'] %}
 <div class="btn-toolbar clearfix">
 	<div class="btn-group pull-left edit-group">
-		<a href="{{ url_for('page.edit_page', page_path=page)}}" class="btn">Edit page</a>
+		<a href="{{ url_for('page.edit_page', page_path=page)}}" class="btn"><i class="icon-pencil"></i> Edit page</a>
+		<a href="{{ url_for('page.delete_page', page_path=page) }}" class="btn btn-danger confirmation"><i class="icon-trash"></i> Delete this page</a>
 	</div>
 	<form action="{{url_for('page.view_page', page_path=page)}}" method="post" name="edit_path" class="form-horizontal pull-left">
 		{{ form.csrf_token }}
