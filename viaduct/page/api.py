@@ -39,6 +39,3 @@ class PageAPI:
 		return Markup(render_template('page/api/get_page.htm',
 			title=revision.title, content=revision.content))
 
-	@staticmethod
-	def create_page(path):
-
