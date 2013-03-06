@@ -2,11 +2,10 @@ import datetime
 
 from viaduct import db
 
-class PageAncestor(db.Model):
-	__tablename__ = 'page_ancestor'
-
-	page_id = db.Column(db.Integer, db.ForeignKey('page.id'), primary_key = True)
-	ancestor_id = db.Column(db.Integer, db.ForeignKey('page.id'), primary_key = True)
+page_ancestor = db.Table('page_ancestor',
+	db.Column('page_id', db.Integer, db.ForeignKey('page.id')),
+	db.Column('ancestor_id', db.Integer, dbForeignKey('page.id'))
+)
 
 class Page(db.Model):
 	__tablename__ = 'page'
@@ -16,9 +15,10 @@ class Page(db.Model):
 	title = db.Column(db.String(128))
 	path = db.Column(db.String(256), unique=True)
 	parent = db.relationship('Page')
-	ancestors = db.relationship('PageAncestor',
-		primaryjoin=id==PageAncestor.ancestor_id,
-		backref='descendants')
+	ancestors = db.relationship('Page', secondary=page_ancestor,
+		primaryjoin=id==page_ancestor.c.page_id,
+		secondaryjoin=id==page_ancestor.c.ancestor_id,
+		backref=db.backref('descendants', lazy='dynamic'), lazy='dynamic')
 	revisions = db.relationship('PageRevision', backref='page', lazy='dynamic')
 
 	def __init__(self, path):
