@@ -5,8 +5,8 @@ from viaduct import db
 class PageAncestor(db.Model):
 	__tablename__ = 'page_ancestor'
 
-	page_id = db.Column(db.Integer, db.ForeignKey('page.id'), primary_key=True)
-	ancestor_id = db.Column(db.Integer, db.ForeignKey('page.id'), primary_key=True)
+	page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
+	ancestor_id = db.Column(db.Integer, db.ForeignKey('page.id'))
 
 class Page(db.Model):
 	__tablename__ = 'page'
@@ -17,7 +17,6 @@ class Page(db.Model):
 	path = db.Column(db.String(256), unique=True)
 	parent = db.relationship('Page')
 	ancestors = db.relationship('PageAncestor',
-		primaryjoin=id==PageAncestor.ancestor_id,
 		backref=db.backref('descendants', lazy='dynamic'), lazy='dynamic')
 	revisions = db.relationship('PageRevision', backref='page', lazy='dynamic')
 
