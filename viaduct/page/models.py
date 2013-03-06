@@ -16,7 +16,7 @@ class Page(db.Model):
 	title = db.Column(db.String(128))
 	path = db.Column(db.String(256), unique=True)
 	parent = db.relationship('Page', remote_side=[id])
-	ancestors = db.relationship('PageAncestor', secondary=page_ancestor,
+	ancestors = db.relationship('PageAncestor',
 		backref=db.backref('descendants', lazy='dynamic'), lazy='dynamic')
 	revisions = db.relationship('PageRevision', backref='page', lazy='dynamic')
 
