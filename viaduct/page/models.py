@@ -32,6 +32,7 @@ class PageRevision(db.Model):
 
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(128))
+	content_type = db.Column(db.Integer)
 	content = db.Column(db.Text)
 	priority = db.Column(db.Integer, default=0)
 	timestamp = db.Column(db.DateTime)
@@ -54,7 +55,8 @@ class PagePermission(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	view = db.Column(db.Boolean)
 	create = db.Column(db.Boolean)
-	edit = db.Column(db.Boolean)
+	safe_edit = db.Column(db.Boolean)
+	unsafe_edit = db.Column(db.Boolean)
 	delete = db.Column(db.Boolean)
 	page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
 	group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
@@ -86,7 +88,8 @@ class PagePermission(db.Model):
 					if permissions:
 						rights['view'] = rights['view'] or permissions.view
 						rights['create'] = rights['create'] or permissions.create
-						rights['edit'] = rights['edit'] or permissions.edit
+						rights['safe_edit'] = rights['safe_edit'] or permissions.safe_edit
+						rights['unsafe_edit'] = rights['unsafe_edit'] or permissions.unsafe_edit
 						rights['delete'] = rights['delete'] or permissions.delete
 
 						break
