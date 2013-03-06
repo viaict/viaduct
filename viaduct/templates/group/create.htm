@@ -1,0 +1,26 @@
+{% extends "content.htm" %}
+
+{% block title %}Create Group{% endblock %}
+
+{% block content %}
+<form action="" method="post" name="add" class="form-horizontal">
+	<fieldset>
+		<legend>Add group</legend>
+
+		<div class="control-group">
+			<label for="name" class="control-label">Group name</label>
+
+			<div class="controls">
+				<input type="text" placeholder="Group name" name="name" />
+			</div>
+		</div>
+
+		<div class="control-group">
+			<div class="controls">
+				<button type="submit" class="btn">Add group</button>
+			</div>
+		</div>
+	</fieldset>
+</form>
+{% endblock %}
+

@@ -1,0 +1,12 @@
+{% from "macros/flash.htm" import render_flash %}
+
+{% extends "base.htm" %}
+
+{% block page %}
+{% if page %}
+{{ PageAPI.get_page(path) }}
+{% else %}
+{{ PageAPI.get_error_page() }}
+{% endif %}
+{% endblock %}
+
