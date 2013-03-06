@@ -26,7 +26,7 @@ def sign_up():
 	# Redirect the user to the index page if he or she has been authenticated
 	# already.
 	if current_user and current_user.is_authenticated():
-		return redirect(url_for('page.get_page', path=''))
+		return redirect(url_for('page.get_page'))
 
 	form = SignUpForm(request.form)
 
@@ -41,7 +41,7 @@ def sign_up():
 
 		login_user(user)
 
-		return redirect(url_for('page.get_page', path=''))
+		return redirect(url_for('page.get_page'))
 	else:
 		flash_form_errors(form)
 
@@ -52,7 +52,7 @@ def sign_in():
 	# Redirect the user to the index page if he or she has been authenticated
 	# already.
 	if current_user and current_user.is_authenticated():
-		return redirect(url_for('page.get_page', path=''))
+		return redirect(url_for('page.get_page'))
 
 	form = SignInForm(request.form)
 
@@ -72,7 +72,7 @@ def sign_in():
 
 			flash('You\'ve been signed in successfully.')
 
-			return redirect(url_for('page.get_page', path=''))
+			return redirect(url_for('page.get_page'))
 	else:
 		flash_form_errors(form)
 
@@ -85,13 +85,13 @@ def sign_out():
 
 	flash('You\'ve been signed out.')
 
-	return redirect(url_for('page.get_page', path=''))
+	return redirect(url_for('page.get_page'))
 
 @module.route('/users/', methods=['GET', 'POST'])
 @module.route('/users/<int:page>/', methods=['GET', 'POST'])
 def view(page=1):
 	if not UserPermission.get_user_rights(current_user)['view']:
-		return redirect(url_for('index'))
+		return redirect(url_for('page.get_page'))
 
 	# persumably, if the method is a post we have selected stuff to delete,
 	# similary to groups
