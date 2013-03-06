@@ -1,0 +1,25 @@
+<ul class="nav nav-stacked nav-tabs">
+    {% if current_page.count('/') > 0 %}
+    <li>
+        <a href="{{ url_for('page.view_page', page_path='/'.join(current_page.split('/')[:-1])) }}"><i class="icon-chevron-left"></i> Go back</a>
+    {% endif %}
+
+	{% for sibbling in sibblings %}
+		{% if sibbling.path == current_page %}
+			<li class="active">
+				<a href="">{{sibbling.title}}</a>
+			</li>
+
+			{% for child in children %}
+				<li>
+				<a href="{{ url_for('page.view_page', page_path=child.path) }}"><i class="icon-chevron-right"></i> {{child.title}}</a>
+				</li>
+			{% endfor %}
+		{% else %}
+			<li>
+				<a href="{{ url_for('page.view_page', page_path=sibbling.path) }}">{{sibbling.title}}</a>
+			</li>
+		{% endif %}
+
+	{% endfor %}
+</ul>

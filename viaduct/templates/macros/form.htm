@@ -1,0 +1,28 @@
+{% macro render_field(field) %}
+	<div class="control-group">
+		{{ field.label(class='content-label') }}
+
+		<div class="controls">
+			{{ field(placeholder=field.label.text, **kwargs) }}
+		</div>
+	</div>
+{% endmacro %}
+
+{% macro render_button(field) %}
+	<div class="control-group">
+		<div class="controls">
+			{{ field(class='btn', **kwargs) }}
+		</div>
+	</div>
+{% endmacro %}
+
+{% macro render_checkbox(field) %}
+	<div class="control-group">
+		<div class="controls">
+			<label class="checkbox">
+				{{ field(**kwargs) }} {{ field.label.text }}
+			</label>
+		</div>
+	</div>
+{% endmacro %}
+

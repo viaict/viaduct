@@ -1,0 +1,51 @@
+{% from "macros/pagination.htm" import render_pagination %}
+
+{% extends "content.htm" %}
+
+{% block title %}Groups{% endblock %}
+
+{%block content %}
+<form action="" method="post" name="group_view">
+	<fieldset>
+		<legend>Groups</legend>
+
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th>Group name</th>
+					<th></th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{% for group in groups.items %}
+					<tr>
+						<td>
+							<label class="checkbox">
+								<input type=checkbox name="select" value="{{ group.id }}"/>
+								<a href="{{ url_for('group.view_users', group_id=group.id) }}">{{ group.name }}</a>
+							</label>
+						</td>
+
+						<td>
+							<a href="{{ url_for('group.edit', group_id=group.id) }}">
+								<i class="icon-pencil"></i>
+							</a>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+		<div class="btn-toolbar">
+			<div class="btn-group">
+				<a href="{{ url_for('group.create') }}" class="btn">Create</a>
+				<button type="submit" class="btn">Delete</button>
+			</div>
+
+			{{ render_pagination(groups, 'group.view') }}
+		</div>
+	</fieldset>
+</form>
+{% endblock %}
+

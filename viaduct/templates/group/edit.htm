@@ -1,0 +1,41 @@
+{% from "macros/form.htm" import render_button %}
+{% extends "content.htm" %}
+
+{% block title %}Edit Group{% endblock %}
+
+{% block content %}
+<form action="." method="post" name="edit_group" class="form-horizontal">
+	<fieldset>
+		<legend>Edit group</legend>
+
+		{{ form.csrf_token }}
+
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th></th>
+					<th>View</th>
+					<th>Create</th>
+					<th>Edit</th>
+					<th>Delete</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{% for permission in form.permissions %}
+					<tr>
+						<th></th>
+						<th>{{ permission.view }}</th>
+						<th>{{ permission.create }}</th>
+						<th>{{ permission.edit }}</th>
+						<th>{{ permission.delete }}</th>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+		{{ render_button(form.edit_group) }}
+	</fieldset>
+</form>
+{% endblock %}
+

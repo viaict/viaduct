@@ -1,9 +1,9 @@
 import bcrypt
 
-from application import db
-from application.user.models import User, UserPermission
-from application.group.models import Group, GroupPermission
-from application.page.models import Page, PagePermission
+from viaduct import db
+from viaduct.user.models import User, UserPermission
+from viaduct.group.models import Group, GroupPermission
+from viaduct.page.models import Page, PagePermission
 
 # Create the database.
 db.create_all()

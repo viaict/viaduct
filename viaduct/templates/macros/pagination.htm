@@ -1,0 +1,28 @@
+{% macro render_pagination(pagination, end_point) %}
+	<div class="btn-group">
+		{% if pagination.has_prev %}
+			<a href="{{ url_for(end_point, page=pagination.prev_num, **kwargs) }}" class="btn">Previous</a>
+		{% else %}
+			<a href="#" class="btn disabled">Previous</a>
+		{% endif %}
+
+		{% for page in pagination.iter_pages() %}
+			{% if page %}
+				{% if page != pagination.page %}
+					<a href="{{ url_for(end_point, page=page, **kwargs) }}" class="btn">{{ page }}</a>
+				{% else %}
+					<a href="#" class="btn disabled">{{ page }}</a>
+				{% endif %}
+			{% else %}
+				<a href="#" class="btn disabled">...</a>
+			{% endif %}
+		{% endfor %}
+
+		{% if pagination.has_next %}
+			<a href="{{ url_for(end_point, page=pagination.next_num, **kwargs) }}" class="btn">Next</a>
+		{% else %}
+			<a href="#" class="btn disabled">Next</a>
+		{% endif %}
+	</div>
+{% endmacro %}
+
