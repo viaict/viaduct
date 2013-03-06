@@ -4,7 +4,7 @@ from viaduct import db
 
 page_ancestor = db.Table('page_ancestor',
 	db.Column('page_id', db.Integer, db.ForeignKey('page.id')),
-	db.Column('ancestor_id', db.Integer, dbForeignKey('page.id'))
+	db.Column('ancestor_id', db.Integer, db.ForeignKey('page.id'))
 )
 
 class Page(db.Model):
