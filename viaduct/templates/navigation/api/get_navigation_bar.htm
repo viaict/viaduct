@@ -1,0 +1,24 @@
+<ul class="nav nav-pills">
+	{% for page in pages %}
+		{% if page.children %}
+			<li class="dropdown {% if page.current.path == path %}active{% endif %}">
+				<a class="dropdown-toggle" data-hover="dropdown"
+					data-delay="200" data-close-others="true"
+					href="{{ url_for('page.get_page', path=page.current.path) }}">
+					{{ page.current.title }}
+				</a>
+
+				<ul class="dropdown-menu">
+					{% for child in page.children %}
+						<li><a href="{{ url_for('page.get_page', path=child.path) }}">{{ child.title }}</a></li>
+					{% endfor %}
+				</ul>
+			</li>
+		{% else %}
+			<li class="{% if page.current.path == path %}active{% endif %}">
+				<a href="{{ url_for('page.get_page', path=page.current.path) }}">{{ page.current.title }}</a>
+			</li>
+		{% endif %}
+	{% endfor %}
+</ul>
+
