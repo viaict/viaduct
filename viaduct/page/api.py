@@ -37,5 +37,6 @@ class PageAPI:
 			return PageAPI.get_error_page()
 
 		return Markup(render_template('page/api/get_page.htm',
-			title=revision.title, content=revision.content))
+			title=revision.title, content_type=revision.content_type,
+			content=revision.content))
 

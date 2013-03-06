@@ -1,13 +1,17 @@
 {% from "macros/flash.htm" import render_flash %}
 
 {% if title and content %}
-<h1>{{ title }}</h1>
+	<h1>{{ title }}</h1>
 
-{{ content | markdown}}
+	{% if revision.content == 0 %}
+		{{ content | safe }}
+	{% else %}
+		{{ content | markdown }}
+	{% endif %}
 {% else %}
-<h1>Page not found</h1>
+	<h1>Page not found</h1>
 
-The requested page is currently unavailable. It possibly doesn't exist or you
-don't have sufficient rights to view it.
+	<p>The requested page is currently unavailable. It possibly doesn't exist or
+	you don't have sufficient rights to view it.</p>
 {% endif %}
 
