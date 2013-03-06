@@ -5,8 +5,8 @@ from viaduct import db
 class PageAncestor(db.Model):
 	__tablename__ = 'page_ancestor'
 
-	page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
-	ancestor_id = db.Column(db.Integer, db.ForeignKey('page.id'))
+	page_id = db.Column(db.Integer, db.ForeignKey('page.id'), primary_key=True)
+	ancestor_id = db.Column(db.Integer, db.ForeignKey('page.id'), primary_key=True)
 
 class Page(db.Model):
 	__tablename__ = 'page'
