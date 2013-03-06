@@ -6,5 +6,5 @@ logging.basicConfig(stream=sys.stderr)
 
 sys.path.append(os.path.dirname(__file__))
 
-from application import application
+from viaduct import application
 
