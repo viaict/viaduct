@@ -19,7 +19,6 @@ sudo pip install MySQL-python py-bcrypt markdown
 
 VERVOLGENS (in root van de git repo):
 ln -s local_config.py config.py
-mv local_config.py config.py
 python create_db.py
 python run.py
 
