@@ -7,7 +7,13 @@ body {
 }
 
 .sponsor {
+	display: table-cell;
+	text-align: center;
 }
+.sponsor img {
+	vertical-align: center;
+}
+
 .mainblock {
 	border-radius: 6px 6px 6px 6px;
 	border: 1px solid #ddd;
