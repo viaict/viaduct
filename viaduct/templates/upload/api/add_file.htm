@@ -1,0 +1,15 @@
+{% from "macros/form.htm" import render_button, render_field %}
+
+<form action="{{ url_for('upload.add_file') }}" method="post" enctype="multipart/form-data" name="add_file" class="form-horizontal">
+	{{ form.csrf_token }}
+
+	{% for attachment in form.attachments %}
+		{{ render_field(attachment) }}
+	{% endfor %}
+
+	<div class="btn-group">
+		{{ render_button(form.add_attachment) }}
+		{{ render_button(form.upload) }}
+	</div>
+</form>
+

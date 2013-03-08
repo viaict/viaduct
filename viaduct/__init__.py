@@ -21,6 +21,7 @@ import navigation
 import page
 import user
 import pimpy
+import upload
 
 from viaduct.user.views import load_anonymous_user
 
