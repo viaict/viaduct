@@ -72,8 +72,8 @@ class PagePermission(db.Model):
 
 	@staticmethod
 	def get_user_rights(user, page_path):
-		rights = {'view': False, 'create': False, 'edit': False,
-			'delete': False}
+		rights = {'view': False, 'create': False, 'safe_edit': False,
+			'unsafe_edit': False, 'delete': False}
 		groups = user.groups.all()
 
 		for group in groups:
