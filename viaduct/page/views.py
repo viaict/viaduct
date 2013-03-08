@@ -42,13 +42,11 @@ def edit_page(path=''):
 
 	form = EditPageForm()
 
-	form.content_type.choices = []
-
 	if rights['unsafe_edit']:
-		form.content_type.choices.append(('1', 'HTML'))
+		form.content_type.choices += ['1', 'HTML']
 
 	if rights['safe_edit']:
-		form.content_type.choices.append(('2', 'Markdown'))
+		form.content_type.choices += ['2', 'Markdown']
 
 	page = Page.query.filter(Page.path==path).first()
 	revision = None
