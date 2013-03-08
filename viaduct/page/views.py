@@ -35,14 +35,24 @@ def delete_page(page_path='', revision=''):
 @module.route('/edit/', methods=['GET', 'POST'])
 @module.route('/edit/<path:path>', methods=['GET', 'POST'])
 def edit_page(path=''):
-	if not PagePermission.get_user_rights(current_user, path)['edit']:
+	rights = PagePermission.get_user_rights(current_user, path)
+
+	if not rights['safe_edit'] or not rights['unsafe_edit']:
 		abort(403)
 
-	page = Page.get_page_by_path(path)
+	form = EditPageForm()
+
+	if rights['unsafe_edit']:
+		form.content_type.choices.append(('1', 'HTML'))
+
+	if rights['safe_edit']:
+		form.content_type.choices.append(('2', 'Markdown'))
+
+	page = Page.query.filter(Page.path==path).first()
 	revision = None
 
 	if page:
-		revision = page.get_newest_revision()
+		revision = page.revisions.order_by(PageRevision.timestamp.desc()).first()
 
 	if request.method == 'POST':
 		title = request.form['title'].strip()
@@ -69,5 +79,6 @@ def edit_page(path=''):
 
 		return redirect(url_for('page.get_page', page=True, path=page_path))
 
-	return render_template('page/edit_page.htm', revision=revision, page=path)
+	return render_template('page/edit_page.htm', form=form,
+		revision=revision, page=path)
 
