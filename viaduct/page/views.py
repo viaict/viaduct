@@ -35,7 +35,9 @@ def delete_page(page_path='', revision=''):
 @module.route('/edit/', methods=['GET', 'POST'])
 @module.route('/edit/<path:path>', methods=['GET', 'POST'])
 def edit_page(path=''):
-	if not PagePermission.get_user_rights(current_user, path)['edit']:
+	rights = PagePermission.get_user_rights(current_user, path)
+
+	if not rights['safe_edit'] or not rights['unsafe_edit']:
 		abort(403)
 
 	page = Page.get_page_by_path(path)
