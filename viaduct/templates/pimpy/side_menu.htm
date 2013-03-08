@@ -1,0 +1,23 @@
+<ul class="nav">
+	{% if current_group == "all" %}
+		<li class="active">
+			<a href="#">Overzicht</a>
+		</li>
+	{% else %}
+		<li>
+			<a href="">Overzicht</a>
+		</li>
+	{% endif %}
+
+	{% for group in groups %}
+		{% if current_group == group.name %}
+			<li class="active">
+				<a href="#">{{ group.name }}</a>
+			</li>
+		{% else %}
+			<li>
+				<a href="">{{ group.name }}</a>
+			</li>
+		{% endif %}
+	{% endfor %}
+</ul>
