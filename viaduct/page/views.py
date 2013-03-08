@@ -45,10 +45,12 @@ def edit_page(path=''):
 	form.content_type.choices = []
 
 	if rights['unsafe_edit']:
-		form.content_type.choices.append(('1', 'HTML'))
+		form.content_type.choices.append((1, 'HTML'))
+		form.content_type.default = 1
 
 	if rights['safe_edit']:
-		form.content_type.choices.append(('2', 'Markdown'))
+		form.content_type.choices.append((2, 'Markdown'))
+		form.content_type.default = 2
 
 	page = Page.query.filter(Page.path==path).first()
 	revision = None
