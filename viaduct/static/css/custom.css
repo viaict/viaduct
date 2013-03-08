@@ -2,6 +2,14 @@ body {
 	overflow-y: scroll;
 }
 
+.twtr-widget h3 {
+	font-size: 200% !important;
+	float: left;
+}
+.twtr-widget h4 {
+	float: right;
+}
+
 .logo {
 	margin: 10px;
 }
