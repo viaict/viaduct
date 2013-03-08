@@ -20,6 +20,8 @@ import group
 import navigation
 import page
 import user
+import upload
+import pimpy
 
 from viaduct.user.views import load_anonymous_user
 

@@ -24,11 +24,6 @@ group = Group('anonymous')
 db.session.add(group)
 db.session.commit()
 
-permissions = PagePermission(group, page, view=True)
-
-db.session.add(permissions)
-db.session.commit()
-
 # Add the administrator.
 user = User('administrator@svia.nl', bcrypt.hashpw('administrator',
 	bcrypt.gensalt()), 'Administrator', '')

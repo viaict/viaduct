@@ -18,8 +18,7 @@ easy_install -U distribute
 sudo pip install MySQL-python py-bcrypt markdown
 
 VERVOLGENS (in root van de git repo):
-cp config.py config.py.backup
-mv local_config.py config.py
+ln -s local_config.py config.py
 python create_db.py
 python run.py
 
