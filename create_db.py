@@ -8,6 +8,11 @@ from viaduct.page.models import Page, PagePermission
 # Create the database.
 db.create_all()
 
+page = Page('')
+
+db.session.add(page)
+db.session.commit()
+
 # Add the anonymous user.
 user = User('anonymous', '', 'Anonymous', '')
 
