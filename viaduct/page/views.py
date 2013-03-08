@@ -40,11 +40,11 @@ def edit_page(path=''):
 	if not rights['safe_edit'] or not rights['unsafe_edit']:
 		abort(403)
 
-	page = Page.get_page_by_path(path)
+	page = Page.query.filter(Page.path==path).first()
 	revision = None
 
 	if page:
-		revision = page.get_newest_revision()
+		revision = page.revisions.order_by(PageRevision.timestamp.desc()).first()
 
 	if request.method == 'POST':
 		title = request.form['title'].strip()
