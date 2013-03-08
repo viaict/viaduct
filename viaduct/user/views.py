@@ -21,7 +21,7 @@ def load_user(id):
 def load_anonymous_user():
 	return User.query.filter(User.email=='anonymous').first()
 
-@module.route('/signup/', methods=['GET', 'POST'])
+@module.route('/sign-up/', methods=['GET', 'POST'])
 def sign_up():
 	# Redirect the user to the index page if he or she has been authenticated
 	# already.
@@ -47,7 +47,7 @@ def sign_up():
 
 	return render_template('user/sign_up.htm', form=form)
 
-@module.route('/signin/', methods=['GET', 'POST'])
+@module.route('/sign-in/', methods=['GET', 'POST'])
 def sign_in():
 	# Redirect the user to the index page if he or she has been authenticated
 	# already.
@@ -78,7 +78,7 @@ def sign_in():
 
 	return render_template('user/sign_in.htm', form=form)
 
-@module.route('/signout/')
+@module.route('/sign-out/')
 def sign_out():
 	# Notify the login manager that the user has been signed out.
 	logout_user()
