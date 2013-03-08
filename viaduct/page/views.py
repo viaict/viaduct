@@ -7,7 +7,7 @@ from viaduct.helpers import flash_form_errors
 
 from api import PageAPI
 from models import Page, PageRevision, PagePermission
-from forms import ChangePathForm
+from forms import ChangePathForm, EditPageForm
 
 module = Blueprint('page', __name__)
 
@@ -61,7 +61,6 @@ def edit_page(path=''):
 			priority = int(request.form['priority'].strip())
 		except:
 			priority = 0
-
 
 		# A new page is being created
 		if not page:
