@@ -2,8 +2,10 @@
 
 {%block content %}
 
+<ul>
 	{% for list_item in list_items: %}
-		{{ list_item.name }}
+		<li> {{ list_item.get_title() }}</li>
 	{% endfor %}
+</ul>
 
 {% endblock %}
