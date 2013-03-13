@@ -1,11 +1,21 @@
 {% extends "pimpy/base.htm" %}
 
+
 {%block content %}
 
-<ul>
-	{% for list_item in list_items: %}
-		<li> {{ list_item.get_title() }}</li>
-	{% endfor %}
-</ul>
+	<ul>
+		{% for list_item in list_items: %}
+			<li> {{ list_item.get_title() }}</li>
+		{% endfor %}
+	</ul>
+	
+	
+	{% block menu %}
+			<div class="column">
+				<div class="span12">
+					{{ PimpyAPI.get_navigation_menu() }}
+				</div>
+			</div>
+	{% endblock %}
 
 {% endblock %}
