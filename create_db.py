@@ -75,10 +75,10 @@ db.session.commit()
 #				minute, line):
 
 # Add standard pimpy tasks
-minute = Minute("minute content, jaja")
+minute = Minute("minute content, jaja", 2)
 db.session.add(minute)
 db.session.commit()
 
-task = Task('test task', 'test content', datetime.date(2020, 10, 10), 1, [user], 1, minute.id)
+task = Task('test task', 'test content', datetime.date(2020, 10, 10), 2, [user], 1, minute.id)
 db.session.add(task)
 db.session.commit()

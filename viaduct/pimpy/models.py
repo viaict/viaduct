@@ -12,10 +12,7 @@ task_user = db.Table('pimpy_task_user',
 	db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
 )
 
-class ListItem(object):
-    name = "jaja"
-
-class Task(ListItem, db.Model):
+class Task(db.Model):
 	__tablename__ = 'pimpy_task'
 
 	id = db.Column(db.Integer, primary_key=True)
@@ -26,15 +23,12 @@ class Task(ListItem, db.Model):
 	line = db.Column(db.Integer)
 
 	minute_id = db.Column(db.Integer, db.ForeignKey('pimpy_minute.id'))
-	#minute = db.relationship('Minute', backref='tasks')
 
 	group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
-	#group = db.relationship('Group', backref='tasks')
 
 	users = db.relationship('User', secondary=task_user,
 		backref=db.backref('tasks', lazy='dynamic'), lazy='dynamic')
 
-	#minute = db.relationship("Minute", backref='tasks')
 
 
 	def __init__(self, title, content, deadline, group_id, users,
@@ -44,24 +38,25 @@ class Task(ListItem, db.Model):
 		self.deadline = deadline
 		self.group_id = group_id
 		self.line = line
-
-		# TODO: the relationship might need to be set differently?
 		self.users = users
 		self.minute_id = minute_id
 
-class Minute(ListItem, db.Model):
+	def get_title(self):
+		return self.title
+
+class Minute(db.Model):
 	__tablename__ = 'pimpy_minute'
 
 	id = db.Column(db.Integer, primary_key=True)
 	timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow())
 	content = db.Column(db.Text)
-
 	group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
-	#group = db.relationship('Group', backref='minutes')
+	tasks = db.relationship('Task', backref='minute', lazy='dynamic')
 
-	#task_id = db.Column(db.Integer, db.ForeignKey('pimpy_task.id'))
-	tasks = db.relationship("Task", backref='minute', lazy='dynamic')
-	#tasks = db.relationship('pimpy_task', backref='minute', lazy='dynamic')
 
-	def __init__(self, content):
+	def __init__(self, content, group_id):
 		self.content = content
+		self.group_id = group_id
+
+	def get_title(self):
+		return '%s van %s' % (self.group.name, self.timestamp)
