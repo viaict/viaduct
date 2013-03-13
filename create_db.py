@@ -1,10 +1,16 @@
 import bcrypt
 
+import datetime
 from viaduct import db
 from viaduct.user.models import User, UserPermission
 from viaduct.group.models import Group, GroupPermission
 from viaduct.page.models import Page, PagePermission
 from viaduct.pimpy.models import Minute, Task
+
+import os
+
+# Remove the old db
+os.system("rm application.db")
 
 # Create the database.
 db.create_all()
@@ -63,3 +69,16 @@ permissions = PagePermission(group, page, view=True, create=True, edit=True,
 db.session.add(permissions)
 db.session.commit()
 
+
+
+#	def __init__(self, title, content, deadline, group_id, users,
+#				minute, line):
+
+# Add standard pimpy tasks
+minute = Minute("minute content, jaja")
+db.session.add(minute)
+db.session.commit()
+
+task = Task('test task', 'test content', datetime.date(2020, 10, 10), 1, [user], 1, minute.id)
+db.session.add(task)
+db.session.commit()
