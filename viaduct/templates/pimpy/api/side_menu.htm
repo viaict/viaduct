@@ -1,5 +1,5 @@
-<a href="{{ url_for('pimpy.view_page', group=current_group, type='minutes') }}">minutes</a>/
-<a href="{{ url_for('pimpy.view_page', group=current_group, type='tasks') }}">tasks</a>
+<a href="{{ url_for('pimpy.view_page', type='minutes', group=current_group) }}">minutes</a>/
+<a href="{{ url_for('pimpy.view_page', type='tasks', group=current_group) }}">tasks</a>
 <ul class="nav">
 	<li>
 		<a href="{{ url_for('pimpy.view_page', type=type, group='all') }}">all</a>
