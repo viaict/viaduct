@@ -4,6 +4,7 @@ from viaduct import db
 from viaduct.user.models import User, UserPermission
 from viaduct.group.models import Group, GroupPermission
 from viaduct.page.models import Page, PagePermission
+from viaduct.pimpy.models import Minute, Task
 
 # Create the database.
 db.create_all()

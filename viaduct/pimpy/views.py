@@ -9,19 +9,18 @@ module = Blueprint('pimpy', __name__)
 
 @module.route('/pimpy/', methods=['GET', 'POST'])
 @module.route('/pimpy/<minutesOrTasks>/<groups>', methods=['GET', 'POST'])
-def view_page(type='all', groups=):
+def view_page(minutesOrTasks='all', groups=""):
 
-	# haal 
+
+	# haal ofwel de minutes ofwel de tasks op
 	list_items = []
 	for group in current_user.groups.all():
-		if type == 'tasks'
-			for task in group.minutes
-				list_items.extend(minute.tasks.all())
-		elif type == 'minutes'
-			for minute in group.minutes
-				list_items.extend(minute.tasks.all())
+		if minutesOrTasks == 'tasks':
+			list_items.extend(group.tasks.all())
+		elif minutesOrTasks == 'minutes':
+			list_items.extend(group.minutes.all())
 			
 
 	
-	return render_template('pimpy/view_page.htm', list_items=list_items, page=True, path=path)
+	return render_template('pimpy/view_page.htm', list_items=list_items, page=True)
 
