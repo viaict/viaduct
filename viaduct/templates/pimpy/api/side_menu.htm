@@ -1,0 +1,16 @@
+<a href="{{ url_for('pimpy.view_page', group=current_group, type='minutes') }}">minutes</a>/
+<a href="{{ url_for('pimpy.view_page', group=current_group, type='tasks') }}">tasks</a>
+<ul class="nav">
+	<li>
+		<a href="{{ url_for('pimpy.view_page', type=type, group='all') }}">all</a>
+	</li>
+	{% for group in groups %}
+		{% if group.name == current_group %}
+			<li class="active">
+		{% else %}
+			<li>
+		{% endif %}
+		<a href="{{ url_for('pimpy.view_page', type=type, group=group.name) }}">{{ group.name }}</a>
+		</li>
+	{% endfor %}
+</ul>
