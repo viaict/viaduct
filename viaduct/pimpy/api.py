@@ -28,10 +28,10 @@ class PimpyAPI:
 			print "group id %d" % group.id
 			if request.args.get('type', '') == 'tasks':
 				print "shall load tasks!" 
-				list_items.extend(group.tasks.all())
+				list_items.extend(group.tasks)
 			elif request.args.get('type', '') == 'minutes':
 				print "shall load minutes!" 
-				list_items.extend(group.minutes.all())
+				list_items.extend(group.minutes)
 
 		url_part = "tasks" if request.args.get('minutesOrTasks', '') == 'tasks' else "minutes"
 		return Markup(render_template('pimpy/api/%s.htm' % url_part,
