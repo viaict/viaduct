@@ -9,8 +9,8 @@ from viaduct.pimpy.models import Minute, Task
 
 import os
 
-# Remove the old db
-os.system("rm application.db")
+# Remove the old db.
+os.remove('application.db')
 
 # Create the database.
 db.create_all()
