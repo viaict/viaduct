@@ -23,10 +23,12 @@ from application.user.views import user
 from application.group.views import group
 from application.page.views import page_module
 from application.navigation.views import view_bar, view_side_bar
+from application.tentamens.views import tentamens_module
 
 application.register_blueprint(user)
 application.register_blueprint(group)
 application.register_blueprint(page_module)
+application.register_blueprint(tentamens_module)
 
 # Register global views to be used within the template engine.
 application.jinja_env.globals.update(test=views.test)
