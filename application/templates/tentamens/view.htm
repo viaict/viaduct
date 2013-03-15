@@ -1,0 +1,32 @@
+{% from "macros/pagination.htm" import render_pagination %}
+
+{% extends "base.htm" %}
+
+{% block title %}Tentamens{% endblock %}
+
+{%block page %}
+<form action="" method="post" name="group_view">
+	<fieldset>
+		<legend>Tentamens</legend>
+
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th>Tentamen Naam</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{% for tentamen in tentamens %}
+					<tr>
+						<td>
+							<a href="{{ (pathname + tentamen) }}">{{ tentamen }}</a>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</fieldset>
+</form>
+{% endblock %}
+
