@@ -1,5 +1,6 @@
 from viaduct import db
-from viaduct.user.models import User, UserPermission
+
+from viaduct.blueprints.user.models import User, UserPermission
 
 user_group = db.Table('user_group',
 	db.Column('user_id', db.Integer, db.ForeignKey('user.id')),

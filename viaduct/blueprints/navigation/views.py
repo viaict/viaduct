@@ -1,8 +1,7 @@
 from flask import Markup
 from flask import render_template
 
-from viaduct.page.models import Page
-from viaduct.helpers import find_subpages, get_current_page
+from viaduct.blueprints.page.models import Page
 
 def view_bar():
 	current_page = request.path.split('/')[0]

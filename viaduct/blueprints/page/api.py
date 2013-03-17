@@ -40,3 +40,7 @@ class PageAPI:
 			title=revision.title, content_type=revision.content_type,
 			content=revision.content))
 
+	@staticmethod
+	def get_page_history(path):
+		return Markup(render_template('page/api/get_page_history'))
+

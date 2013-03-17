@@ -12,8 +12,11 @@ class Page(db.Model):
 
 	id = db.Column(db.Integer, primary_key=True)
 	parent_id = db.Column(db.Integer, db.ForeignKey('page.id'))
-	title = db.Column(db.String(128))
 	path = db.Column(db.String(256), unique=True)
+	title = db.Column(db.String(128))
+	safe_content = db.Column(db.Boolean)
+	content = db.Column(db.Text)
+
 	parent = db.relationship('Page')
 	ancestors = db.relationship('Page', secondary=page_ancestor,
 		primaryjoin=id==page_ancestor.c.page_id,
@@ -23,21 +26,31 @@ class Page(db.Model):
 
 	def __init__(self, path):
 		self.path = path
-	
+
 	def __repr__(self):
 		return '<Page(%s, "%s")>' % (self.id, self.path)
+
+	@staticmethod
+	def get_by_path(path):
+		return Page.query.filter(Page.path==path).first()
+
+	def has_revisions(self):
+		return self.revisions.count() > 0
 
 class PageRevision(db.Model):
 	__tablename__ = 'page_revision'
 
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(128))
-	content_type = db.Column(db.Integer)
+	safe_content = db.Column(db.Boolean)
 	content = db.Column(db.Text)
 	priority = db.Column(db.Integer, default=0)
 	timestamp = db.Column(db.DateTime)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
+
+	author = db.relationship('User', backref=db.backref('page_edits',
+		lazy='dynamic'))
 
 	def __init__(self, page, author, title, content, priority,
 		timestamp=datetime.datetime.utcnow()):
