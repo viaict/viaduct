@@ -2,10 +2,10 @@ import bcrypt
 
 import datetime
 from viaduct import db
-from viaduct.user.models import User, UserPermission
-from viaduct.group.models import Group, GroupPermission
-from viaduct.page.models import Page, PagePermission
-from viaduct.pimpy.models import Minute, Task
+from viaduct.blueprints.user.models import User, UserPermission
+from viaduct.blueprints.group.models import Group, GroupPermission
+from viaduct.blueprints.page.models import Page, PagePermission
+from viaduct.blueprints.pimpy.models import Minute, Task
 
 import os
 

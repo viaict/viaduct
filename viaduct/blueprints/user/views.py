@@ -5,12 +5,14 @@ from flask import flash, get_flashed_messages, redirect, render_template, \
 from flask import Blueprint, Markup
 from flask.ext.login import current_user, login_user, logout_user
 
+blueprint = Blueprint('user', __name__)
+
 from viaduct import application, db, login_manager
 from viaduct.helpers import flash_form_errors
-from viaduct.user.forms import SignUpForm, SignInForm
-from viaduct.user.models import User, UserPermission
+from forms import SignUpForm, SignInForm
+from models import User, UserPermission
 
-module = Blueprint('user', __name__)
+#blueprint = Blueprint('user', __name__)
 
 @login_manager.user_loader
 def load_user(id):
@@ -21,7 +23,7 @@ def load_user(id):
 def load_anonymous_user():
 	return User.query.filter(User.email=='anonymous').first()
 
-@module.route('/sign-up/', methods=['GET', 'POST'])
+@blueprint.route('/sign-up/', methods=['GET', 'POST'])
 def sign_up():
 	# Redirect the user to the index page if he or she has been authenticated
 	# already.
@@ -47,7 +49,7 @@ def sign_up():
 
 	return render_template('user/sign_up.htm', form=form)
 
-@module.route('/sign-in/', methods=['GET', 'POST'])
+@blueprint.route('/sign-in/', methods=['GET', 'POST'])
 def sign_in():
 	# Redirect the user to the index page if he or she has been authenticated
 	# already.
@@ -78,7 +80,7 @@ def sign_in():
 
 	return render_template('user/sign_in.htm', form=form)
 
-@module.route('/sign-out/')
+@blueprint.route('/sign-out/')
 def sign_out():
 	# Notify the login manager that the user has been signed out.
 	logout_user()
@@ -87,11 +89,11 @@ def sign_out():
 
 	return redirect(url_for('page.get_page'))
 
-@module.route('/users/', methods=['GET', 'POST'])
-@module.route('/users/<int:page>/', methods=['GET', 'POST'])
+@blueprint.route('/users/', methods=['GET', 'POST'])
+@blueprint.route('/users/<int:page>/', methods=['GET', 'POST'])
 def view(page=1):
 	if not UserPermission.get_user_rights(current_user)['view']:
-		return redirect(url_for('page.get_page'))
+		abort(403)
 
 	# persumably, if the method is a post we have selected stuff to delete,
 	# similary to groups

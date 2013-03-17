@@ -1,8 +1,28 @@
+import os
+
 from flask import Flask
 from flask.ext.login import LoginManager
 from flask.ext.sqlalchemy import SQLAlchemy
 
-from viaduct.helpers import register_blueprints
+def import_module(name):
+	module = __import__(name)
+
+	for component in name.split('.')[1:]:
+		module = getattr(module, component)
+
+	return module
+
+def register_blueprints(application, path, extension):
+	path = os.path.relpath(path)
+
+	for current, directories, files in os.walk(path):
+		for directory in directories:
+			name = '.'.join([current.replace('/', '.'), directory, extension])
+			print('Importing ' + name)
+			blueprint = getattr(import_module(name), 'blueprint', None)
+
+			if blueprint:
+				application.register_blueprint(blueprint)
 
 # Set up the application and load the configuration file.
 application = Flask(__name__)
@@ -17,17 +37,25 @@ login_manager.login_view = 'signin'
 # Set up the database.
 db = SQLAlchemy(application)
 
-# Import the modules.
-register_blueprints(application, 'blueprints')
+# Register the blueprints.
+path = os.path.dirname(os.path.abspath(__file__))
+register_blueprints(application, os.path.join(path, 'blueprints'), 'views')
 
-import group
-import navigation
+from viaduct.blueprints.user.views import blueprint
+
+application.register_blueprint(blueprint)
+
+#import group
+#import navigation
 #import page
 import user
 import pimpy
 import upload
+#import user
+#import upload
+#import pimpy
 
-from viaduct.user.views import load_anonymous_user
+from viaduct.blueprints.user.views import load_anonymous_user
 
 login_manager.anonymous_user = load_anonymous_user
 

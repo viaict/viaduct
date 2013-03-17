@@ -9,20 +9,20 @@ from api import PageAPI
 from models import Page, PageRevision, PagePermission
 from forms import ChangePathForm, EditPageForm
 
-module = Blueprint('page', __name__)
+blueprint = Blueprint('page', __name__)
 
 @application.errorhandler(403)
 @application.errorhandler(404)
 def get_error_page(error):
 	return render_template('page/view_page.htm')
 
-@module.route('/', methods=['GET', 'POST'])
-@module.route('/<path:path>', methods=['GET', 'POST'])
+@blueprint.route('/', methods=['GET', 'POST'])
+@blueprint.route('/<path:path>', methods=['GET', 'POST'])
 def get_page(path=''):
 	return render_template('page/view_page.htm', page=True, path=path)
 
-@module.route('/delete/')
-@module.route('/delete/<path:page_path>')
+@blueprint.route('/delete/')
+@blueprint.route('/delete/<path:page_path>')
 def delete_page(page_path='', revision=''):
 	page = Page.query.filter(Page.path==page_path).first()
 	revisions = PageRevision.query.filter(PageRevision.page_id==page.id).all()
@@ -32,8 +32,8 @@ def delete_page(page_path='', revision=''):
 	db.session.commit()
 	return redirect('/')
 
-@module.route('/edit/', methods=['GET', 'POST'])
-@module.route('/edit/<path:path>', methods=['GET', 'POST'])
+@blueprint.route('/edit/', methods=['GET', 'POST'])
+@blueprint.route('/edit/<path:path>', methods=['GET', 'POST'])
 def edit_page(path=''):
 	rights = PagePermission.get_user_rights(current_user, path)
 

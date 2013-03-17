@@ -1,8 +1,9 @@
 from flask import render_template, request, Markup
-
-from viaduct.pimpy.models import Task, Minute
-from viaduct.page.models import Page
 from flask.ext.login import current_user
+
+from models import Task, Minute
+
+from viaduct.blueprints.page.models import Page
 
 class PimpyAPI:
 	@staticmethod
