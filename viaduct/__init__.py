@@ -2,6 +2,8 @@ from flask import Flask
 from flask.ext.login import LoginManager
 from flask.ext.sqlalchemy import SQLAlchemy
 
+from viaduct.helpers import register_blueprints
+
 # Set up the application and load the configuration file.
 application = Flask(__name__)
 application.config.from_object('config')
@@ -16,9 +18,11 @@ login_manager.login_view = 'signin'
 db = SQLAlchemy(application)
 
 # Import the modules.
+register_blueprints(application, 'blueprints')
+
 import group
 import navigation
-import page
+#import page
 import user
 import pimpy
 import upload
