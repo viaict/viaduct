@@ -36,7 +36,7 @@ class CourseAPI(Resource):
 		courses = Course.query.filter(Course.id.in_(course_ids)).all()
 
 		for course in courses:
-			results.append(course.todict())
+			results.append(course.to_dict())
 
 		return results
 
