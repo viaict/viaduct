@@ -28,7 +28,8 @@ def register_blueprints(application, path, extension):
 			current = os.path.relpath(current, here)
 			current = current.replace('/', '.')
 			name = '.'.join([current, directory, extension])
-			blueprint = getattr(import_module(name), 'blueprint', None)
+			#blueprint = getattr(import_module(name), 'blueprint', None)
+			blueprint = None
 
 			if blueprint:
 				application.register_blueprint(blueprint)
