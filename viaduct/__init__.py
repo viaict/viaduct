@@ -11,7 +11,6 @@ def import_module(name):
 	module = __import__(name.split('.')[0])
 
 	for component in name.split('.')[1:]:
-		print('{0} and {1}'.format(module, component))
 		module = getattr(module, component)
 
 	return module
