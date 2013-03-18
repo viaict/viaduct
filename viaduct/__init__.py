@@ -10,6 +10,7 @@ def import_module(name):
 	print('Importing {0}...'.format(name))
 	module = __import__('viaduct')
 	print(module)
+	print(dir(module))
 	module = getattr(module, 'blueprints')
 	print(module)
 	module = getattr(module, 'user')
