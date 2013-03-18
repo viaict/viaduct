@@ -7,18 +7,7 @@ from flask.ext.restful import Api
 from flask.ext.sqlalchemy import SQLAlchemy
 
 def import_module(name):
-	print('Importing {0}...'.format(name))
-	module = __import__('viaduct.blueprints')
-	print(module)
-	print(dir(module))
-	module = getattr(module, 'blueprints')
-	print(module)
-	module = getattr(module, 'user')
-	print(module)
-	module = getattr(module, 'views')
-	print(module)
-
-	module = __import__(name.split('.')[0])
+	module = __import__(name)
 
 	for component in name.split('.')[1:]:
 		module = getattr(module, component)
