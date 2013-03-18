@@ -13,9 +13,6 @@ class Page(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	parent_id = db.Column(db.Integer, db.ForeignKey('page.id'))
 	path = db.Column(db.String(256), unique=True)
-	title = db.Column(db.String(128))
-	safe_content = db.Column(db.Boolean)
-	content = db.Column(db.Text)
 
 	parent = db.relationship('Page')
 	ancestors = db.relationship('Page', secondary=page_ancestor,
@@ -42,7 +39,7 @@ class PageRevision(db.Model):
 
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(128))
-	safe_content = db.Column(db.Boolean)
+	filter_html = db.Column(db.Boolean)
 	content = db.Column(db.Text)
 	priority = db.Column(db.Integer, default=0)
 	timestamp = db.Column(db.DateTime)
