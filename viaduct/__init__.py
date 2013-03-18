@@ -8,7 +8,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 
 def import_module(name):
 	print('Importing {0}...'.format(name))
-	module = __import__(name.split(.)[0])
+	module = __import__(name.split('.')[0])
 
 	for component in name.split('.')[1:]:
 		print(component)
