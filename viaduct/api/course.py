@@ -39,10 +39,10 @@ class CourseAPI(Resource):
 		except Exception:
 			return make_api_response(400, 'Data does not correspond to scheme.')
 
-		if isinstance(data, list):
-			course_ids = data
-		elif isinstance(data, int):
-			course_ids = [data]
+		if isinstance(data['id'], list):
+			course_ids = data['id']
+		elif isinstance(data['id'], int):
+			course_ids = [data['id']]
 
 		query = Course.query
 
