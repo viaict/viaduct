@@ -62,6 +62,8 @@ class CourseAPI(Resource):
 		schema = {'type': [{'type', 'integer'},
 			{'type': 'array', 'items': {'type': 'integer'}}]}
 
+		print(data)
+
 		try:
 			validictory.validate(data, schema)
 		except Exception:
