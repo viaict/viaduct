@@ -1,17 +1,20 @@
 import validictory
 
-from flask import request
-from flask.ext.restful import Resource
+from flask import json, Response, request
+from flask.views import MethodView
 
-from viaduct import api_manager, db
+from viaduct import application, db
+from viaduct.helpers import Resource
 from viaduct.helpers.api import make_api_response
 from viaduct.models import Course, Education
 
 class CourseAPI(Resource):
 	@staticmethod
 	def register():
-		api_manager.add_resource(CourseAPI, '/api/courses', '/api/courses/',
-			'/api/courses/<int:course_id>', '/api/courses/<int:course_id>/')
+		view = CourseAPI.as_view('course_api')
+
+		application.add_url_rule('/api/courses/', view_func=view,
+			methods=['DELETE', 'GET', 'POST'])
 
 	@staticmethod
 	def get(course_id=None):
@@ -44,8 +47,8 @@ class CourseAPI(Resource):
 		except Exception:
 			return make_api_response(400, 'Data does not correspond to scheme.')
 
-		if Education.query.filter(Education.id==data['education_id']).count() == 0:
-			return make_api_response(400, 'No object has been associated with the education ID that has been specified.')
+#		if Education.query.filter(Education.id==data['education_id']).count() == 0:
+#			return make_api_response(400, 'No object has been associated with the education ID that has been specified.')
 
 		if Course.query.filter(Course.name==data['name']).count() > 0:
 			return make_api_response(400, 'There is already an object with the name that has been specified.')
@@ -59,10 +62,8 @@ class CourseAPI(Resource):
 	@staticmethod
 	def delete():
 		data = request.json
-		schema = [{'type': 'integer'},
-			{'type': 'array', 'items': {'type': 'integer'}}]
-
-		print(data)
+		schema = {'type': [{'type': 'integer'},
+			{'type': 'array', 'items': {'type': 'integer'}}]}
 
 		try:
 			validictory.validate(data, schema)

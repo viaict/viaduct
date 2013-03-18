@@ -1,9 +1,10 @@
 import validictory
 
 from flask import request
-from flask.ext.restful import Resource
+from flask.views import MethodView
 
-from viaduct import api_manager, db
+from viaduct import application, db
+from viaduct.helpers import Resource
 from viaduct.helpers.api import make_api_response
 
 from viaduct.models import Degree
@@ -11,8 +12,10 @@ from viaduct.models import Degree
 class DegreeAPI(Resource):
 	@staticmethod
 	def register():
-		api_manager.add_resource(DegreeAPI, '/api/degrees', '/api/degrees/',
-			'/api/degrees/<int:degree_id>', '/api/degrees/<int:degree_id>/')
+		view = DegreeAPI.as_view('degree_api')
+
+		application.add_url_rule('/api/degrees/', view_func=view,
+			methods=['DELETE', 'GET', 'POST'])
 
 	@staticmethod
 	def get(degree_id=None):
