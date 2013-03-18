@@ -7,6 +7,7 @@ from flask.ext.restful import Api
 from flask.ext.sqlalchemy import SQLAlchemy
 
 def import_module(name):
+	print('Importing {0}...'.format(name))
 	module = __import__(name)
 
 	for component in name.split('.')[1:]:
@@ -54,8 +55,6 @@ db = SQLAlchemy(application)
 db.Model.to_dict = model_to_dict
 
 # Register the blueprints.
-import api
-
 path = os.path.dirname(os.path.abspath(__file__))
 register_blueprints(application, os.path.join(path, 'blueprints'), 'views')
 
