@@ -10,6 +10,8 @@ def import_module(name):
 	print('Importing {0}...'.format(name))
 	module = __import__(name.split('.')[0])
 
+	print(module)
+
 	for component in name.split('.')[1:]:
 		print(component)
 		module = getattr(module, component)
