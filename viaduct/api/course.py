@@ -17,21 +17,28 @@ class CourseAPI(Resource):
 			methods=['DELETE', 'GET', 'POST'])
 
 	@staticmethod
-	def get(course_id=None):
-		if course_id:
-			course = Course.query.get(course_id)
+	def get():
+		data = request.json
+		schema = {'type': [{'type': 'integer'},
+			{'type': 'array', 'items': {'type': 'integer'}}]}
+		results = []
 
-			if not course:
-				return make_api_response(400, 'No object has been associated with the course ID that has been specified.')
+		try:
+			validictory.validate(data, schema)
+		except Exception:
+			return make_api_response(400, 'Data does not correspond to scheme.')
 
-			return course.to_dict()
+		if isinstance(data, int):
+			course_ids = [data]
 		else:
-			results = []
+			course_ids = data
 
-			for course in Course.query.all():
-				results.append(course.to_dict())
+		courses = Course.query.filter(Course.id.in_(course_ids)).all()
 
-			return results
+		for course in courses:
+			results.append(course.todict())
+
+		return results
 
 	@staticmethod
 	def post():
@@ -47,8 +54,8 @@ class CourseAPI(Resource):
 		except Exception:
 			return make_api_response(400, 'Data does not correspond to scheme.')
 
-#		if Education.query.filter(Education.id==data['education_id']).count() == 0:
-#			return make_api_response(400, 'No object has been associated with the education ID that has been specified.')
+		if Education.query.filter(Education.id==data['education_id']).count() == 0:
+			return make_api_response(400, 'No object has been associated with the education ID that has been specified.')
 
 		if Course.query.filter(Course.name==data['name']).count() > 0:
 			return make_api_response(400, 'There is already an object with the name that has been specified.')
