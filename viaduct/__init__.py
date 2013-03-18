@@ -54,10 +54,10 @@ db = SQLAlchemy(application)
 db.Model.to_dict = model_to_dict
 
 # Register the blueprints.
+import api
+
 path = os.path.dirname(os.path.abspath(__file__))
 register_blueprints(application, os.path.join(path, 'blueprints'), 'views')
-
-import api
 
 from viaduct.blueprints.user.views import load_anonymous_user
 
