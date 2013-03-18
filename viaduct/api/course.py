@@ -19,10 +19,20 @@ class CourseAPI(Resource):
 	@staticmethod
 	def get():
 		data = request.json
-		schema = {'type': [{'type': 'null'}, {'type': 'integer'},
-			{'type': 'array', 'items': {'type': 'integer'}}], 'required': False}
+		schema = {
+			'type': 'object',
+			'properties': {
+				'id': {'type': [
+					{'type': 'null'},
+					{'type': 'integer'},
+					{'type': 'array', 'items': {'type': 'integer'}}
+				]},
+				'page_id': {'type': 'integer', 'required': False}
+				'item_count': {'type': 'integer', 'required': False}
+			}
+		}
 		course_ids = []
-		results = []
+		result = {}
 
 		try:
 			validictory.validate(data, schema)
@@ -39,10 +49,12 @@ class CourseAPI(Resource):
 		if len(course_ids) > 0:
 			query = query.filter(Course.id.in_(course_ids))
 
-		for course in query.all():
-			results.append(course.to_dict())
+		result['courses'] = []
 
-		return results
+		for course in query.all():
+			result['courses'].append(course.to_dict())
+
+		return result
 
 	@staticmethod
 	def post():
