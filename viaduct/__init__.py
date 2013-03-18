@@ -7,6 +7,7 @@ from flask.ext.restful import Api
 from flask.ext.sqlalchemy import SQLAlchemy
 
 def import_module(name):
+	print('getcwd(): {0}.'.format(os.getcwd()))
 	print('Importing {0}...'.format(name))
 	module = __import__(name)
 
