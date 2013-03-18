@@ -8,7 +8,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 
 def import_module(name):
 	print('Importing {0}...'.format(name))
-	module = __import__('viaduct')
+	module = __import__('viaduct.blueprints')
 	print(module)
 	print(dir(module))
 	module = getattr(module, 'blueprints')
