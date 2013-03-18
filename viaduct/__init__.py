@@ -10,9 +10,8 @@ def import_module(name):
 	print('Importing {0}...'.format(name))
 	module = __import__(name)
 
-	print(module)
-
 	for component in name.split('.')[1:]:
+		print(component)
 		module = getattr(module, component)
 
 	return module
@@ -27,7 +26,7 @@ def register_blueprints(application, path, extension):
 			current = os.path.relpath(current, here)
 			current = current.replace('/', '.')
 			name = '.'.join([current, directory, extension])
-			blueprint = getattr(__import__(name), 'blueprint', None)
+			blueprint = getattr(import_module(name), 'blueprint', None)
 
 			if blueprint:
 				application.register_blueprint(blueprint)
