@@ -20,8 +20,8 @@ def register_blueprints(application, path, extension):
 
 	for current, directories, files in os.walk(path):
 		for directory in directories:
-			here = os.path.dirname(os.path.absname(__file__))
-			here = os.path.dirname(os.path.absname(here))
+			here = os.path.dirname(os.path.abspath(__file__))
+			here = os.path.dirname(os.path.abspath(here))
 			current = os.path.relpath(current, here)
 			current = current.replace('/', '.')
 			name = '.'.join([current, directory, extension])
