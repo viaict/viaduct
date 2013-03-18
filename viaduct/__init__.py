@@ -1,7 +1,9 @@
 import os
 
 from flask import Flask
+from flask.ext.babel import Babel
 from flask.ext.login import LoginManager
+from flask.ext.restful import Api
 from flask.ext.sqlalchemy import SQLAlchemy
 
 def import_module(name):
@@ -18,15 +20,25 @@ def register_blueprints(application, path, extension):
 	for current, directories, files in os.walk(path):
 		for directory in directories:
 			name = '.'.join([current.replace('/', '.'), directory, extension])
-			print('Importing ' + name)
 			blueprint = getattr(import_module(name), 'blueprint', None)
 
 			if blueprint:
 				application.register_blueprint(blueprint)
 
+def model_to_dict(self):
+	result = {}
+
+	for column in self.__table__.columns:
+		result[column.name] = getattr(self, column.name)
+
+	return result
+
 # Set up the application and load the configuration file.
 application = Flask(__name__)
 application.config.from_object('config')
+
+# Set up Flask Babel, which is used for internationalisation support.
+babel = Babel(application)
 
 # Set up the login manager, which is used to store the details related to the
 # authentication system.
@@ -34,23 +46,18 @@ login_manager = LoginManager()
 login_manager.init_app(application)
 login_manager.login_view = 'signin'
 
+# Set up support for REST APIs.
+api_manager = Api(application)
+
 # Set up the database.
 db = SQLAlchemy(application)
+db.Model.to_dict = model_to_dict
 
 # Register the blueprints.
 path = os.path.dirname(os.path.abspath(__file__))
 register_blueprints(application, os.path.join(path, 'blueprints'), 'views')
 
-from viaduct.blueprints.user.views import blueprint
-
-application.register_blueprint(blueprint)
-
-#import group
-#import navigation
-#import page
-#import user
-#import upload
-#import pimpy
+import api
 
 from viaduct.blueprints.user.views import load_anonymous_user
 
