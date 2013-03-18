@@ -20,7 +20,8 @@ class CourseAPI(Resource):
 	def get():
 		data = request.json
 		schema = {'type': [{'type': 'integer'},
-			{'type': 'array', 'items': {'type': 'integer'}}]}
+			{'type': 'array', 'items': {'type': 'integer'}}], 'required': False}
+		course_ids = []
 		results = []
 
 		try:
@@ -28,14 +29,17 @@ class CourseAPI(Resource):
 		except Exception:
 			return make_api_response(400, 'Data does not correspond to scheme.')
 
-		if isinstance(data, int):
-			course_ids = [data]
-		else:
+		if isinstance(data, list):
 			course_ids = data
+		elif isinstance(data, int):
+			course_ids = [data]
 
-		courses = Course.query.filter(Course.id.in_(course_ids)).all()
+		query = Course.query
 
-		for course in courses:
+		if len(course_ids) > 0:
+			query = query.filter(Course.id.in_(course_ids))
+
+		for course in query.all():
 			results.append(course.to_dict())
 
 		return results
