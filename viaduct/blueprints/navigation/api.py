@@ -7,7 +7,7 @@ class NavigationAPI:
 	@staticmethod
 	def get_navigation_bar():
 		path = request.path
-		pages = Page.query.filter(Page.revisions).order_by(Page.title).all()
+		pages = Page.query.filter(Page.revisions).all()
 		all_pages = []
 
 		for page in pages:

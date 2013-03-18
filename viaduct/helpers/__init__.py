@@ -2,6 +2,8 @@ from flask import flash, request, Markup
 from viaduct import application
 from markdown import markdown
 
+from resource import Resource
+
 markdown_extensions = [
 	'toc'
 ]

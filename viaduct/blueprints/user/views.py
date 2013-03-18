@@ -5,14 +5,12 @@ from flask import flash, get_flashed_messages, redirect, render_template, \
 from flask import Blueprint, Markup
 from flask.ext.login import current_user, login_user, logout_user
 
-blueprint = Blueprint('user', __name__)
-
 from viaduct import application, db, login_manager
 from viaduct.helpers import flash_form_errors
 from forms import SignUpForm, SignInForm
 from models import User, UserPermission
 
-#blueprint = Blueprint('user', __name__)
+blueprint = Blueprint('user', __name__)
 
 @login_manager.user_loader
 def load_user(id):

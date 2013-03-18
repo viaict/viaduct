@@ -3,7 +3,6 @@ import os
 from flask import Flask
 from flask.ext.babel import Babel
 from flask.ext.login import LoginManager
-from flask.ext.restful import Api
 from flask.ext.sqlalchemy import SQLAlchemy
 
 def import_module(name):
@@ -50,14 +49,13 @@ login_manager = LoginManager()
 login_manager.init_app(application)
 login_manager.login_view = 'signin'
 
-# Set up support for REST APIs.
-api_manager = Api(application)
-
 # Set up the database.
 db = SQLAlchemy(application)
 db.Model.to_dict = model_to_dict
 
 # Register the blueprints.
+import api
+
 path = os.path.dirname(os.path.abspath(__file__))
 register_blueprints(application, os.path.join(path, 'blueprints'), 'views')
 

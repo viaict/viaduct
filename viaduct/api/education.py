@@ -1,18 +1,20 @@
 import validictory
 
 from flask import request
-from flask.ext.restful import Resource
+from flask.views import MethodView
 
-from viaduct import api_manager, db
+from viaduct import application, db
+from viaduct.helpers import Resource
 from viaduct.helpers.api import make_api_response
 from viaduct.models import Degree, Education
 
 class EducationAPI(Resource):
 	@staticmethod
 	def register():
-		api_manager.add_resource(EducationAPI, '/api/educations',
-			'/api/educations/', '/api/educations/<int:education_id>',
-			'/api/educations/<int:education_id>/')
+		view = EducationAPI.as_view('education_api')
+
+		application.add_url_rule('/api/educations/', view_func=view,
+			methods=['DELETE', 'GET', 'POST'])
 
 	@staticmethod
 	def get(education_id=None):
