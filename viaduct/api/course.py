@@ -59,7 +59,8 @@ class CourseAPI(Resource):
 	@staticmethod
 	def delete():
 		data = request.json
-		schema = {'type': 'array', 'items': {'type': 'integer'}}
+		schema = [{'type': 'integer'},
+			{'type': 'array', 'items': {'type': 'integer'}}]
 
 		print(data)
 
