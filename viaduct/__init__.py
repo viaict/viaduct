@@ -16,11 +16,13 @@ def import_module(name):
 	return module
 
 def register_blueprints(application, path, extension):
-	path = os.path.relpath(path, os.path.dirname(__file__))
+	path = os.path.relpath(path)
 
 	for current, directories, files in os.walk(path):
 		for directory in directories:
-			name = '.'.join([current.replace('.', '_').replace('/', '.'), directory, extension])
+			current = os.path.relpath(current, os.path.dirname(__file__))
+			current = current.replace('/', '.')
+			name = '.'.join(current, directory, extension])
 			blueprint = getattr(import_module(name), 'blueprint', None)
 
 			if blueprint:
