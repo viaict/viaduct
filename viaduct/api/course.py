@@ -56,3 +56,16 @@ class CourseAPI(Resource):
 
 		return course.to_dict(), '201 The object has been created.'
 
+	@staticmethod
+	def delete():
+		data = request.json
+		schema = {'type': [{'type', 'integer'},
+			{'type': 'array', 'items': {'type': 'integer'}}]}
+
+		try:
+			validictory.validate(data, schema)
+		except Exception:
+			return make_api_response(400, 'Data does not correspond to scheme.')
+
+		return data
+
