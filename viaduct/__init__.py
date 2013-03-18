@@ -7,8 +7,6 @@ from flask.ext.restful import Api
 from flask.ext.sqlalchemy import SQLAlchemy
 
 def import_module(name):
-	print('getcwd(): {0}.'.format(os.getcwd()))
-	print('Importing {0}...'.format(name))
 	module = __import__(name)
 
 	for component in name.split('.')[1:]:
@@ -17,7 +15,7 @@ def import_module(name):
 	return module
 
 def register_blueprints(application, path, extension):
-	path = os.path.relpath(path)
+	path = os.path.relpath(path, os.path.dirname(__file__))
 
 	for current, directories, files in os.walk(path):
 		for directory in directories:
