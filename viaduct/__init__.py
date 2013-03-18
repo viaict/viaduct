@@ -20,7 +20,7 @@ def register_blueprints(application, path, extension):
 
 	for current, directories, files in os.walk(path):
 		for directory in directories:
-			name = '.'.join([current..replace('.', '_').replace('/', '.'), directory, extension])
+			name = '.'.join([current.replace('.', '_').replace('/', '.'), directory, extension])
 			blueprint = getattr(import_module(name), 'blueprint', None)
 
 			if blueprint:
