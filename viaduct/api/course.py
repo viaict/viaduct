@@ -19,7 +19,7 @@ class CourseAPI(Resource):
 	@staticmethod
 	def get():
 		data = request.json
-		schema = {'type': [{'type': 'none'}, {'type': 'integer'},
+		schema = {'type': [{'type': 'null'}, {'type': 'integer'},
 			{'type': 'array', 'items': {'type': 'integer'}}], 'required': False}
 		course_ids = []
 		results = []
