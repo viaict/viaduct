@@ -27,8 +27,6 @@ class CourseAPI(Resource):
 					{'type': 'integer'},
 					{'type': 'array', 'items': {'type': 'integer'}}
 				]},
-				'page_id': {'type': 'integer', 'required': False},
-				'item_count': {'type': 'integer', 'required': False}
 			}
 		}
 		course_ids = []

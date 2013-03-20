@@ -1,0 +1,51 @@
+import os
+
+from flask import abort, Blueprint, redirect, request, render_template, send_file, url_for
+from werkzeug import secure_filename
+
+from viaduct import application
+from viaduct.forms import UploadForm
+from viaduct.helpers import flash_form_errors
+
+blueprint = Blueprint('upload', __name__)
+
+@blueprint.route('/file/')
+@blueprint.route('/file/<filename>/')
+def view(filename=''):
+	return ''
+
+@blueprint.route('/file/direct/<filename>')
+def view_direct(filename):
+	file_path = os.path.join(application.config['UPLOAD_FOLDER'], filename)
+	path = os.path.join(application.root_path, file_path)
+
+	if not os.path.exists(path):
+		abort(404)
+
+	return send_file(file_path, as_attachment=True)
+
+@blueprint.route('/file/add/', methods=['GET', 'POST'])
+def add():
+	form = UploadForm(request.form)
+
+	if form.validate_on_submit():
+		file = request.files['upload']
+
+		if file:
+			filename = form.filename.data
+			original = secure_filename(file.filename)
+
+			if len(os.path.splitext(filename)[1]) == 0:
+				filename += os.path.splitext(original)[1]
+
+			file_path = os.path.join(application.root_path, application.config['UPLOAD_FOLDER'])
+			file_path = os.path.join(file_path, filename)
+
+			file.save(file_path)
+
+			return redirect(url_for('file.view', filename=filename))
+	else:
+		flash_form_errors(form)
+
+	return render_template('upload/add_file.htm', form=form)
+
