@@ -1,0 +1,22 @@
+{% from "macros/form.htm" import render_button, render_field %}
+
+{% extends "content.htm" %}
+
+{% block title %}Upload Files{% endblock %}
+
+{% block content %}
+<form name="add-file" method="post" action="{{ url_for('upload.add') }}"
+	enctype="multipart/form-data">
+	<fieldset>
+		<legend>Upload file</legend>
+
+		{{ form.csrf_token }}
+
+		{{ render_field(form.filename) }}
+		{{ render_field(form.upload) }}
+
+		{{ render_button(form.upload_file) }}
+	</fieldset>
+</form>
+{% endblock %}
+

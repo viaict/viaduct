@@ -5,6 +5,22 @@ from flask.ext.babel import Babel
 from flask.ext.login import LoginManager
 from flask.ext.sqlalchemy import SQLAlchemy
 
+def get_application_path():
+	application_path = application.root_path
+	application_path = os.path.dirname(os.path.abspath(application_path))
+
+	return application_path
+
+def is_module(path):
+	init_path = os.path.join(path, '__init__.py')
+
+	if os.path.isdir(path) and os.path.exists(init_path):
+		return True
+	elif os.path.isfile(path) and os.path.splitext(path)[1] == '.py':
+		return True
+
+	return False
+
 def import_module(name):
 	module = __import__(name)
 
@@ -12,6 +28,27 @@ def import_module(name):
 		module = getattr(module, component)
 
 	return module
+
+def register_views(application, path, extension=''):
+	print('Debugging time: {0}.'.format(os.getcwd()))
+
+	application_path = get_application_path()
+
+	for filename in os.listdir(path):
+		file_path = os.path.join(path, filename)
+
+		# Check if the current file is a module.
+		if is_module(file_path):
+			# Get the module name from the file path.
+			module_name = os.path.splitext(file_path)[0]
+			module_name = os.path.relpath(module_name, application_path)
+			module_name = module_name.replace('/', '.')
+
+			blueprint = getattr(import_module(module_name), 'blueprint', None)
+
+			if blueprint:
+				print('{0} has been imported.'.format(module_name))
+				application.register_blueprint(blueprint)
 
 def register_blueprints(application, path, extension):
 	path = os.path.relpath(path)
@@ -57,6 +94,8 @@ db.Model.to_dict = model_to_dict
 import api
 
 path = os.path.dirname(os.path.abspath(__file__))
+
+register_views(application, os.path.join(path, 'views'))
 register_blueprints(application, os.path.join(path, 'blueprints'), 'views')
 
 from viaduct.blueprints.user.views import blueprint
