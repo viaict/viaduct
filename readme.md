@@ -16,6 +16,9 @@ sudo apt-get install python-pip
 sudo pip install flask flask-login flask-sqlalchemy flask-wtf
 easy_install -U distribute
 sudo pip install MySQL-python py-bcrypt markdown
+sudo pip install flask-babel
+sudo pip install flask-restful
+sudo pip install validictory
 
 VERVOLGENS (in root van de git repo):
 ln -s local_config.py config.py
