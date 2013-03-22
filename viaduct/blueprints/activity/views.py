@@ -9,16 +9,15 @@ from models import Activity
 
 blueprint = Blueprint('activity', __name__)
 
-@blueprint.route('/', methods=['GET', 'POST'])
-@blueprint.route('/<path:path>', methods=['GET', 'POST'])
-
 # Overview of activities
+@blueprint.route('/activities/', methods=['GET', 'POST'])
+@blueprint.route('/activities/<int:page>/', methods=['GET', 'POST'])
 def view(page=1):
-	users = Activity.query.paginate(page, 15, False)
+	activities = Activity.query.paginate(page, 15, False)
 
 	return render_template('activity/view.htm', activities=activity)
 
-@blueprint.route('/sign-up/', methods=['GET', 'POST'])
+@blueprint.route('/create_activity/', methods=['GET', 'POST'])
 def create():
 	form = CreateForm(request.form)
 
