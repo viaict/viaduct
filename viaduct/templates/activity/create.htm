@@ -1,0 +1,22 @@
+{% from "macros/form.htm" import render_field %}
+
+{% extends "content.htm" %}
+
+{% block content %}
+<form action="" method="post" name="create" class="form-horizontal">
+	<fieldset>
+		<legend>Sign up</legend>
+
+		{{ form.csrf_token }}
+		{{ render_field(form.title) }}
+		{{ render_field(form.description) }}
+
+		<div class="control-group">
+			<div class="controls">
+				<button type="submit" class="btn">Create activity</button>
+			</div>
+		</div>
+	</fieldset>
+</form>
+{% endblock %}
+
