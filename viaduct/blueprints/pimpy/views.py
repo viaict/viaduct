@@ -11,3 +11,6 @@ blueprint = Blueprint('pimpy', __name__)
 def view_page(minutesOrTasks='all', groups=""):
 	return render_template('pimpy/view_page.htm')
 
+@blueprint.route('/pimpjo/', methods=['GET', 'POST'])
+def test():
+	return render_template('activity/create.htm')
