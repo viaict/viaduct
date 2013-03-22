@@ -26,7 +26,8 @@ class Task(db.Model):
 
 	group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
 
-	group = db.relationship('Group', backref='tasks')
+	group = db.relationship('Group', backref=db.backref('tasks',
+		lazy='dynamic'))
 
 	users = db.relationship('User', secondary=task_user,
 		backref=db.backref('tasks', lazy='dynamic'), lazy='dynamic')
@@ -53,7 +54,8 @@ class Minute(db.Model):
 	timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow())
 	content = db.Column(db.Text)
 	group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
-	group = db.relationship('Group', backref='minutes')
+	group = db.relationship('Group', backref=db.backref('minutes',
+		lazy='dynamic'))
 
 	tasks = db.relationship('Task', backref='minute', lazy='dynamic')
 
