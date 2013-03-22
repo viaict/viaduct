@@ -5,13 +5,6 @@ from flask.ext.login import current_user
 from viaduct import application, db
 from viaduct.helpers import flash_form_errors
 
-#<<<<<<< HEAD:viaduct/blueprints/pimpy/views.py
-#blueprint = Blueprint('pimpy', __name__)
-#
-#@blueprint.route('/pimpy/', methods=['GET', 'POST'])
-#def view_page(minutesOrTasks='all', groups=""):
-#	return render_template('pimpy/view_page.htm')
-#=======
 from api import PimpyAPI
 
 module = Blueprint('pimpy', __name__)
@@ -32,8 +25,7 @@ def view_minutes(group_id='all'):
 @module.route('/pimpy/tasks/me/<int:group_id>', methods=['GET', 'POST'], defaults={'personal': True})
 def view_tasks(group_id='all', personal=False):
 	return PimpyAPI.get_tasks(group_id, personal)
-#>>>>>>> should commit to be sure?:viaduct/pimpy/views.py
 
-@blueprint.route('/pimpjo/', methods=['GET', 'POST'])
-def test():
-	return render_template('activity/create.htm')
+@blueprint.route('/pimpy/', methods=['GET', 'POST'])
+def view_page(minutesOrTasks='all', groups=""):
+	return render_template('pimpy/view_page.htm')
