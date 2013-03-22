@@ -5,7 +5,9 @@
 {% block title %}PimPy{% endblock %}
 
 {% block sublogo %}
-<a href="/pimpy"><img class="logo pimpy" src="/static/img/pimpy.png" alt="PimPy" /></a>
+
+
+<a href="{{url_for('pimpy.view_tasks')}}"><img class="logo pimpy" src="/static/img/pimpy.png" alt="PimPy" /></a>
 {% endblock %}
 
 {% block page %}
