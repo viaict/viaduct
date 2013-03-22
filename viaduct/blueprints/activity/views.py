@@ -14,10 +14,9 @@ blueprint = Blueprint('activity', __name__)
 @blueprint.route('/activities/', methods=['GET', 'POST'])
 @blueprint.route('/activities/<int:page>/', methods=['GET', 'POST'])
 def view(page=1):
-	print "hello world"
 	activities = Activity.query.paginate(page, 15, False)
 
-	return render_template('activity/view.htm', activities=activity)
+	return render_template('activity/view.htm', activities=activities)
 
 @blueprint.route('activity/create/', methods=['GET', 'POST'])
 def create():
