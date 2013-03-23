@@ -22,6 +22,7 @@ def is_module(path):
 	return False
 
 def import_module(name):
+	print('Importing {0}.'.format(name))
 	module = __import__(name)
 
 	for component in name.split('.')[1:]:
