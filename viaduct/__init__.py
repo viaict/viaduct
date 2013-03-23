@@ -23,6 +23,11 @@ def is_module(path):
 
 def import_module(name):
 	module = __import__(name)
+	print('{0}, {1}'.format(name, module))
+	module = getattr(module, name.split('.')[1])
+	print('{0}, {1]'.format(name.split('.')[1], module)
+
+	module = __import__(name)
 
 	for component in name.split('.')[1:]:
 		module = getattr(module, component)
@@ -93,7 +98,7 @@ import api
 
 path = os.path.dirname(os.path.abspath(__file__))
 
-#register_views(application, os.path.join(path, 'views'))
+register_views(application, os.path.join(path, 'views'))
 register_blueprints(application, os.path.join(path, 'blueprints'), 'views')
 
 from viaduct.blueprints.user.views import load_anonymous_user
