@@ -25,7 +25,7 @@ def import_module(name):
 	module = __import__(name)
 	print('{0}, {1}'.format(name, module))
 	module = getattr(module, name.split('.')[1])
-	print('{0}, {1]'.format(name.split('.')[1], module)
+	print('{0}, {1]'.format(name.split('.')[1], module))
 
 	module = __import__(name)
 
