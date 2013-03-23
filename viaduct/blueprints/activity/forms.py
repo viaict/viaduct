@@ -1,4 +1,4 @@
-from flask.ext.wtf import Form, TextField,
+from flask.ext.wtf import Form, TextField
 from flask.ext.wtf import Required, Email, EqualTo
 
 class CreateForm(Form):
