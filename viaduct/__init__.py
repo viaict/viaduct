@@ -22,9 +22,7 @@ def is_module(path):
 	return False
 
 def import_module(name):
-	print('Importing {0}.'.format(name))
 	module = __import__(name)
-	print(module)
 
 	for component in name.split('.')[1:]:
 		module = getattr(module, component)
@@ -32,8 +30,6 @@ def import_module(name):
 	return module
 
 def register_views(application, path, extension=''):
-	print('Debugging time: {0}.'.format(os.getcwd()))
-
 	application_path = get_application_path()
 
 	for filename in os.listdir(path):
@@ -97,7 +93,7 @@ import api
 
 path = os.path.dirname(os.path.abspath(__file__))
 
-register_views(application, os.path.join(path, 'views'))
+#register_views(application, os.path.join(path, 'views'))
 register_blueprints(application, os.path.join(path, 'blueprints'), 'views')
 
 from viaduct.blueprints.user.views import blueprint
