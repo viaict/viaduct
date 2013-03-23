@@ -23,14 +23,9 @@ def is_module(path):
 
 def import_module(name):
 	module = __import__(name)
-	print('{0}, {1}'.format(name, module))
-	module = getattr(module, name.split('.')[1])
-	print('{0}, {1]'.format(name.split('.')[1], module))
 
-	module = __import__(name)
-
-	for component in name.split('.')[1:]:
-		module = getattr(module, component)
+#	for component in name.split('.')[1:]:
+#		module = getattr(module, component)
 
 	return module
 
