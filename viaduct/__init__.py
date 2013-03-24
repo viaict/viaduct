@@ -1,4 +1,5 @@
 import os
+import sys
 
 from flask import Flask
 from flask.ext.babel import Babel
@@ -21,13 +22,13 @@ def is_module(path):
 
 	return False
 
-def import_module(name):
-	module = __import__(name)
+def import_module(module_name):
+	try:
+		__import__(module_name)
+	except ImportError:
+		return None
 
-#	for component in name.split('.')[1:]:
-#		module = getattr(module, component)
-
-	return module
+	return sys.modules[module_name]
 
 def register_views(application, path, extension=''):
 	application_path = get_application_path()

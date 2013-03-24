@@ -18,7 +18,7 @@ def view(page=1):
 
 	return render_template('activity/view.htm', activities=activities)
 
-@blueprint.route('activity/create/', methods=['GET', 'POST'])
+@blueprint.route('/activity/create/', methods=['GET', 'POST'])
 def create():
 	form = CreateForm(request.form)
 
