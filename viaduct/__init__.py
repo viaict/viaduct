@@ -1,16 +1,11 @@
 import os
-import sys
 
 from flask import Flask
 from flask.ext.babel import Babel
 from flask.ext.login import LoginManager
 from flask.ext.sqlalchemy import SQLAlchemy
 
-def get_application_path():
-	application_path = application.root_path
-	application_path = os.path.dirname(os.path.abspath(application_path))
-
-	return application_path
+from viaduct.utilities import import_module
 
 def is_module(path):
 	init_path = os.path.join(path, '__init__.py')
@@ -22,16 +17,8 @@ def is_module(path):
 
 	return False
 
-def import_module(module_name):
-	try:
-		__import__(module_name)
-	except ImportError:
-		return None
-
-	return sys.modules[module_name]
-
 def register_views(application, path, extension=''):
-	application_path = get_application_path()
+	application_path = os.path.dirname(os.path.abspath(application.root_path))
 
 	for filename in os.listdir(path):
 		file_path = os.path.join(path, filename)
