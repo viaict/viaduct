@@ -17,10 +17,19 @@ class PimpyAPI:
 		groups = current_user.groups.all()
 
 		endpoint = 'pimpy.view_' + type
+		endpoints = {'view_chosentype' : endpoint,
+					'view_chosentype_personal' : endpoint + '_personal',
+					'view_tasks' : 'pimpy.view_tasks',
+					'view_tasks_personal' : 'pimpy.view_tasks_personal',
+					'view_tasks_chosenpersonal' : 'pimpy.view_tasks',
+					'view_minutes' : 'pimpy.view_minutes'}
+		if personal:
+			endpoints['view_tasks_chosenpersonal'] += '_personal'
+
 
 		return Markup(render_template('pimpy/api/side_menu.htm',
 			groups=groups, group_id=group_id, personal=personal,
-			type=type, endpoint=endpoint))
+			type=type, endpoints=endpoints))
 
 	@staticmethod
 	def get_tasks(group_id, personal):
