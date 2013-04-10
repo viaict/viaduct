@@ -3,10 +3,10 @@
 		Types:
 		<ul>
 			<li {% if type == 'minutes' %} class="active" {% endif %} >
-					<a href="{{ url_for('pimpy.view_minutes', group_id=group_id) }}">minutes</a>
+					<a href="{{ url_for(endpoints['view_minutes'], group_id=group_id) }}">minutes</a>
 			</li>
 			<li {% if type == 'tasks' %} class="active" {% endif %} >
-					<a href="{{ url_for('pimpy.view_tasks', group_id=group_id, personal=personal) }}">tasks</a>
+				<a href="{{ url_for(endpoints['view_tasks_chosenpersonal'], group_id=group_id) }}">tasks</a>
 			</li>
 		</ul>
 	<li>
@@ -14,10 +14,10 @@
 			Show for:
 			<ul>
 				<li {% if personal %} class="active" {% endif %}>
-					<a href="{{ url_for(endpoint, group_id=group_id, personal=True) }}">me</a>
+					<a href="{{ url_for(endpoints['view_chosentype_personal'], group_id=group_id) }}">me</a>
 				</li>
 				<li {% if not personal %} class="active" {% endif %}>
-					<a href="{{ url_for(endpoint, group_id=group_id, personal=False ) }}">all</a>
+					<a href="{{ url_for(endpoints['view_chosentype'], group_id=group_id) }}">all</a>
 				</li>
 			</ul>
 		{% endif %}
@@ -25,11 +25,11 @@
 		Groups:
 		<ul>
 			<li {% if group_id == 'all' %} class="active" {% endif %} >
-				<a href="{{ url_for(endpoint, personal=personal) }}">all</a>
+				<a href="{{ url_for(endpoints['view_chosentype']) }}">all</a>
 			</li>
 			{% for group in groups %}
 				<li {% if group_id == group.id %} class="active" {% endif %} >
-					<a href="{{ url_for(endpoint, group_id=group.id, personal=personal) }}">{{ group.name }}</a>
+					<a href="{{ url_for(endpoints['view_chosentype'], group_id=group.id) }}">{{ group.name }}</a>
 				</li>
 			{% endfor %}
 		<ul>
