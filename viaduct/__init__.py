@@ -5,11 +5,7 @@ from flask.ext.babel import Babel
 from flask.ext.login import LoginManager
 from flask.ext.sqlalchemy import SQLAlchemy
 
-def get_application_path():
-	application_path = application.root_path
-	application_path = os.path.dirname(os.path.abspath(application_path))
-
-	return application_path
+from viaduct.utilities import import_module
 
 def is_module(path):
 	init_path = os.path.join(path, '__init__.py')
@@ -21,18 +17,8 @@ def is_module(path):
 
 	return False
 
-def import_module(name):
-	module = __import__(name)
-
-	for component in name.split('.')[1:]:
-		module = getattr(module, component)
-
-	return module
-
 def register_views(application, path, extension=''):
-	print('Debugging time: {0}.'.format(os.getcwd()))
-
-	application_path = get_application_path()
+	application_path = os.path.dirname(os.path.abspath(application.root_path))
 
 	for filename in os.listdir(path):
 		file_path = os.path.join(path, filename)

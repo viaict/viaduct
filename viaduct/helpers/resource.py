@@ -28,6 +28,10 @@ def output_json(data, code, headers):
 	return response
 
 class Resource(MethodView):
+	@staticmethod
+	def register():
+		pass
+
 	def dispatch_request(self, *args, **kwargs):
 		method = getattr(self, request.method.lower(), None)
 

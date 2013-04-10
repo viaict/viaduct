@@ -1,0 +1,35 @@
+{% from "macros/pagination.htm" import render_pagination %}
+
+{% extends "content.htm" %}
+
+{%block content %}
+<form action="" method="post" name="activity_view">
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Title</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			{% for activity in activities.items %}
+				<tr>
+					<td>
+						<label class="checkbox">
+							<input type=checkbox name="select" value="{{ activity.id }}" />
+							{{ activity.title }}
+						</label>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	<div class="btn-group">
+		<a href="/activities/create" class="btn">Create</a>
+	</div>
+
+	{{ render_pagination(activities, 'activity.view') }}
+</form>
+{% endblock %}
+
