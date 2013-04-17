@@ -22,18 +22,28 @@ def view(page=1):
 def create():
 	form = CreateForm(request.form)
 
-	if form.validate_on_submit():
-		activity = Activity(
-			form.title.data, 
-			form.description.data
-		)
-		
-		db.session.add(activity)
-		db.session.commit()
+	if request.method == 'POST':
+		valid_form = True
 
-		flash('You\'ve created an activity successfully.')
+		title				= request.form['title'].strip()
+		description = request.form['description'].strip()
 
-		#return redirect(url_for('page.get_page'))
+		if not title:
+			flash('No activity title has been specified.', 'error')
+			valid_form = False
+
+		if valid_form:
+			activity = Activity(
+				title,
+				description
+			)
+			
+			db.session.add(activity)
+			db.session.commit()
+
+			flash('You\'ve created an activity successfully.')
+
+			return redirect(url_for('page.get_page'))
 	else:
 		flash_form_errors(form)
 
