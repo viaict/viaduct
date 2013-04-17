@@ -34,8 +34,8 @@ def create():
 
 		if valid_form:
 			activity = Activity(
-				form.title.data, 
-				form.description.data
+				title,
+				description
 			)
 			
 			db.session.add(activity)
