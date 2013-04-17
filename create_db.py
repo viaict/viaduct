@@ -4,7 +4,7 @@ import datetime
 from viaduct import db
 from viaduct.blueprints.user.models import User, UserPermission
 from viaduct.blueprints.group.models import Group, GroupPermission
-from viaduct.blueprints.page.models import Page, PagePermission
+from viaduct.blueprints.page.models import Page, PagePermission, PageRevision
 from viaduct.blueprints.pimpy.models import Minute, Task
 
 import os
@@ -82,4 +82,18 @@ db.session.commit()
 
 task = Task('test task', 'test content', datetime.date(2020, 10, 10), 2, [user], 1, minute.id)
 db.session.add(task)
+db.session.commit()
+
+# Do some pages.
+page = Page('page1')
+db.session.add(page)
+db.session.commit()
+
+permissions = PagePermission(group, page, view=True, create=True, edit=True,
+		delete=True)
+db.session.add(permissions)
+db.session.commit()
+
+revision = PageRevision(page, user, 'Page 1', 'herr derr 1', 0)
+db.session.add(revision)
 db.session.commit()

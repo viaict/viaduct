@@ -14,7 +14,9 @@ class Page(db.Model):
 	parent_id = db.Column(db.Integer, db.ForeignKey('page.id'))
 	path = db.Column(db.String(256), unique=True)
 
-	parent = db.relationship('Page')
+	parent = db.relationship('Page',
+			remote_side=id,
+			backref=db.backref('children', lazy='dynamic'))
 	ancestors = db.relationship('Page', secondary=page_ancestor,
 		primaryjoin=id==page_ancestor.c.page_id,
 		secondaryjoin=id==page_ancestor.c.ancestor_id,
