@@ -8,7 +8,7 @@ user_group = db.Table('user_group',
 '''
 
 class Contact_information(db.Model):
-	__tablename__ = 'study'
+	__tablename__ = 'contact_information'
 
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(256))
