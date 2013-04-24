@@ -6,6 +6,7 @@ from viaduct.blueprints.user.models import User, UserPermission
 from viaduct.blueprints.group.models import Group, GroupPermission
 from viaduct.blueprints.page.models import Page, PagePermission, PageRevision
 from viaduct.blueprints.pimpy.models import Minute, Task
+from viaduct.models.navigation import NavigationEntry
 
 import os
 
@@ -27,14 +28,14 @@ user = User('anonymous', '', 'Anonymous', '')
 db.session.add(user)
 db.session.commit()
 
-group = Group('anonymous')
+anon = Group('anonymous')
 
-db.session.add(group)
+db.session.add(anon)
 db.session.commit()
 
 # Add the administrator.
 user = User('administrator@svia.nl', bcrypt.hashpw('administrator',
-	bcrypt.gensalt()), 'Administrator', '')
+		bcrypt.gensalt()), 'Administrator', '')
 
 db.session.add(user)
 db.session.commit()
@@ -70,8 +71,6 @@ permissions = PagePermission(group, page, view=True, create=True, edit=True,
 db.session.add(permissions)
 db.session.commit()
 
-
-
 #	def __init__(self, title, content, deadline, group_id, users,
 #				minute, line):
 
@@ -80,7 +79,8 @@ minute = Minute("minute content, jaja", 2)
 db.session.add(minute)
 db.session.commit()
 
-task = Task('test task', 'test content', datetime.date(2020, 10, 10), 2, [user], 1, minute.id)
+task = Task('test task', 'test content', datetime.date(2020, 10, 10), 2,
+		[user], 1, minute.id)
 db.session.add(task)
 db.session.commit()
 
@@ -90,6 +90,11 @@ db.session.add(page)
 db.session.commit()
 
 permissions = PagePermission(group, page, view=True, create=True, edit=True,
+		delete=True)
+db.session.add(permissions)
+db.session.commit()
+
+permissions = PagePermission(anon, page, view=True, create=True, edit=True,
 		delete=True)
 db.session.add(permissions)
 db.session.commit()

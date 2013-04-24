@@ -73,8 +73,6 @@ class PageAPI:
 
 	@staticmethod
 	def get_page(path):
-		print(path)
-
 		if path == '' or path =='index' or path == 'via':
 			return PageAPI.get_index_page(path)
 
