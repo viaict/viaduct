@@ -10,7 +10,7 @@
 {% if title and content %}
 	<h1>{{ title }}</h1>
 
-	{% if revision.content_type == 1 %}
+	{% if content_type == 1 %}
 		{{ content | safe }}
 	{% else %}
 		{{ content | markdown }}

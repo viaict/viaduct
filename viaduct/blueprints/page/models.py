@@ -36,6 +36,9 @@ class Page(db.Model):
 	def has_revisions(self):
 		return self.revisions.count() > 0
 
+	def get_newest_revision(self):
+		return self.revisions.order_by(PageRevision.timestamp.desc()).first()
+
 class PageRevision(db.Model):
 	__tablename__ = 'page_revision'
 
@@ -43,6 +46,7 @@ class PageRevision(db.Model):
 	title = db.Column(db.String(128))
 	filter_html = db.Column(db.Boolean)
 	content = db.Column(db.Text)
+	content_type = db.Column(db.Integer, default=0)
 	priority = db.Column(db.Integer, default=0)
 	timestamp = db.Column(db.DateTime)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -52,7 +56,7 @@ class PageRevision(db.Model):
 		lazy='dynamic'))
 
 	def __init__(self, page, author, title, content, priority,
-		timestamp=datetime.datetime.utcnow()):
+			timestamp=datetime.datetime.utcnow()):
 		self.title = title
 		self.content = content
 		self.priority = priority
