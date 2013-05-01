@@ -20,5 +20,3 @@ def create():
 			pass
 
 	return render_template('survey/create.htm', form=form)
-
-
