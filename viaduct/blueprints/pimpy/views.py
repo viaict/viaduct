@@ -1,11 +1,14 @@
-from flask import Blueprint
-from flask import abort, flash, redirect, render_template, request, url_for
+from flask import Blueprint, abort
+from flask import flash, render_template, request
 from flask.ext.login import current_user
 
 from viaduct import application, db
 from viaduct.helpers import flash_form_errors
 
 from api import PimpyAPI
+
+from viaduct.blueprints.user.models import User, UserPermission
+
 
 blueprint = Blueprint('pimpy', __name__)
 
