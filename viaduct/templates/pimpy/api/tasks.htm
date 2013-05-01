@@ -1,8 +1,24 @@
 {% extends "pimpy/view_page.htm" %}
 
 {%block content %}
-	<ul>
+	<div class="span8">
 		{% for list_item in list_items: %}
+			<div class="btn-group">
+				<button class="btn {{ list_item.get_status_color() }}"></button>
+				<button class="btn">{{ list_item.title }}</button>
+				<button class="btn"> {{ list_item.get_users() }} </button>
+				<button class="btn" data-toggle="collapse" data-target='#{{ list_item.id }}'>
+					Show more
+				</button>
+			</div>
+			<div id='{{ list_item.id }}' class="collapse">
+				<div class="well">{{ list_item.content }}</div>
+			</div>
+			<div class="navbar">
+				<div class="navbar-inner">
+					<a class="brand">{{ list_item.title }}</a>
+				</div>
+			</div>
 			<li>
 				<strong> Title: </strong> {{ list_item.title }} <br/>
 				<strong> Content: </strong> {{ list_item.content}} <br/>
@@ -14,5 +30,5 @@
 				<a href="{{ url_for('pimpy.view_minute', group_id=list_item.group_id, minute_id=list_item.minute_id) }}"> Go to minute </a>
 			</li>
 		{% endfor %}
-	</ul>
+	</div>
 {% endblock %}
