@@ -47,6 +47,7 @@ class Task(db.Model):
 		self.minute_id = minute_id
 		self.status = status
 
+
 	def get_status_string(self):
 		"""
 		Returns a string representing the status
@@ -77,6 +78,21 @@ class Minute(db.Model):
 	def __init__(self, content, group_id):
 		self.content = content
 		self.group_id = group_id
+
+	def get_name(self):
+		"""
+		A representable (unique) name for minute
+		"""
+		return 'minute%d' % self.id
+
+	def get_timestamp(self):
+		return self.timestamp
+
+	def get_content(self):
+		return self.content
+
+	def get_group(self):
+		return self.group
 
 	def get_title(self):
 		return '%s van %s' % (self.group.name, self.timestamp)

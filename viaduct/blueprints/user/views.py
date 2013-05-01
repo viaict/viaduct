@@ -72,7 +72,8 @@ def sign_in():
 
 			flash('You\'ve been signed in successfully.')
 
-			return redirect(url_for('page.get_page'))
+			# return redirect(url_for('page.get_page'))
+			return redirect('/')
 	else:
 		flash_form_errors(form)
 
@@ -85,7 +86,9 @@ def sign_out():
 
 	flash('You\'ve been signed out.')
 
-	return redirect(url_for('page.get_page'))
+	# FIX THIS!
+	# return redirect(url_for('page.get_page'))
+	return redirect('/')
 
 @blueprint.route('/users/', methods=['GET', 'POST'])
 @blueprint.route('/users/<int:page>/', methods=['GET', 'POST'])

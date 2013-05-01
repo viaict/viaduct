@@ -1,0 +1,16 @@
+config.py
+application.db
+*.pyc
+*.jpg
+*.gif
+*.png
+*.pdf
+*.zip
+*.tar.gz
+*.rar
+*.log
+.DS_Store
+.DS_Store?
+._*
+.Thrashes
+Thumbs.db

@@ -3,33 +3,51 @@
 {% extends "content.htm" %}
 
 {%block content %}
-<form action="" method="post" name="activity_view">
-	<table class="table table-bordered table-striped">
-		<thead>
-			<tr>
-				<th>Title</th>
-			</tr>
-		</thead>
 
-		<tbody>
-			{% for activity in activities.items %}
-				<tr>
-					<td>
-						<label class="checkbox">
-							<input type=checkbox name="select" value="{{ activity.id }}" />
-							{{ activity.title }}
-						</label>
-					</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+{% for activity in activities.items %}
 
-	<div class="btn-group">
-		<a href="/activities/create" class="btn">Create</a>
+<div class="activity-block row-fluid">
+	<div class="span4">
+		<a href="/activity/{{ activity.id }}">
+			<img src="/static/activity_pictures/{{ activity.picture }}">
+		</a>
 	</div>
 
+	<div class="span8">
+		<h1>
+			<a href="/activity/{{ activity.id }}">
+				{{activity.name}}
+			</a>
+		</h1>
+
+		<table>
+			<tr>
+				<td>Location
+				<td>{{ activity.location}}
+			
+			<tr>
+				<td>Price
+				<td>{{ activity.price}}
+
+		</table>
+
+		<div class="time">
+			{{ activity.get_time() }}
+		</div>
+		<hr>
+	</div>
+
+	<p>{{ activity.description}}
+</div>
+
+{% endfor %}
+
+<hr>
+
+<div class="btn-group">
+	<a href="/activity/create/" class="btn">Create</a>
+</div>
+
 	{{ render_pagination(activities, 'activity.view') }}
-</form>
 {% endblock %}
 

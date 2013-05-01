@@ -1,0 +1,30 @@
+{% extends "base.htm" %}
+
+{% block page %}
+
+	<p><a href="{{ url_for('navigation.edit') }}">Nieuw item</a></p>
+
+	{% if entries %}
+		<ul>
+			{% for entry in entries %}
+				<li>
+					<a href="{{ url_for('navigation.edit', entry_id=entry.id) }}">
+						{{ entry.title }}
+					</a>
+					{% if entry.children %}
+						<ul>
+						{% for child in entry.children %}
+							<li>
+								<a href="{{ url_for('navigation.edit', entry_id=child.id) }}">
+									{{ child.title }}
+								</a>
+							</li>
+						{% endfor %}
+						</ul>
+					{% endif %}
+				</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+
+{% endblock %}

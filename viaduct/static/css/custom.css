@@ -2,6 +2,38 @@ body {
 	overflow-y: scroll;
 }
 
+/* Activity-block (activities) */
+
+.activity-block {
+	padding:10px 0;
+	border-bottom:1px solid blue;
+}
+
+.activity-block img {
+	max-height:230px;
+}
+
+.activity-block h1 {
+  font-size:3.2em;
+	padding:8px 0;
+	line-height:1em;
+}
+
+.activity-block td {
+  min-width:70px;
+	padding:3px;
+}
+
+.activity-block .time {
+  background:#fafafa;
+	color:#444;
+	font-weight:bold;
+	padding:4px;
+	margin-top:4px;
+}
+
+
+/* Twitter widget */
 .twtr-widget h3 {
 	font-size: 200% !important;
 	float: left;
