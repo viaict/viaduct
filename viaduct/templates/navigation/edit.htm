@@ -1,0 +1,37 @@
+{% from "macros/form.htm" import render_field, render_checkbox, render_button %}
+
+{% extends "base.htm" %}
+
+{% block page %}
+
+	<p><a href="{{ url_for('navigation.view') }}">Terug</a></p>
+	
+	<form action="" method="post" name="edit_navigation_entry">
+		<fieldset>
+			<legend>
+				{% if entry %}
+					Navigatie item bewerken
+				{% else %}
+					Navigatie item aanmaken
+				{% endif %}
+			</legend>
+
+			{{ form.csrf_token }}
+			{{ render_field(form.title) }}
+			{{ render_field(form.url) }}
+			{{ render_checkbox(form.external) }}
+
+			{{ render_button(form.submit)}}
+
+		</fieldset>
+	</form>
+
+	{% if entry and not entry.children %}
+		<form action="{{ url_for('navigation.delete', entry_id=entry.id) }}" method="post" name="delete_navigation_entry">
+			<fieldset>
+				<button class="btn btn-danger" type="submit">Verwijderen</button>
+			</fieldset>
+		</form>
+	{% endif %}
+
+{% endblock %}

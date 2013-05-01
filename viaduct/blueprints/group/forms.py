@@ -13,4 +13,3 @@ class GroupEditEntry(Form):
 class GroupEditForm(Form):
 	permissions = FieldList(FormField(GroupEditEntry))
 	edit_group = SubmitField('Edit group')
-

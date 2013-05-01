@@ -1,9 +1,9 @@
-
 {% extends "base.htm" %}
+
 {% block page %}
 <div class="row">
 	<div class="span2">
-		{{ NavigationAPI.get_navigation_bar() }}
+		{{ NavigationAPI.get_navigation_menu() }}
 	</div>
 	<div class="span10">{% block content %}{% endblock %}</div>
 </div>

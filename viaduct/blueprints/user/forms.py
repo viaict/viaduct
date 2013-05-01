@@ -15,4 +15,3 @@ class SignInForm(Form):
 	email = TextField('E-mail address', validators=[Required(), Email()])
 	password = PasswordField('Password', validators=[Required()])
 	remember_me = BooleanField('Remember me', default = False)
-

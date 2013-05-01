@@ -25,7 +25,7 @@ def create():
 	if request.method == 'POST':
 		valid_form = True
 
-		title				= request.form['title'].strip()
+		title = request.form['title'].strip()
 		description = request.form['description'].strip()
 
 		if not title:

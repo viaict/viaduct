@@ -1,7 +1,4 @@
 import bcrypt
-
-
-
 import datetime
 from viaduct import db
 from viaduct.blueprints.user.models import User, UserPermission
@@ -142,4 +139,20 @@ db.session.commit()
 
 revision = PageRevision(page, user, 'Page 1', 'herr derr 1', 0)
 db.session.add(revision)
+db.session.commit()
+
+nav_home = NavigationEntry(None, 'Home', '/', False)
+db.session.add(nav_home)
+db.session.commit()
+
+nav_page1 = NavigationEntry(None, 'Pagina 1', '/page1', False)
+db.session.add(nav_page1)
+db.session.commit()
+
+nav_admin = NavigationEntry(None, 'Admin', '/admin', False)
+db.session.add(nav_admin)
+db.session.commit()
+
+nav_nav = NavigationEntry(nav_admin, 'Navigatie', '/navigation', False)
+db.session.add(nav_nav)
 db.session.commit()
