@@ -6,11 +6,6 @@ from models import Task, Minute
 from viaduct.blueprints.page.models import Page
 
 class PimpyAPI:
-	"""
-	TODO: check if groups are enabled for Pimpy. This has something to do with
-		roles groups can have. Stephan should first fix those roles.
-	"""
-
 
 	@staticmethod
 	def get_navigation_menu(group_id, personal, type):
