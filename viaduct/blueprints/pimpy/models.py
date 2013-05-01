@@ -34,7 +34,8 @@ class Task(db.Model):
 
 	status = db.Column(db.Integer)
 
-	status_meanings = ["not started", "started", "done", "checked", "not done",			"removed"]
+	status_meanings = ["not started", "started", "done", "checked", "not done", "removed"]
+	status_colors = ["btn-info", "btn-warning", "btn-succes", "btn-succes", "btn-danger", "btn-inverse"]
 
 	def __init__(self, title, content, deadline, group_id, users,
 				minute_id, line, status):
@@ -54,6 +55,14 @@ class Task(db.Model):
 		"""
 		if self.status >= 0 and self.status < len(self.status_meanings):
 			return self.status_meanings[self.status]
+		return "unknown"
+
+	def get_status_color(self):
+		"""
+		Returns a string representing the status
+		"""
+		if self.status >= 0 and self.status < len(self.status_colors):
+			return self.status_colors[self.status]
 		return "unknown"
 
 	def get_users(self):
