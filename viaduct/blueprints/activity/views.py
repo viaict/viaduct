@@ -30,13 +30,13 @@ def view(page=1):
 
 	return render_template('activity/view.htm', activities=activities)
 
-@blueprint.route('activities/activity/<int:activity_id>', methods=['GET', 'POST'])
+@blueprint.route('/activities/activity/<int:activity_id>', methods=['GET', 'POST'])
 def get_activity(activity_id = 0):
 	activity = Activity.query.filter(Activity.id == activity_id).first()
 	return render_template('activities/activity/view_single.htm', activity=activity)
 
-@blueprint.route('activities/activity/create/', methods=['GET', 'POST'])
-@blueprint.route('activities/activity/edit/<int:activity_id>', methods=['GET', 'POST'])
+@blueprint.route('/activities/activity/create/', methods=['GET', 'POST'])
+@blueprint.route('/activities/activity/edit/<int:activity_id>', methods=['GET', 'POST'])
 def create(activity_id=None):
 	if not current_user or current_user.email != 'administrator@svia.nl':
 		return abort(403)
