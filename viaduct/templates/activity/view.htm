@@ -3,11 +3,13 @@
 {% extends "content.htm" %}
 
 {%block content %}
+
 <form action="" method="post" name="activity_view">
 	<table class="table table-bordered table-striped">
 		<thead>
 			<tr>
 				<th>Title</th>
+				<th>Date</th>
 			</tr>
 		</thead>
 
@@ -17,8 +19,11 @@
 					<td>
 						<label class="checkbox">
 							<input type=checkbox name="select" value="{{ activity.id }}" />
-							{{ activity.title }}
+							<a href="/activity/{{ activity.id }}">{{ activity.name }}</a>
 						</label>
+					</td>
+					<td>
+						{{ activity.start_time.strftime("%a, %d %b. (%H:%M)")}}
 					</td>
 				</tr>
 			{% endfor %}
@@ -26,7 +31,7 @@
 	</table>
 
 	<div class="btn-group">
-		<a href="/activities/create" class="btn">Create</a>
+		<a href="/activity/create/" class="btn">Create</a>
 	</div>
 
 	{{ render_pagination(activities, 'activity.view') }}
