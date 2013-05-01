@@ -3,7 +3,18 @@ from flask.ext.login import current_user
 
 from models import Task, Minute
 
+from viaduct.blueprints.group.models import Group
+
 class PimpyAPI:
+
+	@staticmethod
+	def get_list_of_users_from_string(comma_sep):
+		"""
+		Parses a string which is a list of comma seperated user names
+		to a list of users
+		"""
+		# TODO: implement this
+		return comma_sep.split()
 
 	@staticmethod
 	def check_user_is_logged_in():
@@ -56,21 +67,6 @@ class PimpyAPI:
 				query = query.filter(Task.group_id==group_id)
 				list_items.extend(query.all())
 
-		#if personal:
-		#	query = current_user.tasks
-		#	if group_id != 'all':
-		#		query = query.filter(Task.group_id==group_id)
-		#	list_items.extend(query.all())
-		#else:
-		#	groups = current_user.groups
-		#	if group_id == 'all':
-		#		groups = groups.all()
-		#		for group in groups:
-		#			list_items.extend(group.tasks.all())
-		#	else:
-		#		groups.filter(Task.group_id==group_id)
-		#		list_items.extend(groups.all())
-
 		return Markup(render_template('pimpy/api/tasks.htm',
 			list_items=list_items, type='tasks', group_id=group_id,
 			personal=personal))
@@ -99,10 +95,3 @@ class PimpyAPI:
 		return Markup(render_template('pimpy/api/minutes.htm',
 			list_items=list_items, type='minutes', group_id=group_id))
 
-	@staticmethod
-	def add_minute(group_id):
-		return Markup(render_template('pimpy/api/add_minute.htm', group_id=group_id, type='minutes'))
-
-	@staticmethod
-	def add_task(group_id):
-		return Markup(render_template('pimpy/api/add_task.htm', group_id=group_id, type='tasks'))
