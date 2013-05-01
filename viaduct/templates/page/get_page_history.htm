@@ -1,0 +1,37 @@
+{% from "macros/flash.htm" import render_flash %}
+
+{% extends "content.htm" %}
+
+{% block content %}
+<form action="" method="post" name="history">
+	<fieldset>
+		<legend>Page History</legend>
+
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Comment</th>
+					<th>Author</th>
+					<th>Previous</th>
+					<th>Current</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{% for revision in revisions %}
+					<tr>
+						<td>{{ revision.id }}</td>
+						<td>{{ revision.comment }}</td>
+						<td>{{ revision.author.first_name }} {{ revision.author.last_name }}</td>
+						<td></td>
+						<td></td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+{% for revision in revisions %}
+
+{% endfor %}
+{% endblock %}
+
