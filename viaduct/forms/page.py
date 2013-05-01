@@ -4,11 +4,10 @@ from flask.ext.wtf import Optional, NumberRange, Required, Regexp
 
 class EditPageForm(Form):
 	title = TextField('Title', [Required()])
-	content_type = SelectField('Content Type')
 	content = TextAreaField('Content', [Optional()])
-	priority = TextField('Priority', [NumberRange()])
+	comment = TextField('Comment', [Required()])
+	filter_html = BooleanField('Disable HTML filtering for the current page.')
 	save_page = SubmitField('Save Page')
-
 
 class ChangePathForm(Form):
 	path = TextField('Path', [Required(), Regexp(r'^ */?[\w-]+(/[\w-]+)*/? *$', message='You suck at typing URL paths')])

@@ -27,6 +27,10 @@ class User(db.Model):
 	def get_id(self):
 		return unicode(self.id)
 
+	def __repr__(self):
+		return '<User(%s, "%s", "%s", "%s", "%s")>' % (self.id, self.email,
+				self.password, self.first_name, self.last_name)
+
 class UserPermission(db.Model):
 	__tablename__ = 'user_permission'
 
