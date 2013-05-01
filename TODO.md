@@ -1,14 +1,14 @@
 == site ==
 
 * links (van het menu) moeten niet automagisch gegeneerd worden, moeten vanuit
-een database geladen worden zodat je kan aangeven waaruit je menu bestaat. 
+een database geladen worden zodat je kan aangeven waaruit je menu bestaat.
     - MODULE: navigation
     - DOOR: BAS
     - als je nieuwe artikelen aanmaakt moeten deze automagisch worden toegevoegd
     - je moet zelf links kunnen toevoegen (/verwijderen)
     - je moet externe links kunnen toevoegen.
 
-* sign-in/sign-up moet uitgebreid worden voor als je het wachtwoord vergeten bent. 
+* sign-in/sign-up moet uitgebreid worden voor als je het wachtwoord vergeten bent.
     - MODULE: user
     - DOOR:
     - afhankelijkheid: mail-smtp-gegevens (flask-mail) moeten bekend zijn
@@ -28,7 +28,7 @@ page history hebt en terugkan
 bestond alleen nog maar in Stephans hoofd. Stephan moet even de tabellen
 uittekenen.
 
-* activiteitenbeheren. 
+* activiteitenbeheren.
     - DOOR: FABIEN
 
 * files uploaden. Uploaden kan al
@@ -46,6 +46,7 @@ uittekenen.
 == boekensysteem ==
 
 == tentamenbank ==
+    - door: Bram
 
 == mail ==
     - door: Ilja
