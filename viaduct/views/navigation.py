@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, abort, request, flash, redirect,\
 		url_for
+from flask.ext.login import current_user
 
 from viaduct import db
 from viaduct.helpers import flash_form_errors
@@ -10,6 +11,9 @@ blueprint = Blueprint('navigation', __name__)
 
 @blueprint.route('/navigation/')
 def view():
+	if not current_user or current_user.email != 'administrator@svia.nl':
+		return abort(403)
+
 	entries = NavigationEntry.get_entries()
 	return render_template('navigation/view.htm', entries=entries)
 
