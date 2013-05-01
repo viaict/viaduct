@@ -1,11 +1,16 @@
-from flask import render_template, request, Markup
+from flask import render_template, request, Markup, redirect, url_for, abort
 from flask.ext.login import current_user
 
 from models import Task, Minute
 
-from viaduct.blueprints.page.models import Page
-
 class PimpyAPI:
+
+	@staticmethod
+	def check_user_is_logged_in():
+		print "_%s_ _%s_ _%s_ _%s_" % (current_user.first_name, current_user.last_name, current_user.email, current_user.is_authenticated())
+		if not current_user.is_authenticated():
+			abort(403)
+		return ""
 
 	@staticmethod
 	def get_navigation_menu(group_id, personal, type):

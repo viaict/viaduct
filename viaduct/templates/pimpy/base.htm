@@ -10,6 +10,7 @@
 {% endblock %}
 
 {% block page %}
-    {% block sidebar %}  {% endblock %}
-    {% block content %}  {% endblock %}
+	{{ PimpyAPI.check_user_is_logged_in()}}
+	{% block sidebar %}  {% endblock %}
+	{% block content %}  {% endblock %}
 {% endblock %}
