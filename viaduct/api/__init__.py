@@ -7,4 +7,3 @@ CourseAPI.register()
 DegreeAPI.register()
 EducationAPI.register()
 FileAPI.register()
-
