@@ -25,11 +25,11 @@
 		Groups:
 		<ul>
 			<li {% if group_id == 'all' %} class="active" {% endif %} >
-				<a href="{{ url_for(endpoints['view_chosentype']) }}">all</a>
+				<a href="{{ url_for(endpoints['view_chosentype_chosenpersonal']) }}">all</a>
 			</li>
 			{% for group in groups %}
 				<li {% if group_id == group.id %} class="active" {% endif %} >
-					<a href="{{ url_for(endpoints['view_chosentype'], group_id=group.id) }}">{{ group.name }}</a>
+					<a href="{{ url_for(endpoints['view_chosentype_chosenpersonal'], group_id=group.id) }}">{{ group.name }}</a>
 				</li>
 			{% endfor %}
 		<ul>
