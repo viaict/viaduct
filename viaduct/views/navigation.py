@@ -38,6 +38,7 @@ def edit(entry_id=None):
 				entry.title = form.title.data
 				entry.url = form.url.data
 				entry.external = form.external.data
+				entry.activity_list = form.activity_list.data
 
 				db.session.add(entry)
 				db.session.commit()
@@ -45,7 +46,7 @@ def edit(entry_id=None):
 				flash('De item is opgeslagen.', 'success');
 			else:
 				entry = NavigationEntry(None, form.title.data, form.url.data,
-						form.external.data)
+						form.external.data, form.activity_list.data)
 
 				db.session.add(entry)
 				db.session.commit()
