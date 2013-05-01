@@ -31,20 +31,21 @@ def edit(entry_id=None):
 
     form = NavigationEntryForm(request.form, entry)
 
-    if form.is_submitted():
-        if form.validate_on_submit():
-            if entry:
-                entry.title = form.title.data
-                entry.url = form.url.data
-                entry.external = form.external.data
+	if form.is_submitted():
+		if form.validate_on_submit():
+			if entry:
+				entry.title = form.title.data
+				entry.url = form.url.data
+				entry.external = form.external.data
+				entry.activity_list = form.activity_list.data
 
                 db.session.add(entry)
                 db.session.commit()
 
-                flash('De item is opgeslagen.', 'success');
-            else:
-                entry = NavigationEntry(None, form.title.data, form.url.data,
-                        form.external.data)
+				flash('De item is opgeslagen.', 'success');
+			else:
+				entry = NavigationEntry(None, form.title.data, form.url.data,
+						form.external.data, form.activity_list.data)
 
                 db.session.add(entry)
                 db.session.commit()
@@ -69,18 +70,12 @@ def edit(entry_id=None):
 
 @blueprint.route('/navigation/delete/<int:entry_id>', methods=['POST'])
 def delete(entry_id):
-<<<<<<< HEAD
-    entry = db.session.query(NavigationEntry).filter_by(id=entry_id).first()
-    if not entry:
-        abort(404)
-=======
 	if not current_user or current_user.email != 'administrator@svia.nl':
 		return abort(403)
 
 	entry = db.session.query(NavigationEntry).filter_by(id=entry_id).first()
 	if not entry:
 		abort(404)
->>>>>>> Permission check. Temporary.
 
     if not entry.parent:
         if entry.children:
