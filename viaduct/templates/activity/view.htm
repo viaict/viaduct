@@ -44,9 +44,11 @@
 
 <hr>
 
+{% if current_user and current_user.email == "administrator@svia.nl" %}
 <div class="btn-group">
 	<a href="/activity/create/" class="btn">Create</a>
 </div>
+{% endif %}
 
 	{{ render_pagination(activities, 'activity.view') }}
 {% endblock %}

@@ -1,0 +1,15 @@
+<ul class="nav nav-stacked nav-tabs">
+
+<li>
+  <a href="#"><i class="icon-arrow-left"></i> Go back</a>
+
+{% for page in pages %}
+
+	{% if page.url == current %}
+		<li class="active"><a href="#">{{ page.title }}</a>
+	{% else %}
+		<li><a href="{{ page.url }}">{{ page.title }}</a>
+	{% endif %}
+
+{% endfor %}
+</ul>

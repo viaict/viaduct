@@ -20,7 +20,7 @@
 			<label class="content-label"">Activity name</label>
 
 			<div class="controls">
-				<input type="text" name="name" class="span6" placeholder="Name">
+				<input value="{{ form.name.data }}" type="text" name="name" class="span6" placeholder="Name">
 			</div>
 		</div>
 
@@ -28,7 +28,7 @@
 			<label class="content-label" for="description">Description</label>
 
 			<div class="controls">
-				<textarea id="description" class="span6" name="description" placeholder="Description"></textarea>
+				<textarea id="description" class="span6" name="description" placeholder="Description">{{ form.description.data }}</textarea>
 			</div>
 		</div>
 
@@ -47,10 +47,10 @@
 			</span>
 
 			<div class="controls form-inline">
-				<input type='date' name='start_date' id='start_date' data-date-format="yyyy-mm-dd">
+				<input value="{{ form.start_time.data }}" type='date' name='start_date' id='start_date' data-date-format="yyyy-mm-dd">
 
 				<div class="input-append bootstrap-timepicker">
-					<input type='text' name='start_time' id="start_time" class="input-small">
+					<input value="{{ form.start_time.data }}" type='text' name='start_time' id="start_time" class="input-small">
 					<span class="add-on"><i class="icon-time"></i></span>
 				</div>
 			</div>
@@ -62,10 +62,10 @@
 			</span>
 
 			<div class="controls form-inline">
-				<input type='date' name='end_date' id='end_date' data-date-format="yyyy-mm-dd">
+				<input value="{{ form.end_time.data }}" type='date' name='end_date' id='end_date' data-date-format="yyyy-mm-dd">
 
 				<div class="input-append bootstrap-timepicker">
-					<input type='text' name='end_time' id="end_time" class="input-small">
+					<input value="{{ form.end_time.data }}" type='text' name='end_time' id="end_time" class="input-small">
 					<span class="add-on"><i class="icon-time"></i></span>
 				</div>
 			</div>
@@ -73,7 +73,12 @@
 
 		{{ render_field(form.location) }}
 		{{ render_field(form.price) }}
-		<!--{{ render_field(form.privacy) }}-->
+
+		{% if form.data.picture %}
+			<p>Current image:<br>
+			<img src="/static/activity_pictures/{{ form.data.picture }}" style="height:200px;width:auto;">
+		{% endif %}
+
 		{{ render_field(form.picture) }}
 
 	<div class="control-group">
@@ -85,7 +90,7 @@
 
 <script>
 $(document).ready(function() {
-	$("textarea").flexible();
+	$("textarea").flexible().trigger('keyup');
 
 	$("input, select").keypress(function(event) {
 		return event.keyCode != 13;
