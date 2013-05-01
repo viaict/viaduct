@@ -82,3 +82,14 @@ class PimpyAPI:
 		return Markup(render_template('pimpy/api/minutes.htm',
 			list_items=list_items, type='minutes', group_id=group_id))
 
+	@staticmethod
+	def get_minute(group_id, minute_id):
+		"""
+		Loads (and thus views) specifically one minute
+		"""
+		query = Minute.query
+		query = query.filter(Minute.id==minute_id)
+		list_items = query.all()
+
+		return Markup(render_template('pimpy/api/minutes.htm',
+			list_items=list_items, type='minutes', group_id=group_id))

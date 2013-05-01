@@ -24,6 +24,9 @@ def view_minutes(group_id='all'):
 def view_minutes(group_id='all'):
 	return PimpyAPI.get_minutes(group_id)
 
+@blueprint.route('/pimpy/minutes/<group_id>/<minute_id>')
+def view_minute(group_id='all', minute_id=0):
+	return PimpyAPI.get_minute(group_id, minute_id)
 
 @blueprint.route('/pimpy/tasks/', methods=['GET', 'POST'])
 @blueprint.route('/pimpy/tasks/<group_id>', methods=['GET', 'POST'])

@@ -4,7 +4,15 @@
 	<ul>
 		{% for list_item in list_items: %}
 			<li>
-				{{ list_item.get_title() }}
+				<strong> Title: </strong> {{ list_item.get_title()}} ({{list_item.id }})<br/>
+				<strong> Group: </strong> {{ list_item.group.name }} (id: {{list_item.group.id }}) <br/>
+				<strong> Created on: </strong> {{ list_item.get_timestamp() }} <br/>
+				<button type="button" class="btn" data-toggle="collapse" data-target='#{{ list_item.get_name() }}'>
+					Show content
+				</button>
+				<div id='{{ list_item.get_name() }}' class="collapse">
+					{{ list_item.get_content() }}
+				</div>
 			</li>
 		{% endfor %}
 	</ul>
