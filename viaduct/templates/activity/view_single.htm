@@ -1,0 +1,13 @@
+{% extends "content.htm" %}
+
+{% block content %}
+
+<div class="page-header">
+	<h1>{{activity.name}}</h1>
+</div>
+
+<img src="/static/activity_pictures/{{ activity.picture }}">
+
+<p>{{ activity.description}}
+
+{% endblock %}

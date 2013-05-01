@@ -1,16 +1,18 @@
-{% from "macros/form.htm" import render_button, render_field %}
+{% from "macros/form.htm" import render_button, render_checkbox, render_field %}
 
 {% extends "content.htm" %}
 
 {% block content %}
 <form action="" method="post" name="edit_page" class="form-horizontal">
 	<fieldset>
-		<legend>Edit page</legend>
+		<legend>Edit Page</legend>
 
-		{{ render_field(form.title) }}
-		{{ render_field(form.content_type) }}
-		{{ render_field(form.content) }}
-		{{ render_field(form.priority) }}
+		{{ form.csrf_token }}
+
+		{{ render_field(form.title, class='input-block-level') }}
+		{{ render_field(form.content, rows=20, class='input-block-level') }}
+		{{ render_field(form.comment, class='input-block-level') }}
+		{{ render_checkbox(form.filter_html) }}
 		{{ render_button(form.save_page) }}
 	</fieldset>
 </form>

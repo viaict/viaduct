@@ -1,16 +1,16 @@
-from flask import render_template, request, Markup
+from flask import render_template, request, Markup, redirect, url_for, abort
 from flask.ext.login import current_user
 
 from models import Task, Minute
 
-from viaduct.blueprints.page.models import Page
-
 class PimpyAPI:
-	"""
-	TODO: check if groups are enabled for Pimpy. This has something to do with
-		roles groups can have. Stephan should first fix those roles.
-	"""
 
+	@staticmethod
+	def check_user_is_logged_in():
+		print "_%s_ _%s_ _%s_ _%s_" % (current_user.first_name, current_user.last_name, current_user.email, current_user.is_authenticated())
+		if not current_user.is_authenticated():
+			abort(401)
+		return ""
 
 	@staticmethod
 	def get_navigation_menu(group_id, personal, type):
@@ -87,3 +87,22 @@ class PimpyAPI:
 		return Markup(render_template('pimpy/api/minutes.htm',
 			list_items=list_items, type='minutes', group_id=group_id))
 
+	@staticmethod
+	def get_minute(group_id, minute_id):
+		"""
+		Loads (and thus views) specifically one minute
+		"""
+		query = Minute.query
+		query = query.filter(Minute.id==minute_id)
+		list_items = query.all()
+
+		return Markup(render_template('pimpy/api/minutes.htm',
+			list_items=list_items, type='minutes', group_id=group_id))
+
+	@staticmethod
+	def add_minute(group_id):
+		return Markup(render_template('pimpy/api/add_minute.htm', group_id=group_id, type='minutes'))
+
+	@staticmethod
+	def add_task(group_id):
+		return Markup(render_template('pimpy/api/add_task.htm', group_id=group_id, type='tasks'))
