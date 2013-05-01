@@ -4,10 +4,13 @@
 een database geladen worden zodat je kan aangeven waaruit je menu bestaat.
     - MODULE: navigation
     - DOOR: BAS
-    - als je nieuwe artikelen aanmaakt moeten deze automagisch worden toegevoegd
-    - je moet zelf links kunnen toevoegen (/verwijderen)
-    - je moet externe links kunnen toevoegen.
-
+    - als je nieuwe artikelen (Model: pages) aanmaakt moeten deze automagisch worden toegevoegd
+    + je moet zelf links kunnen toevoegen (/verwijderen)
+    + je moet externe links kunnen toevoegen.
+    - Modules moeten in routes de parent/kind/nogmeerkind structuur aanhouden
+      (bv. bestuur/bestuursblog/<int:blog_entry_id>)
+      (bv. activities/activity/<int:activity_id>)
+    
 * sign-in/sign-up moet uitgebreid worden voor als je het wachtwoord vergeten bent.
     - MODULE: user
     - DOOR:
@@ -30,7 +33,15 @@ uittekenen.
 
 * activiteitenbeheren.
     - DOOR: FABIEN
-
+    + Activiteiten kunnen aangemaakt worden
+    - Routing moet met goede structuur (zie navigation)
+    - Activiteiten edit
+    - Oude Plaatje verwijderen bij plaatje edit
+    - Facebook event (google+) aanmaken
+    - Attending op svia.nl
+    - Facebook event comments scrapen
+    - Google maps plugin (geolocate API : adres invoert)
+    
 * files uploaden. Uploaden kan al
     - er moet nog een beheringsysteem
 
