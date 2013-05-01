@@ -9,7 +9,7 @@ class PimpyAPI:
 	def check_user_is_logged_in():
 		print "_%s_ _%s_ _%s_ _%s_" % (current_user.first_name, current_user.last_name, current_user.email, current_user.is_authenticated())
 		if not current_user.is_authenticated():
-			abort(403)
+			abort(401)
 		return ""
 
 	@staticmethod
@@ -98,3 +98,11 @@ class PimpyAPI:
 
 		return Markup(render_template('pimpy/api/minutes.htm',
 			list_items=list_items, type='minutes', group_id=group_id))
+
+	@staticmethod
+	def add_minute(group_id):
+		return Markup(render_template('pimpy/api/add_minute.htm', group_id=group_id, type='minutes'))
+
+	@staticmethod
+	def add_task(group_id):
+		return Markup(render_template('pimpy/api/add_task.htm', group_id=group_id, type='tasks'))
