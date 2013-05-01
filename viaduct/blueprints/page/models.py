@@ -46,8 +46,7 @@ class PageRevision(db.Model):
 	title = db.Column(db.String(128))
 	filter_html = db.Column(db.Boolean)
 	content = db.Column(db.Text)
-	content_type = db.Column(db.Integer, default=0)
-	priority = db.Column(db.Integer, default=0)
+	comment = db.Column(db.String(1024))
 	timestamp = db.Column(db.DateTime)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
@@ -55,15 +54,15 @@ class PageRevision(db.Model):
 	author = db.relationship('User', backref=db.backref('page_edits',
 		lazy='dynamic'))
 
-	def __init__(self, page, author, title, content, priority,
+	def __init__(self, page, author, title, content, comment, filter_html=True,
 			timestamp=datetime.datetime.utcnow()):
 		self.title = title
 		self.content = content
-		self.priority = priority
+		self.comment = comment
+		self.filter_html = filter_html
 		self.user_id = author.id
 		self.page_id = page.id
 		self.timestamp = timestamp
-		self.path = ''
 
 class PagePermission(db.Model):
 	__tablename__ = 'page_permission'

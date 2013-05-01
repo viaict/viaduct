@@ -22,3 +22,34 @@ def markdown_filter(data):
 def safe_markdown_filter(data):
 	return Markup(markdown(data, extensions=markdown_extensions))
 
+@application.template_filter('pages')
+def pages_filter(data):
+	content = '<div class="container">'
+
+	for i in range(len(data)):
+		if i % 2 == 0:
+			content += '<div class="row">'
+
+		if i == len(data) - 1 and i % 2 == 0:
+			content += '<div class="span12">'
+		else:
+			content += '<div class="span6">'
+
+		content += '<div class="mainblock">'
+		content += '<h1>{0}</h1>'.format(data[i].title)
+
+		if data[i].filter_html:
+			content += markdown(data[i].content, safe_mode='escape',
+				enable_attributes=False, extensions=markdown_extensions)
+		else:
+			content += markdown(data[i].content, extensions=markdown_extensions)
+
+		content += '</div></div>'
+
+		if i == len(data) - 1 or i % 2 != 0:
+			content += '</div>'
+
+	content += '</div>'
+
+	return Markup(content)
+
