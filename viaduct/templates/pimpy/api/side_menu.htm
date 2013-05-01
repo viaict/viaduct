@@ -9,6 +9,7 @@
 				<a href="{{ url_for(endpoints['view_tasks_chosenpersonal'], group_id=group_id) }}">tasks</a>
 			</li>
 		</ul>
+	</li>
 	<li>
 		{% if type == 'tasks' %}
 			Show for:
@@ -21,6 +22,7 @@
 				</li>
 			</ul>
 		{% endif %}
+	</li>
 	<li>
 		Groups:
 		<ul>
@@ -32,5 +34,12 @@
 					<a href="{{ url_for(endpoints['view_chosentype_chosenpersonal'], group_id=group.id) }}">{{ group.name }}</a>
 				</li>
 			{% endfor %}
-		<ul>
+		</ul>
+	</li>
+	<li>
+		<a href="{{ url_for('pimpy.add_minute', group_id=group_id) }}">Add minute</a>
+	</li>
+	<li>
+		<a href="{{ url_for('pimpy.add_task', group_id=group_id) }}">Add task</a>
+	</li>
 </ul>
