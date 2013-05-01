@@ -14,6 +14,9 @@ def view(page=1):
 
 @contact_information.route('/contact_information/create/', methods=['GET', 'POST'])
 def create():
+	if not current_user or current_user.email != 'administrator@svia.nl':
+		return abort(403)
+
 	if request.method == 'POST':
 		name = request.form['name'].strip()
 		email = request.form['e-mail'].strip() # FUCKING RETARDED KUT STREEPJE
