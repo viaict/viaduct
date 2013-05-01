@@ -2,12 +2,32 @@
 
 {% block content %}
 
-<div class="page-header">
-	<h1>{{activity.name}}</h1>
+<h1>{{activity.name}}</h1>
+<h3>Location: {{ activity.location}}</h3>
+
+<div class="row-fluid">
+	<div class="span8">
+
+		<h4>Price: <em>{{ activity.price}}</em></h4>
+
+		<table class="table">
+			<tr>
+				<th>Start
+				<th>End
+
+			<tr>
+				<td>{{ activity.start_time.strftime("%a, %d %b. (%H:%M)")}}
+			  <td>{{ activity.end_time.strftime("%a, %d %b. (%H:%M)")}}
+		</table>
+
+		<hr>
+		<p>{{ activity.description}}
+	</div>
+
+	<div class="span4">
+		<img src="/static/activity_pictures/{{ activity.picture }}">
+	</div>
+
 </div>
-
-<img src="/static/activity_pictures/{{ activity.picture }}">
-
-<p>{{ activity.description}}
 
 {% endblock %}

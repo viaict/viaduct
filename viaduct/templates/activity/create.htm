@@ -4,6 +4,9 @@
 
 {% block content %}
 
+<script src='/static/js/throttle.js'></script>
+<script src='/static/js/textarea.dev.js'></script>
+
 <script src='/static/js/datepicker.js'></script>
 <script src='/static/js/timepicker.js'></script>
 <link href='/static/css/timepicker.css' rel='stylesheet'>
@@ -12,8 +15,22 @@
 <form action="" method="post" enctype="multipart/form-data">
 
 		{{ form.csrf_token }}
-		{{ render_field(form.name) }}
-		{{ render_field(form.description) }}
+
+		<div class="control-group">
+			<label class="content-label"">Activity name</label>
+
+			<div class="controls">
+				<input type="text" name="name" class="span6" placeholder="Name">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="content-label" for="description">Description</label>
+
+			<div class="controls">
+				<textarea id="description" class="span6" name="description" placeholder="Description"></textarea>
+			</div>
+		</div>
 
 		<div class="control-group">
 			<div class="controls">
@@ -55,6 +72,7 @@
 		</div>
 
 		{{ render_field(form.location) }}
+		{{ render_field(form.price) }}
 		<!--{{ render_field(form.privacy) }}-->
 		{{ render_field(form.picture) }}
 
@@ -67,7 +85,13 @@
 
 <script>
 $(document).ready(function() {
-	// Check eyecon.ro/bootstrap-datepicke
+	$("textarea").flexible();
+
+	$("input, select").keypress(function(event) {
+		return event.keyCode != 13;
+	});
+
+	// Check www.eyecon.ro/bootstrap-datepicke
 	var nowTemp = new Date();
 	var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 	
@@ -86,7 +110,7 @@ $(document).ready(function() {
 	
 	var checkout = $('#end_date').datepicker({
 		onRender: function(date) {
-		return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
+		return date.valueOf() < checkin.date.valueOf() ? 'disabled' : '';
 	}}).on('changeDate', function(ev) {checkout.hide();}).data('datepicker');
 
 	$("#start_time").timepicker({showMeridian:false, defaultTime: "17:00"});
