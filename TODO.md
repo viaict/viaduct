@@ -7,8 +7,8 @@ een database geladen worden zodat je kan aangeven waaruit je menu bestaat.
 
     - als je nieuwe artikelen (Model: pages) aanmaakt moeten deze automagisch worden toegevoegd
     + je moet zelf links kunnen toevoegen (/verwijderen)
-    - je moet externe links kunnen toevoegen.
-        Het onderscheid bestaat, maar mist nog onderscheid in de front-end (e.g. http:// ervoor i.p.v. www.svia.nl/).
+    ~ je moet externe links kunnen toevoegen.
+        Werkt in de navbar, nog niet in het zijmenu.
     - Modules moeten in routes de parent/kind/nogmeerkind structuur aanhouden
       (bv. bestuur/bestuursblog/<int:blog_entry_id>)
       (bv. activities/activity/<int:activity_id>)

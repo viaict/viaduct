@@ -1,8 +1,13 @@
 <ul class="nav nav-pills">
 	{% for entry in entries %}
+
 		{% if entry.children %}
 			<li class="dropdown">
-				<a class="dropdown-toggle" data-hover="dropdown" data-delay="200" data-close-others="true" href="{{ entry.url }}">
+				{% if entry.external == False %}
+					<a class="dropdown-toggle" data-hover="dropdown" data-delay="200" data-close-others="true" href="{{ entry.url }}">
+				{% else %}
+					<a class="dropdown-toggle" data-hover="dropdown" data-delay="200" data-close-others="true" href="http://{{ entry.url }}">
+				{% endif %}
 					{{ entry.title }}
 				</a>
 
@@ -14,7 +19,13 @@
 			</li>
 		{% else %}
 			<li class="">
-				<a href="{{ entry.url }}">{{ entry.title }}</a>
+				{% if entry.external == False %}
+					<a href="{{ entry.url }}">
+				{% else %}
+					<a href="http://{{ entry.url }}">
+				{% endif %}
+					{{ entry.title }}
+				</a>
 			</li>
 		{% endif %}
 	{% endfor %}
