@@ -24,7 +24,10 @@ def allowed_file(filename):
 @blueprint.route('/activities/', methods=['GET', 'POST'])
 @blueprint.route('/activities/<int:page>/', methods=['GET', 'POST'])
 def view(page=1):
-	activities = Activity.query.paginate(page, 15, False)
+	activities = Activity.query \
+		.order_by(Activity.start_time.desc()) \
+		.paginate(page, 15, False)
+
 	return render_template('activity/view.htm', activities=activities)
 
 @blueprint.route('/activity/<int:activity_id>', methods=['GET', 'POST'])
@@ -55,15 +58,17 @@ def create():
 
 		location		= request.form['location'].strip()
 		privacy			= "public"
+		price				= request.form['price'].strip()
 
 		file = request.files['picture']
 
 		if file and allowed_file(file.filename):
 			picture = secure_filename(file.filename)
 			file.save(os.path.join('viaduct/static/activity_pictures', picture))
-
+		else:
+			picture = "yolo.png"
 	
-		venue				= 1 # Facebook ID location, not used yet
+		venue	= 1 # Facebook ID location, not used yet
 
 		if not name:
 			flash('No activity name has been specified.', 'error')
@@ -81,7 +86,8 @@ def create():
 				start, 
 				end, 
 				location, 
-				privacy, 
+				privacy,
+				price,
 				picture,
 				venue
 			)
