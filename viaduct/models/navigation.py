@@ -39,11 +39,11 @@ class NavigationEntry(db.Model):
 			if entry.activity_list:
 				entry.children = []
 				activities = db.session.query(Activity)\
-						.filter(Activity.start_time >= datetime.datetime.utcnow())\
+						.filter(Activity.end_time > datetime.datetime.now())\
 						.all()
 
 				for activity in activities:
 					entry.children.append(NavigationEntry(entry, activity.name,
-							'activity/' + str(activity.id), False, False))
+							'/activity/' + str(activity.id), False, False))
 
 		return entries
