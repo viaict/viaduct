@@ -32,10 +32,12 @@ class Task(db.Model):
 	users = db.relationship('User', secondary=task_user,
 		backref=db.backref('tasks', lazy='dynamic'), lazy='dynamic')
 
+	status = db.Column(db.Integer)
 
+	status_meanings = ["not started", "started", "done", "checked", "not done",			"removed"]
 
 	def __init__(self, title, content, deadline, group_id, users,
-				minute_id, line):
+				minute_id, line, status):
 		self.title = title
 		self.content = content
 		self.deadline = deadline
@@ -43,9 +45,23 @@ class Task(db.Model):
 		self.line = line
 		self.users = users
 		self.minute_id = minute_id
+		self.status = status
 
-	def get_title(self):
-		return self.title
+
+	def get_status_string(self):
+		"""
+		Returns a string representing the status
+		"""
+		if self.status >= 0 and self.status < len(self.status_meanings):
+			return self.status_meanings[self.status]
+		return "unknown"
+
+	def get_users(self):
+		"""
+		Returns a list of users, comma separated
+		"""
+		return ", ".join(map(lambda x: "%s %s" % (x.first_name, x.last_name),
+			self.users))
 
 class Minute(db.Model):
 	__tablename__ = 'pimpy_minute'
@@ -62,6 +78,21 @@ class Minute(db.Model):
 	def __init__(self, content, group_id):
 		self.content = content
 		self.group_id = group_id
+
+	def get_name(self):
+		"""
+		A representable (unique) name for minute
+		"""
+		return 'minute%d' % self.id
+
+	def get_timestamp(self):
+		return self.timestamp
+
+	def get_content(self):
+		return self.content
+
+	def get_group(self):
+		return self.group
 
 	def get_title(self):
 		return '%s van %s' % (self.group.name, self.timestamp)

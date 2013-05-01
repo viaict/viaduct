@@ -1,5 +1,7 @@
 import bcrypt
 
+
+
 import datetime
 from viaduct import db
 from viaduct.blueprints.user.models import User, UserPermission
@@ -71,17 +73,56 @@ permissions = PagePermission(group, page, view=True, create=True, edit=True,
 db.session.add(permissions)
 db.session.commit()
 
-#	def __init__(self, title, content, deadline, group_id, users,
-#				minute, line):
 
-# Add standard pimpy tasks
+# Add stuff for pimpystuff for pimpy
+
+user_maarten = User('maarten@maarten.mrt', 'pwd', 'Maarten', 'Inja')
+user_ed = User('ed@ed.eds', 'pwd', 'Handsome', 'Ed')
+group_first = Group('first')
+group_second = Group('second')
+
+# could I add more stuff at once?
+db.session.add(user_maarten)
+db.session.commit()
+db.session.add(user_ed)
+db.session.commit()
+db.session.add(group_first)
+db.session.commit()
+db.session.add(group_second)
+db.session.commit()
+
+group_first.add_user(user_maarten)
+group_first.add_user(user_ed)
+group_first.add_user(user)
+group_second.add_user(user_maarten)
+group_second.add_user(user_ed)
+group_second.add_user(user)
+
+db.session.add(group_first)
+db.session.commit()
+db.session.add(group_second)
+db.session.commit()
+
+
 minute = Minute("minute content, jaja", 2)
 db.session.add(minute)
 db.session.commit()
 
-task = Task('test task', 'test content', datetime.date(2020, 10, 10), 2,
-		[user], 1, minute.id)
-db.session.add(task)
+# task
+#	def __init__(self, title, content, deadline, group_id, users,
+#				minute_id, line, status):
+
+task0 = Task('test task', 'test content', datetime.date(2020, 10, 10), group_first.id, [user, user_maarten], 1, minute.id, 0)
+db.session.add(task0)
+db.session.commit()
+
+task1 = Task('finish godamn pimpy', 'content', datetime.date(2015, 11, 9), group_second.id, [user, user_maarten, user_ed], 1, minute.id, 0)
+db.session.add(task1)
+db.session.commit()
+
+
+task2 = Task('I dont even', 'sja', datetime.date(2017, 12, 15), group_second.id, [user_maarten, user_ed], 1, minute.id, 0)
+db.session.add(task2)
 db.session.commit()
 
 # Do some pages.

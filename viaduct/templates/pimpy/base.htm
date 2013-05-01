@@ -6,11 +6,11 @@
 
 {% block sublogo %}
 
-
 <a href="{{url_for('pimpy.view_tasks')}}"><img class="logo pimpy" src="/static/img/pimpy.png" alt="PimPy" /></a>
 {% endblock %}
 
 {% block page %}
-    {% block sidebar %}  {% endblock %}
-    {% block content %}  {% endblock %}
+	{{ PimpyAPI.check_user_is_logged_in()}}
+	{% block sidebar %}  {% endblock %}
+	{% block content %}  {% endblock %}
 {% endblock %}

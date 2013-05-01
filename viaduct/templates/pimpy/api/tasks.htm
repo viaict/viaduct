@@ -3,7 +3,16 @@
 {%block content %}
 	<ul>
 		{% for list_item in list_items: %}
-			<li> {{ list_item.get_title() }}</li>
+			<li>
+				<strong> Title: </strong> {{ list_item.title }} <br/>
+				<strong> Content: </strong> {{ list_item.content}} <br/>
+				<strong> Status: </strong> {{ list_item.get_status_string() }} <br/>
+				<strong> Users: </strong> {{ list_item.get_users() }} <br/>
+				<strong> Deadline: </strong> {{ list_item.deadline }} <br/>
+				<strong> Created on: </strong> {{ list_item.timestamp }} <br/>
+				<strong> Group: </strong> {{ list_item.group.name }} (id: {{list_item.group.id }}) <br/>
+				<a href="{{ url_for('pimpy.view_minute', group_id=list_item.group_id, minute_id=list_item.minute_id) }}"> Go to minute </a>
+			</li>
 		{% endfor %}
 	</ul>
 {% endblock %}
