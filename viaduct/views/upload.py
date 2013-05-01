@@ -1,6 +1,7 @@
 import os
 
 from flask import abort, Blueprint, redirect, request, render_template, send_file, url_for
+from flask.ext.login import current_user
 from werkzeug import secure_filename
 
 from viaduct import application
@@ -26,6 +27,9 @@ def view_direct(filename):
 
 @blueprint.route('/file/add/', methods=['GET', 'POST'])
 def add():
+	if not current_user or current_user.email != 'administrator@svia.nl':
+		return abort(403)
+
 	form = UploadForm(request.form)
 
 	if form.validate_on_submit():

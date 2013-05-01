@@ -14,6 +14,9 @@ def view(page=1):
 
 @location.route('/location/create/', methods=['GET', 'POST'])
 def create():
+	if not current_user or current_user.email != 'administrator@svia.nl':
+		return abort(403)
+
 	if request.method == 'POST':
 		email = request.form['email'].strip()
 		phone_nr = request.form['phone_nr'].strip()

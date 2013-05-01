@@ -19,12 +19,15 @@ def view():
 @blueprint.route('/navigation/create', methods=['GET', 'POST'])
 @blueprint.route('/navigation/edit/<int:entry_id>', methods=['GET', 'POST'])
 def edit(entry_id=None):
-    if entry_id:
-        entry = db.session.query(NavigationEntry).filter_by(id=entry_id).first()
-        if not entry:
-            abort(404)
-    else:
-        entry = None
+	if not current_user or current_user.email != 'administrator@svia.nl':
+		return abort(403)
+
+	if entry_id:
+		entry = db.session.query(NavigationEntry).filter_by(id=entry_id).first()
+		if not entry:
+			abort(404)
+	else:
+		entry = None
 
     form = NavigationEntryForm(request.form, entry)
 
@@ -66,9 +69,18 @@ def edit(entry_id=None):
 
 @blueprint.route('/navigation/delete/<int:entry_id>', methods=['POST'])
 def delete(entry_id):
+<<<<<<< HEAD
     entry = db.session.query(NavigationEntry).filter_by(id=entry_id).first()
     if not entry:
         abort(404)
+=======
+	if not current_user or current_user.email != 'administrator@svia.nl':
+		return abort(403)
+
+	entry = db.session.query(NavigationEntry).filter_by(id=entry_id).first()
+	if not entry:
+		abort(404)
+>>>>>>> Permission check. Temporary.
 
     if not entry.parent:
         if entry.children:

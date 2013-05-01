@@ -14,6 +14,9 @@ def view(page=1):
 
 @company.route('/companies/create/', methods=['GET', 'POST'])
 def create():
+	if not current_user or current_user.email != 'administrator@svia.nl':
+		return abort(403)
+
 	if request.method == 'POST':
 		title = request.form['title'].strip()
 		description = request.form['description'].strip()
