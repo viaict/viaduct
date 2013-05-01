@@ -57,11 +57,8 @@ def view_examination():
 
 	if request.method == 'POST':
 		search = request.form.get("search", None)
-		examinations = Examination.query
-		courses =  Course.query.\
-			filter(Course.name.like('%' + search + '%')).all()
 		examinations =  Examination.query.\
-			filter(Examination.course.like('%' + search + '%')).all()
+			filter(Examination.title.like('%' + search + '%')).all()
 		return render_template('examination/view.htm', path = path, 
 			examinations = examinations)
 
