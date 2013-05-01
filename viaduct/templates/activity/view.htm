@@ -8,14 +8,14 @@
 
 <div class="activity-block row-fluid">
 	<div class="span4">
-		<a href="activities/activity/{{ activity.id }}">
+		<a href="/activities/activity/{{ activity.id }}">
 			<img src="/static/activity_pictures/{{ activity.picture }}">
 		</a>
 	</div>
 
 	<div class="span8">
 		<h1>
-			<a href="activities/activity/{{ activity.id }}">
+			<a href="/activities/activity/{{ activity.id }}">
 				{{activity.name}}
 			</a>
 		</h1>
@@ -46,7 +46,7 @@
 
 {% if current_user and current_user.email == "administrator@svia.nl" %}
 <div class="btn-group">
-	<a href="activities/activity/create/" class="btn">Create</a>
+	<a href="/activities/activity/create/" class="btn">Create</a>
 </div>
 {% endif %}
 
