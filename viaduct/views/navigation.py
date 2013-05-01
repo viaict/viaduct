@@ -85,4 +85,5 @@ def delete(entry_id):
     db.session.delete(entry)
     db.session.commit()
 
-    return redirect(url_for('navigation.view'))
+	return redirect(url_for('navigation.view'))
+

@@ -3,17 +3,17 @@
 {% block content %}
 
 <h1>{{activity.name}}</h1>
-<h3>Location: {{ activity.location}}</h3>
+<h3>Lokatie: {{ activity.location}}</h3>
 
 <div class="row-fluid">
 	<div class="span8">
 
-		<h4>Price: <em>{{ activity.price}}</em></h4>
+		<h4>Prijs: <em>{{ activity.price}}</em></h4>
 
 		<table class="table">
 			<tr>
-				<th>Start
-				<th>End
+				<th>Aanvang
+				<th>Einde
 
 			<tr>
 				<td>{{ activity.start_time.strftime("%a, %d %b. (%H:%M)")}}
