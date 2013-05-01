@@ -41,6 +41,10 @@ def view_tasks(group_id='all'):
 def view_tasks_personal(group_id='all'):
 	return PimpyAPI.get_tasks(group_id, True)
 
-@blueprint.route('/pimpy/', methods=['GET', 'POST'])
-def view_page(minutesOrTasks='all', groups=""):
-	return render_template('pimpy/view_page.htm')
+@blueprint.route('/pimpy/tasks/add/<string:group_id>')
+def add_task(group_id='all'):
+	return PimpyAPI.add_task(group_id)
+
+@blueprint.route('/pimpy/minutes/add/<string:group_id>')
+def add_minute(group_id='all'):
+	return PimpyAPI.add_minute(group_id)
