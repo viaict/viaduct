@@ -16,10 +16,11 @@ blueprint = Blueprint('page', __name__)
 def get_error_page(error):
 	return render_template('page/view_page.htm')
 
-#@blueprint.route('/', methods=['GET', 'POST'])
-#@blueprint.route('/<path:path>', methods=['GET', 'POST'])
-#def get_page(path=''):
-#	return render_template('page/view_page.htm', page=True, path=path)
+@blueprint.route('/', methods=['GET', 'POST'])
+@blueprint.route('/page/<path:path>', methods=['GET', 'POST'])
+def get_page(path=''):
+	return render_template('page/view_page.htm', page=True, path=path)
+
 
 @blueprint.route('/delete/')
 @blueprint.route('/delete/<path:page_path>')

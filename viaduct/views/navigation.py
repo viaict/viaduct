@@ -20,6 +20,9 @@ def view():
 @blueprint.route('/navigation/create', methods=['GET', 'POST'])
 @blueprint.route('/navigation/edit/<int:entry_id>', methods=['GET', 'POST'])
 def edit(entry_id=None):
+	if not current_user or current_user.email != 'administrator@svia.nl':
+		return abort(403)
+
 	if entry_id:
 		entry = db.session.query(NavigationEntry).filter_by(id=entry_id).first()
 		if not entry:
@@ -35,6 +38,7 @@ def edit(entry_id=None):
 				entry.title = form.title.data
 				entry.url = form.url.data
 				entry.external = form.external.data
+				entry.activity_list = form.activity_list.data
 
 				db.session.add(entry)
 				db.session.commit()
@@ -42,7 +46,7 @@ def edit(entry_id=None):
 				flash('De item is opgeslagen.', 'success');
 			else:
 				entry = NavigationEntry(None, form.title.data, form.url.data,
-						form.external.data)
+						form.external.data, form.activity_list.data)
 
 				db.session.add(entry)
 				db.session.commit()
@@ -67,6 +71,9 @@ def edit(entry_id=None):
 
 @blueprint.route('/navigation/delete/<int:entry_id>', methods=['POST'])
 def delete(entry_id):
+	if not current_user or current_user.email != 'administrator@svia.nl':
+		return abort(403)
+
 	entry = db.session.query(NavigationEntry).filter_by(id=entry_id).first()
 	if not entry:
 		abort(404)
