@@ -4,13 +4,15 @@
 een database geladen worden zodat je kan aangeven waaruit je menu bestaat.
     - MODULE: navigation
     - DOOR: BAS
+
     - als je nieuwe artikelen (Model: pages) aanmaakt moeten deze automagisch worden toegevoegd
     + je moet zelf links kunnen toevoegen (/verwijderen)
-    + je moet externe links kunnen toevoegen.
+    - je moet externe links kunnen toevoegen.
+        Het onderscheid bestaat, maar mist nog onderscheid in de front-end (e.g. http:// ervoor i.p.v. www.svia.nl/).
     - Modules moeten in routes de parent/kind/nogmeerkind structuur aanhouden
       (bv. bestuur/bestuursblog/<int:blog_entry_id>)
       (bv. activities/activity/<int:activity_id>)
-    
+
 * sign-in/sign-up moet uitgebreid worden voor als je het wachtwoord vergeten bent.
     - MODULE: user
     - DOOR:
