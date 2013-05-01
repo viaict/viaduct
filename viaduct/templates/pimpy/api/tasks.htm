@@ -3,7 +3,7 @@
 {%block content %}
 	<div class="span8">
 		{% for list_item in list_items: %}
-			<div class="btn-group">
+			<div class="btn-group" style="margin-bottom: 8px;">
 				<button class="btn {{ list_item.get_status_color() }}"></button>
 				<button class="btn">{{ list_item.title }}</button>
 				<button class="btn"> {{ list_item.get_users() }} </button>
@@ -12,23 +12,12 @@
 				</button>
 			</div>
 			<div id='{{ list_item.id }}' class="collapse">
-				<div class="well">{{ list_item.content }}</div>
-			</div>
-			<div class="navbar">
-				<div class="navbar-inner">
-					<a class="brand">{{ list_item.title }}</a>
+				<div class="well well-small">{{ list_item.content }}<br>
+					Deadline: {{ list_item.deadline }}<br>
+					Created on: {{list_item.timestamp }}<br>
+					<a href="{{ url_for('pimpy.view_minute', group_id=list_item.group_id, minute_id=list_item.minute_id) }}"> Go to minute </a>
 				</div>
 			</div>
-			<li>
-				<strong> Title: </strong> {{ list_item.title }} <br/>
-				<strong> Content: </strong> {{ list_item.content}} <br/>
-				<strong> Status: </strong> {{ list_item.get_status_string() }} <br/>
-				<strong> Users: </strong> {{ list_item.get_users() }} <br/>
-				<strong> Deadline: </strong> {{ list_item.deadline }} <br/>
-				<strong> Created on: </strong> {{ list_item.timestamp }} <br/>
-				<strong> Group: </strong> {{ list_item.group.name }} (id: {{list_item.group.id }}) <br/>
-				<a href="{{ url_for('pimpy.view_minute', group_id=list_item.group_id, minute_id=list_item.minute_id) }}"> Go to minute </a>
-			</li>
 		{% endfor %}
 	</div>
 {% endblock %}
