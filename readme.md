@@ -14,7 +14,7 @@ sudo apt-get install python-dev
 sudo apt-get install libmysqlclient-dev
 sudo apt-get install python-pip
 sudo pip install flask flask-login flask-sqlalchemy flask-wtf
-easy_install -U distribute
+sudo easy_install -U distribute
 sudo pip install MySQL-python py-bcrypt markdown
 sudo pip install flask-babel
 sudo pip install flask-restful
