@@ -1,26 +1,76 @@
 from flask import render_template, request
 
+import datetime
+
+from viaduct import db
+from viaduct.blueprints.activity.models import Activity
 from viaduct.models.navigation import NavigationEntry
 
 class NavigationAPI:
 
 	@staticmethod
 	def get_navigation_bar():
-		entries = NavigationEntry.get_entries()
+		entries = db.session.query(NavigationEntry).filter_by(parent_id=None)\
+				.order_by(NavigationEntry.position).all()
+
+		# Fill in activity lists.
+		for entry in entries:
+			if entry.activity_list:
+				entry.children = []
+				activities = db.session.query(Activity)\
+						.filter(Activity.end_time > datetime.datetime.now())\
+						.all()
+
+				for activity in activities:
+					entry.children.append(NavigationEntry(entry, activity.name,
+							'/activity/' + str(activity.id), False, False, 0))
+
 		return render_template('navigation/view_bar.htm', entries=entries)
 
 	@staticmethod
 	def get_navigation_menu():
-		first_part = "/" + request.path.split('/')[1]
-		page = NavigationEntry.query.filter(NavigationEntry.url == first_part).first()
-		print first_part
-		pages = []
+		my_path = request.path
 
-		if page:
-			if page.parent:
-				pages = page.parent.children
-			elif page.children:
-				pages = page.children
+		temp_strip = my_path.rstrip('0123456789')
+		if temp_strip.endswith('/'):
+			my_path = temp_strip
 
-		# geen parent -> is top level (wel parent, children van die parent + zichzelf)
-		return render_template('navigation/view_sidebar.htm', pages=pages, current=first_part)
+		my_path = my_path.rstrip('/')
+
+		me = db.session.query(NavigationEntry).filter_by(url=my_path)\
+				.first()
+
+		if me:
+			parent = me.parent
+		else:
+			parent_path = my_path.rsplit('/', 1)[0]
+			parent = db.session.query(NavigationEntry)\
+					.filter_by(url=parent_path).first()
+
+		if parent:
+			pages = db.session.query(NavigationEntry)\
+					.filter_by(parent_id=parent.id)\
+					.order_by(NavigationEntry.position).all()
+		else:
+			pages = [me] if me else []
+
+		return render_template('navigation/view_sidebar.htm', back=parent,
+				pages=pages, current=me)
+
+	@staticmethod
+	def order(entries, parent):
+		position = 1
+
+		for entry in entries:
+			db_entry = db.session.query(NavigationEntry)\
+					.filter_by(id=entry['id']).first()
+
+			db_entry.parent_id = parent.id if parent else None
+			db_entry.position = position
+
+			NavigationAPI.order(entry['children'], db_entry)
+
+			position += 1
+
+			db.session.add(db_entry)
+			db.session.commit()

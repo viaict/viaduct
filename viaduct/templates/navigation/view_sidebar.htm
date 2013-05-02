@@ -1,17 +1,34 @@
 <ul class="nav nav-stacked nav-tabs">
 
-<li>
-  <a href="#"><i class="icon-arrow-left"></i> Go back</a>
+	<li>
 
-{% for page in pages %}
+		{% if back %}
+	  		<a href="{{ back.url }}"><i class="icon-arrow-left"></i> Go back</a>
+	  	{% endif %}
 
-	<li {% if page.url == current %}class="active"{% endif %}>
-		<a
-		href="{% if page.url == current %}#{% else %}{% if page.external %}http://{% endif %}{{ page.url }}{% endif %}"
-		{% if page.external %}target="_blank"{% endif %}>
-			{{ page.title }}
-		</a>
+		{% for page in pages %}
+
+			<li {% if page.url == current.url %}class="active"{% endif %}>
+				<a
+				href="{% if page.url == current.url %}#{% else %}{% if page.external %}http://{% endif %}{{ page.url }}{% endif %}"
+				{% if page.external %}target="_blank"{% endif %}>
+					{{ page.title }}
+				</a>
+
+				{% if page.children %}
+					<ul class="nav nav-stacked nav-tabs">
+						{% for child in page.children %}
+							<li>
+								<a href="{% if child.external %}http://{% endif %}{{ child.url }}"
+								{% if child.external %}target="_blank"{% endif %}>
+									{{ child.title }}
+								</a>
+							</li>
+						{% endfor %}
+					</ul>
+				{% endif %}
+			</li>
+
+		{% endfor %}
 	</li>
-
-{% endfor %}
 </ul>

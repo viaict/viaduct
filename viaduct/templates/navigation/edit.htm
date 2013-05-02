@@ -18,26 +18,6 @@
 
 			{{ form.csrf_token }}
 
-			{% if not entry or not entry.children %}
-				<div class="control-group">
-					In lijst:
-					<div class="controls">
-						<select name="parent_id">
-							<option value="-1"
-							{% if entry.parent_id == None %}selected{% endif %}>
-								Geen
-							</option>
-							{% for parent in parents %}
-								<option value="{{ parent.id }}"
-								{% if entry.parent_id == parent.id %}selected{% endif %}>
-									{{ parent.title }}
-								</option>
-							{% endfor %}
-						</select>
-					</div>
-				</div>
-			{% endif %}
-
 			{{ render_field(form.title) }}
 			{{ render_field(form.url) }}
 			{{ render_checkbox(form.external) }}

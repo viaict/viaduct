@@ -1,0 +1,13 @@
+{% macro render_entry_list(entry) %}
+	<li data-entry-id="{{ entry.id }}">
+		<a href="{{ url_for('navigation.edit', entry_id=entry.id) }}">
+			{{ entry.title }}
+		</a>
+		<ul class="sortable">
+			<li class="leave-alone">
+			{% for child in entry.children %}
+				{{ render_entry_list(child) }}
+			{% endfor %}
+		</ul>
+	</li>
+{% endmacro %}
