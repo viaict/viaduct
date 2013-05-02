@@ -5,26 +5,38 @@
 	<p><a href="{{ url_for('navigation.edit') }}">Nieuw item</a></p>
 
 	{% if entries %}
-		<ul>
+		<ul class="parent sortable">
 			{% for entry in entries %}
 				<li>
 					<a href="{{ url_for('navigation.edit', entry_id=entry.id) }}">
 						{{ entry.title }}
 					</a>
-					{% if entry.children %}
-						<ul>
-						{% for child in entry.children %}
-							<li>
-								<a href="{{ url_for('navigation.edit', entry_id=child.id) }}">
-									{{ child.title }}
-								</a>
-							</li>
-						{% endfor %}
-						</ul>
-					{% endif %}
+					<ul class="child sortable">
+						<li class="leave-alone"></li>
+					{% for child in entry.children %}
+						<li>
+							<a href="{{ url_for('navigation.edit', entry_id=child.id) }}">
+								{{ child.title }}
+							</a>
+						</li>
+					{% endfor %}
+					</ul>
 				</li>
 			{% endfor %}
 		</ul>
 	{% endif %}
+
+	<script>
+	$(function() {
+		$('.parent').sortable({
+				connectWith: $('.parent'),
+				items: '> li[class!="leave-alone"]'
+		});
+		$('.child').sortable({
+				connectWith: $('.child'),
+				items: '> li[class!="leave-alone"]'
+		});
+	});
+	</script>
 
 {% endblock %}
