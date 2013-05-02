@@ -33,7 +33,7 @@ def view(page=1):
 @blueprint.route('/activities/activity/<int:activity_id>', methods=['GET', 'POST'])
 def get_activity(activity_id = 0):
 	activity = Activity.query.filter(Activity.id == activity_id).first()
-	return render_template('activities/activity/view_single.htm', activity=activity)
+	return render_template('activity/view_single.htm', activity=activity)
 
 @blueprint.route('/activities/activity/create/', methods=['GET', 'POST'])
 @blueprint.route('/activities/activity/edit/<int:activity_id>', methods=['GET', 'POST'])
@@ -43,6 +43,9 @@ def create(activity_id=None):
 
 	if activity_id:
 		activity = Activity.query.filter(Activity.id == activity_id).first()
+
+		if not activity:
+			abort(404)
 	else:
 		activity = None
 
@@ -74,6 +77,13 @@ def create(activity_id=None):
 		if file and allowed_file(file.filename):
 			picture = secure_filename(file.filename)
 			file.save(os.path.join('viaduct/static/activity_pictures', picture))
+
+			# Remove old picture
+			if activity.picture:
+				os.remove(os.path.join('viaduct/static/activity_pictures', activity.picture))
+
+		elif activity.picture:
+			picture = activity.picture
 		else:
 			picture = "yolo.png"
 	
@@ -88,23 +98,34 @@ def create(activity_id=None):
 			valid_form = False
 
 		if valid_form:
-			activity = Activity(
-				owner_id,
-				name, 
-				description, 
-				start, 
-				end, 
-				location, 
-				privacy,
-				price,
-				picture,
-				venue
-			)
+			if activity:
+				activity.name = name 
+				activity.description = description
+				activity.start = start
+				activity.end = end 
+				activity.location = location
+				activity.price = price
+				activity.picture = picture
+
+				flash('The changes made in the activity have been saved.', 'success')
+			else:
+				activity = Activity(
+					owner_id,
+					name, 
+					description, 
+					start, 
+					end, 
+					location, 
+					privacy,
+					price,
+					picture,
+					venue
+				)
+
+				flash('You\'ve created an activity successfully.', 'success')
 			
 			db.session.add(activity)
 			db.session.commit()
-
-			flash('You\'ve created an activity successfully.')
 
 			return redirect(url_for('activity.view'))
 	else:
