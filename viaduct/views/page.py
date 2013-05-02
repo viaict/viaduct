@@ -11,7 +11,7 @@ blueprint = Blueprint('page2', __name__)
 
 def get_error_page():
 	page = Page('')
-	revisions = [PageRevision(page, current_user, 'Oh no! It looks like you' +
+	revisions = [PageRevision(page, current_user, 'Oh no! It looks like you ' +
 		'have found a dead Link!', '![alt text](../static/img/404.png "404")',
 		True)]
 
@@ -40,7 +40,12 @@ def get_page(path=''):
 				' you have found a dead Link!',
 				'![alt text](../static/img/404.png "404")', True)
 
-		revisions.append(revision)
+		data = object()
+		data.title = revision.title
+		data.content = revision.content
+		data.path = page.path
+
+		revisions.append(data)
 
 	return render_template('page/get_page.htm', revisions=revisions)
 
@@ -62,7 +67,7 @@ def get_page_history(path=''):
 @blueprint.route('/edit/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<path:path>', methods=['GET', 'POST'])
 def edit_page(path=''):
-	if not current_user.is_authenticated() or current_user.first_name == 'administrator':
+	if not current_user.is_authenticated() or current_user.first_name != 'administrator':
 		return get_error_page()
 
 	page = Page.query.filter(Page.path==path).first()
