@@ -39,7 +39,7 @@ def pages_filter(data):
 
 		content += '<div class="mainblock">'
 
-		if current_user.is_authenticated() and current_user.first_name == 'administrator':
+		if current_user.is_authenticated():
 			content += '<a class="btn" href="' + url_for('page2.edit_page',
 				path='todo') + '"><i class="icon-pencil"></i> Edit Page</a>'
 
