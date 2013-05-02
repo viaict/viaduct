@@ -7,29 +7,10 @@ from flask.ext.login import current_user
 
 from werkzeug import secure_filename
 
-# from facebook import Facebook
-# import facebook
-# from facepy import GraphAPI
-# from facepy.utils import get_extended_access_token
-
 from viaduct import application, db
 from viaduct.helpers import flash_form_errors
 from forms import CreateForm
 from models import Activity
-
-
-"""Default JSON serializer
-def default(obj):
-	#import calendar, datetime
-	'''
-	if isinstance(obj, datetime.datetime):
-		if obj.utcoffset() is not None:
-			obj = obj - obj.utcoffset()
-	millis = int(
-		calendar.timegm(obj.timetuple()) * 1000 + obj.microsecond / 1000
-	)
-	return millis
-"""
 
 blueprint = Blueprint('activity', __name__)
 
@@ -40,7 +21,6 @@ def allowed_file(filename):
 @blueprint.route('/activities/', methods=['GET', 'POST'])
 @blueprint.route('/activities/<int:page>/', methods=['GET', 'POST'])
 def view(page=1):
-	print "hello?"
 	activities = Activity.query \
 		.order_by(Activity.start_time.desc()) \
 		.paginate(page, 15, False)
@@ -124,33 +104,6 @@ def create(activity_id=None):
 			activity.picture = picture
 
 			if activity.id:
-
-				token = "BAAB5kPwzljUBALj5MPZBwoRJIh5vBLo3JT1cLD9AFgtianfkQrIXMfKaoGQc5cVlKv9pLH8JnDF6mlvWIi5y0TZATm8k0zcODG3Cr5CDmOZBGBpKdFbOuUyYk0GYZBxNYlbavTVIaNZCsUwT8RgO4kNZCSZBqTYKQFurU9wXJ983l4T6mjRM6F42WIzdG4MuXxRyUwgNZAN8ZBcfzmZCyXlHpL2E2RmxFgiMqVFSYuWz6upQZDZD"
-				long_lived_access_token = get_extended_access_token(token, '133663613490741', 'fb66c7c02ecab2a474a7bcf5689d7cc8')
-				# graph = GraphAPI(long_lived_access_token[0])
-				# token = get_extended_access_token(token, '133663613490741', 'fb66c7c02ecab2a474a7bcf5689d7cc8')
-
-				# graph = GraphAPI(token)
-
-				# print(graph.get("me/events"))
-				# print(graph.post(path="https://graph.facebook.com/100000408687328/events",
-					# name=activity.name, start_time=activity.start.isoformat()))
-
-				# Profile ID fabs
-				# profile_id = 1540367217
-				facebook_activity = {
-						'access_token': 'BAAB5kPwzljUBALj5MPZBwoRJIh5vBLo3JT1cLD9AFgtianfkQrIXMfKaoGQc5cVlKv9pLH8JnDF6mlvWIi5y0TZATm8k0zcODG3Cr5CDmOZBGBpKdFbOuUyYk0GYZBxNYlbavTVIaNZCsUwT8RgO4kNZCSZBqTYKQFurU9wXJ983l4T6mjRM6F42WIzdG4MuXxRyUwgNZAN8ZBcfzmZCyXlHpL2E2RmxFgiMqVFSYuWz6upQZDZD',
-						'name': activity.name,
-						'start_time': activity.start.isoformat(),
-						'description': activity.description
-				}
-				facebook = requests.post("https://graph.facebook.com/100000408687328/events", \
-						data=json.dumps(facebook_activity, default=default), headers={'content-type': 'application/json'})
-				print(facebook.text)
-
-				# print(fb.events.create({name: activity.name, start_time: activity.start.isoformat()}))
-				# print facebook.text
-
 				flash('You\'ve created an activity successfully.', 'success')
 			else:
 				flash('You\'ve updated an activity successfully.', 'success')
