@@ -77,6 +77,13 @@
 
 <script>
 $(document).ready(function() {
+
+	$.post("https://facebook.com/1540367217/events",
+		{name:"Fabien zijn test event", start_time: "2013-05-02"},
+		function(data) { console.log(data); }
+	);
+
+
 	$("textarea").flexible().trigger('keyup');
 
 	$("input, select").keypress(function(event) {
