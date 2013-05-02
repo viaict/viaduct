@@ -36,13 +36,13 @@ uittekenen.
 * activiteitenbeheren.
     - DOOR: FABIEN
     + Activiteiten kunnen aangemaakt worden
-    - Routing moet met goede structuur (zie navigation)
-    - Activiteiten edit
-    - Oude Plaatje verwijderen bij plaatje edit
+    + Routing moet met goede structuur (zie navigation)
+    + Activiteiten edit
+    + Oude Plaatje verwijderen bij plaatje edit
+    + Google maps plugin (geolocate API : adres invoert)
     - Facebook event (google+) aanmaken
     - Attending op svia.nl
     - Facebook event comments scrapen
-    - Google maps plugin (geolocate API : adres invoert)
     
 * files uploaden. Uploaden kan al
     - er moet nog een beheringsysteem
@@ -67,7 +67,3 @@ uittekenen.
 == databases: ==
 De databasemodellen die op veel plekken nodig zijn, zoals opleidingen en vakken,
 moeten afgemaakt zijn zodat alle applicaties daar mee kunnen werken.
-
-
-
-werknachten: met bier en pizza!
