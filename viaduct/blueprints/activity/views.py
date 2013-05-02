@@ -64,7 +64,6 @@ def create(activity_id=None):
 		end_time = request.form['end_time'].strip()
 
 		end = datetime.datetime.strptime(end_date + end_time, '%Y-%m-%d%H:%M')
-		print(end)
 
 		location		= request.form['location'].strip()
 		privacy			= "public"
@@ -98,8 +97,8 @@ def create(activity_id=None):
 		if valid_form:
 			activity.name = name 
 			activity.description = description
-			activity.start = start
-			activity.end = end 
+			activity.start_time = start
+			activity.end_time = end 
 			activity.location = location
 			activity.price = price
 			activity.picture = picture
@@ -112,8 +111,7 @@ def create(activity_id=None):
 			db.session.add(activity)
 			db.session.commit()
 
-			# return redirect(url_for('activity.view'))
-			return None
+			return redirect(url_for('activity.view'))
 	else:
 		flash_form_errors(form)
 

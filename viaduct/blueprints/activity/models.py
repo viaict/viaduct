@@ -32,6 +32,10 @@ class Activity(db.Model):
 		self.picture = picture
 		self.venue = 1
 
+	def __repr__(self):
+		return '<Activity(%s, "%s", "%s")>' % (self.id, self.start_time,
+					self.end_time)
+
 	def get_time(self):
 		if self.start_time.month == self.end_time.month:
 			if self.start_time.day == self.end_time.day:
