@@ -9,13 +9,17 @@ from viaduct.blueprints.page.models import Page, PageRevision, PagePermission
 
 blueprint = Blueprint('page2', __name__)
 
-def get_error_page():
-	page = Page('')
-	revisions = [PageRevision(page, current_user, 'Oh no! It looks like you ' +
-		'have found a dead Link!', '![alt text](../static/img/404.png "404")',
-		True)]
+def get_error_page(path=''):
+	class struct(object):
+		pass
 
-	return render_template('page/get_page.htm', revisions=revisions)
+	data = struct()
+	data.title = 'Oh no! It looks like you have found a dead Link!'
+	data.content = '![alt text](../static/img/404.png "404")'
+	data.filter_html = True
+	data.path = ''
+
+	return render_template('page/error_page.htm', revisions=data)
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<path:path>', methods=['GET', 'POST'])
@@ -71,7 +75,7 @@ def get_page_history(path=''):
 @blueprint.route('/edit/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<path:path>', methods=['GET', 'POST'])
 def edit_page(path=''):
-	if not current_user.is_authenticated() or current_user.first_name != 'administrator':
+	if not current_user.is_authenticated():
 		return get_error_page()
 
 	page = Page.query.filter(Page.path==path).first()
