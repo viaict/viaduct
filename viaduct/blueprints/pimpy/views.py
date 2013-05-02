@@ -60,12 +60,13 @@ def add_task(group_id='all'):
 		# FIXME: deadline is also messed up, and I do not know why
 		#if form.validate():
 		#	flash("VALIDAATES!!!!")
-		if not(form.name.data == None or request.form['deadline'] == None or
-			form.group == None or form.users.data == None or
-			form.status.data == None):
-			flash("succes?!")
 
-			users = PimpyAPI.get_list_of_users_from_string(form.users.data)
+		users = PimpyAPI.get_list_of_users_from_string(form.users.data)
+
+		if not(form.name.data == None or request.form['deadline'] == None or
+			form.group == None or users == None or
+			form.status.data == None):
+
 
 		
 			deadline = datetime.datetime.strptime(request.form['deadline'],
@@ -80,8 +81,9 @@ def add_task(group_id='all'):
 				-1, -1, form.status.data)
 			db.session.add(task)
 			db.session.commit()
+			flash("Succes! Task has been created!")
 		else:
-			flash("Something went wrong!")
+			flash("Something went wrong! (Task was not created)")
 	group = Group.query.filter(Group.id==group_id).first()
 	form.load_groups(current_user.groups.all())
 	return render_template('pimpy/add_task.htm', group=group, group_id=group_id, type='tasks', form=form)
