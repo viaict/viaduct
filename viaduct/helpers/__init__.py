@@ -40,8 +40,12 @@ def pages_filter(data):
 		content += '<div class="mainblock">'
 
 		if current_user.is_authenticated():
+			content += '<div class="btn-group">'
+			content += '<a class="btn" href="' + url_for(
+				'page2.get_page_history', path=data[i].path) + '"><i class="icon-time"></i> View History</a>'
 			content += '<a class="btn" href="' + url_for('page2.edit_page',
-				path='todo') + '"><i class="icon-pencil"></i> Edit Page</a>'
+				path=data[i].path) + '"><i class="icon-pencil"></i> Edit Page</a>'
+			content += '</div>'
 
 		content += '<h1>{0}</h1>'.format(data[i].title)
 
