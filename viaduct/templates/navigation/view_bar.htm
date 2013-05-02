@@ -1,21 +1,22 @@
 <ul class="nav nav-pills">
 	{% for entry in entries %}
-		{% if entry.children %}
-			<li class="dropdown">
-				<a class="dropdown-toggle" data-hover="dropdown" data-delay="200" data-close-others="true" href="{{ entry.url }}">
-					{{ entry.title }}
-				</a>
 
-				<ul class="dropdown-menu">
-					{% for child in entry.children %}
-						<li><a href="{{ child.url }}">{{ child.title }}</a></li>
-					{% endfor %}
-				</ul>
-			</li>
-		{% else %}
-			<li class="">
-				<a href="{{ entry.url }}">{{ entry.title }}</a>
-			</li>
-		{% endif %}
+		<li class="{% if entry.children %}dropdown{% endif %}">
+			<a class="dropdown-toggle" data-hover="dropdown" data-delay="200" data-close-others="true" {% if entry.external %}target="_blank"{% endif %}
+			href="{% if entry.external %}http://{% endif %}{{ entry.url }}">
+				{{ entry.title }}
+			</a>
+
+			<ul class="dropdown-menu">
+				{% for child in entry.children %}
+					<li>
+						<a {% if child.external %}target="_blank"{% endif %}
+						href="{% if child.external %}http://{% endif %}{{ child.url }}">
+							{{ child.title }}
+						</a>
+					</li>
+				{% endfor %}
+			</ul>
+		</li>
 	{% endfor %}
 </ul>

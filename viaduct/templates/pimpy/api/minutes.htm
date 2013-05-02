@@ -1,19 +1,18 @@
 {% extends "pimpy/view_page.htm" %}
 
 {%block content %}
-	<ul>
+	<div class="span8">
 		{% for list_item in list_items: %}
-			<li>
-				<strong> Title: </strong> {{ list_item.get_title()}} ({{list_item.id }})<br/>
-				<strong> Group: </strong> {{ list_item.group.name }} (id: {{list_item.group.id }}) <br/>
-				<strong> Created on: </strong> {{ list_item.get_timestamp() }} <br/>
-				<button type="button" class="btn" data-toggle="collapse" data-target='#{{ list_item.get_name() }}'>
+			<div class="btn-group">
+				<button class="btn">{{ list_item.get_title() }} ({{list_item.id }})</button>
+				<button class="btn">{{ list_item.group.name }} (id: {{list_item.group.id }})</button>
+				<button class="btn" data-toggle="collapse" data-target='#{{ list_item.get_name() }}'>
 					Show content
 				</button>
-				<div id='{{ list_item.get_name() }}' class="collapse">
-					{{ list_item.get_content() }}
-				</div>
-			</li>
+			</div>
+			<div id='{{ list_item.get_name() }}' class="collapse">
+				<div class="well">{{ list_item.get_content() }}</div>
+			</div>
 		{% endfor %}
-	</ul>
+	</div>
 {% endblock %}

@@ -1,9 +1,11 @@
+{% from "macros/maps.htm" import render_map %}
+
 {% extends "content.htm" %}
 
 {% block content %}
 
 <div class="page-header">
-	<a href="/activities/edit/{{ activity.id }}" class="btn btn-warning pull-right">
+	<a href="/activities/activity/edit/{{ activity.id }}" class="btn btn-warning pull-right">
 		<i class="icon-pencil"></i> Edit
 	</a>
 
@@ -29,13 +31,18 @@
 		</table>
 
 		<hr>
-		<p>{{ activity.description}}
+		<p>{{ activity.description}}</p>
+
+		<hr>
+
+		<h3>Locatie</h3>
+
+		{{ render_map(500, 500, activity.location) }}
 	</div>
 
 	<div class="span4">
 		<img src="/static/activity_pictures/{{ activity.picture }}">
 	</div>
-
 </div>
 
 {% endblock %}

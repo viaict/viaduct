@@ -1,0 +1,45 @@
+{% macro render_map(width, height, address) %}
+
+	<style type="text/css">
+	  #map-canvas { width: {{ width }}px; height: {{ height }}px; }
+	</style>
+
+	<script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCtbv4xNquOEZhyX_Szi5wNme7n49zaiw4&sensor=true">
+    </script>
+
+    <script type="text/javascript">
+
+      	var latlong = new google.maps.LatLng(0, 0);
+
+    	$(function() {
+	      	$.get("http://maps.googleapis.com/maps/api/geocode/json?address={{ address }}&sensor=false",
+	      		function(data) {
+	      			loc = data.results[0].geometry.location;
+	      			latlong = new google.maps.LatLng(loc.lat, loc.lng);
+	      			initialize();
+      		});
+	     });
+      	
+      function initialize() {
+
+      	console.log(latlong)
+        var mapOptions = {
+          center: latlong,
+          zoom: 14,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        var map = new google.maps.Map(document.getElementById("map-canvas"),
+            mapOptions);
+
+        var marker = new google.maps.Marker({
+		      position: latlong,
+		      map: map,
+		      title:"{{ address }}"
+		  });
+      }
+    </script>
+
+    <div id="map-canvas"/>
+{% endmacro %}

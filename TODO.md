@@ -4,13 +4,15 @@
 een database geladen worden zodat je kan aangeven waaruit je menu bestaat.
     - MODULE: navigation
     - DOOR: BAS
+
     - als je nieuwe artikelen (Model: pages) aanmaakt moeten deze automagisch worden toegevoegd
     + je moet zelf links kunnen toevoegen (/verwijderen)
     + je moet externe links kunnen toevoegen.
     - Modules moeten in routes de parent/kind/nogmeerkind structuur aanhouden
       (bv. bestuur/bestuursblog/<int:blog_entry_id>)
       (bv. activities/activity/<int:activity_id>)
-    
+    - Rechten voor niet page-pagina's. Neem PimPy en de Activiteiten, niet iedereen mag hier bewerken, maar wel kijken, maar kijken mag soms weer niet. Zo mag niet ieder lid /navigation bekijken, dat is onnodig. Hier moet dus een goed systeem voor zijn.
+
 * sign-in/sign-up moet uitgebreid worden voor als je het wachtwoord vergeten bent.
     - MODULE: user
     - DOOR:

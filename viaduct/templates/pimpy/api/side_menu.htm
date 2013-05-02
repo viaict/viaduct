@@ -1,35 +1,40 @@
+<div class="span4">
 <ul class="nav">
 	<li>
-		Types:
 		<ul>
-			<li {% if type == 'minutes' %} class="active" {% endif %} >
-					<a href="{{ url_for(endpoints['view_minutes'], group_id=group_id) }}">minutes</a>
-			</li>
-			<li {% if type == 'tasks' %} class="active" {% endif %} >
-				<a href="{{ url_for(endpoints['view_tasks_chosenpersonal'], group_id=group_id) }}">tasks</a>
-			</li>
+			Show:
+			<div class="btn-group">
+				<button class="btn {% if type == 'minutes' %} btn-primary{% endif %}"><a href="{{ url_for(endpoints['view_minutes'], group_id=group_id) }}">minutes</a></button>
+				<button class="btn {% if type == 'tasks' %} btn-primary{% endif %}"><a href="{{ url_for(endpoints['view_tasks_chosenpersonal'], group_id=group_id) }}">tasks</a></button>
+			</div>
 		</ul>
 	</li>
 	<li>
 		{% if type == 'tasks' %}
-			Show for:
 			<ul>
-				<li {% if personal %} class="active" {% endif %}>
-					<a href="{{ url_for(endpoints['view_chosentype_personal'], group_id=group_id) }}">me</a>
-				</li>
-				<li {% if not personal %} class="active" {% endif %}>
-					<a href="{{ url_for(endpoints['view_chosentype'], group_id=group_id) }}">all</a>
-				</li>
+				For:
+				<div class="btn-group">
+					<button class="btn {% if personal %} btn-primary {% endif %}"><a href="{{ url_for(endpoints['view_chosentype_personal'], group_id=group_id) }}">me</a></button>
+					<button class="btn {% if not personal %} btn-primary {% endif %}"><a href="{{ url_for(endpoints['view_chosentype'], group_id=group_id) }}">all</a></button>
+				</div>
 			</ul>
 		{% endif %}
 	</li>
 	<li>
 		Groups:
 		<ul>
+			<div class="btn-group btn-group-vertical">
+				<button class="btn {% if group_id == 'all' %} btn-primary {% endif %}"><a href="{{ url_for(endpoints['view_chosentype_chosenpersonal']) }}">all</a></button>
+				{% for group in groups %}
+					<button class="btn {% if group_id == group.id %} btn-primary {% endif %}"><a href="{{ url_for(endpoints['view_chosentype_chosenpersonal'], group_id=group.id) }}">{{ group.name }}</a></button>
+				{% endfor %}
+			</div>
 			<li {% if group_id == 'all' %} class="active" {% endif %} >
 				<a href="{{ url_for(endpoints['view_chosentype_chosenpersonal']) }}">all</a>
 			</li>
+			group_id = {{ group_id }}
 			{% for group in groups %}
+			group.id = {{ group.id }}
 				<li {% if group_id == group.id %} class="active" {% endif %} >
 					<a href="{{ url_for(endpoints['view_chosentype_chosenpersonal'], group_id=group.id) }}">{{ group.name }}</a>
 				</li>
@@ -43,3 +48,4 @@
 		<a href="{{ url_for('pimpy.add_task', group_id=group_id) }}">Add task</a>
 	</li>
 </ul>
+</div>
