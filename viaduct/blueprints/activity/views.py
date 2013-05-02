@@ -1,6 +1,4 @@
-import os
-
-import json
+import os, requests, datetime, json
 
 from flask import flash, get_flashed_messages, redirect, render_template, \
 	request, url_for, abort
@@ -11,23 +9,19 @@ from werkzeug import secure_filename
 
 # from facebook import Facebook
 # import facebook
-from facepy import GraphAPI
-from facepy.utils import get_extended_access_token
-
-import requests
+# from facepy import GraphAPI
+# from facepy.utils import get_extended_access_token
 
 from viaduct import application, db
 from viaduct.helpers import flash_form_errors
 from forms import CreateForm
 from models import Activity
 
-#from dateutil.parser import parse
-import datetime
 
+"""Default JSON serializer
 def default(obj):
-	"""Default JSON serializer."""
-	import calendar, datetime
-
+	#import calendar, datetime
+	'''
 	if isinstance(obj, datetime.datetime):
 		if obj.utcoffset() is not None:
 			obj = obj - obj.utcoffset()
@@ -35,6 +29,7 @@ def default(obj):
 		calendar.timegm(obj.timetuple()) * 1000 + obj.microsecond / 1000
 	)
 	return millis
+"""
 
 blueprint = Blueprint('activity', __name__)
 
@@ -45,6 +40,7 @@ def allowed_file(filename):
 @blueprint.route('/activities/', methods=['GET', 'POST'])
 @blueprint.route('/activities/<int:page>/', methods=['GET', 'POST'])
 def view(page=1):
+	print "hello?"
 	activities = Activity.query \
 		.order_by(Activity.start_time.desc()) \
 		.paginate(page, 15, False)
@@ -167,3 +163,4 @@ def create(activity_id=None):
 		flash_form_errors(form)
 
 	return render_template('activity/create.htm', form=form)
+
