@@ -41,7 +41,7 @@ def pages_filter(data):
 
 		if current_user.is_authenticated():
 			content += '<a class="btn" href="' + url_for('page2.edit_page',
-				path='todo') + '"><i class="icon-pencil"></i> Edit Page</a>'
+				path=data[i].path) + '"><i class="icon-pencil"></i> Edit Page</a>'
 
 		content += '<h1>{0}</h1>'.format(data[i].title)
 
