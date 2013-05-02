@@ -60,6 +60,9 @@ def get_page(path=''):
 @blueprint.route('/history/', methods=['GET', 'POST'])
 @blueprint.route('/history/<path:path>', methods=['GET', 'POST'])
 def get_page_history(path=''):
+	if not current_user.is_authenticated() or current_user.first_name == 'Administrator':
+		return get_error_page()
+
 	page = Page.query.filter(Page.path==path).first()
 
 	if not page:
@@ -75,7 +78,7 @@ def get_page_history(path=''):
 @blueprint.route('/edit/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<path:path>', methods=['GET', 'POST'])
 def edit_page(path=''):
-	if not current_user.is_authenticated():
+	if not current_user.is_authenticated() or current_user.first_name == 'Administrator':
 		return get_error_page()
 
 	page = Page.query.filter(Page.path==path).first()
