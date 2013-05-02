@@ -34,7 +34,7 @@
 					<a href="{{ url_for(endpoints['view_chosentype_chosenpersonal']) }}">all</a>
 				</li>
 				{% for group in groups %}
-					<li>
+					<li {% if group_id == group.id %} class="active" {% endif %} >
 						<a href="{{ url_for(endpoints['view_chosentype_chosenpersonal'], group_id=group.id) }}">{{ group.name }}</a>
 					</li>
 				{% endfor %}
