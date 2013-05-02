@@ -56,37 +56,43 @@ def add_task(group_id='all'):
 
 	form = AddTaskForm(request.form)
 	if request.method == 'POST':
-		# FIXME: validate does not seem to work :(
 		# FIXME: deadline is also messed up, and I do not know why
 		#if form.validate():
 		#	flash("VALIDAATES!!!!")
 
-		users = PimpyAPI.get_list_of_users_from_string(form.users.data)
+		# FIXME: validate does not seem to work :(, so we are doin' it
+		# manually now
+		message = ""
+		if form.name.data == None:
+			message = "Name is required"
+		if request.form['deadline'] == None:
+			message = "Deadline is required"
+		if form.group == None:
+			message = "Group is required"
+		if form.users.data == None:
+			message = "A minimum of 1 user is required"
 
-		if not(form.name.data == None or request.form['deadline'] == None or
-			form.group == None or users == None or
-			form.status.data == None):
+		result = message == ""
 
-
-		
-			deadline = datetime.datetime.strptime(request.form['deadline'],
-				'%d/%m/%Y')
-
-			#title, content, deadline, group_id, users,
-			#minute_id, line, status):
-			task = Task(form.name.data, form.content.data,
-				deadline, form.group.data,
-				[current_user],
-				#PimpyAPI.get_list_of_users_from_string(form.users.data),
-				-1, -1, form.status.data)
-			db.session.add(task)
-			db.session.commit()
-			flash("Succes! Task has been created!")
+		if result:
+			result, message = PimpyAPI.commit_task_to_db(form.name.data,
+				form.content.data, request.form['deadline'],
+				form.group.data, form.users.data, form.line.data, -1,
+				form.status.data)
 		else:
-			flash("Something went wrong! (Task was not created)")
+			flash(message)
+
+		if result:
+			flash("Success! %s" % message)
+			# maybe redirect to the created task or something else
+		else:
+			flash(message)
+
 	group = Group.query.filter(Group.id==group_id).first()
 	form.load_groups(current_user.groups.all())
-	return render_template('pimpy/add_task.htm', group=group, group_id=group_id, type='tasks', form=form)
+
+	return render_template('pimpy/add_task.htm', group=group,
+		group_id=group_id, type='tasks', form=form)
 
 @blueprint.route('/pimpy/minutes/add/<string:group_id>')
 def add_minute(group_id='all'):

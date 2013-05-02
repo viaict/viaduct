@@ -6,32 +6,86 @@ from models import Task, Minute
 from viaduct.blueprints.group.models import Group
 from viaduct.blueprints.user.models import User
 
+from viaduct import db
+
+
+import datetime
+
+
 class PimpyAPI:
 
 	@staticmethod
-	def get_list_of_users_from_string(comma_sep):
+	def commit_task_to_db(name, content, deadline, group_id,
+		filled_in_users, line, minute_id, status):
 		"""
-		Parses a string which is a list of comma seperated user names
-		to a list of users
+		Returns succes (boolean), message (string). Message is irrelevant if
+		success is true, otherwise it contains what exactly went wrong.
 
-		Returns None when something goes wrong (None as input or no users
-		found)
+		In case of succes the task is entered into the database
 		"""
+
+		if group_id == 'all':
+			return False, "Group can not be 'all'"
+		group = Group.query.filter(Group.id==group_id).first()
+		if group == None:
+			return False, "Could not distinguish group."
+
+		users, message = PimpyAPI.get_list_of_users_from_string(group,
+			filled_in_users)
+		if not users:
+			return False, message
+
+		deadline = datetime.datetime.strptime(deadline, "%m/%d/%Y")
+
+		task = Task(name, content, deadline, group_id,
+				users, line, minute_id, status)
+		db.session.add(task)
+		db.session.commit()
+		return True, "jaja"
+
+	@staticmethod
+	def get_list_of_users_from_string(group, comma_sep):
+		"""
+		Parses a string which is a list of comma separated user names
+		to a list of users, searching only within the group given
+
+		Returns users, message. Users is false if there is something wrong,
+		in which case the message is stated in message, otherwise message
+		equals "" and users is the list of matched users
+
+		Should, in the future, return specific error messages when the
+		matching fails.
+		"""
+
 		if comma_sep == None:
-			return None
-		comma_sep = comma_sep.split()
+			return False, "Did not receive any comma separated users"
+
+		comma_sep = map(lambda x: x.lower().strip(), comma_sep.split(','))
 
 		found_users = []
-		users = User.query.all()
-		for user in users:
-			user_name = "%s %s" % (user.first_name, user.last_name)
-			for comma_sep_user in comma_sep:
-				if user_name.startswith(comma_sep_user):
-					found_users.append(user)
-		if len(found_users) <= 0:
-			return None
-		print found_users
-		return found_users
+
+		users = group.users.all()
+
+		user_names = map(lambda x: "%s %s" % (x.first_name.lower().strip(), x.last_name.lower().strip()), users)
+
+		for comma_sep_user in comma_sep:
+			print "comma sep user: ", comma_sep_user
+
+			for i in range(len(users)):
+				print "user name:", user_names[i]
+
+				# could use a filter here, but meh
+				if user_names[i].startswith(comma_sep_user):
+					print "Found %s matchin' with %s" % (comma_sep_user,
+						user_names[i])
+					found_users.append(users[i])
+
+			if len(found_users) == 0:
+				return False, "Could not match %s to a user in the group" % comma_sep_user
+			if len(found_users) > 1:
+				return False, "could not disambiguate %s" % comma_sep_user
+
+		return found_users, ""
 
 	@staticmethod
 	def check_user_is_logged_in():
