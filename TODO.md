@@ -12,6 +12,7 @@ een database geladen worden zodat je kan aangeven waaruit je menu bestaat.
       (bv. bestuur/bestuursblog/<int:blog_entry_id>)
       (bv. activities/activity/<int:activity_id>)
     - Rechten voor niet page-pagina's. Neem PimPy en de Activiteiten, niet iedereen mag hier bewerken, maar wel kijken, maar kijken mag soms weer niet. Zo mag niet ieder lid /navigation bekijken, dat is onnodig. Hier moet dus een goed systeem voor zijn.
+    - volgorde van de navigatie instelbaar maken
 
 * sign-in/sign-up moet uitgebreid worden voor als je het wachtwoord vergeten bent.
     - MODULE: user
@@ -44,7 +45,7 @@ uittekenen.
     - Facebook event (google+) aanmaken
     - Attending op svia.nl
     - Facebook event comments scrapen
-    
+
 * files uploaden. Uploaden kan al
     - er moet nog een beheringsysteem
 
