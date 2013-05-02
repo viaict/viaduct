@@ -1,4 +1,4 @@
-from flask import flash, request, Markup
+from flask import flash, request, Markup, url_for
 from flask.ext.login import current_user
 
 from viaduct import application
