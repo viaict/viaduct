@@ -81,6 +81,34 @@
 
 		{{ render_field(form.picture) }}
 
+    <div class="row clearfix">
+        <div class="span6">
+          <div class="clearfix">
+            <h2>Form builder</h2>
+            <hr>
+            <div id="build">
+              <form id="target" class="form-horizontal">
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="span6">
+          <h2>Drag & Drop components</h2>
+          <hr>
+          <div class="tabbable">
+            <ul class="nav nav-tabs" id="navtab">
+            </ul>
+            <form class="form-horizontal" id="components">
+              <div class="tab-content"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script data-main="/static/formbuilder/main.js" src="/static/formbuilder/lib/require.js" ></script>
+
 	<div class="control-group">
 		<div class="controls">
 			<button type="submit" class="btn">Create activity</button>
