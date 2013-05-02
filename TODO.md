@@ -27,6 +27,9 @@ maar foo bestaat nog niet moet foo ook aangemaakt worden. Dit heeft te maken met
 de navigatiehierarchie.
     - DOOR: STEPHAN
 
+    - Zojuist getest. Werkt niet op /index1, wel op page1. Misschien een
+    probleem met permissions?
+
 * Page history op basis van diff. Er was ook nog iets met de revisions, dat je
 page history hebt en terugkan
 
