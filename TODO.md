@@ -9,16 +9,14 @@ een database geladen worden zodat je kan aangeven waaruit je menu bestaat.
     worden toegevoegd
     + je moet zelf links kunnen toevoegen (/verwijderen)
     + je moet externe links kunnen toevoegen.
-    - Modules moeten in routes de parent/kind/nogmeerkind structuur aanhouden
+    + Modules moeten in routes de parent/kind/nogmeerkind structuur aanhouden
       (bv. bestuur/bestuursblog/<int:blog_entry_id>)
       (bv. activities/activity/<int:activity_id>)
     - Rechten voor niet page-pagina's. Neem PimPy en de Activiteiten, niet
     iedereen mag hier bewerken, maar wel kijken, maar kijken mag soms weer
     niet. Zo mag niet ieder lid /navigation bekijken, dat is onnodig. Hier moet
     dus een goed systeem voor zijn.
-    - Volgorde van de navigatie instelbaar maken
-        Het is nu al mogelijk om entries een parent te geven. Dit kan alleen
-        als het niet al een parent is.
+    + Volgorde van de navigatie instelbaar maken
 
 * sign-in/sign-up moet uitgebreid worden voor als je het wachtwoord vergeten bent.
     - MODULE: user
