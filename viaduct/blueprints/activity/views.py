@@ -107,6 +107,10 @@ def create(activity_id=None):
 			activity.picture = picture
 
 			if activity.id:
+
+				app_id = 'your-app-id-here'
+				app_secret = 'your-app-secret-here'
+
 				# Profile ID fabs
 				profile_id = 1540367217
 				facebook_activity = {'name':name, 'start_time':start.isoformat(), 'description':description}
