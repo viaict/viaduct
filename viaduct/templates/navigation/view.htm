@@ -1,3 +1,5 @@
+{% from "navigation/entry_list.htm" import render_entry_list %}
+
 {% extends "content.htm" %}
 
 {% block content %}
@@ -5,38 +7,49 @@
 	<p><a href="{{ url_for('navigation.edit') }}">Nieuw item</a></p>
 
 	{% if entries %}
-		<ul class="parent sortable">
+		<ul class="sortable" id="outer">
+			<li class="leave-alone"></li>
 			{% for entry in entries %}
-				<li>
-					<a href="{{ url_for('navigation.edit', entry_id=entry.id) }}">
-						{{ entry.title }}
-					</a>
-					<ul class="child sortable">
-						<li class="leave-alone"></li>
-					{% for child in entry.children %}
-						<li>
-							<a href="{{ url_for('navigation.edit', entry_id=child.id) }}">
-								{{ child.title }}
-							</a>
-						</li>
-					{% endfor %}
-					</ul>
-				</li>
+				{{ render_entry_list(entry) }}
 			{% endfor %}
 		</ul>
 	{% endif %}
 
 	<script>
 	$(function() {
-		$('.parent').sortable({
-				connectWith: $('.parent'),
-				items: '> li[class!="leave-alone"]'
-		});
-		$('.child').sortable({
-				connectWith: $('.child'),
-				items: '> li[class!="leave-alone"]'
+		$('.sortable').sortable({
+				connectWith: $('.sortable'),
+				items: '> li[class!="leave-alone"]',
+				stop: function(event, ui) {
+					var list = crawl_entries($('#outer'));
+					$.post('{{ url_for("navigation.reorder") }}',
+							{entries: JSON.stringify(list)},
+							function(data) {
+								console.log(data);
+							}
+					);
+				}
 		});
 	});
+
+	function crawl_entries($list) {
+		var list = [];
+
+		$list.children('li[class!="leave-alone"]').
+				each(function (index, element) {
+					var $element = $(element);
+					var $deeper_list = $element.children('ul.sortable:first');
+					var children = crawl_entries($deeper_list);
+					var data = {
+						'id': $element.data('entry-id'),
+						'children': children
+					};
+					list.push(data);
+				}
+		);
+
+		return list;
+	}
 	</script>
 
 {% endblock %}

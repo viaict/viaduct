@@ -141,27 +141,27 @@ revision = PageRevision(page, user, 'Page 1', 'herr derr 1', 0)
 db.session.add(revision)
 db.session.commit()
 
-nav_home = NavigationEntry(None, 'Home', '/', False, False)
+nav_home = NavigationEntry(None, 'Home', '/', False, False, 1)
 db.session.add(nav_home)
 db.session.commit()
 
-nav_page1 = NavigationEntry(None, 'Pagina 1', '/page1', False, False)
+nav_page1 = NavigationEntry(None, 'Pagina 1', '/page1', False, False, 2)
 db.session.add(nav_page1)
 db.session.commit()
 
-nav_admin = NavigationEntry(None, 'Admin', '/admin', False, False)
+nav_admin = NavigationEntry(None, 'Admin', '/admin', False, False, 3)
 db.session.add(nav_admin)
 db.session.commit()
 
-nav_nav = NavigationEntry(nav_admin, 'Navigatie', '/navigation', False, False)
+nav_nav = NavigationEntry(nav_admin, 'Navigatie', '/navigation', False, False, 1)
 db.session.add(nav_nav)
 db.session.commit()
 
-nav_activity = NavigationEntry(None, 'Activiteiten', '/activities', False, False)
+nav_activity = NavigationEntry(None, 'Activiteiten', '/activities', False, False, 4)
 db.session.add(nav_activity)
 db.session.commit()
 
-nav_ext = NavigationEntry(nav_page1, 'Externaal', 'viaduct.svia.nl', True, False)
+nav_ext = NavigationEntry(nav_page1, 'Externaal', 'viaduct.svia.nl', True, False, 1)
 db.session.add(nav_ext)
 db.session.commit()
 

@@ -6,8 +6,15 @@ from viaduct import db
 from viaduct.helpers import flash_form_errors
 from viaduct.models.navigation import NavigationEntry
 from viaduct.forms import NavigationEntryForm
+from viaduct.api.navigation import NavigationAPI
+
+import json
 
 blueprint = Blueprint('navigation', __name__)
+
+@blueprint.route('/navigation/edit')
+def edit_back():
+	return redirect(url_for('navigation.view'))
 
 @blueprint.route('/navigation/')
 def view():
@@ -36,8 +43,6 @@ def edit(entry_id=None):
 		if form.validate_on_submit():
 			if entry:
 				entry.title = form.title.data
-				entry.parent_id = form.parent_id.data if form.parent_id.data\
-						else None
 				entry.url = form.url.data
 				entry.external = form.external.data
 				entry.activity_list = form.activity_list.data
@@ -47,13 +52,13 @@ def edit(entry_id=None):
 
 				flash('De item is opgeslagen.', 'success');
 			else:
-				parent_id = form.parent_id.data if form.parent_id.data\
-						else None
-				parent = db.session.query(NavigationEntry)\
-						.filter_by(id=parent_id).first()
+				last_entry = db.session.query(NavigationEntry)\
+						.filter_by(parent_id=None)\
+						.order_by(NavigationEntry.position.desc()).first()
 
-				entry = NavigationEntry(parent, form.title.data, form.url.data,
-						form.external.data, form.activity_list.data)
+				entry = NavigationEntry(None, form.title.data, form.url.data,
+						form.external.data, form.activity_list.data,
+						last_entry.position + 1)
 
 				db.session.add(entry)
 				db.session.commit()
@@ -103,3 +108,9 @@ def delete(entry_id):
 
 	return redirect(url_for('navigation.view'))
 
+@blueprint.route('/navigation/reorder', methods=['POST'])
+def reorder():
+	entries = json.loads(request.form['entries'])
+	NavigationAPI.order(entries, None)
+
+	return ""

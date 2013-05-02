@@ -2,7 +2,7 @@
 	{% for entry in entries %}
 
 		<li class="{% if entry.children %}dropdown{% endif %}">
-			<a class="dropdown-toggle" data-hover="dropdown" data-delay="200" data-close-others="true" {% if entry.external %}target="_blank"{% endif %}
+			<a {% if entry.children %}class="dropdown-toggle" data-hover="dropdown" data-delay="200" data-close-others="true"{% endif %} {% if entry.external %}target="_blank"{% endif %}
 			href="{% if entry.external %}http://{% endif %}{{ entry.url }}">
 				{{ entry.title }}
 			</a>
