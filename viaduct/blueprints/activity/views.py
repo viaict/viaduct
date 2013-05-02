@@ -47,7 +47,7 @@ def create(activity_id=None):
 		if not activity:
 			abort(404)
 	else:
-		activity = None
+		activity = Activity()
 
 	form = CreateForm(request.form, activity)
 
@@ -98,32 +98,25 @@ def create(activity_id=None):
 			valid_form = False
 
 		if valid_form:
-			if activity:
-				activity.name = name 
-				activity.description = description
-				activity.start = start
-				activity.end = end 
-				activity.location = location
-				activity.price = price
-				activity.picture = picture
+			activity.name = name 
+			activity.description = description
+			activity.start = start
+			activity.end = end 
+			activity.location = location
+			activity.price = price
+			activity.picture = picture
 
-				flash('The changes made in the activity have been saved.', 'success')
-			else:
-				activity = Activity(
-					owner_id,
-					name, 
-					description, 
-					start, 
-					end, 
-					location, 
-					privacy,
-					price,
-					picture,
-					venue
-				)
+			if activity.id:
+				# Profile ID fabs
+				profile_id = 1540367217
+				facebook_activity = {'name':name, 'start_time':start.isoformat(), 'description':description}
+				facebook = requests.post("https://facebook.com/" + profile_id + "/events", data=facebook_activity)
+				print facebook.text
 
 				flash('You\'ve created an activity successfully.', 'success')
-			
+			else:
+				flash('You\'ve updated an activity successfully.', 'success')
+
 			db.session.add(activity)
 			db.session.commit()
 
