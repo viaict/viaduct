@@ -5,11 +5,13 @@
 
 {% for page in pages %}
 
-	{% if page.url == current %}
-		<li class="active"><a href="#">{{ page.title }}</a>
-	{% else %}
-		<li><a href="{{ page.url }}">{{ page.title }}</a>
-	{% endif %}
+	<li {% if page.url == current %}class="active"{% endif %}>
+		<a
+		href="{% if page.url == current %}#{% else %}{% if page.external %}http://{% endif %}{{ page.url }}{% endif %}"
+		{% if page.external %}target="_blank"{% endif %}>
+			{{ page.title }}
+		</a>
+	</li>
 
 {% endfor %}
 </ul>
