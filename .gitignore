@@ -1,4 +1,3 @@
-config.py
 application.db
 *.pyc
 *.jpg
