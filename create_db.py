@@ -112,7 +112,7 @@ db.session.add(group_second)
 db.session.commit()
 
 
-minute = Minute("minute content, jaja", 2)
+minute = Minute("minute content, jaja", 2, datetime.date(2020, 10, 10))
 db.session.add(minute)
 db.session.commit()
 

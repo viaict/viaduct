@@ -81,12 +81,15 @@ class Minute(db.Model):
 	group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
 	group = db.relationship('Group', backref=db.backref('minutes',
 		lazy='dynamic'))
+	minute_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+
 
 	tasks = db.relationship('Task', backref='minute', lazy='dynamic')
 
-	def __init__(self, content, group_id):
+	def __init__(self, content, group_id, minute_date):
 		self.content = content
 		self.group_id = group_id
+		self.minute_date = minute_date
 
 	def get_name(self):
 		"""

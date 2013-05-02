@@ -1,5 +1,6 @@
-from flask.ext.wtf import Form, TextField, TextAreaField, FileField, DateTimeField, Required, validators, IntegerField, SelectField
+from flask.ext.wtf import Form, TextField, TextAreaField, FileField, DateTimeField, Required, validators, IntegerField, SelectField, BooleanField
 
+import datetime
 from models import Minute, Task
 
 class AddTaskForm(Form):
@@ -19,4 +20,13 @@ class AddTaskForm(Form):
 
 
 class AddMinuteForm(Form):
-	name				= TextField('name', validators=[Required()])
+	# TODO: should try and resize stuff, especially the content field
+	content = TextAreaField('Content', [validators.required()]) #, validators.length(max=1200)])
+	group = SelectField('Group', [validators.required()])
+	# FIXME: datetime is now printed badly in the actual form!!! :( :(
+	date = DateTimeField('Deadline', format='%Y-%m-%d %H:%M:%S', default=datetime.date.today())
+	parse_tasks = BooleanField('Parse')
+
+	def load_groups(self, groups):
+		#self.group.choices = map(lambda x: ("%s%d" % (x.name, x.id), x.name), groups)
+		self.group.choices = map(lambda x: (x.id, x.name), groups)

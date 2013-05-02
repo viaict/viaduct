@@ -57,19 +57,21 @@ def add_task(group_id='all'):
 	form = AddTaskForm(request.form)
 	if request.method == 'POST':
 		# FIXME: deadline is also messed up, and I do not know why
+
 		#if form.validate():
 		#	flash("VALIDAATES!!!!")
-
 		# FIXME: validate does not seem to work :(, so we are doin' it
 		# manually now
 		message = ""
-		if form.name.data == None:
+		if form.name.data == "":
 			message = "Name is required"
-		if request.form['deadline'] == None:
+		elif form.content.data == "":
+			message = "More info is required"
+		elif request.form['deadline'] == "":
 			message = "Deadline is required"
-		if form.group == None:
+		elif form.group == "":
 			message = "Group is required"
-		if form.users.data == None:
+		elif form.users.data == "":
 			message = "A minimum of 1 user is required"
 
 		result = message == ""
@@ -79,8 +81,6 @@ def add_task(group_id='all'):
 				form.content.data, request.form['deadline'],
 				form.group.data, form.users.data, form.line.data, -1,
 				form.status.data)
-		else:
-			flash(message)
 
 		if result:
 			flash("Success! %s" % message)
@@ -94,13 +94,39 @@ def add_task(group_id='all'):
 	return render_template('pimpy/add_task.htm', group=group,
 		group_id=group_id, type='tasks', form=form)
 
-@blueprint.route('/pimpy/minutes/add/<string:group_id>')
+@blueprint.route('/pimpy/minutes/add/<string:group_id>', methods=['GET', 'POST'])
 def add_minute(group_id='all'):
 	if group_id == '':
 		groud_id = 'all'
 	group = Group.query.filter(Group.id==group_id).first()
 
-	form = AddMinuteForm()
+	form = AddMinuteForm(request.form)
+	if request.method == 'POST':
 
-	return render_template('pimpy/add_minute.htm', group=group, group_id=group_id, type='minutes', form=form)
+		# validate still does not work
+		message = ""
+		if form.content.data == "":
+			message = "Content is required"
+		elif request.form['date'] == "":
+			message = "Date is required"
+		elif form.group == "":
+			message = "Group is required"
+
+		result = message == ""
+
+		if result:
+			result, message = PimpyAPI.commit_minute_to_db(form.content.data,
+				request.form['date'], form.group.data, form.parse_tasks.data)
+
+		if result:
+			flash("Success! %s" % message)
+			# maybe redirect to the created task or something else
+		else:
+			flash(message)
+
+	form.load_groups(current_user.groups.all())
+
+	return render_template('pimpy/add_minute.htm', group=group,
+		group_id=group_id, type='minutes', form=form)
+
 
