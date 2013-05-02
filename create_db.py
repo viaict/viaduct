@@ -157,7 +157,11 @@ nav_nav = NavigationEntry(nav_admin, 'Navigatie', '/navigation', False, False)
 db.session.add(nav_nav)
 db.session.commit()
 
-nav_activity = NavigationEntry(None, 'Activiteiten', '/activities', False, True)
+nav_activity = NavigationEntry(None, 'Activiteiten', '/activities', False, False)
 db.session.add(nav_activity)
+db.session.commit()
+
+nav_ext = NavigationEntry(nav_page1, 'Externaal', 'viaduct.svia.nl', True, False)
+db.session.add(nav_ext)
 db.session.commit()
 
