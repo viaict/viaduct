@@ -46,6 +46,7 @@ def get_page(path=''):
 		data = struct()
 		data.title = revision.title
 		data.content = revision.content
+		data.filter_html = revision.filter_html
 		data.path = page.path
 
 		revisions.append(data)
