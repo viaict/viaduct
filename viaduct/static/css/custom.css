@@ -102,3 +102,16 @@ body {
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0);
 }
+
+/* PimPy */
+.pimpy-btn-group {
+	margin-bottom: 8px;
+}
+
+.pimpy-menu-btn {
+	width: 70px;
+}
+
+.pimpy-menu-btn-group {
+	width: 150px;
+}
