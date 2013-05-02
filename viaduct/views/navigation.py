@@ -35,6 +35,8 @@ def edit(entry_id=None):
 		if form.validate_on_submit():
 			if entry:
 				entry.title = form.title.data
+				entry.parent_id = form.parent_id.data if form.parent_id.data\
+						else None
 				entry.url = form.url.data
 				entry.external = form.external.data
 				entry.activity_list = form.activity_list.data
@@ -44,7 +46,12 @@ def edit(entry_id=None):
 
 				flash('De item is opgeslagen.', 'success');
 			else:
-				entry = NavigationEntry(None, form.title.data, form.url.data,
+				parent_id = form.parent_id.data if form.parent_id.data\
+						else None
+				parent = db.session.query(NavigationEntry)\
+						.filter_by(id=parent_id).first()
+
+				entry = NavigationEntry(parent, form.title.data, form.url.data,
 						form.external.data, form.activity_list.data)
 
                 db.session.add(entry)
@@ -66,7 +73,15 @@ def edit(entry_id=None):
             if not known_error:
                 flash_form_errors(form)
 
-    return render_template('navigation/edit.htm', entry=entry, form=form)
+	parents = db.session.query(NavigationEntry).filter_by(parent_id=None)
+
+	if entry:
+		parents = parents.filter(NavigationEntry.id != entry.id)
+
+	parents = parents.all()
+
+	return render_template('navigation/edit.htm', entry=entry, form=form,
+			parents=parents)
 
 @blueprint.route('/navigation/delete/<int:entry_id>', methods=['POST'])
 def delete(entry_id):
