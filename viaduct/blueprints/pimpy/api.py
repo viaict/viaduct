@@ -14,6 +14,21 @@ import datetime
 
 class PimpyAPI:
 
+
+	@staticmethod
+	def commit_minute_to_db(content, date, group_id, parse_tasks):
+		"""
+		Returns succes (boolean), message (string). Message is irrelevant if
+		success is true, otherwise it contains what exactly went wrong.
+
+		In case of succes the minute is entered into the database
+		"""
+
+		date = datetime.datetime.strptime(date, "%m/%d/%Y")
+
+		return False, "because I said so"
+
+
 	@staticmethod
 	def commit_task_to_db(name, content, deadline, group_id,
 		filled_in_users, line, minute_id, status):
