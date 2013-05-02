@@ -103,6 +103,18 @@ body {
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0);
 }
 
+/* PimPy */
+.pimpy-btn-group {
+	margin-bottom: 8px;
+}
+
+.pimpy-menu {
+	width: 75px;
+}
+
+.pimpy-menu-group {
+	width: 150px;
+}
 
 /* Bootstrap formbuilder */
 .ui-draggable {
