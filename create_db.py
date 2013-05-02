@@ -78,6 +78,17 @@ user_ed = User('ed@ed.eds', 'pwd', 'Handsome', 'Ed')
 group_first = Group('first')
 group_second = Group('second')
 
+
+# Add the anonymous user.
+user = User('-0', '-0', 'Klaas', 'Vaak')
+db.session.add(user)
+db.session.commit()
+
+user = User('-1', '-1', 'Computer', 'Rekenmachine')
+db.session.add(user)
+db.session.commit()
+
+
 # could I add more stuff at once?
 db.session.add(user_maarten)
 db.session.commit()
