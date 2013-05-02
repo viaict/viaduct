@@ -40,7 +40,10 @@ def get_page(path=''):
 				' you have found a dead Link!',
 				'![alt text](../static/img/404.png "404")', True)
 
-		data = object()
+		class struct(object):
+			pass
+
+		data = struct()
 		data.title = revision.title
 		data.content = revision.content
 		data.path = page.path
