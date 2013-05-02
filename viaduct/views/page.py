@@ -47,7 +47,7 @@ def get_page(path=''):
 		data.title = revision.title
 		data.content = revision.content
 		data.filter_html = revision.filter_html
-		data.path = page.path
+		data.path = path
 
 		revisions.append(data)
 
