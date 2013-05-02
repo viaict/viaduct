@@ -19,7 +19,7 @@ def get_error_page(path=''):
 	data.filter_html = True
 	data.path = ''
 
-	return render_template('page/error_page.htm', revisions=data)
+	return render_template('page/get_page.htm', revisions=data)
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<path:path>', methods=['GET', 'POST'])
