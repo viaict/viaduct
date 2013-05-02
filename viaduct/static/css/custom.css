@@ -124,3 +124,16 @@ body {
 .draggableField {
   padding-left:5px;
 }
+
+/* PimPy */
+.pimpy-btn-group {
+	margin-bottom: 8px;
+}
+
+.pimpy-menu-btn {
+	width: 70px;
+}
+
+.pimpy-menu-btn-group {
+	width: 150px;
+}
