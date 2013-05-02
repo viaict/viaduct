@@ -1,4 +1,6 @@
 from flask import flash, request, Markup
+from flask.ext.login import current_user
+
 from viaduct import application
 from markdown import markdown
 
@@ -36,6 +38,11 @@ def pages_filter(data):
 			content += '<div class="span6">'
 
 		content += '<div class="mainblock">'
+
+		if current_user.is_authenticated():
+			content += '<a class="btn" href="' + url_for('page2.edit_page',
+				path='todo') + '"><i class="icon-pencil"></i> Edit Page</a>'
+
 		content += '<h1>{0}</h1>'.format(data[i].title)
 
 		if data[i].filter_html:
