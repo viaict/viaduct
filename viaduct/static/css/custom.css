@@ -136,3 +136,12 @@ body {
 .draggableField {
   padding-left:5px;
 }
+
+li.leave-alone {
+	visibility: hidden;
+	height: 10px;
+}
+
+ul.parent > li {
+	margin-bottom: 10px;
+}
