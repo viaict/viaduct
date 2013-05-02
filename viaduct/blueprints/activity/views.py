@@ -7,11 +7,6 @@ from flask.ext.login import current_user
 
 from werkzeug import secure_filename
 
-# from facebook import Facebook
-# import facebook
-# from facepy import GraphAPI
-# from facepy.utils import get_extended_access_token
-
 from viaduct import application, db
 from viaduct.helpers import flash_form_errors
 from forms import CreateForm
