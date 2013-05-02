@@ -52,7 +52,7 @@ def sign_in():
 	# Redirect the user to the index page if he or she has been authenticated
 	# already.
 	if current_user and current_user.is_authenticated():
-		return redirect(url_for('page.get_page'))
+		return redirect(url_for('page2.get_page'))
 
 	form = SignInForm(request.form)
 
