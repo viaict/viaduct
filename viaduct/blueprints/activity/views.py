@@ -1,4 +1,4 @@
-import os
+import os, requests, datetime, json
 
 from flask import flash, get_flashed_messages, redirect, render_template, \
 	request, url_for, abort
@@ -7,13 +7,29 @@ from flask.ext.login import current_user
 
 from werkzeug import secure_filename
 
+# from facebook import Facebook
+# import facebook
+# from facepy import GraphAPI
+# from facepy.utils import get_extended_access_token
+
 from viaduct import application, db
 from viaduct.helpers import flash_form_errors
 from forms import CreateForm
 from models import Activity
 
-#from dateutil.parser import parse
-import datetime
+
+"""Default JSON serializer
+def default(obj):
+	#import calendar, datetime
+	'''
+	if isinstance(obj, datetime.datetime):
+		if obj.utcoffset() is not None:
+			obj = obj - obj.utcoffset()
+	millis = int(
+		calendar.timegm(obj.timetuple()) * 1000 + obj.microsecond / 1000
+	)
+	return millis
+"""
 
 blueprint = Blueprint('activity', __name__)
 
@@ -24,6 +40,7 @@ def allowed_file(filename):
 @blueprint.route('/activities/', methods=['GET', 'POST'])
 @blueprint.route('/activities/<int:page>/', methods=['GET', 'POST'])
 def view(page=1):
+	print "hello?"
 	activities = Activity.query \
 		.order_by(Activity.start_time.desc()) \
 		.paginate(page, 15, False)
@@ -33,7 +50,7 @@ def view(page=1):
 @blueprint.route('/activities/activity/<int:activity_id>', methods=['GET', 'POST'])
 def get_activity(activity_id = 0):
 	activity = Activity.query.filter(Activity.id == activity_id).first()
-	return render_template('activities/activity/view_single.htm', activity=activity)
+	return render_template('activity/view_single.htm', activity=activity)
 
 @blueprint.route('/activities/activity/create/', methods=['GET', 'POST'])
 @blueprint.route('/activities/activity/edit/<int:activity_id>', methods=['GET', 'POST'])
@@ -43,8 +60,11 @@ def create(activity_id=None):
 
 	if activity_id:
 		activity = Activity.query.filter(Activity.id == activity_id).first()
+
+		if not activity:
+			abort(404)
 	else:
-		activity = None
+		activity = Activity()
 
 	form = CreateForm(request.form, activity)
 
@@ -74,6 +94,13 @@ def create(activity_id=None):
 		if file and allowed_file(file.filename):
 			picture = secure_filename(file.filename)
 			file.save(os.path.join('viaduct/static/activity_pictures', picture))
+
+			# Remove old picture
+			if activity.picture:
+				os.remove(os.path.join('viaduct/static/activity_pictures', activity.picture))
+
+		elif activity.picture:
+			picture = activity.picture
 		else:
 			picture = "yolo.png"
 	
@@ -88,26 +115,52 @@ def create(activity_id=None):
 			valid_form = False
 
 		if valid_form:
-			activity = Activity(
-				owner_id,
-				name, 
-				description, 
-				start, 
-				end, 
-				location, 
-				privacy,
-				price,
-				picture,
-				venue
-			)
-			
+			activity.name = name 
+			activity.description = description
+			activity.start = start
+			activity.end = end 
+			activity.location = location
+			activity.price = price
+			activity.picture = picture
+
+			if activity.id:
+
+				token = "BAAB5kPwzljUBALj5MPZBwoRJIh5vBLo3JT1cLD9AFgtianfkQrIXMfKaoGQc5cVlKv9pLH8JnDF6mlvWIi5y0TZATm8k0zcODG3Cr5CDmOZBGBpKdFbOuUyYk0GYZBxNYlbavTVIaNZCsUwT8RgO4kNZCSZBqTYKQFurU9wXJ983l4T6mjRM6F42WIzdG4MuXxRyUwgNZAN8ZBcfzmZCyXlHpL2E2RmxFgiMqVFSYuWz6upQZDZD"
+				long_lived_access_token = get_extended_access_token(token, '133663613490741', 'fb66c7c02ecab2a474a7bcf5689d7cc8')
+				# graph = GraphAPI(long_lived_access_token[0])
+				# token = get_extended_access_token(token, '133663613490741', 'fb66c7c02ecab2a474a7bcf5689d7cc8')
+
+				# graph = GraphAPI(token)
+
+				# print(graph.get("me/events"))
+				# print(graph.post(path="https://graph.facebook.com/100000408687328/events",
+					# name=activity.name, start_time=activity.start.isoformat()))
+
+				# Profile ID fabs
+				# profile_id = 1540367217
+				facebook_activity = {
+						'access_token': 'BAAB5kPwzljUBALj5MPZBwoRJIh5vBLo3JT1cLD9AFgtianfkQrIXMfKaoGQc5cVlKv9pLH8JnDF6mlvWIi5y0TZATm8k0zcODG3Cr5CDmOZBGBpKdFbOuUyYk0GYZBxNYlbavTVIaNZCsUwT8RgO4kNZCSZBqTYKQFurU9wXJ983l4T6mjRM6F42WIzdG4MuXxRyUwgNZAN8ZBcfzmZCyXlHpL2E2RmxFgiMqVFSYuWz6upQZDZD',
+						'name': activity.name,
+						'start_time': activity.start.isoformat(),
+						'description': activity.description
+				}
+				facebook = requests.post("https://graph.facebook.com/100000408687328/events", \
+						data=json.dumps(facebook_activity, default=default), headers={'content-type': 'application/json'})
+				print(facebook.text)
+
+				# print(fb.events.create({name: activity.name, start_time: activity.start.isoformat()}))
+				# print facebook.text
+
+				flash('You\'ve created an activity successfully.', 'success')
+			else:
+				flash('You\'ve updated an activity successfully.', 'success')
+
 			db.session.add(activity)
 			db.session.commit()
-
-			flash('You\'ve created an activity successfully.')
 
 			return redirect(url_for('activity.view'))
 	else:
 		flash_form_errors(form)
 
 	return render_template('activity/create.htm', form=form)
+

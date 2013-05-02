@@ -115,3 +115,24 @@ body {
 .pimpy-menu-btn-group {
 	width: 150px;
 }
+
+/* Bootstrap formbuilder */
+.ui-draggable {
+  margin-bottom:4px;
+}
+
+.ui-state-highlight {
+  background:#fff;
+}
+
+.hoverDragged {
+  background:#fff;
+}
+
+.hoverDroppable {
+  background-color: lightblue;
+}
+
+.draggableField {
+  padding-left:5px;
+}

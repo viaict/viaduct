@@ -7,11 +7,11 @@ een database geladen worden zodat je kan aangeven waaruit je menu bestaat.
 
     - als je nieuwe artikelen (Model: pages) aanmaakt moeten deze automagisch worden toegevoegd
     + je moet zelf links kunnen toevoegen (/verwijderen)
-    ~ je moet externe links kunnen toevoegen.
-        Werkt in de navbar, nog niet in het zijmenu.
+    + je moet externe links kunnen toevoegen.
     - Modules moeten in routes de parent/kind/nogmeerkind structuur aanhouden
       (bv. bestuur/bestuursblog/<int:blog_entry_id>)
       (bv. activities/activity/<int:activity_id>)
+    - Rechten voor niet page-pagina's. Neem PimPy en de Activiteiten, niet iedereen mag hier bewerken, maar wel kijken, maar kijken mag soms weer niet. Zo mag niet ieder lid /navigation bekijken, dat is onnodig. Hier moet dus een goed systeem voor zijn.
 
 * sign-in/sign-up moet uitgebreid worden voor als je het wachtwoord vergeten bent.
     - MODULE: user
@@ -36,13 +36,14 @@ uittekenen.
 * activiteitenbeheren.
     - DOOR: FABIEN
     + Activiteiten kunnen aangemaakt worden
-    - Routing moet met goede structuur (zie navigation)
-    - Activiteiten edit
-    - Oude Plaatje verwijderen bij plaatje edit
+    + Routing moet met goede structuur (zie navigation)
+    + Activiteiten edit
+    + Oude Plaatje verwijderen bij plaatje edit
+    + Google maps plugin (geolocate API : adres invoert)
+    - Google maps plugin bij lokatie (hidden, met uitklap optie)
     - Facebook event (google+) aanmaken
     - Attending op svia.nl
     - Facebook event comments scrapen
-    - Google maps plugin (geolocate API : adres invoert)
     
 * files uploaden. Uploaden kan al
     - er moet nog een beheringsysteem
@@ -67,7 +68,3 @@ uittekenen.
 == databases: ==
 De databasemodellen die op veel plekken nodig zijn, zoals opleidingen en vakken,
 moeten afgemaakt zijn zodat alle applicaties daar mee kunnen werken.
-
-
-
-werknachten: met bier en pizza!

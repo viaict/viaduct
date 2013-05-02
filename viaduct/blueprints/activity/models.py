@@ -20,7 +20,7 @@ class Activity(db.Model):
 	
 	owner = db.relationship('User', backref=db.backref('activities', lazy='dynamic'))
 
-	def __init__(self, owner_id, name, description, start_time, end_time, location, privacy, price, picture, venue):
+	def __init__(self, owner_id=None, name="", description="", start_time=datetime.datetime.now(), end_time = datetime.datetime.now(), location="Sciencepark, Amsterdam", privacy="public", price="-", picture=None, venue=1):
 		self.owner_id = owner_id
 		self.name = name
 		self.description = description
