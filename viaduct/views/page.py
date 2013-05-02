@@ -28,8 +28,8 @@ def get_page(path=''):
 		if page.revisions.count() > 0:
 			revision = page.revisions.order_by(PageRevision.timestamp.desc()).first()
 		else:
-			revision = PageRevision(page, current_user, 'Oh no! It looks like
-				you have found a dead Link!',
+			revision = PageRevision(page, current_user, 'Oh no! It looks like' +
+				' you have found a dead Link!',
 				'![alt text](../static/img/404.png "404")', True)
 
 		revisions.append(revision)
