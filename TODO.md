@@ -40,6 +40,7 @@ uittekenen.
     + Activiteiten edit
     + Oude Plaatje verwijderen bij plaatje edit
     + Google maps plugin (geolocate API : adres invoert)
+    - Google maps plugin bij lokatie (hidden, met uitklap optie)
     - Facebook event (google+) aanmaken
     - Attending op svia.nl
     - Facebook event comments scrapen
