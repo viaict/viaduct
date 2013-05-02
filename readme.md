@@ -29,3 +29,6 @@ JEEEJ:
 In de browser nu localhost:5000 checken
 Echter, je db is nog super leeg
 Als het niet werkt omdat ie modules mist, opnieuw pip install proberen!
+
+
+https://github.com/jgorset/facepy
