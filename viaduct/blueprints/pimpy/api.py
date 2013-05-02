@@ -4,6 +4,7 @@ from flask.ext.login import current_user
 from models import Task, Minute
 
 from viaduct.blueprints.group.models import Group
+from viaduct.blueprints.user.models import User
 
 class PimpyAPI:
 
@@ -12,9 +13,25 @@ class PimpyAPI:
 		"""
 		Parses a string which is a list of comma seperated user names
 		to a list of users
+
+		Returns None when something goes wrong (None as input or no users
+		found)
 		"""
-		# TODO: implement this
-		return comma_sep.split()
+		if comma_sep == None:
+			return None
+		comma_sep = comma_sep.split()
+
+		found_users = []
+		users = User.query.all()
+		for user in users:
+			user_name = "%s %s" % (user.first_name, user.last_name)
+			for comma_sep_user in comma_sep:
+				if user_name.startswith(comma_sep_user):
+					found_users.append(user)
+		if len(found_users) <= 0:
+			return None
+		print found_users
+		return found_users
 
 	@staticmethod
 	def check_user_is_logged_in():
@@ -38,6 +55,8 @@ class PimpyAPI:
 		if personal:
 			endpoints['view_tasks_chosenpersonal'] += '_personal'
 
+		if group_id != 'all':
+			group_id = int(group_id)
 
 		return Markup(render_template('pimpy/api/side_menu.htm',
 			groups=groups, group_id=group_id, personal=personal,
