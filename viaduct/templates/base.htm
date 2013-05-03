@@ -26,8 +26,16 @@
 		<script src="/static/jquery-ui/ui/minified/jquery-ui.min.js"></script>
 		<script src="/static/jquery-ui/ui/minified/jquery.ui.sortable.min.js"></script>
 
-		<meta name="viewport" content="width=device-width, initial-scale=1.0"
-			/>
+		<script>
+		$(document).ready(function() {
+			// Do not submit form when pressing enter in form fields
+			$("input, select").keypress(function(event) {
+				return event.keyCode != 13;
+			});
+		});
+		</script>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	</head>
 
 	<body>

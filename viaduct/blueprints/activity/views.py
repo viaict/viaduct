@@ -1,4 +1,4 @@
-import os, requests, datetime, json
+import os, datetime
 
 from flask import flash, get_flashed_messages, redirect, render_template, \
 	request, url_for, abort
@@ -53,21 +53,19 @@ def create(activity_id=None):
 
 		owner_id		= current_user.id
 		name				= form.name.data
-		description	= request.form['description'].strip()
+		description	= form.description.data
 
-		start_date = request.form['start_date'].strip()
-		start_time = request.form['start_time'].strip()
+		start_date = form.start_date.data
+		start_time = form.start_time.data
+		
+		end_date = form.end_date.data
+		end_time = form.end_time.data
 
 		start = datetime.datetime.strptime(start_date + start_time, '%Y-%m-%d%H:%M')
-
-		end_date = request.form['end_date'].strip()
-		end_time = request.form['end_time'].strip()
-
 		end = datetime.datetime.strptime(end_date + end_time, '%Y-%m-%d%H:%M')
 
-		location		= request.form['location'].strip()
-		privacy			= "public"
-		price				= request.form['price'].strip()
+		location = form.location.data
+		price	= form.price.data
 
 		file = request.files['picture']
 

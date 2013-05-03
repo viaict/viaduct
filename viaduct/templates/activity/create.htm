@@ -35,7 +35,7 @@
 			</span>
 
 			<div class="controls form-inline">
-				<input value="{{ form.start_time.data.strftime('%Y-%m-%d') }}" type='date' name='start_date' id='start_date' data-date-format="yyyy-mm-dd">
+				<input value="{{ form.start_time.data.strftime('%Y-%m-%d') }}" type='text' name='start_date' id='start_date' data-date-format="yyyy-mm-dd">
 
 				<div class="input-append bootstrap-timepicker">
 					<input value="{{ form.start_time.data.strftime('%H:%M') }}" type='text' name='start_time' id="start_time" class="input-small">
@@ -76,24 +76,10 @@
 	</div>
 </form>
 
-<script src="http://connect.facebook.net/en_US/all.js"></script>
-
 <script>
-
 $(document).ready(function() {
 
-	// $.post("https://facebook.com/1540367217/events",
-	// 	{name:"Fabien zijn test event", start_time: "2013-05-02"},
-	// 	function(data) { alert('kak'); console.log(data); }
-	// );
-
-
-
 	$("textarea").flexible().trigger('keyup');
-
-	$("input, select").keypress(function(event) {
-		return event.keyCode != 13;
-	});
 
 	// Check www.eyecon.ro/bootstrap-datepicke
 	var nowTemp = new Date();
@@ -102,14 +88,14 @@ $(document).ready(function() {
 	var checkin = $('#start_date').datepicker({
 		onRender: function(date) {return date.valueOf() < now.valueOf() ? 'disabled' : '';}
 	}).on('changeDate', function(ev) {
-		if (ev.date.valueOf() > checkout.date.valueOf()) {
-			var newDate = new Date(ev.date)
-			newDate.setDate(newDate.getDate());
-			checkout.setValue(newDate);
-		}
+
+		var newDate = new Date(ev.date)
+		newDate.setDate(newDate.getDate());
+		checkout.setValue(newDate);
 	
 		checkin.hide();
 		$('#end_date')[0].focus();
+
 	}).data('datepicker');
 	
 	var checkout = $('#end_date').datepicker({

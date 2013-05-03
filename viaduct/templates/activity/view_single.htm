@@ -5,39 +5,46 @@
 {% block content %}
 
 <div class="page-header">
+	{% if current_user and current_user.email == "administrator@svia.nl" %}
 	<a href="/activities/activity/edit/{{ activity.id }}" class="btn btn-warning pull-right">
 		<i class="icon-pencil"></i> Edit
 	</a>
+	{% endif %}
 
 	<h1>{{activity.name}}</h1>
-
 </div>
 
-<h3>Lokatie: {{ activity.location}}</h3>
+<div class="accordion" id="acc">
+	<div class="accordion-group">
+
+		<div class="accordion-heading">
+			<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc" href="#collapseLocation">
+				Lokatie: {{ activity.location}}
+				<span class="pull-right">Klik om uit te klappen</span>
+			</a>
+		</div>
+
+		<div id="collapseLocation" class="accordion-body collapse">
+			<div class="accordion-inner">
+				{{ render_map(600, 400, activity.location) }}
+			</div>
+		</div>
+
+	</div>
+</div>
 
 <div class="row-fluid">
 	<div class="span8">
-
 		<h4>Prijs: <em>{{ activity.price}}</em></h4>
+		
+		<div class="time">
+			<i class="icon-time"></i>
+			{{ activity.get_time() }}
+		</div>
 
-		<table class="table">
-			<tr>
-				<th>Aanvang
-				<th>Einde
-
-			<tr>
-				<td>{{ activity.start_time.strftime("%a, %d %b. (%H:%M)")}}
-			  <td>{{ activity.end_time.strftime("%a, %d %b. (%H:%M)")}}
-		</table>
 
 		<hr>
 		<p>{{ activity.description}}</p>
-
-		<hr>
-
-		<h3>Locatie</h3>
-
-		{{ render_map(500, 500, activity.location) }}
 	</div>
 
 	<div class="span4">
