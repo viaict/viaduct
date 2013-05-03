@@ -32,6 +32,9 @@ body {
 	margin-top:4px;
 }
 
+#acc {
+  margin-top:-14px;
+}
 
 /* Twitter widget */
 .twtr-widget h3 {
