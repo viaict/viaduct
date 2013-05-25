@@ -215,7 +215,7 @@ class PimpyAPI:
 
 		# remove those list items that have been set to checked and removed
 		for group_header in list_items:
-			list_items[group_header] = filter(lambda x: x.status <= 4, list_items[group_header])
+			list_items[group_header] = filter(lambda x: x.status < 4, list_items[group_header])
 
 		return Markup(render_template('pimpy/api/tasks.htm',
 			list_items=list_items, type='tasks', group_id=group_id,
