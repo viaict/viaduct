@@ -82,7 +82,7 @@ def upload_file():
 
 @blueprint.route('/examination/', methods=['GET', 'POST'])
 def view_examination():
-	path = '../static/'
+	path = application.config['EXAMINATION_UPLOAD_FOLDER']
 
 	if request.args.get('search') != None:
 		search = request.args.get('search')
