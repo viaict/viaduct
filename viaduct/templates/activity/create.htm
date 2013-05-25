@@ -50,7 +50,7 @@
 			</span>
 
 			<div class="controls form-inline">
-				<input value="{{ form.end_time.data.strftime('%Y-%m-%d') }}" type='date' name='end_date' id='end_date' data-date-format="yyyy-mm-dd">
+				<input value="{{ form.end_time.data.strftime('%Y-%m-%d') }}" type='text' name='end_date' id='end_date' data-date-format="yyyy-mm-dd">
 
 				<div class="input-append bootstrap-timepicker">
 					<input value="{{ form.end_time.data.strftime('%H:%M') }}" type='text' name='end_time' id="end_time" class="input-small">
