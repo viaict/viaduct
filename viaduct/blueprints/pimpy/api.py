@@ -180,6 +180,7 @@ class PimpyAPI:
 
 		list_items = []
 
+		print "personal ", personal, " group id ", group_id
 
 		if personal:
 			query = current_user.tasks
@@ -194,8 +195,7 @@ class PimpyAPI:
 				for group in groups:
 					list_items.extend(group.tasks.all())
 			else:
-				query = current_user.tasks
-				query = query.filter(Task.group_id==group_id)
+				query = Task.query.filter(Task.group_id==group_id)
 				list_items.extend(query.all())
 
 		return Markup(render_template('pimpy/api/tasks.htm',
