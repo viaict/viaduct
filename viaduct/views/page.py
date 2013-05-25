@@ -1,10 +1,12 @@
+import difflib
+
 from flask import Blueprint
 from flask import flash, redirect, render_template, request, url_for
 from flask.ext.login import current_user
 
 from viaduct import db
 from viaduct.helpers import flash_form_errors
-from viaduct.forms import EditPageForm
+from viaduct.forms import EditPageForm, HistoryPageForm
 from viaduct.blueprints.page.models import Page, PageRevision, PagePermission
 
 blueprint = Blueprint('page2', __name__)
@@ -64,8 +66,10 @@ def get_page(path=''):
 @blueprint.route('/history/', methods=['GET', 'POST'])
 @blueprint.route('/history/<path:path>', methods=['GET', 'POST'])
 def get_page_history(path=''):
-	if not current_user.is_authenticated():
-		return get_error_page()
+	#if not current_user.is_authenticated():
+	#	return get_error_page()
+
+	form = HistoryPageForm(request.form)
 
 	page = Page.query.filter(Page.path==path).first()
 
@@ -77,22 +81,46 @@ def get_page_history(path=''):
 	else:
 		revisions = None
 
-	return render_template('page/get_page_history.htm', revisions=revisions)
+	form.previous.choices = [(revision.id, '') for revision in revisions]
+	form.current.choices = [(revision.id, '') for revision in revisions]
+
+	if form.validate_on_submit():
+		previous = request.form['previous']
+		current = request.form['current']
+
+		previous_revision = page.revisions.filter(PageRevision.id==previous).first()
+		current_revision = page.revisions.filter(PageRevision.id==current).first()
+
+		diff = difflib.HtmlDiff().make_table(previous_revision.content.splitlines(),
+			current_revision.content.splitlines())
+
+		return render_template('page/compare_page_history.htm', diff=diff)
+
+	return render_template('page/get_page_history.htm', form=form,
+		revisions=zip(revisions, form.previous, form.current))
 
 @blueprint.route('/edit/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<path:path>', methods=['GET', 'POST'])
 def edit_page(path=''):
-	if not current_user.is_authenticated():
-		return get_error_page()
+	class struct(object):
+		pass
+
+	#if not current_user.is_authenticated():
+	#	return get_error_page()
 
 	page = Page.query.filter(Page.path==path).first()
-	revision = None
+	data = None
 
 	if page:
 		revision = page.revisions.order_by(PageRevision.timestamp.desc()).first()
-		revision.filter_html = not revision.filter_html
 
-	form = EditPageForm(request.form, obj=revision)
+		data = struct()
+		data.title = revision.title
+		data.content = revision.content
+		data.filter_html = not revision.filter_html
+		data.path = path
+
+	form = EditPageForm(request.form, obj=data)
 
 	if form.validate_on_submit():
 		title = request.form['title'].strip()
