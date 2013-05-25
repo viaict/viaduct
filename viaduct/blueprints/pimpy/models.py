@@ -1,6 +1,7 @@
 from viaduct import db
 import datetime
 
+
 # many to many relationship tables
 task_group = db.Table('pimpy_task_group',
 	db.Column('task_id', db.Integer, db.ForeignKey('pimpy_task.id')),

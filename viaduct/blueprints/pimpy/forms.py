@@ -2,11 +2,15 @@ from flask.ext.wtf import Form, TextField, TextAreaField, FileField, DateTimeFie
 
 import datetime
 from models import Minute, Task
+from viaduct import application
+
+
+DATE_FORMAT = application.config['DATE_FORMAT']
 
 class AddTaskForm(Form):
 	name				= TextField('Name', validators=[Required()])
 	content = TextAreaField('Content', validators=[validators.optional()]) #, validators.length(max=1200)])
-	deadline = DateTimeField('Deadline', format='%Y-%m-%d %H:%M:%S')
+	deadline = DateTimeField('Deadline', format=DATE_FORMAT)
 	# timestamp
 	line = IntegerField('Line', default=-1, description='Fill in -1 if this is unknown or impossible.')
 	minute_id = IntegerField('Minute ID', default=-1, description='Fill in -1 if this is unknown or impossible.')
@@ -24,7 +28,7 @@ class AddMinuteForm(Form):
 	content = TextAreaField('Content', [validators.required()]) #, validators.length(max=1200)])
 	group = SelectField('Group', [validators.required()])
 	# FIXME: datetime is now printed badly in the actual form!!! :( :(
-	date = DateTimeField('Deadline', format='%Y-%m-%d %H:%M:%S', default=datetime.date.today())
+	date = DateTimeField('Deadline', format=DATE_FORMAT, default=datetime.date.today())
 	parse_tasks = BooleanField('Parse')
 
 	def load_groups(self, groups):

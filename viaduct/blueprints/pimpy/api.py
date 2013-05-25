@@ -6,11 +6,13 @@ from models import Task, Minute
 from viaduct.blueprints.group.models import Group
 from viaduct.blueprints.user.models import User
 
-from viaduct import db
+from viaduct import db, application
 
 
 import datetime
 
+
+DATE_FORMAT = application.config['DATE_FORMAT']
 
 class PimpyAPI:
 
@@ -24,9 +26,20 @@ class PimpyAPI:
 		In case of succes the minute is entered into the database
 		"""
 
-		date = datetime.datetime.strptime(date, "%m/%d/%Y")
+		try:
+			date = datetime.datetime.strptime(date, DATE_FORMAT)
+		except:
+			return False, "Could not parse the date"
+		
 
-		return False, "because I said so"
+		minute = Minute(content, group_id, date)
+		db.session.add(minute)
+		db.session.commit()
+
+		if parse_tasks:
+			parse_minute(content, group_id, minute_id)
+
+		return True, "jaja"
 
 
 	@staticmethod
@@ -50,7 +63,11 @@ class PimpyAPI:
 		if not users:
 			return False, message
 
-		deadline = datetime.datetime.strptime(deadline, "%m/%d/%Y")
+		try:
+			deadline= datetime.datetime.strptime(date, DATE_FORMAT)
+		except:
+			return False, "Could not parse the deadline"
+
 
 		task = Task(name, content, deadline, group_id,
 				users, line, minute_id, status)
@@ -67,9 +84,6 @@ class PimpyAPI:
 		Returns users, message. Users is false if there is something wrong,
 		in which case the message is stated in message, otherwise message
 		equals "" and users is the list of matched users
-
-		Should, in the future, return specific error messages when the
-		matching fails.
 		"""
 
 		if comma_sep == None:
