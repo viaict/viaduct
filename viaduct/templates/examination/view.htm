@@ -29,7 +29,7 @@
 				{% for examination in examinations %}
 					<tr>
 						<td>
-							<a href="{{ (path + examination.path) }}" target="_blank">{{ examination.title }}</a>
+							<a href="{{ path + examination.path }}" target="_blank">{{ examination.title }}</a>
 						</td>
 						<td>
 							<a href="?search={{ (examination.course.name) }}">{{ examination.course.name }}</a>
