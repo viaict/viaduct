@@ -16,11 +16,11 @@ class Activity(db.Model):
 	price					= db.Column(db.String(16))
 	picture				= db.Column(db.String(255))
 	venue					= db.Column(db.Integer) # venue ID
-	updated_time	= db.Column(db.DateTime, default=datetime.datetime.utcnow())
+	updated_time	= db.Column(db.DateTime, default=datetime.datetime.now())
 	
 	owner = db.relationship('User', backref=db.backref('activities', lazy='dynamic'))
 
-	def __init__(self, owner_id=None, name="", description="", start_time=datetime.datetime.now(), end_time = datetime.datetime.now(), location="Sciencepark, Amsterdam", privacy="public", price="-", picture=None, venue=1):
+	def __init__(self, owner_id=None, name="", description="", start_time=datetime.datetime.now(), end_time=datetime.datetime.now(), location="Sciencepark, Amsterdam", privacy="public", price="gratis", picture=None, venue=1):
 		self.owner_id = owner_id
 		self.name = name
 		self.description = description
