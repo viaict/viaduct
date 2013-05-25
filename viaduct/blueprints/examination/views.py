@@ -82,7 +82,7 @@ def upload_file():
 
 @blueprint.route('/examination/', methods=['GET', 'POST'])
 def view_examination():
-	path = application.config['EXAMINATION_UPLOAD_FOLDER']
+	path = '/static/uploads/examinations/'
 
 	if request.args.get('search') != None:
 		search = request.args.get('search')
@@ -105,8 +105,7 @@ def examination_admin():
 	if not current_user or current_user.email != 'administrator@svia.nl':
 		return abort(403)
 
-	#path = '../static/'
-	path2 = 'viaduct.svia.nl/uploads/examinations/02.pdf'
+	path = '/static/uploads/examinations/'
 
 	if request.args.get('search') != None:
 		search = request.args.get('search')
@@ -115,7 +114,7 @@ def examination_admin():
 				Course.name.like('%' + search + '%'), 
 				Education.name.like('%' + search + '%'))).all()
 		print search
-		return render_template('examination/admin.htm', path = path2, 
+		return render_template('examination/admin.htm', path = path, 
 			examinations = examinations, search=search, message="")
 
 	if request.args.get('delete') != None:
