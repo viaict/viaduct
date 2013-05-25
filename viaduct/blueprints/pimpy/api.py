@@ -100,7 +100,7 @@ class PimpyAPI:
 				users, title = action.split(":")
 				print users
 				print title
-				succes, message = PimpyAPI.commit_task_to_db(title, "", "2013-05-31", group_id,
+				succes, message = PimpyAPI.commit_task_to_db(title, "", "", group_id,
 					users, i, minute_id, 0)
 				if not succes:
 					return False, message
