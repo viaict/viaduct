@@ -110,9 +110,13 @@ class PimpyAPI:
 		hits = regex_DONE.findall(content)
 		for done in hits:
 			query = Task.query
+			print "done =" + done
 			query = query.filter(Task.id==done)
 			list_items = query.all()
 			print list_items[0].id
+			print list_items[0].title
+			for item in list_items:
+				item.update_status(len(Task.status_meanings)-2)
 
 		return True, "awesome stuff"
 
