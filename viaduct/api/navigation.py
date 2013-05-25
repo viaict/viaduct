@@ -10,20 +10,7 @@ class NavigationAPI:
 
 	@staticmethod
 	def get_navigation_bar():
-		entries = db.session.query(NavigationEntry).filter_by(parent_id=None)\
-				.order_by(NavigationEntry.position).all()
-
-		# Fill in activity lists.
-		for entry in entries:
-			if entry.activity_list:
-				entry.children = []
-				activities = db.session.query(Activity)\
-						.filter(Activity.end_time > datetime.datetime.now())\
-						.all()
-
-				for activity in activities:
-					entry.children.append(NavigationEntry(entry, activity.name,
-							'/activity/' + str(activity.id), False, False, 0))
+		entries = NavigationEntry.get_entries(True)
 
 		return render_template('navigation/view_bar.htm', entries=entries)
 
