@@ -1,13 +1,11 @@
-import bcrypt
-import datetime
+import os, bcrypt, datetime
 from viaduct import db, application
 from viaduct.blueprints.user.models import User, UserPermission
 from viaduct.blueprints.group.models import Group, GroupPermission
 from viaduct.blueprints.page.models import Page, PagePermission, PageRevision
 from viaduct.blueprints.pimpy.models import Minute, Task
+from viaduct.blueprints.activity.models import Activity
 from viaduct.models.navigation import NavigationEntry
-
-import os
 
 # Remove the old db.
 if os.path.exists('application.db'):
@@ -111,6 +109,42 @@ db.session.commit()
 db.session.add(group_second)
 db.session.commit()
 
+
+'''
+self.name = name
+self.description = description
+self.start_time = start_time
+self.end_time = end_time
+self.location = location
+self.price = price
+self.picture = picture
+'''
+
+activity1 = Activity()
+activity1.start_time = datetime.datetime(2012, 10, 10, 17, 0)
+activity1.end_time = datetime.datetime(2012, 10, 10, 22, 0)
+activity1.name = "Een activiteit in het verleden"
+activity1.description = """According to some, the system that is designed during the 19th century is on the verge of a revolution. A revolution that could radically change the way we educate ourselves and others, and even the way we look at education. But whether it is a revolution or just an evolution, technology is undoubtedly beginning to play a serious role in many forms of education. Over time, teaching transformed from one on one tutoring to mass education. And the emergence of the internet is now pushing education to the largest scale in history with the introduction of Massive Open Online Courses (early MOOCs had 100000 enrollments). At the same time, education (not unlike the rest of life) is increasingly leaving digital traces. 
+
+Learning analytics is a fairly recent technology that takes advantage of these traces. As most technologies it can be used for multiple purposes and can serve both the revolution and the evolution perspectives.
+
+In this talk I want to elaborate a little bit on the traditional model of education and present the core of the revolution. We'll discuss the current influences that technology can have on education by examining some well known examples. I'll explain what we mean with Learning Analytics, how it might work (technically), what it's potential seems to be, and, of course, what the possible downsides are. We'll conclude with discussing various visions of the future of learning and their potential impact on society.
+
+Although I will not apply the personalization to this talk, I'll attempt to put something in there for everybody. It is then up to you to interact with me and each other to bend it to the perfect talk."""
+
+activity2 = Activity()
+activity2.start_time = datetime.datetime(2013, 10, 10, 17, 0)
+activity2.end_time = datetime.datetime(2013, 10, 10, 22, 0)
+activity2.name = "Een activiteit in het heden"
+activity2.description = """Learning analytics is a fairly recent technology that takes advantage of these traces. As most technologies it can be used for multiple purposes and can serve both the revolution and the evolution perspectives.
+
+In this talk I want to elaborate a little bit on the traditional model of education and present the core of the revolution. We'll discuss the current influences that technology can have on education by examining some well known examples. I'll explain what we mean with Learning Analytics, how it might work (technically), what it's potential seems to be, and, of course, what the possible downsides are. We'll conclude with discussing various visions of the future of learning and their potential impact on society.
+
+Although I will not apply the personalization to this talk, I'll attempt to put something in there for everybody. It is then up to you to interact with me and each other to bend it to the perfect talk."""
+
+db.session.add(activity1)
+db.session.add(activity2)
+db.session.commit()
 
 minute = Minute("minute content, jaja", 2, datetime.date(2020, 10, 10))
 db.session.add(minute)
