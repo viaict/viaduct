@@ -15,7 +15,7 @@ from werkzeug import secure_filename
 
 blueprint = Blueprint('examination', __name__)
 
-UPLOAD_FOLDER = application.config['UPLOAD_FOLDER']
+UPLOAD_FOLDER = application.config['EXAMINATION_UPLOAD_FOLDER']
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 def allowed_file(filename):
@@ -45,9 +45,6 @@ def upload_file():
 
 	courses =  Course.query.all()
 	educations =  Education.query.all()
-
-	import os
-	print os.getcwd()
 
 	if request.method == 'POST':
 		file = request.files['file']
