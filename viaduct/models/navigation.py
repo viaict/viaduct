@@ -54,4 +54,6 @@ class NavigationEntry(db.Model):
 								activity.name, '/activity/' + str(activity.id),
 								False, False, 0))
 
+					print(entry.activities)
+
 		return entries
