@@ -12,7 +12,7 @@ class NavigationAPI:
 	def get_navigation_bar():
 		entries = NavigationEntry.get_entries(True)
 
-		return render_template('navigation/view_bar.htm', entries=entries)
+		return render_template('navigation/view_bar.htm', bar_entries=entries)
 
 	@staticmethod
 	def get_navigation_menu():
