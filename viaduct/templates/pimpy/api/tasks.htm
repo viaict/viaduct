@@ -22,7 +22,9 @@
 					<div class="well well-small">{{ list_item.content }}<br>
 						Deadline: {{ list_item.deadline }}<br>
 						Created on: {{list_item.timestamp }}<br>
-						<a href="{{ url_for('pimpy.view_minute', group_id=list_item.group_id, minute_id=list_item.minute_id) }}"> Go to minute </a>
+						{% if list_item.minute_id >= 0 %}
+							<a href="{{ url_for('pimpy.view_minute', group_id=list_item.group_id, minute_id=list_item.minute_id) }}"> Go to minute </a>	
+						{% endif %}
 					</div>
 				</div>
 			{% endfor %}
