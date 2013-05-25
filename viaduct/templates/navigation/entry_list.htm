@@ -4,7 +4,7 @@
 			{{ entry.title }}
 		</a>
 		<ul class="sortable">
-			<li class="leave-alone">
+			<li class="leave-alone"></li>
 			{% for child in entry.children %}
 				{{ render_entry_list(child) }}
 			{% endfor %}
