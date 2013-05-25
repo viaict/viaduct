@@ -21,6 +21,7 @@ def view():
 		return abort(403)
 
 	entries = NavigationEntry.get_entries()
+
 	return render_template('navigation/view.htm', entries=entries)
 
 @blueprint.route('/navigation/create', methods=['GET', 'POST'])
@@ -32,7 +33,7 @@ def edit(entry_id=None):
 	if entry_id:
 		entry = db.session.query(NavigationEntry).filter_by(id=entry_id).first()
 		if not entry:
-			abort(404)
+			return abort(404)
 	else:
 		entry = None
 
