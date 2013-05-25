@@ -210,10 +210,13 @@ class PimpyAPI:
 	def get_minutes(group_id):
 		list_items = []
 
-		query = Minute.query
 		if group_id != 'all':
-			query = query.filter(Minute.group_id==group_id)
-		list_items.extend(query.all())
+			query = Minute.query.filter(Minute.group_id==group_id)
+			list_items.extend(query.all())
+		# this should be done with a sql in statement, or something, but meh
+		else:
+			for group in current_user.groups:
+				list_items.extend(Minute.query.filter(Minute.group_id==group.id).all())
 
 		return Markup(render_template('pimpy/api/minutes.htm',
 			list_items=list_items, type='minutes', group_id=group_id))
