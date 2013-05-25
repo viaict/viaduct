@@ -101,7 +101,7 @@ class PimpyAPI:
 				print users
 				print title
 				succes, message = PimpyAPI.commit_task_to_db(title, "", "", group_id,
-					users, i, minute_id, 0)
+					users, minute_id, i, 0)
 				if not succes:
 					print message
 					return False, message
@@ -110,9 +110,13 @@ class PimpyAPI:
 		hits = regex_DONE.findall(content)
 		for done in hits:
 			query = Task.query
+			print "done =" + done
 			query = query.filter(Task.id==done)
 			list_items = query.all()
 			print list_items[0].id
+			print list_items[0].title
+			for item in list_items:
+				item.update_status(len(Task.status_meanings)-2)
 
 		return True, "awesome stuff"
 
@@ -188,7 +192,7 @@ class PimpyAPI:
 
 		list_items = {}
 
-		print "personal ", personal, " group id ", group_id
+		#print "personal ", personal, " group id ", group_id
 
 		if personal:
 			if group_id == 'all':
@@ -209,6 +213,10 @@ class PimpyAPI:
 			else:
 				query = Task.query.filter(Task.group_id==group_id)
 				list_items[Group.query.filter(Group.id==group_id).first().name] = query.all()
+
+		# remove those list items that have been set to checked and removed
+		for group_header in list_items:
+			list_items[group_header] = filter(lambda x: x.status <= 4, list_items[group_header])
 
 		return Markup(render_template('pimpy/api/tasks.htm',
 			list_items=list_items, type='tasks', group_id=group_id,
