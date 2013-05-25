@@ -1,4 +1,5 @@
 application.db
+config.py
 *.pyc
 *.jpg
 *.gif
