@@ -28,16 +28,23 @@
 		}
 
 		$(function() {
-			$.get("http://maps.googleapis.com/maps/api/geocode/json?address={{ address }}&sensor=false",
-				function(data) {
-					if (! data.results)
-						data = JSON.parse(data);
+			var loaded = false;
+
+			$("#acc").click(function() {
+				if (!loaded) {
+					$.get("http://maps.googleapis.com/maps/api/geocode/json?address={{ address }}&sensor=false",
+						function(data) {
+							if (! data.results)
+								data = JSON.parse(data);
 					
-					loc = data.results[0].geometry.location;
-					latlong = new google.maps.LatLng(loc.lat, loc.lng);
-					initialize();
+							loc = data.results[0].geometry.location;
+							latlong = new google.maps.LatLng(loc.lat, loc.lng);
+							initialize();
+						}
+					);
+					loaded = true;
 				}
-	 		);
+			});
     });
   </script>
 

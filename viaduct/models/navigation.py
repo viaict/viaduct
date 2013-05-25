@@ -51,7 +51,7 @@ class NavigationEntry(db.Model):
 
 					for activity in activities:
 						entry.activities.append(NavigationEntry(entry,
-								activity.name, '/activity/' + str(activity.id),
+								activity.name, '/activities/' + str(activity.id),
 								False, False, 0))
 
 					print(entry.activities)
