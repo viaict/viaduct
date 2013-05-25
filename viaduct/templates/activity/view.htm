@@ -1,4 +1,4 @@
-{% from "macros/pagination.htm" import render_pagination %}
+{% from "macros/activity_pagination.htm" import render_activity_pagination %}
 
 {% extends "content.htm" %}
 
@@ -6,25 +6,25 @@
 
 <div class="btn-group">
 	{% if current_user and current_user.email == "administrator@svia.nl" %}
-		<a href="/activities/activity/create/" class="btn btn-success">Create</a>
+		<a href="/activities/create/" class="btn btn-success">Create</a>
 	{% endif %}
 
 	<a href="/activities/" class="btn">Toon aankomende activiteiten</a>
-	<a href="/past_activities/" class="btn">Toon activiteiten in het archief</a>
+	<a href="/activities/archive/" class="btn">Toon activiteiten in het archief</a>
 </div>
 
 {% for activity in activities.items %}
 
 <div class="activity-block row-fluid">
 	<div class="span4">
-		<a href="/activities/activity/{{ activity.id }}">
+		<a href="/activities/{{ activity.id }}">
 			<img src="/static/activity_pictures/{{ activity.picture }}">
 		</a>
 	</div>
 
 	<div class="span8">
 		<h1>
-			<a href="/activities/activity/{{ activity.id }}">
+			<a href="/activities/{{ activity.id }}">
 				{{activity.name}}
 			</a>
 		</h1>
@@ -53,6 +53,6 @@
 
 <hr>
 
-	{{ render_pagination(activities, 'activity.view') }}
+	{{ render_activity_pagination(activities, 'activity.view', archive) }}
 {% endblock %}
 

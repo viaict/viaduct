@@ -168,7 +168,7 @@ nav_nav = NavigationEntry(nav_admin, 'Navigatie', '/navigation', False, False, 1
 db.session.add(nav_nav)
 db.session.commit()
 
-nav_activity = NavigationEntry(None, 'Activiteiten', '/activities', False, False, 4)
+nav_activity = NavigationEntry(None, 'Activiteiten', '/activities', False, True, 4)
 db.session.add(nav_activity)
 db.session.commit()
 
