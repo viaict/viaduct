@@ -4,6 +4,11 @@
 		<a href="{{ url_for('navigation.edit', entry_id=entry.id) }}">
 			{{ entry.title }}
 		</a>
+
+		<a class="btn btn-success" href="{{ url_for('navigation.edit', parent_id=entry.id) }}">
+			Voeg kind navigatie item toe
+		</a>
+
 		<ul class="sortable">
 			<li class="leave-alone"></li>
 			{% for child in entry.children %}
