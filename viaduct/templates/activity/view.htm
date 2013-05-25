@@ -4,6 +4,15 @@
 
 {%block content %}
 
+<div class="btn-group">
+	{% if current_user and current_user.email == "administrator@svia.nl" %}
+		<a href="/activities/activity/create/" class="btn btn-success">Create</a>
+	{% endif %}
+
+	<a href="/activities/" class="btn">Toon aankomende activiteiten</a>
+	<a href="/past_activities/" class="btn">Toon activiteiten in het archief</a>
+</div>
+
 {% for activity in activities.items %}
 
 <div class="activity-block row-fluid">
@@ -43,12 +52,6 @@
 {% endfor %}
 
 <hr>
-
-{% if current_user and current_user.email == "administrator@svia.nl" %}
-<div class="btn-group">
-	<a href="/activities/activity/create/" class="btn">Create</a>
-</div>
-{% endif %}
 
 	{{ render_pagination(activities, 'activity.view') }}
 {% endblock %}

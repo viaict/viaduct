@@ -22,8 +22,19 @@ def allowed_file(filename):
 @blueprint.route('/activities/<int:page>/', methods=['GET', 'POST'])
 def view(page=1):
 	activities = Activity.query \
+		.filter(Activity.end_time > datetime.datetime.now()) \
+		.order_by(Activity.start_time.asc()) \
+		.paginate(page, 12, False)
+
+	return render_template('activity/view.htm', activities=activities)
+
+@blueprint.route('/past_activities/', methods=['GET', 'POST'])
+@blueprint.route('/past_activities/<int:page>/', methods=['GET', 'POST'])
+def past_view(page=1):
+	activities = Activity.query \
+		.filter(Activity.start_time < datetime.datetime.now()) \
 		.order_by(Activity.start_time.desc()) \
-		.paginate(page, 15, False)
+		.paginate(page, 12, False)
 
 	return render_template('activity/view.htm', activities=activities)
 
@@ -52,6 +63,7 @@ def create(activity_id=None):
 		valid_form = True
 
 		owner_id		= current_user.id
+
 		name				= form.name.data
 		description	= form.description.data
 
@@ -83,14 +95,6 @@ def create(activity_id=None):
 			picture = "yolo.png"
 	
 		venue	= 1 # Facebook ID location, not used yet
-
-		if not name:
-			flash('No activity name has been specified.', 'error')
-			valid_form = False
-
-		if not description:
-			flash('The activity requires a description.', 'error')
-			valid_form = False
 
 		if valid_form:
 			activity.name = name 
