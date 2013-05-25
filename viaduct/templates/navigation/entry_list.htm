@@ -1,4 +1,5 @@
 {% macro render_entry_list(entry) %}
+
 	<li data-entry-id="{{ entry.id }}">
 		<a href="{{ url_for('navigation.edit', entry_id=entry.id) }}">
 			{{ entry.title }}

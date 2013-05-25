@@ -22,7 +22,7 @@ def view():
 
 	entries = NavigationEntry.get_entries()
 
-	return render_template('navigation/view.htm', entries=entries)
+	return render_template('navigation/view.htm', nav_entries=entries)
 
 @blueprint.route('/navigation/create', methods=['GET', 'POST'])
 @blueprint.route('/navigation/edit/<int:entry_id>', methods=['GET', 'POST'])
