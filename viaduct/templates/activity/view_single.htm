@@ -6,7 +6,7 @@
 
 <div class="page-header">
 	{% if current_user and current_user.email == "administrator@svia.nl" %}
-	<a href="/activities/activity/edit/{{ activity.id }}" class="btn btn-warning pull-right">
+	<a href="/activities/edit/{{ activity.id }}" class="btn btn-warning pull-right">
 		<i class="icon-pencil"></i> Edit
 	</a>
 	{% endif %}

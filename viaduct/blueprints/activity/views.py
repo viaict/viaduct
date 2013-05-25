@@ -19,32 +19,29 @@ def allowed_file(filename):
 
 # Overview of activities
 @blueprint.route('/activities/', methods=['GET', 'POST'])
-@blueprint.route('/activities/<int:page>/', methods=['GET', 'POST'])
-def view(page=1):
-	activities = Activity.query \
-		.filter(Activity.end_time > datetime.datetime.now()) \
-		.order_by(Activity.start_time.asc()) \
-		.paginate(page, 12, False)
+@blueprint.route('/activities/<string:archive>/', methods=['GET', 'POST'])
+@blueprint.route('/activities/page/<int:page>', methods=['GET', 'POST'])
+@blueprint.route('/activities/<string:archive>/page/<int:page>', methods=['GET', 'POST'])
+def view(archive="", page=1):
 
-	return render_template('activity/view.htm', activities=activities)
+	if archive == "archive":
+		activities = Activity.query \
+			.filter(Activity.start_time < datetime.datetime.now()) \
+			.order_by(Activity.start_time.desc())
+	else :
+		activities = Activity.query \
+			.filter(Activity.end_time > datetime.datetime.now()) \
+			.order_by(Activity.start_time.asc())
 
-@blueprint.route('/past_activities/', methods=['GET', 'POST'])
-@blueprint.route('/past_activities/<int:page>/', methods=['GET', 'POST'])
-def past_view(page=1):
-	activities = Activity.query \
-		.filter(Activity.start_time < datetime.datetime.now()) \
-		.order_by(Activity.start_time.desc()) \
-		.paginate(page, 12, False)
+	return render_template('activity/view.htm', activities=activities.paginate(page, 2, False), archive=archive)
 
-	return render_template('activity/view.htm', activities=activities)
-
-@blueprint.route('/activities/activity/<int:activity_id>', methods=['GET', 'POST'])
+@blueprint.route('/activities/<int:activity_id>', methods=['GET', 'POST'])
 def get_activity(activity_id = 0):
 	activity = Activity.query.filter(Activity.id == activity_id).first()
 	return render_template('activity/view_single.htm', activity=activity)
 
-@blueprint.route('/activities/activity/create/', methods=['GET', 'POST'])
-@blueprint.route('/activities/activity/edit/<int:activity_id>', methods=['GET', 'POST'])
+@blueprint.route('/activities/create/', methods=['GET', 'POST'])
+@blueprint.route('/activities/edit/<int:activity_id>', methods=['GET', 'POST'])
 def create(activity_id=None):
 	if not current_user or current_user.email != 'administrator@svia.nl':
 		return abort(403)
