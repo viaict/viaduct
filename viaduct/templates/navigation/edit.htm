@@ -4,8 +4,6 @@
 
 {% block content %}
 
-	<p><a href="{{ url_for('navigation.view') }}">Terug</a></p>
-	
 	<form action="" method="post" name="edit_navigation_entry">
 		<fieldset>
 			<legend>
@@ -23,8 +21,9 @@
 			{{ render_checkbox(form.external) }}
 			{{ render_checkbox(form.activity_list) }}
 
-			{{ render_button(form.submit)}}
+			<input type="hidden" name="parent_id" value="{{ request.args.get("parent_id") }}">
 
+			{{ render_button(form.submit)}}
 		</fieldset>
 	</form>
 
