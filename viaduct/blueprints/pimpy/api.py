@@ -67,7 +67,7 @@ class PimpyAPI:
 		try:
 			deadline = datetime.datetime.strptime(deadline, DATE_FORMAT)
 		except:
-			if deadline != "" and date != None:
+			if deadline != "":
 				return False, "Could not parse the deadline"
 			deadline = None
 
