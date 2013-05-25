@@ -1,0 +1,57 @@
+{% from "macros/pagination.htm" import render_pagination %}
+
+{% extends "base.htm" %}
+
+{% block title %}Tentamens{% endblock %}
+
+{%block page %}
+	<fieldset>
+		<legend>Tentamens</legend>
+
+		<div class="row">
+		  <div class="span12">
+		    <form method="get" action="" enctype=multipart/form-data class="form-inline" >
+		      <input name="search" id="search" class="span5" type="text"  placeholder="Zoek op titel, vak of opleiding" value="{{search}}" onkeypress="searchKeyPress(event);"></input>
+		      <button type="submit" class="btn btn-primary"> <i class="icon-search icon-white" id="submit"></i></button>
+		    </form>
+		  </div>
+		</div>
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th>Tentamen</th>
+					<th>Vak</th>
+					<th>Opleiding</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{% for examination in examinations %}
+					<tr>
+						<td>
+							<a href="{{ (path + examination.path) }}" target="_blank">{{ examination.title }}</a>
+						</td>
+						<td>
+							<a href="?search={{ (examination.course.name) }}">{{ examination.course.name }}</a>
+						</td>
+						<td>
+							<a href="?search={{ (examination.education.name) }}">{{ examination.education.name }}</a>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</fieldset>
+<script>
+function searchKeyPress(e)
+{
+    // look for window.event in case event isn't passed in
+    if (typeof e == 'undefined' && window.event) { e = window.event; }
+    if (e.keyCode == 13)
+    {
+        document.getElementById('submit').click();
+    }
+}
+</script>
+
+{% endblock %}
