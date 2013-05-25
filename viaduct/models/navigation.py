@@ -1,6 +1,7 @@
 from viaduct import db
 from viaduct.blueprints.activity.models import Activity
 
+import inspect
 import datetime
 
 class NavigationEntry(db.Model):
@@ -33,20 +34,26 @@ class NavigationEntry(db.Model):
 				self.parent_id, self.title, self.url, self.external)
 
 	@classmethod
-	def get_entries(cls):
+	def get_entries(cls, inc_activities=False):
 		entries = db.session.query(cls).filter_by(parent_id=None)\
 				.order_by(cls.position).all()
 
-		# Fill in activity lists.
-		for entry in entries:
-			if entry.activity_list:
-				entry.children = []
-				activities = db.session.query(Activity)\
-						.filter(Activity.end_time > datetime.datetime.now())\
-						.all()
+		# print inspect.getframeinfo(inspect.currentframe().f_back)[2]
 
-				for activity in activities:
-					entry.children.append(NavigationEntry(entry, activity.name,
-							'/activity/' + str(activity.id), False, False))
+		# Fill in activity lists.
+		if inc_activities:
+			for entry in entries:
+				if entry.activity_list:
+					entry.activities = []
+					activities = db.session.query(Activity)\
+							.filter(Activity.end_time > datetime.datetime.now())\
+							.all()
+
+					for activity in activities:
+						entry.activities.append(NavigationEntry(entry,
+								activity.name, '/activities/' + str(activity.id),
+								False, False, 0))
+
+					print(entry.activities)
 
 		return entries

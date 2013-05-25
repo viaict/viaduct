@@ -1,4 +1,5 @@
 {% from "macros/flash.htm" import render_flash %}
+{% from "macros/form.htm" import render_button %}
 
 {% extends "content.htm" %}
 
@@ -6,6 +7,8 @@
 <form action="" method="post" name="history">
 	<fieldset>
 		<legend>Page History</legend>
+
+		{{ form.csrf_token }}
 
 		<table class="table table-bordered table-striped">
 			<thead>
@@ -19,19 +22,20 @@
 			</thead>
 
 			<tbody>
-				{% for revision in revisions %}
+				{% for revision, previous, current in revisions %}
 					<tr>
 						<td>{{ revision.id }}</td>
 						<td>{{ revision.comment }}</td>
 						<td>{{ revision.author.first_name }} {{ revision.author.last_name }}</td>
-						<td></td>
-						<td></td>
+						<td>{{ previous }}</td>
+						<td>{{ current }}</td>
 					</tr>
 				{% endfor %}
 			</tbody>
 		</table>
-{% for revision in revisions %}
 
-{% endfor %}
+		{{ render_button(form.compare) }}
+	</fieldset>
+</form>
 {% endblock %}
 

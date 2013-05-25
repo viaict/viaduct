@@ -6,11 +6,14 @@ from models import Task, Minute
 from viaduct.blueprints.group.models import Group
 from viaduct.blueprints.user.models import User
 
-from viaduct import db
+from viaduct import db, application
 
 
 import datetime
+import re
 
+
+DATE_FORMAT = application.config['DATE_FORMAT']
 
 class PimpyAPI:
 
@@ -24,9 +27,21 @@ class PimpyAPI:
 		In case of succes the minute is entered into the database
 		"""
 
-		date = datetime.datetime.strptime(date, "%m/%d/%Y")
+		try:
+			date = datetime.datetime.strptime(date, DATE_FORMAT)
+		except:
+			if date != "":
+				return False, "Could not parse the date"
+			date = None
 
-		return False, "because I said so"
+		minute = Minute(content, group_id, date)
+		db.session.add(minute)
+		db.session.commit()
+
+		if parse_tasks:
+			PimpyAPI.parse_minute(content, group_id, minute.id)
+
+		return True, "jaja"
 
 
 	@staticmethod
@@ -50,13 +65,57 @@ class PimpyAPI:
 		if not users:
 			return False, message
 
-		deadline = datetime.datetime.strptime(deadline, "%m/%d/%Y")
+		try:
+			deadline = datetime.datetime.strptime(deadline, DATE_FORMAT)
+		except:
+			if deadline != "":
+				return False, "Could not parse the deadline"
+			deadline = None
 
 		task = Task(name, content, deadline, group_id,
 				users, line, minute_id, status)
 		db.session.add(task)
 		db.session.commit()
 		return True, "jaja"
+
+	@staticmethod
+	def parse_minute(content, group_id, minute_id):
+		"""
+		Parses the specified minutes for tasks and adds them to the database.
+
+		syntax within the content:
+		ACTIE <name_1>, <name_2>, name_n>: <title of task>
+		or
+		TODO <name_1>, <name_2>, name_n>: <title of task>
+
+		Returns succes (boolean), message (string). Message is irrelevant if
+		success is true, otherwise it contains what exactly went wrong.
+		"""
+
+		regex_TODO = re.compile("\s*[ACTIE|TODO] ([^\n\r]*)")
+		for i, line in enumerate(content.splitlines()):
+			actions = regex_TODO.findall(line)
+			print actions
+			for action in actions:
+				users, title = action.split(":")
+				print users
+				print title
+				succes, message = PimpyAPI.commit_task_to_db(title, "", "", group_id,
+					users, i, minute_id, 0)
+				if not succes:
+					print message
+					return False, message
+
+		regex_DONE = re.compile("\s*DONE:? ([^\n\r]*)")
+		hits = regex_DONE.findall(content)
+		for done in hits:
+			query = Task.query
+			query = query.filter(Task.id==done)
+			list_items = query.all()
+			print list_items[0].id
+
+		return True, "awesome stuff"
+
 
 	@staticmethod
 	def get_list_of_users_from_string(group, comma_sep):
@@ -67,9 +126,6 @@ class PimpyAPI:
 		Returns users, message. Users is false if there is something wrong,
 		in which case the message is stated in message, otherwise message
 		equals "" and users is the list of matched users
-
-		Should, in the future, return specific error messages when the
-		matching fails.
 		"""
 
 		if comma_sep == None:
@@ -84,15 +140,11 @@ class PimpyAPI:
 		user_names = map(lambda x: "%s %s" % (x.first_name.lower().strip(), x.last_name.lower().strip()), users)
 
 		for comma_sep_user in comma_sep:
-			print "comma sep user: ", comma_sep_user
 
 			for i in range(len(users)):
-				print "user name:", user_names[i]
 
 				# could use a filter here, but meh
 				if user_names[i].startswith(comma_sep_user):
-					print "Found %s matchin' with %s" % (comma_sep_user,
-						user_names[i])
 					found_users.append(users[i])
 
 			if len(found_users) == 0:
@@ -104,7 +156,6 @@ class PimpyAPI:
 
 	@staticmethod
 	def check_user_is_logged_in():
-		print "_%s_ _%s_ _%s_ _%s_" % (current_user.first_name, current_user.last_name, current_user.email, current_user.is_authenticated())
 		if not current_user.is_authenticated():
 			abort(401)
 		return ""
@@ -135,25 +186,29 @@ class PimpyAPI:
 	def get_tasks(group_id, personal):
 		# TODO: only return tasks with status != completed
 
-		list_items = []
+		list_items = {}
 
+		print "personal ", personal, " group id ", group_id
 
 		if personal:
-			query = current_user.tasks
 			if group_id == 'all':
-				list_items.extend(query.all())
+				for group in current_user.groups:
+					# this should be done in one query, but meh
+					items = []
+					for task in group.tasks:
+						if current_user in task.users:
+							items.append(task)
+					list_items[group.name] = items
 			else:
-				query = query.filter(Task.group_id==group_id)
-				list_items.extend(query.all())
+				query = Task.query.filter(Task.group_id==group_id)
+				list_items[Group.query.filter(Group.id==group_id).first().name] = query.all()
 		else:
 			if group_id == 'all':
-				groups = current_user.groups
-				for group in groups:
-					list_items.extend(group.tasks.all())
+				for group in current_user.groups:
+					list_items[group.name] = group.tasks
 			else:
-				query = current_user.tasks
-				query = query.filter(Task.group_id==group_id)
-				list_items.extend(query.all())
+				query = Task.query.filter(Task.group_id==group_id)
+				list_items[Group.query.filter(Group.id==group_id).first().name] = query.all()
 
 		return Markup(render_template('pimpy/api/tasks.htm',
 			list_items=list_items, type='tasks', group_id=group_id,
@@ -161,12 +216,15 @@ class PimpyAPI:
 
 	@staticmethod
 	def get_minutes(group_id):
-		list_items = []
+		list_items = {}
 
-		query = Minute.query
 		if group_id != 'all':
-			query = query.filter(Minute.group_id==group_id)
-		list_items.extend(query.all())
+			query = Minute.query.filter(Minute.group_id==group_id)
+			list_items[Group.query.filter(Group.id==group_id).first().name] = query.all()
+		# this should be done with a sql in statement, or something, but meh
+		else:
+			for group in current_user.groups:
+				list_items[group.name] = Minute.query.filter(Minute.group_id==group.id).all()
 
 		return Markup(render_template('pimpy/api/minutes.htm',
 			list_items=list_items, type='minutes', group_id=group_id))
@@ -176,9 +234,10 @@ class PimpyAPI:
 		"""
 		Loads (and thus views) specifically one minute
 		"""
-		query = Minute.query
-		query = query.filter(Minute.id==minute_id)
-		list_items = query.all()
+		list_items = {}
+		query = Minute.query.filter(Minute.id==minute_id)
+		group = Group.query.filter(Group.id==group_id).first()
+		list_items[group.name] = query.all()
 
 		return Markup(render_template('pimpy/api/minutes.htm',
 			list_items=list_items, type='minutes', group_id=group_id))

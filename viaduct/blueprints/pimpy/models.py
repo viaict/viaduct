@@ -1,6 +1,7 @@
 from viaduct import db
 import datetime
 
+
 # many to many relationship tables
 task_group = db.Table('pimpy_task_group',
 	db.Column('task_id', db.Integer, db.ForeignKey('pimpy_task.id')),
@@ -35,7 +36,7 @@ class Task(db.Model):
 	status = db.Column(db.Integer)
 
 	status_meanings = ["not started", "started", "done", "checked", "not done", "removed"]
-	status_colors = ["btn-info", "btn-warning", "btn-succes", "btn-succes", "btn-danger", "btn-inverse"]
+	status_colors = ["btn-info", "btn-warning", "btn-success", "btn-success", "btn-danger", "btn-inverse"]
 
 	def __init__(self, title, content, deadline, group_id, users,
 				minute_id, line, status):
@@ -49,6 +50,9 @@ class Task(db.Model):
 		self.status = status
 
 
+	def get_task_id(self):
+		return self.id
+
 	def get_status_string(self):
 		"""
 		Returns a string representing the status
@@ -57,6 +61,10 @@ class Task(db.Model):
 			return self.status_meanings[self.status]
 		return "unknown"
 
+	def update_status(self, status):
+		if status >= 0 and status <= len(self.status_meanings):
+			self.status = status
+
 	def get_status_color(self):
 		"""
 		Returns a string representing the status
@@ -64,6 +72,13 @@ class Task(db.Model):
 		if self.status >= 0 and self.status < len(self.status_colors):
 			return self.status_colors[self.status]
 		return "unknown"
+
+	@staticmethod
+	def get_status_meanings():
+		statusi = [[]]
+		for i in range(0, len(Task.status_meanings)):
+			statusi.append([Task.status_meanings[i], Task.status_colors[i]])
+		return statusi
 
 	def get_users(self):
 		"""

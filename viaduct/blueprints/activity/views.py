@@ -19,21 +19,29 @@ def allowed_file(filename):
 
 # Overview of activities
 @blueprint.route('/activities/', methods=['GET', 'POST'])
-@blueprint.route('/activities/<int:page>/', methods=['GET', 'POST'])
-def view(page=1):
-	activities = Activity.query \
-		.order_by(Activity.start_time.desc()) \
-		.paginate(page, 15, False)
+@blueprint.route('/activities/<string:archive>/', methods=['GET', 'POST'])
+@blueprint.route('/activities/page/<int:page>', methods=['GET', 'POST'])
+@blueprint.route('/activities/<string:archive>/page/<int:page>', methods=['GET', 'POST'])
+def view(archive="", page=1):
 
-	return render_template('activity/view.htm', activities=activities)
+	if archive == "archive":
+		activities = Activity.query \
+			.filter(Activity.start_time < datetime.datetime.now()) \
+			.order_by(Activity.start_time.desc())
+	else :
+		activities = Activity.query \
+			.filter(Activity.end_time > datetime.datetime.now()) \
+			.order_by(Activity.start_time.asc())
 
-@blueprint.route('/activities/activity/<int:activity_id>', methods=['GET', 'POST'])
+	return render_template('activity/view.htm', activities=activities.paginate(page, 12, False), archive=archive)
+
+@blueprint.route('/activities/<int:activity_id>', methods=['GET', 'POST'])
 def get_activity(activity_id = 0):
 	activity = Activity.query.filter(Activity.id == activity_id).first()
 	return render_template('activity/view_single.htm', activity=activity)
 
-@blueprint.route('/activities/activity/create/', methods=['GET', 'POST'])
-@blueprint.route('/activities/activity/edit/<int:activity_id>', methods=['GET', 'POST'])
+@blueprint.route('/activities/create/', methods=['GET', 'POST'])
+@blueprint.route('/activities/edit/<int:activity_id>', methods=['GET', 'POST'])
 def create(activity_id=None):
 	if not current_user or current_user.email != 'administrator@svia.nl':
 		return abort(403)
@@ -52,6 +60,7 @@ def create(activity_id=None):
 		valid_form = True
 
 		owner_id		= current_user.id
+
 		name				= form.name.data
 		description	= form.description.data
 
@@ -83,14 +92,6 @@ def create(activity_id=None):
 			picture = "yolo.png"
 	
 		venue	= 1 # Facebook ID location, not used yet
-
-		if not name:
-			flash('No activity name has been specified.', 'error')
-			valid_form = False
-
-		if not description:
-			flash('The activity requires a description.', 'error')
-			valid_form = False
 
 		if valid_form:
 			activity.name = name 

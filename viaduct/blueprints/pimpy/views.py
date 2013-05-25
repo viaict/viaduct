@@ -1,6 +1,6 @@
 import datetime
 
-from flask import Blueprint, abort
+from flask import Blueprint, abort, redirect, url_for
 from flask import flash, render_template, request
 from flask.ext.login import current_user
 
@@ -20,16 +20,12 @@ from viaduct.blueprints.group.models import Group
 
 blueprint = Blueprint('pimpy', __name__)
 
+#@blueprint.route('/pimpy/', methods=['GET', 'POST'])
+#def view_page():
+#	return render_template('pimpy/view_page.htm', personal=True,
+#		group_id='all', type='minutes')
+
 @blueprint.route('/pimpy/', methods=['GET', 'POST'])
-def view_page():
-	return render_template('pimpy/view_page.htm', personal=True,
-		group_id='all', type='minutes')
-
-@blueprint.route('/pimpy/minutes/', methods=['GET', 'POST'])
-@blueprint.route('/pimpy/minutes/<group_id>', methods=['GET', 'POST'])
-def view_minutes(group_id='all'):
-	return PimpyAPI.get_minutes(group_id)
-
 @blueprint.route('/pimpy/minutes/', methods=['GET', 'POST'])
 @blueprint.route('/pimpy/minutes/<group_id>', methods=['GET', 'POST'])
 def view_minutes(group_id='all'):
@@ -65,10 +61,10 @@ def add_task(group_id='all'):
 		message = ""
 		if form.name.data == "":
 			message = "Name is required"
-		elif form.content.data == "":
-			message = "More info is required"
-		elif request.form['deadline'] == "":
-			message = "Deadline is required"
+		#elif form.content.data == "":
+		#	message = "More info is required"
+		#elif request.form['deadline'] == "":
+		#	message = "Deadline is required"
 		elif form.group == "":
 			message = "Group is required"
 		elif form.users.data == "":
@@ -83,8 +79,9 @@ def add_task(group_id='all'):
 				form.status.data)
 
 		if result:
-			flash("Success! %s" % message)
-			# maybe redirect to the created task or something else
+			flash('The task is added successfully')
+			return redirect(url_for('pimpy.view_tasks', group_id=form.group.data))
+
 		else:
 			flash(message)
 
@@ -119,8 +116,8 @@ def add_minute(group_id='all'):
 				request.form['date'], form.group.data, form.parse_tasks.data)
 
 		if result:
-			flash("Success! %s" % message)
-			# maybe redirect to the created task or something else
+			flash('The minute is added successfully')
+			return redirect(url_for('pimpy.view_minutes', group_id=form.group.data))
 		else:
 			flash(message)
 
