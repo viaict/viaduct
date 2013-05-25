@@ -29,7 +29,7 @@ class AddMinuteForm(Form):
 	group = SelectField('Group', [validators.required()])
 	# FIXME: datetime is now printed badly in the actual form!!! :( :(
 	date = DateTimeField('Deadline', format=DATE_FORMAT, default=datetime.date.today())
-	parse_tasks = BooleanField('Parse')
+	parse_tasks = BooleanField('Parse', default=True)
 
 	def load_groups(self, groups):
 		#self.group.choices = map(lambda x: ("%s%d" % (x.name, x.id), x.name), groups)
