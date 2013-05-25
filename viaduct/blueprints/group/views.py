@@ -1,4 +1,5 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import abort
 from flask.ext.login import current_user
 
 from viaduct import db
