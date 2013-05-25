@@ -1,5 +1,6 @@
 body {
 	overflow-y: scroll;
+	margin-bottom:20px;
 }
 
 /* Activity-block (activities) */
@@ -10,7 +11,9 @@ body {
 }
 
 .activity-block img {
-	max-height:230px;
+	height:186px;
+	width:auto;
+	max-width:220px;
 }
 
 .activity-block h1 {
