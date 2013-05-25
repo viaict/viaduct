@@ -6,7 +6,12 @@
 			<h1> {{ group_header }} </h1>
 			{% for list_item in list_items[group_header]: %}
 				<div class="btn-group" style="margin-bottom: 8px;">
-					<button class="btn {{ list_item.get_status_color() }}"> {{ list_item.get_task_id() }} </button>
+					<button class="btn dropdown-toggle {{ list_item.get_status_color() }} " data-toggle="dropdown" href="#"> {{ list_item.get_task_id() }} </button>
+					<ul class="dropdown-menu">
+						{% for status_meaning in list_item.get_status_meanings(): %}
+							<li><a class="{{ status_meaning[1] }} "> {{ status_meaning[0] }}</a></li>
+						{% endfor %}
+					</ul>
 					<button class="btn">{{ list_item.title }}</button>
 					<button class="btn"> {{ list_item.get_users() }} </button>
 					<button class="btn" data-toggle="collapse" data-target='#{{ list_item.id }}'>
