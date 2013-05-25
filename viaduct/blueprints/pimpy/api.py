@@ -186,25 +186,29 @@ class PimpyAPI:
 	def get_tasks(group_id, personal):
 		# TODO: only return tasks with status != completed
 
-		list_items = []
+		list_items = {}
 
 		print "personal ", personal, " group id ", group_id
 
 		if personal:
-			query = current_user.tasks
 			if group_id == 'all':
-				list_items.extend(query.all())
-			else:
-				query = query.filter(Task.group_id==group_id)
-				list_items.extend(query.all())
-		else:
-			if group_id == 'all':
-				groups = current_user.groups
-				for group in groups:
-					list_items.extend(group.tasks.all())
+				for group in current_user.groups:
+					# this should be done in one query, but meh
+					items = []
+					for task in group.tasks:
+						if current_user in task.users:
+							items.append(task)
+					list_items[group.name] = items
 			else:
 				query = Task.query.filter(Task.group_id==group_id)
-				list_items.extend(query.all())
+				list_items[Group.query.filter(Group.id==group_id).first().name] = query.all()
+		else:
+			if group_id == 'all':
+				for group in current_user.groups:
+					list_items[group.name] = group.tasks
+			else:
+				query = Task.query.filter(Task.group_id==group_id)
+				list_items[Group.query.filter(Group.id==group_id).first().name] = query.all()
 
 		return Markup(render_template('pimpy/api/tasks.htm',
 			list_items=list_items, type='tasks', group_id=group_id,
@@ -212,15 +216,15 @@ class PimpyAPI:
 
 	@staticmethod
 	def get_minutes(group_id):
-		list_items = []
+		list_items = {}
 
 		if group_id != 'all':
 			query = Minute.query.filter(Minute.group_id==group_id)
-			list_items.extend(query.all())
+			list_items[Group.query.filter(Group.id==group_id).first().name] = query.all()
 		# this should be done with a sql in statement, or something, but meh
 		else:
 			for group in current_user.groups:
-				list_items.extend(Minute.query.filter(Minute.group_id==group.id).all())
+				list_items[group.name] = Minute.query.filter(Minute.group_id==group.id).all()
 
 		return Markup(render_template('pimpy/api/minutes.htm',
 			list_items=list_items, type='minutes', group_id=group_id))
@@ -230,9 +234,10 @@ class PimpyAPI:
 		"""
 		Loads (and thus views) specifically one minute
 		"""
-		query = Minute.query
-		query = query.filter(Minute.id==minute_id)
-		list_items = query.all()
+		list_items = {}
+		query = Minute.query.filter(Minute.id==minute_id)
+		group = Group.query.filter(Group.id==group_id).first()
+		list_items[group.name] = query.all()
 
 		return Markup(render_template('pimpy/api/minutes.htm',
 			list_items=list_items, type='minutes', group_id=group_id))
