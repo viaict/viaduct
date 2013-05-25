@@ -46,6 +46,9 @@ def upload_file():
 	courses =  Course.query.all()
 	educations =  Education.query.all()
 
+	import os
+	print os.getcwd()
+
 	if request.method == 'POST':
 		file = request.files['file']
 		title = request.form.get("title", None)
