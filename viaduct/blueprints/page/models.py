@@ -54,7 +54,7 @@ class PageRevision(db.Model):
 	author = db.relationship('User', backref=db.backref('page_edits',
 		lazy='dynamic'))
 
-	def __init__(self, page, author, title, content, comment, filter_html=True,
+	def __init__(self, page, author, title, content, comment="", filter_html=True,
 			timestamp=datetime.datetime.utcnow()):
 		self.title = title
 		self.content = content

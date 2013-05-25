@@ -15,19 +15,15 @@ from werkzeug import secure_filename
 
 blueprint = Blueprint('examination', __name__)
 
-UPLOAD_FOLDER = '/home/bram/via_ict/viaduct/viaduct/static'
+UPLOAD_FOLDER = application.config['EXAMINATION_UPLOAD_FOLDER']
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-
-
-application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
 	return '.' in filename and \
 		filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 def file_exists(filename):
-	return os.path.exists(os.path.join(application.config['UPLOAD_FOLDER'], 
-		filename))
+	return os.path.exists(os.path.join(UPLOAD_FOLDER, filename))
 
 def create_unique_file(filename):
 	temp_filename = filename
@@ -69,7 +65,7 @@ def upload_file():
 			filename = secure_filename(file.filename)
 			filename = create_unique_file(filename)
 
-			file.save(os.path.join(application.config['UPLOAD_FOLDER'], filename))
+			file.save(os.path.join(UPLOAD_FOLDER, filename))
 			exam = Examination(filename, title,  course_id, education_id)
 			db.session.add(exam)
 			db.session.commit()
@@ -86,7 +82,7 @@ def upload_file():
 
 @blueprint.route('/examination/', methods=['GET', 'POST'])
 def view_examination():
-	path = '../static/'
+	path = application.config['EXAMINATION_UPLOAD_FOLDER']
 
 	if request.args.get('search') != None:
 		search = request.args.get('search')
@@ -109,7 +105,8 @@ def examination_admin():
 	if not current_user or current_user.email != 'administrator@svia.nl':
 		return abort(403)
 
-	path = '../static/'
+	#path = '../static/'
+	path2 = 'viaduct.svia.nl/uploads/examinations/02.pdf'
 
 	if request.args.get('search') != None:
 		search = request.args.get('search')
@@ -118,14 +115,14 @@ def examination_admin():
 				Course.name.like('%' + search + '%'), 
 				Education.name.like('%' + search + '%'))).all()
 		print search
-		return render_template('examination/admin.htm', path = path, 
+		return render_template('examination/admin.htm', path = path2, 
 			examinations = examinations, search=search, message="")
 
 	if request.args.get('delete') != None:
 		exam_id = request.args.get('delete')
 		examination =  Examination.query.filter(Examination.id == exam_id).first()
 
-		os.remove(os.path.join(application.config['UPLOAD_FOLDER'], 
+		os.remove(os.path.join(UPLOAD_FOLDER, 
 		examination.path))
 		title = examination.title
 		db.session.delete(examination)
@@ -139,8 +136,7 @@ def examination_admin():
 		exam_id = request.args.get('edit')
 		examination = Examination.query.filter(Examination.id == exam_id).first()
 
-		os.remove(os.path.join(application.config['UPLOAD_FOLDER'], 
-		examination.path))
+		os.remove(os.path.join(UPLOAD_FOLDER, examination.path))
 		db.session.delete(examination)
 		db.session.commit()
 
@@ -178,11 +174,10 @@ def edit_examination():
 					filename = secure_filename(file.filename)
 					filename = create_unique_file(filename)
 
-					os.remove(os.path.join(application.config['UPLOAD_FOLDER'], 
+					os.remove(os.path.join(UPLOAD_FOLDER, 
 							examination.path))
 
-					file.save(os.path.join(application.config['UPLOAD_FOLDER'], 
-						filename))
+					file.save(os.path.join(UPLOAD_FOLDER, filename))
 
 					examination.path = filename
 				else:
