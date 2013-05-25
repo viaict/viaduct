@@ -55,6 +55,7 @@ body {
 .logo.pimpy {
 	float: right;
 	margin-top: 13px;
+	height: 100px;
 }
 
 .sponsor {
