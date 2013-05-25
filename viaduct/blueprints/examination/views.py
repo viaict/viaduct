@@ -44,6 +44,9 @@ def create_unique_file(filename):
 
 @blueprint.route('/examination/add', methods=['GET', 'POST'])
 def upload_file():
+	if not current_user or current_user.email != 'administrator@svia.nl':
+		return abort(403)
+
 	courses =  Course.query.all()
 	educations =  Education.query.all()
 
@@ -103,6 +106,9 @@ def view_examination():
 
 @blueprint.route('/examination/admin', methods=['GET', 'POST'])
 def examination_admin():
+	if not current_user or current_user.email != 'administrator@svia.nl':
+		return abort(403)
+
 	path = '../static/'
 
 	if request.args.get('search') != None:
@@ -144,6 +150,9 @@ def examination_admin():
 
 @blueprint.route('/examination/edit', methods=['GET', 'POST'])
 def edit_examination():
+	if not current_user or current_user.email != 'administrator@svia.nl':
+		return abort(403)
+
 	path = '../static/'
 
 	courses =  Course.query.all()
@@ -205,6 +214,9 @@ def edit_examination():
 
 @blueprint.route('/course/add', methods=['GET', 'POST'])
 def add_course():
+	if not current_user or current_user.email != 'administrator@svia.nl':
+		return abort(403)
+
 	if request.method == 'POST':
 		course = request.form.get("course", None)
 		discription = request.form.get("discription", None)
@@ -217,6 +229,9 @@ def add_course():
 
 @blueprint.route('/education/add', methods=['GET', 'POST'])
 def add_education():
+	if not current_user or current_user.email != 'administrator@svia.nl':
+		return abort(403)
+		
 	if request.method == 'POST':
 		education = request.form.get("education", None)
 		new_education = Education(1, education)
