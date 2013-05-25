@@ -32,8 +32,8 @@ def delete_page(page_path='', revision=''):
 	db.session.commit()
 	return redirect('/')
 
-#@blueprint.route('/edit/', methods=['GET', 'POST'])
-#@blueprint.route('/edit/<path:path>', methods=['GET', 'POST'])
+@blueprint.route('/edit/', methods=['GET', 'POST'])
+@blueprint.route('/edit/<path:path>', methods=['GET', 'POST'])
 def edit_page(path=''):
 	rights = PagePermission.get_user_rights(current_user, path)
 

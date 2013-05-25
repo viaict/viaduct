@@ -38,8 +38,6 @@ class NavigationEntry(db.Model):
 		entries = db.session.query(cls).filter_by(parent_id=None)\
 				.order_by(cls.position).all()
 
-		# print inspect.getframeinfo(inspect.currentframe().f_back)[2]
-
 		# Fill in activity lists.
 		if inc_activities:
 			for entry in entries:
@@ -53,7 +51,5 @@ class NavigationEntry(db.Model):
 						entry.activities.append(NavigationEntry(entry,
 								activity.name, '/activities/' + str(activity.id),
 								False, False, 0))
-
-					print(entry.activities)
 
 		return entries
