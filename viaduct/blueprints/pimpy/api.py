@@ -31,14 +31,14 @@ class PimpyAPI:
 			date = datetime.datetime.strptime(date, DATE_FORMAT)
 		except:
 			return False, "Could not parse the date"
-		
+
 
 		minute = Minute(content, group_id, date)
 		db.session.add(minute)
 		db.session.commit()
 
 		if parse_tasks:
-			parse_minute(content, group_id, minute_id)
+			PimpyAPI.parse_minute(content, group_id, minute.id)
 
 		return True, "jaja"
 
@@ -67,7 +67,9 @@ class PimpyAPI:
 		try:
 			deadline= datetime.datetime.strptime(date, DATE_FORMAT)
 		except:
-			return False, "Could not parse the deadline"
+			print "could not parse the deadline"
+			deadline = 0
+			#return False, "Could not parse the deadline"
 
 
 		task = Task(name, content, deadline, group_id,
@@ -91,16 +93,19 @@ class PimpyAPI:
 		"""
 
 		regex = re.compile("\s*[ACTIE|TODO] ([^\n\r]*)")
-		for i, line in enumerate(content):
+		for i, line in enumerate(content.splitlines()):
 			actions = regex.findall(line)
+			print actions
 			for action in actions:
 				users, title = action.split(":")
-				succes, message = PimpyAPI.commit_task_to_db(title, "", "", group_id,
+				print users
+				print title
+				succes, message = PimpyAPI.commit_task_to_db(title, "", "2013-05-31", group_id,
 					users, i, minute_id, 0)
 				if not succes:
-					return false, message
+					return False, message
 
-		return true, "awesome stuff"
+		return True, "awesome stuff"
 
 
 	@staticmethod
