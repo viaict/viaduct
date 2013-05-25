@@ -92,10 +92,10 @@ class PimpyAPI:
 		success is true, otherwise it contains what exactly went wrong.
 		"""
 
-		regex_TODO = re.compile("\s*[ACTIE|TODO] ([^\n\r]*)")
+		regex = re.compile("\s*(?:ACTIE|TODO) ([^\n\r]*)")
 		for i, line in enumerate(content.splitlines()):
-			actions = regex_TODO.findall(line)
-			print actions
+			actions = regex.findall(line)
+			print "actions",actions
 			for action in actions:
 				users, title = action.split(":")
 				print users
@@ -106,7 +106,7 @@ class PimpyAPI:
 					print message
 					return False, message
 
-		regex_DONE = re.compile("\s*DONE:? ([^\n\r]*)")
+		regex_DONE = re.compile("\s*DONE? ([^\n\r]*)")
 		hits = regex_DONE.findall(content)
 		for done in hits:
 			query = Task.query
