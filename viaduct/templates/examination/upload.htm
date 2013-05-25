@@ -1,0 +1,33 @@
+{% from "macros/pagination.htm" import render_pagination %}
+
+{% extends "base.htm" %}
+
+{% block title %}Tentamens{% endblock %}
+
+{%block page %}
+	<fieldset>
+		<legend>Upload een nieuw tentamen</legend>
+		{{message}}
+		<form action="" method=post enctype=multipart/form-data>
+			titel </br>
+			<input type=text name=title> <br />
+			vak </br>
+			<select name=course> <br />
+				{% for course in courses %}
+					<option value="{{ course.id }}">{{course.name}}</option>
+				{% endfor %}
+			</select> 
+			<a href="../course/add" class="btn"><i class="icon-pencil"></i> <strong>nieuw</strong></a><br />
+			studie </br>
+			<select name=education> <br />
+				{% for education in educations %}
+					<option value="{{ education.id }}">{{education.name}}</option>
+				{% endfor %}
+			</select> 
+			<a href="../education/add" class="btn"><i class="icon-pencil"></i> <strong>nieuw</strong></a><br />
+		  <p><input type=file name=file>
+			 <input type=submit value=Upload>
+		</form>
+	</fieldset>
+{% endblock %}
+

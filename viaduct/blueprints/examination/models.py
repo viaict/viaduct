@@ -34,13 +34,13 @@ class Examination(db.Model):
 	# 	lazy='dynamic'))
 
 
-	def __init__(self, path, title, course, education, 
+	def __init__(self, path, title, course_id, education_id, 
 			timestamp=datetime.datetime.utcnow()):
 		self.timestamp = timestamp
 		self.path = path
 		self.title = title
-		self.course_id = course
-		self.education_id = education
+		self.course_id = course_id
+		self.education_id = education_id
 		
 	# @staticmethod
 	# def get_by_path(path):
