@@ -106,6 +106,11 @@ class PimpyAPI:
 					print message
 					return False, message
 
+		regex = re.compile("\s*DONE:? ([^\n\r]*)")
+		hits = regex.findall(content)
+		for done in hits:
+
+
 		return True, "awesome stuff"
 
 
