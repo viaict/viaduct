@@ -58,6 +58,10 @@ class Task(db.Model):
 			return self.status_meanings[self.status]
 		return "unknown"
 
+	def update_status(self, status):
+		if status >= 0 and status <= len(self.status_meanings):
+			self.status = status
+
 	def get_status_color(self):
 		"""
 		Returns a string representing the status
