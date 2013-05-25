@@ -105,7 +105,8 @@ def examination_admin():
 	if not current_user or current_user.email != 'administrator@svia.nl':
 		return abort(403)
 
-	path = '../static/'
+	#path = '../static/'
+	path2 = 'viaduct.svia.nl/uploads/examinations/02.pdf'
 
 	if request.args.get('search') != None:
 		search = request.args.get('search')
@@ -114,7 +115,7 @@ def examination_admin():
 				Course.name.like('%' + search + '%'), 
 				Education.name.like('%' + search + '%'))).all()
 		print search
-		return render_template('examination/admin.htm', path = path, 
+		return render_template('examination/admin.htm', path = path2, 
 			examinations = examinations, search=search, message="")
 
 	if request.args.get('delete') != None:
