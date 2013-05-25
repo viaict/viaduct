@@ -44,13 +44,13 @@ class NavigationEntry(db.Model):
 		if inc_activities:
 			for entry in entries:
 				if entry.activity_list:
-					entry.children = []
+					entry.activities = []
 					activities = db.session.query(Activity)\
 							.filter(Activity.end_time > datetime.datetime.now())\
 							.all()
 
 					for activity in activities:
-						entry.children.append(NavigationEntry(entry,
+						entry.activities.append(NavigationEntry(entry,
 								activity.name, '/activity/' + str(activity.id),
 								False, False, 0))
 

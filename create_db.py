@@ -1,6 +1,6 @@
 import bcrypt
 import datetime
-from viaduct import db
+from viaduct import db, application
 from viaduct.blueprints.user.models import User, UserPermission
 from viaduct.blueprints.group.models import Group, GroupPermission
 from viaduct.blueprints.page.models import Page, PagePermission, PageRevision
@@ -73,8 +73,8 @@ db.session.commit()
 
 # Add stuff for pimpystuff for pimpy
 
-user_maarten = User('maarten@maarten.mrt', 'pwd', 'Maarten', 'Inja')
-user_ed = User('ed@ed.eds', 'pwd', 'Handsome', 'Ed')
+user_maarten = User('maarten@maarten.mrt', bcrypt.hashpw('administrator', bcrypt.gensalt()), 'Maarten', 'Inja')
+user_ed = User('ed@ed.eds', bcrypt.hashpw('administrator', bcrypt.gensalt()), 'Handsome', 'Ed')
 group_first = Group('first')
 group_second = Group('second')
 

@@ -15,9 +15,11 @@
 					{{ page.title }}
 				</a>
 
-				{% if page.children %}
+				{% set children = page.activities if page.activities else page.children %}
+
+				{% if children %}
 					<ul class="nav nav-stacked nav-tabs">
-						{% for child in page.children %}
+						{% for child in children %}
 							<li>
 								<a href="{% if child.external %}http://{% endif %}{{ child.url }}"
 								{% if child.external %}target="_blank"{% endif %}>

@@ -6,10 +6,10 @@
 
 	<p><a href="{{ url_for('navigation.edit') }}">Nieuw item</a></p>
 
-	{% if entries %}
+	{% if nav_entries %}
 		<ul class="sortable" id="outer">
 			<li class="leave-alone"></li>
-			{% for entry in entries %}
+			{% for entry in nav_entries %}
 				{{ render_entry_list(entry) }}
 			{% endfor %}
 		</ul>
