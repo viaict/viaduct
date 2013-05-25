@@ -50,6 +50,9 @@ class Task(db.Model):
 		self.status = status
 
 
+	def get_task_id(self):
+		return self.id
+
 	def get_status_string(self):
 		"""
 		Returns a string representing the status
