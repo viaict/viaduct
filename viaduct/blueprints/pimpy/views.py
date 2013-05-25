@@ -80,7 +80,7 @@ def add_task(group_id='all'):
 
 		if result:
 			flash('The task is added successfully')
-			return redirect(url_for('pimpy.view_tasks', group_id=group_id))
+			return redirect(url_for('pimpy.view_tasks', group_id=form.group.data))
 
 		else:
 			flash(message)
@@ -117,7 +117,7 @@ def add_minute(group_id='all'):
 
 		if result:
 			flash('The minute is added successfully')
-			return redirect(url_for('pimpy.view_minutes', group_id=group_id))
+			return redirect(url_for('pimpy.view_minutes', group_id=form.group.data))
 		else:
 			flash(message)
 
