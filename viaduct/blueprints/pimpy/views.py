@@ -61,10 +61,10 @@ def add_task(group_id='all'):
 		message = ""
 		if form.name.data == "":
 			message = "Name is required"
-		elif form.content.data == "":
-			message = "More info is required"
-		elif request.form['deadline'] == "":
-			message = "Deadline is required"
+		#elif form.content.data == "":
+		#	message = "More info is required"
+		#elif request.form['deadline'] == "":
+		#	message = "Deadline is required"
 		elif form.group == "":
 			message = "Group is required"
 		elif form.users.data == "":
@@ -79,9 +79,9 @@ def add_task(group_id='all'):
 				form.status.data)
 
 		if result:
-			print group_id
-			return redirect(url_for('pimpy.view_minutes', group_id=group_id))
 			flash('The task is added successfully')
+			return redirect(url_for('pimpy.view_tasks', group_id=group_id))
+
 		else:
 			flash(message)
 
@@ -117,7 +117,6 @@ def add_minute(group_id='all'):
 
 		if result:
 			flash('The minute is added successfully')
-			print group_id
 			return redirect(url_for('pimpy.view_minutes', group_id=group_id))
 		else:
 			flash(message)
