@@ -30,8 +30,9 @@ class PimpyAPI:
 		try:
 			date = datetime.datetime.strptime(date, DATE_FORMAT)
 		except:
-			return False, "Could not parse the date"
-
+			if date != "":
+				return False, "Could not parse the date"
+			date = None
 
 		minute = Minute(content, group_id, date)
 		db.session.add(minute)
@@ -65,12 +66,11 @@ class PimpyAPI:
 			return False, message
 
 		try:
-			deadline= datetime.datetime.strptime(date, DATE_FORMAT)
+			deadline = datetime.datetime.strptime(deadline, DATE_FORMAT)
 		except:
-			print "could not parse the deadline"
-			deadline = 0
-			#return False, "Could not parse the deadline"
-
+			if deadline != "" and date != None:
+				return False, "Could not parse the deadline"
+			deadline = None
 
 		task = Task(name, content, deadline, group_id,
 				users, line, minute_id, status)
@@ -131,15 +131,11 @@ class PimpyAPI:
 		user_names = map(lambda x: "%s %s" % (x.first_name.lower().strip(), x.last_name.lower().strip()), users)
 
 		for comma_sep_user in comma_sep:
-			print "comma sep user: ", comma_sep_user
 
 			for i in range(len(users)):
-				print "user name:", user_names[i]
 
 				# could use a filter here, but meh
 				if user_names[i].startswith(comma_sep_user):
-					print "Found %s matchin' with %s" % (comma_sep_user,
-						user_names[i])
 					found_users.append(users[i])
 
 			if len(found_users) == 0:
@@ -151,7 +147,6 @@ class PimpyAPI:
 
 	@staticmethod
 	def check_user_is_logged_in():
-		print "_%s_ _%s_ _%s_ _%s_" % (current_user.first_name, current_user.last_name, current_user.email, current_user.is_authenticated())
 		if not current_user.is_authenticated():
 			abort(401)
 		return ""
