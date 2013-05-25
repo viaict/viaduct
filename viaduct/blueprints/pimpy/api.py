@@ -10,6 +10,7 @@ from viaduct import db, application
 
 
 import datetime
+import re
 
 
 DATE_FORMAT = application.config['DATE_FORMAT']
@@ -74,6 +75,33 @@ class PimpyAPI:
 		db.session.add(task)
 		db.session.commit()
 		return True, "jaja"
+
+	@staticmethod
+	def parse_minute(content, group_id, minute_id):
+		"""
+		Parses the specified minutes for tasks and adds them to the database.
+
+		syntax within the content:
+		ACTIE <name_1>, <name_2>, name_n>: <title of task>
+		or
+		TODO <name_1>, <name_2>, name_n>: <title of task>
+
+		Returns succes (boolean), message (string). Message is irrelevant if
+		success is true, otherwise it contains what exactly went wrong.
+		"""
+
+		regex = re.compile("\s*[ACTIE|TODO] ([^\n\r]*)")
+		for i, line in enumerate(content):
+			actions = regex.findall(line)
+			for action in actions:
+				users, title = action.split(":")
+				succes, message = PimpyAPI.commit_task_to_db(title, "", "", group_id,
+					users, i, minute_id, 0)
+				if not succes:
+					return false, message
+
+		return true, "awesome stuff"
+
 
 	@staticmethod
 	def get_list_of_users_from_string(group, comma_sep):
