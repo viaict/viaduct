@@ -204,13 +204,18 @@ class PimpyAPI:
 					list_items[group.name] = items
 			else:
 				query = Task.query.filter(Task.group_id==group_id)
-				#list_items[Group.query.filter(Group.id==group_id).first().name] = query.all()
-				group_name = Group.query.filter(Group.id==group_id).first().name
-				list_items[group_name] = []
+				items = []
 				for task in query.all():
-					for u in task.users:
-						if u.id == current_user.id:
-							list_items[group_name].append(task)
+					if current_user in task.users:
+						items.append(task)
+				list_items[Group.query.filter(Group.id==group_id).first().name] = items
+
+				#group_name = Group.query.filter(Group.id==group_id).first().name
+				#list_items[group_name] = []
+				#for task in query.all():
+				#	for u in task.users:
+				#		if u.id == current_user.id:
+				#			list_items[group_name].append(task)
 
 		else:
 			if group_id == 'all':
