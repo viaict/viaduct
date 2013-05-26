@@ -32,7 +32,7 @@ def sign_up():
 
 	if form.validate_on_submit():
 		user = User(form.email.data, bcrypt.hashpw(form.password.data, bcrypt.gensalt()),
-			form.first_name.data, form.last_name.data, form.student_id)
+			form.first_name.data, form.last_name.data, form.student_id.data)
 
 		db.session.add(user)
 		db.session.commit()
