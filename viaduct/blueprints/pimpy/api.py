@@ -95,14 +95,11 @@ class PimpyAPI:
 		regex = re.compile("\s*(?:ACTIE|TODO) ([^\n\r]*)")
 		for i, line in enumerate(content.splitlines()):
 			actions = regex.findall(line)
-			print "actions",actions
 			for action in actions:
 				try:
 					users, title = action.split(":")
 				except:
 					print "could not split the line on ':'.\nSkipping hit."
-				print users
-				print title
 				succes, message = PimpyAPI.commit_task_to_db(title, "", "", group_id,
 					users, minute_id, i, 0)
 				if not succes:
