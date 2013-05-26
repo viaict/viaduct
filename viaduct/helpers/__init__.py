@@ -37,7 +37,7 @@ def pages_filter(data):
 		else:
 			content += '<div class="span6">'
 
-		content += '<div class="mainblock">'
+		content += '<div class="mainblock expander">'
 
 		if current_user.is_authenticated():
 			content += '<div class="btn-group">'
