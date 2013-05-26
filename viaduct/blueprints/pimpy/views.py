@@ -1,7 +1,7 @@
 import datetime
 
 from flask import Blueprint, abort, redirect, url_for
-from flask import flash, render_template, request
+from flask import flash, render_template, request, jsonify
 from flask.ext.login import current_user
 
 from viaduct import application, db
@@ -44,6 +44,19 @@ def view_tasks(group_id='all'):
 @blueprint.route('/pimpy/tasks/me/<group_id>/', methods=['GET', 'POST'])
 def view_tasks_personal(group_id='all'):
 	return PimpyAPI.get_tasks(group_id, True)
+
+@blueprint.route('/pimpy/tasks/update/', methods=['GET', 'POST'])
+@blueprint.route('/pimpy/tasks/me/update/', methods=['GET', 'POST'])
+def update_task_status():
+	task_id = request.args.get('task_id', 0, type=int)
+	new_status = request.args.get('new_status', 0, type=int)
+
+	query = Task.query
+	query = query.filter(Task.id==task_id)
+	list_items = query.all()
+	for task in list_items:
+		task.update_status(new_status)
+	return jsonify(status=task.get_status_color())
 
 @blueprint.route('/pimpy/tasks/add/<string:group_id>', methods=['GET', 'POST'])
 def add_task(group_id='all'):

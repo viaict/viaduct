@@ -80,7 +80,7 @@ class Task(db.Model):
 	def get_status_meanings():
 		statusi = [[]]
 		for i in range(0, len(Task.status_meanings)-2):
-			statusi.append([Task.status_meanings[i], Task.status_colors[i]])
+			statusi.append([Task.status_meanings[i], Task.status_colors[i], i])
 		return statusi
 
 	def get_users(self):
