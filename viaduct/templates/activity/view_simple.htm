@@ -1,0 +1,11 @@
+<h1>Activiteitenoverzicht</h1>
+<table>
+{% for activity in activities.items %}
+<tr><td> <strong>Wat?</strong> {{ activity.name }} </td></tr>
+<tr><td> <strong>Wanneer?</strong> {{ activity.start_time }} </td></tr>
+<tr><td> <strong>Waar?</strong> {{ activity.location }} </td></tr>
+
+<tr><td><strong>Meer info?</strong> <a href='{{ url_for('activity.get_activity', activity_id=activity.id)}}'>hier</a></td></tr>
+
+{% endfor %}
+</table>
