@@ -46,8 +46,7 @@ class Task(db.Model):
 		self.group_id = group_id
 		self.line = line
 		self.users = users
-		if minute_id >= 0:
-			self.minute_id = minute_id
+		self.minute_id = 1
 		self.status = status
 
 
