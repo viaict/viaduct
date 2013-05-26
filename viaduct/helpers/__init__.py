@@ -1,10 +1,14 @@
-from flask import flash, request, Markup, url_for
+from flask import flash, request, Markup, url_for, render_template
 from flask.ext.login import current_user
 
 from viaduct import application
 from markdown import markdown
 
 from resource import Resource
+
+from viaduct.blueprints.activity.models import Activity 
+
+import datetime
 
 markdown_extensions = [
 	'toc'
@@ -49,9 +53,14 @@ def pages_filter(data):
 
 		content += '<h1>{0}</h1>'.format(data[i].title)
 
-		if data[i].filter_html:
+		if i == 1 and data[i].filter_html:
 			content += markdown(data[i].content, safe_mode='escape',
 				enable_attributes=False, extensions=markdown_extensions)
+		elif i == 2:
+			activities = Activity.query \
+				.filter(Activity.end_time > datetime.datetime.now()) \
+				.order_by(Activity.start_time.asc())
+			content += markdown(render_template('activity/view_simple.htm', activities=activities.paginate(1, 12, False)))
 		else:
 			content += markdown(data[i].content, extensions=markdown_extensions)
 
