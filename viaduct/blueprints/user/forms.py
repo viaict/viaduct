@@ -9,6 +9,7 @@ class SignUpForm(Form):
 		EqualTo('password', message='The passwords do not match.')])
 	first_name = TextField('First name', validators=[Required()])
 	last_name = TextField('Last name', validators=[Required()])
+	student_id = TextField('Student ID', validators=[Required()])
 	recaptcha = RecaptchaField()
 
 class SignInForm(Form):
