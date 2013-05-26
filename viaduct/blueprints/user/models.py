@@ -8,13 +8,15 @@ class User(db.Model):
 	password = db.Column(db.String(60))
 	first_name = db.Column(db.String(256))
 	last_name = db.Column(db.String(256))
-	
-	def __init__(self, email, password, first_name, last_name):
+	student_id = db.Column(db.String(256))
+
+	def __init__(self, email, password, first_name, last_name, student_id):
 		self.email = email
 		self.password = password
 		self.first_name = first_name
 		self.last_name = last_name
-	
+		self.student_id = student_id
+
 	def is_authenticated(self):
 		return self.email != 'anonymous'
 
@@ -27,9 +29,12 @@ class User(db.Model):
 	def get_id(self):
 		return unicode(self.id)
 
+	def get_student_id(self):
+		return self.student_id
+
 	def __repr__(self):
-		return '<User(%s, "%s", "%s", "%s", "%s")>' % (self.id, self.email,
-				self.password, self.first_name, self.last_name)
+		return '<User(%s, "%s", "%s", "%s", "%s", "%s")>' % (self.id, self.email,
+				self.password, self.first_name, self.last_name, self.student_id)
 
 class UserPermission(db.Model):
 	__tablename__ = 'user_permission'
