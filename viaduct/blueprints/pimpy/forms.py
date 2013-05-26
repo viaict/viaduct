@@ -10,7 +10,7 @@ DATE_FORMAT = application.config['DATE_FORMAT']
 class AddTaskForm(Form):
 	name				= TextField('Name', validators=[Required()])
 	content = TextAreaField('Content', validators=[validators.optional()]) #, validators.length(max=1200)])
-	deadline = DateTimeField('Deadline', format=DATE_FORMAT)
+	deadline = DateTimeField('Deadline', format=DATE_FORMAT, default=datetime.date.today())
 	# timestamp
 	line = IntegerField('Line', default=-1, description='Fill in -1 if this is unknown or impossible.')
 	minute_id = IntegerField('Minute ID', default=-1, description='Fill in -1 if this is unknown or impossible.')
