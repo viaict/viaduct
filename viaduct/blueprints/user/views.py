@@ -26,7 +26,7 @@ def sign_up():
 	# Redirect the user to the index page if he or she has been authenticated
 	# already.
 	if current_user and current_user.is_authenticated():
-		return redirect(url_for('page.get_page'))
+		return redirect('/')
 
 	form = SignUpForm(request.form)
 
@@ -41,7 +41,8 @@ def sign_up():
 
 		login_user(user)
 
-		return redirect(url_for('page.get_page'))
+		return redirect('/')
+		#return redirect(url_for('page.get_page'))
 	else:
 		flash_form_errors(form)
 
