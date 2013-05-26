@@ -54,7 +54,7 @@ def pages_filter(data):
 
 		if i == 1 and data[i].filter_html:
 			content += '<h1>{0}</h1>'.format(data[i].title)
-			content += markdown(data[i].content, safe_mode='escape',
+			content += markdown(data[i].content,
 				enable_attributes=False, extensions=markdown_extensions)
 		elif i == 2:
 			activities = Activity.query \
