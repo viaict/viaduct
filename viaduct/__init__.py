@@ -88,11 +88,6 @@ from viaduct.blueprints.user.views import blueprint
 
 application.register_blueprint(blueprint)
 
-import user
-import pimpy
-import upload
-import api
-
 from viaduct.blueprints.user.views import load_anonymous_user
 
 login_manager.anonymous_user = load_anonymous_user

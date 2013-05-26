@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, abort, request, flash, redirect,\
+from flask import Blueprint, render_template, abort, request, flash, redirect
 from flask.ext.login import current_user
 
 from viaduct import db
@@ -37,7 +37,7 @@ def edit(entry_id=None):
 	else:
 		entry = None
 
-    form = NavigationEntryForm(request.form, entry)
+	form = NavigationEntryForm(request.form, entry)
 
 	if form.is_submitted():
 		if form.validate_on_submit():
@@ -92,12 +92,11 @@ def edit(entry_id=None):
 				flash('Geen titel opgegeven.', 'error')
 				known_error = True
 
-            if not form.url.data:
-                flash('Geen url opgegeven.', 'error')
-                known_error = True
-
-            if not known_error:
-                flash_form_errors(form)
+			if not form.url.data:
+				flash('Geen url opgegeven.', 'error')
+				known_error = True
+			if not known_error:
+				flash_form_errors(form)
 
 	parents = db.session.query(NavigationEntry).filter_by(parent_id=None)
 
@@ -118,13 +117,13 @@ def delete(entry_id):
 	if not entry:
 		abort(404)
 
-    if not entry.parent:
-        if entry.children:
-            flash('Deze item heeft nog subitems.', 'error')
-            return redirect(url_for('navigation.edit', entry_id=entry.id))
+		if not entry.parent:
+			if entry.children:
+				flash('Deze item heeft nog subitems.', 'error')
+			return redirect(url_for('navigation.edit', entry_id=entry.id))
 
-    db.session.delete(entry)
-    db.session.commit()
+		db.session.delete(entry)
+		db.session.commit()
 
 	return redirect(url_for('navigation.view'))
 
