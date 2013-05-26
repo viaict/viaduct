@@ -14,6 +14,7 @@ class NavigationAPI:
 
 		return render_template('navigation/view_bar.htm', bar_entries=entries)
 
+
 	@staticmethod
 	def get_navigation_menu():
 		my_path = request.path
