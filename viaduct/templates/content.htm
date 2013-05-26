@@ -2,9 +2,7 @@
 
 {% block page %}
 <div class="row">
-	<div class="span2">
 		{{ NavigationAPI.get_navigation_menu()|safe }}
-	</div>
 	<div class="span10">{% block content %}{% endblock %}</div>
 </div>
 
