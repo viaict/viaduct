@@ -5,16 +5,18 @@
 		{% for group_header in list_items: %}
 			<h1>{{ group_header }}</h1>
 			{% for list_item in list_items[group_header] %}
-				<div class="btn-group">
-					<button class="btn">{{ list_item.get_title() }} ({{list_item.id }})</button>
-					<button class="btn">{{ list_item.group.name }} (id: {{list_item.group.id }})</button>
-					<button class="btn" data-toggle="collapse" data-target='#{{ list_item.get_name() }}'>
-						Show content
-					</button>
-				</div>
-				<div id='{{ list_item.get_name() }}' class="collapse">
-					<div class="well">{{ list_item.get_content() }}</div>
-				</div>
+				{% if list_item.id > 0 %}
+					<div class="btn-group">
+						<button class="btn">{{ list_item.get_title() }} ({{list_item.id }})</button>
+						<button class="btn">{{ list_item.group.name }} (id: {{list_item.group.id }})</button>
+						<button class="btn" data-toggle="collapse" data-target='#{{ list_item.get_name() }}'>
+							Show content
+						</button>
+					</div>
+					<div id='{{ list_item.get_name() }}' class="collapse">
+						<div class="well">{{ list_item.get_content() }}</div>
+					</div>
+				{% endif %}
 			{% endfor %}
 		{% endfor %}
 	</div>
