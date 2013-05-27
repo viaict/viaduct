@@ -72,6 +72,9 @@ class PimpyAPI:
 				return False, "Could not parse the deadline"
 			deadline = None
 
+		if minute_id < 0:
+			minute_id = 1
+
 		task = Task(name, content, deadline, group_id,
 				users, line, minute_id, status)
 		db.session.add(task)
