@@ -45,9 +45,6 @@ def get_page(path=''):
 
 		if page.revisions.count() > 0:
 			revision = page.revisions.order_by(PageRevision.timestamp.desc()).first()
-
-			for i in page.revisions.order_by(PageRevision.timestamp.desc()).all():
-				print(i.timestamp)
 		else:
 			revision = PageRevision(page, current_user, 'Oh no! It looks like' +
 				' you have found a dead Link!',
@@ -108,8 +105,8 @@ def edit_page(path=''):
 	class struct(object):
 		pass
 
-	#if not current_user.is_authenticated():
-	#	return get_error_page()
+	if not current_user.is_authenticated():
+		return get_error_page()
 
 	page = Page.query.filter(Page.path==path).first()
 	data = None
