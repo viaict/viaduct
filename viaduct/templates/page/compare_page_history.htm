@@ -1,0 +1,7 @@
+{% from "macros/flash.htm" import render_flash %}
+
+{% extends "base.htm" %}
+
+{% block page %}
+{{ diff | safe }}
+{% endblock %}
