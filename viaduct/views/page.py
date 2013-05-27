@@ -44,7 +44,7 @@ def get_page(path=''):
 			page = Page('')
 
 		if page.revisions.count() > 0:
-			revision = page.revisions.order_by(PageRevision.timestamp.asc()).first()
+			revision = page.revisions.order_by(PageRevision.id.desc()).first()
 		else:
 			revision = PageRevision(page, current_user, 'Oh no! It looks like' +
 				' you have found a dead Link!',
@@ -77,7 +77,7 @@ def get_page_history(path=''):
 		page = Page('')
 
 	if page.revisions.count() > 0:
-		revisions = page.revisions.order_by(PageRevision.timestamp.desc()).all()
+		revisions = page.revisions.order_by(PageRevision.id.desc()).all()
 	else:
 		revisions = None
 
@@ -112,7 +112,7 @@ def edit_page(path=''):
 	data = None
 
 	if page:
-		revision = page.revisions.order_by(PageRevision.timestamp.desc()).first()
+		revision = page.revisions.order_by(PageRevision.id.desc()).first()
 
 		data = struct()
 		data.title = revision.title
