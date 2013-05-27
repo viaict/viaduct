@@ -75,6 +75,7 @@ class PimpyAPI:
 		print "MINUTE ID OF NEWLY CREATED PIMPY TASK: ", minute_id
 		if minute_id <= 0:
 			minute_id = 1
+		print "MINUTE ID OF NEWLY CREATED PIMPY TASK: ", minute_id
 
 		task = Task(name, content, deadline, group_id,
 				users, line, minute_id, status)
