@@ -77,7 +77,7 @@ def get_page_history(path=''):
 		page = Page('')
 
 	if page.revisions.count() > 0:
-		revisions = page.revisions.order_by(PageRevision.timestamp.asc()).all()
+		revisions = page.revisions.order_by(PageRevision.timestamp.desc()).all()
 	else:
 		revisions = None
 
