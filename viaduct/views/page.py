@@ -1,3 +1,4 @@
+import datetime
 import difflib
 
 from flask import Blueprint
@@ -139,7 +140,8 @@ def edit_page(path=''):
 			db.session.commit()
 
 		revision = PageRevision(page, current_user, title, content, comment,
-			filter_html)
+			filter_html, timestamp=datetime.datetime.utcnow())
+ )
 
 		db.session.add(revision)
 		db.session.commit()
