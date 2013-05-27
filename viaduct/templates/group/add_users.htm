@@ -41,7 +41,7 @@
 				<a href="{{ url_for('group.view_users', group_id=group.id) }}" class="btn">Back</a>
 			</div>
 
-			{{ render_pagination(users, 'group.add_users') }}
+			{{ render_pagination(users, 'group.add_users', group_id=group.id) }}
 		</div>
 	</fieldset>
 </form>

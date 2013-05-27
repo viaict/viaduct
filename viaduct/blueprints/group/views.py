@@ -146,7 +146,7 @@ def view_users(group_id, page=1):
 
 @blueprint.route('/groups/<int:group_id>/users/add/', methods=['GET', 'POST'])
 @blueprint.route('/groups/<int:group_id>/users/add/<int:page_id>', methods=['GET', 'POST'])
-def add_users(group_id, page=1):
+def add_users(group_id, page_id=1):
 	if not GroupPermission.get_user_rights(current_user)['edit']:
 		abort(403)
 
@@ -175,7 +175,7 @@ def add_users(group_id, page=1):
 
 		return redirect(url_for('group.view_users', group_id=group_id))
 
-	users = User.query.paginate(page, 15, False)
+	users = User.query.paginate(page_id, 15, False)
 
 	return render_template('group/add_users.htm', group=group, users=users)
 
