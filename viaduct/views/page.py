@@ -46,7 +46,7 @@ def get_page(path=''):
 		if page.revisions.count() > 0:
 			revision = page.revisions.order_by(PageRevision.timestamp.desc()).first()
 
-			for i in page.revisions.order_by(PageRevision.timestamp.desc().all():
+			for i in page.revisions.order_by(PageRevision.timestamp.desc()).all():
 				print(i.timestamp)
 		else:
 			revision = PageRevision(page, current_user, 'Oh no! It looks like' +
