@@ -106,8 +106,8 @@ def edit_page(path=''):
 	class struct(object):
 		pass
 
-	if not current_user.is_authenticated():
-		return get_error_page()
+#	if not current_user.is_authenticated():
+#		return get_error_page()
 
 	page = Page.query.filter(Page.path==path).first()
 	data = None
