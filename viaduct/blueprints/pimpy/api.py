@@ -147,17 +147,18 @@ class PimpyAPI:
 
 		for comma_sep_user in comma_sep:
 
+			temp_found_users = []
 			for i in range(len(users)):
 
 				# could use a filter here, but meh
 				if user_names[i].startswith(comma_sep_user):
-					found_users.append(users[i])
+					temp_found_users.append(users[i])
 
-			if len(found_users) == 0:
+			if len(temp_found_users) == 0:
 				return False, "Could not match %s to a user in the group" % comma_sep_user
-			#if len(found_users) > 1:
-			#	return False, "could not disambiguate %s" % comma_sep_user
-
+			if len(temp_found_users) > 1:
+				return False, "could not disambiguate %s" % comma_sep_user
+			found_users.extend(temp_found_users)
 		return found_users, ""
 
 	@staticmethod
