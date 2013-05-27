@@ -72,7 +72,8 @@ class PimpyAPI:
 				return False, "Could not parse the deadline"
 			deadline = None
 
-		if minute_id < 0:
+		print "MINUTE ID OF NEWLY CREATED PIMPY TASK: ", minute_id
+		if minute_id <= 0:
 			minute_id = 1
 
 		task = Task(name, content, deadline, group_id,
