@@ -152,8 +152,8 @@ class PimpyAPI:
 
 			if len(found_users) == 0:
 				return False, "Could not match %s to a user in the group" % comma_sep_user
-			if len(found_users) > 1:
-				return False, "could not disambiguate %s" % comma_sep_user
+			#if len(found_users) > 1:
+			#	return False, "could not disambiguate %s" % comma_sep_user
 
 		return found_users, ""
 
