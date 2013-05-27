@@ -14,7 +14,7 @@
 						</button>
 					</div>
 					<div id='{{ list_item.get_name() }}' class="collapse">
-						<div class="well">{{ list_item.get_content() }}</div>
+						<div class="well">{{ list_item.get_content() | markdown }}</div>
 					</div>
 				{% endif %}
 			{% endfor %}
