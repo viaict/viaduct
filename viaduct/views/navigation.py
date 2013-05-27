@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, abort, request, flash, redirect, url_for
+from flask import Blueprint, render_template, abort, request, flash, redirect,\
+		url_for
 from flask.ext.login import current_user
 
 from viaduct import db
@@ -117,13 +118,13 @@ def delete(entry_id):
 	if not entry:
 		abort(404)
 
-		if not entry.parent:
-			if entry.children:
-				flash('Deze item heeft nog subitems.', 'error')
+	if not entry.parent:
+		if entry.children:
+			flash('Deze item heeft nog subitems.', 'error')
 			return redirect(url_for('navigation.edit', entry_id=entry.id))
 
-		db.session.delete(entry)
-		db.session.commit()
+	db.session.delete(entry)
+	db.session.commit()
 
 	return redirect(url_for('navigation.view'))
 

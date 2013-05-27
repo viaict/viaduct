@@ -46,7 +46,7 @@ class Task(db.Model):
 		self.group_id = group_id
 		self.line = line
 		self.users = users
-		self.minute_id = 1
+		self.minute_id = minute_id
 		self.status = status
 
 
