@@ -141,7 +141,6 @@ def edit_page(path=''):
 
 		revision = PageRevision(page, current_user, title, content, comment,
 			filter_html, timestamp=datetime.datetime.utcnow())
- )
 
 		db.session.add(revision)
 		db.session.commit()
