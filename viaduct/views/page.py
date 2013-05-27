@@ -44,7 +44,7 @@ def get_page(path=''):
 			page = Page('')
 
 		if page.revisions.count() > 0:
-			revision = page.revisions.order_by(PageRevision.timestamp.desc()).first()
+			revision = page.revisions.order_by(PageRevision.timestamp.asc()).first()
 		else:
 			revision = PageRevision(page, current_user, 'Oh no! It looks like' +
 				' you have found a dead Link!',
