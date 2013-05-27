@@ -7,7 +7,7 @@ from flask.ext.login import current_user, login_user, logout_user
 
 from viaduct import application, db, login_manager
 from viaduct.helpers import flash_form_errors
-from forms import SignUpForm, SignInForm
+from forms import SignUpForm, SignUpFormNoCaptcha, SignInForm
 from models import User, UserPermission
 
 blueprint = Blueprint('user', __name__)
@@ -21,6 +21,40 @@ def load_user(id):
 def load_anonymous_user():
 	return User.query.filter(User.email=='anonymous').first()
 
+@blueprint.route('/users/create', methods=['GET', 'POST'])
+def create_user():
+	if not UserPermission.get_user_rights(current_user)['create']:
+		abort(403)
+
+	form = SignUpFormNoCaptcha(request.form)
+
+
+	if form.validate_on_submit():
+
+		email_unique = True
+		for user_it in User.query.all():
+			if form.email.data == user_it.email:
+				email_unique = False
+				break
+
+		if email_unique:
+			user = User(form.email.data, bcrypt.hashpw(form.password.data, bcrypt.gensalt()),
+			form.first_name.data, form.last_name.data, form.student_id.data)
+
+			db.session.add(user)
+			db.session.commit()
+
+			flash('User successfully created.')
+			return redirect(url_for('user.create_user'))
+		else:
+			flash("Email already exists in database.");
+
+	else:
+		flash_form_errors(form)
+
+	return render_template('user/create_user.htm', form=form)
+
+
 @blueprint.route('/sign-up/', methods=['GET', 'POST'])
 def sign_up():
 	# Redirect the user to the index page if he or she has been authenticated
@@ -32,7 +66,7 @@ def sign_up():
 
 	if form.validate_on_submit():
 		user = User(form.email.data, bcrypt.hashpw(form.password.data, bcrypt.gensalt()),
-			form.first_name.data, form.last_name.data)
+			form.first_name.data, form.last_name.data, form.student_id.data)
 
 		db.session.add(user)
 		db.session.commit()
