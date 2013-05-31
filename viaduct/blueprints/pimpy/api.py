@@ -103,10 +103,11 @@ class PimpyAPI:
 					users, title = action.split(":")
 				except:
 					print "could not split the line on ':'.\nSkipping hit."
+					continue
 				succes, message = PimpyAPI.commit_task_to_db(title, "", "", group_id,
 					users, minute_id, i, 0)
 				if not succes:
-					return False, message
+					print message
 
 		regex_DONE = re.compile("\s*DONE? ([^\n\r]*)")
 		hits = regex_DONE.findall(content)
