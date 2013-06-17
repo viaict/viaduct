@@ -97,8 +97,8 @@ class PimpyAPI:
 
 		regex = re.compile("\s*(?:ACTIE|TODO) ([^\n\r]*)")
 		for i, line in enumerate(content.splitlines()):
-			actions = regex.findall(line)
-			for action in actions:
+			matches = regex.findall(line)
+			for action in matches:
 				try:
 					users, title = action.split(":")
 				except:
@@ -109,17 +109,31 @@ class PimpyAPI:
 				if not succes:
 					print message
 
-		regex_DONE = re.compile("\s*DONE? ([^\n\r]*)")
-		hits = regex_DONE.findall(content)
-		for done in hits:
+		regex = re.compile("\s*(?:DONE) ([^\n\r]*)")
+		matches = regex.findall(content)
+		for done in matches:
 			query = Task.query
-			print "done =" + done
+			print "done = " + done
 			query = query.filter(Task.id==done)
 			list_items = query.all()
-			print list_items[0].id
-			print list_items[0].title
-			for item in list_items:
-				item.update_status(len(Task.status_meanings)-2)
+			if list_items:
+				print list_items[0].id
+				print list_items[0].title
+				for item in list_items:
+					item.update_status(len(Task.status_meanings)-2)
+
+		regex = re.compile("\s*(?:REMOVE) ([^\n\r]*)")
+		matches = regex.findall(content)
+		for remove in matches:
+			query = Task.query
+			print "remove = " + remove
+			query = query.filter(Task.id==remove)
+			list_items = query.all()
+			if list_items:
+				print list_items[0].id
+				print list_items[0].title
+				for item in list_items:
+					item.update_status(len(Task.status_meanings)-1)
 
 		return True, "awesome stuff"
 
