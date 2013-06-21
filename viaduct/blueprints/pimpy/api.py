@@ -95,6 +95,10 @@ class PimpyAPI:
 		success is true, otherwise it contains what exactly went wrong.
 		"""
 
+		"""commit_task_to_db(name, content, deadline, group_id,
+		filled_in_users, line, minute_id, status):
+		"""
+
 		regex = re.compile("\s*(?:ACTIE|TODO) ([^\n\r]*)")
 		for i, line in enumerate(content.splitlines()):
 			matches = regex.findall(line)
@@ -105,7 +109,7 @@ class PimpyAPI:
 					print "could not split the line on ':'.\nSkipping hit."
 					continue
 				succes, message = PimpyAPI.commit_task_to_db(title, "", "", group_id,
-					users, minute_id, i, 0)
+					users, i, minute_id, 0)
 				if not succes:
 					print message
 
@@ -121,6 +125,8 @@ class PimpyAPI:
 				print list_items[0].title
 				for item in list_items:
 					item.update_status(len(Task.status_meanings)-2)
+			else:
+				print "Could not find task " + done
 
 		regex = re.compile("\s*(?:REMOVE) ([^\n\r]*)")
 		matches = regex.findall(content)
