@@ -1,0 +1,14 @@
+{% from "macros/pagination.htm" import render_pagination %}
+
+{% extends "content.htm" %}
+
+{% block content %}
+	<p><a class="btn" href="{{ url_for('vacancy.view') }}">Nieuwe vacature</a></p>
+	<ul>
+		{% for vacancy in vacancies.items %}
+			<li><a href="{{ url_for('vacancy.view', vacancy_id=vacancy.id) }}">{{ vacancy.title }}</a></li>
+		{% endfor %}
+	</ul>
+
+	{{ render_pagination(vacancies, 'vacancy.list') }}
+{% endblock %}
