@@ -6,7 +6,8 @@ from viaduct import db
 from viaduct.helpers import flash_form_errors
 
 from viaduct.forms import GroupEditForm
-from viaduct.models import user_group, Group, GroupPermission, User, UserPermission
+from viaduct.models import user_group, Group, GroupPermission, User, UserPermission, Permission
+from viaduct.forms.group import EditGroupPermissionForm
 
 blueprint = Blueprint('group', __name__)
 
@@ -195,7 +196,7 @@ def edit_permissions(group_id, page_id=1):
 				group.delete_permission(permission.name)
 	else:
 		for permission in pagination.items:
-			form.permissions.append_entry({'select': group.has_permission()})
+			form.permissions.append_entry({'select': group.has_permission(permission.name)})
 
 	return render_template('group/edit_permissions.htm', form=form,
 			pagination=pagination,

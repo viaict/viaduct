@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from viaduct import db
+from viaduct.models.permission import GroupPermission, Permission
 
 user_group = db.Table('user_group',
 	db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
