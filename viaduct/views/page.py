@@ -34,7 +34,7 @@ def get_page(path=''):
 	revisions = []
 
 	if path == '' or path == 'index':
-		paths = ['laatste_bestuursblog', 'twitter', 'activities', 'contact']
+		paths = ['laatste_bestuursblog', 'activities', 'twitter', 'contact']
 	else:
 		paths = [path]
 
