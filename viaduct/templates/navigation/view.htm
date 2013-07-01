@@ -24,7 +24,7 @@
 					$.post('{{ url_for("navigation.reorder") }}',
 							{entries: JSON.stringify(list)},
 							function(data) {
-								console.log(data);
+								location.reload();
 							}
 					);
 				}
