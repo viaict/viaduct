@@ -40,7 +40,7 @@ class User(db.Model):
 
 	@staticmethod
 	def get_anonymous_user():
-		return User()
+		return User.query.get(0);
 
 	def has_permission(self, name):
 		# Check if the permission has been allowed to or denied from the user.
