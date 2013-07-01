@@ -196,6 +196,10 @@ nav_ext = NavigationEntry(nav_page1, 'Externaal', 'viaduct.svia.nl', True, False
 db.session.add(nav_ext)
 db.session.commit()
 
+nav_vacancies = NavigationEntry(None, 'Vacaturebank', '/vacancies/', False, False, 5)
+db.session.add(nav_vacancies)
+db.session.commit()
+
 # VACANCIES
 
 location_1 = Location('Amsterdam', 'The Netherlands', 'Science Park 904',
