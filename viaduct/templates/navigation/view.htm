@@ -24,7 +24,9 @@
 					$.post('{{ url_for("navigation.reorder") }}',
 							{entries: JSON.stringify(list)},
 							function(data) {
-								location.reload();
+								clearflash();
+								flash('De volgorde is succesvol opgeslagen',
+										'success');
 							}
 					);
 				}

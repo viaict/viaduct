@@ -33,8 +33,10 @@ def get_error_page(path=''):
 def get_page(path=''):
 	revisions = []
 
+	is_main_page = False
 	if path == '' or path == 'index':
-		paths = ['laatste_bestuursblog', 'twitter', 'activities', 'contact']
+		paths = ['laatste_bestuursblog', 'activities', 'twitter', 'contact']
+		is_main_page = True
 	else:
 		paths = [path]
 
@@ -55,6 +57,7 @@ def get_page(path=''):
 			pass
 
 		data = struct()
+		data.is_main_page = is_main_page
 		data.title = revision.title
 		data.content = revision.content
 		data.filter_html = revision.filter_html
