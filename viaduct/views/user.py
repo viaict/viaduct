@@ -8,7 +8,7 @@ from flask.ext.login import current_user, login_user, logout_user
 from viaduct import application, db, login_manager
 from viaduct.helpers import flash_form_errors
 from forms import SignUpForm, SignUpFormNoCaptcha, SignInForm
-from models import User, UserPermission
+from viaduct.models import User, UserPermission
 
 blueprint = Blueprint('user', __name__)
 
@@ -23,11 +23,10 @@ def load_anonymous_user():
 
 @blueprint.route('/users/create', methods=['GET', 'POST'])
 def create_user():
-	if not UserPermission.get_user_rights(current_user)['create']:
+	if not current_user.has_permission('user.create'):
 		abort(403)
 
 	form = SignUpFormNoCaptcha(request.form)
-
 
 	if form.validate_on_submit():
 
