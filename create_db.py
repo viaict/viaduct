@@ -11,6 +11,9 @@ from viaduct.models.vacancy import Vacancy
 from viaduct.models.requirement import Requirement
 from viaduct.models.education import Education
 from viaduct.models.programming_language import ProgrammingLanguage
+from viaduct.models.company import Company
+from viaduct.models.location import Location
+from viaduct.models.contact import Contact
 
 # Remove the old db.
 if os.path.exists('application.db'):
@@ -215,3 +218,23 @@ nav_ext = NavigationEntry(nav_page1, 'Externaal', 'viaduct.svia.nl', True, False
 db.session.add(nav_ext)
 db.session.commit()
 
+# VACANCIES
+
+location_1 = Location('Amsterdam', 'The Netherlands', 'Science Park 904',
+		'1098 XH', 'nvt', 'email@sciencepark.nl', '2345613452')
+db.session.add(location_1)
+db.session.commit()
+
+contact_1 = Contact('Bas de Boer', 'jemoeder@jemoder.nl', '12', location_1)
+db.session.add(contact_1)
+db.session.commit()
+
+company_1 = Company('test', 'bladiebla', datetime.datetime.now(),
+		datetime.datetime.now(), location_1, contact_1)
+db.session.add(company_1)
+db.session.commit()
+
+vacancy_1 = Vacancy('test', 'bladiebla', datetime.datetime.now(),
+		datetime.datetime.now(), 'deeltijd', 'nvt', company_1)
+db.session.add(vacancy_1)
+db.session.commit()

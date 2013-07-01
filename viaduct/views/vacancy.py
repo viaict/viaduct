@@ -1,18 +1,18 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, render_template
 
-from application import db
+from viaduct import application, db
+from viaduct.models.vacancy import Vacancy
 
-vacancy = Blueprint('vacancy', __name__)
+blueprint = Blueprint('vacancy', __name__)
 
-@vacancy.route('/vacancies/', methods=['GET', 'POST'])
-@vacancy.route('/vacancies/<int:page>/', methods=['GET', 'POST'])
+@blueprint.route('/vacancies/', methods=['GET', 'POST'])
+@blueprint.route('/vacancies/<int:page>/', methods=['GET', 'POST'])
 def view(page=1):
-
-	vacancies = vacancy.query.paginate(page, 15, False)
+	vacancies = Vacancy.query.paginate(page, 15, False)
 
 	return render_template('vacancy/view.htm', vacancies=vacancies)
 
-@vacancy.route('/vacancies/create/', methods=['GET', 'POST'])
+@blueprint.route('/vacancies/create/', methods=['GET', 'POST'])
 def create():
 	if not current_user or current_user.email != 'administrator@svia.nl':
 		return abort(403)
