@@ -1,6 +1,5 @@
 {% macro render_entry_list(entry) %}
-
-	<li data-entry-id="{{ entry.id }}">
+	<div class="nav_entry" data-entry-id="{{ entry.id }}">
 		<a href="{{ url_for('navigation.edit', entry_id=entry.id) }}">
 			{{ entry.title }}
 		</a>
@@ -9,11 +8,10 @@
 			Voeg kind navigatie item toe
 		</a>
 
-		<ul class="sortable">
-			<li class="leave-alone"></li>
+		<div class="sortable">
 			{% for child in entry.children %}
 				{{ render_entry_list(child) }}
 			{% endfor %}
-		</ul>
-	</li>
+		</div>
+	</div>
 {% endmacro %}

@@ -151,3 +151,13 @@ li.leave-alone {
 ul.parent > li {
 	margin-bottom: 10px;
 }
+
+/* Navigation. */
+div.nav_entry {
+	border: 1px solid black;
+	padding: 5px;
+}
+
+div.sortable {
+	padding: 10px;
+}
