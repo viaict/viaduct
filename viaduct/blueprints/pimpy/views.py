@@ -105,7 +105,7 @@ def add_task(group_id='all'):
 		group_id=group_id, type='tasks', form=form)
 
 @blueprint.route('/pimpy/tasks/edit/<string:task_id>', methods=['GET', 'POST'])
-def edit_task(task_id=-1)
+def edit_task(task_id=-1):
 	if task_id == '':
 		flash('task not specified')
 		return redirect(url_for('pimpy.view_tasks', group_id='all'))

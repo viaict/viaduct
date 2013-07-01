@@ -97,7 +97,7 @@ class PimpyAPI:
 
 		In case of succes the task is edited in the database.
 		"""
-		if task_id==-1
+		if task_id==-1:
 			return False, "no task_id given"
 
 		task = Task.query.filter(Task.id==task_id).first()
