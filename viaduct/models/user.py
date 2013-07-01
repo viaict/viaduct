@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from viaduct import db, login_manager
-from viaduct.models import GroupPermission, UserPermission
+from viaduct.models import GroupPermission, Permission, UserPermission
 
 class User(db.Model):
 	__tablename__ = 'user'
@@ -42,16 +42,27 @@ class User(db.Model):
 	def get_anonymous_user():
 		return User.query.get(0);
 
+	def get_permission(self, name):
+		permission = self.permissions.join(Permission).filter(Permission.name==name).order_by(UserPermission.allowed.desc()).first()
+
+		if not permission:
+			return 0
+
+		if permission.allowed:
+			return 1
+		else:
+			return -1
+
 	def has_permission(self, name):
 		# Check if the permission has been allowed to or denied from the user.
-		permission = self.permissions.filter(UserPermission.name==name).order_by(UserPermission.allowed.desc()).first()
+		permission = self.permissions.join(Permission).filter(Permission.name==name).order_by(UserPermission.allowed.desc()).first()
 
 		if permission:
 			return permission.allowed
 
 		# Check if the permission has been allowed to or denied from any groups
 		# associated with the user.
-		permission = self.groups.join(GroupPermission).filter(GroupPermission.name==name).order_by(GroupPermission.allowed.desc()).first()
+		permission = self.groups.join(GroupPermission).join(Permission).filter(Permission.name==name).order_by(GroupPermission.allowed.desc()).first()
 
 		if permission:
 			return permission.allowed
@@ -64,11 +75,15 @@ class User(db.Model):
 		self.delete_permission(name)
 
 		# Set the permission for the user.
-		db.session.add(UserPermission(self, name, allowed))
+		permission = Permission.query.filter(Permission.name==name).first()
+		db.session.add(UserPermission(self, permission, allowed))
 		db.session.commit()
 
 	def delete_permission(self, name):
-		self.permissions.filter(UserPermission.name==name).delete()
+		for permission in self.permissions.join(Permission).filter(Permission.name==name).all():
+			db.session.delete(permission)
+
+		db.session.commit()
 
 	def __repr__(self):
 		return '<User({0}, "{1}", "{2}", "{3}", "{4}", "{5}">'.format(self.id,

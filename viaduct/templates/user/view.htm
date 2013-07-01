@@ -11,6 +11,7 @@
 				<th>First name(s)</th>
 				<th>Last name</th>
 				<th>Student ID</th>
+				<th></th>
 			</tr>
 		</thead>
 
@@ -27,6 +28,7 @@
 					<td>{{ user.first_name }}</td>
 					<td>{{ user.last_name }}</td>
 					<td>{{ user.student_id }}</td>
+					<td><a href="{{ url_for('user.edit_permissions', user_id=user.id) }}">Edit Permissions</a></td>
 				</tr>
 			{% endfor %}
 		</tbody>

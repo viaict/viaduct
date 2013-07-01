@@ -177,3 +177,27 @@ def add_users(group_id, page_id=1):
 
 	return render_template('group/add_users.htm', group=group, users=users)
 
+@blueprint.route('/groups/edit-permissions/<int:group_id>/', methods=['GET', 'POST'])
+@blueprint.route('/groups/edit-permissions/<int:group_id>/<int:page_id>', methods=['GET', 'POST'])
+def edit_permissions(group_id, page_id=1):
+	if not current_user.has_permission('group.edit'):
+		abort(403)
+
+	group = Group.query.filter(Group.id==group_id).first()
+	form = EditGroupPermissionForm()
+	pagination = Permission.query.paginate(page_id, 15, False)
+
+	if form.validate_on_submit():
+		for form_entry, permission in zip(form.permissions, pagination.items):
+			if form_entry.select.data:
+				group.add_permission(permission.name, True)
+			else:
+				group.delete_permission(permission.name)
+	else:
+		for permission in pagination.items:
+			form.permissions.append_entry({'select': group.has_permission()})
+
+	return render_template('group/edit_permissions.htm', form=form,
+			pagination=pagination,
+			permissions=zip(pagination.items, form.permissions))
+
