@@ -30,7 +30,6 @@ def safe_markdown_filter(data):
 @application.template_filter('pages')
 def pages_filter(data):
 	for i in range(len(data)):
-		print i, data[i].title
 
 	content = '<div class="container">'
 
