@@ -39,7 +39,14 @@ class PimpyAPI:
 		db.session.commit()
 
 		if parse_tasks:
-			PimpyAPI.parse_minute(content, group_id, minute.id)
+			tasks, dones, removes = PimpyAPI.parse_minute(content, group_id, minute.id)
+			print "I'm now going to print all tasks, dones and removes"
+			for task in tasks:
+				print task
+			for done in dones:
+				print done
+			for remove in removes:
+				print remove
 
 		return True, "jaja"
 
@@ -60,7 +67,7 @@ class PimpyAPI:
 		if group == None:
 			return False, "Could not distinguish group."
 
-		users, message = PimpyAPI.get_list_of_users_from_string(group,
+		users, message = PimpyAPI.get_list_of_users_from_string(group_id,
 			filled_in_users)
 		if not users:
 			return False, message
@@ -82,32 +89,87 @@ class PimpyAPI:
 		return True, "jaja"
 
 	@staticmethod
+	def edit_task(task_id, name, content, deadline, group_id,
+		filled_in_users, line, status):
+		"""
+		Returns succed (boolean), message (string). Message is irrelevant if
+		succes is true, otherwise it contains what exactly went wrong.
+
+		In case of succes the task is edited in the database.
+		"""
+		if task_id==-1:
+			return False, "no task_id given"
+
+		task = Task.query.filter(Task.id==task_id).first()
+
+		users, message = PimpyAPI.get_list_of_users_from_string(group_id,
+			filled_in_users)
+		if not users:
+			return False, message
+
+		if name:
+			task.title = name
+		if content:
+			task.content = content
+		if deadline:
+			task.deadline = deadline
+		if group_id:
+			task.group_id = group_id
+		if line:
+			task.line = line
+		if users:
+			task.users = users
+		if status:
+			task.status = status
+
+		db.session.commit()
+		print "task edited"
+
+
+	@staticmethod
 	def parse_minute(content, group_id, minute_id):
 		"""
-		Parses the specified minutes for tasks and adds them to the database.
+		Parses the specified minutes for tasks and returns them in a list.
+		Same counts for DONE's and REMOVE's
 
 		syntax within the content:
 		ACTIE <name_1>, <name_2>, name_n>: <title of task>
 		or
 		TODO <name_1>, <name_2>, name_n>: <title of task>
 
-		Returns succes (boolean), message (string). Message is irrelevant if
-		success is true, otherwise it contains what exactly went wrong.
+		usage:
+		tasks, dones, removes = parse_minute(content, group_id, minute_id)
+		where content is a string with the entire minute
+		group id is the group's id
+		minute id is the minute's id
 		"""
+
+		tasks_found = []
+		dones_found = []
+		removes_found = []
 
 		regex = re.compile("\s*(?:ACTIE|TODO) ([^\n\r]*)")
 		for i, line in enumerate(content.splitlines()):
 			matches = regex.findall(line)
 			for action in matches:
 				try:
-					users, title = action.split(":")
+					listed_users, title = action.split(":")
 				except:
 					print "could not split the line on ':'.\nSkipping hit."
 					continue
-				succes, message = PimpyAPI.commit_task_to_db(title, "", "", group_id,
-					users, minute_id, i, 0)
-				if not succes:
+
+				users, message = PimpyAPI.get_list_of_users_from_string(group_id, listed_users)
+				if not users:
 					print message
+					continue
+				print users[0].first_name
+				print users[0].last_name
+				try:
+					task = Task(title, "", "", group_id, users, line, minute_id, 0)
+				except:
+					print "wasnt given the right input to create a task"
+					continue
+				tasks_found.append(task)
 
 		regex = re.compile("\s*(?:DONE) ([^\n\r]*)")
 		matches = regex.findall(content)
@@ -120,7 +182,9 @@ class PimpyAPI:
 				print list_items[0].id
 				print list_items[0].title
 				for item in list_items:
-					item.update_status(len(Task.status_meanings)-2)
+					dones_found.append(item)
+			else:
+				print "Could not find task " + done
 
 		regex = re.compile("\s*(?:REMOVE) ([^\n\r]*)")
 		matches = regex.findall(content)
@@ -133,13 +197,13 @@ class PimpyAPI:
 				print list_items[0].id
 				print list_items[0].title
 				for item in list_items:
-					item.update_status(len(Task.status_meanings)-1)
+					removes_found.append(item)
 
-		return True, "awesome stuff"
+		return tasks_found, dones_found, removes_found
 
 
 	@staticmethod
-	def get_list_of_users_from_string(group, comma_sep):
+	def get_list_of_users_from_string(group_id, comma_sep):
 		"""
 		Parses a string which is a list of comma separated user names
 		to a list of users, searching only within the group given
@@ -147,7 +211,16 @@ class PimpyAPI:
 		Returns users, message. Users is false if there is something wrong,
 		in which case the message is stated in message, otherwise message
 		equals "" and users is the list of matched users
+
+		usage:
+		get_list_of_users_from_string(group_id, comma_sep)
+		where group_id is the group's id
+		and comma_sep is a string with comma seperated users.
 		"""
+
+		group = Group.query.filter(Group.id==group_id).first()
+		if group == None:
+			return False, "Could not distinguish group."
 
 		if comma_sep == None:
 			return False, "Did not receive any comma separated users"
