@@ -1,7 +1,7 @@
 from viaduct import db
 
-class ContactInformation(db.Model):
-	__tablename__ = 'contact_information'
+class Contact(db.Model):
+	__tablename__ = 'contact'
 
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(256))
@@ -10,7 +10,7 @@ class ContactInformation(db.Model):
 	location_id = db.Column(db.Integer, db.ForeignKey('location.id'))
 
 	location = db.relationship('Location',
-			backref=db.backref('contact_informations', lazy='dynamic'))
+			backref=db.backref('contacts', lazy='dynamic'))
 	
 	def __init__(self, name, email, phone_nr, location):
 		self.name = name

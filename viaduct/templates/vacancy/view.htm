@@ -1,0 +1,11 @@
+{% from "macros/pagination.htm" import render_pagination %}
+
+{% extends "content.htm" %}
+
+{% block content %}
+	<ul>
+		{% for vacancy in vacancies.items %}
+			<li>{{ vacancy.title }}</li>
+		{% endfor %}
+	</ul>
+{% endblock %}
