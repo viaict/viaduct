@@ -3,7 +3,7 @@ from flask import render_template, request
 import datetime
 
 from viaduct import db
-from viaduct.blueprints.activity.models import Activity
+from viaduct.models.activity import Activity
 from viaduct.models.navigation import NavigationEntry
 
 class NavigationAPI:

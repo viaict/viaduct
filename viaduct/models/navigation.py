@@ -1,5 +1,5 @@
 from viaduct import db
-from viaduct.blueprints.activity.models import Activity
+from viaduct.models.activity import Activity
 
 import inspect
 import datetime

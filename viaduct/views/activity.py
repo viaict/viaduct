@@ -9,8 +9,8 @@ from werkzeug import secure_filename
 
 from viaduct import application, db
 from viaduct.helpers import flash_form_errors
-from forms import CreateForm
-from models import Activity
+from viaduct.forms.activity import CreateForm
+from viaduct.models.activity import Activity
 
 blueprint = Blueprint('activity', __name__)
 
