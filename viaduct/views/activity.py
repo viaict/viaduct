@@ -30,10 +30,10 @@ def view(archive="", page=1):
 			.order_by(Activity.start_time.desc())
 	else :
 		activities = Activity.query \
-			.filter(Activity.end_time > datetime.datetime.now()) \
+			.filter(Activity.end_time > (datetime.datetime.now() - datetime.timedelta(hours=12))) \
 			.order_by(Activity.start_time.asc())
 
-	return render_template('activity/view.htm', activities=activities.paginate(page, 1, False), archive=archive)
+	return render_template('activity/view.htm', activities=activities.paginate(page, 10, False), archive=archive)
 
 @blueprint.route('/activities/<int:activity_id>', methods=['GET', 'POST'])
 def get_activity(activity_id = 0):
@@ -89,8 +89,8 @@ def create(activity_id=None):
 		elif activity.picture:
 			picture = activity.picture
 		else:
-			picture = "yolo.png"
-	
+			picture = None
+
 		venue	= 1 # Facebook ID location, not used yet
 
 		if valid_form:

@@ -20,7 +20,12 @@ class Activity(db.Model):
 	
 	owner = db.relationship('User', backref=db.backref('activities', lazy='dynamic'))
 
-	def __init__(self, owner_id=None, name="", description="", start_time=datetime.datetime.now(), end_time=datetime.datetime.now(), location="Sciencepark, Amsterdam", privacy="public", price="gratis", picture=None, venue=1):
+	def __init__(self, owner_id=None, name="", description="", start_time=None, end_time=None, location="Sciencepark, Amsterdam", privacy="public", price="gratis", picture=None, venue=1):
+		if not start_time:
+			today = datetime.datetime.now()
+			start_time = datetime.datetime(today.year, today.month, today.day, 17)
+			end_time	 = start_time + datetime.timedelta(hours=5)
+
 		self.owner_id = owner_id
 		self.name = name
 		self.description = description
@@ -44,3 +49,12 @@ class Activity(db.Model):
 				return self.start_time.strftime("%a. %d %b (%H:%M) - ")  + \
 					self.end_time.strftime("%a. %d (%H:%M) %b") 
 
+	def get_short_description(self, characters):
+
+		if (len(self.description) > characters):
+			short_description = self.description[:characters].strip()
+			words = short_description.split(' ')[:-1]
+
+			return ' '.join(words) + '...'
+		
+		return self.description
