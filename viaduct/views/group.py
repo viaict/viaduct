@@ -5,10 +5,8 @@ from flask.ext.login import current_user
 from viaduct import db
 from viaduct.helpers import flash_form_errors
 
-from forms import GroupEditForm
-from models import user_group, Group, GroupPermission
-
-from viaduct.blueprints.user.models import User, UserPermission
+from viaduct.forms import GroupEditForm
+from viaduct.models import user_group, Group, GroupPermission, User, UserPermission
 
 blueprint = Blueprint('group', __name__)
 

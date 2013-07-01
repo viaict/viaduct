@@ -1,13 +1,13 @@
 import bcrypt
 
 from flask import flash, get_flashed_messages, redirect, render_template, \
-	request, url_for, abort
+		request, url_for, abort
 from flask import Blueprint, Markup
 from flask.ext.login import current_user, login_user, logout_user
 
 from viaduct import application, db, login_manager
 from viaduct.helpers import flash_form_errors
-from forms import SignUpForm, SignUpFormNoCaptcha, SignInForm
+from viaduct.forms import SignUpForm, SignUpFormNoCaptcha, SignInForm
 from viaduct.models import User, UserPermission
 
 blueprint = Blueprint('user', __name__)
@@ -17,9 +17,6 @@ def load_user(id):
 	# The hook used by the login manager to get the user from the database by
 	# user ID.
 	return User.query.get(int(id))
-
-def load_anonymous_user():
-	return User.query.filter(User.email=='anonymous').first()
 
 @blueprint.route('/users/create', methods=['GET', 'POST'])
 def create_user():

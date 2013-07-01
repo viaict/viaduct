@@ -20,14 +20,9 @@ db.session.add(page)
 db.session.commit()
 
 # Add the anonymous user.
-user = User('anonymous', '', 'Anonymous', '', '0')
+user = User()
 
 db.session.add(user)
-db.session.commit()
-
-anon = Group('anonymous')
-
-db.session.add(anon)
 db.session.commit()
 
 # Add the administrator.
@@ -161,11 +156,6 @@ db.session.commit()
 #db.session.commit()
 
 permissions = PagePermission(group, page, view=True, create=True, edit=True,
-		delete=True)
-db.session.add(permissions)
-db.session.commit()
-
-permissions = PagePermission(anon, page, view=True, create=True, edit=True,
 		delete=True)
 db.session.add(permissions)
 db.session.commit()

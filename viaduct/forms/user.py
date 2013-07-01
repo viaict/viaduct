@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form, TextField, PasswordField, BooleanField, \
-	RecaptchaField
+		RecaptchaField
 from flask.ext.wtf import Required, Email, EqualTo
 
 class SignUpForm(Form):

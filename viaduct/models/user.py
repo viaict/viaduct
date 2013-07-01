@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from viaduct import db
+from viaduct import db, login_manager
 from viaduct.models import GroupPermission, UserPermission
 
 class User(db.Model):
@@ -13,7 +13,10 @@ class User(db.Model):
 	last_name = db.Column(db.String(256))
 	student_id = db.Column(db.String(256))
 
-	def __init__(self, email, password, first_name, last_name, student_id):
+	def __init__(self, email=None, password=None, first_name=None, last_name=None, student_id=None):
+		if not email:
+			self.id = 0
+
 		self.email = email
 		self.password = password
 		self.first_name = first_name
@@ -21,19 +24,23 @@ class User(db.Model):
 		self.student_id = student_id
 
 	def is_authenticated(self):
-		return True
+		return self.id != 0
 
 	def is_active(self):
-		return True
+		return self.id != 0
 
 	def is_anonymous(self):
-		return False
+		return self.id == 0
 
 	def get_id(self):
 		return unicode(self.id)
 
 	def get_student_id(self):
 		return self.student_id
+
+	@staticmethod
+	def get_anonymous_user():
+		return User()
 
 	def has_permission(self, name):
 		# Check if the permission has been allowed to or denied from the user.
