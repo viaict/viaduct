@@ -11,8 +11,8 @@ from viaduct.models import user_group, Group, GroupPermission, User, UserPermiss
 blueprint = Blueprint('group', __name__)
 
 @blueprint.route('/groups/', methods=['GET', 'POST'])
-@blueprint.route('/groups/<int:page>/', methods=['GET', 'POST'])
-def view(page=1):
+@blueprint.route('/groups/<int:page_id>/', methods=['GET', 'POST'])
+def view(page_id=1):
 	if not current_user.has_permission('group.view'):
 		abort(403)
 
@@ -33,7 +33,7 @@ def view(page=1):
 
 		redirect(url_for('group.view'))
 
-	groups = Group.query.paginate(page, 15, False)
+	groups = Group.query.paginate(page_id, 15, False)
 
 	return render_template('group/view.htm', groups=groups)
 
@@ -108,8 +108,8 @@ def edit(group_id):
 	return render_template('group/edit.htm', form=form)
 
 @blueprint.route('/groups/<int:group_id>/users/', methods=['GET', 'POST'])
-@blueprint.route('/groups/<int:group_id>/users/<int:page>/', methods=['GET', 'POST'])
-def view_users(group_id, page=1):
+@blueprint.route('/groups/<int:group_id>/users/<int:page_id>/', methods=['GET', 'POST'])
+def view_users(group_id, page_id=1):
 	if not current_user.has_permission('group.view_users'):
 		abort(403)
 
@@ -138,7 +138,7 @@ def view_users(group_id, page=1):
 
 		return redirect(url_for('group.view_users', group_id=group_id))
 
-	users = group.get_users().paginate(page, 15, False)
+	users = group.get_users().paginate(page_id, 15, False)
 
 	return render_template('group/view_users.htm', group=group, users=users)
 
