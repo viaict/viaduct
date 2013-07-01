@@ -1,6 +1,8 @@
 from viaduct import db
 from datetime import datetime
 
+from viaduct.models.company import Company
+
 class Vacancy(db.Model):
 	__tablename__ = 'vacancy'
 

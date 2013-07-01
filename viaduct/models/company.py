@@ -1,4 +1,6 @@
 from viaduct import db
+from viaduct.models.location import Location
+from viaduct.models.contact import Contact
 
 class Company(db.Model):
 	__tablename__ = 'company'
