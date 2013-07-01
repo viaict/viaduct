@@ -164,19 +164,14 @@ def edit_permissions(user_id, page_id=1):
 	if form.validate_on_submit():
 		for form_entry, permission in zip(form.permissions, pagination.items):
 			if form_entry.select.data > 0:
-				print('add true')
 				user.add_permission(permission.name, True)
 			elif form_entry.select.data < 0:
-				print('add false')
 				user.add_permission(permission.name, False)
 			else:
-				print('del {0}'.format(permission.name))
 				user.delete_permission(permission.name)
 	else:
 		for permission in pagination.items:
-			data = {'select': user.has_user_permission(permission.name)}
-
-			form.permissions.append_entry(data)
+			form.permissions.append_entry({'select': user.get_permission(permission.name)})
 
 	return render_template('user/edit_permissions.htm', form=form,
 			pagination=pagination,

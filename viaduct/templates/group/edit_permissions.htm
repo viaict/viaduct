@@ -1,0 +1,37 @@
+{% from "macros/form.htm" import render_button %}
+{% from "macros/pagination.htm" import render_pagination %}
+
+{% extends "content.htm" %}
+
+{% block content %}
+<form action="" method="post" name="group_edit_permissions">
+	<fieldset>
+		<legend>Edit Group Permissions</legend>
+
+		{{ form.csrf_token }}
+
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th>Permission</th>
+					<th></th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{% for permission, form_entry in permissions %}
+					<tr>
+						<td>{{ permission.label }}</td>
+						<td>{{ form_entry.csrf_token }}{{ form_entry.select }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+		{{ render_button(form.save_changes) }}
+
+		{{ render_pagination(pagination, 'user.edit_permissions') }}
+	</fieldset>
+</form>
+{% endblock %}
+

@@ -42,7 +42,7 @@ class User(db.Model):
 	def get_anonymous_user():
 		return User.query.get(0);
 
-	def has_user_permission(self, name):
+	def get_permission(self, name):
 		permission = self.permissions.join(Permission).filter(Permission.name==name).order_by(UserPermission.allowed.desc()).first()
 
 		if not permission:
