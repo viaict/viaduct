@@ -111,7 +111,6 @@ def examination_admin():
 			filter(or_(Examination.title.like('%' + search + '%'), 
 				Course.name.like('%' + search + '%'), 
 				Education.name.like('%' + search + '%'))).all()
-		print search
 		return render_template('examination/admin.htm', path = path, 
 			examinations = examinations, search=search, message="")
 
@@ -190,7 +189,6 @@ def edit_examination():
 
 	if request.args.get('edit') != None:
 		exam_id = request.args.get('edit')
-		print "henk"
 		examination = Examination.query.filter(Examination.id == exam_id).\
 			first()
 
