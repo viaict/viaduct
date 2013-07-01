@@ -19,7 +19,8 @@
 
 		<div class="accordion-heading">
 			<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc" href="#collapseLocation">
-				Lokatie: {{ activity.location}}
+				<i class="icon-compass"></i>
+				Locatie: {{ activity.location}}
 				<span class="pull-right">Klik om uit te klappen</span>
 			</a>
 		</div>
@@ -35,10 +36,10 @@
 
 <div class="row-fluid">
 	<div class="span8">
-		<h4>Prijs: <em>{{ activity.price}}</em></h4>
+		<h4><i class="icon-euro"></i>Prijs: {{ activity.price}}</h4>
 		
 		<div class="time">
-			<i class="icon-time"></i>
+			<i class="icon-calendar"></i>
 			{{ activity.get_time() }}
 		</div>
 
