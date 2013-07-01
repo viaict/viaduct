@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	$('div.expander').expander({
-		slicePoint: 1100,
+		slicePoint: 2371,
 		expandText: "lees meer",
 		userCollapseText: "lees minder",
 		expandSpeed: 1000,
