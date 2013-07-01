@@ -29,7 +29,6 @@ def safe_markdown_filter(data):
 
 @application.template_filter('pages')
 def pages_filter(data):
-	print "DAAAAAAAATA"
 	for i in range(len(data)):
 		print i, data[i].title
 
@@ -56,7 +55,9 @@ def pages_filter(data):
 				path=data[i].path) + '"><i class="icon-pencil"></i> Edit Page</a>'
 			content += '</div>'
 
-
+		# if we render stuff for the main page we want to make sure
+		# the individual pages are rendered correctly, this is super
+		# hard coded but, well, what can you do?
 		if data[i].is_main_page:
 			if data[i].path == 'twitter':
 				content += '<h1>{0}</h1>'.format(data[i].title)
@@ -75,21 +76,6 @@ def pages_filter(data):
 			print data[i].path
 			content += '<h1>{0}</h1>'.format(data[i].title)
 			content += markdown(data[i].content, extensions=markdown_extensions)
-
-		## we fix index/homepage here
-		#if i == 1 and data[i].filter_html:
-		#	content += '<h1>{0}</h1>'.format(data[i].title)
-		#	content += markdown(data[i].content,
-		#		enable_attributes=False, extensions=markdown_extensions)
-		#elif i == 2:
-		#	activities = Activity.query \
-		#		.filter(Activity.end_time > datetime.datetime.now()) \
-		#		.order_by(Activity.start_time.asc())
-		#	content += markdown(render_template('activity/view_simple.htm',
-		#		activities=activities.paginate(1, 12, False)))
-		#else:
-		#content += '<h1>{0}</h1>'.format(data[i].title)
-		#content += markdown(data[i].content, extensions=markdown_extensions)
 
 		content += '</div></div>'
 
