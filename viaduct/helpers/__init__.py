@@ -13,6 +13,14 @@ markdown_extensions = [
 	'toc'
 ]
 
+@application.errorhandler(403)
+def page_not_found(e):
+	return "403, The police has been notified."
+
+@application.errorhandler(404)
+def page_not_found(e):
+	return "500, External server error."
+
 def flash_form_errors(form):
 	for field, errors in form.errors.items():
 		for error in errors:
