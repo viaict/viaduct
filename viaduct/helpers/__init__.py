@@ -29,8 +29,6 @@ def safe_markdown_filter(data):
 
 @application.template_filter('pages')
 def pages_filter(data):
-	for i in range(len(data)):
-
 	content = '<div class="container">'
 
 	for i in range(len(data)):
