@@ -36,12 +36,15 @@ def pages_filter(data):
 			content += '<div class="row">'
 
 		if i == len(data) - 1 and i % 2 == 0:
-			content += '<div class="span12">'
+			content += '<div class="span10">'
 		else:
 			content += '<div class="span6">'
 
-		content += '<div class="mainblock expander">'
+		content += '<div class="mainblock'
 
+		# expander toevoegen als het over de mainpage gaat
+		content += '">' if len(data) == 1 else ' expander">'
+	
 		if current_user.is_authenticated():
 			content += '<div class="btn-group">'
 			content += '<a class="btn" href="' + url_for(
@@ -50,7 +53,7 @@ def pages_filter(data):
 				path=data[i].path) + '"><i class="icon-pencil"></i> Edit Page</a>'
 			content += '</div>'
 
-
+		# we fix index/homepage here
 		if i == 1 and data[i].filter_html:
 			content += '<h1>{0}</h1>'.format(data[i].title)
 			content += markdown(data[i].content,

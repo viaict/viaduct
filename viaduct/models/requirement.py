@@ -1,8 +1,6 @@
-from application import db
+from viaduct import db
 
-# Minimale eisen van je vacature
-
-class Requirements(db.Model):
+class Requirement(db.Model):
 	__tablename__ = 'requirements'
 
 	id = db.Column(db.Integer, primary_key=True)
