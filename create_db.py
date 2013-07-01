@@ -1,11 +1,11 @@
 import os, bcrypt, datetime
 from viaduct import db, application
-from viaduct.blueprints.user.models import User, UserPermission
-from viaduct.blueprints.group.models import Group, GroupPermission
 from viaduct.blueprints.page.models import Page, PagePermission, PageRevision
-from viaduct.models.pimpy import Minute, Task
-from viaduct.models.activity import Activity
-from viaduct.models.navigation import NavigationEntry
+
+from viaduct.models import User, UserPermission, Group, GroupPermission
+from viaduct.models import Activity
+from viaduct.models import Minute, Task
+from viaduct.models import NavigationEntry
 
 from viaduct.models.vacancy import Vacancy
 from viaduct.models.requirement import Requirement
@@ -28,14 +28,9 @@ db.session.add(page)
 db.session.commit()
 
 # Add the anonymous user.
-user = User('anonymous', '', 'Anonymous', '', '0')
+user = User()
 
 db.session.add(user)
-db.session.commit()
-
-anon = Group('anonymous')
-
-db.session.add(anon)
 db.session.commit()
 
 # Add the administrator.
@@ -58,18 +53,6 @@ db.session.add(group)
 db.session.commit()
 
 # Grant the permissions.
-permissions = UserPermission(group, view=True, create=True, edit=True,
-	delete=True)
-
-db.session.add(permissions)
-db.session.commit()
-
-permissions = GroupPermission(group, view=True, create=True, edit=True,
-	delete=True)
-
-db.session.add(permissions)
-db.session.commit()
-
 permissions = PagePermission(group, page, view=True, create=True, edit=True,
 	delete=True)
 
@@ -181,11 +164,6 @@ db.session.commit()
 #db.session.commit()
 
 permissions = PagePermission(group, page, view=True, create=True, edit=True,
-		delete=True)
-db.session.add(permissions)
-db.session.commit()
-
-permissions = PagePermission(anon, page, view=True, create=True, edit=True,
 		delete=True)
 db.session.add(permissions)
 db.session.commit()

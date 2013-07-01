@@ -1,10 +1,8 @@
 from flask import render_template, request, Markup, redirect, url_for, abort
 from flask.ext.login import current_user
 
-from viaduct.models.pimpy import Task, Minute
-
-from viaduct.blueprints.group.models import Group
-from viaduct.blueprints.user.models import User
+from viaduct.models import Group, User
+from viaduct.models import Minute, Task
 
 from viaduct import db, application
 

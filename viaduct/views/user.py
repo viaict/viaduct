@@ -1,14 +1,14 @@
 import bcrypt
 
 from flask import flash, get_flashed_messages, redirect, render_template, \
-	request, url_for, abort
+		request, url_for, abort
 from flask import Blueprint, Markup
 from flask.ext.login import current_user, login_user, logout_user
 
 from viaduct import application, db, login_manager
 from viaduct.helpers import flash_form_errors
-from forms import SignUpForm, SignUpFormNoCaptcha, SignInForm
-from models import User, UserPermission
+from viaduct.forms import SignUpForm, SignUpFormNoCaptcha, SignInForm
+from viaduct.models import User, UserPermission
 
 blueprint = Blueprint('user', __name__)
 
@@ -18,16 +18,12 @@ def load_user(id):
 	# user ID.
 	return User.query.get(int(id))
 
-def load_anonymous_user():
-	return User.query.filter(User.email=='anonymous').first()
-
 @blueprint.route('/users/create', methods=['GET', 'POST'])
 def create_user():
-	if not UserPermission.get_user_rights(current_user)['create']:
+	if not current_user.has_permission('user.create'):
 		abort(403)
 
 	form = SignUpFormNoCaptcha(request.form)
-
 
 	if form.validate_on_submit():
 
@@ -127,7 +123,7 @@ def sign_out():
 @blueprint.route('/users/', methods=['GET', 'POST'])
 @blueprint.route('/users/<int:page>/', methods=['GET', 'POST'])
 def view(page=1):
-	if not UserPermission.get_user_rights(current_user)['view']:
+	if not current_user.has_permission('user.view'):
 		abort(403)
 
 	# persumably, if the method is a post we have selected stuff to delete,

@@ -84,11 +84,7 @@ path = os.path.dirname(os.path.abspath(__file__))
 register_views(application, os.path.join(path, 'views'))
 register_blueprints(application, os.path.join(path, 'blueprints'), 'views')
 
-from viaduct.blueprints.user.views import blueprint
+from viaduct.models import User
 
-application.register_blueprint(blueprint)
-
-from viaduct.blueprints.user.views import load_anonymous_user
-
-login_manager.anonymous_user = load_anonymous_user
+login_manager.anonymous_user = User.get_anonymous_user
 

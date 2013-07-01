@@ -41,9 +41,8 @@ def pages_filter(data):
 			content += '<div class="span6">'
 
 		content += '<div class="mainblock'
-
 		# expander toevoegen als het over de mainpage gaat
-		content += '">' if len(data) == 1 else ' expander">'
+		content += ' expander">' if data[i].is_main_page else '">'
 	
 		if current_user.is_authenticated():
 			content += '<div class="btn-group">'
@@ -53,18 +52,25 @@ def pages_filter(data):
 				path=data[i].path) + '"><i class="icon-pencil"></i> Edit Page</a>'
 			content += '</div>'
 
-		# we fix index/homepage here
-		if i == 1 and data[i].filter_html:
-			content += '<h1>{0}</h1>'.format(data[i].title)
-			content += markdown(data[i].content,
-				enable_attributes=False, extensions=markdown_extensions)
-		elif i == 2:
-			activities = Activity.query \
-				.filter(Activity.end_time > datetime.datetime.now()) \
-				.order_by(Activity.start_time.asc())
-			content += markdown(render_template('activity/view_simple.htm',
-				activities=activities.paginate(1, 12, False)))
+		# if we render stuff for the main page we want to make sure
+		# the individual pages are rendered correctly, this is super
+		# hard coded but, well, what can you do?
+		if data[i].is_main_page:
+			if data[i].path == 'twitter':
+				content += '<h1>{0}</h1>'.format(data[i].title)
+				content += markdown(data[i].content,
+					enable_attributes=False, extensions=markdown_extensions)
+			elif data[i].path == 'activities':
+				activities = Activity.query \
+					.filter(Activity.end_time > datetime.datetime.now()) \
+					.order_by(Activity.start_time.asc())
+				content += render_template('activity/view_simple.htm',
+					activities=activities.paginate(1, 12, False))
+			elif data[i].path == 'contact' or data[i].path == 'laatste_bestuursblog':
+				content += '<h1>{0}</h1>'.format(data[i].title)
+				content += markdown(data[i].content, extensions=markdown_extensions)
 		else:
+			print data[i].path
 			content += '<h1>{0}</h1>'.format(data[i].title)
 			content += markdown(data[i].content, extensions=markdown_extensions)
 

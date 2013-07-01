@@ -5,17 +5,15 @@ from flask.ext.login import current_user
 from viaduct import db
 from viaduct.helpers import flash_form_errors
 
-from forms import GroupEditForm
-from models import user_group, Group, GroupPermission
-
-from viaduct.blueprints.user.models import User, UserPermission
+from viaduct.forms import GroupEditForm
+from viaduct.models import user_group, Group, GroupPermission, User, UserPermission
 
 blueprint = Blueprint('group', __name__)
 
 @blueprint.route('/groups/', methods=['GET', 'POST'])
 @blueprint.route('/groups/<int:page>/', methods=['GET', 'POST'])
 def view(page=1):
-	if not GroupPermission.get_user_rights(current_user)['view']:
+	if not current_user.has_permission('group.view'):
 		abort(403)
 
 	if request.method == 'POST':
@@ -41,7 +39,7 @@ def view(page=1):
 
 @blueprint.route('/groups/create/', methods=['GET', 'POST'])
 def create():
-	if not UserPermission.get_user_rights(current_user)['create']:
+	if not current_user.has_permission('group.create'):
 		abort(403)
 
 	if request.method == 'POST':
@@ -69,7 +67,7 @@ def create():
 
 @blueprint.route('/groups/<int:group_id>/edit/', methods=['GET', 'POST'])
 def edit(group_id):
-	if not GroupPermission.get_user_rights(current_user)['edit']:
+	if not current_user.has_permission('group.edit'):
 		abort(403)
 
 	group = Group.query.filter(Group.id==group_id).first()
@@ -112,7 +110,7 @@ def edit(group_id):
 @blueprint.route('/groups/<int:group_id>/users/', methods=['GET', 'POST'])
 @blueprint.route('/groups/<int:group_id>/users/<int:page>/', methods=['GET', 'POST'])
 def view_users(group_id, page=1):
-	if not GroupPermission.get_user_rights(current_user)['view']:
+	if not current_user.has_permission('group.view_users'):
 		abort(403)
 
 	group = Group.query.filter(Group.id==group_id).first()
@@ -147,7 +145,7 @@ def view_users(group_id, page=1):
 @blueprint.route('/groups/<int:group_id>/users/add/', methods=['GET', 'POST'])
 @blueprint.route('/groups/<int:group_id>/users/add/<int:page_id>', methods=['GET', 'POST'])
 def add_users(group_id, page_id=1):
-	if not GroupPermission.get_user_rights(current_user)['edit']:
+	if not current_user.has_permission('group.add_users'):
 		abort(403)
 
 	group = Group.query.filter(Group.id==group_id).first()
