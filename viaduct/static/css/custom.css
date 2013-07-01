@@ -160,4 +160,5 @@ div.nav_entry {
 
 div.sortable {
 	padding: 10px;
+	clear: both;
 }
