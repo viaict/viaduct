@@ -8,7 +8,8 @@ from flask.ext.login import current_user, login_user, logout_user
 from viaduct import application, db, login_manager
 from viaduct.helpers import flash_form_errors
 from viaduct.forms import SignUpForm, SignUpFormNoCaptcha, SignInForm
-from viaduct.models import User, UserPermission
+from viaduct.models import Permission, User, UserPermission
+from viaduct.forms.user import EditUserPermissionForm
 
 blueprint = Blueprint('user', __name__)
 
@@ -150,10 +151,34 @@ def view(page_id=1):
 
 	return render_template('user/view.htm', users=users)
 
-@blueprint.route('/user/edit-permissions/<int:user_id>/', methods=['GET', 'POST'])
-def edit_permissions(user_id):
+@blueprint.route('/users/edit-permissions/<int:user_id>/', methods=['GET', 'POST'])
+@blueprint.route('/users/edit-permissions/<int:user_id>/<int:page_id>/', methods=['GET', 'POST'])
+def edit_permissions(user_id, page_id=1):
 	if not current_user.has_permission('user.edit'):
 		abort(403)
 
-	return ''
+	user = User.query.filter(User.id==user_id).first()
+	form = EditUserPermissionForm()
+	pagination = Permission.query.paginate(page_id, 15, False)
+
+	if form.validate_on_submit():
+		for form_entry, permission in zip(form.permissions, pagination.items):
+			if form_entry.select.data > 0:
+				print('add true')
+				user.add_permission(permission.name, True)
+			elif form_entry.select.data < 0:
+				print('add false')
+				user.add_permission(permission.name, False)
+			else:
+				print('del {0}'.format(permission.name))
+				user.delete_permission(permission.name)
+	else:
+		for permission in pagination.items:
+			data = {'select': user.has_user_permission(permission.name)}
+
+			form.permissions.append_entry(data)
+
+	return render_template('user/edit_permissions.htm', form=form,
+			pagination=pagination,
+			permissions=zip(pagination.items, form.permissions))
 
