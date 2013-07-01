@@ -1,7 +1,7 @@
 from flask import render_template, request, Markup, redirect, url_for, abort
 from flask.ext.login import current_user
 
-from models import Task, Minute
+from viaduct.models.pimpy import Task, Minute
 
 from viaduct.blueprints.group.models import Group
 from viaduct.blueprints.user.models import User
@@ -352,4 +352,6 @@ class PimpyAPI:
 
 		return Markup(render_template('pimpy/api/minutes.htm',
 			list_items=list_items, type='minutes', group_id=group_id))
+
+
 

@@ -1,11 +1,12 @@
 from flask.ext.wtf import Form, TextField, TextAreaField, FileField, DateTimeField, Required, validators, IntegerField, SelectField, BooleanField
 
 import datetime
-from models import Minute, Task
+from viaduct.models.pimpy import Minute, Task
 from viaduct import application
 
 
 DATE_FORMAT = application.config['DATE_FORMAT']
+
 
 class AddTaskForm(Form):
 	name = TextField('Name', validators=[Required()])
@@ -38,3 +39,9 @@ class AddMinuteForm(Form):
 	def load_groups(self, groups):
 		#self.group.choices = map(lambda x: ("%s%d" % (x.name, x.id), x.name), groups)
 		self.group.choices = map(lambda x: (x.id, x.name), groups)
+
+
+
+
+
+

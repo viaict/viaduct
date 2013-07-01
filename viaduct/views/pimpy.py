@@ -7,9 +7,10 @@ from flask.ext.login import current_user
 from viaduct import application, db
 from viaduct.helpers import flash_form_errors
 
-from api import PimpyAPI
-from forms import AddTaskForm, AddMinuteForm
-from models import Minute, Task
+
+from viaduct.forms.pimpy import AddTaskForm, AddMinuteForm
+from viaduct.api.pimpy import PimpyAPI
+from viaduct.models.pimpy import Minute, Task
 
 from flask.ext.login import current_user
 
