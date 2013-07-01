@@ -3,10 +3,9 @@ from flask.ext.login import current_user
 
 from viaduct import application
 from markdown import markdown
-
 from resource import Resource
 
-from viaduct.blueprints.activity.models import Activity 
+from viaduct.models.activity import Activity
 
 import datetime
 

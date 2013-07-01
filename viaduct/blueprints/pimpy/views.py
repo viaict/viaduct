@@ -16,8 +16,6 @@ from flask.ext.login import current_user
 from viaduct.blueprints.user.models import User, UserPermission
 from viaduct.blueprints.group.models import Group
 
-
-
 blueprint = Blueprint('pimpy', __name__)
 
 #@blueprint.route('/pimpy/', methods=['GET', 'POST'])
