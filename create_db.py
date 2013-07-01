@@ -7,6 +7,11 @@ from viaduct.models import Activity
 from viaduct.models import Minute, Task
 from viaduct.models import NavigationEntry
 
+from viaduct.models.vacancy import Vacancy
+from viaduct.models.requirement import Requirement
+from viaduct.models.education import Education
+from viaduct.models.programming_language import ProgrammingLanguage
+
 # Remove the old db.
 if os.path.exists('application.db'):
 	os.remove('application.db')

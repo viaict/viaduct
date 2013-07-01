@@ -90,13 +90,11 @@ def view_examination():
 			filter(or_(Examination.title.like('%' + search + '%'), 
 				Course.name.like('%' + search + '%'), 
 				Education.name.like('%' + search + '%'))).all()
-		print search
 		return render_template('examination/view.htm', path = path, 
 			examinations = examinations, search=search)
 
 
 	examinations = Examination.query.all()
-	print examinations
 	return render_template('examination/view.htm', path = path, 
 		examinations = examinations, search="")
 
@@ -113,7 +111,6 @@ def examination_admin():
 			filter(or_(Examination.title.like('%' + search + '%'), 
 				Course.name.like('%' + search + '%'), 
 				Education.name.like('%' + search + '%'))).all()
-		print search
 		return render_template('examination/admin.htm', path = path, 
 			examinations = examinations, search=search, message="")
 
@@ -192,7 +189,6 @@ def edit_examination():
 
 	if request.args.get('edit') != None:
 		exam_id = request.args.get('edit')
-		print "henk"
 		examination = Examination.query.filter(Examination.id == exam_id).\
 			first()
 
@@ -242,15 +238,12 @@ def get_education_id(education):
 		filter(Education.name==education).first()
 
 	if(education_object == None):
-		print "education_object"
 		return None
 	return education_object[0].id
 
 def get_course_id(course):
-	print course;
 	course_object = db.session.query(Course).filter(Course.name==course).first()
 
 	if(course_object == None):
-		print "course_object"
 		return None
 	return course_object.id

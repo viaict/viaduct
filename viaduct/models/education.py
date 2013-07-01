@@ -1,6 +1,5 @@
-import datetime
-
 from viaduct import db
+import datetime
 
 class Education(db.Model):
 	__tablename__ = 'education'

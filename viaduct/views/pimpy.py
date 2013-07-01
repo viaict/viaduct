@@ -8,7 +8,7 @@ from viaduct import application, db
 from viaduct.helpers import flash_form_errors
 
 
-from viaduct.forms.pimpy import AddTaskForm, AddMinuteForm
+from viaduct.forms.pimpy import AddTaskForm, AddMinuteForm, EditTaskForm
 from viaduct.api.pimpy import PimpyAPI
 from viaduct.models.pimpy import Minute, Task
 
@@ -109,6 +109,8 @@ def edit_task(task_id=-1):
 		flash('task not specified')
 		return redirect(url_for('pimpy.view_tasks', group_id='all'))
 
+	task = Task.query.filter(Task.id==task_id).first()
+
 	form = EditTaskForm(request.form)
 	if request.method == 'POST':
 		message = ""
@@ -130,6 +132,11 @@ def edit_task(task_id=-1):
 		if result:
 			flash('The task is edited sucessfully')
 			return redirect(url_for('pimpy.view_tasks', group_id=form.group.data))
+
+	form.load_groups(current_user.groups.all())
+
+	return render_template('pimpy/edit_task.htm', group=group,
+		group_id=group_id, type='tasks', form=form)
 
 @blueprint.route('/pimpy/minutes/add/<string:group_id>', methods=['GET', 'POST'])
 def add_minute(group_id='all'):
