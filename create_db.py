@@ -3,7 +3,7 @@ from viaduct import db, application
 from viaduct.blueprints.user.models import User, UserPermission
 from viaduct.blueprints.group.models import Group, GroupPermission
 from viaduct.blueprints.page.models import Page, PagePermission, PageRevision
-from viaduct.blueprints.pimpy.models import Minute, Task
+from viaduct.models.pimpy import Minute, Task
 from viaduct.blueprints.activity.models import Activity
 from viaduct.models.navigation import NavigationEntry
 

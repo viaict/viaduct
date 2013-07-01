@@ -1,0 +1,61 @@
+{% extends "pimpy/view_page.htm" %}
+
+{% block content %}
+<div class="span8">
+
+<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+	<div class="control-group">
+		<label class="control-label">Edit a task</label>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="name">Task</label>
+		<div class="controls">
+			{{ form.name }}
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="content">More Info</label>
+		<div class="controls">
+			{{ form.content }}
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="deadline">Deadline (jjjj-mm-dd)</label>
+		<div class="controls">
+			{{ form.deadline(id='start_date') }}
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="line">Line</label>
+		<div class="controls">
+			{{ form.line }}
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="group">Group</label>
+		<div class="controls">
+			{{ form.group }}
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="users">Users</label>
+		<div class="controls">
+			{{ form.users }}
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="status">Status</label>
+		<div class="controls">
+			{{ form.status }}
+		</div>
+	</div>
+	<div class="control-group">
+		<div class="controls">
+			<button type="submit" class="btn">Create task</button>
+		</div>
+	</div>
+<!-- data-date-format="yyyy-mm-dd", seems not likely to be workin' anytime soon -->
+</form>
+</div>
+
+{% endblock content %}

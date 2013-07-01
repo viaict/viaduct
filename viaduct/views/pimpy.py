@@ -7,16 +7,15 @@ from flask.ext.login import current_user
 from viaduct import application, db
 from viaduct.helpers import flash_form_errors
 
-from api import PimpyAPI
-from forms import AddTaskForm, AddMinuteForm
-from models import Minute, Task
+
+from viaduct.forms.pimpy import AddTaskForm, AddMinuteForm
+from viaduct.api.pimpy import PimpyAPI
+from viaduct.models.pimpy import Minute, Task
 
 from flask.ext.login import current_user
 
 from viaduct.blueprints.user.models import User, UserPermission
 from viaduct.blueprints.group.models import Group
-
-
 
 blueprint = Blueprint('pimpy', __name__)
 
@@ -103,6 +102,34 @@ def add_task(group_id='all'):
 
 	return render_template('pimpy/add_task.htm', group=group,
 		group_id=group_id, type='tasks', form=form)
+
+@blueprint.route('/pimpy/tasks/edit/<string:task_id>', methods=['GET', 'POST'])
+def edit_task(task_id=-1):
+	if task_id == '':
+		flash('task not specified')
+		return redirect(url_for('pimpy.view_tasks', group_id='all'))
+
+	form = EditTaskForm(request.form)
+	if request.method == 'POST':
+		message = ""
+		if form.name.data == "":
+			message = "Name is required"
+		elif form.group == "":
+			message = "Group is required"
+		elif form.users.data == "":
+			message = "A minimum of 1 user is required"
+
+		result = message == ""
+
+		if result:
+			result, message = PimpyAPI.edit_task(form.name.data,
+				form.content.data, request.form['deadline'],
+				form.group.data, form.users.data, form.line.data,
+				form.status.data)
+
+		if result:
+			flash('The task is edited sucessfully')
+			return redirect(url_for('pimpy.view_tasks', group_id=form.group.data))
 
 @blueprint.route('/pimpy/minutes/add/<string:group_id>', methods=['GET', 'POST'])
 def add_minute(group_id='all'):

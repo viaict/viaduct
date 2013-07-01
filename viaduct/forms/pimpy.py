@@ -1,14 +1,15 @@
 from flask.ext.wtf import Form, TextField, TextAreaField, FileField, DateTimeField, Required, validators, IntegerField, SelectField, BooleanField
 
 import datetime
-from models import Minute, Task
+from viaduct.models.pimpy import Minute, Task
 from viaduct import application
 
 
 DATE_FORMAT = application.config['DATE_FORMAT']
 
+
 class AddTaskForm(Form):
-	name				= TextField('Name', validators=[Required()])
+	name = TextField('Name', validators=[Required()])
 	content = TextAreaField('Content', validators=[validators.optional()]) #, validators.length(max=1200)])
 	deadline = DateTimeField('Deadline', format=DATE_FORMAT, default=datetime.date.today())
 	# timestamp
@@ -23,6 +24,10 @@ class AddTaskForm(Form):
 		self.group.choices = map(lambda x: (x.id, x.name), groups)
 
 
+class EditTaskForm(Form):
+	name = TextField('name', validators=[Required()])
+
+
 class AddMinuteForm(Form):
 	# TODO: should try and resize stuff, especially the content field
 	content = TextAreaField('Content', [validators.required()]) #, validators.length(max=1200)])
@@ -34,3 +39,9 @@ class AddMinuteForm(Form):
 	def load_groups(self, groups):
 		#self.group.choices = map(lambda x: ("%s%d" % (x.name, x.id), x.name), groups)
 		self.group.choices = map(lambda x: (x.id, x.name), groups)
+
+
+
+
+
+
