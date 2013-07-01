@@ -25,7 +25,13 @@ class AddTaskForm(Form):
 
 
 class EditTaskForm(Form):
-	name = TextField('name', validators=[Required()])
+	name = TextField('Name', default=task.title)
+	content = TextAreaField('Content', default=task.content)
+	deadline = DateTimeField('Deadline', default=task.deadline)
+	group = SelectField('Group', default=task.group_id)
+
+	def load_groups(self, groups):
+		self.group.choises = map(lambda x: (x.id, x.name), groups)
 
 
 class AddMinuteForm(Form):
@@ -39,9 +45,4 @@ class AddMinuteForm(Form):
 	def load_groups(self, groups):
 		#self.group.choices = map(lambda x: ("%s%d" % (x.name, x.id), x.name), groups)
 		self.group.choices = map(lambda x: (x.id, x.name), groups)
-
-
-
-
-
 
