@@ -31,7 +31,7 @@ db.session.add(anon)
 db.session.commit()
 
 # Add the administrator.
-user = User('administrator@svia.nl', bcrypt.hashpw('administrator',
+user = User('administrator@svia.nl', bcrypt.hashpw('ictIsAwesome',
 		bcrypt.gensalt()), 'Administrator', '', '0')
 
 db.session.add(user)
