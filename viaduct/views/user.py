@@ -121,8 +121,8 @@ def sign_out():
 	return redirect('/')
 
 @blueprint.route('/users/', methods=['GET', 'POST'])
-@blueprint.route('/users/<int:page>/', methods=['GET', 'POST'])
-def view(page=1):
+@blueprint.route('/users/<int:page_id>/', methods=['GET', 'POST'])
+def view(page_id=1):
 	if not current_user.has_permission('user.view'):
 		abort(403)
 
@@ -146,7 +146,14 @@ def view(page=1):
 		redirect(url_for('user.view'))
 
 	# Get a list of users to render for the current page.
-	users = User.query.paginate(page, 15, False)
+	users = User.query.paginate(page_id, 15, False)
 
 	return render_template('user/view.htm', users=users)
+
+@blueprint.route('/user/edit-permissions/<int:user_id>/', methods=['GET', 'POST'])
+def edit_permissions(user_id):
+	if not current_user.has_permission('user.edit'):
+		abort(403)
+
+	return ''
 
