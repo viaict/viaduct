@@ -26,3 +26,29 @@
 	</div>
 {% endmacro %}
 
+{% macro render_textarea(field) %}
+	<div class="control-group">
+		{{ field.label(class='content-label') }}
+		<div class="controls">
+			{{ field(placeholder=field.label.text, **kwargs) }}
+		</div>
+	</div>
+{% endmacro %}
+
+{% macro render_datefield(field) %}
+	<div class="control-group">
+		{{ field.label(class='content-label') }}
+		<div class="controls">
+			{{ field(placeholder=field.label.text, **kwargs) }}
+		</div>
+	</div>
+{% endmacro %}
+
+{% macro render_select(field) %}
+	<div class="control-group">
+		{{ field.label(class='content-label') }}
+		<div class="controls">
+			{{ field(**kwargs) }}
+		</div>
+	</div>
+{% endmacro %}
