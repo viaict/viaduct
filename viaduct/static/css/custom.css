@@ -3,6 +3,11 @@ body {
 	margin-bottom:20px;
 }
 
+.sponsors {
+	margin-top:40px;
+  padding:20px 0;
+}
+
 /* Activity-block (activities) */
 
 .activity-block {
@@ -150,4 +155,15 @@ li.leave-alone {
 
 ul.parent > li {
 	margin-bottom: 10px;
+}
+
+/* Navigation. */
+div.nav_entry {
+	border: 1px solid black;
+	padding: 5px;
+}
+
+div.sortable {
+	padding: 10px;
+	clear: both;
 }

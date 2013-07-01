@@ -26,14 +26,14 @@ def view(archive="", page=1):
 
 	if archive == "archive":
 		activities = Activity.query \
-			.filter(Activity.start_time < datetime.datetime.now()) \
+			.filter(Activity.end_time < datetime.datetime.today()) \
 			.order_by(Activity.start_time.desc())
 	else :
 		activities = Activity.query \
 			.filter(Activity.end_time > datetime.datetime.now()) \
 			.order_by(Activity.start_time.asc())
 
-	return render_template('activity/view.htm', activities=activities.paginate(page, 12, False), archive=archive)
+	return render_template('activity/view.htm', activities=activities.paginate(page, 1, False), archive=archive)
 
 @blueprint.route('/activities/<int:activity_id>', methods=['GET', 'POST'])
 def get_activity(activity_id = 0):

@@ -4,7 +4,7 @@ from viaduct.blueprints.user.models import User, UserPermission
 from viaduct.blueprints.group.models import Group, GroupPermission
 from viaduct.blueprints.page.models import Page, PagePermission, PageRevision
 from viaduct.models.pimpy import Minute, Task
-from viaduct.blueprints.activity.models import Activity
+from viaduct.models.activity import Activity
 from viaduct.models.navigation import NavigationEntry
 
 # Remove the old db.
