@@ -123,7 +123,7 @@ def sign_out():
 @blueprint.route('/users/', methods=['GET', 'POST'])
 @blueprint.route('/users/<int:page>/', methods=['GET', 'POST'])
 def view(page=1):
-	if not UserPermission.get_user_rights(current_user)['view']:
+	if not current_user.has_permission('user.view'):
 		abort(403)
 
 	# persumably, if the method is a post we have selected stuff to delete,
