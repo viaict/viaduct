@@ -7,8 +7,10 @@ from viaduct.helpers import flash_form_errors
 from viaduct.models.navigation import NavigationEntry
 from viaduct.forms import NavigationEntryForm
 from viaduct.api.navigation import NavigationAPI
+from viaduct.blueprints.page.models import Page
 
 import json
+import re
 
 blueprint = Blueprint('navigation', __name__)
 
@@ -42,15 +44,19 @@ def edit(entry_id=None):
 
 	if form.is_submitted():
 		if form.validate_on_submit():
+			url = form.url.data
+			pattern = re.compile('^/')
+			if not pattern.match(url):
+				url = '/' + url
+
 			if entry:
 				flash('De navigatie link is opgeslagen.', 'success');
 				entry.title = form.title.data
-				entry.url = form.url.data
+				entry.url = url
 				entry.external = form.external.data
 				entry.activity_list = form.activity_list.data
 			else:
-				flash('De navigatie link is aangemaakt.', 'success');
-				if not form.parent_id.data:
+				if form.parent_id.data == 'None':
 					parent = None
 
 					last_entry = db.session.query(NavigationEntry)\
@@ -74,18 +80,25 @@ def edit(entry_id=None):
 					else:
 						position = 0
 
-				entry = NavigationEntry(parent, form.title.data, form.url.data,
+				entry = NavigationEntry(parent, form.title.data, url,
 						form.external.data, form.activity_list.data, position)
+				flash('De navigatie link is aangemaakt.', 'success');
 
 			db.session.add(entry)
 			db.session.commit()
 
-			# Check if the page exists, if not redirect to create it
+			if not form.external.data:
+				
+				# Check if the page exists, if not redirect to create it
+				page = Page.get_by_path(form.url.data)
+				if not page:
+					flash('De link verwijst naar een pagina die niet bestaat, '
+							'maak deze aub aan!', 'alert');
+					return redirect(url_for('page2.edit_page',
+							path=form.url.data))
 
-			flash('De link verwijst naar een pagina die niet bestaat, maak deze aub aan!', 'alert');
-			return redirect(url_for('page2.edit_page', path=form.url.data))
+			return redirect(url_for('navigation.edit', entry_id=entry.id))
 
-			#return redirect(url_for('navigation.edit', entry_id=entry.id))
 		else:
 			known_error = False;
 
