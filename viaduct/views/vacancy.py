@@ -6,8 +6,6 @@ from viaduct.models.vacancy import Vacancy
 from viaduct.models.company import Company
 from viaduct.forms import VacancyForm
 
-from datetime import datetime
-
 blueprint = Blueprint('vacancy', __name__)
 
 @blueprint.route('/vacancies/', methods=['GET', 'POST'])
@@ -33,7 +31,7 @@ def view(vacancy_id=None):
 
 	# Add companies.
 	form.company_id.choices = \
-			[(c.id, c.title) for c in Company.query.order_by('title')]
+			[(c.id, c.name) for c in Company.query.order_by('name')]
 
 	return render_template('vacancy/view.htm', vacancy=vacancy, form=form)
 
@@ -53,7 +51,7 @@ def update(vacancy_id=None):
 
 	# Add companies.
 	form.company_id.choices = \
-			[(c.id, c.title) for c in Company.query.order_by('title')]
+			[(c.id, c.name) for c in Company.query.order_by('name')]
 
 	if form.validate_on_submit():
 		vacancy.title = form.title.data

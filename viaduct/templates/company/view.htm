@@ -1,0 +1,30 @@
+{% from "macros/form.htm" import render_field, render_button, render_textarea, render_datefield, render_select %}
+
+{% extends "content.htm" %}
+
+{% block content %}
+	<form method="post">
+		<fieldset>
+			<legend>Bedrijf {% if company.id %}bewerken{% else %}aanmaken{% endif %}</legend>
+
+			{{ form.csrf_token }}
+
+			{{ render_field(form.name) }}
+			{{ render_textarea(form.description) }}
+			{{ render_datefield(form.contract_start_date) }}
+			{{ render_datefield(form.contract_end_date) }}
+			{{ render_select(form.location_id) }}
+			{{ render_select(form.contact_id) }}
+
+			{{ render_button(form.submit) }}
+		</fieldset>
+	</form>
+
+	{% if company.id %}
+		<form action="{{ url_for('company.delete', company_id=company.id) }}" method="post">
+			<fieldset>
+				<button class="btn btn-danger" type="submit">Verwijderen</button>
+			</fieldset>
+		</form>
+	{% endif %}
+{% endblock %}

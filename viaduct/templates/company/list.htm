@@ -1,0 +1,14 @@
+{% from 'macros/pagination.htm' import render_pagination %}
+
+{% extends 'content.htm' %}
+
+{% block content %}
+	<p><a class="btn" href="{{ url_for('company.view') }}">Nieuw bedrijf</a></p>
+	<ul>
+		{% for company in companies.items %}
+			<li><a href="{{ url_for('company.view', company_id=company.id) }}">{{ company.name }}</a></li>
+		{% endfor %}
+	</ul>
+
+	{{ render_pagination(companies, 'company.list') }}
+{% endblock %}
