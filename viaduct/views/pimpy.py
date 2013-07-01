@@ -14,8 +14,8 @@ from viaduct.models.pimpy import Minute, Task
 
 from flask.ext.login import current_user
 
-from viaduct.blueprints.user.models import User, UserPermission
-from viaduct.blueprints.group.models import Group
+from viaduct.models.user import User, UserPermission
+from viaduct.models.group import Group
 
 blueprint = Blueprint('pimpy', __name__)
 
@@ -161,6 +161,10 @@ def add_minute(group_id='all'):
 		if result:
 			result, message = PimpyAPI.commit_minute_to_db(form.content.data,
 				request.form['date'], form.group.data, form.parse_tasks.data)
+			if result and form.parse_tasks.data:
+				tasks, dones, removes = PimpyAPI.parse_minute(form.content.data,
+					form.group.data, message)
+				flash('The minute has been parsed:')
 
 		if result:
 			flash('The minute is added successfully')
