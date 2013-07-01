@@ -62,11 +62,9 @@ class Task(db.Model):
 		return "unknown"
 
 	def update_status(self, status):
-		print status
 		if status >= 0 and status <= len(self.status_meanings):
 			self.status = status
 			db.session.commit()
-			print "status updated"
 
 	def get_status_color(self):
 		"""

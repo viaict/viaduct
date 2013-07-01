@@ -104,6 +104,34 @@ def add_task(group_id='all'):
 	return render_template('pimpy/add_task.htm', group=group,
 		group_id=group_id, type='tasks', form=form)
 
+@blueprint.route('/pimpy/tasks/edit/<string:task_id>', methods=['GET', 'POST'])
+def edit_task(task_id=-1)
+	if task_id == '':
+		flash('task not specified')
+		return redirect(url_for('pimpy.view_tasks', group_id='all'))
+
+	form = EditTaskForm(request.form)
+	if request.method == 'POST':
+		message = ""
+		if form.name.data == "":
+			message = "Name is required"
+		elif form.group == "":
+			message = "Group is required"
+		elif form.users.data == "":
+			message = "A minimum of 1 user is required"
+
+		result = message == ""
+
+		if result:
+			result, message = PimpyAPI.edit_task(form.name.data,
+				form.content.data, request.form['deadline'],
+				form.group.data, form.users.data, form.line.data,
+				form.status.data)
+
+		if result:
+			flash('The task is edited sucessfully')
+			return redirect(url_for('pimpy.view_tasks', group_id=form.group.data))
+
 @blueprint.route('/pimpy/minutes/add/<string:group_id>', methods=['GET', 'POST'])
 def add_minute(group_id='all'):
 	if group_id == '':
