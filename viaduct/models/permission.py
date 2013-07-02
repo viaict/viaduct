@@ -9,6 +9,10 @@ class Permission(db.Model):
 	name = db.Column(db.String(64))
 	label = db.Column(db.String(64))
 
+	def __init__(self, name, label):
+		self.name = name
+		self.label = label
+
 class UserPermission(db.Model):
 	__tablename__ = 'user_permission'
 

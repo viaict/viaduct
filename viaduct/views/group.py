@@ -111,7 +111,7 @@ def edit(group_id):
 @blueprint.route('/groups/<int:group_id>/users/', methods=['GET', 'POST'])
 @blueprint.route('/groups/<int:group_id>/users/<int:page_id>/', methods=['GET', 'POST'])
 def view_users(group_id, page_id=1):
-	if not current_user.has_permission('group.view_users'):
+	if not current_user.has_permission('group.view'):
 		abort(403)
 
 	group = Group.query.filter(Group.id==group_id).first()
@@ -195,7 +195,7 @@ def edit_permissions(group_id, page_id=1):
 			else:
 				group.delete_permission(permission.name)
 
-		redirect(url_for('group.view'))
+		return redirect(url_for('group.view'))
 	else:
 		for permission in pagination.items:
 			data = {}

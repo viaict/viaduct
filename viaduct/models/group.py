@@ -34,7 +34,8 @@ class Group(db.Model):
 			self.users.remove(user)
 
 	def get_users(self):
-		return User.query.join(user_group, (user_group.c.user_id==User.id)).filter(user_group.c.group_id==self.id)
+		# FIXME: backwards compatibility.
+		return self.users
 
 	def get_permission(self, name):
 		permission = self.permissions.join(Permission).filter(Permission.name==name).order_by(GroupPermission.allowed.desc()).first()

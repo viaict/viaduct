@@ -7,6 +7,7 @@ from viaduct.models import Activity
 from viaduct.models import Minute, Task
 from viaduct.models import NavigationEntry
 
+from viaduct.models.permission import Permission
 from viaduct.models.vacancy import Vacancy
 from viaduct.models.requirement import Requirement
 from viaduct.models.education import Education
@@ -45,6 +46,24 @@ group = Group('administrators')
 
 db.session.add(group)
 db.session.commit()
+
+permissions = {
+	'user.view': 'View Users',
+	'user.create': 'Create Users',
+	'user.edit': 'Edit Users',
+	'user.delete': 'Delete Users',
+	'group.view': 'View Groups',
+	'group.create': 'Create Groups',
+	'group.edit': 'Edit Groups',
+	'group.delete': 'Delete Groups',
+}
+
+for key, value in permissions.items():
+	permission = Permission(key, value)
+	db.session.add(permission)
+	db.session.commit()
+	db.session.add(GroupPermission(group, permission))
+	db.session.commit()
 
 # Add the administrator to the administrators group.
 group.add_user(user)
