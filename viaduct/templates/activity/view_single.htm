@@ -36,15 +36,29 @@
 
 <div class="row-fluid">
 	<div class="span8">
-		<h4><i class="icon-euro"></i>Prijs: {{ activity.price}}</h4>
+		<h4><i class="icon-euro"></i>Prijs: {{ activity.price }}</h4>
 		
 		<div class="time">
 			<i class="icon-calendar"></i>
 			{{ activity.get_time() }}
 		</div>
 
+		<hr>
+
+		{% if activity.form %}
+			<h3>{{ activity.form.name }}</h3>
+			<form id="{{ activity.form.id }}">
+				<input type="hidden" name="mail">
+
+				{{ activity.form.html | safe }}
+
+				<button id="custom_form" class="btn btn-success">Submit</button>
+			</form>
+			<script src="/static/js/custom_form_submission.js"></script>
 
 		<hr>
+		{% endif %}
+
 		<p>{{ activity.description | markdown }}</p>
 	</div>
 

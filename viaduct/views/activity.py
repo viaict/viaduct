@@ -11,6 +11,7 @@ from viaduct import application, db
 from viaduct.helpers import flash_form_errors
 from viaduct.forms.activity import CreateForm
 from viaduct.models.activity import Activity
+from viaduct.models.custom_form import CustomForm
 
 blueprint = Blueprint('activity', __name__)
 
@@ -38,6 +39,13 @@ def view(archive="", page=1):
 @blueprint.route('/activities/<int:activity_id>', methods=['GET', 'POST'])
 def get_activity(activity_id = 0):
 	activity = Activity.query.filter(Activity.id == activity_id).first()
+
+	if not activity:
+		return abort(404)
+
+	if activity.form_id:
+		activity.form = CustomForm.query.filter(CustomForm.id == activity.form_id).first()
+
 	return render_template('activity/view_single.htm', activity=activity)
 
 @blueprint.route('/activities/create/', methods=['GET', 'POST'])
@@ -55,6 +63,13 @@ def create(activity_id=None):
 		activity = Activity()
 
 	form = CreateForm(request.form, activity)
+
+	# Add companies.
+	form.form_id.choices = \
+		[(c.id, c.name) for c in CustomForm.query.order_by('name')]
+
+	# Set default to "No form"
+	form.form_id.choices.insert(0, (0, 'Geen formulier'))
 
 	if request.method == 'POST':
 		valid_form = True
@@ -92,6 +107,9 @@ def create(activity_id=None):
 			picture = None
 
 		venue	= 1 # Facebook ID location, not used yet
+
+		if form.form_id and form.form_id.data > 0:
+			activity.form_id = form.form_id.data
 
 		if valid_form:
 			activity.name = name 

@@ -1,0 +1,37 @@
+{% from "macros/pagination.htm" import render_pagination %}
+
+{% extends "content.htm" %}
+
+{%block content %}
+
+<div class="btn-group">
+	{% if current_user and current_user.email == "administrator@svia.nl" %}
+		<a href="/forms/create/" class="btn btn-success">Create</a>
+	{% endif %}
+</div>
+
+<table class="table">
+<thead>
+<tr>
+	<th>Name<th>
+	<th>Edit</th>
+
+{% for form in custom_forms.items %}
+
+<tr>
+	<td>{{ form.name }}
+	<td><a href="/forms/edit/{{ form.id }}" class="btn btn-mini btn-warning">
+	<i class="icon-pencil"></i> Edit</a>
+	<td><a href="/forms/view/{{ form.id }}" class="btn btn-mini btn-primary">
+		View entries
+	</a>
+
+{% endfor %}
+
+</table>
+
+<hr>
+
+	{{ render_pagination(custom_forms, 'custom_form.view') }}
+{% endblock %}
+
