@@ -36,21 +36,6 @@ def register_views(application, path, extension=''):
 				print('{0} has been imported.'.format(module_name))
 				application.register_blueprint(blueprint)
 
-def register_blueprints(application, path, extension):
-	path = os.path.relpath(path)
-
-	for current, directories, files in os.walk(path):
-		for directory in directories:
-			here = os.path.dirname(os.path.abspath(__file__))
-			here = os.path.dirname(os.path.abspath(here))
-			current = os.path.relpath(current, here)
-			current = current.replace('/', '.')
-			name = '.'.join([current, directory, extension])
-			blueprint = getattr(import_module(name), 'blueprint', None)
-
-			if blueprint:
-				application.register_blueprint(blueprint)
-
 def model_to_dict(self):
 	result = {}
 
@@ -82,7 +67,6 @@ import api
 path = os.path.dirname(os.path.abspath(__file__))
 
 register_views(application, os.path.join(path, 'views'))
-register_blueprints(application, os.path.join(path, 'blueprints'), 'views')
 
 from viaduct.models import User
 
