@@ -57,7 +57,7 @@ def sign_up():
 	# Redirect the user to the index page if he or she has been authenticated
 	# already.
 	if current_user and current_user.is_authenticated():
-		return redirect(url_for('page2.get_page'))
+		return redirect(url_for('page.get_page'))
 
 	form = SignUpForm(request.form)
 
@@ -72,7 +72,7 @@ def sign_up():
 
 		login_user(user)
 
-		return redirect(url_for('page2.get_page'))
+		return redirect(url_for('page.get_page'))
 	else:
 		flash_form_errors(form)
 
@@ -83,7 +83,7 @@ def sign_in():
 	# Redirect the user to the index page if he or she has been authenticated
 	# already.
 	if current_user and current_user.is_authenticated():
-		return redirect(url_for('page2.get_page'))
+		return redirect(url_for('page.get_page'))
 
 	form = SignInForm(request.form)
 
@@ -103,8 +103,7 @@ def sign_in():
 
 			flash('You\'ve been signed in successfully.')
 
-			# return redirect(url_for('page.get_page'))
-			return redirect('/')
+			return redirect(url_for('page.get_page'))
 	else:
 		flash_form_errors(form)
 
@@ -117,9 +116,7 @@ def sign_out():
 
 	flash('You\'ve been signed out.')
 
-	# FIX THIS!
-	# return redirect(url_for('page.get_page'))
-	return redirect('/')
+	return redirect(url_for('page.get_page'))
 
 @blueprint.route('/users/', methods=['GET', 'POST'])
 @blueprint.route('/users/<int:page_id>/', methods=['GET', 'POST'])

@@ -55,8 +55,8 @@ def pages_filter(data):
 		if current_user.is_authenticated():
 			content += '<div class="btn-group">'
 			content += '<a class="btn" href="' + url_for(
-				'page2.get_page_history', path=data[i].path) + '"><i class="icon-time"></i> View History</a>'
-			content += '<a class="btn" href="' + url_for('page2.edit_page',
+				'page.get_page_history', path=data[i].path) + '"><i class="icon-time"></i> View History</a>'
+			content += '<a class="btn" href="' + url_for('page.edit_page',
 				path=data[i].path) + '"><i class="icon-pencil"></i> Edit Page</a>'
 			content += '</div>'
 
