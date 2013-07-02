@@ -36,13 +36,24 @@ class Group(db.Model):
 	def get_users(self):
 		return User.query.join(user_group, (user_group.c.user_id==User.id)).filter(user_group.c.group_id==self.id)
 
-	def has_permission(self, name):
+	def get_permission(self, name):
 		permission = self.permissions.join(Permission).filter(Permission.name==name).order_by(GroupPermission.allowed.desc()).first()
 
 		if not permission:
-			return False
+			return 0
 
-		return permission.allowed
+		if permission.allowed:
+			return 1
+		else:
+			return -1
+
+	def has_permission(self, name):
+		permission = self.permissions.join(Permission).filter(Permission.name==name).order_by(GroupPermission.allowed.desc()).first()
+
+		if permission:
+			return permission.allowed
+
+		return False
 	
 	def add_permission(self, name, allowed=True):
 		self.delete_permission(name)

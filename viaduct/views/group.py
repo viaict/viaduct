@@ -190,13 +190,22 @@ def edit_permissions(group_id, page_id=1):
 
 	if form.validate_on_submit():
 		for form_entry, permission in zip(form.permissions, pagination.items):
-			if form_entry.select.data:
+			if form_entry.select.data > 0:
 				group.add_permission(permission.name, True)
 			else:
 				group.delete_permission(permission.name)
+
+		redirect(url_for('group.view'))
 	else:
 		for permission in pagination.items:
-			form.permissions.append_entry({'select': group.has_permission(permission.name)})
+			data = {}
+
+			if group.get_permission(permission.name) > 0:
+				data['select'] = 1
+			else:
+				data['select'] = -1
+
+			form.permissions.append_entry(data)
 
 	return render_template('group/edit_permissions.htm', form=form,
 			pagination=pagination,

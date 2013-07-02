@@ -169,6 +169,8 @@ def edit_permissions(user_id, page_id=1):
 				user.add_permission(permission.name, False)
 			else:
 				user.delete_permission(permission.name)
+
+		redirect(url_for('user.view'))
 	else:
 		for permission in pagination.items:
 			form.permissions.append_entry({'select': user.get_permission(permission.name)})

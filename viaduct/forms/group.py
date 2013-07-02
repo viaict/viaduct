@@ -16,7 +16,7 @@ class GroupEditForm(Form):
 	edit_group = SubmitField('Edit group')
 
 class EditGroupPermissionEntry(Form):
-	select = SelectField(None, coerce=bool, choices=[(True, 'Allow'), (False, 'Deny')])
+	select = SelectField(None, coerce=int, choices=[(1, 'Allow'), (-1, 'Deny')])
 
 class EditGroupPermissionForm(Form):
 	permissions = FieldList(FormField(EditGroupPermissionEntry))

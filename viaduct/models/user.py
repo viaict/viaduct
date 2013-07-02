@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from viaduct import db, login_manager
-from viaduct.models import GroupPermission, Permission, UserPermission
+from viaduct.models import Group, GroupPermission, Permission, UserPermission
 
 class User(db.Model):
 	__tablename__ = 'user'
@@ -62,7 +62,7 @@ class User(db.Model):
 
 		# Check if the permission has been allowed to or denied from any groups
 		# associated with the user.
-		permission = self.groups.join(GroupPermission).join(Permission).filter(Permission.name==name).order_by(GroupPermission.allowed.desc()).first()
+		permission = GroupPermission.query.join(Group, GroupPermission.group).join(Permission).filter(Permission.name==name).order_by(GroupPermission.allowed.desc()).first()
 
 		if permission:
 			return permission.allowed
