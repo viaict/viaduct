@@ -1,0 +1,18 @@
+{% extends "content.htm" %}
+
+{% block content %}
+
+<h1>{{ custom_form.name }}</h1>
+
+
+{% if custom_form.results %}
+
+<table>
+{% for result in custom_form.results %}
+<tr><td>{{ result.data }}
+
+{% endfor %}
+</table>
+
+{% endif %}
+{% endblock %}

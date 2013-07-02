@@ -1,0 +1,35 @@
+{% from "macros/form.htm" import render_field %}
+
+{% extends "content.htm" %}
+
+{% block content %}
+
+<form action="/forms/create/" method="post">
+
+	{{ form.csrf_token }}
+
+	{{ render_field(form.name, class="span6") }}
+
+	<input type="hidden" name="origin_holder_for_edits" value="{{ form.origin.data }}">
+
+	<div id="formbuilder"></div>
+	<script src="/static/js/formbuilder.js "></script>
+
+	<div class="control-group">
+		<div class="controls">
+			<button type="submit" class="btn btn-primary">Create form</button>
+		</div>
+	</div>
+</form>
+
+<script>
+	$(document).ready(function() {
+	  $('#formbuilder').formbuilder();
+
+		// On load get the origin original data for edits
+		$("textarea[name='origin']").val($("input[name='origin_holder_for_edits']").val()).trigger('keyup');
+
+	});
+</script>
+
+{% endblock %}
