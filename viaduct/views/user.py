@@ -7,9 +7,9 @@ from flask.ext.login import current_user, login_user, logout_user
 
 from viaduct import application, db, login_manager
 from viaduct.helpers import flash_form_errors
-from viaduct.forms import SignUpForm, SignUpFormNoCaptcha, SignInForm
+from viaduct.forms import SignUpForm, SignInForm
 from viaduct.models import Permission, User, UserPermission
-from viaduct.forms.user import EditUserPermissionForm
+from viaduct.forms.user import CreateUserForm, EditUserPermissionForm
 
 blueprint = Blueprint('user', __name__)
 
@@ -19,38 +19,36 @@ def load_user(id):
 	# user ID.
 	return User.query.get(int(id))
 
-@blueprint.route('/users/create', methods=['GET', 'POST'])
-def create_user():
+@blueprint.route('/users/create/', methods=['GET', 'POST'])
+def create():
 	if not current_user.has_permission('user.create'):
 		abort(403)
 
-	form = SignUpFormNoCaptcha(request.form)
+	form = CreateUserForm(request.form)
 
 	if form.validate_on_submit():
+		if User.query.filter(User.email==form.email.data).count() > 0:
+			flash('A user with the e-mail address specified does already exist.', 'error')
+			return render_template('user/create_user.htm', form=form)
 
-		email_unique = True
-		for user_it in User.query.all():
-			if form.email.data == user_it.email:
-				email_unique = False
-				break
+		user = User(form.email.data, bcrypt.hashpw(form.password.data,
+				bcrypt.gensalt()), form.first_name.data, form.last_name.data,
+				form.student_id.data)
+		db.session.add(user)
 
-		if email_unique:
-			user = User(form.email.data, bcrypt.hashpw(form.password.data, bcrypt.gensalt()),
-			form.first_name.data, form.last_name.data, form.student_id.data)
-
-			db.session.add(user)
+		try:
 			db.session.commit()
+		except Exception as exception:
+			db.session.flush()
+			flash('An error occured with the database while creating the user.', 'error')
+			return render_template('user/create_user.htm', form=form)
 
-			flash('User successfully created.')
-			return redirect(url_for('user.create_user'))
-		else:
-			flash("Email already exists in database.");
-
+		flash('The user has been created successfully.', 'success')
+		return redirect(url_for('user.view'))
 	else:
 		flash_form_errors(form)
 
 	return render_template('user/create_user.htm', form=form)
-
 
 @blueprint.route('/sign-up/', methods=['GET', 'POST'])
 def sign_up():

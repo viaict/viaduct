@@ -12,7 +12,7 @@ class SignUpForm(Form):
 	student_id = TextField('Student ID', validators=[Required()])
 	recaptcha = RecaptchaField()
 
-class SignUpFormNoCaptcha(Form):
+class CreateUserForm(Form):
 	email = TextField('E-mail address', validators=[Required(), Email()])
 	password = PasswordField('Password', validators=[Required()])
 	repeat_password = PasswordField('Repeat password', validators=[Required(),
