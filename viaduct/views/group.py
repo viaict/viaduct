@@ -5,9 +5,8 @@ from flask.ext.login import current_user
 from viaduct import db
 from viaduct.helpers import flash_form_errors
 
-from viaduct.forms import GroupEditForm
 from viaduct.models import user_group, Group, GroupPermission, User, UserPermission, Permission
-from viaduct.forms.group import EditGroupPermissionForm
+from viaduct.forms.group import EditGroupPermissionForm, ViewGroupForm
 
 blueprint = Blueprint('group', __name__)
 
@@ -17,8 +16,15 @@ def view(page_id=1):
 	if not current_user.has_permission('group.view'):
 		abort(403)
 
-	if request.method == 'POST':
-		group_ids = request.form.getlist('select')
+	form = ViewGroupForm(request.form)
+	pagination = Group.query.paginate(page_id, 15, False)
+
+	if form.validate_on_submit():
+		group_ids = []
+
+		for group, form_entry in zip(pagination.items, form.entries):
+			if form_entry.select.data:
+				group_ids.append(group.id)
 
 		groups = Group.query.filter(Group.id.in_(group_ids)).all()
 
@@ -32,11 +38,15 @@ def view(page_id=1):
 		else:
 			flash('The selected group has been deleted.', 'success')
 
-		redirect(url_for('group.view'))
+		return redirect(url_for('group.view'))
+	else:
+		for group in pagination.items:
+			form.entries.append_entry()
 
-	groups = Group.query.paginate(page_id, 15, False)
+		flash_form_errors(form)
 
-	return render_template('group/view.htm', groups=groups)
+	return render_template('group/view.htm', form=form, pagination=pagination,
+			groups=zip(pagination.items, form.entries))
 
 @blueprint.route('/groups/create/', methods=['GET', 'POST'])
 def create():
@@ -65,48 +75,6 @@ def create():
 			return redirect(url_for('group.view'))
 
 	return render_template('group/create.htm')
-
-@blueprint.route('/groups/<int:group_id>/edit/', methods=['GET', 'POST'])
-def edit(group_id):
-	if not current_user.has_permission('group.edit'):
-		abort(403)
-
-	group = Group.query.filter(Group.id==group_id).first()
-
-	if not group:
-		flash('There is no such group.')
-
-		return redirect(url_for('group.view'))
-
-	form = GroupEditForm()
-
-	if form.validate_on_submit():
-			rights = {}
-
-			rights['view'] = form.permissions.entries[0].view.data
-			rights['create'] = form.permissions.entries[0].create.data
-			rights['edit'] = form.permissions.entries[0].edit.data
-			rights['delete'] = form.permissions.entries[0].delete.data
-
-			UserPermission.set_group_rights(group, rights)
-
-			rights['view'] = form.permissions.entries[1].view.data
-			rights['create'] = form.permissions.entries[1].create.data
-			rights['edit'] = form.permissions.entries[1].edit.data
-			rights['delete'] = form.permissions.entries[1].delete.data
-
-			GroupPermission.set_group_rights(group, rights)
-
-			flash('The group has been edited successfully.', 'success')
-
-			return redirect(url_for('group.view'))
-	else:
-		form.permissions.append_entry(UserPermission.get_group_rights(group))
-		form.permissions.append_entry(GroupPermission.get_group_rights(group))
-
-	flash_form_errors(form)
-
-	return render_template('group/edit.htm', form=form)
 
 @blueprint.route('/groups/<int:group_id>/users/', methods=['GET', 'POST'])
 @blueprint.route('/groups/<int:group_id>/users/<int:page_id>/', methods=['GET', 'POST'])
