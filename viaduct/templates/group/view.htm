@@ -41,8 +41,13 @@
 
 		<div class="btn-toolbar">
 			<div class="btn-group">
-				<a href="{{ url_for('group.create') }}" class="btn">Create</a>
-				<button id="{{ form.delete_group.id }}" name="{{ form.delete_group.id }}" type="submit" class="btn">{{ form.delete_group.label.text }}</button>
+				{% if current_user.has_permission('group.create'): %}
+					<a href="{{ url_for('group.create') }}" class="btn">Create</a>
+				{% endif %}
+
+				{% if current_user.has_permission('group.delete'): %}
+					<button id="{{ form.delete_group.id }}" name="{{ form.delete_group.id }}" type="submit" class="btn">{{ form.delete_group.label.text }}</button>
+				{% endif %}
 			</div>
 
 			{{ render_pagination(pagination, 'group.view') }}

@@ -20,25 +20,29 @@ def view(page_id=1):
 	pagination = Group.query.paginate(page_id, 15, False)
 
 	if form.validate_on_submit():
-		group_ids = []
+		if form.delete_group.data:
+			if current_user.has_permission('group.delete'):
+				group_ids = []
 
-		for group, form_entry in zip(pagination.items, form.entries):
-			if form_entry.select.data:
-				group_ids.append(group.id)
+				for group, form_entry in zip(pagination.items, form.entries):
+					if form_entry.select.data:
+						group_ids.append(group.id)
 
-		groups = Group.query.filter(Group.id.in_(group_ids)).all()
+				groups = Group.query.filter(Group.id.in_(group_ids)).all()
 
-		for group in groups:
-			db.session.delete(group)
+				for group in groups:
+					db.session.delete(group)
 
-		db.session.commit()
+				db.session.commit()
 
-		if len(groups) > 1:
-			flash('The selected groups have been deleted.', 'success')
-		else:
-			flash('The selected group has been deleted.', 'success')
+				if len(groups) > 1:
+					flash('The selected groups have been deleted.', 'success')
+				else:
+					flash('The selected group has been deleted.', 'success')
 
-		return redirect(url_for('group.view'))
+				return redirect(url_for('group.view'))
+			else:
+				flash('This incident has been reported to our authorities.', 'warning')
 	else:
 		for group in pagination.items:
 			form.entries.append_entry()
@@ -46,7 +50,8 @@ def view(page_id=1):
 		flash_form_errors(form)
 
 	return render_template('group/view.htm', form=form, pagination=pagination,
-			groups=zip(pagination.items, form.entries))
+			groups=zip(pagination.items, form.entries),
+			current_user=current_user)
 
 @blueprint.route('/groups/create/', methods=['GET', 'POST'])
 def create():
@@ -163,8 +168,12 @@ def edit_permissions(group_id, page_id=1):
 			else:
 				group.delete_permission(permission.name)
 
+		flash('The permissions have been saved.', 'success')
+
 		return redirect(url_for('group.view'))
 	else:
+		flash_form_errors(form)
+
 		for permission in pagination.items:
 			data = {}
 
