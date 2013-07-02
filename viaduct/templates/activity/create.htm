@@ -1,4 +1,4 @@
-{% from "macros/form.htm" import render_field %}
+{% from "macros/form.htm" import render_field, render_select %}
 {% from "macros/formbuilder.htm" import render_formbuilder %}
 
 {% extends "content.htm" %}
@@ -66,6 +66,8 @@
 			<p>Current image:<br>
 			<img src="/static/activity_pictures/{{ form.data.picture }}" style="height:200px;width:auto;">
 		{% endif %}
+
+		{{ render_select(form.form_id) }}
 
 		{{ render_field(form.picture) }}
 
