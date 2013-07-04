@@ -231,6 +231,11 @@ location_1 = Location('Amsterdam', 'The Netherlands', 'Science Park 904',
 db.session.add(location_1)
 db.session.commit()
 
+location_2 = Location('Utrecht', 'The Netherlands', 'Drol 2', '1333 DD',
+		'2 uur', 'geen', 'geen')
+db.session.add(location_2)
+db.session.commit()
+
 contact_1 = Contact('Bas de Boer', 'jemoeder@jemoder.nl', '12', location_1)
 db.session.add(contact_1)
 db.session.commit()

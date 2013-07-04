@@ -34,10 +34,15 @@ def view(company_id=None):
 	form.location_id.choices = \
 			[(l.id, l.address + ', ' + l.city) for l in locations]
 
+	if company.location:
+		location = company.location
+	else:
+		location = locations.first()
+
 	# Add contacts.
 	form.contact_id.choices = \
 			[(c.id, c.name) for c in Contact.query\
-					.filter_by(location=locations.first()).order_by('name')]
+					.filter_by(location=location).order_by('name')]
 
 	return render_template('company/view.htm', company=company, form=form)
 
@@ -55,48 +60,44 @@ def update(company_id=None):
 
 	form = CompanyForm(request.form, company)
 
-	# Add locations.
-	locations = Location.query.order_by('address').order_by('city')
-	form.location_id.choices = \
-			[(l.id, l.address + ', ' + l.city) for l in locations]
+	error_found = False
+	if not form.name.data:
+		flash('Geen titel opgegeven', 'error')
+		error_found = True
+	if not form.description.data:
+		flash('Geen beschrijving opgegeven', 'error')
+		error_found = True
+	if not form.contract_start_date.data:
+		flash('Geen contract begindatum opgegeven', 'error')
+		error_found = True
+	if not form.contract_end_date.data:
+		flash('Geen contract einddatum opgegeven', 'error')
+		error_found = True
+	if not form.location_id.data:
+		flash('Geen locatie opgegeven', 'error')
+		error_found = True
+	if not form.contact_id.data:
+		flash('Geen contactpersoon opgegeven', 'error')
+		error_found = True
 
-	# Add contacts.
-	form.contact_id.choices = \
-			[(c.id, c.name) for c in Contact.query.order_by('name')]
+	if error_found:
+		return redirect(url_for('company.view', company_id=company_id))
 
-	if form.validate_on_submit():
-		company.name = form.name.data
-		company.description = form.description.data
-		company.contract_start_date = form.contract_start_date.data
-		company.contract_end_date = form.contract_end_date.data
-		company.location = Location.query.get(form.location_id.data)
-		company.contact = Contact.query.get(form.contact_id.data)
+	company.name = form.name.data
+	company.description = form.description.data
+	company.contract_start_date = form.contract_start_date.data
+	company.contract_end_date = form.contract_end_date.data
+	company.location = Location.query.get(form.location_id.data)
+	company.contact = Contact.query.get(form.contact_id.data)
 
-		db.session.add(company)
-		db.session.commit()
+	db.session.add(company)
+	db.session.commit()
 
-		if company_id:
-			flash('Bedrijf opgeslagen', 'success')
-		else:
-			company_id = company.id
-			flash('Bedrijf aangemaakt', 'success')
+	if company_id:
+		flash('Bedrijf opgeslagen', 'success')
 	else:
-		error_handled = False
-		if not form.title.data:
-			flash('Geen titel opgegeven', 'error')
-			error_handled = True
-		if not form.description.data:
-			flash('Geen beschrijving opgegeven', 'error')
-			error_handled = True
-		if not form.contract_start_date.data:
-			flash('Geen contract begindatum opgegeven', 'error')
-			error_handled = True
-		if not form.contract_end_date.data:
-			flash('Geen contract einddatum opgegeven', 'error')
-			error_handled = True
-
-		if not error_handled:
-			flash_form_errors(form)
+		company_id = company.id
+		flash('Bedrijf aangemaakt', 'success')
 
 	return redirect(url_for('company.view', company_id=company_id))
 
