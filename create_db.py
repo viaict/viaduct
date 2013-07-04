@@ -1,6 +1,7 @@
 import os, bcrypt, datetime
 from viaduct import db, application
-from viaduct.blueprints.page.models import Page, PagePermission, PageRevision
+
+from viaduct.models.page import Page, PagePermission, PageRevision
 
 from viaduct.models import User, UserPermission, Group, GroupPermission
 from viaduct.models import Activity
