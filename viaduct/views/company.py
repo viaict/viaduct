@@ -73,10 +73,10 @@ def update(company_id=None):
 	if not form.contract_end_date.data:
 		flash('Geen contract einddatum opgegeven', 'error')
 		error_found = True
-	if not form.location_id.data:
+	if not 'location_id' in request.form:
 		flash('Geen locatie opgegeven', 'error')
 		error_found = True
-	if not form.contact_id.data:
+	if not 'contact_id' in request.form:
 		flash('Geen contactpersoon opgegeven', 'error')
 		error_found = True
 
