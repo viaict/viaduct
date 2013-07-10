@@ -109,11 +109,20 @@ def submit(form_id=None):
 		user.phone_nr = request.form['phone_nr']
 		
 		# These might be there
-		if request.form['gender']:
-			user.gender = request.form['gender']
+		if request.form['dieet']:
+			user.diet = request.form['dieet']
+
+		if request.form['allergie/medicatie']:
+			user.allergy = request.form['allergie/medicatie']
+
+		if request.form['shirt maat']:
+			user.shirt_size = request.form['shirt maat']
+
+		if request.form['geslacht']:
+			user.gender = request.form['geslacht']
 
 		if request.form['noodnummer']:
-			user.noodnummer = request.form['noodnummer']
+			user.emergency_phone_nr = request.form['noodnummer']
 
 		duplicate_test = CustomFormResult.query.filter(
 			CustomFormResult.owner_id == current_user.id, 

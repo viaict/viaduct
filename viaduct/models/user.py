@@ -12,10 +12,14 @@ class User(db.Model):
 	password = db.Column(db.String(60))
 	first_name = db.Column(db.String(256))
 	last_name = db.Column(db.String(256))
-	phone_nr	= db.Column(db.String(16))
+	shirt_size = db.Column(db.Enum('Small', 'Medium', 'Large'))
+	allergy = db.Column(db.String(1024)) # Allergy / medication
+	diet = db.Column(db.Enum(None, 'Vegetarisch', 'Veganistisch', 'Fruitarier'))
+	gender = db.Column(db.Enum('Man', 'Vrouw', 'Geen info'))
+	phone_nr = db.Column(db.String(16))
+	emergency_phone_nr = = db.Column(db.String(16))
 	student_id = db.Column(db.String(256))
-	education_id = db.Column(db.Integer,
-		db.ForeignKey('education.id'))
+	education_id = db.Column(db.Integer, db.ForeignKey('education.id'))
 
 	education = db.relationship(Education,
 		backref=db.backref('user', lazy='dynamic'))
