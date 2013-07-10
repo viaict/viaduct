@@ -2,7 +2,7 @@
 
 $.fn.formbuilder = function() {  
 
-	var info		 = $('<div class="alert alert-info"><b>Formulier commandos</b> Veldnaam | veldtype (user, textarea, radio, checkbox, select). Voor radio/checkbox/select moet je per optie "-" of "*" ervoor zetten.</div>');
+	var info		 = $('<div class="alert alert-info"><b>Formulier commandos</b> Veldnaam | veldtype (textarea, radio, checkbox, select). Voor radio/checkbox/select moet je per optie "-" of "*" ervoor zetten.</div>');
   var textarea = $('<textarea name="origin" class="span6" style="min-height:200px" placeholder="Type hier je formulier commandos" />');
   var result   = $('<input type="hidden" name="html" />').hide();
   var form     = $('<form />');
@@ -21,9 +21,9 @@ $.fn.formbuilder = function() {
   this
 		.append(info)
     .append(textarea)
-    .after(result) // contains the entire form
-    .after(form)
-    .after('<h3>Preview</h3>');
+    .append(form)
+    .after(result)
+		.after('<h4>Preview</h4>'); // contains the entire form
 
   textarea.on('keyup', function() {
     form.html(''); // Reset the control
@@ -38,12 +38,14 @@ $.fn.formbuilder = function() {
       options = parseLine(lines[i]);
       type    = options.type || "text";
       
+			/*
       if (type === "user") {
         lines[i] = '';
-        lines.splice(i, 0, 'Student nr.', 'Email', 'Mobiel nr.', 'Studie | select', '-Informatica', '-Informatiekunde', '-Kunstmatige Intelligentie', '-Software Engineering', '-SNE');
+        lines.splice(i, 0, 'Student nr.', 'Email', 'Mobiel nr.');
         textarea.val(lines.join("\n"));
         break;
       }
+			*/
 
       if (! options || !fields[type])
         continue;
@@ -80,7 +82,7 @@ $.fn.formbuilder = function() {
       group.clone().appendTo(form);
     }
     
-    result.val(form.html());
+    result.val('<div id="custom_form_data">' + form.html() + '</div>');
   });
   
   function parseLine(line) {

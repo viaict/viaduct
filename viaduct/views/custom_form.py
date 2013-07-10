@@ -37,8 +37,10 @@ def create(form_id=None):
 	if not current_user or current_user.email != 'administrator@svia.nl':
 		return abort(403)
 
+	print form_id
+
 	if form_id:
-		custom_form = CustomForm.query.filter(CustomForm.id == form_id).first()
+		custom_form = CustomForm.query.get(form_id)
 
 		if not custom_form:
 			abort(404)
@@ -48,9 +50,9 @@ def create(form_id=None):
 	form = CreateForm(request.form, custom_form)
 
 	if request.method == 'POST':
-		custom_form.name = form.name.data
-		custom_form.origin = form.origin.data
-		custom_form.html = form.html.data
+		custom_form.name 		= form.name.data
+		custom_form.origin 	= form.origin.data
+		custom_form.html 		= form.html.data
 
 		if custom_form.id:
 			flash('You\'ve created a form successfully.', 'success')
@@ -69,8 +71,7 @@ def create(form_id=None):
 @blueprint.route('/forms/submit/<int:form_id>', methods=['POST'])
 def submit(form_id=None):
 	# User needs to be logged in
-
-	if request.method== 'POST' and current_user.id and form_id and not request.form['mail']:
+	if current_user.id and form_id:
 
 		response = "success"
 
@@ -88,8 +89,7 @@ def submit(form_id=None):
 		
 		db.session.add(result)
 		db.session.commit()
+	else :
+		response = "error"
 
-		return response
-
-	return "error"
-
+	return response

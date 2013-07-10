@@ -1,4 +1,5 @@
 {% from "macros/maps.htm" import render_map %}
+{% from "macros/custom_form.htm" import user_fields %}
 
 {% extends "content.htm" %}
 
@@ -46,17 +47,17 @@
 		<hr>
 
 		{% if activity.form %}
-			<h3>{{ activity.form.name }}</h3>
-			<form id="{{ activity.form.id }}">
-				<input type="hidden" name="mail">
+			<form action="/forms/submit/{{ activity.form.id }}">
 
+				{{ user_fields(current_user) }}
 				{{ activity.form.html | safe }}
 
-				<button id="custom_form" class="btn btn-success">Submit</button>
+				<button id="custom_form" class="btn btn-success">Verzend formulier</button>
 			</form>
 			<script src="/static/js/custom_form_submission.js"></script>
 
 		<hr>
+
 		{% endif %}
 
 		<p>{{ activity.description | markdown }}</p>

@@ -1,13 +1,15 @@
 $(document).ready(function() {
 	$("#custom_form").click(function() {
-
 		var custom_form = $(this).closest('form');
-		var mail = $('input[name="mail"]').val();
 
 		$.post(
-			"/forms/submit/" + custom_form.attr('id'), 
-			{'mail': mail, 'data':custom_form.serialize()},
-			function(result) { 
+			custom_form.attr('action'), 
+			{
+				'user': $('#custom_form_user').serialize(), 
+				'data':$('#custom_form_data').serialize()
+			},
+
+			function(result) {
 				if (result == "success") {
 					flash("Je hebt het formulier succesvol ingevuld", "success");
 					custom_form.detach();

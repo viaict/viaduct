@@ -1,12 +1,23 @@
-{% from "macros/form.htm" import render_field %}
+{% from "macros/form.htm" import render_field, render_button %}
 
 {% extends "content.htm" %}
 
 {% block content %}
 
-<form action="/forms/create/" method="post">
-
+<form method="post">
 	{{ form.csrf_token }}
+
+	<h1>Eigen formulier</h1>
+	<p><strong>LET OP</strong> automatisch wordt van de gebruiker het volgende 
+	gevraagd:
+
+	<ol>
+		<li>Naam
+		<li>Email
+		<li>Telefoon nummer
+	</ol>
+
+	<hr>
 
 	{{ render_field(form.name, class="span6") }}
 
@@ -14,12 +25,8 @@
 
 	<div id="formbuilder"></div>
 	<script src="/static/js/formbuilder.js "></script>
-
-	<div class="control-group">
-		<div class="controls">
-			<button type="submit" class="btn btn-primary">Create form</button>
-		</div>
-	</div>
+	
+	{{ render_button(form.submit) }}
 </form>
 
 <script>
@@ -27,7 +34,9 @@
 	  $('#formbuilder').formbuilder();
 
 		// On load get the origin original data for edits
-		$("textarea[name='origin']").val($("input[name='origin_holder_for_edits']").val()).trigger('keyup');
+		$("textarea[name='origin']")
+			.val($("input[name='origin_holder_for_edits']").val())
+			.trigger('keyup');
 
 	});
 </script>

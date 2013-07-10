@@ -19,6 +19,16 @@
 
 		{{ form.csrf_token }}
 
+
+		<div style="position:relative; margin-bottom:30px;">
+		{{ render_select(form.form_id) }}
+		<small style="position:absolute; top:60px; left:240px;">Je moet de pagina opnieuw laden voor resultaat.</small>
+
+		<a style="position:absolute; top:24px; left:240px" class="show-window btn btn-success" target="_blank" href="http://{{ request.host }}/forms/create/">
+			Formulier aanmaken
+		</a>
+		</div>
+
 		{{ render_field(form.name, class="span6") }}
 		{{ render_field(form.description, class="span6") }}
 
@@ -69,7 +79,6 @@
 			<img src="/static/activity_pictures/{{ form.data.picture }}" style="height:200px;width:auto;">
 		{% endif %}
 
-		{{ render_select(form.form_id) }}
 		{{ render_field(form.picture) }}
 
 	<div class="control-group">
