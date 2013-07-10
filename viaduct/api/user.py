@@ -1,5 +1,7 @@
 from flask.ext.login import current_user
 
+from viaduct.models.group import Group
+
 class UserAPI:
 
 	@staticmethod
