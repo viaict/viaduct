@@ -10,7 +10,20 @@
 		{{ form.csrf_token }}
 
 		{{ form.title.csrf_token }}{{ render_field(form.title, class='input-block-level') }}
-		{{ form.content.csrf_token }}{{ render_field(form.content, rows=20, class='input-block-level') }}
+		{{ form.content.csrf_token }}
+		<div class="row">
+			<div class="span8">
+				{{ render_field(form.content, rows=20, class='input-block-level') }}
+			</div>
+			<div class="span2">
+				<strong>Bestanden</strong><br />
+				<label for="file-search-query">Zoeken</label>
+				<input type="text" id="file-search-query" />
+				<div id="file-search-results">
+					<ul></ul>
+				</div>
+			</div>
+		</div>
 		{{ form.comment.csrf_token }}{{ render_field(form.comment, class='input-block-level') }}
 		<table class="table table-bordered table-striped">
 			<thead>
@@ -33,4 +46,6 @@
 		{{ render_button(form.save_page) }}
 	</fieldset>
 </form>
+
+<script src="/static/js/search-files.js"></script>
 {% endblock %}

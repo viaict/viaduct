@@ -1,7 +1,8 @@
 '''
 Views for the file module.
 '''
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, \
+		url_for, jsonify
 from viaduct.models.file import File
 from viaduct.forms import FileForm
 from viaduct.api import FileAPI
@@ -30,3 +31,10 @@ def upload(page=1):
 	FileAPI.upload(new_file)
 
 	return redirect(url_for('file.list', page=page))
+
+@blueprint.route('/files/search/<string:query>/', methods=['GET'])
+def search(query):
+	'''
+	Fuzzy search files.
+	'''
+	return jsonify(filenames=FileAPI.search(query))

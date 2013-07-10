@@ -1,6 +1,6 @@
 from flask import flash
 from werkzeug import secure_filename
-import os
+import os, difflib
 from viaduct.models.file import File
 from viaduct import db
 
@@ -61,3 +61,11 @@ class FileAPI:
 		filename_ext = filename_split[1]
 
 		return filename_noext, filename_ext
+
+	@staticmethod
+	def search(query):
+		files = File.query.all()
+		filenames = [f.name for f in files]
+		results = difflib.get_close_matches(query, filenames, 10, 0.0)
+
+		return results
