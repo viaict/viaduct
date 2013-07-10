@@ -1,8 +1,11 @@
 // Author: Fabien Tesselaar (https://github.com/Tessmore/formbuilder)
 
-$.fn.formbuilder = function() {  
+$.fn.formbuilder = function() {
 
-	var info		 = $('<div class="alert alert-info"><b>Formulier commandos</b> Veldnaam | veldtype (textarea, radio, checkbox, select). Voor radio/checkbox/select moet je per optie "-" of "*" ervoor zetten.</div>');
+	var info = $('<div class="alert alert-info"><b>Formulier commandos</b> Naam | type ' + 
+							 '(Waar de type een "textarea", "radio", "checkbox" of "select" is)' +
+							 '<p>Radio, checkbox en select opties maak je aan door de regels met <b>"-"</b> te beginnen. <p>Verder zijn er een paar shortcut "types" ("weekend", "shirt"), om automatisch meerdere velden in één keer aan te maken. <p><b>Bijvoorbeeld:</b><br>Dieet | checkbox<br>- Vlees<br>- Vegetarisch<br>- Veganist' +
+'</div>');
   var textarea = $('<textarea name="origin" class="span6" style="min-height:200px" placeholder="Type hier je formulier commandos" />');
   var result   = $('<input type="hidden" name="html" />').hide();
   var form     = $('<form />');
@@ -11,11 +14,11 @@ $.fn.formbuilder = function() {
   var label    = $('<label class="control-label" />');
   
   var fields = {
-    'text'     : $('<input type="text" name id>'),
+    'text'     : $('<input type="text" name>'),
     'radio'    : $('<div />'),
     'checkbox' : $('<div />'),
-    'textarea' : $('<textarea name id />'),
-    'select'   : $('<select name id></select>')
+    'textarea' : $('<textarea name />'),
+    'select'   : $('<select name />')
   };
 
   this
@@ -37,15 +40,37 @@ $.fn.formbuilder = function() {
       
       options = parseLine(lines[i]);
       type    = options.type || "text";
-      
-			/*
-      if (type === "user") {
-        lines[i] = '';
-        lines.splice(i, 0, 'Student nr.', 'Email', 'Mobiel nr.');
+
+			if (type === "weekend") {
+				lines[i] = '';
+        lines.splice(i, 0, 
+					'Dieet | checkbox', 
+					'-Vegetarisch', 
+					'-Veganistisch', 
+
+					'shirt',
+					'Telefoon nr. in geval van nood',
+					'Allergie/medicatie (waar moeten we rekening mee houden) | textarea'
+				);
+
         textarea.val(lines.join("\n"));
+				textarea.trigger('keyup');
         break;
-      }
-			*/
+			}
+
+			if (type === "shirt") {
+				lines[i] = '';
+        lines.splice(i, 0, '', 
+					'Shirt maat | select',
+					'-Small',
+					'-Medium',
+					'-Large'
+				);
+
+        textarea.val(lines.join("\n"));
+				textarea.trigger('keyup');
+        break;
+			}
 
       if (! options || !fields[type])
         continue;
@@ -63,14 +88,14 @@ $.fn.formbuilder = function() {
         fields[type].html(''); // Reset the list
         
         while (++i < lines.length && lines[i] && (lines[i].charAt(0) == '*' || lines[i].charAt(0) == '-')) {
-          value = lines[i].substring(1);
+          value = strip_(lines[i]);
 
           if (type === 'select')
             fields[type].append($('<option />').text(value));
           else
             fields[type].append(
               '<label class="checkbox">' +
-                '<input type="' + type + '" name="' + (type === 'radio' ? options.name : value) + '" value="' + value + '"> ' + 
+                '<input type="' + type + '" name="' + options.name + '[]" value="' + value + '"> ' + 
                 value + 
               '</label>'
             );
@@ -85,20 +110,31 @@ $.fn.formbuilder = function() {
     result.val('<div id="custom_form_data">' + form.html() + '</div>');
   });
   
-  function parseLine(line) {
-    var line = line.trim().split("|");
-    var name = line[0];
+	function strip(str) {
+		return str.replace(/[\+\*\-]/g, '');
+	}
 
-    if (name == "") // Skip empty lines
+	function strip_(str) {
+		return str.replace(/[\+\*\- ]/g, '');
+	}
+
+  function parseLine(line) {
+    var line  = line.split("|");
+    var label = strip(line[0]);
+		var name  = $.trim(label).toLowerCase();
+
+    if (label == "") // Skip empty lines
       return false;
           
     var options = {
-      label : name,
-      name  : name.replace(/[ ]/g, '_')
+      'label' : label,
+      'name'  : name
     };
     
     if (line[1])
-      options['type'] = line[1].replace(/[ ]/g, '');
+      options['type'] = strip_(line[1]);
+		else if (options.name === 'weekend' || options.name === 'shirt')
+			options['type'] = options.name;
 
     return options;
   }  

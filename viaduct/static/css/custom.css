@@ -3,6 +3,36 @@ body {
 	margin-bottom:20px;
 }
 
+/* Definition lists */
+
+dl, dt, dd {
+	float:left;
+  margin:0;
+}
+
+dt, dd {
+	min-height:20px;
+	border-top:1px dashed #eee;
+}
+
+dl {
+	width: 410px;
+	padding: 0;
+}
+
+dt {
+	text-transform:capitalize;
+	width: 100px;
+	padding: 5px 5px 5px 0;
+}
+
+dd {
+	width: 300px;
+	padding: 5px 0;
+}
+
+/* Sponsors */
+
 .sponsors {
 	margin-top:40px;
   padding:20px 0;

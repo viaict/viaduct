@@ -47,17 +47,25 @@
 		<hr>
 
 		{% if activity.form %}
-			<form action="/forms/submit/{{ activity.form.id }}">
 
-				{{ user_fields(current_user) }}
-				{{ activity.form.html | safe }}
+				<form id="custom" action="/forms/submit/{{ activity.form.id }}" enctype="multipart/form-data">
 
-				<button id="custom_form" class="btn btn-success">Verzend formulier</button>
-			</form>
+					{{ user_fields(current_user) }}
+					{{ activity.form.html | safe }}
+
+					<button id="custom_form" class="btn btn-success">Verzend formulier</button>
+				</form>
+
+			{% if activity.form_data %}
+				<script src="/static/js/unserialize.js"></script>
+
+				<script>
+				$("#custom").unserializeForm("{{ activity.form_data | safe }}");
+				</script>
+			{% endif %}
+			
 			<script src="/static/js/custom_form_submission.js"></script>
-
 		<hr>
-
 		{% endif %}
 
 		<p>{{ activity.description | markdown }}</p>

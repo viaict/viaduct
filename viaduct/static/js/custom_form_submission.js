@@ -10,14 +10,10 @@ $(document).ready(function() {
 			},
 
 			function(result) {
-				if (result == "success") {
+				if (result == "success")
 					flash("Je hebt het formulier succesvol ingevuld", "success");
-					custom_form.detach();
-				}
-				else if (result == "edit") {
+				else if (result == "edit")
 					flash("Je formulier is aangepast", "alert");
-					custom_form.detach();
-				}
 				else
 					flash("Er is iets misgegaan bij het invullen :(", "error"); 
 			}

@@ -38,7 +38,7 @@ db.session.commit()
 
 # Add the administrator.
 user = User('administrator@svia.nl', bcrypt.hashpw('ictIsAwesome',
-		bcrypt.gensalt()), 'Administrator', 'de beste van het land', '0')
+		bcrypt.gensalt()), 'Administrator', 'de beste', '0')
 
 db.session.add(user)
 db.session.commit()
@@ -137,17 +137,17 @@ db.session.commit()
 #self.picture = picture
 #'''
 
-custom_form = CustomForm(user.id, "Test formulier", '''Locatie
-Textarea | textarea
-Checkboxes | checkbox
-- een
-- twee
-- drie
+custom_form = CustomForm(user.id, "Test formulier", '''Dieet | checkbox
+-Vegetarisch
+-Veganistisch
 
-Select | select
-- What
-- Up
-- Dog''', '''<div id="custom_form_data"><div class="control-group"><label class="control-label">Locatie</label><div class="controls"><input type="text" name="Locatie" id=""></div></div><div class="control-group"><label class="control-label">Textarea </label><div class="controls"><textarea name="Textarea_" id=""></textarea></div></div><div class="control-group"><label class="control-label">Checkboxes </label><div class="controls"><div name="Checkboxes_"><label class="checkbox"><input type="checkbox" name=" een" value=" een">  een</label><label class="checkbox"><input type="checkbox" name=" twee" value=" twee">  twee</label><label class="checkbox"><input type="checkbox" name=" drie" value=" drie">  drie</label></div></div></div><div class="control-group"><label class="control-label">Select </label><div class="controls"><select name="Select_" id=""><option> What</option><option> Up</option><option> Dog</option></select></div></div></div>''')
+Shirt maat | select
+-Small
+-Medium
+-Large
+
+Telefoon nr. in geval van nood
+Allergie/medicatie (waar moeten we rekening mee houden) | textarea''', '''<div id="custom_form_data"><div class="control-group"><label class="control-label">Dieet </label><div class="controls"><div name="dieet"><label class="checkbox"><input type="checkbox" name="dieet[]" value="Vegetarisch"> Vegetarisch</label><label class="checkbox"><input type="checkbox" name="dieet[]" value="Veganistisch"> Veganistisch</label></div></div></div><div class="control-group"><label class="control-label">Shirt maat </label><div class="controls"><select name="shirt maat"><option>Small</option><option>Medium</option><option>Large</option></select></div></div><div class="control-group"><label class="control-label">Telefoon nr. in geval van nood</label><div class="controls"><input type="text" name="telefoon nr. in geval van nood"></div></div><div class="control-group"><label class="control-label">Allergie/medicatie (waar moeten we rekening mee houden) </label><div class="controls"><textarea name="allergie/medicatie (waar moeten we rekening mee houden)"></textarea></div></div></div>"''')
 
 db.session.add(custom_form)
 db.session.commit()
@@ -226,38 +226,35 @@ nav_admin = NavigationEntry(None, 'Admin', '/admin', False, False, 3)
 db.session.add(nav_admin)
 db.session.commit()
 
-nav_nav = NavigationEntry(nav_admin, 'Navigatie', '/navigation', False, False,
-		1)
+nav_nav = NavigationEntry(nav_admin, 'Navigatie', '/navigation', False, False, 1)
 db.session.add(nav_nav)
 db.session.commit()
 
-nav_activity = NavigationEntry(None, 'Activiteiten', '/activities', False, True,
-		4)
+nav_forms = NavigationEntry(nav_admin, 'Formulieren', '/forms/', False, False, 2)
+db.session.add(nav_forms)
+db.session.commit()
+
+nav_activity = NavigationEntry(None, 'Activiteiten', '/activities', False, True, 4)
 db.session.add(nav_activity)
 db.session.commit()
 
-nav_ext = NavigationEntry(nav_page1, 'Externaal', 'viaduct.svia.nl', True,
-		False, 1)
+nav_ext = NavigationEntry(nav_page1, 'Externaal', 'viaduct.svia.nl', True, False, 1)
 db.session.add(nav_ext)
 db.session.commit()
 
-nav_vacancies = NavigationEntry(None, 'Vacaturebank', '/vacancies/', False,
-		False, 5)
+nav_vacancies = NavigationEntry(None, 'Vacaturebank', '/vacancies/', False, False, 5)
 db.session.add(nav_vacancies)
 db.session.commit()
 
-nav_companies = NavigationEntry(None, 'Bedrijven', '/companies/', False, False,
-		6)
+nav_companies = NavigationEntry(None, 'Bedrijven', '/companies/', False, False, 6)
 db.session.add(nav_companies)
 db.session.commit()
 
-nav_locations = NavigationEntry(None, 'Locaties', '/locations/', False, False,
-		7)
+nav_locations = NavigationEntry(None, 'Locaties', '/locations/', False, False, 7)
 db.session.add(nav_locations)
 db.session.commit()
 
-nav_contacts = NavigationEntry(None, 'Contactpersonen', '/contacts/', False,
-		False, 7)
+nav_contacts = NavigationEntry(None, 'Contactpersonen', '/contacts/', False, False, 7)
 db.session.add(nav_contacts)
 db.session.commit()
 

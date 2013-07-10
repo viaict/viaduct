@@ -22,12 +22,38 @@ def view(page=1):
 
 @blueprint.route('/forms/view/<int:form_id>', methods=['GET', 'POST'])
 def view_single(form_id=None):
-	custom_form = CustomForm.query.filter(CustomForm.id == form_id).first()
+	custom_form = CustomForm.query.get(form_id)
 
 	if not custom_form:
 		return abort(403)
 
-	custom_form.results = CustomFormResult.query.filter(CustomFormResult.form_id == form_id)
+	results = []
+	entries = CustomFormResult.query.filter(CustomFormResult.form_id == form_id)
+
+	from urllib import unquote_plus
+	from urlparse import parse_qs
+
+	for entry in entries:
+		data = parse_qs(entry.data)
+
+		html = '<dl>'
+
+		for key in data:
+			html += "<dt>%s" % key.replace('[]', '')
+
+			if type(data[key]) is list:
+				html += "<dd>%s" % ', '.join(data[key])
+			else: 
+				html += "<dd>%s" % unquote_plus(data[key])
+
+		html += '</dl>'
+
+		results.append({
+			'owner'				: entry.owner,
+			'form_entry'	: html,
+		})
+
+	custom_form.results = results
 
 	return render_template('custom_form/view_single.htm', custom_form=custom_form)
 

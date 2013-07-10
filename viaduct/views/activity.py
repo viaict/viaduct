@@ -11,7 +11,7 @@ from viaduct import application, db
 from viaduct.helpers import flash_form_errors
 from viaduct.forms.activity import CreateForm
 from viaduct.models.activity import Activity
-from viaduct.models.custom_form import CustomForm
+from viaduct.models.custom_form import CustomForm, CustomFormResult
 
 blueprint = Blueprint('activity', __name__)
 
@@ -38,13 +38,19 @@ def view(archive="", page=1):
 
 @blueprint.route('/activities/<int:activity_id>', methods=['GET', 'POST'])
 def get_activity(activity_id = 0):
-	activity = Activity.query.filter(Activity.id == activity_id).first()
+	activity = Activity.query.get(activity_id)
 
 	if not activity:
 		return abort(404)
 
 	if activity.form_id:
-		activity.form = CustomForm.query.filter(CustomForm.id == activity.form_id).first()
+		activity.form = CustomForm.query.get(activity.form_id)
+
+		form_result = CustomFormResult.query \
+			.filter(CustomFormResult.form_id  == activity.form_id) \
+			.filter(CustomFormResult.owner_id == current_user.id).first()
+
+		activity.form_data = form_result.data.replace('"', "'")
 
 	return render_template('activity/view_single.htm', activity=activity)
 

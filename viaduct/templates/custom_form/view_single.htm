@@ -5,22 +5,27 @@
 <h1>Inzendingen <small>'{{ custom_form.name }}'</small></h1>
 
 {% if custom_form.results %}
-
 <table class="table">
 	<tr>
 		<th>Gebruiker
+		<th>Email
+		<th>Tel nr.
+		<th>Formulier data
 
 	{% for result in custom_form.results %}
 		<tr>
 			<td>
-				<a class="btn btn-mini btn-primary" href="{{ url_for('user.view_single', user_id=owner.id) }}">
-					Inzien
+				<a href="{{ url_for('user.view_single', user_id=result.owner.id) }}">
+					{{ result.owner.first_name[:1] }}. {{ result.owner.last_name }}
 				</a>
-
+			<td>{{ result.owner.email }}
+			<td>{{ result.owner.phone_nr }}
+			<td>{{ result.form_entry|safe }}
 	{% endfor %}
 </table>
 
 {% else %}
 <p>Er zijn nog geen resultaten om te tonen
 {% endif %}
+
 {% endblock %}

@@ -3,6 +3,7 @@
 {%block content %}
 
 <!-- TODO check permission -->
+
 <a href="{{ url_for('user.create', user_id=user.id) }}" class="btn btn-warning pull-right">
 	<i class="icon-pencil"></i>
 	Aanpassen
@@ -17,14 +18,14 @@
 	<dt>Student nr.
 	<dd>{{ user.student_id }}</a>
 
-	<dt>Contact
+	<dt>Contact <i class="icon-envelope-alt"></i>
 	<dd><a href="mailto:{{ user.email }}">{{ user.email }}</a>
 
 	<dt>Telefoon nr.
 	<dd>{{ user.phone_nr }}
 
 	<dt>Studie
-	<dd>{{ user.study }}
+	<dd>{{ user.education.name }}
+</dl>
 
-</ul>
 {% endblock %}
