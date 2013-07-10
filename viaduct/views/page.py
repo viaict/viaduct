@@ -49,7 +49,6 @@ def get_page(path=''):
 	else:
 		paths = [path]
 
-	print paths
 	for path in paths:
 		page = Page.query.filter(Page.path==path).first()
 
@@ -59,7 +58,7 @@ def get_page(path=''):
 		if page.revisions.count() > 0:
 			revision = page.revisions.order_by(PageRevision.id.desc()).first()
 
-			if not revision.author.id == current_user.id:
+			if current_user != None and not revision.author.id == current_user.id:
 				if not page.can_read(current_user):
 					if not path == 'activities':
 						abort(403)
