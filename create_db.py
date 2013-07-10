@@ -42,10 +42,10 @@ user = User()
 db.session.add(user)
 db.session.commit()
 
-group.add_user(user)
+# group.add_user(user)
 
-db.session.add(group)
-db.session.commit()
+# db.session.add(group)
+# db.session.commit()
 
 # Add the administrator.
 user = User('administrator@svia.nl', bcrypt.hashpw('ictIsAwesome',
