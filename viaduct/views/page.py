@@ -11,6 +11,7 @@ from viaduct.helpers import flash_form_errors
 from viaduct.forms import EditPageForm, HistoryPageForm
 from viaduct.models import Group
 from viaduct.models.page import Page, PageRevision, PagePermission
+from viaduct.api.group import GroupPermissionAPI
 
 blueprint = Blueprint('page', __name__)
 
@@ -132,11 +133,6 @@ def edit_page(path=''):
 
 	page = Page.query.filter(Page.path==path).first()
 
-
-	#UNCOMMEND AFTER MERGE!!!
-	#if not ModulePermissionApi.can_write('page'):
-		#abort(403)
-
 	data = None
 
 	if page:
@@ -152,6 +148,10 @@ def edit_page(path=''):
 			data.content = revision.content
 			data.filter_html = not revision.filter_html
 			data.path = path
+	else:
+		if not(GroupPermissionAPI.can_write('page')):
+			return abort(403);
+
 
 	form = EditPageForm(request.form, obj=data)
 
