@@ -48,6 +48,7 @@
 		<hr>
 
 		{% if activity.form %}
+			{% if current_user.is_active %}
 			<form id="custom" action="/forms/submit/{{ activity.form.id }}" enctype="multipart/form-data">
 
 				{{ user_fields(current_user) }}
@@ -64,6 +65,11 @@
 			{% endif %}
 			
 			<script src="/static/js/custom_form_submission.js"></script>
+			{% else %}
+
+				<p>Je moet ingelogd zijn om het formulier in te vullen
+				<a href="{{ url_for('user.sign-in') }}">Inloggen</a>
+			{% endif %}
 		<hr>
 		{% endif %}
 
