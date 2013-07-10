@@ -7,13 +7,11 @@ from viaduct.models.activity import Activity
 from viaduct.models.navigation import NavigationEntry
 
 class NavigationAPI:
-
 	@staticmethod
 	def get_navigation_bar():
 		entries = NavigationEntry.get_entries(True)
 
 		return render_template('navigation/view_bar.htm', bar_entries=entries)
-
 
 	@staticmethod
 	def get_navigation_menu():
