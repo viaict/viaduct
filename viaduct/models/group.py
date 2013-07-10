@@ -21,7 +21,10 @@ class Group(db.Model):
 		self.name = name
 
 	def has_user(self, user):
-		return self.users.filter(user_group.c.user_id==user.id).count() > 0
+		if not user:
+			return False;
+		else:
+			return self.users.filter(user_group.c.user_id==user.id).count() > 0
 
 	def add_user(self, user):
 		if not self.has_user(user):
