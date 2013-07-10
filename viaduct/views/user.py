@@ -9,6 +9,7 @@ from viaduct import application, db, login_manager
 from viaduct.helpers import flash_form_errors
 from viaduct.forms import SignUpForm, SignInForm
 from viaduct.models import User
+from viaduct.models.group import Group
 from viaduct.forms.user import CreateUserForm#, EditUserPermissionForm
 from viaduct.models.education import Education
 from viaduct.api.group import GroupPermissionAPI
@@ -61,7 +62,11 @@ def create(user_id=None):
 				bcrypt.gensalt()), form.first_name.data, form.last_name.data,
 				form.student_id.data, form.education_id.data)
 		db.session.add(user)
-		user.add_to_all()
+
+		group = Group.query.filter(Group.name=='all').first()
+		group.add_user(user)
+
+		#user.add_to_all()
 
 		try:
 			db.session.commit()
@@ -97,7 +102,11 @@ def sign_up():
 
 		db.session.add(user)
 		db.session.commit()
-		user.add_to_all()
+
+
+		group = Group.query.filter(Group.name=='all').first()
+		group.add_user(user)
+		#user.add_to_all()
 
 		flash('You\'ve signed up successfully.')
 

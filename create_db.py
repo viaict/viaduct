@@ -41,7 +41,6 @@ db.session.commit()
 user = User()
 db.session.add(user)
 db.session.commit()
-user.add_to_all()
 
 # Add the administrator.
 user = User('administrator@svia.nl', bcrypt.hashpw('ictIsAwesome',
@@ -49,7 +48,6 @@ user = User('administrator@svia.nl', bcrypt.hashpw('ictIsAwesome',
 
 db.session.add(user)
 db.session.commit()
-user.add_to_all()
 
 # Add the administrators group.
 group = Group('administrators')
