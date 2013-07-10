@@ -41,6 +41,7 @@ db.session.commit()
 user = User()
 db.session.add(user)
 db.session.commit()
+user.add_to_all()
 
 # Add the administrator.
 user = User('administrator@svia.nl', bcrypt.hashpw('ictIsAwesome',
@@ -48,6 +49,7 @@ user = User('administrator@svia.nl', bcrypt.hashpw('ictIsAwesome',
 
 db.session.add(user)
 db.session.commit()
+user.add_to_all()
 
 # Add the administrators group.
 group = Group('administrators')
@@ -60,23 +62,6 @@ group_guest = Group('guests')
 db.session.add(group_guest)
 db.session.commit()
 
-#permissions = {
-#	'user.view': 'View Users',
-#	'user.create': 'Create Users',
-#	'user.edit': 'Edit Users',
-#	'user.delete': 'Delete Users',
-#	'group.view': 'View Groups',
-#	'group.create': 'Create Groups',
-#	'group.edit': 'Edit Groups',
-#	'group.delete': 'Delete Groups',
-#}
-
-#for key, value in permissions.items():
-#	permission = Permission(key, value)
-#	db.session.add(permission)
-#	db.session.commit()
-#	db.session.add(GroupPermission(group, permission))
-#	db.session.commit()
 
 # Add the administrator to the administrators group.
 group.add_user(user)
@@ -84,64 +69,6 @@ group.add_user(user)
 db.session.add(group)
 db.session.commit()
 
-## Grant the permissions.
-#permissions = PagePermission(group, page, view=True, create=True, edit=True,
-#	delete=True)
-
-#db.session.add(permissions)
-#db.session.commit()
-
-
-# Add stuff for pimpystuff for pimpy
-
-#user_maarten = User('maarten@maarten.mrt', bcrypt.hashpw('administrator', bcrypt.gensalt()), 'Maarten', 'Inja')
-#user_ed = User('ed@ed.eds', bcrypt.hashpw('administrator', bcrypt.gensalt()), 'Handsome', 'Ed')
-#group_first = Group('first')
-#group_second = Group('second')
-#
-#
-## Add the anonymous user.
-#user = User('-0', '-0', 'Klaas', 'Vaak')
-#db.session.add(user)
-#db.session.commit()
-#
-#user = User('-1', '-1', 'Computer', 'Rekenmachine')
-#db.session.add(user)
-#db.session.commit()
-#
-#
-## could I add more stuff at once?
-#db.session.add(user_maarten)
-#db.session.commit()
-#db.session.add(user_ed)
-#db.session.commit()
-#db.session.add(group_first)
-#db.session.commit()
-#db.session.add(group_second)
-#db.session.commit()
-#
-#group_first.add_user(user_maarten)
-#group_first.add_user(user_ed)
-#group_first.add_user(user)
-#group_second.add_user(user_maarten)
-#group_second.add_user(user_ed)
-#group_second.add_user(user)
-#
-#db.session.add(group_first)
-#db.session.commit()
-#db.session.add(group_second)
-#db.session.commit()
-#
-#
-#'''
-#self.name = name
-#self.description = description
-#self.start_time = start_time
-#self.end_time = end_time
-#self.location = location
-#self.price = price
-#self.picture = picture
-#'''
 
 custom_form = CustomForm(user.id, "Test formulier", '''Dieet | checkbox
 -Vegetarisch
@@ -188,30 +115,6 @@ db.session.add(activity1)
 db.session.add(activity2)
 db.session.commit()
 
-#minute = Minute("minute content, jaja", 2, datetime.date(2020, 10, 10))
-#db.session.add(minute)
-#db.session.commit()
-#
-## task
-##	def __init__(self, title, content, deadline, group_id, users,
-##				minute_id, line, status):
-#
-#task0 = Task('test task', 'test content', datetime.date(2020, 10, 10), group_first.id, [user, user_maarten], 1, minute.id, 0)
-#db.session.add(task0)
-#db.session.commit()
-#
-#task1 = Task('finish godamn pimpy', 'content', datetime.date(2015, 11, 9), group_second.id, [user, user_maarten, user_ed], 1, minute.id, 0)
-#db.session.add(task1)
-#db.session.commit()
-#
-#
-#task2 = Task('I dont even', 'sja', datetime.date(2017, 12, 15), group_second.id, [user_maarten, user_ed], 1, minute.id, 0)
-#db.session.add(task2)
-#db.session.commit()
-# ## Do some pages.
-#page = Page('page1')
-#db.session.add(page)
-#db.session.commit()
 
 revision = PageRevision(page, user, 'Page 1', 'herr derr 1', 0)
 db.session.add(revision)

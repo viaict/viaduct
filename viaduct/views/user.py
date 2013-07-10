@@ -53,6 +53,7 @@ def create(user_id=None):
 				bcrypt.gensalt()), form.first_name.data, form.last_name.data,
 				form.student_id.data)
 		db.session.add(user)
+		user.add_to_all()
 
 		try:
 			db.session.commit()
@@ -88,6 +89,7 @@ def sign_up():
 
 		db.session.add(user)
 		db.session.commit()
+		user.add_to_all()
 
 		flash('You\'ve signed up successfully.')
 
