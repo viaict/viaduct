@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form, BooleanField, FormField, FieldList, SubmitField, \
-	SelectField
+	SelectField, TextField
 
 class ViewGroupEntry(Form):
 	select = BooleanField(None)
@@ -13,5 +13,7 @@ class EditGroupPermissionEntry(Form):
 
 class EditGroupPermissionForm(Form):
 	permissions = FieldList(FormField(EditGroupPermissionEntry))
+	add_module_name = TextField(None)
+	add_module_permission = SelectField(None, coerce=int, choices=[(0, "Geen"), (1, "Lees"), (2, "Lees/Schrijf")])
 	save_changes = SubmitField('Sla veranderingen op')
 

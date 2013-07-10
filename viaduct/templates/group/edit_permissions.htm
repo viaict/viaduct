@@ -40,6 +40,14 @@
 				</td>
 				</tr>
 			{% endfor %}
+			<tr>
+				<td>
+					{{ form.add_module_name.csrf_token }}{{ form.add_module_name }}
+				</td>
+				<td>
+					{{ form.add_module_permission.csrf_token }}{{ form.add_module_permission}}
+				</td>
+			</tr>
 		</tbody>
 	</table>
 

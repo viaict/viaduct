@@ -167,7 +167,6 @@ def edit_permissions(group_id, page_id=1):
 
 	form = EditGroupPermissionForm()
 
-
 	make_form = False
 	if form.validate_on_submit():
 		make_form = True
@@ -177,6 +176,13 @@ def edit_permissions(group_id, page_id=1):
 				permission.permission = form_entry.select.data
 				db.session.add(permission)
 				db.session.commit()
+
+		if form.add_module_name.data != "":
+			new_permission = GroupPermission(form.add_module_name.data,
+				group_id, form.add_module_permission.data)
+			db.session.add(new_permission)
+			db.session.commit()
+			flash("Permission for module %s created!" % form.add_module_name.data)
 
 	else:
 		flash_form_errors(form)

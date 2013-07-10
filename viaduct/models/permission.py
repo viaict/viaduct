@@ -2,33 +2,6 @@
 
 from viaduct import db
 
-#class Permission(db.Model):
-#	__tablename__ = 'permission'
-#
-#	id = db.Column(db.Integer, primary_key=True)
-#	name = db.Column(db.String(64))
-#	label = db.Column(db.String(64))
-#
-#	def __init__(self, name, label):
-#		self.name = name
-#		self.label = label
-
-#class UserPermission(db.Model):
-#	__tablename__ = 'user_permission'
-#
-#	id = db.Column(db.Integer, primary_key=True)
-#	permission_id = db.Column(db.Integer, db.ForeignKey('permission.id'))
-#	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-#	allowed = db.Column(db.Boolean)
-#
-#	permission = db.relationship('Permission', backref=db.backref('user_permissions', lazy='dynamic'))
-#	user = db.relationship('User', backref=db.backref('permissions', lazy='dynamic'))
-#
-#	def __init__(self, user, permission, allowed=True):
-#		self.user_id = user.id
-#		self.permission_id = permission.id
-#		self.allowed = allowed
-
 class GroupPermission(db.Model):
 	"""
 	Modules have names, this is not stored or registered, it is simply the name a module
