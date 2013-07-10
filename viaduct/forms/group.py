@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form, BooleanField, FormField, FieldList, SubmitField, \
-		SelectField
+	SelectField
 
 class ViewGroupEntry(Form):
 	select = BooleanField(None)
@@ -10,7 +10,6 @@ class ViewGroupForm(Form):
 
 
 class EditGroupPermissionEntry(Form):
-<<<<<<< HEAD
 	select = SelectField(None, coerce=int, choices=[(0, "Geen"), (1, "Lees"), (2, "Lees/Schrijf")])
 
 class EditGroupPermissionForm(Form):
