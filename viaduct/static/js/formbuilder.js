@@ -56,7 +56,8 @@ $.fn.formbuilder = function() {
 
 					'shirt',
 					'Telefoon nr. in geval van nood',
-					'Allergie/medicatie (waar moeten we rekening mee houden) | textarea'
+					'> Waar moeten we rekening mee houden',
+					'Allergie/medicatie | textarea'
 				);
 
         textarea.val(lines.join("\n"));
