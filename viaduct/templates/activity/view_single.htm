@@ -38,7 +38,12 @@
 
 <div class="row-fluid">
 	<div class="span8">
-		<h4>Prijs: {{ activity.price }}</h4>
+		<h4>Prijs: 
+		{% if not activity.price == "gratis"  %}
+			<i class="icon-euro"></i>
+		{% endif %}
+		{{ activity.price }}
+		</h4>
 		
 		<div class="time">
 			<i class="icon-calendar"></i>
