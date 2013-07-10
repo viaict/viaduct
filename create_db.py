@@ -17,6 +17,7 @@ from viaduct.models.company import Company
 from viaduct.models.location import Location
 from viaduct.models.contact import Contact
 from viaduct.models.custom_form import CustomForm, CustomFormResult
+from viaduct.models.file import File
 
 # Remove the old db.
 if os.path.exists('application.db'):
