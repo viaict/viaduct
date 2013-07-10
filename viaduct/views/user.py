@@ -7,8 +7,9 @@ from flask.ext.login import current_user, login_user, logout_user
 
 from viaduct import application, db, login_manager
 from viaduct.helpers import flash_form_errors
-from viaduct.forms import SignUpForm, SignUpFormNoCaptcha, SignInForm
-from viaduct.models import User, UserPermission
+from viaduct.forms import SignUpForm, SignInForm
+from viaduct.models import Permission, User, UserPermission
+from viaduct.forms.user import CreateUserForm, EditUserPermissionForm
 
 blueprint = Blueprint('user', __name__)
 
@@ -18,45 +19,43 @@ def load_user(id):
 	# user ID.
 	return User.query.get(int(id))
 
-@blueprint.route('/users/create', methods=['GET', 'POST'])
-def create_user():
+@blueprint.route('/users/create/', methods=['GET', 'POST'])
+def create():
 	if not current_user.has_permission('user.create'):
 		abort(403)
 
-	form = SignUpFormNoCaptcha(request.form)
+	form = CreateUserForm(request.form)
 
 	if form.validate_on_submit():
+		if User.query.filter(User.email==form.email.data).count() > 0:
+			flash('A user with the e-mail address specified does already exist.', 'error')
+			return render_template('user/create_user.htm', form=form)
 
-		email_unique = True
-		for user_it in User.query.all():
-			if form.email.data == user_it.email:
-				email_unique = False
-				break
+		user = User(form.email.data, bcrypt.hashpw(form.password.data,
+				bcrypt.gensalt()), form.first_name.data, form.last_name.data,
+				form.student_id.data)
+		db.session.add(user)
 
-		if email_unique:
-			user = User(form.email.data, bcrypt.hashpw(form.password.data, bcrypt.gensalt()),
-			form.first_name.data, form.last_name.data, form.student_id.data)
-
-			db.session.add(user)
+		try:
 			db.session.commit()
+		except Exception as exception:
+			db.session.flush()
+			flash('An error occured with the database while creating the user.', 'error')
+			return render_template('user/create_user.htm', form=form)
 
-			flash('User successfully created.')
-			return redirect(url_for('user.create_user'))
-		else:
-			flash("Email already exists in database.");
-
+		flash('The user has been created successfully.', 'success')
+		return redirect(url_for('user.view'))
 	else:
 		flash_form_errors(form)
 
 	return render_template('user/create_user.htm', form=form)
-
 
 @blueprint.route('/sign-up/', methods=['GET', 'POST'])
 def sign_up():
 	# Redirect the user to the index page if he or she has been authenticated
 	# already.
 	if current_user and current_user.is_authenticated():
-		return redirect(url_for('page2.get_page'))
+		return redirect(url_for('page.get_page'))
 
 	form = SignUpForm(request.form)
 
@@ -71,7 +70,7 @@ def sign_up():
 
 		login_user(user)
 
-		return redirect(url_for('page2.get_page'))
+		return redirect(url_for('page.get_page'))
 	else:
 		flash_form_errors(form)
 
@@ -82,7 +81,7 @@ def sign_in():
 	# Redirect the user to the index page if he or she has been authenticated
 	# already.
 	if current_user and current_user.is_authenticated():
-		return redirect(url_for('page2.get_page'))
+		return redirect(url_for('page.get_page'))
 
 	form = SignInForm(request.form)
 
@@ -102,8 +101,7 @@ def sign_in():
 
 			flash('You\'ve been signed in successfully.')
 
-			# return redirect(url_for('page.get_page'))
-			return redirect('/')
+			return redirect(url_for('page.get_page'))
 	else:
 		flash_form_errors(form)
 
@@ -116,13 +114,11 @@ def sign_out():
 
 	flash('You\'ve been signed out.')
 
-	# FIX THIS!
-	# return redirect(url_for('page.get_page'))
-	return redirect('/')
+	return redirect(url_for('page.get_page'))
 
 @blueprint.route('/users/', methods=['GET', 'POST'])
-@blueprint.route('/users/<int:page>/', methods=['GET', 'POST'])
-def view(page=1):
+@blueprint.route('/users/<int:page_id>/', methods=['GET', 'POST'])
+def view(page_id=1):
 	if not current_user.has_permission('user.view'):
 		abort(403)
 
@@ -146,7 +142,35 @@ def view(page=1):
 		redirect(url_for('user.view'))
 
 	# Get a list of users to render for the current page.
-	users = User.query.paginate(page, 15, False)
+	users = User.query.paginate(page_id, 15, False)
 
 	return render_template('user/view.htm', users=users)
+
+@blueprint.route('/users/edit-permissions/<int:user_id>/', methods=['GET', 'POST'])
+@blueprint.route('/users/edit-permissions/<int:user_id>/<int:page_id>/', methods=['GET', 'POST'])
+def edit_permissions(user_id, page_id=1):
+	if not current_user.has_permission('user.edit'):
+		abort(403)
+
+	user = User.query.filter(User.id==user_id).first()
+	form = EditUserPermissionForm()
+	pagination = Permission.query.paginate(page_id, 15, False)
+
+	if form.validate_on_submit():
+		for form_entry, permission in zip(form.permissions, pagination.items):
+			if form_entry.select.data > 0:
+				user.add_permission(permission.name, True)
+			elif form_entry.select.data < 0:
+				user.add_permission(permission.name, False)
+			else:
+				user.delete_permission(permission.name)
+
+		return redirect(url_for('user.view'))
+	else:
+		for permission in pagination.items:
+			form.permissions.append_entry({'select': user.get_permission(permission.name)})
+
+	return render_template('user/edit_permissions.htm', form=form,
+			pagination=pagination,
+			permissions=zip(pagination.items, form.permissions))
 

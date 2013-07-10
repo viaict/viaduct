@@ -13,6 +13,14 @@ markdown_extensions = [
 	'toc'
 ]
 
+@application.errorhandler(403)
+def page_not_found(e):
+	return "403, The police has been notified."
+
+@application.errorhandler(404)
+def page_not_found(e):
+	return "500, External server error."
+
 def flash_form_errors(form):
 	for field, errors in form.errors.items():
 		for error in errors:
@@ -47,8 +55,8 @@ def pages_filter(data):
 		if current_user.is_authenticated():
 			content += '<div class="btn-group">'
 			content += '<a class="btn" href="' + url_for(
-				'page2.get_page_history', path=data[i].path) + '"><i class="icon-time"></i> View History</a>'
-			content += '<a class="btn" href="' + url_for('page2.edit_page',
+				'page.get_page_history', path=data[i].path) + '"><i class="icon-time"></i> View History</a>'
+			content += '<a class="btn" href="' + url_for('page.edit_page',
 				path=data[i].path) + '"><i class="icon-pencil"></i> Edit Page</a>'
 			content += '</div>'
 

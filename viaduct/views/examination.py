@@ -8,8 +8,9 @@ from sqlalchemy import or_
 from viaduct import application, db
 from viaduct.helpers import flash_form_errors
 
-from models import Examination
-from viaduct.models import Course, Education
+from viaduct.models.examination import Examination
+from viaduct.models.course import Course
+from viaduct.models.education import Education
 
 from werkzeug import secure_filename
 

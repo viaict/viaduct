@@ -8,9 +8,9 @@ from flask.ext.login import current_user
 from viaduct import db
 from viaduct.helpers import flash_form_errors
 from viaduct.forms import EditPageForm, HistoryPageForm
-from viaduct.blueprints.page.models import Page, PageRevision, PagePermission
+from viaduct.models.page import Page, PageRevision, PagePermission
 
-blueprint = Blueprint('page2', __name__)
+blueprint = Blueprint('page', __name__)
 
 def get_error_page(path=''):
 	revisions = []
@@ -150,7 +150,7 @@ def edit_page(path=''):
 
 		flash('The page has been saved.', 'success')
 
-		return redirect(url_for('page2.get_page', path=path))
+		return redirect(url_for('page.get_page', path=path))
 	else:
 		flash_form_errors(form)
 

@@ -1,12 +1,14 @@
 import os, bcrypt, datetime
 from viaduct import db, application
-from viaduct.blueprints.page.models import Page, PagePermission, PageRevision
+
+from viaduct.models.page import Page, PagePermission, PageRevision
 
 from viaduct.models import User, UserPermission, Group, GroupPermission
 from viaduct.models import Activity
 from viaduct.models import Minute, Task
 from viaduct.models import NavigationEntry
 
+from viaduct.models.permission import Permission
 from viaduct.models.vacancy import Vacancy
 from viaduct.models.requirement import Requirement
 from viaduct.models.education import Education
@@ -45,6 +47,24 @@ group = Group('administrators')
 
 db.session.add(group)
 db.session.commit()
+
+permissions = {
+	'user.view': 'View Users',
+	'user.create': 'Create Users',
+	'user.edit': 'Edit Users',
+	'user.delete': 'Delete Users',
+	'group.view': 'View Groups',
+	'group.create': 'Create Groups',
+	'group.edit': 'Edit Groups',
+	'group.delete': 'Delete Groups',
+}
+
+for key, value in permissions.items():
+	permission = Permission(key, value)
+	db.session.add(permission)
+	db.session.commit()
+	db.session.add(GroupPermission(group, permission))
+	db.session.commit()
 
 # Add the administrator to the administrators group.
 group.add_user(user)
@@ -196,11 +216,24 @@ nav_ext = NavigationEntry(nav_page1, 'Externaal', 'viaduct.svia.nl', True, False
 db.session.add(nav_ext)
 db.session.commit()
 
+nav_vacancies = NavigationEntry(None, 'Vacaturebank', '/vacancies/', False, False, 5)
+db.session.add(nav_vacancies)
+db.session.commit()
+
+nav_companies = NavigationEntry(None, 'Bedrijven', '/companies/', False, False, 6)
+db.session.add(nav_companies)
+db.session.commit()
+
 # VACANCIES
 
 location_1 = Location('Amsterdam', 'The Netherlands', 'Science Park 904',
 		'1098 XH', 'nvt', 'email@sciencepark.nl', '2345613452')
 db.session.add(location_1)
+db.session.commit()
+
+location_2 = Location('Utrecht', 'The Netherlands', 'Drol 2', '1333 DD',
+		'2 uur', 'geen', 'geen')
+db.session.add(location_2)
 db.session.commit()
 
 contact_1 = Contact('Bas de Boer', 'jemoeder@jemoder.nl', '12', location_1)

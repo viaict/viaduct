@@ -1,4 +1,4 @@
-from flask.ext.wtf import Form, TextField, TextAreaField, FileField, Required
+from flask.ext.wtf import Form, TextField, TextAreaField, FileField, SelectField, Required
 
 class CreateForm(Form):
 	name				= TextField(u'Activity name', validators=[Required()])
@@ -12,3 +12,4 @@ class CreateForm(Form):
 	price				= TextField(u'Price')
 	picture			= FileField(u'Picture')
 	venue				= TextField(u'Venue')
+	form_id			= SelectField('Formulier', coerce=int)

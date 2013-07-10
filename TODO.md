@@ -35,14 +35,10 @@
 * naar de parser kijken (crazy ass fouten)
 * tussenscherm na het uploaden van notulen
 
-
-
-
-
-
 ## boekensysteem
 * alles?
 
+<<<<<<< HEAD
 ## mail
 * alles?
 

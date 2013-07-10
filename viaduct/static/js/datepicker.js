@@ -97,8 +97,7 @@
 				e.stopPropagation();
 				e.preventDefault();
 			}
-			if (!this.isInput) {
-			}
+
 			var that = this;
 			$(document).on('mousedown', function(ev){
 				if ($(ev.target).closest('.datepicker').length == 0) {
@@ -116,9 +115,6 @@
 			$(window).off('resize', this.place);
 			this.viewMode = this.startViewMode;
 			this.showMode();
-			if (!this.isInput) {
-				$(document).off('mousedown', this.hide);
-			}
 			//this.set();
 			this.element.trigger({
 				type: 'hide',
@@ -252,8 +248,8 @@
 		},
 		
 		click: function(e) {
-			e.stopPropagation();
-			e.preventDefault();
+			//e.stopPropagation();
+			//e.preventDefault();
 			var target = $(e.target).closest('span, td, th');
 			if (target.length === 1) {
 				switch(target[0].nodeName.toLowerCase()) {
