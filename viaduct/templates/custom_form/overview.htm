@@ -4,28 +4,36 @@
 
 {%block content %}
 
+{% if GroupPermissionAPI.can_write('custom_form') %}
 <div class="btn-group">
-	{% if current_user and current_user.email == "administrator@svia.nl" %}
-		<a href="/forms/create/" class="btn btn-success">Create</a>
-	{% endif %}
+	<a href="/forms/create/" class="btn btn-success">
+		<i class="icon-plus"></i>
+		Nieuw formulier
+	</a>
 </div>
+{% endif %}
 
 <table class="table">
 <thead>
 <tr>
-	<th>Name<th>
-	<th>Edit</th>
+	<th>Formulier naam<th>
+	<th></th>
 
 {% for form in custom_forms.items %}
-
 <tr>
 	<td>{{ form.name }}
-	<td><a href="/forms/edit/{{ form.id }}" class="btn btn-mini btn-warning">
-	<i class="icon-pencil"></i> Edit</a>
-	<td><a href="/forms/view/{{ form.id }}" class="btn btn-mini btn-primary">
-		View entries
-	</a>
+	<td>
 
+		{% if GroupPermissionAPI.can_write('custom_form') %}
+		<a href="/forms/edit/{{ form.id }}" class="btn btn-mini btn-warning">
+			<i class="icon-pencil"></i>
+			Aanpassen
+		</a>
+	
+		<a href="/forms/view/{{ form.id }}" class="btn btn-mini btn-primary">
+			View entries
+		</a>
+		{% endif %}
 {% endfor %}
 
 </table>

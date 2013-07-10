@@ -6,9 +6,10 @@
 {% block content %}
 
 <div class="page-header">
-	{% if current_user and current_user.email == "administrator@svia.nl" %}
+	{% if GroupPermissionAPI.can_write('activity') %}
 	<a href="/activities/edit/{{ activity.id }}" class="btn btn-warning pull-right">
-		<i class="icon-pencil"></i> Edit
+		<i class="icon-pencil"></i> 
+		Aanpassen
 	</a>
 	{% endif %}
 
@@ -47,18 +48,18 @@
 		<hr>
 
 		{% if activity.form %}
-				<form id="custom" action="/forms/submit/{{ activity.form.id }}" enctype="multipart/form-data">
+			<form id="custom" action="/forms/submit/{{ activity.form.id }}" enctype="multipart/form-data">
 
-					{{ user_fields(current_user) }}
-					{{ activity.form.html | safe }}
+				{{ user_fields(current_user) }}
+				{{ activity.form.html | safe }}
 
-					<button id="custom_form" class="btn btn-success">Verzend formulier</button>
-				</form>
+				<button id="custom_form" class="btn btn-success">Verzend formulier</button>
+			</form>
 
 			{% if activity.form_data %}
 				<script src="/static/js/unserialize.js"></script>
 				<script>
-				$("#custom").unserializeForm("{{ activity.form_data | safe }}");
+					$("#custom").unserializeForm("{{ activity.form_data | safe }}");
 				</script>
 			{% endif %}
 			

@@ -12,17 +12,24 @@ from viaduct.helpers import flash_form_errors
 from viaduct.forms.custom_form import CreateForm
 from viaduct.models.user import User
 from viaduct.models.custom_form import CustomForm, CustomFormResult
+from viaduct.api.group import GroupPermissionApi
 
 blueprint = Blueprint('custom_form', __name__)
 
 @blueprint.route('/forms/', methods=['GET', 'POST'])
 @blueprint.route('/forms/page/<int:page>', methods=['GET', 'POST'])
 def view(page=1):
+	if not GroupPermissionAPI.can_write('custom_form'):
+		return abort(403)
+
 	custom_forms = CustomForm.query.order_by(CustomForm.name.asc())
 	return render_template('custom_form/overview.htm', custom_forms=custom_forms.paginate(page, 20, False))
 
 @blueprint.route('/forms/view/<int:form_id>', methods=['GET', 'POST'])
 def view_single(form_id=None):
+	if not GroupPermissionAPI.can_write('custom_form'):
+		return abort(403)
+
 	custom_form = CustomForm.query.get(form_id)
 
 	if not custom_form:
@@ -61,7 +68,7 @@ def view_single(form_id=None):
 @blueprint.route('/forms/create/', methods=['GET', 'POST'])
 @blueprint.route('/forms/edit/<int:form_id>', methods=['GET', 'POST'])
 def create(form_id=None):
-	if not current_user or current_user.email != 'administrator@svia.nl':
+	if not GroupPermissionAPI.can_write('custom_form'):
 		return abort(403)
 
 	if form_id:
@@ -95,6 +102,9 @@ def create(form_id=None):
 
 @blueprint.route('/forms/submit/<int:form_id>', methods=['POST'])
 def submit(form_id=None):
+	if not GroupPermissionAPI.can_read('custom_form'):
+		return abort(403)
+
 	# User needs to be logged in
 	if current_user.id and form_id:
 
@@ -125,7 +135,7 @@ def submit(form_id=None):
 			if request.form['geslacht']:
 				user.gender = request.form['geslacht']
 		
-
+		# TODO
 		except Exception :
 			pass
 
