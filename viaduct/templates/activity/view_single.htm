@@ -37,7 +37,7 @@
 
 <div class="row-fluid">
 	<div class="span8">
-		<h4><i class="icon-euro"></i>Prijs: {{ activity.price }}</h4>
+		<h4>Prijs: {{ activity.price }}</h4>
 		
 		<div class="time">
 			<i class="icon-calendar"></i>
@@ -47,7 +47,6 @@
 		<hr>
 
 		{% if activity.form %}
-
 				<form id="custom" action="/forms/submit/{{ activity.form.id }}" enctype="multipart/form-data">
 
 					{{ user_fields(current_user) }}
@@ -58,7 +57,6 @@
 
 			{% if activity.form_data %}
 				<script src="/static/js/unserialize.js"></script>
-
 				<script>
 				$("#custom").unserializeForm("{{ activity.form_data | safe }}");
 				</script>

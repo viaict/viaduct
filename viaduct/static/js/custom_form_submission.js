@@ -5,8 +5,8 @@ $(document).ready(function() {
 		$.post(
 			custom_form.attr('action'), 
 			{
-				'user': $('#custom_form_user').find('input, textarea, select').serialize(), 
-				'data':$('#custom_form_data').find('input, textarea, select').serialize()
+				'phone_nr': custom_form.find('input[name="phone_nr"]').val(), 
+				'data': $('#custom_form_data').find(':input').serialize()
 			},
 
 			function(result) {

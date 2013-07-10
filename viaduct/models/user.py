@@ -12,6 +12,7 @@ class User(db.Model):
 	password = db.Column(db.String(60))
 	first_name = db.Column(db.String(256))
 	last_name = db.Column(db.String(256))
+	phone_nr	= db.Column(db.String(16))
 	student_id = db.Column(db.String(256))
 	education_id = db.Column(db.Integer,
 		db.ForeignKey('education.id'))

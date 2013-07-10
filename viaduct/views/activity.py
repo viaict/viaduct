@@ -50,7 +50,8 @@ def get_activity(activity_id = 0):
 			.filter(CustomFormResult.form_id  == activity.form_id) \
 			.filter(CustomFormResult.owner_id == current_user.id).first()
 
-		activity.form_data = form_result.data.replace('"', "'")
+		if form_result:
+			activity.form_data = form_result.data.replace('"', "'")
 
 	return render_template('activity/view_single.htm', activity=activity)
 

@@ -10,6 +10,7 @@ from werkzeug import secure_filename
 from viaduct import application, db
 from viaduct.helpers import flash_form_errors
 from viaduct.forms.custom_form import CreateForm
+from viaduct.models.user import User
 from viaduct.models.custom_form import CustomForm, CustomFormResult
 
 blueprint = Blueprint('custom_form', __name__)
@@ -99,8 +100,20 @@ def submit(form_id=None):
 
 		response = "success"
 
-		# TODO if request.form['user'] is set, we must check the user email/name/phone_nr
-		# and check if it should be updated
+		user = User.query.get(current_user.id)
+		
+		# These are definitely there
+		user.first_name = request.form['first_name']
+		user.last_name = request.form['last_name']
+		user.email = request.form['email']
+		user.phone_nr = request.form['phone_nr']
+		
+		# These might be there
+		if request.form['gender']:
+			user.gender = request.form['gender']
+
+		if request.form['noodnummer']:
+			user.noodnummer = request.form['noodnummer']
 
 		duplicate_test = CustomFormResult.query.filter(
 			CustomFormResult.owner_id == current_user.id, 
@@ -114,6 +127,9 @@ def submit(form_id=None):
 		else:
 			result = CustomFormResult(current_user.id, form_id, request.form['data'])
 		
+		db.session.add(user)
+		db.session.commit()
+
 		db.session.add(result)
 		db.session.commit()
 	else :

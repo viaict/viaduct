@@ -45,7 +45,7 @@ def create(user_id=None):
 	form = CreateUserForm(request.form)
 
 	if form.validate_on_submit():
-		if User.query.filter(User.email==form.email.data).count() > 0:
+		if User.query.filter(User.email == form.email.data).count() > 0:
 			flash('Een gebruiker met dit email adres bestaat al / A user with the e-mail address specified does already exist.', 'error')
 			return render_template('user/create_user.htm', form=form)
 
