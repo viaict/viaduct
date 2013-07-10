@@ -14,3 +14,4 @@ config.py
 ._*
 .Thrashes
 Thumbs.db
+*.sublime-*
