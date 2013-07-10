@@ -64,6 +64,9 @@ def create(user_id=None):
 		group = Group.query.filter(Group.name=='all').first()
 		group.add_user(user)
 
+		db.session.add(group)
+		db.session.commit()
+
 		#user.add_to_all()
 
 		try:
@@ -104,6 +107,9 @@ def sign_up():
 
 		group = Group.query.filter(Group.name=='all').first()
 		group.add_user(user)
+
+		db.session.add(group)
+		db.session.commit()
 		#user.add_to_all()
 
 		flash('You\'ve signed up successfully.')
