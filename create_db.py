@@ -152,8 +152,11 @@ Shirt maat | select
 -Medium
 -Large
 
-Telefoon nr. in geval van nood
-Allergie/medicatie (waar moeten we rekening mee houden) | textarea''', '''<div id="custom_form_data"><div class="control-group"><label class="control-label">Dieet </label><div class="controls"><div name="dieet"><label class="checkbox"><input type="checkbox" name="dieet[]" value="Vegetarisch"> Vegetarisch</label><label class="checkbox"><input type="checkbox" name="dieet[]" value="Veganistisch"> Veganistisch</label></div></div></div><div class="control-group"><label class="control-label">Shirt maat </label><div class="controls"><select name="shirt maat"><option>Small</option><option>Medium</option><option>Large</option></select></div></div><div class="control-group"><label class="control-label">Telefoon nr. in geval van nood</label><div class="controls"><input type="text" name="telefoon nr. in geval van nood"></div></div><div class="control-group"><label class="control-label">Allergie/medicatie (waar moeten we rekening mee houden) </label><div class="controls"><textarea name="allergie/medicatie (waar moeten we rekening mee houden)"></textarea></div></div></div>"''')
+Noodnummer
+> Telefoon nummer in geval van nood
+Allergie/medicatie | textarea
+
+> Waar moeten we rekening mee houden''', '''<div id="custom_form_data"><div class="control-group"><label class="control-label">Dieet </label><div class="controls"><div name="dieet"><label class="checkbox"><input type="checkbox" name="dieet[]" value="Vegetarisch"> Vegetarisch</label><label class="checkbox"><input type="checkbox" name="dieet[]" value="Veganistisch"> Veganistisch</label></div></div></div><div class="control-group"><label class="control-label">Shirt maat </label><div class="controls"><select name="shirt maat"><option>Small</option><option>Medium</option><option>Large</option></select></div></div><div class="control-group"><label class="control-label">Noodnummer</label><small> Telefoon nummer in geval van nood</small><div class="controls"><input type="text" name="noodnummer"></div></div><div class="control-group"><label class="control-label">Allergie/medicatie </label><small> Waar moeten we rekening mee houden</small><div class="controls"><textarea name="allergie/medicatie"></textarea></div></div></div>''')
 
 db.session.add(custom_form)
 db.session.commit()

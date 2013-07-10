@@ -16,13 +16,13 @@ dt, dd {
 }
 
 dl {
-	width: 410px;
+	width: 490px;
 	padding: 0;
 }
 
 dt {
 	text-transform:capitalize;
-	width: 100px;
+	width: 180px;
 	padding: 5px 5px 5px 0;
 }
 

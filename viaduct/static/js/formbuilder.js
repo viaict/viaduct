@@ -40,7 +40,7 @@ $.fn.formbuilder = function() {
       }
 
       if (lines[i].charAt(0) == '>') {
-        form.append('<p>' + lines[i].substring(1));
+				form.find('label').last().after('<small>' + lines[i].substring(1) + '</small>');
         continue;
       }
       
@@ -55,9 +55,10 @@ $.fn.formbuilder = function() {
 					'-Veganistisch', 
 
 					'shirt',
-					'Telefoon nr. in geval van nood',
-					'> Waar moeten we rekening mee houden',
-					'Allergie/medicatie | textarea'
+					'Noodnummer',
+					'> Telefoon nummer in geval van nood',
+					'Allergie/medicatie | textarea',
+					'> Waar moeten we rekening mee houden'
 				);
 
         textarea.val(lines.join("\n"));
@@ -128,7 +129,7 @@ $.fn.formbuilder = function() {
   function parseLine(line) {
     var line  = line.split("|");
     var label = strip(line[0]);
-		var name  = $.trim(label).toLowerCase();
+		var name  = $.trim(label).replace(/[ ]/g, '_').toLowerCase();
 
     if (label == "") // Skip empty lines
       return false;

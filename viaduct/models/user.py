@@ -14,10 +14,11 @@ class User(db.Model):
 	last_name = db.Column(db.String(256))
 	shirt_size = db.Column(db.Enum('Small', 'Medium', 'Large'))
 	allergy = db.Column(db.String(1024)) # Allergy / medication
-	diet = db.Column(db.Enum(None, 'Vegetarisch', 'Veganistisch', 'Fruitarier'))
+	diet = db.Column(db.Enum('Vegetarisch', 'Veganistisch', 'Fruitarier'))
 	gender = db.Column(db.Enum('Man', 'Vrouw', 'Geen info'))
 	phone_nr = db.Column(db.String(16))
-	emergency_phone_nr = = db.Column(db.String(16))
+	emergency_phone_nr = db.Column(db.String(16))
+	description = db.Column(db.String(1024)) # Description of user
 	student_id = db.Column(db.String(256))
 	education_id = db.Column(db.Integer, db.ForeignKey('education.id'))
 
