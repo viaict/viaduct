@@ -51,8 +51,8 @@ def pages_filter(data):
 		content += '<div class="mainblock'
 		# expander toevoegen als het over de mainpage gaat
 		content += ' expander">' if data[i].is_main_page else '">'
-	
-		if current_user.is_authenticated():
+
+		if current_user != None and current_user.is_authenticated():
 			content += '<div class="btn-group">'
 			content += '<a class="btn" href="' + url_for(
 				'page.get_page_history', path=data[i].path) + '"><i class="icon-time"></i> View History</a>'
