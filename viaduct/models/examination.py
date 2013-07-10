@@ -4,7 +4,7 @@ from viaduct import db
 
 from viaduct.models.course import Course
 from viaduct.models.education import Education
-from viaduct.models.user import User, UserPermission
+from viaduct.models.user import User
 
 class Examination(db.Model):
 	__tablename__ = 'examination'

@@ -11,6 +11,7 @@ from viaduct.forms import SignUpForm, SignInForm
 from viaduct.models import User
 from viaduct.forms.user import CreateUserForm#, EditUserPermissionForm
 from viaduct.models.education import Education
+from viaduct.api.group import GroupPermissionAPI
 
 from viaduct.api.group import GroupPermissionAPI
 
@@ -46,6 +47,11 @@ def create(user_id=None):
 
 	form = CreateUserForm(request.form)
 
+	# Add education.
+	educations = Education.query.all()
+	form.education_id.choices = \
+			[(e.id, e.name) for e in educations]
+
 	if form.validate_on_submit():
 		if User.query.filter(User.email == form.email.data).count() > 0:
 			flash('Een gebruiker met dit email adres bestaat al / A user with the e-mail address specified does already exist.', 'error')
@@ -53,7 +59,7 @@ def create(user_id=None):
 
 		user = User(form.email.data, bcrypt.hashpw(form.password.data,
 				bcrypt.gensalt()), form.first_name.data, form.last_name.data,
-				form.student_id.data)
+				form.student_id.data, form.education_id.data)
 		db.session.add(user)
 		user.add_to_all()
 
