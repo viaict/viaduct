@@ -53,7 +53,7 @@ def get_activity(activity_id = 0):
 		activity.form = CustomForm.query.get(activity.form_id)
 
 		form_result = CustomFormResult.query \
-			.filter(CustomFormResult.form_id  == activity.form_id) \
+			.filter(CustomFormResult.form_id == activity.form_id) \
 			.filter(CustomFormResult.owner_id == current_user.id).first()
 
 		if form_result:
@@ -94,7 +94,7 @@ def create(activity_id=None):
 
 		start_date = form.start_date.data
 		start_time = form.start_time.data
-		
+
 		end_date = form.end_date.data
 		end_time = form.end_time.data
 
@@ -125,10 +125,10 @@ def create(activity_id=None):
 			activity.form_id = form.form_id.data
 
 		if valid_form:
-			activity.name = name 
+			activity.name = name
 			activity.description = description
 			activity.start_time = start
-			activity.end_time = end 
+			activity.end_time = end
 			activity.location = location
 			activity.price = price
 			activity.picture = picture

@@ -44,8 +44,8 @@ def upload_file():
 	if not current_user or current_user.email != 'administrator@svia.nl':
 		return abort(403)
 
-	courses =  Course.query.all()
-	educations =  Education.query.all()
+	courses = Course.query.all()
+	educations = Education.query.all()
 
 	if request.method == 'POST':
 		file = request.files['file']
@@ -55,11 +55,11 @@ def upload_file():
 
 		# course_id = get_course_id(course);
 		# if(course_id == None):
-		# 	return render_template('examination/upload.htm', courses = courses, 
+		# 	return render_template('examination/upload.htm', courses = courses,
 		# 	educations = educations, message = 'Er is een fout opgetreden!');
 		# education_id = get_education_id(education)
 		# if(education_id == None):
-		# 	return render_template('examination/upload.htm', courses = courses, 
+		# 	return render_template('examination/upload.htm', courses = courses,
 		# 	educations = educations, message = 'Er is een fout opgetreden!');
 
 		if file and allowed_file(file.filename):
@@ -67,17 +67,17 @@ def upload_file():
 			filename = create_unique_file(filename)
 
 			file.save(os.path.join(UPLOAD_FOLDER, filename))
-			exam = Examination(filename, title,  course_id, education_id)
+			exam = Examination(filename, title, course_id, education_id)
 			db.session.add(exam)
 			db.session.commit()
 
-			return render_template('examination/upload.htm', courses = courses, 
+			return render_template('examination/upload.htm', courses = courses,
 			educations = educations, message = 'Het tentamen is geupload!');
 		else:
-			return render_template('examination/upload.htm', courses = courses, 
-			educations = educations, message = 'Fout file format!');			
+			return render_template('examination/upload.htm', courses = courses,
+			educations = educations, message = 'Fout file format!');
 
-	return render_template('examination/upload.htm', courses = courses, 
+	return render_template('examination/upload.htm', courses = courses,
 		educations = educations);
 
 
@@ -87,16 +87,16 @@ def view_examination():
 
 	if request.args.get('search') != None:
 		search = request.args.get('search')
-		examinations =  Examination.query.join(Course).join(Education).\
-			filter(or_(Examination.title.like('%' + search + '%'), 
-				Course.name.like('%' + search + '%'), 
+		examinations = Examination.query.join(Course).join(Education).\
+			filter(or_(Examination.title.like('%' + search + '%'),
+				Course.name.like('%' + search + '%'),
 				Education.name.like('%' + search + '%'))).all()
-		return render_template('examination/view.htm', path = path, 
+		return render_template('examination/view.htm', path = path,
 			examinations = examinations, search=search)
 
 
 	examinations = Examination.query.all()
-	return render_template('examination/view.htm', path = path, 
+	return render_template('examination/view.htm', path = path,
 		examinations = examinations, search="")
 
 @blueprint.route('/examination/admin', methods=['GET', 'POST'])
@@ -108,25 +108,25 @@ def examination_admin():
 
 	if request.args.get('search') != None:
 		search = request.args.get('search')
-		examinations =  Examination.query.join(Course).join(Education).\
-			filter(or_(Examination.title.like('%' + search + '%'), 
-				Course.name.like('%' + search + '%'), 
+		examinations = Examination.query.join(Course).join(Education).\
+			filter(or_(Examination.title.like('%' + search + '%'),
+				Course.name.like('%' + search + '%'),
 				Education.name.like('%' + search + '%'))).all()
-		return render_template('examination/admin.htm', path = path, 
+		return render_template('examination/admin.htm', path = path,
 			examinations = examinations, search=search, message="")
 
 	if request.args.get('delete') != None:
 		exam_id = request.args.get('delete')
-		examination =  Examination.query.filter(Examination.id == exam_id).first()
+		examination = Examination.query.filter(Examination.id == exam_id).first()
 
-		os.remove(os.path.join(UPLOAD_FOLDER, 
+		os.remove(os.path.join(UPLOAD_FOLDER,
 		examination.path))
 		title = examination.title
 		db.session.delete(examination)
 		db.session.commit()
 		examinations = Examination.query.all()
-		return render_template('examination/admin.htm', path = path, 
-			examinations = examinations, search="", 
+		return render_template('examination/admin.htm', path = path,
+			examinations = examinations, search="",
 			message="Tentamen " + title + " succesvol verwijderd")
 
 	if request.args.get('edit') != None:
@@ -138,7 +138,7 @@ def examination_admin():
 		db.session.commit()
 
 	examinations = Examination.query.all()
-	return render_template('examination/admin.htm', path = path, 
+	return render_template('examination/admin.htm', path = path,
 		examinations = examinations, search="", message="")
 
 @blueprint.route('/examination/edit', methods=['GET', 'POST'])
@@ -148,8 +148,8 @@ def edit_examination():
 
 	path = '../static/'
 
-	courses =  Course.query.all()
-	educations =  Education.query.all()
+	courses = Course.query.all()
+	educations = Education.query.all()
 
 	if request.method == 'POST':
 		file = request.files['file']
@@ -171,36 +171,36 @@ def edit_examination():
 					filename = secure_filename(file.filename)
 					filename = create_unique_file(filename)
 
-					os.remove(os.path.join(UPLOAD_FOLDER, 
+					os.remove(os.path.join(UPLOAD_FOLDER,
 							examination.path))
 
 					file.save(os.path.join(UPLOAD_FOLDER, filename))
 
 					examination.path = filename
 				else:
-					return render_template('examination/edit.htm', courses = courses, 
+					return render_template('examination/edit.htm', courses = courses,
 					educations = educations, examination=examination,
-					message = 'Fout file format!');				
-			
+					message = 'Fout file format!');
+
 			db.session.commit()
 
-			return render_template('examination/edit.htm', courses = courses, 
+			return render_template('examination/edit.htm', courses = courses,
 			educations = educations, examination=examination,
-			message = 'Het tentamen is aangepast!');		
+			message = 'Het tentamen is aangepast!');
 
 	if request.args.get('edit') != None:
 		exam_id = request.args.get('edit')
 		examination = Examination.query.filter(Examination.id == exam_id).\
 			first()
 
-		return render_template('examination/edit.htm', path = path, 
+		return render_template('examination/edit.htm', path = path,
 			examination=examination, courses=courses, educations=educations)
 
 
 
 	examinations = Examination.query.all()
-	return render_template('examination/admin.htm', path = path, 
-		examinations = examinations, search="", 
+	return render_template('examination/admin.htm', path = path,
+		examinations = examinations, search="",
 		message="Geen examen geselecteerd")
 
 @blueprint.route('/course/add', methods=['GET', 'POST'])
@@ -222,7 +222,7 @@ def add_course():
 def add_education():
 	if not current_user or current_user.email != 'administrator@svia.nl':
 		return abort(403)
-		
+
 	if request.method == 'POST':
 		education = request.form.get("education", None)
 		new_education = Education(1, education)
