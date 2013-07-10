@@ -12,8 +12,8 @@ blueprint = Blueprint('vacancy', __name__)
 @blueprint.route('/vacancies/', methods=['GET', 'POST'])
 @blueprint.route('/vacancies/<int:page>/', methods=['GET', 'POST'])
 def list(page=1):
-	if not(GroupPermissionAPI.can_read('vacancy')):
-		return abort(403);
+	if not GroupPermissionAPI.can_read('vacancy'):
+		return abort(403)
 
 	vacancies = Vacancy.query.paginate(page, 15, False)
 
@@ -26,8 +26,8 @@ def view(vacancy_id=None):
 	FRONTEND
 	Create, view or edit a vacancy.
 	'''
-	if not(GroupPermissionAPI.can_read('location')):
-		return abort(403);
+	if not GroupPermissionAPI.can_read('vacancy'):
+		return abort(403)
 
 	# Select vacancy.
 	if vacancy_id:
@@ -50,8 +50,8 @@ def update(vacancy_id=None):
 	BACKEND
 	Create, view or edit a vacancy.
 	'''
-	if not(GroupPermissionAPI.can_write('location')):
-		return abort(403);
+	if not GroupPermissionAPI.can_write('vacancy'):
+		return abort(403)
 
 	# Select vacancy.
 	if vacancy_id:
@@ -111,8 +111,8 @@ def delete(vacancy_id):
 	BACKEND
 	Delete a vacancy.
 	'''
-	if not(GroupPermissionAPI.can_write('location')):
-		return abort(403);
+	if not GroupPermissionAPI.can_write('vacancy'):
+		return abort(403)
 
 	vacancy = Vacancy.query.get(vacancy_id)
 	if not vacancy:

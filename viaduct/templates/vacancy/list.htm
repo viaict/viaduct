@@ -3,7 +3,10 @@
 {% extends "content.htm" %}
 
 {% block content %}
-	<p><a class="btn" href="{{ url_for('vacancy.view') }}">Nieuwe vacature</a></p>
+	{% if GroupPermissionAPI.can_write('vacancy') %}
+		<p><a class="btn" href="{{ url_for('vacancy.view') }}">Nieuwe vacature</a></p>
+	{% endif %}
+
 	<ul>
 		{% for vacancy in vacancies.items %}
 			<li><a href="{{ url_for('vacancy.view', vacancy_id=vacancy.id) }}">{{ vacancy.title }}</a></li>
