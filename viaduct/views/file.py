@@ -16,8 +16,8 @@ def list(page=1):
 	'''
 	List all files that are not assigned to a page.
 	'''
-	if not(GroupPermissionAPI.can_read('file')):
-		return abort(403);
+	if not GroupPermissionAPI.can_read('file'):
+		return abort(403)
 
 	files = File.query.filter_by(page=None).order_by(File.name)\
 			.paginate(page, 30, False)
@@ -31,8 +31,8 @@ def upload(page=1):
 	'''
 	Upload a file.
 	'''
-	if not(GroupPermissionAPI.can_write('file')):
-		return abort(403);
+	if not GroupPermissionAPI.can_write('file'):
+		return abort(403)
 
 	new_file = request.files['file']
 	FileAPI.upload(new_file)
@@ -44,7 +44,7 @@ def search(query):
 	'''
 	Fuzzy search files.
 	'''
-	if not(GroupPermissionAPI.can_read('file')):
+	if not GroupPermissionAPI.can_read('file'):
 		return jsonify(error='Geen toestemming');
 
 	return jsonify(filenames=FileAPI.search(query))

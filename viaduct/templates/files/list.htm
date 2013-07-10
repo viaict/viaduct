@@ -5,10 +5,12 @@
 
 {% block page %}
 
-<form method="post" enctype="multipart/form-data">
-	{{ render_file(form.file) }}
-	{{ render_button(form.submit) }}
-</form>
+{% if GroupPermissionAPI.can_write('file') %}
+	<form method="post" enctype="multipart/form-data">
+		{{ render_file(form.file) }}
+		{{ render_button(form.submit) }}
+	</form>
+{% endif %}
 
 <ul>
 	{% for file in files.items %}

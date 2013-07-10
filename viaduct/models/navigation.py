@@ -16,8 +16,8 @@ class NavigationEntry(db.Model):
 	position = db.Column(db.Integer)
 
 	parent = db.relationship('NavigationEntry', remote_side=[id],
-            primaryjoin=('NavigationEntry.parent_id==NavigationEntry.id'),
-            backref="children")
+			primaryjoin=('NavigationEntry.parent_id==NavigationEntry.id'),
+			backref="children")
 
 	def __init__(self, parent, title, url, external, activity_list, position):
 		if parent:
