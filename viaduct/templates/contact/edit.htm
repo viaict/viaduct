@@ -1,0 +1,30 @@
+{% from "macros/form.htm" import render_field, render_button, render_textarea, render_datefield, render_select %}
+
+{% extends "content.htm" %}
+
+{% block content %}
+    <form method="post">
+        <fieldset>
+            <legend>Contactpersoon {% if contact.id %}bewerken{% else %}aanmaken{% endif %}</legend>
+
+            {{ form.csrf_token }}
+
+            {{ render_field(form.name) }}
+            {{ render_field(form.email) }}
+            {{ render_field(form.phone_nr) }}
+            {{ render_field(form.location_id) }}
+
+            {{ render_button(form.submit) }}
+        </fieldset>
+    </form>
+
+    {% if contact.id %}
+        <form action="{{ url_for('contact.delete', contact_id=contact.id) }}" method="post">
+            <fieldset>
+                <button class="btn btn-danger" type="submit">Verwijderen</button>
+            </fieldset>
+        </form>
+    {% endif %}
+
+    <script src="/static/js/contact_edit.js"></script>
+{% endblock %}

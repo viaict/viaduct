@@ -219,28 +219,39 @@ nav_admin = NavigationEntry(None, 'Admin', '/admin', False, False, 3)
 db.session.add(nav_admin)
 db.session.commit()
 
-nav_nav = NavigationEntry(nav_admin, 'Navigatie', '/navigation', False, False, 1)
+nav_nav = NavigationEntry(nav_admin, 'Navigatie', '/navigation', False, False,
+		1)
 db.session.add(nav_nav)
 db.session.commit()
 
-nav_activity = NavigationEntry(None, 'Activiteiten', '/activities', False, True, 4)
+nav_activity = NavigationEntry(None, 'Activiteiten', '/activities', False, True,
+		4)
 db.session.add(nav_activity)
 db.session.commit()
 
-nav_ext = NavigationEntry(nav_page1, 'Externaal', 'viaduct.svia.nl', True, False, 1)
+nav_ext = NavigationEntry(nav_page1, 'Externaal', 'viaduct.svia.nl', True,
+		False, 1)
 db.session.add(nav_ext)
 db.session.commit()
 
-nav_vacancies = NavigationEntry(None, 'Vacaturebank', '/vacancies/', False, False, 5)
+nav_vacancies = NavigationEntry(None, 'Vacaturebank', '/vacancies/', False,
+		False, 5)
 db.session.add(nav_vacancies)
 db.session.commit()
 
-nav_companies = NavigationEntry(None, 'Bedrijven', '/companies/', False, False, 6)
+nav_companies = NavigationEntry(None, 'Bedrijven', '/companies/', False, False,
+		6)
 db.session.add(nav_companies)
 db.session.commit()
 
-nav_locations = NavigationEntry(None, 'Locaties', '/locations/', False, False, 7)
+nav_locations = NavigationEntry(None, 'Locaties', '/locations/', False, False,
+		7)
 db.session.add(nav_locations)
+db.session.commit()
+
+nav_contacts = NavigationEntry(None, 'Contactpersonen', '/contacts/', False,
+		False, 7)
+db.session.add(nav_contacts)
 db.session.commit()
 
 # VACANCIES
