@@ -7,7 +7,7 @@ from viaduct.helpers import flash_form_errors
 from viaduct.models.navigation import NavigationEntry
 from viaduct.forms import NavigationEntryForm
 from viaduct.api.navigation import NavigationAPI
-from viaduct.blueprints.page.models import Page
+from viaduct.models.page import Page
 
 import json
 import re
@@ -88,7 +88,7 @@ def edit(entry_id=None):
 			db.session.commit()
 
 			if not form.external.data:
-				
+
 				# Check if the page exists, if not redirect to create it
 				page = Page.get_by_path(form.url.data)
 				if not page:

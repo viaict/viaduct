@@ -20,7 +20,7 @@ def get_error_page(path=''):
 
 	data = struct()
 	data.title = 'Oh no! It looks like you have found a dead Link!'
-	data.content = '![alt text](static/img/404.png "404")'
+	data.content = '![alt text](/static/img/404.png "404")'
 	data.filter_html = True
 	data.path = ''
 
@@ -51,7 +51,7 @@ def get_page(path=''):
 		else:
 			revision = PageRevision(page, current_user, 'Oh no! It looks like' +
 				' you have found a dead Link!',
-				'![alt text](../static/img/404.png "404")', True)
+				'![alt text](/static/img/404.png "404")', True)
 
 		class struct(object):
 			pass

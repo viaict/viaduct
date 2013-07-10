@@ -60,7 +60,7 @@ class PageRevision(db.Model):
 		self.content = content
 		self.comment = comment
 		self.filter_html = filter_html
-		self.user_id = author.id
+		self.user_id = author.id if author != None else -1
 		self.page_id = page.id
 		self.timestamp = timestamp
 
