@@ -9,9 +9,26 @@
 
 		{{ form.csrf_token }}
 
-		{{ render_field(form.title, class='input-block-level') }}
-		{{ render_field(form.content, rows=20, class='input-block-level') }}
-		{{ render_field(form.comment, class='input-block-level') }}
+		{{ form.title.csrf_token }}{{ render_field(form.title, class='input-block-level') }}
+		{{ form.content.csrf_token }}{{ render_field(form.content, rows=20, class='input-block-level') }}
+		{{ form.comment.csrf_token }}{{ render_field(form.comment, class='input-block-level') }}
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th>Permission</th>
+					<th></th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{% for group, form_entry in groups %}
+					<tr>
+						<td>{{ group.name }}</td>
+						<td>{{ form_entry.select }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
 		{{ render_checkbox(form.filter_html) }}
 		{{ render_button(form.save_page) }}
 	</fieldset>

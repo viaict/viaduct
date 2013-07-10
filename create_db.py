@@ -31,6 +31,12 @@ page = Page('')
 db.session.add(page)
 db.session.commit()
 
+#Add the all group
+group = Group('all')
+
+db.session.add(group)
+db.session.commit()
+
 # Add the anonymous user.
 user = User()
 db.session.add(user)
@@ -76,13 +82,6 @@ for key, value in permissions.items():
 group.add_user(user)
 
 db.session.add(group)
-db.session.commit()
-
-# Grant the permissions.
-permissions = PagePermission(group, page, view=True, create=True, edit=True,
-	delete=True)
-
-db.session.add(permissions)
 db.session.commit()
 
 
@@ -204,11 +203,6 @@ db.session.commit()
 #page = Page('page1')
 #db.session.add(page)
 #db.session.commit()
-
-permissions = PagePermission(group, page, view=True, create=True, edit=True,
-		delete=True)
-db.session.add(permissions)
-db.session.commit()
 
 revision = PageRevision(page, user, 'Page 1', 'herr derr 1', 0)
 db.session.add(revision)

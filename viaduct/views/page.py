@@ -4,11 +4,15 @@ import difflib
 from flask import Blueprint
 from flask import flash, redirect, render_template, request, url_for
 from flask.ext.login import current_user
+from flask import abort
 
 from viaduct import db
 from viaduct.helpers import flash_form_errors
 from viaduct.forms import EditPageForm, HistoryPageForm
 from viaduct.models.page import Page, PageRevision, PagePermission
+from viaduct.models import Group
+##UNCOMMEND AFTER MERGE!!!
+#from viaduct.models.module_permission import ModulePermissionAPI
 
 blueprint = Blueprint('page', __name__)
 
@@ -28,12 +32,16 @@ def get_error_page(path=''):
 
 	return render_template('page/get_page.htm', revisions=revisions)
 
+@blueprint.route('/favicon.ico', methods=['GET', 'POST'])
+def favicon_route():
+	return "None";
+
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<path:path>', methods=['GET', 'POST'])
 def get_page(path=''):
-	print(path)
-
 	revisions = []
+
+	print 
 
 	is_main_page = False
 	if path == '' or path == 'index':
@@ -42,6 +50,7 @@ def get_page(path=''):
 	else:
 		paths = [path]
 
+	print paths
 	for path in paths:
 		page = Page.query.filter(Page.path==path).first()
 
@@ -50,10 +59,16 @@ def get_page(path=''):
 
 		if page.revisions.count() > 0:
 			revision = page.revisions.order_by(PageRevision.id.desc()).first()
+
+			if not revision.author.id == current_user.id:
+				if not page.can_read(current_user):
+					if not path == 'activities':
+						abort(403)
 		else:
 			revision = PageRevision(page, current_user, 'Oh no! It looks like' +
 				' you have found a dead Link!',
 				'![alt text](/static/img/404.png "404")', True)
+
 
 		class struct(object):
 			pass
@@ -78,6 +93,9 @@ def get_page_history(path=''):
 	form = HistoryPageForm(request.form)
 
 	page = Page.query.filter(Page.path==path).first()
+
+	if not page.can_write(current_user):
+		abort(403)
 
 	if not page:
 		page = Page('')
@@ -115,10 +133,20 @@ def edit_page(path=''):
 #		return get_error_page()
 
 	page = Page.query.filter(Page.path==path).first()
+
+
+	#UNCOMMEND AFTER MERGE!!!
+	#if not ModulePermissionApi.can_write('page'):
+		#abort(403)
+
 	data = None
 
 	if page:
 		revision = page.revisions.order_by(PageRevision.id.desc()).first()
+
+		if not revision.author.id == current_user.id:
+			if not page.can_write(current_user):
+				abort(403)
 
 		data = struct()
 		data.title = revision.title
@@ -127,6 +155,9 @@ def edit_page(path=''):
 		data.path = path
 
 	form = EditPageForm(request.form, obj=data)
+
+	groups = Group.query.all()
+
 
 	if form.validate_on_submit():
 		title = request.form['title'].strip()
@@ -143,6 +174,21 @@ def edit_page(path=''):
 
 			db.session.add(page)
 			db.session.commit()
+	
+		# Enter permission in db
+		for form_entry, group in zip(form.permissions, groups):
+			permission_entry = PagePermission.query.filter(PagePermission.group_id==group.id, 
+				PagePermission.page_id==page.id).first()
+
+			permission_level = form_entry.select.data
+
+			if permission_entry:
+			 	permission_entry.set_permission(permission_level);
+			else:
+				permission_entry = PagePermission(group.id, page.id, permission_level)
+
+			db.session.add(permission_entry)
+			db.session.commit()	
 
 		revision = PageRevision(page, current_user, title, content, comment,
 			filter_html, timestamp=datetime.datetime.utcnow())
@@ -152,9 +198,21 @@ def edit_page(path=''):
 
 		flash('The page has been saved.', 'success')
 
+
 		return redirect(url_for('page.get_page', path=path))
 	else:
+		for group in groups:
+			data = {}
+			if page:
+				permission = PagePermission.query.filter(PagePermission.group_id==group.id, 
+					PagePermission.page_id==page.id).first()
+
+				if permission:			
+					data['select'] = permission.permission
+
+			form.permissions.append_entry(data)
 		flash_form_errors(form)
 
-	return render_template('page/edit_page.htm', form=form)
+	return render_template('page/edit_page.htm', form=form,
+			groups=zip(groups, form.permissions))
 

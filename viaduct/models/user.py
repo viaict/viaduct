@@ -31,6 +31,12 @@ class User(db.Model):
 		self.student_id = student_id
 		self.education_id = education_id
 
+		group = Group.query.filter(Group.name=='all').first()
+
+		group.add_user(self)
+		db.session.add(group)
+		db.session.commit()
+
 	def is_authenticated(self):
 		return self.id != 0
 
