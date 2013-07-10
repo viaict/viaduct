@@ -9,10 +9,8 @@ from flask import abort
 from viaduct import db
 from viaduct.helpers import flash_form_errors
 from viaduct.forms import EditPageForm, HistoryPageForm
-from viaduct.models.page import Page, PageRevision, PagePermission
 from viaduct.models import Group
-##UNCOMMEND AFTER MERGE!!!
-#from viaduct.models.module_permission import ModulePermissionAPI
+from viaduct.models.page import Page, PageRevision
 
 blueprint = Blueprint('page', __name__)
 

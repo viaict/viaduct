@@ -8,7 +8,7 @@ from flask.ext.login import current_user, login_user, logout_user
 from viaduct import application, db, login_manager
 from viaduct.helpers import flash_form_errors
 from viaduct.forms import SignUpForm, SignInForm
-from viaduct.models import Permission, User, UserPermission
+from viaduct.models import User
 from viaduct.forms.user import CreateUserForm, EditUserPermissionForm
 from viaduct.models.education import Education
 
@@ -103,8 +103,8 @@ def sign_up():
 def sign_in():
 	# Redirect the user to the index page if he or she has been authenticated
 	# already.
-	if current_user and current_user.is_authenticated():
-		return redirect(url_for('page.get_page'))
+	#if current_user and current_user.is_authenticated():
+	#	return redirect(url_for('page.get_page'))
 
 	form = SignInForm(request.form)
 
@@ -142,8 +142,8 @@ def sign_out():
 @blueprint.route('/users/', methods=['GET', 'POST'])
 @blueprint.route('/users/<int:page_id>/', methods=['GET', 'POST'])
 def view(page_id=1):
-	if not current_user.has_permission('user.view'):
-		abort(403)
+	#if not current_user.has_permission('user.view'):
+	#	abort(403)
 
 	# persumably, if the method is a post we have selected stuff to delete,
 	# similary to groups

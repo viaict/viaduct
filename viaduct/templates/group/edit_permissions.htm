@@ -1,42 +1,53 @@
+{% from "macros/flash.htm" import render_flash %}
 {% from "macros/form.htm" import render_button %}
-{% from "macros/pagination.htm" import render_pagination %}
 
 {% extends "content.htm" %}
 
-{% block content %}
-<form action="" method="post" name="group_edit_permissions">
-	<fieldset>
-		<legend>Pas groeppermissies aan</legend>
+{% block title %}Module Permission{% endblock %}
 
+
+
+{% block page %}
+
+<h2>Zetten van permissies voor {{ group_name }}</h2>
+
+<form action="" method="post" name="module_permission_form">
+	{% if can_write %}
 		{{ form.csrf_token }}
+	{% endif %}
 
-		<table class="table table-bordered table-striped">
-			<thead>
-				<tr>
-					<th>Permissie</th>
-					<th></th>
+	<table class='table'>
+	<thead>
+		<th>Modulenaam</th><th>Permissie</th>
+	</thead>
+	<tbody>
+
+			{% for permission, form_entry in permissions: %}
+			<tr>
+				<td>
+					{{ permission.module_name }}
+				</td>
+				<td>
+					{% if can_write %}
+						{{ form_entry.csrf_token }}{{ form_entry.select}}
+					{% elif permission.permission == 0 %}
+						Geen
+					{% elif permission.permission == 1 %}
+						Lezen
+					{% elif permission.permission == 2 %}
+						Lezen/Schrijven
+					{% endif %}
+				</td>
 				</tr>
-			</thead>
+			{% endfor %}
+		</tbody>
+	</table>
 
-			<tbody>
-				{% for permission, form_entry in permissions %}
-					<tr>
-						<td>{{ permission.label }}</td>
-						<td>{{ form_entry.csrf_token }}{{ form_entry.select }}</td>
-					</tr>
-				{% endfor %}
-				<tr>
-					<th>
-						Modulen
-					</th>
-				</tr>
-			</tbody>
-		</table>
-
+	{% if can_write %}
 		{{ render_button(form.save_changes) }}
-
-		{{ render_pagination(pagination, 'user.edit_permissions') }}
+	{% endif %}
 	</fieldset>
 </form>
-{% endblock %}
 
+
+{% endblock %}

@@ -5,7 +5,9 @@ from flask.ext.login import current_user
 from viaduct import db
 from viaduct.helpers import flash_form_errors
 
-from viaduct.models import user_group, Group, GroupPermission, User, UserPermission, Permission
+from viaduct.api.group import GroupPermissionAPI
+
+from viaduct.models import user_group, Group, GroupPermission, User
 from viaduct.forms.group import EditGroupPermissionForm, ViewGroupForm
 
 blueprint = Blueprint('group', __name__)
@@ -13,15 +15,15 @@ blueprint = Blueprint('group', __name__)
 @blueprint.route('/groups/', methods=['GET', 'POST'])
 @blueprint.route('/groups/<int:page_id>/', methods=['GET', 'POST'])
 def view(page_id=1):
-	if not current_user.has_permission('group.view'):
-		abort(403)
+	if not(GroupPermissionAPI.can_read('group')):
+		return abort(403);
 
 	form = ViewGroupForm(request.form)
 	pagination = Group.query.paginate(page_id, 15, False)
 
 	if form.validate_on_submit():
 		if form.delete_group.data:
-			if current_user.has_permission('group.delete'):
+			if GroupPermissionAPI.can_write('group'):
 				group_ids = []
 
 				for group, form_entry in zip(pagination.items, form.entries):
@@ -55,8 +57,8 @@ def view(page_id=1):
 
 @blueprint.route('/groups/create/', methods=['GET', 'POST'])
 def create():
-	if not current_user.has_permission('group.create'):
-		abort(403)
+	if not(GroupPermissionAPI.can_write('group')):
+		return abort(403);
 
 	if request.method == 'POST':
 		name = request.form['name'].strip()
@@ -84,8 +86,8 @@ def create():
 @blueprint.route('/groups/<int:group_id>/users/', methods=['GET', 'POST'])
 @blueprint.route('/groups/<int:group_id>/users/<int:page_id>/', methods=['GET', 'POST'])
 def view_users(group_id, page_id=1):
-	if not current_user.has_permission('group.view'):
-		abort(403)
+	if not(GroupPermissionAPI.can_read('group')):
+		return abort(403);
 
 	group = Group.query.filter(Group.id==group_id).first()
 
@@ -119,8 +121,8 @@ def view_users(group_id, page_id=1):
 @blueprint.route('/groups/<int:group_id>/users/add/', methods=['GET', 'POST'])
 @blueprint.route('/groups/<int:group_id>/users/add/<int:page_id>', methods=['GET', 'POST'])
 def add_users(group_id, page_id=1):
-	if not current_user.has_permission('group.add_users'):
-		abort(403)
+	if not(GroupPermissionAPI.can_write('group')):
+		return abort(403);
 
 	group = Group.query.filter(Group.id==group_id).first()
 
@@ -154,37 +156,41 @@ def add_users(group_id, page_id=1):
 @blueprint.route('/groups/edit-permissions/<int:group_id>/', methods=['GET', 'POST'])
 @blueprint.route('/groups/edit-permissions/<int:group_id>/<int:page_id>', methods=['GET', 'POST'])
 def edit_permissions(group_id, page_id=1):
-	if not current_user.has_permission('group.edit'):
-		abort(403)
+	if not(GroupPermissionAPI.can_read('group')):
+		return abort(403);
 
 	group = Group.query.filter(Group.id==group_id).first()
+	# TODO: change into error if group_name is unknown
+	group_name = "unknown" if group == None else group.name
+
+	permissions = GroupPermission.query.filter(GroupPermission.group_id==group_id).all()
+
 	form = EditGroupPermissionForm()
-	pagination = Permission.query.paginate(page_id, 15, False)
 
+
+	make_form = False
 	if form.validate_on_submit():
-		for form_entry, permission in zip(form.permissions, pagination.items):
-			if form_entry.select.data > 0:
-				group.add_permission(permission.name, True)
-			else:
-				group.delete_permission(permission.name)
+		make_form = True
 
-		flash('The permissions have been saved.', 'success')
+		for form_entry, permission in zip(form.permissions, permissions):
+			if permission.permission != form_entry.select.data:
+				permission.permission = form_entry.select.data
+				db.session.add(permission)
+				db.session.commit()
 
-		return redirect(url_for('group.view'))
 	else:
 		flash_form_errors(form)
 
-		for permission in pagination.items:
+		# add the permissions as drop down boxes
+		for permission in permissions:
 			data = {}
-
-			if group.get_permission(permission.name) > 0:
-				data['select'] = 1
-			else:
-				data['select'] = -1
-
+			data['select'] = permission.permission
 			form.permissions.append_entry(data)
 
+
 	return render_template('group/edit_permissions.htm', form=form,
-			pagination=pagination,
-			permissions=zip(pagination.items, form.permissions))
+		can_write=GroupPermissionAPI.can_write('group'),
+		group_name=group_name, permissions=zip(permissions, form.permissions))
+
+
 

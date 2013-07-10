@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from viaduct import db
-from viaduct.models.permission import GroupPermission, Permission
+from viaduct.models.permission import GroupPermission
 
 user_group = db.Table('user_group',
 	db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
@@ -37,35 +37,35 @@ class Group(db.Model):
 		# FIXME: backwards compatibility.
 		return self.users
 
-	def get_permission(self, name):
-		permission = self.permissions.join(Permission).filter(Permission.name==name).order_by(GroupPermission.allowed.desc()).first()
+	#def get_permission(self, name):
+	#	permission = self.permissions.join(Permission).filter(Permission.name==name).order_by(GroupPermission.allowed.desc()).first()
 
-		if not permission:
-			return 0
+	#	if not permission:
+	#		return 0
 
-		if permission.allowed:
-			return 1
-		else:
-			return -1
+	#	if permission.allowed:
+	#		return 1
+	#	else:
+	#		return -1
 
-	def has_permission(self, name):
-		permission = self.permissions.join(Permission).filter(Permission.name==name).order_by(GroupPermission.allowed.desc()).first()
+	#def has_permission(self, name):
+	#	permission = self.permissions.join(Permission).filter(Permission.name==name).order_by(GroupPermission.allowed.desc()).first()
 
-		if permission:
-			return permission.allowed
+	#	if permission:
+	#		return permission.allowed
 
-		return False
-	
-	def add_permission(self, name, allowed=True):
-		self.delete_permission(name)
+	#	return False
+	#
+	#def add_permission(self, name, allowed=True):
+	#	self.delete_permission(name)
 
-		permission = Permission.query.filter(Permission.name==name).first()
-		db.session.add(GroupPermission(self, permission, allowed))
-		db.session.commit()
+	#	permission = Permission.query.filter(Permission.name==name).first()
+	#	db.session.add(GroupPermission(self, permission, allowed))
+	#	db.session.commit()
 
-	def delete_permission(self, name):
-		for permission in self.permissions.join(Permission).filter(Permission.name==name).all():
-			db.session.delete(permission)
+	#def delete_permission(self, name):
+	#	for permission in self.permissions.join(Permission).filter(Permission.name==name).all():
+	#		db.session.delete(permission)
 
-		db.session.commit()
+	#	db.session.commit()
 

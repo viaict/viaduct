@@ -8,7 +8,7 @@ from pimpy import PimpyAPI
 from file import FileAPI
 
 from user import UserAPI
-from module_permission import ModulePermissionAPI
+from group import GroupPermissionAPI
 
 
 CourseAPI.register()
@@ -18,4 +18,4 @@ EducationAPI.register()
 application.jinja_env.globals.update(NavigationAPI=NavigationAPI)
 application.jinja_env.globals.update(PimpyAPI=PimpyAPI)
 application.jinja_env.globals.update(UserAPI=UserAPI)
-application.jinja_env.globals.update(ModulePermissionAPI=ModulePermissionAPI)
+application.jinja_env.globals.update(GroupPermissionAPI=GroupPermissionAPI)

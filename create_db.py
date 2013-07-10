@@ -3,13 +3,13 @@ from viaduct import db, application
 
 from viaduct.models.page import Page, PagePermission, PageRevision
 
-from viaduct.models import User, UserPermission, Group, GroupPermission
+from viaduct.models import User, Group, GroupPermission
 from viaduct.models import Activity
 from viaduct.models import Minute, Task
 from viaduct.models import NavigationEntry
-from viaduct.models.module_permission import ModulePermission
+#from viaduct.models.module_permission import ModulePermission
 
-from viaduct.models.permission import Permission
+#from viaduct.models.permission import Permission
 from viaduct.models.vacancy import Vacancy
 from viaduct.models.requirement import Requirement
 from viaduct.models.education import Education
@@ -60,29 +60,36 @@ group_guest = Group('guests')
 db.session.add(group_guest)
 db.session.commit()
 
-permissions = {
-	'user.view': 'View Users',
-	'user.create': 'Create Users',
-	'user.edit': 'Edit Users',
-	'user.delete': 'Delete Users',
-	'group.view': 'View Groups',
-	'group.create': 'Create Groups',
-	'group.edit': 'Edit Groups',
-	'group.delete': 'Delete Groups',
-}
+#permissions = {
+#	'user.view': 'View Users',
+#	'user.create': 'Create Users',
+#	'user.edit': 'Edit Users',
+#	'user.delete': 'Delete Users',
+#	'group.view': 'View Groups',
+#	'group.create': 'Create Groups',
+#	'group.edit': 'Edit Groups',
+#	'group.delete': 'Delete Groups',
+#}
 
-for key, value in permissions.items():
-	permission = Permission(key, value)
-	db.session.add(permission)
-	db.session.commit()
-	db.session.add(GroupPermission(group, permission))
-	db.session.commit()
+#for key, value in permissions.items():
+#	permission = Permission(key, value)
+#	db.session.add(permission)
+#	db.session.commit()
+#	db.session.add(GroupPermission(group, permission))
+#	db.session.commit()
 
 # Add the administrator to the administrators group.
 group.add_user(user)
 
 db.session.add(group)
 db.session.commit()
+
+## Grant the permissions.
+#permissions = PagePermission(group, page, view=True, create=True, edit=True,
+#	delete=True)
+
+#db.session.add(permissions)
+#db.session.commit()
 
 
 # Add stuff for pimpystuff for pimpy
@@ -198,8 +205,7 @@ db.session.commit()
 #task2 = Task('I dont even', 'sja', datetime.date(2017, 12, 15), group_second.id, [user_maarten, user_ed], 1, minute.id, 0)
 #db.session.add(task2)
 #db.session.commit()
-#
-## Do some pages.
+# ## Do some pages.
 #page = Page('page1')
 #db.session.add(page)
 #db.session.commit()
@@ -287,10 +293,13 @@ db.session.commit()
 # group should still be administrators!!!
 
 # in the future we want modules to automagically register themselves but for now we will do this hard coded
-modules = ['module_permission', 'pimpy', 'user', 'group', 'navigation', 'vacancy_couch']
+modules = ['activity', 'company', 'contact', 'custom _form',
+	'examination', 'file', 'group', 'location', 'navigation', 'page',
+	'pimpy', 'requirement', 'survey', 'upload', 'user', 'vacancy']
+
 for module in modules:
-	module_permission = ModulePermission(module, group.id, 2);
-	db.session.add(module_permission)
+	group_permission = GroupPermission(module, group.id, 2);
+	db.session.add(group_permission)
 	db.session.commit()
 
 
