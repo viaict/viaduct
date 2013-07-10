@@ -15,21 +15,38 @@ from viaduct.models.education import Education
 blueprint = Blueprint('user', __name__)
 
 @login_manager.user_loader
-def load_user(id):
+def load_user(user_id):
 	# The hook used by the login manager to get the user from the database by
 	# user ID.
-	return User.query.get(int(id))
+	user = User.query.get(int(user_id))
+
+	return user
+
+@blueprint.route('/users/view/<int:user_id>', methods=['GET'])
+def view_single(user_id=None):
+	# TODO fix permission	
+	#if not current_user.has_permission('user.create'):
+	#	abort(403)
+	
+	return render_template('user/view_single.htm', user= User.query.get(user_id))
 
 @blueprint.route('/users/create/', methods=['GET', 'POST'])
-def create():
+@blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
+def create(user_id=None):
 	if not current_user.has_permission('user.create'):
 		abort(403)
+
+	# Select user
+	if user_id:
+		user = User.query.get(user_id)
+	else:
+		user = User()
 
 	form = CreateUserForm(request.form)
 
 	if form.validate_on_submit():
 		if User.query.filter(User.email==form.email.data).count() > 0:
-			flash('A user with the e-mail address specified does already exist.', 'error')
+			flash('Een gebruiker met dit email adres bestaat al / A user with the e-mail address specified does already exist.', 'error')
 			return render_template('user/create_user.htm', form=form)
 
 		user = User(form.email.data, bcrypt.hashpw(form.password.data,

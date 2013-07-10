@@ -26,19 +26,17 @@ if os.path.exists('application.db'):
 db.create_all()
 
 page = Page('')
-
 db.session.add(page)
 db.session.commit()
 
 # Add the anonymous user.
 user = User()
-
 db.session.add(user)
 db.session.commit()
 
 # Add the administrator.
 user = User('administrator@svia.nl', bcrypt.hashpw('ictIsAwesome',
-		bcrypt.gensalt()), 'Administrator', '', '0')
+		bcrypt.gensalt()), 'Administrator', 'de beste van het land', '0')
 
 db.session.add(user)
 db.session.commit()
@@ -132,6 +130,21 @@ db.session.commit()
 #self.picture = picture
 #'''
 
+custom_form = CustomForm(user.id, "Test formulier", '''Locatie
+Textarea | textarea
+Checkboxes | checkbox
+- een
+- twee
+- drie
+
+Select | select
+- What
+- Up
+- Dog''', '''<div id="custom_form_data"><div class="control-group"><label class="control-label">Locatie</label><div class="controls"><input type="text" name="Locatie" id=""></div></div><div class="control-group"><label class="control-label">Textarea </label><div class="controls"><textarea name="Textarea_" id=""></textarea></div></div><div class="control-group"><label class="control-label">Checkboxes </label><div class="controls"><div name="Checkboxes_"><label class="checkbox"><input type="checkbox" name=" een" value=" een">  een</label><label class="checkbox"><input type="checkbox" name=" twee" value=" twee">  twee</label><label class="checkbox"><input type="checkbox" name=" drie" value=" drie">  drie</label></div></div></div><div class="control-group"><label class="control-label">Select </label><div class="controls"><select name="Select_" id=""><option> What</option><option> Up</option><option> Dog</option></select></div></div></div>''')
+
+db.session.add(custom_form)
+db.session.commit()
+
 activity1 = Activity()
 activity1.start_time = datetime.datetime(2012, 10, 10, 17, 0)
 activity1.end_time = datetime.datetime(2012, 10, 10, 22, 0)
@@ -145,9 +158,10 @@ In this talk I want to elaborate a little bit on the traditional model of educat
 Although I will not apply the personalization to this talk, I'll attempt to put something in there for everybody. It is then up to you to interact with me and each other to bend it to the perfect talk."""
 
 activity2 = Activity()
+activity2.form_id = custom_form.id
 activity2.start_time = datetime.datetime(2013, 10, 10, 17, 0)
 activity2.end_time = datetime.datetime(2013, 10, 10, 22, 0)
-activity2.name = "Een activiteit in het heden"
+activity2.name = "Een activiteit die nog moet komen, met formulier"
 activity2.description = """Learning analytics is a fairly recent technology that takes advantage of these traces. As most technologies it can be used for multiple purposes and can serve both the revolution and the evolution perspectives.
 
 In this talk I want to elaborate a little bit on the traditional model of education and present the core of the revolution. We'll discuss the current influences that technology can have on education by examining some well known examples. I'll explain what we mean with Learning Analytics, how it might work (technically), what it's potential seems to be, and, of course, what the possible downsides are. We'll conclude with discussing various visions of the future of learning and their potential impact on society.

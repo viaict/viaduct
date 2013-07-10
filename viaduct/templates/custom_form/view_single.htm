@@ -12,7 +12,10 @@
 
 	{% for result in custom_form.results %}
 		<tr>
-			<td>{{ url_for('user.view/' . result.owner.id) }}
+			<td>
+				<a class="btn btn-mini btn-primary" href="{{ url_for('user.view_single', user_id=owner.id) }}">
+					Inzien
+				</a>
 
 	{% endfor %}
 </table>
