@@ -13,7 +13,9 @@
 <link href='/static/css/timepicker.css' rel='stylesheet'>
 <link href='/static/css/datepicker.css' rel='stylesheet'>
 
-<form action="" method="post" enctype="multipart/form-data">
+<h1>Activiteit</h1>
+
+<form method="post" enctype="multipart/form-data">
 
 		{{ form.csrf_token }}
 
@@ -68,46 +70,14 @@
 		{% endif %}
 
 		{{ render_select(form.form_id) }}
-
 		{{ render_field(form.picture) }}
 
-    <div class="control-group">
+	<div class="control-group">
 		<div class="controls">
 			<button type="submit" class="btn">Create activity</button>
 		</div>
 	</div>
 </form>
 
-<script>
-$(document).ready(function() {
-
-	$("textarea").flexible().trigger('keyup');
-
-	// Check www.eyecon.ro/bootstrap-datepicke
-	var nowTemp = new Date();
-	var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-	
-	var checkin = $('#start_date').datepicker({
-		onRender: function(date) {return date.valueOf() < now.valueOf() ? 'disabled' : '';}
-	}).on('changeDate', function(ev) {
-
-		var newDate = new Date(ev.date)
-		newDate.setDate(newDate.getDate());
-		checkout.setValue(newDate);
-	
-		checkin.hide();
-		$('#end_date')[0].focus();
-
-	}).data('datepicker');
-	
-	var checkout = $('#end_date').datepicker({
-		onRender: function(date) {
-		return date.valueOf() < checkin.date.valueOf() ? 'disabled' : '';
-	}}).on('changeDate', function(ev) {checkout.hide();}).data('datepicker');
-
-	$("#start_time").timepicker({showMeridian:false, defaultTime: "17:00"});
-	$("#end_time").timepicker({showMeridian:false, defaultTime: "22:00"});
-});
-</script>
+<script src="/static/js/form.date.helper.js"></script>
 {% endblock %}
-

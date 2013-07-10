@@ -1,6 +1,5 @@
-
 $(document).ready(function() {
-  $("#custom_form").click(function() {
+	$("#custom_form").click(function() {
 
 		var custom_form = $(this).closest('form');
 		var mail = $('input[name="mail"]').val();
