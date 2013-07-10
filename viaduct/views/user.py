@@ -10,6 +10,7 @@ from viaduct.helpers import flash_form_errors
 from viaduct.forms import SignUpForm, SignInForm
 from viaduct.models import Permission, User, UserPermission
 from viaduct.forms.user import CreateUserForm, EditUserPermissionForm
+from viaduct.models.education import Education
 
 blueprint = Blueprint('user', __name__)
 
@@ -59,9 +60,14 @@ def sign_up():
 
 	form = SignUpForm(request.form)
 
+	# Add education.
+	educations = Education.query.all()
+	form.education_id.choices = \
+			[(e.id, e.name) for e in educations]
+
 	if form.validate_on_submit():
 		user = User(form.email.data, bcrypt.hashpw(form.password.data, bcrypt.gensalt()),
-			form.first_name.data, form.last_name.data, form.student_id.data)
+			form.first_name.data, form.last_name.data, form.student_id.data, form.education_id.data)
 
 		db.session.add(user)
 		db.session.commit()

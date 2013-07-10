@@ -10,6 +10,7 @@ class SignUpForm(Form):
 	first_name = TextField('First name', validators=[Required()])
 	last_name = TextField('Last name', validators=[Required()])
 	student_id = TextField('Student ID', validators=[Required()])
+	education_id = SelectField('Education', coerce=int)
 	recaptcha = RecaptchaField()
 
 class CreateUserForm(Form):
@@ -20,6 +21,7 @@ class CreateUserForm(Form):
 	first_name = TextField('First name', validators=[Required()])
 	last_name = TextField('Last name', validators=[Required()])
 	student_id = TextField('Student ID', validators=[Required()])
+	education_id = SelectField('Education', coerce=int)
 
 class SignInForm(Form):
 	email = TextField('E-mail address', validators=[Required(), Email()])

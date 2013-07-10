@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from viaduct import db, login_manager
+from viaduct.models.education import Education
 from viaduct.models import Group, GroupPermission, Permission, UserPermission
 
 class User(db.Model):
@@ -12,8 +13,13 @@ class User(db.Model):
 	first_name = db.Column(db.String(256))
 	last_name = db.Column(db.String(256))
 	student_id = db.Column(db.String(256))
+	education_id = db.Column(db.Integer,
+		db.ForeignKey('education.id'))
 
-	def __init__(self, email=None, password=None, first_name=None, last_name=None, student_id=None):
+	education = db.relationship(Education,
+		backref=db.backref('user', lazy='dynamic'))
+
+	def __init__(self, email=None, password=None, first_name=None, last_name=None, student_id=None, education_id=None):
 		if not email:
 			self.id = 0
 
@@ -22,6 +28,7 @@ class User(db.Model):
 		self.first_name = first_name
 		self.last_name = last_name
 		self.student_id = student_id
+		self.education_id = education_id
 
 	def is_authenticated(self):
 		return self.id != 0
