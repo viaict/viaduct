@@ -2,17 +2,22 @@
 
 {% block content %}
 
-<h1>{{ custom_form.name }}</h1>
-
+<h1>Inzendingen <small>'{{ custom_form.name }}'</small></h1>
 
 {% if custom_form.results %}
 
-<table>
-{% for result in custom_form.results %}
-<tr><td>{{ result.data }}
+<table class="table">
+	<tr>
+		<th>Gebruiker
 
-{% endfor %}
+	{% for result in custom_form.results %}
+		<tr>
+			<td>{{ url_for('user.view/' . result.owner.id) }}
+
+	{% endfor %}
 </table>
 
+{% else %}
+<p>Er zijn nog geen resultaten om te tonen
 {% endif %}
 {% endblock %}

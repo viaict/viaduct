@@ -37,8 +37,6 @@ def create(form_id=None):
 	if not current_user or current_user.email != 'administrator@svia.nl':
 		return abort(403)
 
-	print form_id
-
 	if form_id:
 		custom_form = CustomForm.query.get(form_id)
 
@@ -74,6 +72,9 @@ def submit(form_id=None):
 	if current_user.id and form_id:
 
 		response = "success"
+
+		# TODO if request.form['user'] is set, we must check the user email/name/phone_nr
+		# and check if it should be updated
 
 		duplicate_test = CustomFormResult.query.filter(
 			CustomFormResult.owner_id == current_user.id, 

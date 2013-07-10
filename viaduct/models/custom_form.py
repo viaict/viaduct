@@ -19,9 +19,13 @@ class CustomForm(db.Model):
 
 class CustomFormResult(db.Model):
 	__tablename__ = 'custom_form_result'
-	owner_id	= db.Column(db.Integer, primary_key=True)
-	form_id		= db.Column(db.Integer, primary_key=True)
-	data			= db.Column(db.String(2048))
+
+	id				= db.Column(db.Integer, primary_key=True)
+	owner_id	= db.Column(db.Integer, db.ForeignKey('user.id'))
+	form_id		= db.Column(db.Integer)
+	data			= db.Column(db.String(4096))
+
+	owner = db.relationship('User', backref=db.backref('custom_form_results', lazy='dynamic'))
 
 	def __init__(self, owner_id=None, form_id=None, data=""):
 		self.owner_id = owner_id

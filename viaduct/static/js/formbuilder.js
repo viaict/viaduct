@@ -21,9 +21,9 @@ $.fn.formbuilder = function() {
   this
 		.append(info)
     .append(textarea)
+		.append('<h4>Voorbeeld van dit formulier</h4>')
     .append(form)
-    .after(result)
-		.after('<h4>Preview</h4>'); // contains the entire form
+    .after(result); // contains the entire form
 
   textarea.on('keyup', function() {
     form.html(''); // Reset the control
