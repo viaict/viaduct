@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="btn-group">
-	{% if current_user and current_user.email == "administrator@svia.nl" %}
+	{% if GroupPermissionAPI.can_write('activity') %}
 		<a href="/activities/create/" class="btn btn-success">Create</a>
 	{% endif %}
 
@@ -42,7 +42,7 @@
 			<tr>
 				<td><i class="icon-compass"></i> Location
 				<td>{{ activity.location}}
-			
+
 			<tr>
 				<td><i class="icon-euro"></i> Price
 				<td>{{ activity.price}}
@@ -66,8 +66,8 @@
 
 {% endfor %}
 
-<hr>
+<hr />
 
-	{{ render_activity_pagination(activities, 'activity.view', archive) }}
+{{ render_activity_pagination(activities, 'activity.view', archive) }}
 {% endblock %}
 

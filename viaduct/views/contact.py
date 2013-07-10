@@ -16,8 +16,8 @@ def list(page=1):
 	'''
 	Show a paginated list of contacts.
 	'''
-	if not(GroupPermissionAPI.can_read('contact')):
-		return abort(403);
+	if not GroupPermissionAPI.can_read('contact'):
+		return abort(403)
 
 	contacts = Contact.query.paginate(page, 15, False)
 	return render_template('contact/list.htm', contacts=contacts)
@@ -28,8 +28,8 @@ def edit(contact_id=None):
 	'''
 	Create or edit a contact, frontend.
 	'''
-	if not(GroupPermissionAPI.can_read('contact')):
-		return abort(403);
+	if not GroupPermissionAPI.can_read('contact'):
+		return abort(403)
 
 	if contact_id:
 		contact = Contact.query.get(contact_id)
@@ -50,8 +50,8 @@ def update(contact_id=None):
 	'''
 	Create or edit a contact, backend.
 	'''
-	if not(GroupPermissionAPI.can_write('contact')):
-		return abort(403);
+	if not GroupPermissionAPI.can_write('contact'):
+		return abort(403)
 
 	if contact_id:
 		contact = Contact.query.get(contact_id)
@@ -79,8 +79,8 @@ def delete(contact_id):
 	'''
 	Delete a contact.
 	'''
-	if not(GroupPermissionAPI.can_write('contact')):
-		return abort(403);
+	if not GroupPermissionAPI.can_write('contact'):
+		return abort(403)
 
 	contact = Contact.query.get(contact_id)
 	if not contact:

@@ -3,28 +3,30 @@
 {% extends "content.htm" %}
 
 {% block content %}
-    <form method="post">
-        <fieldset>
-            <legend>Contactpersoon {% if contact.id %}bewerken{% else %}aanmaken{% endif %}</legend>
+	<form method="post">
+		<fieldset>
+			<legend>Contactpersoon {% if contact.id %}bewerken{% else %}aanmaken{% endif %}</legend>
 
-            {{ form.csrf_token }}
+			{{ form.csrf_token }}
 
-            {{ render_field(form.name) }}
-            {{ render_field(form.email) }}
-            {{ render_field(form.phone_nr) }}
-            {{ render_field(form.location_id) }}
+			{{ render_field(form.name) }}
+			{{ render_field(form.email) }}
+			{{ render_field(form.phone_nr) }}
+			{{ render_field(form.location_id) }}
 
-            {{ render_button(form.submit) }}
-        </fieldset>
-    </form>
+			{% if GroupPermissionAPI.can_write('contact') %}
+				{{ render_button(form.submit) }}
+			{% endif %}
+		</fieldset>
+	</form>
 
-    {% if contact.id %}
-        <form action="{{ url_for('contact.delete', contact_id=contact.id) }}" method="post">
-            <fieldset>
-                <button class="btn btn-danger" type="submit">Verwijderen</button>
-            </fieldset>
-        </form>
-    {% endif %}
+	{% if contact.id and GroupPermissionAPI.can_write('contact') %}
+		<form action="{{ url_for('contact.delete', contact_id=contact.id) }}" method="post">
+			<fieldset>
+				<button class="btn btn-danger" type="submit">Verwijderen</button>
+			</fieldset>
+		</form>
+	{% endif %}
 
-    <script src="/static/js/contact_edit.js"></script>
+	<script src="/static/js/contact_edit.js"></script>
 {% endblock %}

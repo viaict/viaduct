@@ -13,8 +13,8 @@ blueprint = Blueprint('company', __name__)
 @blueprint.route('/companies/', methods=['GET', 'POST'])
 @blueprint.route('/companies/<int:page>/', methods=['GET', 'POST'])
 def list(page=1):
-	if not(GroupPermissionAPI.can_read('company')):
-		return abort(403);
+	if not GroupPermissionAPI.can_read('company'):
+		return abort(403)
 
 	companies = Company.query.paginate(page, 15, False)
 
@@ -27,8 +27,8 @@ def view(company_id=None):
 	FRONTEND
 	Create, view or edit a company.
 	'''
-	if not(GroupPermissionAPI.can_read('company')):
-		return abort(403);
+	if not GroupPermissionAPI.can_read('company'):
+		return abort(403)
 
 	# Select company.
 	if company_id:
@@ -62,8 +62,8 @@ def update(company_id=None):
 	BACKEND
 	Create, view or edit a company.
 	'''
-	if not(GroupPermissionAPI.can_write('company')):
-		return abort(403);
+	if not GroupPermissionAPI.can_write('company'):
+		return abort(403)
 
 	# Select company.
 	if company_id:
@@ -120,8 +120,8 @@ def delete(company_id):
 	BACKEND
 	Delete a company.
 	'''
-	if not(GroupPermissionAPI.can_write('company')):
-		return abort(403);
+	if not GroupPermissionAPI.can_write('company'):
+		return abort(403)
 
 	company = Company.query.get(company_id)
 	if not company:

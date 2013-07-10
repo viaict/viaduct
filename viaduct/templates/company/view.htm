@@ -16,11 +16,13 @@
 			{{ render_select(form.location_id) }}
 			{{ render_select(form.contact_id) }}
 
-			{{ render_button(form.submit) }}
+			{% if GroupPermissionAPI.can_write('company') %}
+				{{ render_button(form.submit) }}
+			{% endif %}
 		</fieldset>
 	</form>
 
-	{% if company.id %}
+	{% if company.id and GroupPermissionAPI.can_write('company') %}
 		<form action="{{ url_for('company.delete', company_id=company.id) }}" method="post">
 			<fieldset>
 				<button class="btn btn-danger" type="submit">Verwijderen</button>
