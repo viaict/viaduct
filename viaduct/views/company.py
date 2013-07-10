@@ -1,16 +1,21 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, flash, redirect, render_template, request, \
+		url_for, abort
 
 from viaduct import db
 from viaduct.models.company import Company
 from viaduct.models.location import Location
 from viaduct.models.contact import Contact
 from viaduct.forms import CompanyForm
+from viaduct.api.group import GroupPermissionAPI
 
 blueprint = Blueprint('company', __name__)
 
 @blueprint.route('/companies/', methods=['GET', 'POST'])
 @blueprint.route('/companies/<int:page>/', methods=['GET', 'POST'])
 def list(page=1):
+	if not(GroupPermissionAPI.can_read('company')):
+		return abort(403);
+
 	companies = Company.query.paginate(page, 15, False)
 
 	return render_template('company/list.htm', companies=companies)
@@ -18,8 +23,12 @@ def list(page=1):
 @blueprint.route('/companies/create/', methods=['GET'])
 @blueprint.route('/companies/edit/<int:company_id>/', methods=['GET'])
 def view(company_id=None):
-	''' FRONTEND
-	Create, view or edit a company. '''
+	'''
+	FRONTEND
+	Create, view or edit a company.
+	'''
+	if not(GroupPermissionAPI.can_read('company')):
+		return abort(403);
 
 	# Select company.
 	if company_id:
@@ -49,8 +58,12 @@ def view(company_id=None):
 @blueprint.route('/companies/create/', methods=['POST'])
 @blueprint.route('/companies/edit/<int:company_id>/', methods=['POST'])
 def update(company_id=None):
-	''' BACKEND
-	Create, view or edit a company. '''
+	'''
+	BACKEND
+	Create, view or edit a company.
+	'''
+	if not(GroupPermissionAPI.can_write('company')):
+		return abort(403);
 
 	# Select company.
 	if company_id:
@@ -103,8 +116,12 @@ def update(company_id=None):
 
 @blueprint.route('/companies/delete/<int:company_id>/', methods=['POST'])
 def delete(company_id):
-	''' BACKEND
-	Delete a company. '''
+	'''
+	BACKEND
+	Delete a company.
+	'''
+	if not(GroupPermissionAPI.can_write('company')):
+		return abort(403);
 
 	company = Company.query.get(company_id)
 	if not company:

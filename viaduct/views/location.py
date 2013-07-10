@@ -1,21 +1,28 @@
 from flask import Blueprint, flash, redirect, render_template, request, \
-		url_for, jsonify
+		url_for, jsonify, abort
 
 from viaduct import db
 from viaduct.models.location import Location
 from viaduct.utilities import serialize_sqla, validate_form
 from viaduct.forms import LocationForm
+from viaduct.api.group import GroupPermissionAPI
 
 blueprint = Blueprint('location', __name__)
 
 @blueprint.route('/locations/<int:location_id>/contacts/', methods=['GET'])
 def get_contacts(location_id):
+	if not(GroupPermissionAPI.can_read('contacts')):
+		return jsonify(error='Geen toestemming contactpersonen te lezen');
+
 	location = Location.query.get(location_id)
 	return jsonify(contacts=serialize_sqla(location.contacts.all()))
 
 @blueprint.route('/locations/', methods=['GET', 'POST'])
 @blueprint.route('/locations/<int:page>/', methods=['GET', 'POST'])
 def list(page=1):
+	if not(GroupPermissionAPI.can_read('location')):
+		return abort(403);
+
 	locations = Location.query.paginate(page, 15, False)
 	return render_template('location/list.htm', locations=locations)
 
@@ -26,6 +33,8 @@ def view(location_id=None):
 	FRONTEND
 	Create, view or edit a location.
 	'''
+	if not(GroupPermissionAPI.can_read('location')):
+		return abort(403);
 
 	# Select location..
 	if location_id:
@@ -43,6 +52,8 @@ def update(location_id=None):
 	BACKEND
 	Create or edit a location.
 	'''
+	if not(GroupPermissionAPI.can_write('location')):
+		return abort(403);
 
 	# Select location.
 	if location_id:
@@ -73,6 +84,9 @@ def delete(location_id):
 	BACKEND
 	Delete a location.
 	'''
+	if not(GroupPermissionAPI.can_write('location')):
+		return abort(403);
+
 	location = Location.query.get(location_id)
 	if not location:
 		return abort(404)

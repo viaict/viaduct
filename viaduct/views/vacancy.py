@@ -5,12 +5,16 @@ from viaduct import application, db
 from viaduct.models.vacancy import Vacancy
 from viaduct.models.company import Company
 from viaduct.forms import VacancyForm
+from viaduct.api.group import GroupPermissionAPI
 
 blueprint = Blueprint('vacancy', __name__)
 
 @blueprint.route('/vacancies/', methods=['GET', 'POST'])
 @blueprint.route('/vacancies/<int:page>/', methods=['GET', 'POST'])
 def list(page=1):
+	if not(GroupPermissionAPI.can_read('vacancy')):
+		return abort(403);
+
 	vacancies = Vacancy.query.paginate(page, 15, False)
 
 	return render_template('vacancy/list.htm', vacancies=vacancies)
@@ -18,8 +22,12 @@ def list(page=1):
 @blueprint.route('/vacancies/create/', methods=['GET'])
 @blueprint.route('/vacancies/edit/<int:vacancy_id>/', methods=['GET'])
 def view(vacancy_id=None):
-	''' FRONTEND
-	Create, view or edit a vacancy. '''
+	'''
+	FRONTEND
+	Create, view or edit a vacancy.
+	'''
+	if not(GroupPermissionAPI.can_read('location')):
+		return abort(403);
 
 	# Select vacancy.
 	if vacancy_id:
@@ -38,8 +46,12 @@ def view(vacancy_id=None):
 @blueprint.route('/vacancies/create/', methods=['POST'])
 @blueprint.route('/vacancies/edit/<int:vacancy_id>/', methods=['POST'])
 def update(vacancy_id=None):
-	''' BACKEND
-	Create, view or edit a vacancy. '''
+	'''
+	BACKEND
+	Create, view or edit a vacancy.
+	'''
+	if not(GroupPermissionAPI.can_write('location')):
+		return abort(403);
 
 	# Select vacancy.
 	if vacancy_id:
@@ -95,8 +107,12 @@ def update(vacancy_id=None):
 
 @blueprint.route('/vacancies/delete/<int:vacancy_id>/', methods=['POST'])
 def delete(vacancy_id):
-	''' BACKEND
-	Delete a vacancy. '''
+	'''
+	BACKEND
+	Delete a vacancy.
+	'''
+	if not(GroupPermissionAPI.can_write('location')):
+		return abort(403);
 
 	vacancy = Vacancy.query.get(vacancy_id)
 	if not vacancy:

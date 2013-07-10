@@ -2,10 +2,11 @@
 Views for the file module.
 '''
 from flask import Blueprint, render_template, request, flash, redirect, \
-		url_for, jsonify
+		url_for, jsonify, abort
 from viaduct.models.file import File
 from viaduct.forms import FileForm
 from viaduct.api import FileAPI
+from viaduct.api.group import GroupPermissionAPI
 
 blueprint = Blueprint('file', __name__)
 
@@ -15,6 +16,9 @@ def list(page=1):
 	'''
 	List all files that are not assigned to a page.
 	'''
+	if not(GroupPermissionAPI.can_read('file')):
+		return abort(403);
+
 	files = File.query.filter_by(page=None).order_by(File.name)\
 			.paginate(page, 30, False)
 	form = FileForm()
@@ -27,6 +31,9 @@ def upload(page=1):
 	'''
 	Upload a file.
 	'''
+	if not(GroupPermissionAPI.can_write('file')):
+		return abort(403);
+
 	new_file = request.files['file']
 	FileAPI.upload(new_file)
 
@@ -37,4 +44,7 @@ def search(query):
 	'''
 	Fuzzy search files.
 	'''
+	if not(GroupPermissionAPI.can_read('file')):
+		return jsonify(error='Geen toestemming');
+
 	return jsonify(filenames=FileAPI.search(query))

@@ -296,7 +296,7 @@ db.session.commit()
 # group should still be administrators!!!
 
 # in the future we want modules to automagically register themselves but for now we will do this hard coded
-modules = ['activity', 'company', 'contact', 'custom _form',
+modules = ['activity', 'company', 'contact', 'custom_form',
 	'examination', 'file', 'group', 'location', 'navigation', 'page',
 	'pimpy', 'requirement', 'survey', 'upload', 'user', 'vacancy']
 
