@@ -28,10 +28,10 @@ class SignInForm(Form):
 	password = PasswordField('Password', validators=[Required()])
 	remember_me = BooleanField('Remember me', default = False)
 
-class EditUserPermissionEntry(Form):
-	select = SelectField(None, coerce=int, choices=[(1, 'Allow'), (-1, 'Deny'), (0, 'Inherit')])
-
-class EditUserPermissionForm(Form):
-	permissions = FieldList(FormField(EditUserPermissionEntry))
-	save_changes = SubmitField('Save changes')
+#class EditUserPermissionEntry(Form):
+#	select = SelectField(None, coerce=int, choices=[(1, 'Allow'), (-1, 'Deny'), (0, 'Inherit')])
+#
+#class EditUserPermissionForm(Form):
+#	permissions = FieldList(FormField(EditUserPermissionEntry))
+#	save_changes = SubmitField('Save changes')
 
