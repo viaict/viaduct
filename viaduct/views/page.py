@@ -170,10 +170,10 @@ def edit_page(path=''):
 
 			db.session.add(page)
 			db.session.commit()
-	
+
 		# Enter permission in db
 		for form_entry, group in zip(form.permissions, groups):
-			permission_entry = PagePermission.query.filter(PagePermission.group_id==group.id, 
+			permission_entry = PagePermission.query.filter(PagePermission.group_id==group.id,
 				PagePermission.page_id==page.id).first()
 
 			permission_level = form_entry.select.data
@@ -184,7 +184,7 @@ def edit_page(path=''):
 				permission_entry = PagePermission(group.id, page.id, permission_level)
 
 			db.session.add(permission_entry)
-			db.session.commit()	
+			db.session.commit()
 
 		revision = PageRevision(page, current_user, title, content, comment,
 			filter_html, timestamp=datetime.datetime.utcnow())
@@ -200,10 +200,10 @@ def edit_page(path=''):
 		for group in groups:
 			data = {}
 			if page:
-				permission = PagePermission.query.filter(PagePermission.group_id==group.id, 
+				permission = PagePermission.query.filter(PagePermission.group_id==group.id,
 					PagePermission.page_id==page.id).first()
 
-				if permission:			
+				if permission:
 					data['select'] = permission.permission
 
 			form.permissions.append_entry(data)

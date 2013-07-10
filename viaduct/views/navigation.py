@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, abort, request, flash, redirect,\
 		url_for
 from flask.ext.login import current_user
 
-from viaduct import db
+from viaduct import db, application
 from viaduct.helpers import flash_form_errors
 from viaduct.models.navigation import NavigationEntry
 from viaduct.forms import NavigationEntryForm
@@ -13,26 +13,26 @@ from viaduct.models.page import Page
 import json
 import re
 
-blueprint = Blueprint('navigation', __name__)
+blueprint = Blueprint('navigation', __name__, url_prefix='/navigation/')
 
-@blueprint.route('/navigation/edit')
+@blueprint.route('/edit/')
 def edit_back():
 	if not GroupPermissionAPI.can_read('navigation'):
 		return abort(403)
 
 	return redirect(url_for('navigation.view'))
 
-@blueprint.route('/navigation/')
+@blueprint.route('/')
 def view():
 	if not GroupPermissionAPI.can_read('navigation'):
 		return abort(403)
 
-	entries = NavigationEntry.get_entries()
+	entries = NavigationAPI.get_entries()
 
 	return render_template('navigation/view.htm', nav_entries=entries)
 
-@blueprint.route('/navigation/create', methods=['GET', 'POST'])
-@blueprint.route('/navigation/edit/<int:entry_id>', methods=['GET', 'POST'])
+@blueprint.route('/create/', methods=['GET', 'POST'])
+@blueprint.route('/edit/<int:entry_id>/', methods=['GET', 'POST'])
 def edit(entry_id=None):
 	if not GroupPermissionAPI.can_read('navigation'):
 		return abort(403)
@@ -126,7 +126,7 @@ def edit(entry_id=None):
 	return render_template('navigation/edit.htm', entry=entry, form=form,
 			parents=parents)
 
-@blueprint.route('/navigation/delete/<int:entry_id>', methods=['POST'])
+@blueprint.route('/delete/<int:entry_id>/', methods=['POST'])
 def delete(entry_id):
 	if not GroupPermissionAPI.can_write('navigation'):
 		return abort(403)
