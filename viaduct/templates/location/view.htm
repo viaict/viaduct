@@ -3,31 +3,33 @@
 {% extends "content.htm" %}
 
 {% block content %}
-    <form method="post">
-        <fieldset>
-            <legend>Locatie {% if location.id %}bewerken{% else %}aanmaken{% endif %}</legend>
+	<form method="post">
+		<fieldset>
+			<legend>Locatie {% if location.id %}bewerken{% else %}aanmaken{% endif %}</legend>
 
-            {{ form.csrf_token }}
+			{{ form.csrf_token }}
 
-            {{ render_field(form.city) }}
-            {{ render_field(form.country) }}
-            {{ render_field(form.address) }}
-            {{ render_field(form.zip) }}
-            {{ render_field(form.postoffice_box) }}
-            {{ render_field(form.email) }}
-            {{ render_field(form.phone_nr) }}
+			{{ render_field(form.city) }}
+			{{ render_field(form.country) }}
+			{{ render_field(form.address) }}
+			{{ render_field(form.zip) }}
+			{{ render_field(form.postoffice_box) }}
+			{{ render_field(form.email) }}
+			{{ render_field(form.phone_nr) }}
 
-            {{ render_button(form.submit) }}
-        </fieldset>
-    </form>
+			{% if GroupPermissionAPI.can_write('location') %}
+				{{ render_button(form.submit) }}
+			{% endif %}
+		</fieldset>
+	</form>
 
-    {% if location.id %}
-        <form action="{{ url_for('location.delete', location_id=location.id) }}" method="post">
-            <fieldset>
-                <button class="btn btn-danger" type="submit">Verwijderen</button>
-            </fieldset>
-        </form>
-    {% endif %}
+	{% if location.id and GroupPermissionAPI.can_write('location') %}
+		<form action="{{ url_for('location.delete', location_id=location.id) }}" method="post">
+			<fieldset>
+				<button class="btn btn-danger" type="submit">Verwijderen</button>
+			</fieldset>
+		</form>
+	{% endif %}
 
-    <script src="/static/js/location_view.js"></script>
+	<script src="/static/js/location_view.js"></script>
 {% endblock %}
