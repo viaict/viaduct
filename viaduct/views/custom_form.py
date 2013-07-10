@@ -12,7 +12,7 @@ from viaduct.helpers import flash_form_errors
 from viaduct.forms.custom_form import CreateForm
 from viaduct.models.user import User
 from viaduct.models.custom_form import CustomForm, CustomFormResult
-from viaduct.api.group import GroupPermissionApi
+from viaduct.api.group import GroupPermissionAPI
 
 blueprint = Blueprint('custom_form', __name__)
 
@@ -23,6 +23,10 @@ def view(page=1):
 		return abort(403)
 
 	custom_forms = CustomForm.query.order_by(CustomForm.name.asc())
+
+	#for form in custom_forms:
+	#	form.custom_forms_count = len(CustomFormResult.query.filter(CustomFormResult.form_id == form.id))
+
 	return render_template('custom_form/overview.htm', custom_forms=custom_forms.paginate(page, 20, False))
 
 @blueprint.route('/forms/view/<int:form_id>', methods=['GET', 'POST'])

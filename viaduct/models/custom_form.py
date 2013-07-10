@@ -8,7 +8,8 @@ class CustomForm(db.Model):
 	name			= db.Column(db.String(256))
 	origin		= db.Column(db.String(128))
 	html			= db.Column(db.String(8192))
-	
+	#updated_time	= db.Column(db.DateTime, default=datetime.datetime.now())
+
 	owner = db.relationship('User', backref=db.backref('custom_forms', lazy='dynamic'))
 
 	def __init__(self, owner_id=None, name="", origin="", html=""):
@@ -24,6 +25,7 @@ class CustomFormResult(db.Model):
 	owner_id	= db.Column(db.Integer, db.ForeignKey('user.id'))
 	form_id		= db.Column(db.Integer)
 	data			= db.Column(db.String(4096))
+	#updated_time	= db.Column(db.DateTime, default=datetime.datetime.now())
 
 	owner = db.relationship('User', backref=db.backref('custom_form_results', lazy='dynamic'))
 
