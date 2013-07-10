@@ -17,15 +17,15 @@ blueprint = Blueprint('navigation', __name__)
 
 @blueprint.route('/navigation/edit')
 def edit_back():
-	if not(GroupPermissionAPI.can_read('navigation')):
-		return abort(403);
+	if not GroupPermissionAPI.can_read('navigation'):
+		return abort(403)
 
 	return redirect(url_for('navigation.view'))
 
 @blueprint.route('/navigation/')
 def view():
-	if not(GroupPermissionAPI.can_read('navigation')):
-		return abort(403);
+	if not GroupPermissionAPI.can_read('navigation'):
+		return abort(403)
 
 	entries = NavigationEntry.get_entries()
 
@@ -34,8 +34,8 @@ def view():
 @blueprint.route('/navigation/create', methods=['GET', 'POST'])
 @blueprint.route('/navigation/edit/<int:entry_id>', methods=['GET', 'POST'])
 def edit(entry_id=None):
-	if not(GroupPermissionAPI.can_read('navigation')):
-		return abort(403);
+	if not GroupPermissionAPI.can_read('navigation'):
+		return abort(403)
 
 	if entry_id:
 		entry = db.session.query(NavigationEntry).filter_by(id=entry_id).first()
@@ -128,8 +128,8 @@ def edit(entry_id=None):
 
 @blueprint.route('/navigation/delete/<int:entry_id>', methods=['POST'])
 def delete(entry_id):
-	if not(GroupPermissionAPI.can_write('navigation')):
-		return abort(403);
+	if not GroupPermissionAPI.can_write('navigation'):
+		return abort(403)
 
 	entry = db.session.query(NavigationEntry).filter_by(id=entry_id).first()
 	if not entry:
@@ -147,8 +147,8 @@ def delete(entry_id):
 
 @blueprint.route('/navigation/reorder', methods=['POST'])
 def reorder():
-	if not(GroupPermissionAPI.can_write('navigation')):
-		return abort(403);
+	if not GroupPermissionAPI.can_write('navigation'):
+		return abort(403)
 
 	entries = json.loads(request.form['entries'])
 	NavigationAPI.order(entries, None)
