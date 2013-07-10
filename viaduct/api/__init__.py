@@ -5,6 +5,7 @@ from degree import DegreeAPI
 from education import EducationAPI
 from navigation import NavigationAPI
 from pimpy import PimpyAPI
+from file import FileAPI
 
 from user import UserAPI
 from module_permission import ModulePermissionAPI

@@ -261,6 +261,10 @@ nav_contacts = NavigationEntry(None, 'Contactpersonen', '/contacts/', False,
 db.session.add(nav_contacts)
 db.session.commit()
 
+nav_files = NavigationEntry(None, 'Bestanden', '/files/', False, False, 8)
+db.session.add(nav_files)
+db.session.commit()
+
 # VACANCIES
 
 location_1 = Location('Amsterdam', 'The Netherlands', 'Science Park 904',

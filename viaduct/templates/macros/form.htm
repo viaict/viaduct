@@ -52,3 +52,12 @@
 		</div>
 	</div>
 {% endmacro %}
+
+{% macro render_file(field) %}
+	<div class="control-group">
+		{{ field.label(class='content-label') }}
+		<div class="controls">
+			{{ field(**kwargs) }}
+		</div>
+	</div>
+{% endmacro %}
