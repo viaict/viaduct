@@ -6,14 +6,14 @@
 {% block content %}
 <form action="" method="post" name="group_edit_permissions">
 	<fieldset>
-		<legend>Edit Group Permissions</legend>
+		<legend>Pas groeppermissies aan</legend>
 
 		{{ form.csrf_token }}
 
 		<table class="table table-bordered table-striped">
 			<thead>
 				<tr>
-					<th>Permission</th>
+					<th>Permissie</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -25,6 +25,11 @@
 						<td>{{ form_entry.csrf_token }}{{ form_entry.select }}</td>
 					</tr>
 				{% endfor %}
+				<tr>
+					<th>
+						Modulen
+					</th>
+				</tr>
 			</tbody>
 		</table>
 

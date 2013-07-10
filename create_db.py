@@ -7,6 +7,7 @@ from viaduct.models import User, UserPermission, Group, GroupPermission
 from viaduct.models import Activity
 from viaduct.models import Minute, Task
 from viaduct.models import NavigationEntry
+from viaduct.models.module_permission import ModulePermission
 
 from viaduct.models.permission import Permission
 from viaduct.models.vacancy import Vacancy
@@ -46,6 +47,11 @@ db.session.commit()
 group = Group('administrators')
 
 db.session.add(group)
+db.session.commit()
+
+# a group for not logged in users
+group_guest = Group('guests')
+db.session.add(group_guest)
 db.session.commit()
 
 permissions = {
@@ -280,3 +286,17 @@ vacancy_1 = Vacancy('test', 'bladiebla', datetime.datetime.now(),
 		datetime.datetime.now(), 'deeltijd', 'nvt', company_1)
 db.session.add(vacancy_1)
 db.session.commit()
+
+
+# MODULE_PERMISSION
+# group should still be administrators!!!
+
+# in the future we want modules to automagically register themselves but for now we will do this hard coded
+modules = ['module_permission', 'pimpy', 'user', 'group', 'navigation', 'vacancy_couch']
+for module in modules:
+	module_permission = ModulePermission(module, group.id, 2);
+	db.session.add(module_permission)
+	db.session.commit()
+
+
+
