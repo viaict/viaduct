@@ -12,6 +12,8 @@ from viaduct.models.examination import Examination
 from viaduct.models.course import Course
 from viaduct.models.education import Education
 
+from viaduct.api.group import GroupPermissionAPI
+
 from werkzeug import secure_filename
 
 blueprint = Blueprint('examination', __name__)
@@ -41,7 +43,7 @@ def create_unique_file(filename):
 
 @blueprint.route('/examination/add', methods=['GET', 'POST'])
 def upload_file():
-	if not current_user or current_user.email != 'administrator@svia.nl':
+	if not GroupPermissionAPI.can_write('examination'):
 		return abort(403)
 
 	courses = Course.query.all()
@@ -101,7 +103,7 @@ def view_examination():
 
 @blueprint.route('/examination/admin', methods=['GET', 'POST'])
 def examination_admin():
-	if not current_user or current_user.email != 'administrator@svia.nl':
+	if not GroupPermissionAPI.can_write('examination'):
 		return abort(403)
 
 	path = '/static/uploads/examinations/'
@@ -143,7 +145,7 @@ def examination_admin():
 
 @blueprint.route('/examination/edit', methods=['GET', 'POST'])
 def edit_examination():
-	if not current_user or current_user.email != 'administrator@svia.nl':
+	if not GroupPermissionAPI.can_write('examination'):
 		return abort(403)
 
 	path = '../static/'
@@ -205,7 +207,7 @@ def edit_examination():
 
 @blueprint.route('/course/add', methods=['GET', 'POST'])
 def add_course():
-	if not current_user or current_user.email != 'administrator@svia.nl':
+	if not GroupPermissionAPI.can_write('examination'):
 		return abort(403)
 
 	if request.method == 'POST':
@@ -220,7 +222,7 @@ def add_course():
 
 @blueprint.route('/education/add', methods=['GET', 'POST'])
 def add_education():
-	if not current_user or current_user.email != 'administrator@svia.nl':
+	if not GroupPermissionAPI.can_write('examination'):
 		return abort(403)
 
 	if request.method == 'POST':

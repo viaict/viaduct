@@ -14,8 +14,6 @@ from viaduct.forms.user import CreateUserForm#, EditUserPermissionForm
 from viaduct.models.education import Education
 from viaduct.api.group import GroupPermissionAPI
 
-from viaduct.api.group import GroupPermissionAPI
-
 blueprint = Blueprint('user', __name__)
 
 @login_manager.user_loader
