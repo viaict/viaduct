@@ -1,0 +1,14 @@
+{% from 'macros/pagination.htm' import render_pagination %}
+
+{% extends 'content.htm' %}
+
+{% block content %}
+	<p><a class="btn" href="{{ url_for('location.view') }}">Nieuwe locatie</a></p>
+	<ul>
+		{% for location in locations.items %}
+			<li><a href="{{ url_for('location.view', location_id=location.id) }}">{{ location.address }}, {{ location.city }}</a></li>
+		{% endfor %}
+	</ul>
+
+	{{ render_pagination(locations, 'location.list') }}
+{% endblock %}

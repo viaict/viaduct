@@ -31,6 +31,8 @@ def get_error_page(path=''):
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<path:path>', methods=['GET', 'POST'])
 def get_page(path=''):
+	print(path)
+
 	revisions = []
 
 	is_main_page = False

@@ -225,6 +225,10 @@ nav_companies = NavigationEntry(None, 'Bedrijven', '/companies/', False, False, 
 db.session.add(nav_companies)
 db.session.commit()
 
+nav_locations = NavigationEntry(None, 'Locaties', '/locations/', False, False, 7)
+db.session.add(nav_locations)
+db.session.commit()
+
 # VACANCIES
 
 location_1 = Location('Amsterdam', 'The Netherlands', 'Science Park 904',

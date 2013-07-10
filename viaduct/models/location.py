@@ -12,8 +12,8 @@ class Location(db.Model):
 	email = db.Column(db.String(256), unique=True)
 	phone_nr = db.Column(db.String(64))
 
-	def __init__(self, city, country, address, zip, postoffice_box, email,
-			phone_nr):
+	def __init__(self, city='', country='', address='', zip='',
+			postoffice_box='', email='', phone_nr=''):
 		self.city = city
 		self.country = country
 		self.address = address
