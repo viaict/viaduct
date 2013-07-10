@@ -10,7 +10,7 @@ from viaduct import db
 from viaduct.helpers import flash_form_errors
 from viaduct.forms import EditPageForm, HistoryPageForm
 from viaduct.models import Group
-from viaduct.models.page import Page, PageRevision
+from viaduct.models.page import Page, PageRevision, PagePermission
 
 blueprint = Blueprint('page', __name__)
 
@@ -142,15 +142,16 @@ def edit_page(path=''):
 	if page:
 		revision = page.revisions.order_by(PageRevision.id.desc()).first()
 
-		if not revision.author.id == current_user.id:
-			if not page.can_write(current_user):
-				abort(403)
+		if revision:
+			if not revision.author.id == current_user.id:
+				if not page.can_write(current_user):
+					abort(403)
 
-		data = struct()
-		data.title = revision.title
-		data.content = revision.content
-		data.filter_html = not revision.filter_html
-		data.path = path
+			data = struct()
+			data.title = revision.title
+			data.content = revision.content
+			data.filter_html = not revision.filter_html
+			data.path = path
 
 	form = EditPageForm(request.form, obj=data)
 
