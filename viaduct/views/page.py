@@ -12,6 +12,7 @@ from viaduct.forms import EditPageForm, HistoryPageForm
 from viaduct.models import Group
 from viaduct.models.page import Page, PageRevision, PagePermission
 from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.user import UserAPI
 
 blueprint = Blueprint('page', __name__)
 
@@ -40,8 +41,6 @@ def favicon_route():
 def get_page(path=''):
 	revisions = []
 
-	print 
-
 	is_main_page = False
 	if path == '' or path == 'index':
 		paths = ['laatste_bestuursblog', 'activities', 'twitter', 'contact']
@@ -59,14 +58,13 @@ def get_page(path=''):
 			revision = page.revisions.order_by(PageRevision.id.desc()).first()
 
 			if current_user != None and not revision.author.id == current_user.id:
-				if not page.can_read(current_user):
+				if not UserAPI.can_read(page):
 					if not path == 'activities':
 						abort(403)
 		else:
 			revision = PageRevision(page, current_user, 'Oh no! It looks like' +
 				' you have found a dead Link!',
 				'![alt text](/static/img/404.png "404")', True)
-
 
 		class struct(object):
 			pass
@@ -92,7 +90,7 @@ def get_page_history(path=''):
 
 	page = Page.query.filter(Page.path==path).first()
 
-	if not page.can_write(current_user):
+	if not UserAPI.can_write(page):
 		abort(403)
 
 	if not page:
@@ -139,7 +137,7 @@ def edit_page(path=''):
 
 		if revision:
 			if not revision.author.id == current_user.id:
-				if not page.can_write(current_user):
+				if not UserAPI.can_write(page):
 					abort(403)
 
 			data = struct()
