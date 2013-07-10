@@ -8,7 +8,6 @@ class ViewGroupForm(Form):
 	entries = FieldList(FormField(ViewGroupEntry))
 	delete_group = SubmitField('Delete group')
 
-
 class EditGroupPermissionEntry(Form):
 	select = SelectField(None, coerce=int, choices=[(0, "Geen"), (1, "Lees"), (2, "Lees/Schrijf")])
 
