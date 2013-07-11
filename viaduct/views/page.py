@@ -57,7 +57,11 @@ def get_page(path=''):
 		if page.revisions.count() > 0:
 			revision = page.revisions.order_by(PageRevision.id.desc()).first()
 
-			if current_user != None and not revision.author.id == current_user.id:
+			if not current_user:
+				if not UserAPI.can_read(page):
+					if not path == 'activities':
+						abort(403)
+			elif not revision.author.id == current_user.id:
 				if not UserAPI.can_read(page):
 					if not path == 'activities':
 						abort(403)
@@ -136,6 +140,8 @@ def edit_page(path=''):
 		revision = page.revisions.order_by(PageRevision.id.desc()).first()
 
 		if revision:
+			if not current_user:
+				abort(403)
 			if not revision.author.id == current_user.id:
 				if not UserAPI.can_write(page):
 					abort(403)
