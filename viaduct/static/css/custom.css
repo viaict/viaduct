@@ -3,6 +3,14 @@ body {
 	margin-bottom:20px;
 }
 
+form label {
+  font-weight:bold;
+}
+
+label.checkbox {
+  font-weight:normal;
+}
+
 /* Definition lists */
 
 dl, dt, dd {
