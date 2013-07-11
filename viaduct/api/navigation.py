@@ -44,9 +44,7 @@ class NavigationAPI:
 		else:
 			entries = [me] if me else []
 
-		print(entries)
 		entries = NavigationAPI.remove_unauthorized(entries)
-		print(entries)
 
 		return render_template('navigation/view_sidebar.htm', back=parent,
 				pages=entries, current=me)
