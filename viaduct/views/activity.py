@@ -25,8 +25,8 @@ def allowed_file(filename):
 @blueprint.route('/activities/page/<int:page>', methods=['GET', 'POST'])
 @blueprint.route('/activities/<string:archive>/page/<int:page>', methods=['GET', 'POST'])
 def view(archive="", page=1):
-	if not GroupPermissionAPI.can_read('activity'):
-		return abort(403);
+	#if not GroupPermissionAPI.can_read('activity'):
+	#	return abort(403);
 
 	if archive == "archive":
 		activities = Activity.query \

@@ -52,31 +52,34 @@
 
 		<hr>
 
-		{% if activity.form %}
-			{% if current_user.is_active %}
-			<form id="custom" action="/forms/submit/{{ activity.form.id }}" enctype="multipart/form-data">
+		{% if current_user and current_user.id %}
 
-				{{ user_fields(current_user) }}
-				{{ activity.form.html | safe }}
+			{% if activity.form %}
+				<form id="custom" action="/forms/submit/{{ activity.form.id }}" enctype="multipart/form-data">
 
-				<button id="custom_form" class="btn btn-success">Verzend formulier</button>
-			</form>
+					{{ user_fields(current_user) }}
+					{{ activity.form.html | safe }}
 
-			{% if activity.form_data %}
-				<script src="/static/js/unserialize.js"></script>
-				<script>
-					$("#custom").unserializeForm("{{ activity.form_data | safe }}");
-				</script>
-			{% endif %}
+					<button id="custom_form" class="btn btn-success">Verzend formulier</button>
+				</form>
+
+				{% if activity.form_data %}
+					<script src="/static/js/unserialize.js"></script>
+					<script>
+						$("#custom").unserializeForm("{{ activity.form_data | safe }}");
+					</script>
+				{% endif %}
 			
-			<script src="/static/js/custom_form_submission.js"></script>
-			{% else %}
-
-				<p>Je moet ingelogd zijn om het formulier in te vullen
-				<a href="{{ url_for('user.sign-in') }}">Inloggen</a>
+				<script src="/static/js/custom_form_submission.js"></script>
 			{% endif %}
-		<hr>
+
+			<hr>
+		{% else %}
+			<p>Je moet ingelogd zijn om het formulier in te vullen
+			<a href="{{ url_for('user.sign_in') }}" class="btn btn-huge btn-success">Inloggen</a>
+			<hr>
 		{% endif %}
+	
 
 		<p>{{ activity.description | markdown }}</p>
 	</div>
