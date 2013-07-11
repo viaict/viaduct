@@ -57,6 +57,8 @@ def get_page(path=''):
 		if page.revisions.count() > 0:
 			revision = page.revisions.order_by(PageRevision.id.desc()).first()
 
+			print current_user
+
 			if not current_user:
 				if not UserAPI.can_read(page):
 					if not path == 'activities':
