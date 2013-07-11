@@ -96,10 +96,8 @@ class PagePermission(db.Model):
 		rights = 0
 
 		if not user or not user.is_active():
-			print "groups all"
 			groups = [Group.query.filter(Group.name=='all').first()]
 		else:
-			print "groups from user"
 			groups = user.groups.all()
 		
 		page = Page.query.filter(Page.id==page_id).first()
@@ -109,11 +107,10 @@ class PagePermission(db.Model):
 				if group.name == 'administrators':
 					return 2
 
-				print "permission true1"
 				permissions = PagePermission.query.filter(PagePermission.page_id==page.id,
 					PagePermission.group_id==group.id).first()
 				if permissions:
-					print "permission true2"
+					print permissions.permission
 					if (permissions.permission >= 2) :
 						print "permissions1"
 						return permissions.permission
