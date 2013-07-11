@@ -95,7 +95,7 @@ class PagePermission(db.Model):
 	def get_user_rights(user, page_id):
 		rights = 0
 
-		if user and not user.is_active():
+		if not user or not user.is_active():
 			groups = [Group.query.filter(Group.name=='all').first()]
 		else:
 			groups = user.groups.all()
