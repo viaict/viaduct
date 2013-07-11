@@ -25,8 +25,8 @@ def allowed_file(filename):
 @blueprint.route('/activities/page/<int:page>', methods=['GET', 'POST'])
 @blueprint.route('/activities/<string:archive>/page/<int:page>', methods=['GET', 'POST'])
 def view(archive="", page=1):
-	#if not GroupPermissionAPI.can_read('activity'):
-	#	return abort(403);
+	if not GroupPermissionAPI.can_read('activity'):
+		return abort(403);
 
 	if archive == "archive":
 		activities = Activity.query \
@@ -41,15 +41,15 @@ def view(archive="", page=1):
 
 @blueprint.route('/activities/<int:activity_id>', methods=['GET', 'POST'])
 def get_activity(activity_id = 0):
-	#if not GroupPermissionAPI.can_read('activity'):
-	#	return abort(403);
+	if not GroupPermissionAPI.can_read('activity'):
+		return abort(403);
 
 	activity = Activity.query.get(activity_id)
 
 	if not activity:
 		return abort(404)
 
-	if activity.form_id:
+	if current_user and activity.form_id:
 		activity.form = CustomForm.query.get(activity.form_id)
 
 		form_result = CustomFormResult.query \
