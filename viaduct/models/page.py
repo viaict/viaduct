@@ -110,14 +110,10 @@ class PagePermission(db.Model):
 				permissions = PagePermission.query.filter(PagePermission.page_id==page.id,
 					PagePermission.group_id==group.id).first()
 				if permissions:
-					print permissions.permission
-					print permissions
 					if (permissions.permission >= 2) :
-						print "permissions1"
 						return permissions.permission
 					
 					if (permissions.permission > rights):
-						print "permissions2"
 						rights = permissions.permission
 
 		return rights
