@@ -210,6 +210,3 @@ for module in modules:
 	group_permission = GroupPermission(module, group.id, 2);
 	db.session.add(group_permission)
 	db.session.commit()
-
-
-

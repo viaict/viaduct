@@ -8,10 +8,10 @@ from viaduct.models.contact import Contact
 from viaduct.forms import CompanyForm
 from viaduct.api.group import GroupPermissionAPI
 
-blueprint = Blueprint('company', __name__)
+blueprint = Blueprint('company', __name__, url_prefix='/companies/')
 
-@blueprint.route('/companies/', methods=['GET', 'POST'])
-@blueprint.route('/companies/<int:page>/', methods=['GET', 'POST'])
+@blueprint.route('/', methods=['GET', 'POST'])
+@blueprint.route('/<int:page>/', methods=['GET', 'POST'])
 def list(page=1):
 	if not GroupPermissionAPI.can_read('company'):
 		return abort(403)
@@ -20,8 +20,8 @@ def list(page=1):
 
 	return render_template('company/list.htm', companies=companies)
 
-@blueprint.route('/companies/create/', methods=['GET'])
-@blueprint.route('/companies/edit/<int:company_id>/', methods=['GET'])
+@blueprint.route('/create/', methods=['GET'])
+@blueprint.route('/edit/<int:company_id>/', methods=['GET'])
 def view(company_id=None):
 	'''
 	FRONTEND
@@ -55,8 +55,8 @@ def view(company_id=None):
 
 	return render_template('company/view.htm', company=company, form=form)
 
-@blueprint.route('/companies/create/', methods=['POST'])
-@blueprint.route('/companies/edit/<int:company_id>/', methods=['POST'])
+@blueprint.route('/create/', methods=['POST'])
+@blueprint.route('/edit/<int:company_id>/', methods=['POST'])
 def update(company_id=None):
 	'''
 	BACKEND
@@ -114,7 +114,7 @@ def update(company_id=None):
 
 	return redirect(url_for('company.view', company_id=company_id))
 
-@blueprint.route('/companies/delete/<int:company_id>/', methods=['POST'])
+@blueprint.route('/delete/<int:company_id>/', methods=['POST'])
 def delete(company_id):
 	'''
 	BACKEND

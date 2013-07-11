@@ -8,10 +8,10 @@ from viaduct.utilities import validate_form
 from viaduct.forms import ContactForm
 from viaduct.api.group import GroupPermissionAPI
 
-blueprint = Blueprint('contact', __name__)
+blueprint = Blueprint('contact', __name__, url_prefix='/contacts/')
 
-@blueprint.route('/contacts/', methods=['GET', 'POST'])
-@blueprint.route('/contacts/<int:page>/', methods=['GET', 'POST'])
+@blueprint.route('/', methods=['GET', 'POST'])
+@blueprint.route('/<int:page>/', methods=['GET', 'POST'])
 def list(page=1):
 	'''
 	Show a paginated list of contacts.
@@ -22,8 +22,8 @@ def list(page=1):
 	contacts = Contact.query.paginate(page, 15, False)
 	return render_template('contact/list.htm', contacts=contacts)
 
-@blueprint.route('/contacts/create/', methods=['GET'])
-@blueprint.route('/contacts/edit/<int:contact_id>/', methods=['GET'])
+@blueprint.route('/create/', methods=['GET'])
+@blueprint.route('/edit/<int:contact_id>/', methods=['GET'])
 def edit(contact_id=None):
 	'''
 	Create or edit a contact, frontend.
@@ -44,8 +44,8 @@ def edit(contact_id=None):
 
 	return render_template('contact/edit.htm', contact=contact, form=form)
 
-@blueprint.route('/contacts/create/', methods=['POST'])
-@blueprint.route('/contacts/edit/<int:contact_id>/', methods=['POST'])
+@blueprint.route('/create/', methods=['POST'])
+@blueprint.route('/edit/<int:contact_id>/', methods=['POST'])
 def update(contact_id=None):
 	'''
 	Create or edit a contact, backend.
@@ -74,7 +74,7 @@ def update(contact_id=None):
 
 	return redirect(url_for('contact.edit', contact_id=contact_id))
 
-@blueprint.route('/contacts/delete/<int:contact_id>/', methods=['POST'])
+@blueprint.route('/delete/<int:contact_id>/', methods=['POST'])
 def delete(contact_id):
 	'''
 	Delete a contact.

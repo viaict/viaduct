@@ -7,9 +7,9 @@ from viaduct.utilities import serialize_sqla, validate_form
 from viaduct.forms import LocationForm
 from viaduct.api.group import GroupPermissionAPI
 
-blueprint = Blueprint('location', __name__)
+blueprint = Blueprint('location', __name__, url_prefix='/locations/')
 
-@blueprint.route('/locations/<int:location_id>/contacts/', methods=['GET'])
+@blueprint.route('/<int:location_id>/contacts/', methods=['GET'])
 def get_contacts(location_id):
 	if not GroupPermissionAPI.can_read('contacts'):
 		return jsonify(error='Geen toestemming cotactpersonen te lezen');
@@ -17,8 +17,8 @@ def get_contacts(location_id):
 	location = Location.query.get(location_id)
 	return jsonify(contacts=serialize_sqla(location.contacts.all()))
 
-@blueprint.route('/locations/', methods=['GET', 'POST'])
-@blueprint.route('/locations/<int:page>/', methods=['GET', 'POST'])
+@blueprint.route('/', methods=['GET', 'POST'])
+@blueprint.route('/<int:page>/', methods=['GET', 'POST'])
 def list(page=1):
 	if not GroupPermissionAPI.can_read('location'):
 		return abort(403)
@@ -26,8 +26,8 @@ def list(page=1):
 	locations = Location.query.paginate(page, 15, False)
 	return render_template('location/list.htm', locations=locations)
 
-@blueprint.route('/locations/create/', methods=['GET'])
-@blueprint.route('/locations/edit/<int:location_id>/', methods=['GET'])
+@blueprint.route('/create/', methods=['GET'])
+@blueprint.route('/edit/<int:location_id>/', methods=['GET'])
 def view(location_id=None):
 	'''
 	FRONTEND
@@ -45,8 +45,8 @@ def view(location_id=None):
 	form = LocationForm(request.form, location)
 	return render_template('location/view.htm', location=location, form=form)
 
-@blueprint.route('/locations/create/', methods=['POST'])
-@blueprint.route('/locations/edit/<int:location_id>/', methods=['POST'])
+@blueprint.route('/create/', methods=['POST'])
+@blueprint.route('/edit/<int:location_id>/', methods=['POST'])
 def update(location_id=None):
 	'''
 	BACKEND
@@ -78,7 +78,7 @@ def update(location_id=None):
 
 	return redirect(url_for('location.view', location_id=location_id))
 
-@blueprint.route('/locations/delete/<int:location_id>/', methods=['POST'])
+@blueprint.route('/delete/<int:location_id>/', methods=['POST'])
 def delete(location_id):
 	'''
 	BACKEND

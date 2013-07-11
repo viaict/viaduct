@@ -8,10 +8,10 @@ from viaduct.forms import FileForm
 from viaduct.api import FileAPI
 from viaduct.api.group import GroupPermissionAPI
 
-blueprint = Blueprint('file', __name__)
+blueprint = Blueprint('file', __name__, url_prefix='/files/')
 
-@blueprint.route('/files/', methods=['GET'])
-@blueprint.route('/files/<int:page>/', methods=['GET'])
+@blueprint.route('/', methods=['GET'])
+@blueprint.route('/<int:page>/', methods=['GET'])
 def list(page=1):
 	'''
 	List all files that are not assigned to a page.
@@ -25,8 +25,8 @@ def list(page=1):
 
 	return render_template('files/list.htm', files=files, form=form)
 
-@blueprint.route('/files/', methods=['POST'])
-@blueprint.route('/files/<int:page>/', methods=['POST'])
+@blueprint.route('/', methods=['POST'])
+@blueprint.route('/<int:page>/', methods=['POST'])
 def upload(page=1):
 	'''
 	Upload a file.
@@ -39,7 +39,7 @@ def upload(page=1):
 
 	return redirect(url_for('file.list', page=page))
 
-@blueprint.route('/files/search/<string:query>/', methods=['GET'])
+@blueprint.route('/search/<string:query>/', methods=['GET'])
 def search(query):
 	'''
 	Fuzzy search files.

@@ -7,10 +7,10 @@ from viaduct.models.company import Company
 from viaduct.forms import VacancyForm
 from viaduct.api.group import GroupPermissionAPI
 
-blueprint = Blueprint('vacancy', __name__)
+blueprint = Blueprint('vacancy', __name__, url_prefix='/vacancies/')
 
-@blueprint.route('/vacancies/', methods=['GET', 'POST'])
-@blueprint.route('/vacancies/<int:page>/', methods=['GET', 'POST'])
+@blueprint.route('/', methods=['GET', 'POST'])
+@blueprint.route('/<int:page>/', methods=['GET', 'POST'])
 def list(page=1):
 	if not GroupPermissionAPI.can_read('vacancy'):
 		return abort(403)
@@ -19,8 +19,8 @@ def list(page=1):
 
 	return render_template('vacancy/list.htm', vacancies=vacancies)
 
-@blueprint.route('/vacancies/create/', methods=['GET'])
-@blueprint.route('/vacancies/edit/<int:vacancy_id>/', methods=['GET'])
+@blueprint.route('/create/', methods=['GET'])
+@blueprint.route('/edit/<int:vacancy_id>/', methods=['GET'])
 def view(vacancy_id=None):
 	'''
 	FRONTEND
@@ -43,8 +43,8 @@ def view(vacancy_id=None):
 
 	return render_template('vacancy/view.htm', vacancy=vacancy, form=form)
 
-@blueprint.route('/vacancies/create/', methods=['POST'])
-@blueprint.route('/vacancies/edit/<int:vacancy_id>/', methods=['POST'])
+@blueprint.route('/create/', methods=['POST'])
+@blueprint.route('/edit/<int:vacancy_id>/', methods=['POST'])
 def update(vacancy_id=None):
 	'''
 	BACKEND
@@ -105,7 +105,7 @@ def update(vacancy_id=None):
 
 	return redirect(url_for('vacancy.view', vacancy_id=vacancy_id))
 
-@blueprint.route('/vacancies/delete/<int:vacancy_id>/', methods=['POST'])
+@blueprint.route('/delete/<int:vacancy_id>/', methods=['POST'])
 def delete(vacancy_id):
 	'''
 	BACKEND
