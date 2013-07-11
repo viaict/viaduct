@@ -39,14 +39,6 @@ def favicon_route():
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<path:path>', methods=['GET', 'POST'])
 def get_page(path=''):
-	pages = Page.query.all()
-	group = Group.query.filter(Group.name=='all').first()
-	for page in pages:
-		permission_entry = PagePermission(group.id, page.id, 1)
-		db.session.add(permission_entry)
-		db.session.commit()
-
-
 	revisions = []
 
 	is_main_page = False
