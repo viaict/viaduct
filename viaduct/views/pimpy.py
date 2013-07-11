@@ -29,7 +29,7 @@ def view_minutes(group_id='all'):
 		return abort(403)
 	return PimpyAPI.get_minutes(group_id)
 
-@blueprint.route('/pimpy/minutes/<group_id>/<minute_id>')
+@blueprint.route('/minutes/<group_id>/<minute_id>')
 def view_minute(group_id='all', minute_id=0):
 	if not GroupPermissionAPI.can_read('pimpy'):
 		return abort(403)
