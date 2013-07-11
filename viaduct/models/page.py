@@ -111,6 +111,7 @@ class PagePermission(db.Model):
 					PagePermission.group_id==group.id).first()
 				if permissions:
 					print permissions.permission
+					print permissions
 					if (permissions.permission >= 2) :
 						print "permissions1"
 						return permissions.permission
