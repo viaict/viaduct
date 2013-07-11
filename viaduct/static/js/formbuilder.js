@@ -32,15 +32,29 @@ $.fn.formbuilder = function() {
     form.html(''); // Reset the control
     var lines = this.value.split("\n");
     
+
     for (var i=0; i < lines.length; i++) {
 
       if (lines[i].charAt(0) == '#') {
-        form.children().last().after('<h3>' + lines[i].substring(1) + '</h3>');
-        continue;
+				var str	= '<h3>' + lines[i].substring(1) + '</h3>';
+
+				console.log(form.children())
+				if (form.children().length > 0)
+        	form.children().last().after(str);
+        else
+					form.prepend(str);
+
+				continue;
       }
 
       if (lines[i].charAt(0) == 'p') {
-        form.children().last().after('<p>' + lines[i].substring(1) + '</p>');
+				var str = '<p>' + lines[i].substring(1) + '</p>';
+
+				if (form.children().length > 0)
+        	form.children().last().after(str);
+        else
+					form.prepend(str);
+
         continue;
       }
 
