@@ -19,38 +19,38 @@ from viaduct.models.group import Group
 
 from viaduct.api.group import GroupPermissionAPI
 
-blueprint = Blueprint('pimpy', __name__, url_prefix='/pimpy/')
+blueprint = Blueprint('pimpy', __name__)
 
-@blueprint.route('/', methods=['GET', 'POST'])
-@blueprint.route('/minutes/', methods=['GET', 'POST'])
-@blueprint.route('/minutes/<group_id>', methods=['GET', 'POST'])
+@blueprint.route('/pimpy/', methods=['GET', 'POST'])
+@blueprint.route('/pimpy/minutes/', methods=['GET', 'POST'])
+@blueprint.route('/pimpy/minutes/<group_id>', methods=['GET', 'POST'])
 def view_minutes(group_id='all'):
 	if not GroupPermissionAPI.can_read('pimpy'):
 		return abort(403)
 	return PimpyAPI.get_minutes(group_id)
 
-@blueprint.route('/minutes/<group_id>/<minute_id>')
+@blueprint.route('/pimpy/minutes/<group_id>/<minute_id>')
 def view_minute(group_id='all', minute_id=0):
 	if not GroupPermissionAPI.can_read('pimpy'):
 		return abort(403)
 	return PimpyAPI.get_minute(group_id, minute_id)
 
-@blueprint.route('/tasks/', methods=['GET', 'POST'])
-@blueprint.route('/tasks/<group_id>', methods=['GET', 'POST'])
+@blueprint.route('/pimpy/tasks/', methods=['GET', 'POST'])
+@blueprint.route('/pimpy/tasks/<group_id>', methods=['GET', 'POST'])
 def view_tasks(group_id='all'):
 	if not GroupPermissionAPI.can_read('pimpy'):
 		return abort(403)
 	return PimpyAPI.get_tasks(group_id, False)
 
-@blueprint.route('/tasks/me/', methods=['GET', 'POST'])
-@blueprint.route('/tasks/me/<group_id>/', methods=['GET', 'POST'])
+@blueprint.route('/pimpy/tasks/me/', methods=['GET', 'POST'])
+@blueprint.route('/pimpy/tasks/me/<group_id>/', methods=['GET', 'POST'])
 def view_tasks_personal(group_id='all'):
 	if not GroupPermissionAPI.can_read('pimpy'):
 		return abort(403)
 	return PimpyAPI.get_tasks(group_id, True)
 
-@blueprint.route('/tasks/update/', methods=['GET', 'POST'])
-@blueprint.route('/tasks/me/update/', methods=['GET', 'POST'])
+@blueprint.route('/pimpy/tasks/update/', methods=['GET', 'POST'])
+@blueprint.route('/pimpy/tasks/me/update/', methods=['GET', 'POST'])
 def update_task_status():
 	if not GroupPermissionAPI.can_write('pimpy'):
 		return abort(403)
@@ -64,7 +64,7 @@ def update_task_status():
 		task.update_status(new_status)
 	return jsonify(status=task.get_status_color())
 
-@blueprint.route('/tasks/add/<string:group_id>', methods=['GET', 'POST'])
+@blueprint.route('/pimpy/tasks/add/<string:group_id>', methods=['GET', 'POST'])
 def add_task(group_id='all'):
 	if not GroupPermissionAPI.can_write('pimpy'):
 		return abort(403)
@@ -112,7 +112,7 @@ def add_task(group_id='all'):
 	return render_template('pimpy/add_task.htm', group=group,
 		group_id=group_id, type='tasks', form=form)
 
-@blueprint.route('/tasks/edit/<string:task_id>', methods=['GET', 'POST'])
+@blueprint.route('/pimpy/tasks/edit/<string:task_id>', methods=['GET', 'POST'])
 def edit_task(task_id=-1):
 	if not GroupPermissionAPI.can_write('pimpy'):
 		return abort(403)
@@ -149,7 +149,7 @@ def edit_task(task_id=-1):
 	return render_template('pimpy/edit_task.htm', group=group,
 		group_id=group_id, type='tasks', form=form)
 
-@blueprint.route('/minutes/add/<string:group_id>', methods=['GET', 'POST'])
+@blueprint.route('/pimpy/minutes/add/<string:group_id>', methods=['GET', 'POST'])
 def add_minute(group_id='all'):
 	if not GroupPermissionAPI.can_write('pimpy'):
 		return abort(403)
