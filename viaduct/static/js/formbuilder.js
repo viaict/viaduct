@@ -35,7 +35,12 @@ $.fn.formbuilder = function() {
     for (var i=0; i < lines.length; i++) {
 
       if (lines[i].charAt(0) == '#') {
-        form.append('<h3>' + lines[i].substring(1) + '</h3>');
+        form.children().last().after('<h3>' + lines[i].substring(1) + '</h3>');
+        continue;
+      }
+
+      if (lines[i].charAt(0) == 'p') {
+        form.children().last().after('<p>' + lines[i].substring(1) + '</p>');
         continue;
       }
 
