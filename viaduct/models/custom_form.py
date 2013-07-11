@@ -6,8 +6,8 @@ class CustomForm(db.Model):
 	id				= db.Column(db.Integer, primary_key=True)
 	owner_id	= db.Column(db.Integer, db.ForeignKey('user.id'))
 	name			= db.Column(db.String(256))
-	origin		= db.Column(db.String(128))
-	html			= db.Column(db.String(8192))
+	origin		= db.Column(db.String(4096))
+	html			= db.Column(db.UnicodeText())
 	#updated_time	= db.Column(db.DateTime, default=datetime.datetime.now())
 
 	owner = db.relationship('User', backref=db.backref('custom_forms', lazy='dynamic'))
