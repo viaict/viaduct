@@ -116,7 +116,7 @@ class PagePermission(db.Model):
 					if (permissions.permission > rights):
 						rights = permissions.permission
 
-		return 0 #rights
+		return rights
 
 	def set_permission(self, permission):
 		self.permission = permission
