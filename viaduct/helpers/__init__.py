@@ -78,7 +78,7 @@ def pages_filter(data):
 				content += '<h1>{0}</h1>'.format(data[i].title)
 				content += markdown(data[i].content, extensions=markdown_extensions)
 		else:
-			print data[i].path
+			#print data[i].path
 			content += '<h1>{0}</h1>'.format(data[i].title)
 			content += markdown(data[i].content, extensions=markdown_extensions)
 

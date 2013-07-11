@@ -17,6 +17,7 @@ class UserAPI:
 		"""
 		# if there is no user we treat them as if in the guests group
 		if current_user == None:
+			print "NO CURRENT USER!!!!"
 			group = Group.query.filter(Group.name=='all').first()
 			if not(group):
 				raise Exception("No group 'guests', this should never happen!")
