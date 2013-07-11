@@ -44,7 +44,9 @@ class NavigationAPI:
 		else:
 			entries = [me] if me else []
 
+		print(entries)
 		entries = NavigationAPI.remove_unauthorized(entries)
+		print(entries)
 
 		return render_template('navigation/view_sidebar.htm', back=parent,
 				pages=entries, current=me)
@@ -113,12 +115,12 @@ class NavigationAPI:
 
 			if url_prefix == url:
 				return GroupPermissionAPI.can_read(blueprint)
-			else:
-				page = Page.query.filter_by(path=path).first()
-				if not page:
-					continue
 
-				return UserAPI.can_read(page)
+		page = Page.query.filter_by(path=path).first()
+		if not page:
+			return True
+
+		return UserAPI.can_read(page)
 
 	@staticmethod
 	def remove_unauthorized(entries):

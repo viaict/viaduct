@@ -2,6 +2,7 @@
 	{% for entry in bar_entries %}
 
 		{% set children = entry.activities if entry.activities else entry.children %}
+		{% set children = NavigationAPI.remove_unauthorized(children) %}
 
 		<li class="{% if children %}dropdown{% endif %}">
 			<a {% if children %}class="dropdown-toggle" data-hover="dropdown" data-delay="200" data-close-others="true"{% endif %} {% if entry.external %}target="_blank"{% endif %}

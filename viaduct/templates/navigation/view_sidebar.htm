@@ -19,6 +19,7 @@
 				</a>
 
 				{% set children = page.activities if page.activities else page.children %}
+				{% set children = NavigationAPI.remove_unauthorized(children) %}
 
 				{% if children %}
 					<ul class="nav nav-stacked nav-tabs">

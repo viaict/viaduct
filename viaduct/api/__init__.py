@@ -10,7 +10,6 @@ from file import FileAPI
 from user import UserAPI
 from group import GroupPermissionAPI
 
-
 CourseAPI.register()
 DegreeAPI.register()
 EducationAPI.register()
