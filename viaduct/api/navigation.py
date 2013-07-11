@@ -122,8 +122,9 @@ class NavigationAPI:
 
 	@staticmethod
 	def remove_unauthorized(entries):
+		authorized_entries = list(entries)
 		for entry in entries:
 			if not NavigationAPI.can_view(entry):
-				entries.remove(entry)
+				authorized_entries.remove(entry)
 
-		return entries
+		return authorized_entries
