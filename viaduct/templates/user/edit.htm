@@ -5,12 +5,16 @@
 {% block content %}
 <form action="" method="post" name="sign_up" class="form-horizontal">
 	<fieldset>
-		<legend>Create User</legend>
+		<legend>{% if user.id %}Edit{% else %}Create{% endif %} user</legend>
 
 		{{ form.csrf_token }}
 		{{ render_field(form.email) }}
-		{{ render_field(form.password) }}
-		{{ render_field(form.repeat_password) }}
+
+		{% if not user.id %}
+			{{ render_field(form.password) }}
+			{{ render_field(form.repeat_password) }}
+		{% endif %}
+
 		{{ render_field(form.first_name) }}
 		{{ render_field(form.last_name) }}
 		{{ render_field(form.student_id) }}
@@ -18,7 +22,7 @@
 
 		<div class="control-group">
 			<div class="controls">
-				<button type="submit" class="btn">Create User</button>
+				<button type="submit" class="btn">{% if user.id %}Edit{% else %}Create{% endif %} user</button>
 			</div>
 		</div>
 	</fieldset>

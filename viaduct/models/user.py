@@ -12,7 +12,7 @@ class User(db.Model):
 	password = db.Column(db.String(60))
 	first_name = db.Column(db.String(256))
 	last_name = db.Column(db.String(256))
-	has_payed_membership_fee = db.Column(db.Boolean)
+	has_payed = db.Column(db.Boolean)
 	shirt_size = db.Column(db.Enum('Small', 'Medium', 'Large'))
 	allergy = db.Column(db.String(1024)) # Allergy / medication
 	diet = db.Column(db.Enum('Vegetarisch', 'Veganistisch', 'Fruitarier'))
@@ -26,7 +26,8 @@ class User(db.Model):
 	education = db.relationship(Education,
 		backref=db.backref('user', lazy='dynamic'))
 
-	def __init__(self, email=None, password=None, first_name=None, last_name=None, student_id=None, education_id=None):
+	def __init__(self, email=None, password=None, first_name=None,
+				last_name=None, student_id=None, education_id=None):
 		if not email:
 			self.id = 0
 
@@ -47,10 +48,8 @@ class User(db.Model):
 		return self.id == 0
 
 	def get_id(self):
+		"""Necessary for Flask-Login."""
 		return unicode(self.id)
-
-	def get_student_id(self):
-		return self.student_id
 
 	@staticmethod
 	def get_anonymous_user():
@@ -60,4 +59,3 @@ class User(db.Model):
 		return '<User({0}, "{1}", "{2}", "{3}", "{4}", "{5}">'.format(self.id,
 				self.email, self.password, self.first_name, self.last_name,
 				self.student_id)
-

@@ -84,7 +84,9 @@ db.session.commit()
 
 # Add stuff for pimpystuff for pimpy
 
-user_tijmen = User('tijmen.zwaan@gmail.com', bcrypt.hashpw('memorystick', bcrypt.gensalt()), 'Tijmen', 'Zwaan')
+user_tijmen = User('tijmen.zwaan@gmail.com', bcrypt.hashpw('memorystick',
+														bcrypt.gensalt()),
+				'Tijmen', 'Zwaan', 'n/a')
 group_ict = Group('ict')
 group_bestuur = Group('bestuur')
 #user_maarten = User('maarten@maarten.mrt', bcrypt.hashpw('administrator', bcrypt.gensalt()), 'Maarten', 'Inja')
