@@ -1,6 +1,6 @@
-<h1>Activiteitenoverzicht</h1>
+<a style="color: #333;" href="/activities"><h1>Activiteitenoverzicht</h1></a>
 
-{% for activity in activities.items %}
+{% for activity in activities.items[:4] %}
 
 <div class="activity-simple">
 	<h4>
@@ -13,16 +13,16 @@
 		<i class="icon-calendar"></i>
 		{{ activity.get_time() }}
 		<br>
-	
+
 		<i class="icon-compass"></i>
 		{{ activity.location }}
 	</div>
 
-	{{ activity.get_short_description(200) | markdown }}
+	{{ activity.get_short_description(50) | markdown }}
 
-	<a href="{{ url_for('activity.get_activity', activity_id=activity.id)}}" class="btn btn-primary">
-		Lees verder
-	</a>
 </div>
 
-{% endfor %}	
+{% endfor %}
+
+Heb je een idee voor een activiteit?<br>
+Stuur een mailtje naar de <a href="mailto:actie@svia.nl">actiecommissie</a>.

@@ -17,7 +17,7 @@ class PimpyAPI:
 
 
 	@staticmethod
-	def commit_minute_to_db(content, date, group_id, parse_tasks):
+	def commit_minute_to_db(content, date, group_id):
 		"""
 		Returns succes (boolean), message (string). Message is irrelevant if
 		success is true, otherwise it contains what exactly went wrong.
@@ -36,8 +36,12 @@ class PimpyAPI:
 		db.session.add(minute)
 		db.session.commit()
 
+		"""
+		code that has to be moved to views
+
 		if parse_tasks:
-			tasks, dones, removes = PimpyAPI.parse_minute(content, group_id, minute.id)
+			tasks, dones, removes = PimpyAPI.parse_minute(content,
+				group_id, minute.id)
 			print "I'm now going to print all tasks, dones and removes"
 			for task in tasks:
 				print task
@@ -45,8 +49,9 @@ class PimpyAPI:
 				print done
 			for remove in removes:
 				print remove
+		"""
 
-		return True, "jaja"
+		return True, minute.id
 
 
 	@staticmethod

@@ -62,6 +62,9 @@ db.session.commit()
 
 # Add stuff for pimpystuff for pimpy
 
+user_tijmen = User('tijmen.zwaan@gmail.com', bcrypt.hashpw('memorystick', bcrypt.gensalt()), 'Tijmen', 'Zwaan')
+group_ict = Group('ict')
+group_bestuur = Group('bestuur')
 #user_maarten = User('maarten@maarten.mrt', bcrypt.hashpw('administrator', bcrypt.gensalt()), 'Maarten', 'Inja')
 #user_ed = User('ed@ed.eds', bcrypt.hashpw('administrator', bcrypt.gensalt()), 'Handsome', 'Ed')
 #group_first = Group('first')
@@ -79,6 +82,10 @@ db.session.commit()
 #
 #
 ## could I add more stuff at once?
+db.session.add(user_tijmen)
+db.session.add(group_ict)
+db.session.add(group_bestuur)
+db.session.commit()
 #db.session.add(user_maarten)
 #db.session.commit()
 #db.session.add(user_ed)
@@ -87,7 +94,11 @@ db.session.commit()
 #db.session.commit()
 #db.session.add(group_second)
 #db.session.commit()
-#
+
+group_ict.add_user(user_tijmen)
+group_bestuur.add_user(user_tijmen)
+group.add_user(user_tijmen)
+db.session.commit()
 #group_first.add_user(user_maarten)
 #group_first.add_user(user_ed)
 #group_first.add_user(user)
@@ -115,7 +126,7 @@ activity1 = Activity()
 activity1.start_time = datetime.datetime(2012, 10, 10, 17, 0)
 activity1.end_time = datetime.datetime(2012, 10, 10, 22, 0)
 activity1.name = "Een activiteit in het verleden"
-activity1.description = """According to some, the system that is designed during the 19th century is on the verge of a revolution. A revolution that could radically change the way we educate ourselves and others, and even the way we look at education. But whether it is a revolution or just an evolution, technology is undoubtedly beginning to play a serious role in many forms of education. Over time, teaching transformed from one on one tutoring to mass education. And the emergence of the internet is now pushing education to the largest scale in history with the introduction of Massive Open Online Courses (early MOOCs had 100000 enrollments). At the same time, education (not unlike the rest of life) is increasingly leaving digital traces. 
+activity1.description = """According to some, the system that is designed during the 19th century is on the verge of a revolution. A revolution that could radically change the way we educate ourselves and others, and even the way we look at education. But whether it is a revolution or just an evolution, technology is undoubtedly beginning to play a serious role in many forms of education. Over time, teaching transformed from one on one tutoring to mass education. And the emergence of the internet is now pushing education to the largest scale in history with the introduction of Massive Open Online Courses (early MOOCs had 100000 enrollments). At the same time, education (not unlike the rest of life) is increasingly leaving digital traces.
 
 Learning analytics is a fairly recent technology that takes advantage of these traces. As most technologies it can be used for multiple purposes and can serve both the revolution and the evolution perspectives.
 
@@ -133,8 +144,43 @@ In this talk I want to elaborate a little bit on the traditional model of educat
 
 Although I will not apply the personalization to this talk, I'll attempt to put something in there for everybody. It is then up to you to interact with me and each other to bend it to the perfect talk."""
 
+activity3 = Activity()
+activity3.start_time = datetime.datetime(2013, 10, 10, 17, 0)
+activity3.end_time = datetime.datetime(2013, 10, 10, 22, 0)
+activity3.name = "Een activiteit in het heden"
+activity3.description = """Learning analytics is a fairly recent technology that takes advantage of these traces. As most technologies it can be used for multiple purposes and can serve both the revolution and the evolution perspectives.
+
+In this talk I want to elaborate a little bit on the traditional model of education and present the core of the revolution. We'll discuss the current influences that technology can have on education by examining some well known examples. I'll explain what we mean with Learning Analytics, how it might work (technically), what it's potential seems to be, and, of course, what the possible downsides are. We'll conclude with discussing various visions of the future of learning and their potential impact on society.
+
+Although I will not apply the personalization to this talk, I'll attempt to put something in there for everybody. It is then up to you to interact with me and each other to bend it to the perfect talk."""
+
+activity4 = Activity()
+activity4.start_time = datetime.datetime(2013, 10, 10, 17, 0)
+activity4.end_time = datetime.datetime(2013, 10, 10, 22, 0)
+activity4.name = "Een activiteit in het heden"
+activity4.description = """Learning analytics is a fairly recent technology that takes advantage of these traces. As most technologies it can be used for multiple purposes and can serve both the revolution and the evolution perspectives.
+
+In this talk I want to elaborate a little bit on the traditional model of education and present the core of the revolution. We'll discuss the current influences that technology can have on education by examining some well known examples. I'll explain what we mean with Learning Analytics, how it might work (technically), what it's potential seems to be, and, of course, what the possible downsides are. We'll conclude with discussing various visions of the future of learning and their potential impact on society.
+
+Although I will not apply the personalization to this talk, I'll attempt to put something in there for everybody. It is then up to you to interact with me and each other to bend it to the perfect talk."""
+
+
+activity5 = Activity()
+activity5.start_time = datetime.datetime(2013, 10, 10, 17, 0)
+activity5.end_time = datetime.datetime(2013, 10, 10, 22, 0)
+activity5.name = "Een activiteit in het heden"
+activity5.description = """Learning analytics is a fairly recent technology that takes advantage of these traces. As most technologies it can be used for multiple purposes and can serve both the revolution and the evolution perspectives.
+
+In this talk I want to elaborate a little bit on the traditional model of education and present the core of the revolution. We'll discuss the current influences that technology can have on education by examining some well known examples. I'll explain what we mean with Learning Analytics, how it might work (technically), what it's potential seems to be, and, of course, what the possible downsides are. We'll conclude with discussing various visions of the future of learning and their potential impact on society.
+
+Although I will not apply the personalization to this talk, I'll attempt to put something in there for everybody. It is then up to you to interact with me and each other to bend it to the perfect talk."""
+
+
 db.session.add(activity1)
 db.session.add(activity2)
+db.session.add(activity3)
+db.session.add(activity4)
+db.session.add(activity5)
 db.session.commit()
 
 #minute = Minute("minute content, jaja", 2, datetime.date(2020, 10, 10))
@@ -194,6 +240,10 @@ db.session.commit()
 
 nav_ext = NavigationEntry(nav_page1, 'Externaal', 'viaduct.svia.nl', True, False, 1)
 db.session.add(nav_ext)
+db.session.commit()
+
+nav_pimpy = NavigationEntry(None, 'Pimpy', '/pimpy', False, False, 5)
+db.session.add(nav_pimpy)
 db.session.commit()
 
 # VACANCIES
