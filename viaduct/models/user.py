@@ -26,7 +26,8 @@ class User(db.Model):
 	education = db.relationship(Education,
 		backref=db.backref('user', lazy='dynamic'))
 
-	def __init__(self, email=None, password=None, first_name=None, last_name=None, student_id=None, education_id=None):
+	def __init__(self, email=None, password=None, first_name=None,
+				last_name=None, student_id=None, education_id=None):
 		if not email:
 			self.id = 0
 
@@ -45,6 +46,10 @@ class User(db.Model):
 
 	def is_anonymous(self):
 		return self.id == 0
+
+	def get_id(self):
+		"""Necessary for Flask-Login."""
+		return unicode(self.id)
 
 	@staticmethod
 	def get_anonymous_user():
