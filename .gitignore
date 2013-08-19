@@ -15,3 +15,5 @@ config.py
 .Thrashes
 Thumbs.db
 *.sublime-*
+
+viaduct/static/files/*
