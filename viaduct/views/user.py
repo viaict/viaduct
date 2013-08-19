@@ -104,7 +104,6 @@ def sign_up():
 		db.session.add(user)
 		db.session.commit()
 
-
 		group = Group.query.filter(Group.name=='all').first()
 		group.add_user(user)
 

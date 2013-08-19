@@ -47,7 +47,7 @@ db.session.commit()
 
 # Add the administrator.
 user = User('administrator@svia.nl', bcrypt.hashpw('ictIsAwesome',
-		bcrypt.gensalt()), 'Administrator', 'de beste', '0')
+		bcrypt.gensalt()), 'Administrator', 'de beste', '129181982192818', 2)
 
 db.session.add(user)
 db.session.commit()
@@ -361,7 +361,9 @@ for module in modules:
 
 
 activity_permission = GroupPermission('activity', group_all.id, 1)
+custom_form_permission = GroupPermission('custom_form', group_all.id, 1)
 
+db.session.add(custom_form_permission)
 db.session.add(activity_permission)
 db.session.commit()
 

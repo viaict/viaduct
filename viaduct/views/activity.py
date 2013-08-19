@@ -9,10 +9,11 @@ from werkzeug import secure_filename
 
 from viaduct import application, db
 from viaduct.helpers import flash_form_errors
-from viaduct.forms.activity import CreateForm
+from viaduct.forms.activity import ActivityForm, CreateForm
 from viaduct.models.activity import Activity
 from viaduct.models.custom_form import CustomForm, CustomFormResult
 from viaduct.api.group import GroupPermissionAPI
+from viaduct.models.education import Education
 
 blueprint = Blueprint('activity', __name__)
 
@@ -49,6 +50,13 @@ def get_activity(activity_id = 0):
 	if not activity:
 		return abort(404)
 
+	form = ActivityForm(request.form, current_user)
+
+	# Add education.
+	educations = Education.query.all()
+	form.education_id.choices = \
+			[(e.id, e.name) for e in educations]
+
 	if current_user and activity.form_id:
 		activity.form = CustomForm.query.get(activity.form_id)
 
@@ -59,7 +67,7 @@ def get_activity(activity_id = 0):
 		if form_result:
 			activity.form_data = form_result.data.replace('"', "'")
 
-	return render_template('activity/view_single.htm', activity=activity)
+	return render_template('activity/view_single.htm', activity=activity, form=form)
 
 @blueprint.route('/activities/create/', methods=['GET', 'POST'])
 @blueprint.route('/activities/edit/<int:activity_id>', methods=['GET', 'POST'])

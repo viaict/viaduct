@@ -1,5 +1,6 @@
 {% from "macros/maps.htm" import render_map %}
 {% from "macros/custom_form.htm" import user_fields %}
+{% from "macros/form.htm" import render_field %}
 
 {% extends "content.htm" %}
 
@@ -52,36 +53,30 @@
 
 		<hr>
 
-		{% if current_user and current_user.id %}
+		{% if activity.form %}
+			<form id="custom" action="/forms/submit/{{ activity.form.id }}" enctype="multipart/form-data">
 
-			{% if activity.form %}
-				<form id="custom" action="/forms/submit/{{ activity.form.id }}" enctype="multipart/form-data">
+				{% if current_user and current_user.id %}
+					<p>We hebben je gegevens voor zo ver mogelijk ingevuld!
+				{% else %}
+					<p><a href="{{ url_for('user.sign_in') }}" class="btn btn-huge btn-success">Inloggen</a>
+					<p><b>Geef bij het bestuur van via aan dat je betaald hebt voor lidmaatschap, anders is je inschrijving niet definitief!</b>
 
-					{{ user_fields(current_user) }}
-					{{ activity.form.html | safe }}
+					<input name='registreren' type='hidden' value=1>
+				{% endif %}
 
-					<button id="custom_form" class="btn btn-success">Verzend formulier</button>
-				</form>
-			{% endif %}
-			<hr>
-		{% else %}
-			<p>
-			<a href="{{ url_for('user.sign_in') }}" class="btn btn-huge btn-success">Inloggen</a>
-			
-			<p>Als je al een account hebt kun je inloggen en dan hoef je niet nogmaals
-de meeste informatie op te geven. <b>Je 
-moet echter bij het bestuur van via aangeven dat je betaald hebt voor lidmaatschap, anders is je inschrijving niet definitief!</b>
+				{{ render_field(form.email) }}
+				{{ render_field(form.first_name) }}
+				{{ render_field(form.last_name) }}
+				{{ render_field(form.student_id) }}
+				{{ render_field(form.education_id) }}
 
-			<form id="custom" action="/forms/submit_register/{{ activity.form.id }}" enctype="multipart/form-data">
+				{{ activity.form.html | safe }}
 
-					{{ user_fields(current_user) }}
-					{{ activity.form.html | safe }}
-
-					<button id="custom_form" class="btn btn-success">Registreren en formulier verzenden</button>
-				</form>
-			<hr>
+				<button id="custom_form" class="btn btn-success">Verzend formulier</button>
+			</form>
 		{% endif %}
-
+		<hr>
 		<p>{{ activity.description | markdown }}</p>
 	</div>
 

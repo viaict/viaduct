@@ -1,4 +1,4 @@
-import os
+import os, bcrypt
 
 from flask import flash, get_flashed_messages, redirect, render_template, \
 	request, url_for, abort
@@ -11,6 +11,7 @@ from viaduct import application, db
 from viaduct.helpers import flash_form_errors
 from viaduct.forms.custom_form import CreateForm
 from viaduct.models.user import User
+from viaduct.models.group import Group
 from viaduct.models.custom_form import CustomForm, CustomFormResult
 from viaduct.api.group import GroupPermissionAPI
 
@@ -23,9 +24,6 @@ def view(page=1):
 		return abort(403)
 
 	custom_forms = CustomForm.query.order_by(CustomForm.name.asc())
-
-	#for form in custom_forms:
-	#	form.custom_forms_count = len(CustomFormResult.query.filter(CustomFormResult.form_id == form.id))
 
 	return render_template('custom_form/overview.htm', custom_forms=custom_forms.paginate(page, 20, False))
 
@@ -109,21 +107,51 @@ def submit(form_id=None):
 	if not GroupPermissionAPI.can_read('custom_form'):
 		return abort(403)
 
-	# User needs to be logged in
-	if current_user.id and form_id:
+	response = "success"
 
-		response = "success"
+	if form_id:
+		email = request.form['email'].lower()
 
-		user = User.query.get(current_user.id)
-		
-		# These are definitely there
-		user.first_name = request.form['first_name']
-		user.last_name = request.form['last_name']
-		user.email = request.form['email']
-		user.phone_nr = request.form['phone_nr']
-		
+		# Logged in user
+		if current_user.id:
+			user = User.query.get(current_user.id)
+
+			user.first_name	= request.form['first_name']
+			user.last_name	= request.form['last_name']
+			user.email			= email
+		else:
+			# Check if a non-logged in user that has an account submits request
+			user = User.query.filter(User.email==email).first()
+
+			if not user.id:
+				tmp_password = 'Hello123'
+
+				user = User(
+					email, 
+					bcrypt.hashpw(tmp_password, bcrypt.gensalt()),
+					request.form['first_name'],
+					request.form['last_name'],
+					request.form['student_id'],
+					request.form['education_id']
+				)
+
+				db.session.add(user)
+				db.session.commit()
+
+				group = Group.query.filter(Group.name=='all').first()
+				group.add_user(user)
+
+				db.session.add(group)
+				db.session.commit()
+
+	if not user:
+		response = "error"
+	else:
 		# These might be there
 		try :
+			if request.form['phone_nr']:
+				user.phone_nr	= request.form['phone_nr']
+
 			if request.form['noodnummer']:
 				user.emergency_phone_nr = request.form['noodnummer']
 
@@ -132,35 +160,31 @@ def submit(form_id=None):
 
 			if request.form['dieet[]']:
 				user.diet = ', '.join(request.form['dieet[]'])
-		
+	
 			if request.form['allergie/medicatie']:
 				user.allergy = request.form['allergie/medicatie']
 
 			if request.form['geslacht']:
 				user.gender = request.form['geslacht']
-		
-		# TODO
 		except Exception :
 			pass
 
 		duplicate_test = CustomFormResult.query.filter(
-			CustomFormResult.owner_id == current_user.id, 
+			CustomFormResult.owner_id == user.id, 
 			CustomFormResult.form_id == form_id).first()
 
 		if duplicate_test:
-			result = duplicate_test
-			result.data = request.form['data']
-		
+			result			= duplicate_test
+			result.data	= request.form['data']
+	
 			response = "edit"
 		else:
-			result = CustomFormResult(current_user.id, form_id, request.form['data'])
+			result = CustomFormResult(user.id, form_id, request.form['data'])
 		
 		db.session.add(user)
 		db.session.commit()
 
 		db.session.add(result)
 		db.session.commit()
-	else :
-		response = "error"
 
 	return response

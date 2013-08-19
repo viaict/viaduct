@@ -1,4 +1,4 @@
-from flask.ext.wtf import Form, TextField, TextAreaField, FileField, SelectField, Required
+from flask.ext.wtf import Form, TextAreaField, FileField, TextField, PasswordField, SelectField, FieldList, FormField, SubmitField, Required, Email
 
 class CreateForm(Form):
 	name				= TextField(u'Activity name', validators=[Required()])
@@ -13,3 +13,10 @@ class CreateForm(Form):
 	picture			= FileField(u'Picture')
 	venue				= TextField(u'Venue')
 	form_id			= SelectField('Formulier', coerce=int)
+
+class ActivityForm(Form):
+	email = TextField(u'E-mail address', validators=[Required(), Email()])
+	first_name = TextField(u'First name', validators=[Required()])
+	last_name = TextField(u'Last name', validators=[Required()])
+	student_id = TextField(u'Student ID', validators=[Required()])
+	education_id = SelectField(u'Education', coerce=int)
