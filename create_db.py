@@ -73,11 +73,10 @@ db.session.add(group)
 db.session.commit()
 
 # Grant the permissions.
-permissions = PagePermission(group, page, view=True, create=True, edit=True,
-	delete=True)
+#permissions = PagePermission(group, page, permission=2)
 
-db.session.add(permissions)
-db.session.commit()
+#db.session.add(permissions)
+#db.session.commit()
 
 
 # Add stuff for pimpystuff for pimpy
