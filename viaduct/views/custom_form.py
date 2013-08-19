@@ -1,4 +1,6 @@
-import os, bcrypt
+
+import os, random, bcrypt, smtplib
+from email.mime.text import MIMEText
 
 from flask import flash, get_flashed_messages, redirect, render_template, \
 	request, url_for, abort
@@ -123,8 +125,8 @@ def submit(form_id=None):
 			# Check if a non-logged in user that has an account submits request
 			user = User.query.filter(User.email==email).first()
 
-			if not user.id:
-				tmp_password = 'Hello123'
+			if not user:
+				tmp_password = ''.join(map(lambda x: random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-"), range(14)))
 
 				user = User(
 					email, 
@@ -143,6 +145,21 @@ def submit(form_id=None):
 
 				db.session.add(group)
 				db.session.commit()
+
+				try:
+					msg = MIMEText("Hoi %s %s,\n\nWe hebben een account op de via website voor je gemaakt. Het wachtwoord is '%s'.\n\nMet vriendelijke groet,\nICT commissie" % user.first_name, user.last_name, tmp_password)
+					msg['Subject'] = '[VIA] Registratie op svia.nl'
+					msg['From']		 = 'ict@svia.nl'
+					msg['To'] 		 = email
+
+					# Send the message via our own SMTP server, but don't include the
+					# envelope header.
+					s = smtplib.SMTP('localhost')
+					s.sendmail('ict@svia.nl', [email], msg.as_string())
+					s.quit()
+				except Exception :
+					pass
+
 
 	if not user:
 		response = "error"
