@@ -46,12 +46,6 @@ class User(db.Model):
 	def is_anonymous(self):
 		return self.id == 0
 
-	def get_id(self):
-		return unicode(self.id)
-
-	def get_student_id(self):
-		return self.student_id
-
 	@staticmethod
 	def get_anonymous_user():
 		return User.query.get(0);
