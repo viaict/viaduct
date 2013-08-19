@@ -15,14 +15,14 @@
 			vak </br>
 			<select name=course> <br />
 				{% for course in courses %}
-					<option value="{{ course.id }}" 
+					<option value="{{ course.id }}"
 					{% if course.id == examination.course_id %}
 						selected="selected"
 					{% endif %}
 					>
 					{{course.name}}</option>
 				{% endfor %}
-			</select> 
+			</select>
 			<a href="../course/add" class="btn"><i class="icon-pencil"></i> <strong>nieuw</strong></a><br />
 			studie </br>
 				<select name=education> <br />
@@ -34,11 +34,11 @@
 						>
 						{{education.name}}</option>
 					{% endfor %}
-				</select> 
+				</select>
 				<a href="../education/add" class="btn"><i class="icon-pencil"></i> <strong>nieuw</strong></a><br />
-			
-		  <p><input type=file name=file>
-			 <input type=submit value=Upload>
+
+			<input type=file name=file>
+			<input type=submit value=Upload>
 		</form>
 	</fieldset>
 {% endblock %}

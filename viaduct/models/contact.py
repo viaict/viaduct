@@ -11,8 +11,8 @@ class Contact(db.Model):
 
 	location = db.relationship('Location',
 			backref=db.backref('contacts', lazy='dynamic'))
-	
-	def __init__(self, name, email, phone_nr, location):
+
+	def __init__(self, name='', email='', phone_nr='', location=None):
 		self.name = name
 		self.email = email
 		self.phone_nr = phone_nr

@@ -6,8 +6,8 @@
 	<li>
 
 		{% if back %}
-	  		<a href="{{ back.url }}"><i class="icon-arrow-left"></i> Go back</a>
-	  	{% endif %}
+			<a href="{{ back.url }}"><i class="icon-arrow-left"></i> Go back</a>
+		{% endif %}
 
 		{% for page in pages %}
 
@@ -19,6 +19,7 @@
 				</a>
 
 				{% set children = page.activities if page.activities else page.children %}
+				{% set children = NavigationAPI.remove_unauthorized(children) %}
 
 				{% if children %}
 					<ul class="nav nav-stacked nav-tabs">

@@ -1,6 +1,6 @@
 {% extends "pimpy/view_page.htm" %}
 
-{%block content %}
+{% block content %}
 	<div class="span8">
 		{% for group_header in list_items: %}
 			<h1> {{ group_header }} </h1>
@@ -10,7 +10,7 @@
 					<ul class="dropdown-menu">
 						{% for status_meaning in list_item.get_status_meanings(): %}
 							<li>
-								<a onclick="update_task({{ list_item.id }}, {{ status_meaning[2] }})"  class="{{ status_meaning[1] }} "> {{ status_meaning[0] }}</a>
+								<a onclick="update_task({{ list_item.id }}, {{ status_meaning[2] }})" class="{{ status_meaning[1] }} "> {{ status_meaning[0] }}</a>
 							</li>
 						{% endfor %}
 					</ul>

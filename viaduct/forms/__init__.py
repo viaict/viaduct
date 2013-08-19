@@ -9,6 +9,10 @@ def register_forms(path):
 	application_path = os.path.dirname(os.path.abspath(application.root_path))
 
 	for filename in os.listdir(path):
+
+		if filename[-3:] != ".py":
+			continue
+
 		file_path = os.path.join(path, filename)
 
 		name = os.path.splitext(file_path)[0]

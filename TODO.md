@@ -1,78 +1,34 @@
-== site ==
+## sign-in/sign-up, BRAM
+* extra informatie vragen bij sign up
+* wat is er aan de hand als je je inloggegevens kwijt bent?
 
-* links (van het menu) moeten niet automagisch gegeneerd worden, moeten vanuit
-een database geladen worden zodat je kan aangeven waaruit je menu bestaat.
-    - MODULE: navigation
-    - DOOR: BAS
+## Forms, FABIEN
+* tutorial
+* Formulier aanmaken via modal / ajax, dat je niet eerst je formulieren hoeft te maken en dan pas kan selecteren (GAAT NIET GEBEUREN)
+* Mooier resultaten zien (nu zie je puur $POST data)
+* Automatisch herkennen of formulier al is ingevuld / pre-vullen oid (of uitklapbaar zeg maar, dat je niet meteen in scherm hebt)
+* Paar extra 'shortcuts' en shortcuts duidelijker vermelden ( Poep | user geeft je bijv. student nr / email / naam / studie die je een gebruiker wilt laten invullen (GAAT NIET GEBEUREN)
+* Toevoegen dat wanneer formulier wordt ingevuld, het de gebruiker data ook update als die zou ontbreken (bijv. telefoon nummer, wordt het nu ingevuld dan is het wel chill om die te blijven houden)
 
-    - als je nieuwe artikelen (Model: pages) aanmaakt moeten deze automagisch
-    worden toegevoegd
-    + je moet zelf links kunnen toevoegen (/verwijderen)
-    + je moet externe links kunnen toevoegen.
-    + Modules moeten in routes de parent/kind/nogmeerkind structuur aanhouden
-      (bv. bestuur/bestuursblog/<int:blog_entry_id>)
-      (bv. activities/activity/<int:activity_id>)
-    - Rechten voor niet page-pagina's. Neem PimPy en de Activiteiten, niet
-    iedereen mag hier bewerken, maar wel kijken, maar kijken mag soms weer
-    niet. Zo mag niet ieder lid /navigation bekijken, dat is onnodig. Hier moet
-    dus een goed systeem voor zijn.
-    + Volgorde van de navigatie instelbaar maken
+## files uploaden
+* alles?
 
-* sign-in/sign-up moet uitgebreid worden voor als je het wachtwoord vergeten bent.
-    - MODULE: user
-    - DOOR:
-    - afhankelijkheid: mail-smtp-gegevens (flask-mail) moeten bekend zijn
-    - Je krijgt een mailtje met een link om je wachtwoord opnieuw in te stellen.
-    De link moet maar een bepaalde tijd geldig zijn en mag niet achterhaalbaar
-    zijn.
-
-* iets met pages aanmaken (gaat stephan nog even afmaken) als je foo/bar aanmaakt
-maar foo bestaat nog niet moet foo ook aangemaakt worden. Dit heeft te maken met
-de navigatiehierarchie.
-    - DOOR: STEPHAN
-
-    - Zojuist getest. Werkt niet op /index1, wel op page1. Misschien een
-    probleem met permissions?
-
-* Page history op basis van diff. Er was ook nog iets met de revisions, dat je
-page history hebt en terugkan
-
-* Forms aanmaken. Er was een mooi systeem bedacht met 5 databasetabellen. Dit
-bestond alleen nog maar in Stephans hoofd. Stephan moet even de tabellen
-uittekenen.
-
-* activiteitenbeheren.
-    - DOOR: FABIEN
-    + Activiteiten kunnen aangemaakt worden
-    + Routing moet met goede structuur (zie navigation)
-    + Activiteiten edit
-    + Oude Plaatje verwijderen bij plaatje edit
-    + Google maps plugin (geolocate API : adres invoert)
-    - Google maps plugin bij lokatie (hidden, met uitklap optie)
-    - Facebook event (google+) aanmaken
-    - Attending op svia.nl
-    - Facebook event comments scrapen
-
-* files uploaden. Uploaden kan al
-    - er moet nog een beheringsysteem
-
+## wiki-systeem
 * zoeksysteem
+* categorieen
 
-== PIMPY ==
-    - DOOR: MAARTEN
+## pimpy, MAARTEN
+* tasks aanpasbaar maken
+* naar de parser kijken (crazy ass fouten)
+* tussenscherm na het uploaden van notulen
 
-== wiki (mediawiki) ==
+## boekensysteem
+* alles?
 
-== vacaturenbank ==
+## spelfout/taal-consistentie check doen
+Alles moet eigenlijk even nagelopen worden of het allemaal 1 taal is en spelfoutloos.
 
-== boekensysteem ==
+## mail
+* alles?
 
-== tentamenbank ==
-    - door: Bram
 
-== mail ==
-    - door: Ilja
-
-== databases: ==
-De databasemodellen die op veel plekken nodig zijn, zoals opleidingen en vakken,
-moeten afgemaakt zijn zodat alle applicaties daar mee kunnen werken.

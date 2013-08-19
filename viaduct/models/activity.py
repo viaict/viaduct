@@ -17,10 +17,11 @@ class Activity(db.Model):
 	picture				= db.Column(db.String(255))
 	venue					= db.Column(db.Integer) # venue ID
 	updated_time	= db.Column(db.DateTime, default=datetime.datetime.now())
-	
+	form_id				= db.Column(db.Integer, db.ForeignKey('custom_form.id'))
+
 	owner = db.relationship('User', backref=db.backref('activities', lazy='dynamic'))
 
-	def __init__(self, owner_id=None, name="", description="", start_time=None, end_time=None, location="Sciencepark, Amsterdam", privacy="public", price="gratis", picture=None, venue=1):
+	def __init__(self, owner_id=None, name="", description="", start_time=None, end_time=None, location="Sciencepark, Amsterdam", privacy="public", price="gratis", picture=None, venue=1, form_id=None):
 		if not start_time:
 			today = datetime.datetime.now()
 			start_time = datetime.datetime(today.year, today.month, today.day, 17)
@@ -36,6 +37,7 @@ class Activity(db.Model):
 		self.price = price
 		self.picture = picture
 		self.venue = 1
+		self.form_id = form_id
 
 	def __repr__(self):
 		return '<Activity(%s, "%s", "%s")>' % (self.id, self.start_time,
@@ -44,10 +46,10 @@ class Activity(db.Model):
 	def get_time(self):
 		if self.start_time.month == self.end_time.month:
 			if self.start_time.day == self.end_time.day:
-				return self.start_time.strftime("%A %d %b, %H:%M - ") + self.end_time.strftime("%H:%M") 
+				return self.start_time.strftime("%A %d %b, %H:%M - ") + self.end_time.strftime("%H:%M")
 			else:
-				return self.start_time.strftime("%a. %d %b (%H:%M) - ")  + \
-					self.end_time.strftime("%a. %d (%H:%M) %b") 
+				return self.start_time.strftime("%a. %d %b (%H:%M) - ") + \
+					self.end_time.strftime("%a. %d (%H:%M) %b")
 
 	def get_short_description(self, characters):
 
@@ -56,5 +58,5 @@ class Activity(db.Model):
 			words = short_description.split(' ')[:-1]
 
 			return ' '.join(words) + '...'
-		
+
 		return self.description

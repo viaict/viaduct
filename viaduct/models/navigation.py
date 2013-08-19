@@ -1,4 +1,4 @@
-from viaduct import db
+from viaduct import db, application
 from viaduct.models.activity import Activity
 
 import inspect
@@ -16,8 +16,8 @@ class NavigationEntry(db.Model):
 	position = db.Column(db.Integer)
 
 	parent = db.relationship('NavigationEntry', remote_side=[id],
-            primaryjoin=('NavigationEntry.parent_id==NavigationEntry.id'),
-            backref="children")
+			primaryjoin=('NavigationEntry.parent_id==NavigationEntry.id'),
+			backref="children")
 
 	def __init__(self, parent, title, url, external, activity_list, position):
 		if parent:
@@ -32,24 +32,3 @@ class NavigationEntry(db.Model):
 	def __repr__(self):
 		return '<NavigationEntry(%s, %s, "%s", "%s", %s)>' % (self.id,
 				self.parent_id, self.title, self.url, self.external)
-
-	@classmethod
-	def get_entries(cls, inc_activities=False):
-		entries = db.session.query(cls).filter_by(parent_id=None)\
-				.order_by(cls.position).all()
-
-		# Fill in activity lists.
-		if inc_activities:
-			for entry in entries:
-				if entry.activity_list:
-					entry.activities = []
-					activities = db.session.query(Activity)\
-							.filter(Activity.end_time > datetime.datetime.now())\
-							.all()
-
-					for activity in activities:
-						entry.activities.append(NavigationEntry(entry,
-								activity.name, '/activities/' + str(activity.id),
-								False, False, 0))
-
-		return entries

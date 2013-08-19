@@ -20,8 +20,8 @@ class Vacancy(db.Model):
 	company = db.relationship('Company', backref=db.backref('vacancies',
 			lazy='dynamic'))
 
-	def __init__(self, title, description, start_date, end_date,
-			contract_of_service, workload, company):
+	def __init__(self, title='', description='', start_date=None, end_date=None,
+			contract_of_service=None, workload='', company=None):
 		self.title = title
 		self.description = description
 		self.start_date = start_date

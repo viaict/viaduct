@@ -1,0 +1,44 @@
+{% from "macros/form.htm" import render_field, render_button %}
+
+{% extends "content.htm" %}
+
+{% block content %}
+
+<form method="post">
+	{{ form.csrf_token }}
+
+	<h1>Eigen formulier</h1>
+	<p><strong>LET OP</strong> automatisch wordt van de gebruiker het volgende
+	gevraagd:
+
+	<ol>
+		<li>Naam
+		<li>Email
+		<li>Telefoon nummer
+	</ol>
+
+	<hr>
+
+	{{ render_field(form.name, class="span6") }}
+
+	<input type="hidden" name="origin_holder_for_edits" value="{{ form.origin.data }}">
+
+	<div id="formbuilder"></div>
+	<script src="/static/js/formbuilder.js "></script>
+
+	{{ render_button(form.submit) }}
+</form>
+
+<script>
+	$(document).ready(function() {
+		$('#formbuilder').formbuilder();
+
+			// On load get the origin original data for edits
+			$("textarea[name='origin']")
+				.val($("input[name='origin_holder_for_edits']").val())
+				.trigger('keyup');
+
+	});
+</script>
+
+{% endblock %}

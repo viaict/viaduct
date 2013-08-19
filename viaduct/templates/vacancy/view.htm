@@ -1,11 +1,33 @@
-{% from "macros/pagination.htm" import render_pagination %}
+{% from "macros/form.htm" import render_field, render_button, render_textarea, render_datefield, render_select %}
 
 {% extends "content.htm" %}
 
 {% block content %}
-	<ul>
-		{% for vacancy in vacancies.items %}
-			<li>{{ vacancy.title }}</li>
-		{% endfor %}
-	</ul>
+	<form method="post">
+		<fieldset>
+			<legend>Vacature {% if vacancy.id %}bewerken{% else %}aanmaken{% endif %}</legend>
+
+			{{ form.csrf_token }}
+
+			{{ render_field(form.title) }}
+			{{ render_textarea(form.description) }}
+			{{ render_datefield(form.start_date) }}
+			{{ render_datefield(form.end_date) }}
+			{{ render_select(form.contract_of_service) }}
+			{{ render_field(form.workload) }}
+			{{ render_select(form.company_id) }}
+
+			{% if GroupPermissionAPI.can_write('vacancy') %}
+				{{ render_button(form.submit) }}
+			{% endif %}
+		</fieldset>
+	</form>
+
+	{% if vacancy.id and GroupPermissionAPI.can_write('vacancy') %}
+		<form action="{{ url_for('vacancy.delete', vacancy_id=vacancy.id) }}" method="post">
+			<fieldset>
+				<button class="btn btn-danger" type="submit">Verwijderen</button>
+			</fieldset>
+		</form>
+	{% endif %}
 {% endblock %}

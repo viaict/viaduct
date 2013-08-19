@@ -30,7 +30,7 @@
 		<ul>
 			Groups
 			<ul class="nav nav-pills nav-stacked pimpy-menu-group">
-				<li {% if group_id == 'all'  %} class="active" {% endif %} >
+				<li {% if group_id == 'all' %} class="active" {% endif %} >
 					<a href="{{ url_for(endpoints['view_chosentype_chosenpersonal']) }}">all</a>
 				</li>
 				{% for group in groups %}

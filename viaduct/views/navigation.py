@@ -2,35 +2,39 @@ from flask import Blueprint, render_template, abort, request, flash, redirect,\
 		url_for
 from flask.ext.login import current_user
 
-from viaduct import db
+from viaduct import db, application
 from viaduct.helpers import flash_form_errors
 from viaduct.models.navigation import NavigationEntry
 from viaduct.forms import NavigationEntryForm
 from viaduct.api.navigation import NavigationAPI
-from viaduct.blueprints.page.models import Page
+from viaduct.api.group import GroupPermissionAPI
+from viaduct.models.page import Page
 
 import json
 import re
 
-blueprint = Blueprint('navigation', __name__)
+blueprint = Blueprint('navigation', __name__, url_prefix='/navigation/')
 
-@blueprint.route('/navigation/edit')
+@blueprint.route('/edit/')
 def edit_back():
-	return redirect(url_for('navigation.view'))
-
-@blueprint.route('/navigation/')
-def view():
-	if not current_user or current_user.email != 'administrator@svia.nl':
+	if not GroupPermissionAPI.can_read('navigation'):
 		return abort(403)
 
-	entries = NavigationEntry.get_entries()
+	return redirect(url_for('navigation.view'))
+
+@blueprint.route('/')
+def view():
+	if not GroupPermissionAPI.can_read('navigation'):
+		return abort(403)
+
+	entries = NavigationAPI.get_entries()
 
 	return render_template('navigation/view.htm', nav_entries=entries)
 
-@blueprint.route('/navigation/create', methods=['GET', 'POST'])
-@blueprint.route('/navigation/edit/<int:entry_id>', methods=['GET', 'POST'])
+@blueprint.route('/create/', methods=['GET', 'POST'])
+@blueprint.route('/edit/<int:entry_id>/', methods=['GET', 'POST'])
 def edit(entry_id=None):
-	if not current_user or current_user.email != 'administrator@svia.nl':
+	if not GroupPermissionAPI.can_read('navigation'):
 		return abort(403)
 
 	if entry_id:
@@ -88,7 +92,7 @@ def edit(entry_id=None):
 			db.session.commit()
 
 			if not form.external.data:
-				
+
 				# Check if the page exists, if not redirect to create it
 				page = Page.get_by_path(form.url.data)
 				if not page:
@@ -122,9 +126,9 @@ def edit(entry_id=None):
 	return render_template('navigation/edit.htm', entry=entry, form=form,
 			parents=parents)
 
-@blueprint.route('/navigation/delete/<int:entry_id>', methods=['POST'])
+@blueprint.route('/delete/<int:entry_id>/', methods=['POST'])
 def delete(entry_id):
-	if not current_user or current_user.email != 'administrator@svia.nl':
+	if not GroupPermissionAPI.can_write('navigation'):
 		return abort(403)
 
 	entry = db.session.query(NavigationEntry).filter_by(id=entry_id).first()
@@ -143,6 +147,9 @@ def delete(entry_id):
 
 @blueprint.route('/navigation/reorder', methods=['POST'])
 def reorder():
+	if not GroupPermissionAPI.can_write('navigation'):
+		return abort(403)
+
 	entries = json.loads(request.form['entries'])
 	NavigationAPI.order(entries, None)
 

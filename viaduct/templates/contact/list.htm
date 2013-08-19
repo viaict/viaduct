@@ -1,0 +1,17 @@
+{% from 'macros/pagination.htm' import render_pagination %}
+
+{% extends 'content.htm' %}
+
+{% block content %}
+	{% if GroupPermissionAPI.can_write('contact') %}
+		<p><a class="btn" href="{{ url_for('contact.edit') }}">Nieuwe contactpersoon</a>
+		</p>
+	{% endif %}
+	<ul>
+		{% for contact in contacts.items %}
+			<li><a href="{{ url_for('contact.edit', contact_id=contact.id) }}">{{ contact.name }}</a></li>
+		{% endfor %}
+	</ul>
+
+	{{ render_pagination(contacts, 'contact.list') }}
+{% endblock %}

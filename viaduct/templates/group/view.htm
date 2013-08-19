@@ -9,28 +9,30 @@
 	<fieldset>
 		<legend>Groups</legend>
 
+		{{ form.csrf_token }}
+
 		<table class="table table-bordered table-striped">
 			<thead>
 				<tr>
 					<th>Group name</th>
 					<th></th>
+					<th></th>
 				</tr>
 			</thead>
 
 			<tbody>
-				{% for group in groups.items %}
+				{% for group, form_entry in groups %}
 					<tr>
 						<td>
-							<label class="checkbox">
-								<input type=checkbox name="select" value="{{ group.id }}"/>
-								<a href="{{ url_for('group.view_users', group_id=group.id) }}">{{ group.name }}</a>
-							</label>
+							{{ form_entry.csrf_token }} {{ form_entry.select }} {{ group.name }}
 						</td>
 
 						<td>
-							<a href="{{ url_for('group.edit', group_id=group.id) }}">
-								<i class="icon-pencil"></i>
-							</a>
+							<a href="{{ url_for('group.view_users', group_id=group.id) }}"><i class="icon-user"></i> View Members</a>
+						</td>
+
+						<td>
+							<a href="{{ url_for('group.edit_permissions', group_id=group.id) }}"><i class="icon-key"></i> Edit Permissions</a>
 						</td>
 					</tr>
 				{% endfor %}
@@ -39,11 +41,13 @@
 
 		<div class="btn-toolbar">
 			<div class="btn-group">
-				<a href="{{ url_for('group.create') }}" class="btn">Create</a>
-				<button type="submit" class="btn">Delete</button>
+				{% if GroupPermissionAPI.can_write('group') %}
+					<a href="{{ url_for('group.create') }}" class="btn">Create</a>
+					<button id="{{ form.delete_group.id }}" name="{{ form.delete_group.id }}" type="submit" class="btn">{{ form.delete_group.label.text }}</button>
+				{% endif %}
 			</div>
 
-			{{ render_pagination(groups, 'group.view') }}
+			{{ render_pagination(pagination, 'group.view') }}
 		</div>
 	</fieldset>
 </form>

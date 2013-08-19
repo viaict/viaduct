@@ -1,0 +1,45 @@
+{% from "macros/pagination.htm" import render_pagination %}
+
+{% extends "content.htm" %}
+
+{%block content %}
+
+{% if GroupPermissionAPI.can_write('custom_form') %}
+<div class="btn-group">
+	<a href="/forms/create/" class="btn btn-success">
+		<i class="icon-plus"></i>
+		Nieuw formulier
+	</a>
+</div>
+{% endif %}
+
+<table class="table">
+<thead>
+<tr>
+	<th>Formulier naam<th>
+	<th></th>
+
+{% for form in custom_forms.items %}
+<tr>
+	<td>{{ form.name }}
+	<td>
+
+		{% if GroupPermissionAPI.can_write('custom_form') %}
+		<a href="/forms/edit/{{ form.id }}" class="btn btn-mini btn-warning">
+			<i class="icon-pencil"></i>
+			Aanpassen
+		</a>
+	
+		<a href="/forms/view/{{ form.id }}">
+			({{ form.custom_forms_count }} inzendingen) Inzien
+		</a>
+		{% endif %}
+{% endfor %}
+
+</table>
+
+<hr>
+
+	{{ render_pagination(custom_forms, 'custom_form.view') }}
+{% endblock %}
+

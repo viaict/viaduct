@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
 from viaduct import db, login_manager
-from viaduct.models import GroupPermission, UserPermission
+from viaduct.models.education import Education
+from viaduct.models import Group#, GroupPermission
 
 class User(db.Model):
 	__tablename__ = 'user'
@@ -11,9 +12,20 @@ class User(db.Model):
 	password = db.Column(db.String(60))
 	first_name = db.Column(db.String(256))
 	last_name = db.Column(db.String(256))
+	shirt_size = db.Column(db.Enum('Small', 'Medium', 'Large'))
+	allergy = db.Column(db.String(1024)) # Allergy / medication
+	diet = db.Column(db.Enum('Vegetarisch', 'Veganistisch', 'Fruitarier'))
+	gender = db.Column(db.Enum('Man', 'Vrouw', 'Geen info'))
+	phone_nr = db.Column(db.String(16))
+	emergency_phone_nr = db.Column(db.String(16))
+	description = db.Column(db.String(1024)) # Description of user
 	student_id = db.Column(db.String(256))
+	education_id = db.Column(db.Integer, db.ForeignKey('education.id'))
 
-	def __init__(self, email=None, password=None, first_name=None, last_name=None, student_id=None):
+	education = db.relationship(Education,
+		backref=db.backref('user', lazy='dynamic'))
+
+	def __init__(self, email=None, password=None, first_name=None, last_name=None, student_id=None, education_id=None):
 		if not email:
 			self.id = 0
 
@@ -22,6 +34,7 @@ class User(db.Model):
 		self.first_name = first_name
 		self.last_name = last_name
 		self.student_id = student_id
+		self.education_id = education_id
 
 	def is_authenticated(self):
 		return self.id != 0
@@ -41,34 +54,6 @@ class User(db.Model):
 	@staticmethod
 	def get_anonymous_user():
 		return User.query.get(0);
-
-	def has_permission(self, name):
-		# Check if the permission has been allowed to or denied from the user.
-		permission = self.permissions.filter(UserPermission.name==name).order_by(UserPermission.allowed.desc()).first()
-
-		if permission:
-			return permission.allowed
-
-		# Check if the permission has been allowed to or denied from any groups
-		# associated with the user.
-		permission = self.groups.join(GroupPermission).filter(GroupPermission.name==name).order_by(GroupPermission.allowed.desc()).first()
-
-		if permission:
-			return permission.allowed
-
-		# Assume the permission has been denied from the user.
-		return False
-
-	def add_permission(self, name, allowed=True):
-		# Clean up all previous permissions.
-		self.delete_permission(name)
-
-		# Set the permission for the user.
-		db.session.add(UserPermission(self, name, allowed))
-		db.session.commit()
-
-	def delete_permission(self, name):
-		self.permissions.filter(UserPermission.name==name).delete()
 
 	def __repr__(self):
 		return '<User({0}, "{1}", "{2}", "{3}", "{4}", "{5}">'.format(self.id,

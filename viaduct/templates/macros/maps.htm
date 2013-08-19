@@ -1,14 +1,14 @@
 {% macro render_map(width, height, address) %}
 
 	<style>
-	  #map-canvas { width:100%; height: {{ height }}px; }
+		#map-canvas { width:100%; height: {{ height }}px; }
 	</style>
 
 	<script	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCtbv4xNquOEZhyX_Szi5wNme7n49zaiw4&sensor=true">
 	</script>
 
-  <script>
-    var latlong = new google.maps.LatLng(0, 0);
+	<script>
+	var latlong = new google.maps.LatLng(0, 0);
 
 		function initialize() {
 			var mapOptions = {
@@ -18,7 +18,7 @@
 			};
 
 			var map = new google.maps.Map(document.getElementById("map-canvas"),
-				  mapOptions);
+					mapOptions);
 
 			var marker = new google.maps.Marker({
 				position: latlong,
@@ -36,7 +36,7 @@
 						function(data) {
 							if (! data.results)
 								data = JSON.parse(data);
-					
+
 							loc = data.results[0].geometry.location;
 							latlong = new google.maps.LatLng(loc.lat, loc.lng);
 							initialize();
@@ -45,8 +45,8 @@
 					loaded = true;
 				}
 			});
-    });
-  </script>
+	});
+	</script>
 
-  <div id="map-canvas"></div>
+	<div id="map-canvas"></div>
 {% endmacro %}

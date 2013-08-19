@@ -4,23 +4,21 @@
 
 {% block title %}Tentamens{% endblock %}
 
-{%block page %}
+{% block page %}
 	<fieldset>
 		<legend>Tentamens</legend>
 		{% if message != "" %}
 		<div class="alert alert-block">
-		  <h4>
-		  	{{message}}
-		  </h4>
+			<h4>{{ message }}</h4>
 		</div>
 		{% endif %}
 		<div class="row">
-		  <div class="span12">
-		    <form method="get" action="" enctype=multipart/form-data class="form-inline" >
-		      <input name="search" id="search" class="span5" type="text"  placeholder="Zoek op titel, vak of opleiding" value="{{search}}" onkeypress="searchKeyPress(event);"></input>
-		      <button type="submit" class="btn btn-primary"> <i class="icon-search icon-white" id="submit"></i></button>
-		    </form>
-		  </div>
+			<div class="span12">
+				<form method="get" action="" enctype=multipart/form-data class="form-inline" >
+					<input name="search" id="search" class="span5" type="text" placeholder="Zoek op titel, vak of opleiding" value="{{search}}" onkeypress="searchKeyPress(event);"></input>
+					<button type="submit" class="btn btn-primary"> <i class="icon-search icon-white" id="submit"></i></button>
+				</form>
+			</div>
 		</div>
 		<a href="add" class="btn"><i class="icon-pencil"></i> <strong>Nieuw tentamen</strong></a>
 		<table class="table table-bordered table-striped">
@@ -47,8 +45,8 @@
 						</td>
 						<td>
 							<a href="edit?edit={{ (examination.id) }}"><i class="icon-pencil"></i></a>
-	             			<a onclick="confirmation({{examination.id}})" role="button" data-toggle="modal" style="cursor: pointer;"><i class="icon-remove"></i></a>
-	             		</td>
+							<a onclick="confirmation({{examination.id}})" role="button" data-toggle="modal" style="cursor: pointer;"><i class="icon-remove"></i></a>
+						</td>
 					</tr>
 				{% endfor %}
 			</tbody>
@@ -57,12 +55,12 @@
 <script>
 function searchKeyPress(e)
 {
-    // look for window.event in case event isn't passed in
-    if (typeof e == 'undefined' && window.event) { e = window.event; }
-    if (e.keyCode == 13)
-    {
-        document.getElementById('submit').click();
-    }
+	// look for window.event in case event isn't passed in
+	if (typeof e == 'undefined' && window.event) { e = window.event; }
+	if (e.keyCode == 13)
+	{
+		document.getElementById('submit').click();
+	}
 }
 </script>
 

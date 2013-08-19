@@ -3,14 +3,18 @@
 {% extends "content.htm" %}
 
 {%block content %}
-<form action="" method="post" name="user_view">
-	<table class="table table-bordered table-striped">
+<h1>Gebruiker overzicht</h1>
+
+<form method="post" name="user_view">
+	<table class="table table-striped">
 		<thead>
 			<tr>
-				<th>E-mail address</th>
-				<th>First name(s)</th>
-				<th>Last name</th>
-				<th>Student ID</th>
+				<th>E-mail adres
+				<th>Voornaam
+				<th>Achternaam
+				<th>Student ID
+				<th>Study
+				<th>
 			</tr>
 		</thead>
 
@@ -22,22 +26,30 @@
 							<input type=checkbox name="select" value="{{ user.id }}" />
 							{{ user.email }}
 						</label>
-					</td>
-
-					<td>{{ user.first_name }}</td>
-					<td>{{ user.last_name }}</td>
-					<td>{{ user.student_id }}</td>
+					<td>{{ user.first_name }}
+					<td>{{ user.last_name }}
+					<td>{{ user.student_id }}
+					<td>{{ user.education.name }}
+					<td>
+						<a class="btn btn-mini btn-primary" href="{{ url_for('user.view_single', user_id=user.id) }}">
+							Bekijken
+						</a>
 				</tr>
 			{% endfor %}
 		</tbody>
 	</table>
 
 	<div class="btn-group">
-		<a href="/users/create" class="btn">Create</a>
-		<button type="submit" class="btn">Delete</button>
+		<a href="/users/create" class="btn btn-success">
+			<i class="icon-user"></i> Gebruiker aanmaken
+		</a>
+
+		<button type="submit" class="btn btn-danger">
+			<i class="icon-remove"></i>
+			Verwijderen
+		</button>
 	</div>
 
 	{{ render_pagination(users, 'user.view') }}
 </form>
 {% endblock %}
-

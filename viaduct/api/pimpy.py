@@ -6,6 +6,7 @@ from viaduct.models import Minute, Task
 
 from viaduct import db, application
 
+from viaduct.api.group import GroupPermissionAPI
 
 import datetime
 import re
@@ -24,6 +25,8 @@ class PimpyAPI:
 
 		In case of succes the minute is entered into the database
 		"""
+		if not GroupPermissionAPI.can_write('pimpy'):
+			abort(403)
 
 		try:
 			date = datetime.datetime.strptime(date, DATE_FORMAT)
@@ -63,6 +66,8 @@ class PimpyAPI:
 
 		In case of succes the task is entered into the database
 		"""
+		if not GroupPermissionAPI.can_write('pimpy'):
+			abort(403)
 
 		if group_id == 'all':
 			return False, "Group can not be 'all'"
@@ -100,6 +105,9 @@ class PimpyAPI:
 
 		In case of succes the task is edited in the database.
 		"""
+		if not GroupPermissionAPI.can_write('pimpy'):
+			abort(403)
+
 		if task_id==-1:
 			return False, "no task_id given"
 
@@ -220,6 +228,8 @@ class PimpyAPI:
 		where group_id is the group's id
 		and comma_sep is a string with comma seperated users.
 		"""
+		if not GroupPermissionAPI.can_read('pimpy'):
+			abort(403)
 
 		group = Group.query.filter(Group.id==group_id).first()
 		if group == None:
@@ -253,13 +263,10 @@ class PimpyAPI:
 		return found_users, ""
 
 	@staticmethod
-	def check_user_is_logged_in():
-		if not current_user.is_authenticated():
-			abort(401)
-		return ""
-
-	@staticmethod
 	def get_navigation_menu(group_id, personal, type):
+		if not GroupPermissionAPI.can_read('pimpy'):
+			abort(403)
+
 		groups = current_user.groups.all()
 
 		endpoint = 'pimpy.view_' + type
@@ -282,6 +289,8 @@ class PimpyAPI:
 
 	@staticmethod
 	def get_tasks(group_id, personal):
+		if not GroupPermissionAPI.can_read('pimpy'):
+			abort(403)
 		# TODO: only return tasks with status != completed
 
 		list_items = {}
@@ -330,6 +339,9 @@ class PimpyAPI:
 
 	@staticmethod
 	def get_minutes(group_id):
+		if not GroupPermissionAPI.can_read('pimpy'):
+			abort(403)
+
 		list_items = {}
 
 		if group_id != 'all':
@@ -348,6 +360,9 @@ class PimpyAPI:
 		"""
 		Loads (and thus views) specifically one minute
 		"""
+		if not GroupPermissionAPI.can_read('pimpy'):
+			abort(403)
+
 		list_items = {}
 		query = Minute.query.filter(Minute.id==minute_id)
 		group = Group.query.filter(Group.id==group_id).first()

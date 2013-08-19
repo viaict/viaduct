@@ -11,6 +11,8 @@ from viaduct import application, db
 from viaduct.helpers import flash_form_errors
 from viaduct.forms.activity import CreateForm
 from viaduct.models.activity import Activity
+from viaduct.models.custom_form import CustomForm, CustomFormResult
+from viaduct.api.group import GroupPermissionAPI
 
 blueprint = Blueprint('activity', __name__)
 
@@ -23,6 +25,8 @@ def allowed_file(filename):
 @blueprint.route('/activities/page/<int:page>', methods=['GET', 'POST'])
 @blueprint.route('/activities/<string:archive>/page/<int:page>', methods=['GET', 'POST'])
 def view(archive="", page=1):
+	#if not GroupPermissionAPI.can_read('activity'):
+	#	return abort(403);
 
 	if archive == "archive":
 		activities = Activity.query \
@@ -37,17 +41,34 @@ def view(archive="", page=1):
 
 @blueprint.route('/activities/<int:activity_id>', methods=['GET', 'POST'])
 def get_activity(activity_id = 0):
-	activity = Activity.query.filter(Activity.id == activity_id).first()
+	if not GroupPermissionAPI.can_read('activity'):
+		return abort(403);
+
+	activity = Activity.query.get(activity_id)
+
+	if not activity:
+		return abort(404)
+
+	if current_user and activity.form_id:
+		activity.form = CustomForm.query.get(activity.form_id)
+
+		form_result = CustomFormResult.query \
+			.filter(CustomFormResult.form_id == activity.form_id) \
+			.filter(CustomFormResult.owner_id == current_user.id).first()
+
+		if form_result:
+			activity.form_data = form_result.data.replace('"', "'")
+
 	return render_template('activity/view_single.htm', activity=activity)
 
 @blueprint.route('/activities/create/', methods=['GET', 'POST'])
 @blueprint.route('/activities/edit/<int:activity_id>', methods=['GET', 'POST'])
 def create(activity_id=None):
-	if not current_user or current_user.email != 'administrator@svia.nl':
-		return abort(403)
+	if not GroupPermissionAPI.can_write('activity'):
+		return abort(403);
 
 	if activity_id:
-		activity = Activity.query.filter(Activity.id == activity_id).first()
+		activity = Activity.query.get(activity_id)
 
 		if not activity:
 			abort(404)
@@ -55,6 +76,13 @@ def create(activity_id=None):
 		activity = Activity()
 
 	form = CreateForm(request.form, activity)
+
+	# Add companies.
+	form.form_id.choices = \
+		[(c.id, c.name) for c in CustomForm.query.order_by('name')]
+
+	# Set default to "No form"
+	form.form_id.choices.insert(0, (0, 'Geen formulier'))
 
 	if request.method == 'POST':
 		valid_form = True
@@ -66,7 +94,7 @@ def create(activity_id=None):
 
 		start_date = form.start_date.data
 		start_time = form.start_time.data
-		
+
 		end_date = form.end_date.data
 		end_time = form.end_time.data
 
@@ -93,11 +121,14 @@ def create(activity_id=None):
 
 		venue	= 1 # Facebook ID location, not used yet
 
+		if form.form_id and form.form_id.data > 0:
+			activity.form_id = form.form_id.data
+
 		if valid_form:
-			activity.name = name 
+			activity.name = name
 			activity.description = description
 			activity.start_time = start
-			activity.end_time = end 
+			activity.end_time = end
 			activity.location = location
 			activity.price = price
 			activity.picture = picture

@@ -1,38 +1,93 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, flash, redirect, render_template, request, \
+		url_for, jsonify, abort
 
-from application import db
+from viaduct import db
+from viaduct.models.contact import Contact
+from viaduct.models.location import Location
+from viaduct.utilities import validate_form
+from viaduct.forms import ContactForm
+from viaduct.api.group import GroupPermissionAPI
 
-contact_information = Blueprint('contact_information', __name__)
+blueprint = Blueprint('contact', __name__, url_prefix='/contacts/')
 
-@contact_information.route('/contact_information/', methods=['GET', 'POST'])
-@contact_information.route('/contact_information/<int:page>/', methods=['GET', 'POST'])
-def view(page=1):
-
-	contact_information = contact_information.query.paginate(page, 15, False)
-
-	return render_template('contact_information/view.htm', contact_information=contact_information)
-
-@contact_information.route('/contact_information/create/', methods=['GET', 'POST'])
-def create():
-	if not current_user or current_user.email != 'administrator@svia.nl':
+@blueprint.route('/', methods=['GET', 'POST'])
+@blueprint.route('/<int:page>/', methods=['GET', 'POST'])
+def list(page=1):
+	'''
+	Show a paginated list of contacts.
+	'''
+	if not GroupPermissionAPI.can_read('contact'):
 		return abort(403)
 
-	if request.method == 'POST':
-		name = request.form['name'].strip()
-		email = request.form['e-mail'].strip() # FUCKING RETARDED KUT STREEPJE
-		phone_nr = request.form['phone_nr'].strip()
-		location_id = request.form['location_id']
-		
-		valid_form = True
+	contacts = Contact.query.paginate(page, 15, False)
+	return render_template('contact/list.htm', contacts=contacts)
 
-		if valid_form:
-			contact_information = Contact_information(name, email, phone_nr, location_id)
+@blueprint.route('/create/', methods=['GET'])
+@blueprint.route('/edit/<int:contact_id>/', methods=['GET'])
+def edit(contact_id=None):
+	'''
+	Create or edit a contact, frontend.
+	'''
+	if not GroupPermissionAPI.can_read('contact'):
+		return abort(403)
 
-			db.session.add(contact_information)
-			db.session.commit()
+	if contact_id:
+		contact = Contact.query.get(contact_id)
+	else:
+		contact = Contact()
 
-			flash('The contact_information has been added.', 'success')
+	form = ContactForm(request.form, contact)
 
-			return redirect(url_for('contact_information.view'))
+	locations = Location.query.order_by('address').order_by('city')
+	form.location_id.choices = \
+			[(l.id, '%s, %s' % (l.address, l.city)) for l in locations]
 
-	return render_template('contact_information/create.htm')
+	return render_template('contact/edit.htm', contact=contact, form=form)
+
+@blueprint.route('/create/', methods=['POST'])
+@blueprint.route('/edit/<int:contact_id>/', methods=['POST'])
+def update(contact_id=None):
+	'''
+	Create or edit a contact, backend.
+	'''
+	if not GroupPermissionAPI.can_write('contact'):
+		return abort(403)
+
+	if contact_id:
+		contact = Contact.query.get(contact_id)
+	else:
+		contact = Contact()
+
+	form = ContactForm(request.form, contact)
+	if not validate_form(form, ['name', 'email', 'phone_nr', 'location_id']):
+		return redirect(url_for('contact.edit', contact_id=contact_id))
+
+	form.populate_obj(contact)
+	db.session.add(contact)
+	db.session.commit()
+
+	if contact_id:
+		flash('Contactpersoon opgeslagen', 'success')
+	else:
+		contact_id = contact.id
+		flash('Contactpersoon aangemaakt', 'success')
+
+	return redirect(url_for('contact.edit', contact_id=contact_id))
+
+@blueprint.route('/delete/<int:contact_id>/', methods=['POST'])
+def delete(contact_id):
+	'''
+	Delete a contact.
+	'''
+	if not GroupPermissionAPI.can_write('contact'):
+		return abort(403)
+
+	contact = Contact.query.get(contact_id)
+	if not contact:
+		return abort(404)
+
+	db.session.delete(contact)
+	db.session.commit()
+	flash('Contactpersoon verwijderd', 'success')
+
+	return redirect(url_for('contact.list'))

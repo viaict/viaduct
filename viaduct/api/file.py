@@ -1,34 +1,71 @@
-import validictory
+from flask import flash
+from werkzeug import secure_filename
+import os, difflib
+from viaduct.models.file import File
+from viaduct import db
 
-from flask import json, Response, request
-from flask.views import MethodView
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+UPLOAD_DIR = 'viaduct/static/files/'
 
-from viaduct import application, db
-from viaduct.helpers import Resource
-from viaduct.helpers.api import make_api_response
-from viaduct.models import File
-
-class FileAPI(Resource):
-	@staticmethod
-	def register():
-		view = FileAPI.as_view('file_api')
-
-		application.add_url_rule('/api/files/', view_func=view,
-			methods=['DELETE', 'GET', 'POST'])
+class FileAPI:
+	'''
+	API for files.
+	'''
 
 	@staticmethod
-	def delete():
-		return {'hello', 'world'}
+	def upload(f):
+		filename = f.filename
+
+		# Check if the file is allowed.
+		if not '.' in filename or \
+				not filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS:
+			flash('Bestandstype is niet toegestaan.')
+			return
+
+		# Convert the name.
+		filename = secure_filename(filename)
+
+		# Add numbers for duplicate filenames.
+		filename_noext, filename_ext = FileAPI.split_name(filename)
+		counter = 1
+		while FileAPI.exists(filename):
+			filename = '%s_%d.%s' % (filename_noext, counter, filename_ext)
+			counter += 1
+
+		# Save file.
+		path = os.path.join(os.getcwd(), UPLOAD_DIR, filename)
+		f.save(path)
+
+		# Add to database.
+		new_file = File(filename)
+		db.session.add(new_file)
+		db.session.commit()
+
+		if new_file:
+			flash('Het bestand is geupload onder de naam %s' % (new_file.name),
+				'success')
+		else:
+			flash('Er is iets misgegaan, waarschuw de ICT-commissie', 'error')
+
+		return new_file
 
 	@staticmethod
-	def get():
-		return {'hello', 'world'}
+	def exists(filename):
+		path = os.path.join(os.getcwd(), UPLOAD_DIR, filename)
+		return os.path.exists(path)
 
 	@staticmethod
-	def post():
-		return {'hello', 'world'}
+	def split_name(filename):
+		filename_split = filename.rsplit('.', 1)
+		filename_noext = filename_split[0]
+		filename_ext = filename_split[1]
+
+		return filename_noext, filename_ext
 
 	@staticmethod
-	def put():
-		return {'hello', 'world'}
+	def search(query):
+		files = File.query.all()
+		filenames = [f.name for f in files]
+		results = difflib.get_close_matches(query, filenames, 10, 0.0)
 
+		return results
