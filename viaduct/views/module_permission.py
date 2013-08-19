@@ -26,7 +26,6 @@ def main_view(group_id):
 
 	form = ModuleEditGroupPermissionForm()
 
-
 	make_form = False
 	if form.validate_on_submit():
 		make_form = True

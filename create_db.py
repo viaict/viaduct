@@ -32,9 +32,9 @@ db.session.add(page)
 db.session.commit()
 
 #Add the all group
-group = Group('all')
+group_all = Group('all')
 
-db.session.add(group)
+db.session.add(group_all)
 db.session.commit()
 
 # Add the anonymous user.
@@ -49,9 +49,9 @@ user = User('administrator@svia.nl', bcrypt.hashpw('ictIsAwesome',
 db.session.add(user)
 db.session.commit()
 
-group.add_user(user)
+group_all.add_user(user)
 
-db.session.add(group)
+db.session.add(group_all)
 db.session.commit()
 
 # Add the administrators group.
@@ -316,3 +316,10 @@ for module in modules:
 	group_permission = GroupPermission(module, group.id, 2);
 	db.session.add(group_permission)
 	db.session.commit()
+
+
+activity_permission = GroupPermission('activity', group_all.id, 1)
+
+db.session.add(activity_permission)
+db.session.commit()
+

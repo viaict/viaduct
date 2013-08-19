@@ -27,8 +27,8 @@ class GroupPermissionAPI:
 		"""
 
 		groups = UserAPI.get_groups_for_current_user()
-
 		highest = 0
+
 		for group in groups:
 			query = GroupPermission.query.filter(GroupPermission.group_id==group.id)
 			query = query.filter(GroupPermission.module_name==module_name)
