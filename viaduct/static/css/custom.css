@@ -4,18 +4,18 @@ body {
 }
 
 form label {
-  font-weight:bold;
+	font-weight:bold;
 }
 
 label.checkbox {
-  font-weight:normal;
+	font-weight:normal;
 }
 
 /* Definition lists */
 
 dl, dt, dd {
 	float:left;
-  margin:0;
+	margin:0;
 }
 
 dt, dd {
@@ -43,7 +43,7 @@ dd {
 
 .sponsors {
 	margin-top:40px;
-  padding:20px 0;
+	padding:20px 0;
 }
 
 /* Activity-block (activities) */
@@ -60,18 +60,18 @@ dd {
 }
 
 .activity-block h1 {
-  font-size:3.2em;
+	font-size:3.2em;
 	padding:8px 0;
 	line-height:1em;
 }
 
 .activity-block td {
-  min-width:70px;
+	min-width:70px;
 	padding:3px;
 }
 
 .activity-block .time {
-  background:#fafafa;
+	background:#fafafa;
 	color:#444;
 	font-weight:bold;
 	padding:4px;
@@ -79,7 +79,7 @@ dd {
 }
 
 #acc {
-  margin-top:-14px;
+	margin-top:-14px;
 }
 
 /* Twitter widget */
@@ -116,7 +116,19 @@ dd {
 	padding-left: 1em;
 	padding-right: 1em;
 	min-height: 540px;
-	overflow: hidden;
+}
+.readmore {
+	background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgba(255,255,255,1) 20%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(20%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 20%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 20%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 20%); /* IE10+ */
+	background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 20%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+	position: absolute;
+	bottom: 0;
+	padding-top: 10px;
+	text-align: right;
 }
 
 .edit-group {
@@ -169,23 +181,23 @@ dd {
 
 /* Bootstrap formbuilder */
 .ui-draggable {
-  margin-bottom:4px;
+	margin-bottom:4px;
 }
 
 .ui-state-highlight {
-  background:#fff;
+	background:#fff;
 }
 
 .hoverDragged {
-  background:#fff;
+	background:#fff;
 }
 
 .hoverDroppable {
-  background-color: lightblue;
+	background-color: lightblue;
 }
 
 .draggableField {
-  padding-left:5px;
+	padding-left:5px;
 }
 
 li.leave-alone {

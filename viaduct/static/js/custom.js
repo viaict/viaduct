@@ -1,10 +1,49 @@
 $(document).ready(function() {
-	$('div.expander').expander({
-		slicePoint: 1600,
-		expandText: "lees meer",
-		userCollapseText: "lees minder",
-		expandSpeed: 1000,
-		collapseSpeed: 1000,
+	$('.mainblock').each(function() {
+		var desired_height_text = $(this).css('min-height');
+		var desired_height = parseInt(desired_height_text.
+									substr(0, desired_height_text.length - 2));
+
+		var actual_height = $(this).height();
+
+		if (actual_height > desired_height) {
+			$main_block = $(this);
+
+			$(this).css({'overflow': 'hidden',
+						'height': sprintf('%dpx', desired_height),
+						'position': 'relative'});
+
+			var $read_more_div = $('<div></div>');
+			$read_more_div.css({'height': $(this).css('margin-bottom'),
+								'left': sprintf('-%s',
+												$(this).css('margin-left')),
+								'padding': $(this).css('margin'),
+								'padding-left': $(this).css('padding-left'),
+								'width': $(this).css('width')});
+			$read_more_div.addClass('readmore');
+
+			var $read_more_link = $('<a>Meer lezen</a>');
+			$read_more_link.attr('href', '#');
+			$read_more_link.on('click', function() {
+				if ($main_block.height() == desired_height) {
+					$main_block.animate({'height': sprintf('%dpx',
+													actual_height + 20),
+										'overflow': 'visible'});
+					$(this).text('Minder lezen');
+				}
+				else {
+					$main_block.animate({'overflow': 'hidden',
+									'height': sprintf('%dpx', desired_height)});
+					$(this).text('Meer lezen');
+				}
+
+				return false;
+			});
+
+			$read_more_div.append($read_more_link);
+
+			$(this).prepend($read_more_div);
+		}
 	});
 });
 
