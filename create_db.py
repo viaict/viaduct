@@ -255,10 +255,9 @@ nav_ext = NavigationEntry(nav_page1, 'Externaal', 'viaduct.svia.nl', True, False
 db.session.add(nav_ext)
 db.session.commit()
 
-<<<<<<< HEAD
 nav_pimpy = NavigationEntry(None, 'Pimpy', '/pimpy', False, False, 5)
 db.session.add(nav_pimpy)
-=======
+
 nav_vacancies = NavigationEntry(None, 'Vacaturebank', '/vacancies/', False, False, 5)
 db.session.add(nav_vacancies)
 db.session.commit()
@@ -277,7 +276,6 @@ db.session.commit()
 
 nav_files = NavigationEntry(None, 'Bestanden', '/files/', False, False, 8)
 db.session.add(nav_files)
->>>>>>> 30ea056418ce1dc6a61aff42787d93141dc2175d
 db.session.commit()
 
 # VACANCIES
