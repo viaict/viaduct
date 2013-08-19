@@ -84,6 +84,7 @@ def upload_file():
 
 
 @blueprint.route('/examination/', methods=['GET', 'POST'])
+@blueprint.route('/tentamenbank/', methods=['GET', 'POST'])
 def view_examination():
 	path = '/static/uploads/examinations/'
 
