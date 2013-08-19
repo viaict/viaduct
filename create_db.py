@@ -10,6 +10,9 @@ from viaduct.models import NavigationEntry
 #from viaduct.models.module_permission import ModulePermission
 
 #from viaduct.models.permission import Permission
+from viaduct.models.degree import Degree
+from viaduct.models.education import Education
+
 from viaduct.models.vacancy import Vacancy
 from viaduct.models.requirement import Requirement
 from viaduct.models.education import Education
@@ -140,6 +143,45 @@ db.session.commit()
 #self.price = price
 #self.picture = picture
 #'''
+
+# Education
+dg1 = Degree('Bachelor', 'BSc.')
+dg2 = Degree('Master', 'MSt.')
+
+
+db.session.add(dg1)
+db.session.commit()
+
+db.session.add(dg2)
+db.session.commit()
+
+ed = Education(dg1.id, 'Informatica')
+db.session.add(ed)
+db.session.commit()
+
+ed = Education(dg2.id, 'System and Network Engineering')
+db.session.add(ed)
+db.session.commit()
+
+ed = Education(dg2.id, 'Software Engineering')
+db.session.add(ed)
+db.session.commit()
+
+ed = Education(dg1.id, 'Kunstmatige Intelligentie')
+db.session.add(ed)
+db.session.commit()
+
+ed = Education(dg2.id, 'Artificial intelligence')
+db.session.add(ed)
+db.session.commit()
+
+ed = Education(dg2.id, 'Computational Science')
+db.session.add(ed)
+db.session.commit()
+
+ed = Education(dg1.id, 'Informatiekunde')
+db.session.add(ed)
+db.session.commit()
 
 custom_form = CustomForm(user.id, "Test formulier", '''Dieet | checkbox
 -Vegetarisch
