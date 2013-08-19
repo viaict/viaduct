@@ -62,24 +62,25 @@
 
 					<button id="custom_form" class="btn btn-success">Verzend formulier</button>
 				</form>
-
-				{% if activity.form_data %}
-					<script src="/static/js/unserialize.js"></script>
-					<script>
-						$("#custom").unserializeForm("{{ activity.form_data | safe }}");
-					</script>
-				{% endif %}
-			
-				<script src="/static/js/custom_form_submission.js"></script>
 			{% endif %}
-
 			<hr>
 		{% else %}
-			<p>Je moet ingelogd zijn om het formulier in te vullen
+			<p>
 			<a href="{{ url_for('user.sign_in') }}" class="btn btn-huge btn-success">Inloggen</a>
+			
+			<p>Als je al een account hebt kun je inloggen en dan hoef je niet nogmaals
+de meeste informatie op te geven. <b>Je 
+moet echter bij het bestuur van via aangeven dat je betaald hebt voor lidmaatschap, anders is je inschrijving niet definitief!</b>
+
+			<form id="custom" action="/forms/submit_register/{{ activity.form.id }}" enctype="multipart/form-data">
+
+					{{ user_fields(current_user) }}
+					{{ activity.form.html | safe }}
+
+					<button id="custom_form" class="btn btn-success">Registreren en formulier verzenden</button>
+				</form>
 			<hr>
 		{% endif %}
-	
 
 		<p>{{ activity.description | markdown }}</p>
 	</div>
@@ -88,5 +89,14 @@
 		<img src="/static/activity_pictures/{{ activity.picture }}">
 	</div>
 </div>
+
+{% if activity.form_data %}
+	<script src="/static/js/unserialize.js"></script>
+	<script>
+		$("#custom").unserializeForm("{{ activity.form_data | safe }}");
+	</script>
+{% endif %}
+
+<script src="/static/js/custom_form_submission.js"></script>
 
 {% endblock %}

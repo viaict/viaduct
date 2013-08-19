@@ -12,6 +12,7 @@ class User(db.Model):
 	password = db.Column(db.String(60))
 	first_name = db.Column(db.String(256))
 	last_name = db.Column(db.String(256))
+	has_payed_membership_fee = db.Column(db.Boolean)
 	shirt_size = db.Column(db.Enum('Small', 'Medium', 'Large'))
 	allergy = db.Column(db.String(1024)) # Allergy / medication
 	diet = db.Column(db.Enum('Vegetarisch', 'Veganistisch', 'Fruitarier'))
