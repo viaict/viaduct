@@ -59,4 +59,3 @@ class User(db.Model):
 		return '<User({0}, "{1}", "{2}", "{3}", "{4}", "{5}">'.format(self.id,
 				self.email, self.password, self.first_name, self.last_name,
 				self.student_id)
-

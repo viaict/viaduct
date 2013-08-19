@@ -10,7 +10,7 @@ from viaduct.helpers import flash_form_errors
 from viaduct.forms import SignUpForm, SignInForm
 from viaduct.models import User
 from viaduct.models.group import Group
-from viaduct.forms.user import CreateUserForm#, EditUserPermissionForm
+from viaduct.forms.user import EditUserForm#, EditUserPermissionForm
 from viaduct.models.education import Education
 from viaduct.api.group import GroupPermissionAPI
 
@@ -26,15 +26,15 @@ def load_user(user_id):
 
 @blueprint.route('/users/view/<int:user_id>', methods=['GET'])
 def view_single(user_id=None):
-	# TODO fix permission	
+	# TODO fix permission
 	#if not current_user.has_permission('user.create'):
 	#	abort(403)
-	
+
 	return render_template('user/view_single.htm', user= User.query.get(user_id))
 
 @blueprint.route('/users/create/', methods=['GET', 'POST'])
 @blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
-def create(user_id=None):
+def edit(user_id=None):
 	if not GroupPermissionAPI.can_write('user'):
 		return abort(403)
 
@@ -44,21 +44,38 @@ def create(user_id=None):
 	else:
 		user = User()
 
-	form = CreateUserForm(request.form)
+	form = EditUserForm(request.form, user)
 
 	# Add education.
 	educations = Education.query.all()
-	form.education_id.choices = \
-			[(e.id, e.name) for e in educations]
+	form.education_id.choices = [(e.id, e.name) for e in educations]
 
 	if form.validate_on_submit():
-		if User.query.filter(User.email == form.email.data).count() > 0:
-			flash('Een gebruiker met dit email adres bestaat al / A user with the e-mail address specified does already exist.', 'error')
-			return render_template('user/create_user.htm', form=form)
 
-		user = User(form.email.data, bcrypt.hashpw(form.password.data,
-				bcrypt.gensalt()), form.first_name.data, form.last_name.data,
-				form.student_id.data, form.education_id.data)
+		# Only new users need a unique email.
+		query = User.query.filter(User.email == form.email.data)
+		if user_id: query = query.filter(User.id != user_id)
+
+		if query.count() > 0:
+			flash('Een gebruiker met dit email adres bestaat al / A user with the e-mail address specified does already exist.', 'error')
+			return render_template('user/edit.htm', form=form, user=user)
+
+		# Because the user model is constructed to have an ID of 0 when it is
+		# initialized without an email adress provided, reinitialize the user
+		# with a default string for email adress, so that it will get a unique
+		# ID when committed to the database.
+		if not user_id:
+			user = User('_')
+
+		user.email = form.email.data
+		user.first_name = form.first_name.data
+		user.last_name = form.last_name.data
+		user.student_id = form.student_id.data
+		user.education_id = form.education_id.data
+
+		if not user_id:
+			user.password = bcrypt.hashpw(form.password.data, bcrypt.gensalt())
+
 		db.session.add(user)
 
 		group = Group.query.filter(Group.name=='all').first()
@@ -67,21 +84,15 @@ def create(user_id=None):
 		db.session.add(group)
 		db.session.commit()
 
-		#user.add_to_all()
+		flash('The user has been %s successfully.' %
+			('edited' if user_id else 'created'), 'success')
 
-		try:
-			db.session.commit()
-		except Exception as exception:
-			db.session.flush()
-			flash('An error occured with the database while creating the user.', 'error')
-			return render_template('user/create_user.htm', form=form)
-
-		flash('The user has been created successfully.', 'success')
-		return redirect(url_for('user.view'))
+		if not user_id:
+			return redirect(url_for('user.view'))
 	else:
 		flash_form_errors(form)
 
-	return render_template('user/create_user.htm', form=form)
+	return render_template('user/edit.htm', form=form, user=user)
 
 @blueprint.route('/sign-up/', methods=['GET', 'POST'])
 def sign_up():
