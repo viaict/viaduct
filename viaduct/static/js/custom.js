@@ -27,7 +27,7 @@ $(document).ready(function() {
 			$read_more_link.on('click', function() {
 				if ($main_block.height() == desired_height) {
 					$main_block.animate({'height': sprintf('%dpx',
-													actual_height + 20),
+										actual_height + 20),
 										'overflow': 'visible'});
 					$(this).text('Minder lezen');
 				}
