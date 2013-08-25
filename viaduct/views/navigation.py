@@ -13,7 +13,7 @@ from viaduct.models.page import Page
 import json
 import re
 
-blueprint = Blueprint('navigation', __name__, url_prefix='/navigation/')
+blueprint = Blueprint('navigation', __name__, url_prefix='/navigation')
 
 @blueprint.route('/edit/')
 def edit_back():
@@ -95,10 +95,10 @@ def edit(entry_id=None):
 
 				# Check if the page exists, if not redirect to create it
 				page = Page.get_by_path(form.url.data)
-				if not page:
+				if not page and form.url.data != '/':
 					flash('De link verwijst naar een pagina die niet bestaat, '
 							'maak deze aub aan!', 'alert');
-					return redirect(url_for('page2.edit_page',
+					return redirect(url_for('page.edit_page',
 							path=form.url.data))
 
 			return redirect(url_for('navigation.edit', entry_id=entry.id))

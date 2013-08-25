@@ -126,7 +126,7 @@ def get_page_history(path=''):
 		revisions=zip(revisions, form.previous, form.current))
 
 @blueprint.route('/edit/', methods=['GET', 'POST'])
-@blueprint.route('/edit/<path:path>', methods=['GET', 'POST'])
+@blueprint.route('/edit/<path:path>/', methods=['GET', 'POST'])
 def edit_page(path=''):
 	class struct(object):
 		pass
