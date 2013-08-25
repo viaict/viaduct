@@ -32,8 +32,9 @@ def view():
 	return render_template('navigation/view.htm', nav_entries=entries)
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
+@blueprint.route('/create/<int:parent_id>/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<int:entry_id>/', methods=['GET', 'POST'])
-def edit(entry_id=None):
+def edit(entry_id=None, parent_id=None):
 	if not GroupPermissionAPI.can_read('navigation'):
 		return abort(403)
 
@@ -60,7 +61,7 @@ def edit(entry_id=None):
 				entry.external = form.external.data
 				entry.activity_list = form.activity_list.data
 			else:
-				if form.parent_id.data == 'None':
+				if not parent_id:
 					parent = None
 
 					last_entry = db.session.query(NavigationEntry)\
@@ -70,7 +71,7 @@ def edit(entry_id=None):
 					position = last_entry.position + 1
 				else:
 					parent = db.session.query(NavigationEntry) \
-											.filter_by(id=form.parent_id.data).first()
+											.filter_by(id=parent_id).first()
 
 					if not parent:
 						flash('Deze navigatie parent bestaat niet.', 'error');
