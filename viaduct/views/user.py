@@ -173,8 +173,8 @@ def sign_out():
 	return redirect(url_for('page.get_page'))
 
 @blueprint.route('/users/', methods=['GET', 'POST'])
-@blueprint.route('/users/<int:page_id>/', methods=['GET', 'POST'])
-def view(page_id=1):
+@blueprint.route('/users/<int:page_nr>/', methods=['GET', 'POST'])
+def view(page_nr=1):
 	#if not current_user.has_permission('user.view'):
 	#	abort(403)
 
@@ -198,35 +198,6 @@ def view(page_id=1):
 		redirect(url_for('user.view'))
 
 	# Get a list of users to render for the current page.
-	users = User.query.paginate(page_id, 15, False)
+	users = User.query.paginate(page_nr, 15, False)
 
 	return render_template('user/view.htm', users=users)
-
-#@blueprint.route('/users/edit-permissions/<int:user_id>/', methods=['GET', 'POST'])
-#@blueprint.route('/users/edit-permissions/<int:user_id>/<int:page_id>/', methods=['GET', 'POST'])
-#def edit_permissions(user_id, page_id=1):
-#	if not GroupPermissionAPI.can_write('user'):
-#		return abort(403)
-#
-#	user = User.query.filter(User.id==user_id).first()
-#	form = EditUserPermissionForm()
-#	pagination = Permission.query.paginate(page_id, 15, False)
-#
-#	if form.validate_on_submit():
-#		for form_entry, permission in zip(form.permissions, pagination.items):
-#			if form_entry.select.data > 0:
-#				user.add_permission(permission.name, True)
-#			elif form_entry.select.data < 0:
-#				user.add_permission(permission.name, False)
-#			else:
-#				user.delete_permission(permission.name)
-#
-#		return redirect(url_for('user.view'))
-#	else:
-#		for permission in pagination.items:
-#			form.permissions.append_entry({'select': user.get_permission(permission.name)})
-#
-#	return render_template('user/edit_permissions.htm', form=form,
-#			pagination=pagination,
-#			permissions=zip(pagination.items, form.permissions))
-
