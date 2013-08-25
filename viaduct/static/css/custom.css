@@ -11,6 +11,14 @@ label.checkbox {
 	font-weight:normal;
 }
 
+#sublogo {
+	min-height: 120px;
+}
+
+#login-info {
+	text-align: right;
+}
+
 /* Definition lists */
 
 dl, dt, dd {

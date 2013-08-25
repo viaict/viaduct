@@ -51,6 +51,11 @@ class User(db.Model):
 		"""Necessary for Flask-Login."""
 		return unicode(self.id)
 
+	@property
+	def name(self):
+		"""The user's name."""
+		return ' '.join([self.first_name, self.last_name])
+
 	@staticmethod
 	def get_anonymous_user():
 		return User.query.get(0);
