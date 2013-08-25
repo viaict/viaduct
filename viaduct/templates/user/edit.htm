@@ -17,6 +17,9 @@
 
 		{{ render_field(form.first_name) }}
 		{{ render_field(form.last_name) }}
+
+		{% if user.id %}{{ render_field(form.has_payed) }}{% endif %}
+
 		{{ render_field(form.student_id) }}
 		{{ render_field(form.education_id) }}
 

@@ -26,10 +26,6 @@ def load_user(user_id):
 
 @blueprint.route('/users/view/<int:user_id>', methods=['GET'])
 def view_single(user_id=None):
-	# TODO fix permission
-	#if not current_user.has_permission('user.create'):
-	#	abort(403)
-
 	return render_template('user/view_single.htm', user= User.query.get(user_id))
 
 @blueprint.route('/users/create/', methods=['GET', 'POST'])
@@ -70,6 +66,7 @@ def edit(user_id=None):
 		user.email = form.email.data
 		user.first_name = form.first_name.data
 		user.last_name = form.last_name.data
+		user.has_payed = form.has_payed.data
 		user.student_id = form.student_id.data
 		user.education_id = form.education_id.data
 

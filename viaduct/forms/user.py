@@ -21,6 +21,7 @@ class EditUserForm(Form):
 	repeat_password = PasswordField('Repeat password')
 	first_name = TextField('First name', validators=[Required()])
 	last_name = TextField('Last name', validators=[Required()])
+	has_payed = BooleanField('Has payed membership')
 	student_id = TextField('Student ID', validators=[Required()])
 	education_id = SelectField('Education', coerce=int)
 
