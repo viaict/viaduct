@@ -55,8 +55,6 @@ def pages_filter(data):
 		content += ' expander">' if data[i].is_main_page else '">'
 
 		page = data[i].page if data[i].page.id else None
-		print(page)
-
 		if (page and current_user and (UserAPI.can_write(page) or
 									GroupPermissionAPI.can_write('page'))) or (
 				not page and GroupPermissionAPI.can_write('page')):
