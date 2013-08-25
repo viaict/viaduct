@@ -98,7 +98,7 @@ class PimpyAPI:
 
 	@staticmethod
 	def edit_task(task_id, name, content, deadline, group_id,
-		filled_in_users, line, status):
+		filled_in_users, line):
 		"""
 		Returns succed (boolean), message (string). Message is irrelevant if
 		succes is true, otherwise it contains what exactly went wrong.
@@ -123,6 +123,12 @@ class PimpyAPI:
 		if content:
 			task.content = content
 		if deadline:
+			try:
+				deadline = datetime.datetime.strptime(deadline, DATE_FORMAT)
+			except:
+				if deadline != "":
+					return False, "Could not parse the deadline"
+				deadline = None
 			task.deadline = deadline
 		if group_id:
 			task.group_id = group_id
@@ -130,11 +136,11 @@ class PimpyAPI:
 			task.line = line
 		if users:
 			task.users = users
-		if status:
-			task.status = status
+	#	if status:
+	#		task.status = status
 
 		db.session.commit()
-		print "task edited"
+		return True, "task edited"
 
 
 	@staticmethod

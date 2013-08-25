@@ -50,8 +50,8 @@ $(document).ready(function() {
 /* PimPy function
  * updates the task status
  */
-function update_task($task_id, $new_status) {
-	$.getJSON('/pimpy/tasks/update', {
+function update_task_status($task_id, $new_status) {
+	$.getJSON('/pimpy/tasks/update_status', {
 		task_id: $task_id,
 		new_status: $new_status
 	}, function(data) {
@@ -59,4 +59,16 @@ function update_task($task_id, $new_status) {
 		$('#'+$id).attr('class', "btn dropdown-toggle " + data.status);
 	});
 	return false;
+}
+
+function edit_task($task_id) {
+	$.getJSON('/pimpy/tasks/edit', {
+		task_id: $task_id
+	}, function(data) {
+	});
+	return false;
+}
+
+function update_task($task_id, $task_name, $more_info,
+	$deadline, $group, $users, $status) {
 }

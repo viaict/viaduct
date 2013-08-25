@@ -1,0 +1,40 @@
+{% from "macros/pagination.htm" import render_pagination %}
+
+{% extends "content.htm" %}
+
+{% block sidebar %}
+	Hier komt het menu
+{% endblock %}
+
+{% block content %}
+<h1>Boeken overzicht</h1>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Title
+			<th>ISBN NR
+			<th>Prijs
+			<th>Voorraad
+			<th>
+		</tr>
+	</thead>
+
+	<tbody>
+		{% for book in books: %}
+			<tr>
+				<td>{{ book.title }}
+				<td>{{ book.isbn }}
+				<td>{{ book.price }}
+				<td>{{ book.stock }}
+				<td>
+					<a class="btn btn-mini btn-primary" href="{{ url_for('booksales.edit_book', book_id=book.id) }}">
+						Edit
+					</a>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+
+{% endblock %}

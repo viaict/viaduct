@@ -1,0 +1,12 @@
+{% from "macros/flash.htm" import render_flash %}
+
+{% extends "content.htm" %}
+
+{% block title %}Booksales{% endblock %}
+
+{% block page %}
+	<div class="row">
+		{% block sidebar %}{% endblock %}
+		{% block content %}{% endblock %}
+	</div>
+{% endblock %}

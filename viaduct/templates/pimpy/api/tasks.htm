@@ -10,7 +10,7 @@
 					<ul class="dropdown-menu">
 						{% for status_meaning in list_item.get_status_meanings(): %}
 							<li>
-								<a onclick="update_task({{ list_item.id }}, {{ status_meaning[2] }})" class="{{ status_meaning[1] }} "> {{ status_meaning[0] }}</a>
+								<a onclick="update_task_status({{ list_item.id }}, {{ status_meaning[2] }})" class="{{ status_meaning[1] }} "> {{ status_meaning[0] }}</a>
 							</li>
 						{% endfor %}
 					</ul>
@@ -20,7 +20,9 @@
 					<button class="btn" data-toggle="collapse" data-target='#{{ list_item.id }}'> {{ list_item.get_users() }} </button>
 				</div>
 				<div id='{{ list_item.id }}' class="collapse">
-					<div class="well well-small">{{ list_item.content }}<br>
+					<div class="well well-small">
+						<button class="btn" style="float: right;" onclick="edit_task({{ list_item.id }})" >Edit</button>
+						{{ list_item.content }}<br>
 						Deadline: {{ list_item.deadline }}<br>
 						Created on: {{list_item.timestamp }}<br>
 						{% if list_item.minute_id > 1 %}

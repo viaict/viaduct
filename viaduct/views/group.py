@@ -58,7 +58,7 @@ def view(page_id=1):
 @blueprint.route('/groups/create/', methods=['GET', 'POST'])
 def create():
 	if not(GroupPermissionAPI.can_write('group')):
-		return abort(403);
+		return abort(403)
 
 	if request.method == 'POST':
 		name = request.form['name'].strip()
