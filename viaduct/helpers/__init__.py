@@ -4,6 +4,8 @@ from flask.ext.login import current_user
 from viaduct import application
 from markdown import markdown
 from resource import Resource
+from viaduct.api.user import UserAPI
+from viaduct.api.group import GroupPermissionAPI
 
 from viaduct.models.activity import Activity
 
@@ -52,7 +54,12 @@ def pages_filter(data):
 		# expander toevoegen als het over de mainpage gaat
 		content += ' expander">' if data[i].is_main_page else '">'
 
-		if current_user != None and current_user.is_authenticated():
+		page = data[i].page if data[i].page.id else None
+		print(page)
+
+		if (page and current_user and (UserAPI.can_write(page) or
+									GroupPermissionAPI.can_write('page'))) or (
+				not page and GroupPermissionAPI.can_write('page')):
 			content += '<div class="btn-group">'
 			content += '<a class="btn" href="' + url_for(
 				'page.get_page_history', path=data[i].path) + '"><i class="icon-time"></i> View History</a>'

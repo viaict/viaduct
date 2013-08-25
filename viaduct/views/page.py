@@ -27,6 +27,7 @@ def get_error_page(path=''):
 	data.content = '![alt text](/static/img/404.png "404")'
 	data.filter_html = True
 	data.path = ''
+	data.page = None
 
 	revisions.append(data)
 
@@ -79,6 +80,7 @@ def get_page(path=''):
 		data.content = revision.content
 		data.filter_html = revision.filter_html
 		data.path = path
+		data.page = page
 
 		revisions.append(data)
 
