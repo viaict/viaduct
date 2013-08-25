@@ -11,7 +11,7 @@
 		{% endif %}
 
 		<div class="sortable">
-			{% for child in entry.children %}
+			{% for child in NavigationAPI.order_entries(entry.children) %}
 				{{ render_entry_list(child) }}
 			{% endfor %}
 		</div>

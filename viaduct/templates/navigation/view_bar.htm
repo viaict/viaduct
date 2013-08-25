@@ -1,7 +1,7 @@
 <ul class="nav nav-pills">
 	{% for entry in bar_entries %}
 
-		{% set children = entry.activities if entry.activities else entry.children %}
+		{% set children = entry.activities if entry.activities else NavigationAPI.order_entries(entry.children).all() %}
 		{% set children = NavigationAPI.remove_unauthorized(children) %}
 
 		<li class="{% if children %}dropdown{% endif %}">

@@ -17,7 +17,7 @@ class NavigationEntry(db.Model):
 
 	parent = db.relationship('NavigationEntry', remote_side=[id],
 			primaryjoin=('NavigationEntry.parent_id==NavigationEntry.id'),
-			backref="children")
+			backref=db.backref('children', lazy='dynamic'))
 
 	def __init__(self, parent, title, url, external, activity_list, position):
 		if parent:

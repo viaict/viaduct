@@ -128,3 +128,8 @@ class NavigationAPI:
 				authorized_entries.remove(entry)
 
 		return authorized_entries
+
+	@staticmethod
+	def order_entries(query):
+		"""Order entries."""
+		return query.order_by(NavigationEntry.position)
