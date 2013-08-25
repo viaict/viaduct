@@ -4,7 +4,7 @@ $(document).ready(function() {
 		var desired_height = parseInt(desired_height_text.
 									substr(0, desired_height_text.length - 2));
 
-		var actual_height = $(this).height();
+		var actual_height = Math.floor($(this).height());
 
 		if (actual_height > desired_height) {
 			$main_block = $(this);
@@ -25,7 +25,7 @@ $(document).ready(function() {
 			var $read_more_link = $('<a>Meer lezen</a>');
 			$read_more_link.attr('href', '#');
 			$read_more_link.on('click', function() {
-				if ($main_block.height() == desired_height) {
+				if (Math.floor($main_block.height()) == desired_height) {
 					$main_block.animate({'height': sprintf('%dpx',
 										actual_height + 20),
 										'overflow': 'visible'});
