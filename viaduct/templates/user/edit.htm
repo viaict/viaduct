@@ -5,7 +5,7 @@
 {% block content %}
 <form action="" method="post" name="sign_up" class="form-horizontal">
 	<fieldset>
-		<legend>{% if user.id %}Edit{% else %}Create{% endif %} user</legend>
+		<legend>{% if user.id %}Bewerk{% else %}Maak{% endif %} gebruiker</legend>
 
 		{{ form.csrf_token }}
 		{{ render_field(form.email) }}
@@ -25,7 +25,7 @@
 
 		<div class="control-group">
 			<div class="controls">
-				<button type="submit" class="btn">{% if user.id %}Edit{% else %}Create{% endif %} user</button>
+				<button type="submit" class="btn">{% if user.id %}Bewerk{% else %}Maak{% endif %} gebruiker</button>
 			</div>
 		</div>
 	</fieldset>

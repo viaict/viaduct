@@ -4,26 +4,26 @@ from flask.ext.wtf import Required, Email, EqualTo, IntegerField
 from flask.ext.wtf import ValidationError
 
 class SignUpForm(Form):
-	email = TextField('E-mail address', validators=[Required(), Email()])
-	password = PasswordField('Password', validators=[Required()])
-	repeat_password = PasswordField('Repeat password', validators=[Required(),
-	EqualTo('password', message='The passwords do not match.')])
-	first_name = TextField('First name', validators=[Required()])
-	last_name = TextField('Last name', validators=[Required()])
-	student_id = TextField('Student ID', validators=[Required()])
-	education_id = SelectField('Education', coerce=int)
+	email = TextField('E-mail adres', validators=[Required(), Email()])
+	password = PasswordField('Wachtwoord', validators=[Required()])
+	repeat_password = PasswordField('Herhaal wachtwoord', validators=[Required(),
+	EqualTo('password', message='De wachtwoorden komen niet overeen.')])
+	first_name = TextField('Voornaam', validators=[Required()])
+	last_name = TextField('Achternaam', validators=[Required()])
+	student_id = TextField('Studentnummer', validators=[Required()])
+	education_id = SelectField('Opleiding', coerce=int)
 	recaptcha = RecaptchaField()
 
 class EditUserForm(Form):
 	id = IntegerField('ID')
-	email = TextField('E-mail address', validators=[Required(), Email()])
-	password = PasswordField('Password')
-	repeat_password = PasswordField('Repeat password')
-	first_name = TextField('First name', validators=[Required()])
-	last_name = TextField('Last name', validators=[Required()])
-	has_payed = BooleanField('Has payed membership')
-	student_id = TextField('Student ID', validators=[Required()])
-	education_id = SelectField('Education', coerce=int)
+	email = TextField('E-mail adres', validators=[Required(), Email()])
+	password = PasswordField('Wachtwoord')
+	repeat_password = PasswordField('Herhaal wachtwoord')
+	first_name = TextField('Voornaam', validators=[Required()])
+	last_name = TextField('Achternaam', validators=[Required()])
+	has_payed = BooleanField('Heeft lidmaatschap betaald')
+	student_id = TextField('Studentnummer', validators=[Required()])
+	education_id = SelectField('Opleiding', coerce=int)
 
 	def validate_password(form, field):
 		"""Providing a password is only required when creating a new user."""
@@ -37,9 +37,9 @@ class EditUserForm(Form):
 
 
 class SignInForm(Form):
-	email = TextField('E-mail address', validators=[Required(), Email()])
-	password = PasswordField('Password', validators=[Required()])
-	remember_me = BooleanField('Remember me', default = False)
+	email = TextField('E-mail adres', validators=[Required(), Email()])
+	password = PasswordField('Wachtwoord', validators=[Required()])
+	remember_me = BooleanField('Onthouden', default = False)
 
 #class EditUserPermissionEntry(Form):
 #	select = SelectField(None, coerce=int, choices=[(1, 'Allow'), (-1, 'Deny'), (0, 'Inherit')])

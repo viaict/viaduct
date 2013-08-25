@@ -3,11 +3,11 @@
 {% extends "content.htm" %}
 
 {% block content %}
-<h1>Sign in</h1>
+<h1>Inloggen</h1>
 
 <form action="." method="post" name="sign-in" id="sign-in" class="form-horizontal">
 	<fieldset>
-		<legend>Sign in</legend>
+		<legend>Inloggen</legend>
 
 		{{ form.csrf_token }}
 		{{ render_field(form.email) }}
@@ -16,7 +16,7 @@
 
 		<div class="control-group">
 			<div class="controls">
-				<button type="submit" class="btn">Sign in</button>
+				<button type="submit" class="btn">Log in</button>
 			</div>
 		</div>
 	</fieldset>
