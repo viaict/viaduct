@@ -41,7 +41,7 @@
 						{% block sublogo %}{% endblock %}
 					</div></div>
 					<div class="row"><div class="span5" id="login-info">
-						{% if current_user.is_anonymous() %}
+						{% if not current_user or current_user.is_anonymous() %}
 							Niet ingelogged, <a href="{{ url_for('user.sign_in') }}">log in</a> of <a href="{{ url_for('user.sign_up') }}">registreer</a>.
 						{% else %}
 							Ingelogged als <a href="{{ url_for('user.view_single', user_id=current_user.id) }}">{{ current_user.name }}</a>, <a href="{{ url_for('user.sign_out') }}">uitloggen</a>.
