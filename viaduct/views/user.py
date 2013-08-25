@@ -198,6 +198,7 @@ def view(page_nr=1):
 		redirect(url_for('user.view'))
 
 	# Get a list of users to render for the current page.
-	users = User.query.paginate(page_nr, 15, False)
+	users = User.query.order_by(User.first_name).order_by(User.last_name)\
+				.paginate(page_nr, 15, False)
 
 	return render_template('user/view.htm', users=users)
