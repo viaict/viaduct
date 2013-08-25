@@ -17,7 +17,7 @@ class UserAPI:
 		"""
 
 		# if there is no user we treat them as if in the guests group
-		if not current_user.id:
+		if not current_user or not current_user.id:
 			group = Group.query.filter(Group.name == 'all').first()
 			
 			if not(group):

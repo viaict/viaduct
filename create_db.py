@@ -45,6 +45,45 @@ user = User()
 db.session.add(user)
 db.session.commit()
 
+# Education
+dg1 = Degree('Bachelor', 'BSc.')
+dg2 = Degree('Master', 'MSt.')
+
+
+db.session.add(dg1)
+db.session.commit()
+
+db.session.add(dg2)
+db.session.commit()
+
+ed = Education(dg1.id, 'Informatica')
+db.session.add(ed)
+db.session.commit()
+
+ed = Education(dg2.id, 'System and Network Engineering')
+db.session.add(ed)
+db.session.commit()
+
+ed = Education(dg2.id, 'Software Engineering')
+db.session.add(ed)
+db.session.commit()
+
+ed = Education(dg1.id, 'Kunstmatige Intelligentie')
+db.session.add(ed)
+db.session.commit()
+
+ed = Education(dg2.id, 'Artificial intelligence')
+db.session.add(ed)
+db.session.commit()
+
+ed = Education(dg2.id, 'Computational Science')
+db.session.add(ed)
+db.session.commit()
+
+ed = Education(dg1.id, 'Informatiekunde')
+db.session.add(ed)
+db.session.commit()
+
 # Add the administrator.
 user = User('administrator@svia.nl', bcrypt.hashpw('ictIsAwesome',
 		bcrypt.gensalt()), 'Administrator', 'de beste', '129181982192818', 2)
@@ -145,45 +184,6 @@ db.session.commit()
 #self.price = price
 #self.picture = picture
 #'''
-
-# Education
-dg1 = Degree('Bachelor', 'BSc.')
-dg2 = Degree('Master', 'MSt.')
-
-
-db.session.add(dg1)
-db.session.commit()
-
-db.session.add(dg2)
-db.session.commit()
-
-ed = Education(dg1.id, 'Informatica')
-db.session.add(ed)
-db.session.commit()
-
-ed = Education(dg2.id, 'System and Network Engineering')
-db.session.add(ed)
-db.session.commit()
-
-ed = Education(dg2.id, 'Software Engineering')
-db.session.add(ed)
-db.session.commit()
-
-ed = Education(dg1.id, 'Kunstmatige Intelligentie')
-db.session.add(ed)
-db.session.commit()
-
-ed = Education(dg2.id, 'Artificial intelligence')
-db.session.add(ed)
-db.session.commit()
-
-ed = Education(dg2.id, 'Computational Science')
-db.session.add(ed)
-db.session.commit()
-
-ed = Education(dg1.id, 'Informatiekunde')
-db.session.add(ed)
-db.session.commit()
 
 custom_form = CustomForm(user.id, "Test formulier", '''Dieet | checkbox
 -Vegetarisch
