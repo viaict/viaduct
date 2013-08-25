@@ -5,7 +5,7 @@
 {% block content %}
 <form action="" method="post" name="sign_up" class="form-horizontal">
 	<fieldset>
-		<legend>{% if user.id %}Bewerk{% else %}Maak{% endif %} gebruiker</legend>
+		<legend>{% if user.id %}Bewerk{% else %}Maak{% endif %} lid</legend>
 
 		{{ form.csrf_token }}
 		{{ render_field(form.email) }}
@@ -18,14 +18,14 @@
 		{{ render_field(form.first_name) }}
 		{{ render_field(form.last_name) }}
 
-		{% if user.id %}{{ render_field(form.has_payed) }}{% endif %}
-
 		{{ render_field(form.student_id) }}
 		{{ render_field(form.education_id) }}
 
+		{{ render_field(form.has_payed) }}
+
 		<div class="control-group">
 			<div class="controls">
-				<button type="submit" class="btn">{% if user.id %}Bewerk{% else %}Maak{% endif %} gebruiker</button>
+				<button type="submit" class="btn">{% if user.id %}Bewerk{% else %}Maak{% endif %} lid</button>
 			</div>
 		</div>
 	</fieldset>

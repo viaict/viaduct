@@ -4,25 +4,24 @@ from flask.ext.wtf import Required, Email, EqualTo, IntegerField
 from flask.ext.wtf import ValidationError
 
 class SignUpForm(Form):
-	email = TextField('E-mail adres', validators=[Required(), Email()])
-	password = PasswordField('Wachtwoord', validators=[Required()])
-	repeat_password = PasswordField('Herhaal wachtwoord', validators=[Required(),
-	EqualTo('password', message='De wachtwoorden komen niet overeen.')])
-	first_name = TextField('Voornaam', validators=[Required()])
-	last_name = TextField('Achternaam', validators=[Required()])
-	student_id = TextField('Studentnummer', validators=[Required()])
+	email = TextField('E-mail adres', validators=[Required(message='Geen emailadres opgegeven'), Email(message='Ongelding emailadres opgegeven')])
+	password = PasswordField('Wachtwoord', validators=[Required(message='Geen wachtwoord opgegeven')])
+	repeat_password = PasswordField('Herhaal wachtwoord', validators=[Required(message='Wachtwoorden komen niet overeen'), EqualTo('password', message='Wachtwoorden komen niet overeen')])
+	first_name = TextField('Voornaam', validators=[Required(message='Geen voornaam opgegeven')])
+	last_name = TextField('Achternaam', validators=[Required(message='Geen achternaam opgegeven')])
+	student_id = TextField('Studentnummer', validators=[Required(message='Geen studentnummer opgegeven')])
 	education_id = SelectField('Opleiding', coerce=int)
 	recaptcha = RecaptchaField()
 
 class EditUserForm(Form):
 	id = IntegerField('ID')
-	email = TextField('E-mail adres', validators=[Required(), Email()])
+	email = TextField('E-mail adres', validators=[Required(message='Geen emailadres opgegeven'), Email(message='Ongeldig emailadres opgegeven')])
 	password = PasswordField('Wachtwoord')
 	repeat_password = PasswordField('Herhaal wachtwoord')
-	first_name = TextField('Voornaam', validators=[Required()])
-	last_name = TextField('Achternaam', validators=[Required()])
-	has_payed = BooleanField('Heeft lidmaatschap betaald')
-	student_id = TextField('Studentnummer', validators=[Required()])
+	first_name = TextField('Voornaam', validators=[Required(message='Geen voornaam opgegeven')])
+	last_name = TextField('Achternaam', validators=[Required(message='Geen achternaam opgegeven')])
+	has_payed = BooleanField('Heeft betaald')
+	student_id = TextField('Studentnummer', validators=[Required(message='Geen studentnummer opgegeven')])
 	education_id = SelectField('Opleiding', coerce=int)
 
 	def validate_password(form, field):
