@@ -57,12 +57,15 @@ def get_activity(activity_id = 0):
 	form.education_id.choices = \
 			[(e.id, e.name) for e in educations]
 
-	if current_user and activity.form_id:
+	if activity.form_id:
+		if current_user: current_user_id = current_user.id
+		else: current_user_id = 0
+
 		activity.form = CustomForm.query.get(activity.form_id)
 
 		form_result = CustomFormResult.query \
 			.filter(CustomFormResult.form_id == activity.form_id) \
-			.filter(CustomFormResult.owner_id == current_user.id).first()
+			.filter(CustomFormResult.owner_id == current_user_id).first()
 
 		if form_result:
 			activity.form_data = form_result.data.replace('"', "'")
