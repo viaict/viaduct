@@ -13,13 +13,13 @@ from viaduct.forms.group import EditGroupPermissionForm, ViewGroupForm
 blueprint = Blueprint('group', __name__)
 
 @blueprint.route('/groups/', methods=['GET', 'POST'])
-@blueprint.route('/groups/<int:page_id>/', methods=['GET', 'POST'])
-def view(page_id=1):
+@blueprint.route('/groups/<int:page_nr>/', methods=['GET', 'POST'])
+def view(page_nr=1):
 	if not(GroupPermissionAPI.can_read('group')):
 		return abort(403);
 
 	form = ViewGroupForm(request.form)
-	pagination = Group.query.paginate(page_id, 15, False)
+	pagination = Group.query.order_by(Group.name).paginate(page_nr, 15, False)
 
 	if form.validate_on_submit():
 		if form.delete_group.data:
@@ -84,8 +84,8 @@ def create():
 	return render_template('group/create.htm')
 
 @blueprint.route('/groups/<int:group_id>/users/', methods=['GET', 'POST'])
-@blueprint.route('/groups/<int:group_id>/users/<int:page_id>/', methods=['GET', 'POST'])
-def view_users(group_id, page_id=1):
+@blueprint.route('/groups/<int:group_id>/users/<int:page_nr>/', methods=['GET', 'POST'])
+def view_users(group_id, page_nr=1):
 	if not(GroupPermissionAPI.can_read('group')):
 		return abort(403);
 
@@ -114,13 +114,13 @@ def view_users(group_id, page_id=1):
 
 		return redirect(url_for('group.view_users', group_id=group_id))
 
-	users = group.get_users().paginate(page_id, 15, False)
+	users = group.get_users().paginate(page_nr, 15, False)
 
 	return render_template('group/view_users.htm', group=group, users=users)
 
 @blueprint.route('/groups/<int:group_id>/users/add/', methods=['GET', 'POST'])
-@blueprint.route('/groups/<int:group_id>/users/add/<int:page_id>', methods=['GET', 'POST'])
-def add_users(group_id, page_id=1):
+@blueprint.route('/groups/<int:group_id>/users/add/<int:page_nr>', methods=['GET', 'POST'])
+def add_users(group_id, page_nr=1):
 	if not(GroupPermissionAPI.can_write('group')):
 		return abort(403);
 
@@ -149,13 +149,13 @@ def add_users(group_id, page_id=1):
 
 		return redirect(url_for('group.view_users', group_id=group_id))
 
-	users = User.query.paginate(page_id, 15, False)
+	users = User.query.paginate(page_nr, 15, False)
 
 	return render_template('group/add_users.htm', group=group, users=users)
 
 @blueprint.route('/groups/edit-permissions/<int:group_id>/', methods=['GET', 'POST'])
-@blueprint.route('/groups/edit-permissions/<int:group_id>/<int:page_id>', methods=['GET', 'POST'])
-def edit_permissions(group_id, page_id=1):
+@blueprint.route('/groups/edit-permissions/<int:group_id>/<int:page_nr>', methods=['GET', 'POST'])
+def edit_permissions(group_id, page_nr=1):
 	if not(GroupPermissionAPI.can_read('group')):
 		return abort(403);
 
