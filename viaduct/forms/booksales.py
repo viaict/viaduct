@@ -16,7 +16,7 @@ class AddBookForm(Form):
 class AddSaleForm(Form):
 	books = MultiCheckboxField('books', validators=[Required()])
 	student_number = IntegerField('student_number', validators=[Required()])
-	payment = SelectField('payment', validators=[Required()])
+	payment = SelectField('payment', validators=[Required()], choices=[(1, 'pin'), (2, 'contant')])
 
 	def load_books(self, books):
 		self.books.choices = map(lambda x: (x.id, x.title), books)

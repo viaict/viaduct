@@ -25,6 +25,14 @@ def view():
 	return render_template('booksales/view.htm', books = Book.query.all())
 
 
+@blueprint.route('/sales/')
+def view_sales():
+	if not GroupPermissionAPI.can_read('booksales'):
+		return abort(403)
+
+	return render_template('booksales/sales.htm', sales = Sale.query.all())
+
+
 @blueprint.route('/add_sale/', methods=['GET', 'POST'])
 def add_sale():
 	if not GroupPermissionAPI.can_write('booksales'):

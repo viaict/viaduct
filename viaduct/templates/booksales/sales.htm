@@ -3,9 +3,9 @@
 {% extends "content.htm" %}
 
 {% block content %}
-<h1>Boeken overzicht</h1>
-<a class="btn btn-mini btn-primary" href="{{ url_for('booksales.view_sales') }}">
-Verkochte Boeken
+<h1>Verkochte boeken</h1>
+<a class="btn btn-mini btn-primary" href="{{ url_for('booksales.view') }}">
+Boeken overzicht
 </a>
 <a class="btn btn-mini btn-primary" href="{{ url_for('booksales.edit_book') }}">
 Boek toevoegen
@@ -17,25 +17,29 @@ Boeken verkopen
 <table class="table table-striped">
 	<thead>
 		<tr>
-			<th>Title
-			<th>ISBN NR
+			<th>Studentnummer
 			<th>Prijs
-			<th>Voorraad
+			<th>Betaalmethode
+			<th>Boeken
 			<th>
 		</tr>
 	</thead>
 
 	<tbody>
-		{% for book in books: %}
+		{% for sale in sales: %}
 			<tr>
-				<td>{{ book.title }}
-				<td>{{ book.isbn }}
-				<td>{{ book.price }}
-				<td>{{ book.stock }}
+				<td>{{ sale.student_number }}
+				<td>{{ sale.price }}
 				<td>
-					<a class="btn btn-mini btn-primary" href="{{ url_for('booksales.edit_book', book_id=book.id) }}">
-						Edit
-					</a>
+					{% if sale.payment == 1 %}
+						Pin
+					{% elif sale.payment == 2 %}
+						Contant
+					{% endif %}
+				<td>
+					{% for book in sale.books %}
+						{{ book.title }}<br>
+					{% endfor %}
 			</tr>
 		{% endfor %}
 	</tbody>

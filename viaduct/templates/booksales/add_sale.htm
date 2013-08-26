@@ -5,12 +5,24 @@
 
 <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
 	<div class="control-group">
-		<label class="control-label">Add a sale</label>
+		<label class="control-label">Boek verkopen</label>
 	</div>
 	<div class="control-group">
-		<label class="control-label" for="title">Books</label>
+		<label class="control-label" for="title">Boeken</label>
 		<div class="controls">
 			{{ form.books }}
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="title">Studentnummer</label>
+		<div class="controls">
+			{{ form.student_number }}
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="title">Betalingsmethode</label>
+		<div class="controls">
+			{{ form.payment }}
 		</div>
 	</div>
 	<div class="control-group">
