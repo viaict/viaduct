@@ -99,7 +99,7 @@ def view_users(group_id, page_nr=1):
 	if request.method == 'POST':
 		user_ids = request.form.getlist('select')
 
-		users = group.get_users().filter(User.id.in_(user_ids)).all()
+		users = group.get_users().filter(User.id.in_(user_ids)).order_by(User.first_name).order_by(User.last_name).all()
 
 		for user in users:
 			group.delete_user(user)
@@ -134,7 +134,7 @@ def add_users(group_id, page_nr=1):
 	if request.method == 'POST':
 		user_ids = request.form.getlist('select')
 
-		users = User.query.filter(User.id.in_(user_ids)).all()
+		users = User.query.filter(User.id.in_(user_ids)).all().order_by(User.first_name).order_by(User.last_name)
 
 		for user in users:
 			group.add_user(user)
@@ -149,7 +149,7 @@ def add_users(group_id, page_nr=1):
 
 		return redirect(url_for('group.view_users', group_id=group_id))
 
-	users = User.query.paginate(page_nr, 15, False)
+	users = User.query.paginate(page_nr, 15, False).order_by(User.first_name).order_by(User.last_name)
 
 	return render_template('group/add_users.htm', group=group, users=users)
 
@@ -163,7 +163,7 @@ def edit_permissions(group_id, page_nr=1):
 	# TODO: change into error if group_name is unknown
 	group_name = "unknown" if group == None else group.name
 
-	permissions = GroupPermission.query.filter(GroupPermission.group_id==group_id).all()
+	permissions = GroupPermission.query.filter(GroupPermission.group_id==group_id).all().order_by(GroupPermission.module_name)
 
 	form = EditGroupPermissionForm()
 
