@@ -163,7 +163,7 @@ def edit_permissions(group_id, page_nr=1):
 	# TODO: change into error if group_name is unknown
 	group_name = "unknown" if group == None else group.name
 
-	permissions = GroupPermission.query.filter(GroupPermission.group_id==group_id).all().order_by(GroupPermission.module_name)
+	permissions = GroupPermission.query.order_by(GroupPermission.module_name).filter(GroupPermission.group_id==group_id).all()
 
 	form = EditGroupPermissionForm()
 
