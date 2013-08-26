@@ -114,7 +114,7 @@ def view_users(group_id, page_nr=1):
 
 		return redirect(url_for('group.view_users', group_id=group_id))
 
-	users = group.get_users().paginate(page_nr, 15, False)
+	users = group.get_users().order_by(User.first_name).order_by(User.last_name).paginate(page_nr, 15, False)
 
 	return render_template('group/view_users.htm', group=group, users=users)
 
