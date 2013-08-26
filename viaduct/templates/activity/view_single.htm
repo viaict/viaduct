@@ -9,7 +9,7 @@
 <div class="page-header">
 	{% if GroupPermissionAPI.can_write('activity') %}
 	<a href="/activities/edit/{{ activity.id }}" class="btn btn-warning pull-right">
-		<i class="icon-pencil"></i> 
+		<i class="icon-pencil"></i>
 		Aanpassen
 	</a>
 	{% endif %}
@@ -39,20 +39,20 @@
 
 <div class="row-fluid">
 	<div class="span8">
-		<h4>Prijs: 
+		<h4>Prijs:
 		{% if not activity.price == "gratis"  %}
 			<i class="icon-euro"></i>
 		{% endif %}
 		{{ activity.price }}
 		</h4>
-		
+
 		<div class="time">
 			<i class="icon-calendar"></i>
 			{{ activity.get_time() }}
 		</div>
 
 		<hr>
-
+		{{ activity.form }}
 		{% if activity.form %}
 			<form id="custom" action="/forms/submit/{{ activity.form.id }}" enctype="multipart/form-data">
 
