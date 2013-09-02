@@ -99,8 +99,9 @@ def edit(entry_id=None, parent_id=None):
 				if not page and form.url.data != '/':
 					flash('De link verwijst naar een pagina die niet bestaat, '
 							'maak deze aub aan!', 'alert');
+					path = form.url.data.lstrip('/')
 					return redirect(url_for('page.edit_page',
-							path=form.url.data))
+							path=path))
 
 			return redirect(url_for('navigation.edit', entry_id=entry.id))
 

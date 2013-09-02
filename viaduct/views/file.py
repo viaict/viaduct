@@ -8,7 +8,7 @@ from viaduct.forms import FileForm
 from viaduct.api import FileAPI
 from viaduct.api.group import GroupPermissionAPI
 
-blueprint = Blueprint('file', __name__, url_prefix='/files/')
+blueprint = Blueprint('file', __name__, url_prefix='/files')
 
 @blueprint.route('/', methods=['GET'])
 @blueprint.route('/<int:page>/', methods=['GET'])
