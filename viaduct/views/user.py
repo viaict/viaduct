@@ -109,17 +109,21 @@ def sign_up():
 		user = User(form.email.data, bcrypt.hashpw(form.password.data, bcrypt.gensalt()),
 			form.first_name.data, form.last_name.data, form.student_id.data, form.education_id.data)
 
-		db.session.add(user)
-		db.session.commit()
+		exists = User.query.filter(User.email==user.email)
 
-		group = Group.query.filter(Group.name=='all').first()
-		group.add_user(user)
+		if exists:
 
-		db.session.add(group)
-		db.session.commit()
-		#user.add_to_all()
+			db.session.add(user)
+			db.session.commit()
 
-		flash('You\'ve signed up successfully.')
+			group = Group.query.filter(Group.name=='all').first()
+			group.add_user(user)
+
+			db.session.add(group)
+			db.session.commit()
+			#user.add_to_all()
+
+			flash('You\'ve signed up successfully.')
 
 		login_user(user)
 
@@ -174,6 +178,8 @@ def sign_out():
 def view(page_nr=1):
 	#if not current_user.has_permission('user.view'):
 	#	abort(403)
+	if not GroupPermissionAPI.can_read('user'):
+		return abort(403)
 
 	# persumably, if the method is a post we have selected stuff to delete,
 	# similary to groups
