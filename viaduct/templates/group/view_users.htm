@@ -2,12 +2,12 @@
 
 {% extends "content.htm" %}
 
-{% block title %}Group Users{% endblock %}
+{% block title %}{{ group.name }} Users{% endblock %}
 
 {%block content %}
 <form action="" method="post" name="group_view_users">
 	<fieldset>
-		<legend>Group users</legend>
+		<legend>{{ group.name }} users</legend>
 
 		<table class="table table-bordered table-striped">
 			<thead>
