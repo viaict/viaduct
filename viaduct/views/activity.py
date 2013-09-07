@@ -132,7 +132,7 @@ def create(activity_id=None):
 
 		venue	= 1 # Facebook ID location, not used yet
 
-		if form.form_id and form.form_id.data > 0:
+		if form.form_id and form.form_id.data >= 0:
 			activity.form_id = form.form_id.data
 
 		if valid_form:
