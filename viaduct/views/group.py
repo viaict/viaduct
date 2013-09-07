@@ -134,7 +134,7 @@ def add_users(group_id, page_nr=1):
 	if request.method == 'POST':
 		user_ids = request.form.getlist('select')
 
-		users = User.query.filter(User.id.in_(user_ids)).all().order_by(User.first_name).order_by(User.last_name)
+		users = User.query.filter(User.id.in_(user_ids)).order_by(User.first_name).order_by(User.last_name).all()
 
 		for user in users:
 			group.add_user(user)
