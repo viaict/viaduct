@@ -134,6 +134,8 @@ def create(activity_id=None):
 
 		if form.form_id and form.form_id.data > 0:
 			activity.form_id = form.form_id.data
+		else:
+			activity.form_id = None
 
 		if valid_form:
 			activity.name = name
