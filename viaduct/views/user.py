@@ -191,8 +191,8 @@ def view(page_nr=1):
 			filter(or_(User.first_name.like('%' + search + '%'),
 				User.last_name.like('%' + search + '%'),
 				User.email.like('%' + search + '%'),
-				User.student_id.like('%' + search + '%'))).paginate(page_nr, 15, False)
-		return render_template('user/view.htm', users=users)
+				User.student_id.like('%' + search + '%'))).order_by(User.first_name).order_by(User.last_name).paginate(page_nr, 15, False)
+		return render_template('user/view.htm', users=users, search=search)
 
 	# persumably, if the method is a post we have selected stuff to delete,
 	# similary to groups

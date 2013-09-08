@@ -5,6 +5,14 @@
 {% block title %}{{ group.name }} Users{% endblock %}
 
 {%block content %}
+<div class="row">
+	<div class="span12">
+		<form method="get" action="" enctype=multipart/form-data class="form-inline" >
+			<input name="search" id="search" class="span5" type="text" placeholder="Zoeken" value="{{search}}"></input>
+			<button type="submit" class="btn btn-primary"> <i class="icon-search icon-white" id="submit"></i></button>
+		</form>
+	</div>
+</div>
 <form action="" method="post" name="group_view_users">
 	<fieldset>
 		<legend>{{ group.name }} users</legend>

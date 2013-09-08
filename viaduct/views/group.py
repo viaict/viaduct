@@ -5,6 +5,8 @@ from flask.ext.login import current_user
 from viaduct import db
 from viaduct.helpers import flash_form_errors
 
+from sqlalchemy import or_
+
 from viaduct.api.group import GroupPermissionAPI
 
 from viaduct.models import user_group, Group, GroupPermission, User
@@ -114,6 +116,15 @@ def view_users(group_id, page_nr=1):
 
 		return redirect(url_for('group.view_users', group_id=group_id))
 
+	if request.args.get('search') != None:
+		search = request.args.get('search')
+		users = group.get_users().\
+			filter(or_(User.first_name.like('%' + search + '%'),
+				User.last_name.like('%' + search + '%'),
+				User.email.like('%' + search + '%'),
+				User.student_id.like('%' + search + '%'))).order_by(User.first_name).order_by(User.last_name).paginate(page_nr, 15, False)
+		return render_template('group/view_users.htm', group=group, users=users, search=search)
+
 	users = group.get_users().order_by(User.first_name).order_by(User.last_name).paginate(page_nr, 15, False)
 
 	return render_template('group/view_users.htm', group=group, users=users)
@@ -148,6 +159,15 @@ def add_users(group_id, page_nr=1):
 			flash('The selected user has been added to the group.', 'success')
 
 		return redirect(url_for('group.view_users', group_id=group_id))
+
+	if request.args.get('search') != None:
+		search = request.args.get('search')
+		users = User.query.\
+			filter(or_(User.first_name.like('%' + search + '%'),
+				User.last_name.like('%' + search + '%'),
+				User.email.like('%' + search + '%'),
+				User.student_id.like('%' + search + '%'))).order_by(User.last_name).paginate(page_nr, 15, False)
+		return render_template('group/add_users.htm', group=group, users=users, search=search)
 
 	users = User.query.order_by(User.first_name).order_by(User.last_name).paginate(page_nr, 15, False)
 
