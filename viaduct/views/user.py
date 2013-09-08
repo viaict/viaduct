@@ -5,6 +5,8 @@ from flask import flash, get_flashed_messages, redirect, render_template, \
 from flask import Blueprint, Markup
 from flask.ext.login import current_user, login_user, logout_user
 
+from sqlalchemy import or_
+
 from viaduct import application, db, login_manager
 from viaduct.helpers import flash_form_errors
 from viaduct.forms import SignUpForm, SignInForm
@@ -182,6 +184,15 @@ def view(page_nr=1):
 	#	abort(403)
 	if not GroupPermissionAPI.can_read('user'):
 		return abort(403)
+
+	if request.args.get('search') != None:
+		search = request.args.get('search')
+		users = User.query.\
+			filter(or_(User.first_name.like('%' + search + '%'),
+				User.last_name.like('%' + search + '%'),
+				User.email.like('%' + search + '%'),
+				User.student_id.like('%' + search + '%'))).paginate(page_nr, 15, False)
+		return render_template('user/view.htm', users=users)
 
 	# persumably, if the method is a post we have selected stuff to delete,
 	# similary to groups
