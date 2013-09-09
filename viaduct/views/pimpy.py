@@ -185,7 +185,7 @@ def add_minute(group_id='all'):
 
 		if result:
 			result, message = PimpyAPI.commit_minute_to_db(form.content.data,
-				request.form['date'], form.group.data, form.parse_tasks.data)
+				request.form['date'], form.group.data)
 			if result and form.parse_tasks.data:
 				tasks, dones, removes = PimpyAPI.parse_minute(form.content.data,
 					form.group.data, message)
