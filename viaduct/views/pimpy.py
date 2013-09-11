@@ -121,6 +121,7 @@ def add_task(group_id='all'):
 
 @blueprint.route('/tasks/edit/<string:task_id>', methods=['GET', 'POST'])
 def edit_task(task_id=-1):
+	print "i get here"
 	if not GroupPermissionAPI.can_write('pimpy'):
 		return abort(403)
 	if task_id == '':
@@ -132,6 +133,7 @@ def edit_task(task_id=-1):
 	form = EditTaskForm(request.form, name=task.title, content=task.content,
 		deadline=task.deadline, group=task.group_id, users=task.get_users(),
 		status=task.status)
+
 	if request.method == 'POST':
 		message = ""
 		if form.name.data == "":

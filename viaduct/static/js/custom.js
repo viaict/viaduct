@@ -62,11 +62,13 @@ function update_task_status($task_id, $new_status) {
 }
 
 function edit_task($task_id) {
-	$.getJSON('/pimpy/tasks/edit', {
-		task_id: $task_id
+	$result = $.ajax({url:'/pimpy/tasks/edit/' + $task_id});
+	console.log($result);
+	return false;
+	$.getJSON('/pimpy/tasks/edit/' + $task_id, {
 	}, function(data) {
 	});
-	return false;
+
 }
 
 function update_task($task_id, $task_name, $more_info,
