@@ -21,7 +21,7 @@
 		{{ render_field(form.student_id) }}
 		{{ render_field(form.education_id) }}
 
-		{{ render_field(form.has_payed) }}
+		{% if isAdmin %} {{render_field(form.has_payed) }} {% endif %}
 
 		<div class="control-group">
 			<div class="controls">

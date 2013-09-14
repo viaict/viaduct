@@ -12,7 +12,7 @@ from viaduct.helpers import flash_form_errors
 from viaduct.forms import SignUpForm, SignInForm
 from viaduct.models import User
 from viaduct.models.group import Group
-from viaduct.forms.user import EditUserForm#, EditUserPermissionForm
+from viaduct.forms.user import EditUserForm, EditUserInfoForm#, EditUserPermissionForm
 from viaduct.models.education import Education
 from viaduct.api.group import GroupPermissionAPI
 
@@ -28,14 +28,14 @@ def load_user(user_id):
 
 @blueprint.route('/users/view/<int:user_id>', methods=['GET'])
 def view_single(user_id=None):
-	if not GroupPermissionAPI.can_read('user'):
+	if not GroupPermissionAPI.can_read('user') and (current_user == None or current_user.id != user_id):
 		return abort(403)
 	return render_template('user/view_single.htm', user= User.query.get(user_id))
 
 @blueprint.route('/users/create/', methods=['GET', 'POST'])
 @blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
 def edit(user_id=None):
-	if not GroupPermissionAPI.can_write('user'):
+	if not GroupPermissionAPI.can_write('user') and (current_user == None or current_user.id != user_id):
 		return abort(403)
 
 	# Select user
@@ -44,7 +44,12 @@ def edit(user_id=None):
 	else:
 		user = User()
 
-	form = EditUserForm(request.form, user)
+	if GroupPermissionAPI.can_write('user'):
+		form = EditUserForm(request.form, user)
+		isAdmin = True
+	else:
+		form = EditUserInfoForm(request.form, user)
+		isAdmin = False
 
 	# Add education.
 	educations = Education.query.all()
@@ -70,7 +75,8 @@ def edit(user_id=None):
 		user.email = form.email.data
 		user.first_name = form.first_name.data
 		user.last_name = form.last_name.data
-		user.has_payed = form.has_payed.data
+		if GroupPermissionAPI.can_write('user'):
+			user.has_payed = form.has_payed.data
 		user.student_id = form.student_id.data
 		user.education_id = form.education_id.data
 
@@ -93,7 +99,7 @@ def edit(user_id=None):
 	else:
 		flash_form_errors(form)
 
-	return render_template('user/edit.htm', form=form, user=user)
+	return render_template('user/edit.htm', form=form, user=user, isAdmin=isAdmin)
 
 @blueprint.route('/sign-up/', methods=['GET', 'POST'])
 def sign_up():

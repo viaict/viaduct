@@ -115,7 +115,7 @@ def submit(form_id=None):
 		email = request.form['email'].lower()
 
 		# Logged in user
-		if current_user.id:
+		if current_user != None and current_user.id:
 			user = User.query.get(current_user.id)
 
 			user.first_name	= request.form['first_name']
