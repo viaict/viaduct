@@ -50,6 +50,10 @@ $(document).ready(function() {
 /* PimPy function
  * updates the task status
  */
+
+/* Editable Setting */
+$.fn.editable.defaults.mode = 'inline';
+
 function update_task_status($task_id, $new_status) {
 	$.getJSON('/pimpy/tasks/update_status', {
 		task_id: $task_id,
@@ -62,13 +66,29 @@ function update_task_status($task_id, $new_status) {
 }
 
 function edit_task($task_id) {
-	$.getJSON('/pimpy/tasks/edit', {
-		task_id: $task_id
+	$result = $.ajax({url:'/pimpy/tasks/edit/' + $task_id});
+	console.log($result);
+	return false;
+	$.getJSON('/pimpy/tasks/edit/' + $task_id, {
 	}, function(data) {
 	});
-	return false;
+
 }
 
 function update_task($task_id, $task_name, $more_info,
 	$deadline, $group, $users, $status) {
 }
+
+$(document).ready(function() {
+	$('.pimpy_editable').editable();
+	$('.pimpy_editable_toggle').click(function() {
+		$('.pimpy_editable').editable('toggleDisabled');
+	});
+	$('.pimpy_editable_date').editable({
+		format: 'yyyy-mm-dd',
+		viewformat: 'dd/mm/yyyy',
+		datepicker: {
+			weekStart: 1
+		}
+	});
+});

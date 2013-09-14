@@ -15,7 +15,7 @@ class AddTaskForm(Form):
 	# timestamp
 	line = IntegerField('Line', default=-1, description='Fill in -1 if this is unknown or impossible.')
 	minute_id = IntegerField('Minute ID', default=-1, description='Fill in -1 if this is unknown or impossible.')
-	group = SelectField('Group', multiple=True)
+	group = SelectField('Group')
 	users = TextAreaField('Users', description='Type comma separated names for whom this task is, in a similar manner as you are familiar with whilst taking minutes.', validators=[Required()])
 	status = SelectField('Status', choices=map(lambda x, y: (x, y), range(0, len(Task.status_meanings)), Task.status_meanings), validators=[])
 
