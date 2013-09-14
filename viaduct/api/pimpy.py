@@ -308,7 +308,8 @@ class PimpyAPI:
 					for task in group.tasks:
 						if current_user in task.users:
 							items.append(task)
-					list_users[current_user.first_name] = items
+					if len(items):
+						list_users[current_user.first_name] = items
 					list_items[group.name] = list_users
 			else:
 				tasks = Task.query.filter(Task.group_id==group_id).all()
@@ -316,7 +317,8 @@ class PimpyAPI:
 				for task in tasks:
 					if current_user in task.users:
 						items.append(task)
-				list_users[current_user.first_name] = items
+				if len(items):
+					list_users[current_user.first_name] = items
 				list_items[Group.query.filter(Group.id==group_id).first().name] = list_users
 
 				#group_name = Group.query.filter(Group.id==group_id).first().name
@@ -335,7 +337,8 @@ class PimpyAPI:
 						for task in group.tasks:
 							if user in task.users:
 								items.append(task)
-						list_users[user.first_name] = items
+						if len(items):
+							list_users[user.first_name] = items
 					list_items[group.name] = list_users
 
 			else:
@@ -346,7 +349,8 @@ class PimpyAPI:
 					for task in group.tasks:
 						if user in task.users:
 							items.append(task)
-					list_users[user.first_name] = items
+					if len(items):
+						list_users[user.first_name] = items
 				list_items[group.name] = list_users
 
 		# remove those list items that have been set to checked and removed
