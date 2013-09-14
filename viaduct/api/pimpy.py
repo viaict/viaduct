@@ -7,6 +7,7 @@ from viaduct.models import Minute, Task
 from viaduct import db, application
 
 from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.user import UserAPI
 
 import datetime
 import re
@@ -285,7 +286,7 @@ class PimpyAPI:
 
 		if personal:
 			if group_id == 'all':
-				for group in current_user.groups:
+				for group in UserAPI.get_ordered_groups(current_user):
 					list_users = {}
 					items = []
 					for task in group.tasks:
@@ -315,7 +316,7 @@ class PimpyAPI:
 
 		else:
 			if group_id == 'all':
-				for group in current_user.groups:
+				for group in UserAPI.get_ordered_groups(current_user):
 					list_users = {}
 					for user in group.users:
 						items = []

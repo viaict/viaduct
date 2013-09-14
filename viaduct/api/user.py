@@ -19,7 +19,7 @@ class UserAPI:
 		# if there is no user we treat them as if in the guests group
 		if not current_user or not current_user.id:
 			group = Group.query.filter(Group.name == 'all').first()
-			
+
 			if not(group):
 				raise Exception("No group 'guests', this should never happen!")
 			return [group]
@@ -33,3 +33,7 @@ class UserAPI:
 	@staticmethod
 	def can_write(page):
 		return PagePermission.get_user_rights(current_user, page.id) > 1
+
+	@staticmethod
+	def get_ordered_groups(user):
+		return user.groups.order_by(Group.name)
