@@ -37,6 +37,7 @@ Alles moet eigenlijk even nagelopen worden of het allemaal 1 taal is en spelfout
 * navigation, je kan nog geen paginas deleten (check of een entry geen children heeft faalt altijd).
 * (files uploaden) permissies van het mapje waar we naar uploaden niet op 777 zetten, 'BAS'
 * als je geen rechten hebt en doorverwezen bent na het inloggen zou het mooi zijn als je daarna wel op de pagina komt die je oorspronkelijk probeerde te bereiken
+* paginas waar je geen rechten toe hebt verwijderen uit het menu (zoals admin)
 
 
 ## mail
