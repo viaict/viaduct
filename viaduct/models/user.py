@@ -39,9 +39,11 @@ class User(db.Model):
 		self.education_id = education_id
 
 	def is_authenticated(self):
+		"""Necessary."""
 		return self.id != 0
 
 	def is_active(self):
+		"""Necessary."""
 		return self.id != 0
 
 	def is_anonymous(self):

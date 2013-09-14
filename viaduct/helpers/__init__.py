@@ -1,5 +1,6 @@
-from flask import flash, request, Markup, url_for, render_template
+from flask import flash, request, Markup, url_for, render_template, redirect
 from flask.ext.login import current_user
+
 
 from viaduct import application
 from markdown import markdown
@@ -16,11 +17,20 @@ markdown_extensions = [
 ]
 
 @application.errorhandler(403)
-def page_not_found(e):
-	return "403, The police has been notified."
+def permission_denied(e):
+	""" When permission denied and not logged in you will be redirected. """
+	content = "403, The police has been notified!"
+	image = '/static/img/403.jpg'
 
-@application.errorhandler(404)
-def page_not_found(e):
+	if(current_user.is_anonymous()):
+		flash('Je hebt geen rechten om deze pagina te bekijken.')
+		return redirect(url_for('user.sign_in'))
+
+	return render_template('page/403.htm', content=content, image=image)
+	#return "403, The police has been notified."
+
+@application.errorhandler(500)
+def internal_server_error(e):
 	return "500, External server error."
 
 def flash_form_errors(form):
