@@ -10,10 +10,8 @@
 		{{ form.csrf_token }}
 		{{ render_field(form.email) }}
 
-		{% if not user.id %}
 			{{ render_field(form.password) }}
 			{{ render_field(form.repeat_password) }}
-		{% endif %}
 
 		{{ render_field(form.first_name) }}
 		{{ render_field(form.last_name) }}

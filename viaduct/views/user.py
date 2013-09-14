@@ -80,7 +80,7 @@ def edit(user_id=None):
 		user.student_id = form.student_id.data
 		user.education_id = form.education_id.data
 
-		if not user_id:
+		if form.password.data != '':
 			user.password = bcrypt.hashpw(form.password.data, bcrypt.gensalt())
 
 		db.session.add(user)
