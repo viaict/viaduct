@@ -37,6 +37,7 @@ Alles moet eigenlijk even nagelopen worden of het allemaal 1 taal is en spelfout
 * navigation, je kan nog geen paginas deleten (check of een entry geen children heeft faalt altijd).
 * users verwijderen (na zoeken) werkt niet meer
 * (files uploaden) permissies van het mapje waar we naar uploaden niet op 777 zetten, 'BAS'
+* als een user een emailadres invult wat wij al geregistreerd hebben rkijgen we een internal server error
 
 ## mail
 * alles?
@@ -49,3 +50,10 @@ Een dynamische module die gebruikt kan gaan worden in de tentamenbank, vacaturen
 
 Je geeft op welke tabellen en welke kolommen doorzocht moeten worden. `tijmen zwaan` als query moet matchen op
 een user terwijl de kolomen firstname en lastname zijn.
+
+## permissions
+In viaduct hebben we modules, zoals pimpy, group, user etc. Kijk maar naar svia.nl/groups en dan edit permissions van administrator voor een overzicht van de modul die we hebben. We hebben ook een module waarin je kan zetten welke groups welke modules mogen lezen of lezen en schrijven en het zou chill zijn als je deze kan verbeteren. 
+
+Vorige keer was dit vrij snel bij elkaar gehackt maar we willen natuurlijk dat de modules die we in viaduct stoppen automagisch getoond worden, en aanpasbaar zijn (indien juiste rechten). Nu is het zo dat je zelf de naam van een module moet toevoegen.
+
+Een verbetering is als module_permission dit zelf bijhoudt. Hiervoor moet het dus dynamisch kunnen zien welke modules in viaduct zitten OF we moeten zorgen dat modules zichzelf ergens registreren zodat de module_permission daar kan zien welke modules er allemaal zijn. 
