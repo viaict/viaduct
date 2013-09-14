@@ -197,28 +197,20 @@ def view(page_nr=1):
 	if not GroupPermissionAPI.can_read('user'):
 		return abort(403)
 
-	if request.args.get('search') != None:
-		search = request.args.get('search')
-		users = User.query.\
-			filter(or_(User.first_name.like('%' + search + '%'),
-				User.last_name.like('%' + search + '%'),
-				User.email.like('%' + search + '%'),
-				User.student_id.like('%' + search + '%'))).order_by(User.first_name).order_by(User.last_name).paginate(page_nr, 15, False)
-		return render_template('user/view.htm', users=users, search=search)
 
 	# persumably, if the method is a post we have selected stuff to delete,
 	# similary to groups
 	if request.method == 'POST':
 		user_ids = request.form.getlist('select')
 
-		users = User.query.filter(User.id.in_(user_ids)).all()
+		del_users = User.query.filter(User.id.in_(user_ids)).all()
 
-		for user in users:
+		for user in del_users:
 			db.session.delete(user)
 
 		db.session.commit()
 
-		if len(users) > 1:
+		if len(del_users) > 1:
 			flash('The selected users have been deleted.', 'success')
 		else:
 			flash('The selected user has been deleted.', 'success')
@@ -226,7 +218,17 @@ def view(page_nr=1):
 		redirect(url_for('user.view'))
 
 	# Get a list of users to render for the current page.
-	users = User.query.order_by(User.first_name).order_by(User.last_name)\
-				.paginate(page_nr, 15, False)
+	if request.args.get('search') != None:
+		search = request.args.get('search')
+		users = User.query.\
+			filter(or_(User.first_name.like('%' + search + '%'),
+				User.last_name.like('%' + search + '%'),
+				User.email.like('%' + search + '%'),
+				User.student_id.like('%' + search + '%'))).order_by(User.first_name).order_by(User.last_name).paginate(page_nr, 15, False)
+	else:
+		search = ''
+		users = User.query.order_by(User.first_name).order_by(User.last_name)\
+			.paginate(page_nr, 15, False)
 
-	return render_template('user/view.htm', users=users)
+
+	return render_template('user/view.htm', users=users, search=search)
