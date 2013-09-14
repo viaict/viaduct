@@ -27,7 +27,7 @@
 		</fieldset>
 	</form>
 
-	{% if entry and not entry.children %}
+	{% if entry and entry.children.count() == 0 %}
 		<form action="{{ url_for('navigation.delete', entry_id=entry.id) }}" method="post" name="delete_navigation_entry">
 			<fieldset>
 				<button class="btn btn-danger" type="submit">Verwijderen</button>
