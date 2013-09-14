@@ -37,6 +37,7 @@ Alles moet eigenlijk even nagelopen worden of het allemaal 1 taal is en spelfout
 * navigation, je kan nog geen paginas deleten (check of een entry geen children heeft faalt altijd).
 * users verwijderen (na zoeken) werkt niet meer
 * (files uploaden) permissies van het mapje waar we naar uploaden niet op 777 zetten, 'BAS'
+* Als user kun je je eigen gegevens niet aanpassen. Hier heb je geen permissie voor.
 
 ## mail
 * alles?
