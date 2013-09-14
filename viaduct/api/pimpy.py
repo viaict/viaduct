@@ -304,21 +304,23 @@ class PimpyAPI:
 		#print "personal ", personal, " group id ", group_id
 
 		if personal:
+			list_users = {}
 			if group_id == 'all':
 				for group in current_user.groups:
-					# this should be done in one query, but meh
 					items = []
 					for task in group.tasks:
 						if current_user in task.users:
 							items.append(task)
-					list_items[group.name] = items
+					list_users[current_user.first_name] = items
+					list_items[group.name] = list_users
 			else:
-				query = Task.query.filter(Task.group_id==group_id)
+				tasks = Task.query.filter(Task.group_id==group_id).all()
 				items = []
-				for task in query.all():
+				for task in tasks:
 					if current_user in task.users:
 						items.append(task)
-				list_items[Group.query.filter(Group.id==group_id).first().name] = items
+				list_users[current_user.first_name] = items
+				list_items[Group.query.filter(Group.id==group_id).first().name] = list_users
 
 				#group_name = Group.query.filter(Group.id==group_id).first().name
 				#list_items[group_name] = []
@@ -330,14 +332,30 @@ class PimpyAPI:
 		else:
 			if group_id == 'all':
 				for group in current_user.groups:
-					list_items[group.name] = group.tasks
+					list_users = {}
+					for user in group.users:
+						items = []
+						for task in group.tasks:
+							if user in task.users:
+								items.append(task)
+						list_users[user.first_name] = items
+					list_items[group.name] = list_users
+
 			else:
-				query = Task.query.filter(Task.group_id==group_id)
-				list_items[Group.query.filter(Group.id==group_id).first().name] = query.all()
+				group = Group.query.filter(Group.id==group_id).first()
+				list_users = {}
+				for user in group.users:
+					items = []
+					for task in group.tasks:
+						if user in task.users:
+							items.append(task)
+					list_users[user.first_name] = items
+				list_items[group.name] = list_users
 
 		# remove those list items that have been set to checked and removed
 		for group_header in list_items:
-			list_items[group_header] = filter(lambda x: x.status < 4, list_items[group_header])
+			for user_header in list_items[group_header]:
+				list_items[group_header][user_header] = filter(lambda x: x.status < 4, list_items[group_header][user_header])
 
 		return Markup(render_template('pimpy/api/tasks.htm',
 			list_items=list_items, type='tasks', group_id=group_id,
@@ -345,6 +363,9 @@ class PimpyAPI:
 
 	@staticmethod
 	def get_minutes(group_id):
+		"""
+		Load all minutes in the given group
+		"""
 		if not GroupPermissionAPI.can_read('pimpy'):
 			abort(403)
 
@@ -364,7 +385,7 @@ class PimpyAPI:
 	@staticmethod
 	def get_minute(group_id, minute_id):
 		"""
-		Loads (and thus views) specifically one minute
+		Load (and thus view) specifically one minute
 		"""
 		if not GroupPermissionAPI.can_read('pimpy'):
 			abort(403)
@@ -377,5 +398,58 @@ class PimpyAPI:
 		return Markup(render_template('pimpy/api/minutes.htm',
 			list_items=list_items, type='minutes', group_id=group_id))
 
+	@staticmethod
+	def update_content(task_id, content):
+		"""
+		Update the content of the task with the given id
+		"""
+		task = Task.query.filter(Task.id==task_id).first()
+		task.content = content
+		db.session.commit()
+		return True, "The task is edited sucessfully"
+
+	@staticmethod
+	def update_title(task_id, title):
+		"""
+		Update the title of the task with the given id
+		"""
+		task = Task.query.filter(Task.id==task_id).first()
+		task.title = title
+		db.session.commit()
+		return True, "The task is edited sucessfully"
+
+	@staticmethod
+	def update_users(task_id, comma_sep_users):
+		"""
+		Update the users of the task with the given id
+		"""
+		task = Task.query.filter(Task.id==task_id).first()
+		users, message = PimpyAPI.get_list_of_users_from_string(task.group_id,
+			comma_sep_users)
+		print users
+		if not users:
+			print "this is false"
+			return False, message
+		task.users = users
+		db.session.commit()
+		return True, "The task is edited sucessfully"
+
+	@staticmethod
+	def update_date(task_id, date):
+		"""
+		Update the date of the task with the given id
+		"""
+		print "update_date"
+		try:
+			date = datetime.datetime.strptime(date, DATE_FORMAT)
+		except:
+			if date != "":
+				return False, "Could not parse the date"
+			date = None
+
+		task = Task.query.filter(Task.id == task_id).first()
+		task.deadline = date
+		db.session.commit()
+		return True, "The task is edited sucessfully"
 
 

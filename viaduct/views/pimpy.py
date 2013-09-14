@@ -119,40 +119,30 @@ def add_task(group_id='all'):
 	return render_template('pimpy/add_task.htm', group=group,
 		group_id=group_id, type='tasks', form=form)
 
+@blueprint.route('/tasks/edit/', methods=['GET', 'POST'])
 @blueprint.route('/tasks/edit/<string:task_id>', methods=['GET', 'POST'])
 def edit_task(task_id=-1):
 	print "i get here"
 	if not GroupPermissionAPI.can_write('pimpy'):
 		return abort(403)
-	if task_id == '':
+	if task_id == '' or task_id == -1:
 		flash('task not specified')
 		return redirect(url_for('pimpy.view_tasks', group_id='all'))
 
-	task = Task.query.filter(Task.id==task_id).first()
-
-	form = EditTaskForm(request.form, name=task.title, content=task.content,
-		deadline=task.deadline, group=task.group_id, users=task.get_users(),
-		status=task.status)
-
 	if request.method == 'POST':
-		message = ""
-		if form.name.data == "":
-			message = "Name is required"
-		elif form.group == "":
-			message = "Group is required"
-		elif form.users.data == "":
-			message = "A minimum of 1 user is required"
+		print request.form['name']
+		print request.form['value']
+		name = request.form['name']
+		if name == "content":
+			result, message = PimpyAPI.update_content(task_id, request.form['value'])
+		elif name == "title":
+			result, message = PimpyAPI.update_title(task_id, request.form['value'])
+		elif name == "users":
+			result, message = PimpyAPI.update_users(task_id, request.form['value'])
+		elif name == "deadline":
+			result, message = PimpyAPI.update_deadline(task_id, request.form['value'])
 
-		result = message == ""
-
-		if result:
-			result, message = PimpyAPI.edit_task(task_id, form.name.data,
-				form.content.data, request.form['deadline'],
-				form.group.data, form.users.data, form.line.data)
-
-		if result:
-			flash('The task is edited sucessfully')
-			return redirect(url_for('pimpy.view_tasks', group_id=form.group.data))
+		return message
 
 
 	group = Group.query.filter(Group.id==task.group_id).first()
