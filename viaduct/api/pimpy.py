@@ -309,7 +309,7 @@ class PimpyAPI:
 						if current_user in task.users:
 							items.append(task)
 					if len(items):
-						list_users[current_user.first_name] = items
+						list_users[current_user.first_name + " " + current_user.last_name] = items
 					if len(list_users):
 						list_items[group.name] = list_users
 			else:
@@ -319,7 +319,7 @@ class PimpyAPI:
 					if current_user in task.users:
 						items.append(task)
 				if len(items):
-					list_users[current_user.first_name] = items
+					list_users[current_user.first_name + " " + current_user.last_name] = items
 				if len(list_users):
 					list_items[Group.query.filter(Group.id==group_id).first().name] = list_users
 
@@ -340,7 +340,7 @@ class PimpyAPI:
 							if user in task.users:
 								items.append(task)
 						if len(items):
-							list_users[user.first_name] = items
+							list_users[user.first_name + " " + user.last_name] = items
 					if len(list_users):
 						list_items[group.name] = list_users
 
@@ -353,7 +353,7 @@ class PimpyAPI:
 						if user in task.users:
 							items.append(task)
 					if len(items):
-						list_users[user.first_name] = items
+						list_users[user.first_name + " " + user.last_name] = items
 				if len(list_users):
 					list_items[group.name] = list_users
 

@@ -41,7 +41,6 @@ def favicon_route():
 @blueprint.route('/<path:path>', methods=['GET', 'POST'])
 def get_page(path=''):
 
-	print "CURRENT USER:!!!!!!!!!!!!!!!",  current_user
 	revisions = []
 
 	is_main_page = False
