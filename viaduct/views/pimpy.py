@@ -181,7 +181,17 @@ def add_minute(group_id='all'):
 			if result and form.parse_tasks.data:
 				tasks, dones, removes = PimpyAPI.parse_minute(form.content.data,
 					form.group.data, message)
+				for task in tasks:
+					db.session.add(task)
+				for done in dones:
+					done.update_status(4)
+				for remove in removes:
+					remove.update_status(5)
+				db.session.commit()
 				flash('The minute has been parsed:')
+
+				return render_template('pimpy/view_parsed_tasks.htm',
+					tasks=tasks, dones=dones, removes=removes)
 
 		if result:
 			flash('The minute is added successfully')
@@ -193,5 +203,4 @@ def add_minute(group_id='all'):
 
 	return render_template('pimpy/add_minute.htm', group=group,
 		group_id=group_id, type='minutes', form=form)
-
 

@@ -146,8 +146,8 @@ class PimpyAPI:
 	@staticmethod
 	def parse_minute(content, group_id, minute_id):
 		"""
-		Parses the specified minutes for tasks and returns them in a list.
-		Same counts for DONE's and REMOVE's
+		Parse the specified minutes for tasks and return them in a list.
+		Same for DONE tasks and REMOVED tasks
 
 		syntax within the content:
 		ACTIE <name_1>, <name_2>, name_n>: <title of task>
@@ -179,10 +179,9 @@ class PimpyAPI:
 				if not users:
 					print message
 					continue
-				print users[0].first_name
-				print users[0].last_name
 				try:
-					task = Task(title, "", "", group_id, users, line, minute_id, 0)
+					task = Task(title, "", None, group_id, users, minute_id,
+						line, 0)
 				except:
 					print "wasnt given the right input to create a task"
 					continue
@@ -190,31 +189,19 @@ class PimpyAPI:
 
 		regex = re.compile("\s*(?:DONE) ([^\n\r]*)")
 		matches = regex.findall(content)
-		for done in matches:
-			query = Task.query
-			print "done = " + done
-			query = query.filter(Task.id==done)
-			list_items = query.all()
-			if list_items:
-				print list_items[0].id
-				print list_items[0].title
-				for item in list_items:
-					dones_found.append(item)
+		for done_id in matches:
+			done_task = Task.query.filter(Task.id==done_id).first()
+			if done_task:
+				dones_found.append(done_task)
 			else:
-				print "Could not find task " + done
+				print "Could not find task " + done_id
 
 		regex = re.compile("\s*(?:REMOVE) ([^\n\r]*)")
 		matches = regex.findall(content)
-		for remove in matches:
-			query = Task.query
-			print "remove = " + remove
-			query = query.filter(Task.id==remove)
-			list_items = query.all()
-			if list_items:
-				print list_items[0].id
-				print list_items[0].title
-				for item in list_items:
-					removes_found.append(item)
+		for remove_id in matches:
+			remove_task = Task.query.filter(Task.id==remove_id).first()
+			if remove_task:
+				removes_found.append(remove_task)
 
 		return tasks_found, dones_found, removes_found
 
@@ -272,9 +259,14 @@ class PimpyAPI:
 	def get_navigation_menu(group_id, personal, type):
 		if not GroupPermissionAPI.can_read('pimpy'):
 			abort(403)
+		if not current_user:
+			flash('Current_user not found')
+			return redirect(url_for('pimpy.view_minutes'))
 
 		groups = current_user.groups.all()
 
+		if not type:
+			type='minutes'
 		endpoint = 'pimpy.view_' + type
 		endpoints = {'view_chosentype' : endpoint,
 					'view_chosentype_personal' : endpoint + '_personal',
@@ -286,6 +278,8 @@ class PimpyAPI:
 		if personal:
 			endpoints['view_tasks_chosenpersonal'] += '_personal'
 
+		if not group_id:
+			group_id = 'all'
 		if group_id != 'all':
 			group_id = int(group_id)
 
@@ -297,6 +291,9 @@ class PimpyAPI:
 	def get_tasks(group_id, personal):
 		if not GroupPermissionAPI.can_read('pimpy'):
 			abort(403)
+		if not current_user:
+			flash('Current_user not found')
+			return redirect(url_for('pimpy.view_tasks'))
 		# TODO: only return tasks with status != completed
 
 		list_items = {}
@@ -368,11 +365,14 @@ class PimpyAPI:
 		"""
 		if not GroupPermissionAPI.can_read('pimpy'):
 			abort(403)
+		if not current_user:
+			flash('Current_user not found')
+			return redirect(url_for('pimpy.view_minutes'))
 
 		list_items = {}
 
 		if group_id != 'all':
-			query = Minute.query.filter(Minute.group_id==group_id)
+			query = Minute.query.filter(Minute.group_id==group_id).order_by(Minute.timestamp.desc())
 			list_items[Group.query.filter(Group.id==group_id).first().name] = query.all()
 		# this should be done with a sql in statement, or something, but meh
 		else:
@@ -389,6 +389,9 @@ class PimpyAPI:
 		"""
 		if not GroupPermissionAPI.can_read('pimpy'):
 			abort(403)
+		if not current_user:
+			flash('Current_user not found')
+			return redirect(url_for('pimpy.view_minutes'))
 
 		list_items = {}
 		query = Minute.query.filter(Minute.id==minute_id)
