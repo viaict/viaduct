@@ -64,7 +64,7 @@ def get_page(path=''):
 				if not UserAPI.can_read(page):
 					if not path == 'activities':
 						abort(403)
-			elif not revision.author.id == current_user.id:
+			elif current_user != None and not revision.author.id == current_user.id:
 				if not UserAPI.can_read(page):
 					if not path == 'activities':
 						abort(403)
