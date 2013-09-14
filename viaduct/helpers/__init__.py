@@ -22,7 +22,7 @@ def permission_denied(e):
 	content = "403, The police has been notified!"
 	image = '/static/img/403.jpg'
 
-	if(current_user == None || current_user.is_anonymous()):
+	if(current_user == None or current_user.is_anonymous()):
 		flash('Je hebt geen rechten om deze pagina te bekijken.')
 		return redirect(url_for('user.sign_in'))
 
