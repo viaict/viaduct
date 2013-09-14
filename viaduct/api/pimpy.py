@@ -39,21 +39,6 @@ class PimpyAPI:
 		db.session.add(minute)
 		db.session.commit()
 
-		"""
-		code that has to be moved to views
-
-		if parse_tasks:
-			tasks, dones, removes = PimpyAPI.parse_minute(content,
-				group_id, minute.id)
-			print "I'm now going to print all tasks, dones and removes"
-			for task in tasks:
-				print task
-			for done in dones:
-				print done
-			for remove in removes:
-				print remove
-		"""
-
 		return True, minute.id
 
 
@@ -298,12 +283,10 @@ class PimpyAPI:
 
 		list_items = {}
 
-		#print "personal ", personal, " group id ", group_id
-
 		if personal:
-			list_users = {}
 			if group_id == 'all':
 				for group in current_user.groups:
+					list_users = {}
 					items = []
 					for task in group.tasks:
 						if current_user in task.users:
@@ -437,9 +420,7 @@ class PimpyAPI:
 		task = Task.query.filter(Task.id==task_id).first()
 		users, message = PimpyAPI.get_list_of_users_from_string(task.group_id,
 			comma_sep_users)
-		print users
 		if not users:
-			print "this is false"
 			return False, message
 		task.users = users
 		db.session.commit()
@@ -450,7 +431,6 @@ class PimpyAPI:
 		"""
 		Update the date of the task with the given id
 		"""
-		print "update_date"
 		try:
 			date = datetime.datetime.strptime(date, DATE_FORMAT)
 		except:

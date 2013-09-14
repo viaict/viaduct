@@ -122,7 +122,6 @@ def add_task(group_id='all'):
 @blueprint.route('/tasks/edit/', methods=['GET', 'POST'])
 @blueprint.route('/tasks/edit/<string:task_id>', methods=['GET', 'POST'])
 def edit_task(task_id=-1):
-	print "i get here"
 	if not GroupPermissionAPI.can_write('pimpy'):
 		return abort(403)
 	if task_id == '' or task_id == -1:
@@ -130,8 +129,6 @@ def edit_task(task_id=-1):
 		return redirect(url_for('pimpy.view_tasks', group_id='all'))
 
 	if request.method == 'POST':
-		print request.form['name']
-		print request.form['value']
 		name = request.form['name']
 		if name == "content":
 			result, message = PimpyAPI.update_content(task_id, request.form['value'])
@@ -146,8 +143,6 @@ def edit_task(task_id=-1):
 
 
 	group = Group.query.filter(Group.id==task.group_id).first()
-	print group
-	print group.id
 	form.load_groups(current_user.groups.all())
 	return render_template('pimpy/edit_task.htm', group=group,
 		group_id=group.id, type='tasks', form=form)
