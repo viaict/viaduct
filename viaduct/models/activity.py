@@ -52,7 +52,6 @@ class Activity(db.Model):
 					self.end_time.strftime("%a. %d (%H:%M) %b")
 
 	def get_short_description(self, characters):
-
 		if (len(self.description) > characters):
 			short_description = self.description[:characters].strip()
 			words = short_description.split(' ')[:-1]
