@@ -40,7 +40,6 @@ def favicon_route():
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<path:path>', methods=['GET', 'POST'])
 def get_page(path=''):
-
 	revisions = []
 
 	is_main_page = False
