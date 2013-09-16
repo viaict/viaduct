@@ -28,6 +28,11 @@ Heeft pas voor het tweede semester prioriteit.
 ## spelfout/taal-consistentie check doen
 Alles moet eigenlijk even nagelopen worden of het allemaal 1 taal is en spelfoutloos.
 
+## Tentamenbank, Victors verzoeken (Mailonderwerp `Tentamenbank`, tijdspostzegel `Sun, Sep 15, 2013 at 3:35 PM`) 'BRAM'
+* De vakken aan een studie te koppelen (dus dat er niet perongeluk vakken bij de verkeerde studie terecht kunnen komen);
+* De vakken, studies, tentamens op alfabetische volgorde te zetten;
+* De titelsuggestie voor het tentamen (bij nieuw tentamen) aan te passen naar de standaard (zie doc).
+
 ## documentatie
 * systeem opzetten wat de documenatie voor viaduct organiseert
 * alle modules etc documenteren
