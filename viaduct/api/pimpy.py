@@ -299,6 +299,7 @@ class PimpyAPI:
 			else:
 				tasks = Task.query.filter(Task.group_id==group_id).all()
 				items = []
+				list_users = {}
 				for task in tasks:
 					if current_user in task.users:
 						items.append(task)
