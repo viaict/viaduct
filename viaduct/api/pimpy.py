@@ -286,7 +286,7 @@ class PimpyAPI:
 
 		if personal:
 			if group_id == 'all':
-				for group in UserAPI.get_ordered_groups(current_user):
+				for group in UserAPI.get_groups_for_current_user():
 					list_users = {}
 					items = []
 					for task in group.tasks:
@@ -317,7 +317,7 @@ class PimpyAPI:
 
 		else:
 			if group_id == 'all':
-				for group in UserAPI.get_ordered_groups(current_user):
+				for group in UserAPI.get_groups_for_current_user():
 					list_users = {}
 					for user in group.users:
 						items = []

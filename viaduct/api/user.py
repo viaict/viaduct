@@ -24,7 +24,7 @@ class UserAPI:
 				raise Exception("No group 'guests', this should never happen!")
 			return [group]
 
-		return current_user.groups
+		return current_user.groups.order_by(Group.name)
 
 	@staticmethod
 	def can_read(page):
@@ -33,7 +33,3 @@ class UserAPI:
 	@staticmethod
 	def can_write(page):
 		return PagePermission.get_user_rights(current_user, page.id) > 1
-
-	@staticmethod
-	def get_ordered_groups(user):
-		return user.groups.order_by(Group.name)
