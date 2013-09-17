@@ -21,7 +21,6 @@ from viaduct.api.group import GroupPermissionAPI
 
 blueprint = Blueprint('pimpy', __name__, url_prefix='/pimpy')
 
-@blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/minutes/', methods=['GET', 'POST'])
 @blueprint.route('/minutes/<group_id>', methods=['GET', 'POST'])
 def view_minutes(group_id='all'):
@@ -42,6 +41,7 @@ def view_tasks(group_id='all'):
 		return abort(403)
 	return PimpyAPI.get_tasks(group_id, False)
 
+@blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/tasks/me/', methods=['GET', 'POST'])
 @blueprint.route('/tasks/me/<group_id>/', methods=['GET', 'POST'])
 def view_tasks_personal(group_id='all'):
