@@ -21,10 +21,9 @@ class PimpyAPI:
 	@staticmethod
 	def commit_minute_to_db(content, date, group_id):
 		"""
-		Returns succes (boolean), message (string). Message is irrelevant if
-		success is true, otherwise it contains what exactly went wrong.
-
-		In case of succes the minute is entered into the database
+		Enter minute into the database.
+		Return succes (boolean, message (string). Message is the new minute.id
+		if succes is true, otherwise it contains an error message.
 		"""
 		if not GroupPermissionAPI.can_write('pimpy'):
 			abort(403)
@@ -47,10 +46,9 @@ class PimpyAPI:
 	def commit_task_to_db(name, content, deadline, group_id,
 		filled_in_users, line, minute_id, status):
 		"""
-		Returns succes (boolean), message (string). Message is irrelevant if
-		success is true, otherwise it contains what exactly went wrong.
-
-		In case of succes the task is entered into the database
+		Enter task into the database.
+		Return succes (boolean), message (string). Message is the new task.id
+		if succes is true, otherwise it contains an error message.
 		"""
 		if not GroupPermissionAPI.can_write('pimpy'):
 			abort(403)
@@ -80,13 +78,13 @@ class PimpyAPI:
 				users, minute_id, line, status)
 		db.session.add(task)
 		db.session.commit()
-		return True, "jaja"
+		return True, task.id
 
 	@staticmethod
 	def edit_task(task_id, name, content, deadline, group_id,
 		filled_in_users, line):
 		"""
-		Returns succed (boolean), message (string). Message is irrelevant if
+		Returns succes (boolean), message (string). Message is irrelevant if
 		succes is true, otherwise it contains what exactly went wrong.
 
 		In case of succes the task is edited in the database.
@@ -159,6 +157,7 @@ class PimpyAPI:
 					listed_users, title = action.split(":")
 				except:
 					print "could not split the line on ':'.\nSkipping hit."
+					flash("could not parse: " + action)
 					continue
 
 				users, message = PimpyAPI.get_list_of_users_from_string(group_id, listed_users)
@@ -167,7 +166,7 @@ class PimpyAPI:
 					continue
 				try:
 					task = Task(title, "", None, group_id, users, minute_id,
-						line, 0)
+						i, 0)
 				except:
 					print "wasnt given the right input to create a task"
 					continue
@@ -176,18 +175,32 @@ class PimpyAPI:
 		regex = re.compile("\s*(?:DONE) ([^\n\r]*)")
 		matches = regex.findall(content)
 		for done_id in matches:
-			done_task = Task.query.filter(Task.id==done_id).first()
+			try:
+				done_task = Task.query.filter(Task.id==done_id).first()
+			except:
+				print "could not find the given task"
+				flash("could not find DONE " + done_id)
+				continue
 			if done_task:
 				dones_found.append(done_task)
 			else:
 				print "Could not find task " + done_id
+				flash("could not find DONE " + done_id)
 
 		regex = re.compile("\s*(?:REMOVE) ([^\n\r]*)")
 		matches = regex.findall(content)
 		for remove_id in matches:
-			remove_task = Task.query.filter(Task.id==remove_id).first()
+			try:
+				remove_task = Task.query.filter(Task.id==remove_id).first()
+			except:
+				print "could not find the given task"
+				flash("could not find REMOVE " + remove_id)
+				continue
 			if remove_task:
 				removes_found.append(remove_task)
+			else:
+				print "Could not find REMOVE " + remove_id
+				flash("could not find REMOVE " + remove_id)
 
 		return tasks_found, dones_found, removes_found
 
