@@ -1,4 +1,4 @@
-from flask import render_template, request, Markup, redirect, url_for, abort
+from flask import render_template, request, Markup, redirect, url_for, abort, flash
 from flask.ext.login import current_user
 
 from viaduct.models import Group, User
