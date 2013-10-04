@@ -69,6 +69,10 @@ def view_single(form_id=None):
 	from urlparse import parse_qs
 
 	for entry in entries:
+		# Hide form entries from non existing users
+		if not entry.owner:
+			continue
+
 		data = parse_qs(entry.data)
 
 		html = '<dl>'
@@ -136,17 +140,22 @@ def submit(form_id=None):
 	response = "success"
 
 	if form_id:
-		email = request.form['email'].lower()
+		# Allow users to change their details
+		#email = request.form['email'].lower()
 
 		# Logged in user
 		if current_user and current_user.id > 0:
 			user = User.query.get(current_user.id)
 
-			user.first_name	= request.form['first_name']
-			user.last_name	= request.form['last_name']
-			user.email			= email
+			#user.first_name	= request.form['first_name']
+			#user.last_name	= request.form['last_name']
+			#user.email			= email
 		else:
+			# Need to be logged in
+			return abort(403)
+
 			# Check if a non-logged in user that has an account submits request
+			'''
 			user = User.query.filter(User.email == email).first()
 
 			# Create a user if it does not exist yet
@@ -170,22 +179,7 @@ def submit(form_id=None):
 
 				db.session.add(group)
 				db.session.commit()
-
-				''' TODO send an email for new accounts
-				try:
-					msg = MIMEText("Hoi %s %s,\n\nWe hebben een account op de via website voor je gemaakt. Het wachtwoord is '%s'.\n\nMet vriendelijke groet,\nICT commissie" % user.first_name, user.last_name, tmp_password)
-					msg['Subject'] = '[VIA] Registratie op svia.nl'
-					msg['From']		 = 'ict@svia.nl'
-					msg['To'] 		 = email
-
-					# Send the message via our own SMTP server, but don't include the
-					# envelope header.
-					s = smtplib.SMTP('localhost')
-					s.sendmail('ict@svia.nl', [email], msg.as_string())
-					s.quit()
-				except Exception :
-					pass
-				'''
+	'''
 
 	if not user:
 		response = "error"
@@ -214,12 +208,12 @@ def submit(form_id=None):
 
 		duplicate_test = CustomFormResult.query.filter(
 			CustomFormResult.owner_id == user.id, 
-			CustomFormResult.form_id == form_id).first()
+			CustomFormResult.form_id == form_id
+		).first()
 
 		if duplicate_test:
 			result			= duplicate_test
 			result.data	= request.form['data']
-	
 			response = "edit"
 		else:
 			result = CustomFormResult(user.id, form_id, request.form['data'])
