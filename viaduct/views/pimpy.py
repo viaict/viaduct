@@ -21,7 +21,6 @@ from viaduct.api.group import GroupPermissionAPI
 
 blueprint = Blueprint('pimpy', __name__, url_prefix='/pimpy')
 
-@blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/minutes/', methods=['GET', 'POST'])
 @blueprint.route('/minutes/<group_id>', methods=['GET', 'POST'])
 def view_minutes(group_id='all'):
@@ -42,6 +41,7 @@ def view_tasks(group_id='all'):
 		return abort(403)
 	return PimpyAPI.get_tasks(group_id, False)
 
+@blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/tasks/me/', methods=['GET', 'POST'])
 @blueprint.route('/tasks/me/<group_id>/', methods=['GET', 'POST'])
 def view_tasks_personal(group_id='all'):
@@ -119,43 +119,30 @@ def add_task(group_id='all'):
 	return render_template('pimpy/add_task.htm', group=group,
 		group_id=group_id, type='tasks', form=form)
 
+@blueprint.route('/tasks/edit/', methods=['GET', 'POST'])
 @blueprint.route('/tasks/edit/<string:task_id>', methods=['GET', 'POST'])
 def edit_task(task_id=-1):
 	if not GroupPermissionAPI.can_write('pimpy'):
 		return abort(403)
-	if task_id == '':
+	if task_id == '' or task_id == -1:
 		flash('task not specified')
 		return redirect(url_for('pimpy.view_tasks', group_id='all'))
 
-	task = Task.query.filter(Task.id==task_id).first()
-
-	form = EditTaskForm(request.form, name=task.title, content=task.content,
-		deadline=task.deadline, group=task.group_id, users=task.get_users(),
-		status=task.status)
 	if request.method == 'POST':
-		message = ""
-		if form.name.data == "":
-			message = "Name is required"
-		elif form.group == "":
-			message = "Group is required"
-		elif form.users.data == "":
-			message = "A minimum of 1 user is required"
+		name = request.form['name']
+		if name == "content":
+			result, message = PimpyAPI.update_content(task_id, request.form['value'])
+		elif name == "title":
+			result, message = PimpyAPI.update_title(task_id, request.form['value'])
+		elif name == "users":
+			result, message = PimpyAPI.update_users(task_id, request.form['value'])
+		elif name == "deadline":
+			result, message = PimpyAPI.update_deadline(task_id, request.form['value'])
 
-		result = message == ""
-
-		if result:
-			result, message = PimpyAPI.edit_task(task_id, form.name.data,
-				form.content.data, request.form['deadline'],
-				form.group.data, form.users.data, form.line.data)
-
-		if result:
-			flash('The task is edited sucessfully')
-			return redirect(url_for('pimpy.view_tasks', group_id=form.group.data))
+		return message
 
 
 	group = Group.query.filter(Group.id==task.group_id).first()
-	print group
-	print group.id
 	form.load_groups(current_user.groups.all())
 	return render_template('pimpy/edit_task.htm', group=group,
 		group_id=group.id, type='tasks', form=form)
@@ -185,11 +172,21 @@ def add_minute(group_id='all'):
 
 		if result:
 			result, message = PimpyAPI.commit_minute_to_db(form.content.data,
-				request.form['date'], form.group.data, form.parse_tasks.data)
+				request.form['date'], form.group.data)
 			if result and form.parse_tasks.data:
 				tasks, dones, removes = PimpyAPI.parse_minute(form.content.data,
 					form.group.data, message)
+				for task in tasks:
+					db.session.add(task)
+				for done in dones:
+					done.update_status(4)
+				for remove in removes:
+					remove.update_status(5)
+				db.session.commit()
 				flash('The minute has been parsed:')
+
+				return render_template('pimpy/view_parsed_tasks.htm',
+					tasks=tasks, dones=dones, removes=removes)
 
 		if result:
 			flash('The minute is added successfully')
@@ -201,5 +198,4 @@ def add_minute(group_id='all'):
 
 	return render_template('pimpy/add_minute.htm', group=group,
 		group_id=group_id, type='minutes', form=form)
-
 

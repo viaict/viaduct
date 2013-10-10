@@ -1,4 +1,4 @@
-from flask import render_template, request, Markup, redirect, url_for, abort
+from flask import render_template, request, Markup, redirect, url_for, abort, flash
 from flask.ext.login import current_user
 
 from viaduct.models import Group, User
@@ -7,6 +7,7 @@ from viaduct.models import Minute, Task
 from viaduct import db, application
 
 from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.user import UserAPI
 
 import datetime
 import re
@@ -20,10 +21,9 @@ class PimpyAPI:
 	@staticmethod
 	def commit_minute_to_db(content, date, group_id):
 		"""
-		Returns succes (boolean), message (string). Message is irrelevant if
-		success is true, otherwise it contains what exactly went wrong.
-
-		In case of succes the minute is entered into the database
+		Enter minute into the database.
+		Return succes (boolean, message (string). Message is the new minute.id
+		if succes is true, otherwise it contains an error message.
 		"""
 		if not GroupPermissionAPI.can_write('pimpy'):
 			abort(403)
@@ -39,21 +39,6 @@ class PimpyAPI:
 		db.session.add(minute)
 		db.session.commit()
 
-		"""
-		code that has to be moved to views
-
-		if parse_tasks:
-			tasks, dones, removes = PimpyAPI.parse_minute(content,
-				group_id, minute.id)
-			print "I'm now going to print all tasks, dones and removes"
-			for task in tasks:
-				print task
-			for done in dones:
-				print done
-			for remove in removes:
-				print remove
-		"""
-
 		return True, minute.id
 
 
@@ -61,10 +46,9 @@ class PimpyAPI:
 	def commit_task_to_db(name, content, deadline, group_id,
 		filled_in_users, line, minute_id, status):
 		"""
-		Returns succes (boolean), message (string). Message is irrelevant if
-		success is true, otherwise it contains what exactly went wrong.
-
-		In case of succes the task is entered into the database
+		Enter task into the database.
+		Return succes (boolean), message (string). Message is the new task.id
+		if succes is true, otherwise it contains an error message.
 		"""
 		if not GroupPermissionAPI.can_write('pimpy'):
 			abort(403)
@@ -94,13 +78,13 @@ class PimpyAPI:
 				users, minute_id, line, status)
 		db.session.add(task)
 		db.session.commit()
-		return True, "jaja"
+		return True, task.id
 
 	@staticmethod
 	def edit_task(task_id, name, content, deadline, group_id,
 		filled_in_users, line):
 		"""
-		Returns succed (boolean), message (string). Message is irrelevant if
+		Returns succes (boolean), message (string). Message is irrelevant if
 		succes is true, otherwise it contains what exactly went wrong.
 
 		In case of succes the task is edited in the database.
@@ -146,8 +130,8 @@ class PimpyAPI:
 	@staticmethod
 	def parse_minute(content, group_id, minute_id):
 		"""
-		Parses the specified minutes for tasks and returns them in a list.
-		Same counts for DONE's and REMOVE's
+		Parse the specified minutes for tasks and return them in a list.
+		Same for DONE tasks and REMOVED tasks
 
 		syntax within the content:
 		ACTIE <name_1>, <name_2>, name_n>: <title of task>
@@ -173,16 +157,16 @@ class PimpyAPI:
 					listed_users, title = action.split(":")
 				except:
 					print "could not split the line on ':'.\nSkipping hit."
+					flash("could not parse: " + action)
 					continue
 
 				users, message = PimpyAPI.get_list_of_users_from_string(group_id, listed_users)
 				if not users:
 					print message
 					continue
-				print users[0].first_name
-				print users[0].last_name
 				try:
-					task = Task(title, "", "", group_id, users, line, minute_id, 0)
+					task = Task(title, "", None, group_id, users, minute_id,
+						i, 0)
 				except:
 					print "wasnt given the right input to create a task"
 					continue
@@ -190,31 +174,33 @@ class PimpyAPI:
 
 		regex = re.compile("\s*(?:DONE) ([^\n\r]*)")
 		matches = regex.findall(content)
-		for done in matches:
-			query = Task.query
-			print "done = " + done
-			query = query.filter(Task.id==done)
-			list_items = query.all()
-			if list_items:
-				print list_items[0].id
-				print list_items[0].title
-				for item in list_items:
-					dones_found.append(item)
+		for done_id in matches:
+			try:
+				done_task = Task.query.filter(Task.id==done_id).first()
+			except:
+				print "could not find the given task"
+				flash("could not find DONE " + done_id)
+				continue
+			if done_task:
+				dones_found.append(done_task)
 			else:
-				print "Could not find task " + done
+				print "Could not find task " + done_id
+				flash("could not find DONE " + done_id)
 
 		regex = re.compile("\s*(?:REMOVE) ([^\n\r]*)")
 		matches = regex.findall(content)
-		for remove in matches:
-			query = Task.query
-			print "remove = " + remove
-			query = query.filter(Task.id==remove)
-			list_items = query.all()
-			if list_items:
-				print list_items[0].id
-				print list_items[0].title
-				for item in list_items:
-					removes_found.append(item)
+		for remove_id in matches:
+			try:
+				remove_task = Task.query.filter(Task.id==remove_id).first()
+			except:
+				print "could not find the given task"
+				flash("could not find REMOVE " + remove_id)
+				continue
+			if remove_task:
+				removes_found.append(remove_task)
+			else:
+				print "Could not find REMOVE " + remove_id
+				flash("could not find REMOVE " + remove_id)
 
 		return tasks_found, dones_found, removes_found
 
@@ -272,9 +258,14 @@ class PimpyAPI:
 	def get_navigation_menu(group_id, personal, type):
 		if not GroupPermissionAPI.can_read('pimpy'):
 			abort(403)
+		if not current_user:
+			flash('Current_user not found')
+			return redirect(url_for('pimpy.view_minutes'))
 
 		groups = current_user.groups.all()
 
+		if not type:
+			type='minutes'
 		endpoint = 'pimpy.view_' + type
 		endpoints = {'view_chosentype' : endpoint,
 					'view_chosentype_personal' : endpoint + '_personal',
@@ -286,6 +277,8 @@ class PimpyAPI:
 		if personal:
 			endpoints['view_tasks_chosenpersonal'] += '_personal'
 
+		if not group_id:
+			group_id = 'all'
 		if group_id != 'all':
 			group_id = int(group_id)
 
@@ -297,28 +290,36 @@ class PimpyAPI:
 	def get_tasks(group_id, personal):
 		if not GroupPermissionAPI.can_read('pimpy'):
 			abort(403)
+		if not current_user:
+			flash('Current_user not found')
+			return redirect(url_for('pimpy.view_tasks'))
 		# TODO: only return tasks with status != completed
 
 		list_items = {}
 
-		#print "personal ", personal, " group id ", group_id
-
 		if personal:
 			if group_id == 'all':
-				for group in current_user.groups:
-					# this should be done in one query, but meh
+				for group in UserAPI.get_groups_for_current_user():
+					list_users = {}
 					items = []
 					for task in group.tasks:
 						if current_user in task.users:
 							items.append(task)
-					list_items[group.name] = items
+					if len(items):
+						list_users[current_user.first_name + " " + current_user.last_name] = items
+					if len(list_users):
+						list_items[group.name] = list_users
 			else:
-				query = Task.query.filter(Task.group_id==group_id)
+				tasks = Task.query.filter(Task.group_id==group_id).all()
 				items = []
-				for task in query.all():
+				list_users = {}
+				for task in tasks:
 					if current_user in task.users:
 						items.append(task)
-				list_items[Group.query.filter(Group.id==group_id).first().name] = items
+				if len(items):
+					list_users[current_user.first_name + " " + current_user.last_name] = items
+				if len(list_users):
+					list_items[Group.query.filter(Group.id==group_id).first().name] = list_users
 
 				#group_name = Group.query.filter(Group.id==group_id).first().name
 				#list_items[group_name] = []
@@ -329,15 +330,35 @@ class PimpyAPI:
 
 		else:
 			if group_id == 'all':
-				for group in current_user.groups:
-					list_items[group.name] = group.tasks
+				for group in UserAPI.get_groups_for_current_user():
+					list_users = {}
+					for user in group.users:
+						items = []
+						for task in group.tasks:
+							if user in task.users:
+								items.append(task)
+						if len(items):
+							list_users[user.first_name + " " + user.last_name] = items
+					if len(list_users):
+						list_items[group.name] = list_users
+
 			else:
-				query = Task.query.filter(Task.group_id==group_id)
-				list_items[Group.query.filter(Group.id==group_id).first().name] = query.all()
+				group = Group.query.filter(Group.id==group_id).first()
+				list_users = {}
+				for user in group.users:
+					items = []
+					for task in group.tasks:
+						if user in task.users:
+							items.append(task)
+					if len(items):
+						list_users[user.first_name + " " + user.last_name] = items
+				if len(list_users):
+					list_items[group.name] = list_users
 
 		# remove those list items that have been set to checked and removed
 		for group_header in list_items:
-			list_items[group_header] = filter(lambda x: x.status < 4, list_items[group_header])
+			for user_header in list_items[group_header]:
+				list_items[group_header][user_header] = filter(lambda x: x.status < 4, list_items[group_header][user_header])
 
 		return Markup(render_template('pimpy/api/tasks.htm',
 			list_items=list_items, type='tasks', group_id=group_id,
@@ -345,13 +366,19 @@ class PimpyAPI:
 
 	@staticmethod
 	def get_minutes(group_id):
+		"""
+		Load all minutes in the given group
+		"""
 		if not GroupPermissionAPI.can_read('pimpy'):
 			abort(403)
+		if not current_user:
+			flash('Current_user not found')
+			return redirect(url_for('pimpy.view_minutes'))
 
 		list_items = {}
 
 		if group_id != 'all':
-			query = Minute.query.filter(Minute.group_id==group_id)
+			query = Minute.query.filter(Minute.group_id==group_id).order_by(Minute.timestamp.desc())
 			list_items[Group.query.filter(Group.id==group_id).first().name] = query.all()
 		# this should be done with a sql in statement, or something, but meh
 		else:
@@ -364,10 +391,13 @@ class PimpyAPI:
 	@staticmethod
 	def get_minute(group_id, minute_id):
 		"""
-		Loads (and thus views) specifically one minute
+		Load (and thus view) specifically one minute
 		"""
 		if not GroupPermissionAPI.can_read('pimpy'):
 			abort(403)
+		if not current_user:
+			flash('Current_user not found')
+			return redirect(url_for('pimpy.view_minutes'))
 
 		list_items = {}
 		query = Minute.query.filter(Minute.id==minute_id)
@@ -377,5 +407,55 @@ class PimpyAPI:
 		return Markup(render_template('pimpy/api/minutes.htm',
 			list_items=list_items, type='minutes', group_id=group_id))
 
+	@staticmethod
+	def update_content(task_id, content):
+		"""
+		Update the content of the task with the given id
+		"""
+		task = Task.query.filter(Task.id==task_id).first()
+		task.content = content
+		db.session.commit()
+		return True, "The task is edited sucessfully"
+
+	@staticmethod
+	def update_title(task_id, title):
+		"""
+		Update the title of the task with the given id
+		"""
+		task = Task.query.filter(Task.id==task_id).first()
+		task.title = title
+		db.session.commit()
+		return True, "The task is edited sucessfully"
+
+	@staticmethod
+	def update_users(task_id, comma_sep_users):
+		"""
+		Update the users of the task with the given id
+		"""
+		task = Task.query.filter(Task.id==task_id).first()
+		users, message = PimpyAPI.get_list_of_users_from_string(task.group_id,
+			comma_sep_users)
+		if not users:
+			return False, message
+		task.users = users
+		db.session.commit()
+		return True, "The task is edited sucessfully"
+
+	@staticmethod
+	def update_date(task_id, date):
+		"""
+		Update the date of the task with the given id
+		"""
+		try:
+			date = datetime.datetime.strptime(date, DATE_FORMAT)
+		except:
+			if date != "":
+				return False, "Could not parse the date"
+			date = None
+
+		task = Task.query.filter(Task.id == task_id).first()
+		task.deadline = date
+		db.session.commit()
+		return True, "The task is edited sucessfully"
 
 

@@ -5,7 +5,7 @@ class CreateForm(Form):
 	name	= TextField(u'Formulier naam')
 	origin	= TextField(u'Who')
 	html	= TextField(u'Let the dogs out')
-	email = TextField('E-mail address', validators=[Required(), Email()])
+	email = TextField('E-mail', validators=[Required(), Email()])
 	first_name = TextField('First name', validators=[Required()])
 	last_name = TextField('Last name', validators=[Required()])
 	student_id = TextField('Student ID', validators=[Required()])

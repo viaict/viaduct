@@ -53,27 +53,26 @@
 
 		<hr>
 		{% if activity.form %}
-			<form id="custom" action="/forms/submit/{{ activity.form.id }}" enctype="multipart/form-data">
-
 				{% if current_user and current_user.id %}
 					<p>We hebben je gegevens voor zo ver mogelijk ingevuld!
+
+					<form id="custom" action="/forms/submit/{{ activity.form.id }}" enctype="multipart/form-data">
+
+						{{ render_field(form.email) }}
+						{{ render_field(form.first_name) }}
+						{{ render_field(form.last_name) }}
+						{{ render_field(form.student_id) }}
+						{{ render_field(form.education_id) }}
+
+						{{ activity.form.html | safe }}
+
+						<button id="custom_form" class="btn btn-success">Verzend formulier</button>
+					</form>
+
 				{% else %}
+					<p>Je moet ingelogd zijn om je voor een activiteit in te schrijven.
 					<p><a href="{{ url_for('user.sign_in') }}" class="btn btn-huge btn-success">Inloggen</a>
-					<p><b>Geef bij het bestuur van via aan dat je betaald hebt voor lidmaatschap, anders is je inschrijving niet definitief!</b>
-
-					<input name='registreren' type='hidden' value=1>
 				{% endif %}
-
-				{{ render_field(form.email) }}
-				{{ render_field(form.first_name) }}
-				{{ render_field(form.last_name) }}
-				{{ render_field(form.student_id) }}
-				{{ render_field(form.education_id) }}
-
-				{{ activity.form.html | safe }}
-
-				<button id="custom_form" class="btn btn-success">Verzend formulier</button>
-			</form>
 		{% endif %}
 		<hr>
 		<p>{{ activity.description | markdown }}</p>

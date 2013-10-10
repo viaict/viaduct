@@ -1,7 +1,5 @@
-
-import os, random, bcrypt, smtplib
-from email.mime.text import MIMEText
-
+from flask import make_response
+import csv, os, random, bcrypt
 from flask import flash, get_flashed_messages, redirect, render_template, \
 	request, url_for, abort
 from flask import Blueprint
@@ -29,6 +27,31 @@ def view(page=1):
 
 	return render_template('custom_form/overview.htm', custom_forms=custom_forms.paginate(page, 20, False))
 
+@blueprint.route('/forms/download/<int:form_id>', methods=['GET', 'POST'])
+def download(form_id=None):
+	"""if not GroupPermissionAPI.can_write('custom_form'):
+		return abort(403)
+
+	custom_form = CustomForm.query.get(form_id)
+
+	if not custom_form:
+		return abort(403)
+
+	entries = CustomFormResult.query.filter(CustomFormResult.form_id == form_id)
+	results = []
+	
+	for entry in entries:
+		results.append([
+			entry.owner.name,
+			entry.owner.email,
+			entry.owner.student_id,
+			entry.owner.phone_nr,
+			entry.owner.emergency_phone_nr
+		])
+
+	return response"""
+	return "Not working"
+
 @blueprint.route('/forms/view/<int:form_id>', methods=['GET', 'POST'])
 def view_single(form_id=None):
 	if not GroupPermissionAPI.can_write('custom_form'):
@@ -46,6 +69,10 @@ def view_single(form_id=None):
 	from urlparse import parse_qs
 
 	for entry in entries:
+		# Hide form entries from non existing users
+		if not entry.owner:
+			continue
+
 		data = parse_qs(entry.data)
 
 		html = '<dl>'
@@ -67,7 +94,7 @@ def view_single(form_id=None):
 
 	custom_form.results = results
 
-	return render_template('custom_form/view_single.htm', custom_form=custom_form)
+	return render_template('custom_form/view_results.htm', custom_form=custom_form)
 
 @blueprint.route('/forms/create/', methods=['GET', 'POST'])
 @blueprint.route('/forms/edit/<int:form_id>', methods=['GET', 'POST'])
@@ -106,25 +133,32 @@ def create(form_id=None):
 
 @blueprint.route('/forms/submit/<int:form_id>', methods=['POST'])
 def submit(form_id=None):
+	# TODO make sure custom_form rights are set on server 
 	if not GroupPermissionAPI.can_read('custom_form'):
 		return abort(403)
 
 	response = "success"
 
 	if form_id:
-		email = request.form['email'].lower()
+		# Allow users to change their details
+		#email = request.form['email'].lower()
 
 		# Logged in user
-		if current_user != None and current_user.id:
+		if current_user and current_user.id > 0:
 			user = User.query.get(current_user.id)
 
-			user.first_name	= request.form['first_name']
-			user.last_name	= request.form['last_name']
-			user.email			= email
+			#user.first_name	= request.form['first_name']
+			#user.last_name	= request.form['last_name']
+			#user.email			= email
 		else:
-			# Check if a non-logged in user that has an account submits request
-			user = User.query.filter(User.email==email).first()
+			# Need to be logged in
+			return abort(403)
 
+			# Check if a non-logged in user that has an account submits request
+			'''
+			user = User.query.filter(User.email == email).first()
+
+			# Create a user if it does not exist yet
 			if not user:
 				tmp_password = ''.join(map(lambda x: random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-"), range(14)))
 
@@ -145,26 +179,12 @@ def submit(form_id=None):
 
 				db.session.add(group)
 				db.session.commit()
-
-				try:
-					msg = MIMEText("Hoi %s %s,\n\nWe hebben een account op de via website voor je gemaakt. Het wachtwoord is '%s'.\n\nMet vriendelijke groet,\nICT commissie" % user.first_name, user.last_name, tmp_password)
-					msg['Subject'] = '[VIA] Registratie op svia.nl'
-					msg['From']		 = 'ict@svia.nl'
-					msg['To'] 		 = email
-
-					# Send the message via our own SMTP server, but don't include the
-					# envelope header.
-					s = smtplib.SMTP('localhost')
-					s.sendmail('ict@svia.nl', [email], msg.as_string())
-					s.quit()
-				except Exception :
-					pass
-
+	'''
 
 	if not user:
 		response = "error"
 	else:
-		# These might be there
+		# These fields might be there
 		try :
 			if request.form['phone_nr']:
 				user.phone_nr	= request.form['phone_nr']
@@ -188,12 +208,12 @@ def submit(form_id=None):
 
 		duplicate_test = CustomFormResult.query.filter(
 			CustomFormResult.owner_id == user.id, 
-			CustomFormResult.form_id == form_id).first()
+			CustomFormResult.form_id == form_id
+		).first()
 
 		if duplicate_test:
 			result			= duplicate_test
 			result.data	= request.form['data']
-	
 			response = "edit"
 		else:
 			result = CustomFormResult(user.id, form_id, request.form['data'])

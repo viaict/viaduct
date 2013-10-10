@@ -52,29 +52,31 @@ def get_activity(activity_id = 0):
 
 	form = ActivityForm(request.form, current_user)
 
-	# Add education.
+	# Add education for activity form
 	educations = Education.query.all()
 	form.education_id.choices = \
 			[(e.id, e.name) for e in educations]
 
+	# Check if there is a custom_form for this activity
 	if activity.form_id:
-		if current_user: current_user_id = current_user.id
-		else: current_user_id = 0
-
+		# Add the form
 		activity.form = CustomForm.query.get(activity.form_id)
 
-		form_result = CustomFormResult.query \
-			.filter(CustomFormResult.form_id == activity.form_id) \
-			.filter(CustomFormResult.owner_id == current_user_id).first()
+		# Check if the current user has already entered data in this custom form
+		if current_user and current_user.id > 0:
+			form_result = CustomFormResult.query \
+				.filter(CustomFormResult.form_id == activity.form_id) \
+				.filter(CustomFormResult.owner_id == current_user.id).first()
 
-		if form_result:
-			activity.form_data = form_result.data.replace('"', "'")
+			if form_result:
+				activity.form_data = form_result.data.replace('"', "'")
 
 	return render_template('activity/view_single.htm', activity=activity, form=form)
 
 @blueprint.route('/activities/create/', methods=['GET', 'POST'])
 @blueprint.route('/activities/edit/<int:activity_id>', methods=['GET', 'POST'])
 def create(activity_id=None):
+	# Need to be logged in + actie group or admin etc.
 	if not GroupPermissionAPI.can_write('activity'):
 		return abort(403);
 
@@ -88,7 +90,7 @@ def create(activity_id=None):
 
 	form = CreateForm(request.form, activity)
 
-	# Add companies.
+	# Add a dropdown select for available custom_forms
 	form.form_id.choices = \
 		[(c.id, c.name) for c in CustomForm.query.order_by('name')]
 
@@ -132,6 +134,7 @@ def create(activity_id=None):
 
 		venue	= 1 # Facebook ID location, not used yet
 
+		# Set a custom_form if it actually exists 
 		if form.form_id and form.form_id.data > 0:
 			activity.form_id = form.form_id.data
 		else:
@@ -158,5 +161,5 @@ def create(activity_id=None):
 	else:
 		flash_form_errors(form)
 
-	return render_template('activity/create.htm', form=form)
+	return render_template('activity/create.htm', activity=activity, form=form)
 

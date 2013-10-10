@@ -4,33 +4,50 @@
 	<div class="span8">
 		{% for group_header in list_items: %}
 			<h1> {{ group_header }} </h1>
-			{% for list_item in list_items[group_header]: %}
-				<div class="btn-group" style="margin-bottom: 8px;">
-					<button id="pimpy_task{{ list_item.id }}" class="btn dropdown-toggle {{ list_item.get_status_color() }} " data-toggle="dropdown" href="#"> {{ list_item.get_task_id() }} </button>
-					<ul class="dropdown-menu">
-						{% for status_meaning in list_item.get_status_meanings(): %}
-							<li>
-								<a onclick="update_task_status({{ list_item.id }}, {{ status_meaning[2] }})" class="{{ status_meaning[1] }} "> {{ status_meaning[0] }}</a>
-							</li>
-						{% endfor %}
-					</ul>
-				</div>
-				<div class="btn-group" style="margin-bottom: 8px;">
-					<button class="btn" data-toggle="collapse" data-target='#{{ list_item.id }}'>{{ list_item.title }}</button>
-					<button class="btn" data-toggle="collapse" data-target='#{{ list_item.id }}'> {{ list_item.get_users() }} </button>
-				</div>
-				<div id='{{ list_item.id }}' class="collapse">
-					<div class="well well-small">
-						<button class="btn" style="float: right;" onclick="edit_task({{ list_item.id }})" >Edit</button>
-						{{ list_item.content }}<br>
-						Deadline: {{ list_item.deadline }}<br>
-						Created on: {{list_item.timestamp }}<br>
-						{% if list_item.minute_id > 1 %}
-							<a href="{{ url_for('pimpy.view_minute', group_id=list_item.group_id, minute_id=list_item.minute_id) }}"> Go to minute </a>
-						{% endif %}
+			{% for user_header in list_items[group_header]: %}
+				<h3> {{ user_header }} </h3>
+				{% for list_item in list_items[group_header][user_header]: %}
+					<div class="btn-group" style="margin-bottom: 8px;">
+						<button id="pimpy_task{{ list_item.id }}" class="btn dropdown-toggle {{ list_item.get_status_color() }} " data-toggle="dropdown" href="#"> {{ list_item.get_task_id() }} </button>
+						<ul class="dropdown-menu">
+							{% for status_meaning in list_item.get_status_meanings(): %}
+								<li>
+									<a onclick="update_task_status({{ list_item.id }}, {{ status_meaning[2] }})" class="{{ status_meaning[1] }} "> {{ status_meaning[0] }}</a>
+								</li>
+							{% endfor %}
+						</ul>
 					</div>
-				</div>
+					<div class="btn-group" style="margin-bottom: 8px;">
+						<button class="btn" data-toggle="collapse" data-target='#{{ list_item.id }}'>{{ list_item.title }}</button>
+						<button class="btn" data-toggle="collapse" data-target='#{{ list_item.id }}'> {{ list_item.get_users() }} </button>
+					</div>
+					<div id='{{ list_item.id }}' class="collapse">
+						<div class="well well-small">
+							<table class="table table-striped">
+								<tbody>
+									<tr>
+										<td>Task:<td> <a href="#" class="pimpy_editable" id="title" data-pk="{{ list_item.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ list_item.id }}" data-title="Task Content">{{ list_item.title }}</a>
+										<td><button class="btn pimpy_editable_toggle" style="float: right;">Edit</button>
+									</tr><tr>
+										<td>Users:<td> <a href="#" class="pimpy_editable" id="users" data-pk="{{ list_item.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ list_item.id }}" data-title="Task Content">{{ list_item.get_users() }}</a><td>
+									</tr><tr>
+										<td>Description:<td> <a href="#" class="pimpy_editable" id="content" data-pk="{{ list_item.id }}" data-type="textarea" data-url="/pimpy/tasks/edit/{{ list_item.id }}" data-title="Task Content">{{ list_item.content }}</a><td>
+									</tr><tr>
+										<td>Deadline: <td>{{ list_item.deadline }}<td>
+									</tr><tr>
+										<td>Created on:<td> {{list_item.timestamp }}<td>
+									</tr>
+								</tbody>
+							</table>
+							{% if list_item.minute_id > 1 %}
+								<a href="{{ url_for('pimpy.view_minute', group_id=list_item.group_id, minute_id=list_item.minute_id) }}"> Go to minute </a>
+							{% endif %}
+						</div>
+					</div>
+				{% endfor %}
+				<br>
 			{% endfor %}
+			<br><br>
 		{% endfor %}
 	</div>
 {% endblock %}

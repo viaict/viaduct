@@ -138,7 +138,7 @@ def delete(entry_id):
 		abort(404)
 
 	if not entry.parent:
-		if entry.children:
+		if entry.children.count() > 0:
 			flash('Deze item heeft nog subitems.', 'error')
 			return redirect(url_for('navigation.edit', entry_id=entry.id))
 
