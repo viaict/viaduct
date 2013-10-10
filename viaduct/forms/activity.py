@@ -7,7 +7,7 @@ class CreateForm(Form):
 	start_time	= TextField(u'start_time', validators=[Required()])
 	end_date		= TextField(u'Venue')
 	end_time		= TextField(u'Venue')
-	location		= TextField(u'Location', default="VIA Kamer (A0.10)")
+	location		= TextField(u'Location', default="Studievereniging VIA, Science Park 904, 1098 Amsterdam Nederland")
 	privacy			= TextField(u'Privacy')
 	price				= TextField(u'Price')
 	picture			= FileField(u'Picture')
