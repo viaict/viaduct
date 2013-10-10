@@ -47,6 +47,12 @@ Alles moet eigenlijk even nagelopen worden of het allemaal 1 taal is en spelfout
 ## zoekmodule
 Een dynamische module die gebruikt kan gaan worden in de tentamenbank, vacaturenbank en de wiki. Mischien zelfs pimpy.
 
+## Export module
+Een module om lijsten te exporteren
+
+## Ideal
+Ideal betalen bitches
+
 Je geeft op welke tabellen en welke kolommen doorzocht moeten worden. `tijmen zwaan` als query moet matchen op
 een user terwijl de kolomen firstname en lastname zijn.
 
