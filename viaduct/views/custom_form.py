@@ -4,7 +4,7 @@ from flask import flash, get_flashed_messages, redirect, render_template, \
 	request, url_for, abort
 from flask import Blueprint
 from flask.ext.login import current_user
-
+import datetime
 from werkzeug import secure_filename
 
 from viaduct import application, db
@@ -23,34 +23,10 @@ def view(page=1):
 	if not GroupPermissionAPI.can_write('custom_form'):
 		return abort(403)
 
-	custom_forms = CustomForm.query.order_by(CustomForm.name.asc())
+	custom_forms = CustomForm.query.order_by("created")
 
+	# TODO Custom forms for specific groups (i.e coordinator can only see own forms)
 	return render_template('custom_form/overview.htm', custom_forms=custom_forms.paginate(page, 20, False))
-
-@blueprint.route('/forms/download/<int:form_id>', methods=['GET', 'POST'])
-def download(form_id=None):
-	"""if not GroupPermissionAPI.can_write('custom_form'):
-		return abort(403)
-
-	custom_form = CustomForm.query.get(form_id)
-
-	if not custom_form:
-		return abort(403)
-
-	entries = CustomFormResult.query.filter(CustomFormResult.form_id == form_id)
-	results = []
-	
-	for entry in entries:
-		results.append([
-			entry.owner.name,
-			entry.owner.email,
-			entry.owner.student_id,
-			entry.owner.phone_nr,
-			entry.owner.emergency_phone_nr
-		])
-
-	return response"""
-	return "Not working"
 
 @blueprint.route('/forms/view/<int:form_id>', methods=['GET', 'POST'])
 def view_single(form_id=None):
@@ -63,7 +39,7 @@ def view_single(form_id=None):
 		return abort(403)
 
 	results = []
-	entries = CustomFormResult.query.filter(CustomFormResult.form_id == form_id)
+	entries = CustomFormResult.query.filter(CustomFormResult.form_id == form_id).order_by("created")
 
 	from urllib import unquote_plus
 	from urlparse import parse_qs
@@ -90,6 +66,8 @@ def view_single(form_id=None):
 		results.append({
 			'owner'				: entry.owner,
 			'form_entry'	: html,
+			'class'				: 'class="is_reserve"' if entry.is_reserve else '',
+			'time'				: entry.created.strftime("%Y-%m-%d %H:%I")
 		})
 
 	custom_form.results = results
@@ -116,8 +94,9 @@ def create(form_id=None):
 		custom_form.name 		= form.name.data
 		custom_form.origin 	= form.origin.data
 		custom_form.html 		= form.html.data
+		custom_form.max_attendants	= form.max_attendants.data
 
-		if custom_form.id:
+		if not form_id:
 			flash('You\'ve created a form successfully.', 'success')
 		else:
 			flash('You\'ve updated a form successfully.', 'success')
@@ -140,46 +119,17 @@ def submit(form_id=None):
 	response = "success"
 
 	if form_id:
-		# Allow users to change their details
-		#email = request.form['email'].lower()
+		custom_form = CustomForm.query.get(form_id)
+
+		if not custom_form:
+			abort(404)
 
 		# Logged in user
 		if current_user and current_user.id > 0:
 			user = User.query.get(current_user.id)
-
-			#user.first_name	= request.form['first_name']
-			#user.last_name	= request.form['last_name']
-			#user.email			= email
 		else:
 			# Need to be logged in
 			return abort(403)
-
-			# Check if a non-logged in user that has an account submits request
-			'''
-			user = User.query.filter(User.email == email).first()
-
-			# Create a user if it does not exist yet
-			if not user:
-				tmp_password = ''.join(map(lambda x: random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-"), range(14)))
-
-				user = User(
-					email, 
-					bcrypt.hashpw(tmp_password, bcrypt.gensalt()),
-					request.form['first_name'],
-					request.form['last_name'],
-					request.form['student_id'],
-					request.form['education_id']
-				)
-
-				db.session.add(user)
-				db.session.commit()
-
-				group = Group.query.filter(Group.name=='all').first()
-				group.add_user(user)
-
-				db.session.add(group)
-				db.session.commit()
-	'''
 
 	if not user:
 		response = "error"
@@ -206,6 +156,7 @@ def submit(form_id=None):
 		except Exception :
 			pass
 
+		# Test if user already signed up 
 		duplicate_test = CustomFormResult.query.filter(
 			CustomFormResult.owner_id == user.id, 
 			CustomFormResult.form_id == form_id
@@ -216,7 +167,16 @@ def submit(form_id=None):
 			result.data	= request.form['data']
 			response = "edit"
 		else:
-			result = CustomFormResult(user.id, form_id, request.form['data'])
+			entries = CustomFormResult.query.filter(CustomFormResult.form_id == form_id)
+			num_attendants = entries.count()
+
+			# Check if number attendants allows another registration
+			if num_attendants >= custom_form.max_attendants:
+				# Create "Reserve" signup
+				result = CustomFormResult(user.id, form_id, request.form['data'], True)
+				response = "reserve"
+			else:
+				result = CustomFormResult(user.id, form_id, request.form['data'])
 		
 		db.session.add(user)
 		db.session.commit()

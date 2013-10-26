@@ -62,6 +62,10 @@ def get_activity(activity_id = 0):
 		# Add the form
 		activity.form = CustomForm.query.get(activity.form_id)
 
+		# Count current attendants for "reserved" message
+		entries = CustomFormResult.query.filter(CustomFormResult.form_id == activity.form_id)
+		activity.num_attendants = entries.count()
+
 		# Check if the current user has already entered data in this custom form
 		if current_user and current_user.id > 0:
 			form_result = CustomFormResult.query \
@@ -70,6 +74,11 @@ def get_activity(activity_id = 0):
 
 			if form_result:
 				activity.form_data = form_result.data.replace('"', "'")
+
+				activity.info	= "Je hebt je al ingeschreven! Je kunt wel je inschrijving aanpassen door opniew het formulier in te vullen en te verzenden."
+			else :
+				activity.info	= "De activiteit zit vol qua inschrijvingen, als je je nu inschrijft kom je op de reserve lijst!" if activity.num_attendants >= activity.form.max_attendants else "Er zijn op het moment %s inschrijvingen" % activity.num_attendants
+
 
 	return render_template('activity/view_single.htm', activity=activity, form=form)
 

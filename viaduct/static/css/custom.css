@@ -227,3 +227,8 @@ div.sortable {
 	padding: 10px;
 	clear: both;
 }
+
+/* Custom Form view-results */
+.is_reserve {
+	background:#FFFD87;
+} 

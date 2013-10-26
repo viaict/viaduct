@@ -1,8 +1,8 @@
 from flask.ext.wtf import Form, TextField, PasswordField, SelectField, FieldList, FormField, SubmitField, Required, Email
 
-# Who let the dogs out... otherwise the form parser gives an error
 class CreateForm(Form):
 	name	= TextField(u'Formulier naam')
+	max_attendants	= TextField(u'Maximale aantal deelnemers')
 	origin	= TextField(u'Who')
 	html	= TextField(u'Let the dogs out')
 	email = TextField('E-mail', validators=[Required(), Email()])

@@ -33,8 +33,55 @@
 				{{ render_map(600, 400, activity.location) }}
 			</div>
 		</div>
-
 	</div>
+
+	{% if activity.form %}
+		<div class="accordion-group">
+			<div class="accordion-heading">
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc" href="#collapseForm">
+					<i class="icon-star"></i>
+					Inschrijven voor deze activiteit
+					<span class="pull-right">Klik om uit te klappen</span>
+				</a>
+			</div>
+
+			<div id="collapseForm" class="accordion-body collapse">
+				<div class="accordion-inner">
+					{% if current_user and current_user.id %}
+						<form id="custom" action="/forms/submit/{{ activity.form.id }}" enctype="multipart/form-data">
+								{% if activity.info %}
+								<div class="alert alert-warning">
+									{{ activity.info }}
+								</div>
+								{% endif %}
+
+								<div class="row-fluid">
+									<div class="span4 offset1 pull-right">
+										<h3>Contact gegevens</h3>
+										<small>Dit zijn gegevens die we van je account halen</small>
+									{{ render_field(form.email) }}
+									{{ render_field(form.first_name) }}
+									{{ render_field(form.last_name) }}
+									{{ render_field(form.student_id) }}
+									{{ render_field(form.education_id) }}
+									</div>
+									<div class="span7">
+										<h3>Vul a.u.b in :D</h3>
+										{{ activity.form.html | safe }}
+									</div>
+							</div>
+
+							<button id="custom_form" class="btn btn-success">Verzend formulier</button>
+						</form>
+
+					{% else %}
+						<p>Je moet ingelogd zijn om je voor een activiteit in te schrijven.
+						<p><a href="{{ url_for('user.sign_in') }}" class="btn btn-huge btn-success">Inloggen</a>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		{% endif %}
 </div>
 
 <div class="row-fluid">
@@ -50,38 +97,16 @@
 			<i class="icon-calendar"></i>
 			{{ activity.get_time() }}
 		</div>
-
-		<hr>
-		{% if activity.form %}
-				{% if current_user and current_user.id %}
-					<p>We hebben je gegevens voor zo ver mogelijk ingevuld!
-
-					<form id="custom" action="/forms/submit/{{ activity.form.id }}" enctype="multipart/form-data">
-
-						{{ render_field(form.email) }}
-						{{ render_field(form.first_name) }}
-						{{ render_field(form.last_name) }}
-						{{ render_field(form.student_id) }}
-						{{ render_field(form.education_id) }}
-
-						{{ activity.form.html | safe }}
-
-						<button id="custom_form" class="btn btn-success">Verzend formulier</button>
-					</form>
-
-				{% else %}
-					<p>Je moet ingelogd zijn om je voor een activiteit in te schrijven.
-					<p><a href="{{ url_for('user.sign_in') }}" class="btn btn-huge btn-success">Inloggen</a>
-				{% endif %}
-		{% endif %}
-		<hr>
-		<p>{{ activity.description | markdown }}</p>
 	</div>
 
 	<div class="span4">
 		<img src="/static/activity_pictures/{{ activity.picture }}">
 	</div>
 </div>
+
+<hr>
+
+<p>{{ activity.description | markdown }}</p>
 
 {% if activity.form_data %}
 	<script src="/static/js/unserialize.js"></script>
