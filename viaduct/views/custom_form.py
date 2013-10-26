@@ -12,7 +12,7 @@ from viaduct.helpers import flash_form_errors
 from viaduct.forms.custom_form import CreateForm
 from viaduct.models.user import User
 from viaduct.models.group import Group
-from viaduct.models.custom_form import CustomForm, CustomFormResult
+from viaduct.models.custom_form import CustomForm, CustomFormResult, CustomFormFollower
 from viaduct.api.group import GroupPermissionAPI
 
 blueprint = Blueprint('custom_form', __name__)
@@ -25,8 +25,21 @@ def view(page=1):
 
 	custom_forms = CustomForm.query.order_by("created")
 
+	if current_user and current_user.id > 0:
+		follows = CustomFormFollower.query.filter(CustomFormFollower.owner_id == current_user.id).all()
+
+		ids = []
+
+		for follow in follows:
+			ids.append(follow.form_id)
+
+		followed_forms = CustomForm.query.filter(CustomForm.id.in_(ids)).all()
+	else:
+		followed_forms = []
+		ids = []
+
 	# TODO Custom forms for specific groups (i.e coordinator can only see own forms)
-	return render_template('custom_form/overview.htm', custom_forms=custom_forms.paginate(page, 20, False))
+	return render_template('custom_form/overview.htm', custom_forms=custom_forms.paginate(page, 20, False), followed_forms=followed_forms, followed_ids=ids)
 
 @blueprint.route('/forms/view/<int:form_id>', methods=['GET', 'POST'])
 def view_single(form_id=None):
@@ -183,5 +196,32 @@ def submit(form_id=None):
 
 		db.session.add(result)
 		db.session.commit()
+
+	return response
+
+@blueprint.route('/forms/follow/<int:form_id>', methods=['GET', 'POST'])
+def submit(form_id=None):
+	if not GroupPermissionAPI.can_write('custom_form'):
+		return abort(403)
+
+	# Logged in user
+	if current_user and current_user.id > 0:
+		user = User.query.get(current_user.id)
+	else:
+		# Need to be logged in
+		return abort(403)
+
+	# TODO Unfollow if re-submitted
+	follows = CustomFormFollower.query.filter(CustomFormFollower.form_id == form_id).first()
+	
+	if follows:
+		response = "removed"
+		db.session.delete(follows)
+	else:
+		response = "added"
+		result = CustomFormFollower(current_user.id, form_id)
+		db.session.add(result)
+
+	db.session.commit()
 
 	return response

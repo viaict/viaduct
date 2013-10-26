@@ -39,3 +39,17 @@ class CustomFormResult(db.Model):
 		self.data = data
 		self.is_reserve = is_reserve
 		self.has_payed = has_payed
+
+class CustomFormFollower(db.Model):
+	__tablename__ = 'custom_form_follower'
+
+	id				= db.Column(db.Integer, primary_key=True)
+	owner_id	= db.Column(db.Integer, db.ForeignKey('user.id'))
+	form_id		= db.Column(db.Integer)
+
+	owner = db.relationship('User', backref=db.backref('custom_form_follower', lazy='dynamic'))
+
+	def __init__(self, owner_id=None, form_id=None):
+		self.owner_id = owner_id
+		self.form_id = form_id
+
