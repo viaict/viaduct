@@ -4,7 +4,7 @@
 
 <h1>Inzendingen <small>'{{ custom_form.name }}'</small></h1>
 
-<a href="/forms/download/{{ custom_form.id }}" class="btn btn-primary">Download inzendingen</a>
+<p><em>Gele entries zijn "reserve" inschrijvingen</em>
 
 <hr>
 
@@ -12,20 +12,21 @@
 <table class="table">
 	<tr>
 		<th>Gebruiker
-		<th>Email
-		<th>Tel nr.
-		<th>Formulier data
+		<th>Informatie
+		<th>Datum aanmelding
 		<th>Betaald
 
 	{% for result in custom_form.results %}
-		<tr>
+		<tr {{ result.class }}>
 			<td>
 				<a href="{{ url_for('user.view_single', user_id=result.owner.id) }}">
 					{{ result.owner.first_name[:1] }}. {{ result.owner.last_name }}
 				</a>
-			<td>{{ result.owner.email }}
-			<td>{{ result.owner.phone_nr }}
-			<td>{{ result.form_entry|safe }}
+			<td>
+				{{ result.owner.email }}<br>
+				{{ result.owner.phone_nr }}<br>
+				{{ result.form_entry|safe }}
+			<td>{{ result.time }}
 			<td>{% if result.has_payed %} <i class='icon-ok></i> {% endif %}
 	{% endfor %}
 </table>

@@ -4,14 +4,49 @@
 
 {%block content %}
 
-{% if GroupPermissionAPI.can_write('custom_form') %}
-<div class="btn-group">
-	<a href="/forms/create/" class="btn btn-success">
-		<i class="icon-plus"></i>
-		Nieuw formulier
-	</a>
-</div>
-{% endif %}
+<h1>Formulieren die je volgt</h1>
+
+<table class="table" id="follow_table">
+<thead>
+<tr>
+	<th>Formulier naam<th>
+	<th></th>
+
+{% for form in followed_forms %}
+<tr>
+	<td>{{ form.name }}
+	<td>
+		{% if GroupPermissionAPI.can_write('custom_form') %}
+				<a href="/forms/edit/{{ form.id }}" class="btn btn-mini btn-warning pull-right">
+					<i class="icon-pencil"></i>
+					Aanpassen
+				</a>
+
+				<a href="/forms/follow/{{ form.id }}" class="follow btn btn-mini btn-danger pull-right">
+					Niet meer volgen
+				</a>
+				
+				<a href="/forms/view/{{ form.id }}" class="btn btn-mini btn-primary pull-right">
+					Inzendingen bekijken
+				</a>
+		{% endif %}
+{% endfor %}
+</table>
+<hr>
+
+<h1>Formulieren overzicht
+
+	{% if GroupPermissionAPI.can_write('custom_form') %}
+		<a href="/forms/create/" class="btn btn-success pull-right">
+			<i class="icon-plus"></i>
+			Nieuw formulier
+		</a>
+	{% endif %}
+</h1>
+
+<p>Hier is het overzicht van alle gemaakte formulieren. Je kunt formulieren volgen om ze hier bovenaan de pagina te tonen voor makkelijkere toegang.
+
+<hr>
 
 <table class="table">
 <thead>
@@ -23,21 +58,34 @@
 <tr>
 	<td>{{ form.name }}
 	<td>
-
 		{% if GroupPermissionAPI.can_write('custom_form') %}
-		<a href="/forms/edit/{{ form.id }}" class="btn btn-mini btn-warning">
-			<i class="icon-pencil"></i>
-			Aanpassen
-		</a>
-	
-		<a href="/forms/view/{{ form.id }}">
-			({{ form.custom_forms_count }} inzendingen) Inzien
-		</a>
+				<a href="/forms/edit/{{ form.id }}" class="btn btn-mini btn-warning pull-right">
+					<i class="icon-pencil"></i>
+					Aanpassen
+				</a>
+
+				{% if form.id in followed_ids %}
+				<a href="/forms/follow/{{ form.id }}" class="follow btn btn-mini btn-danger pull-right">
+					Niet meer volgen
+				</a>
+				{% else %}
+				<a href="/forms/follow/{{ form.id }}" class="follow btn btn-mini btn-success pull-right">
+					Formulier volgen
+				</a>
+				{% endif %}
+
+				<a href="/forms/view/{{ form.id }}" class="btn btn-mini btn-primary pull-right">
+					Inzendingen bekijken
+				</a>
+
 		{% endif %}
 {% endfor %}
 
 </table>
 <hr>
+
+
+<script src="/static/js/form.follower.js"></script>
 
 	{{ render_pagination(custom_forms, 'custom_form.view') }}
 {% endblock %}

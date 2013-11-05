@@ -43,7 +43,8 @@ Alles moet eigenlijk even nagelopen worden of het allemaal 1 taal is en spelfout
 * (files uploaden) permissies van het mapje waar we naar uploaden niet op 777 zetten, 'BAS'
 * als je geen rechten hebt en doorverwezen bent na het inloggen zou het mooi zijn als je daarna wel op de pagina komt die je oorspronkelijk probeerde te bereiken
 * paginas waar je geen rechten toe hebt verwijderen uit het menu (zoals admin)
-
+* Een aparte groep voor ingelogde users
+* CAS gebruiken?
 
 ## mail
 * alles?
@@ -53,6 +54,12 @@ Alles moet eigenlijk even nagelopen worden of het allemaal 1 taal is en spelfout
 
 ## zoekmodule/api
 Een dynamische module die gebruikt kan gaan worden in de tentamenbank, vacaturenbank en de wiki. Mischien zelfs pimpy.
+
+## Export module
+Een module om lijsten te exporteren
+
+## Ideal
+Ideal betalen bitches
 
 Je geeft op welke tabellen en welke kolommen doorzocht moeten worden. `tijmen zwaan` als query moet matchen op
 een user terwijl de kolomen firstname en lastname zijn.

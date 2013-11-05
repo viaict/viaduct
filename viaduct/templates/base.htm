@@ -9,8 +9,7 @@
 		<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 		<link href='/static/css/timepicker.css' rel='stylesheet'>
 		<link href='/static/css/datepicker.css' rel='stylesheet'>
-		<link href="/static/css/bootstrap.css" rel="stylesheet">
-		<link href="/static/css/bootstrap-editable.css" rel="stylesheet">
+
 		<link href="/static/css/custom.css" rel="stylesheet" />
 
 		<script src="/static/js/jquery.js"></script>
@@ -44,9 +43,9 @@
 					</div></div>
 					<div class="row"><div class="span5" id="login-info">
 						{% if not current_user or current_user.is_anonymous() %}
-							Niet ingelogged, <a href="{{ url_for('user.sign_in') }}">log in</a> of <a href="{{ url_for('user.sign_up') }}">registreer</a>.
+							Niet ingelogd, <a href="{{ url_for('user.sign_in') }}">log in</a> of <a href="{{ url_for('user.sign_up') }}">registreer</a>.
 						{% else %}
-							Ingelogged als <a href="{{ url_for('user.view_single', user_id=current_user.id) }}">{{ current_user.name }}</a>, <a href="{{ url_for('user.sign_out') }}">uitloggen</a>.
+							Ingelogd als <a href="{{ url_for('user.view_single', user_id=current_user.id) }}">{{ current_user.name }}</a>, <a href="{{ url_for('user.sign_out') }}">uitloggen</a>.
 						{% endif %}
 					</div></div>
 				</div>
