@@ -71,7 +71,7 @@ def view_single(form_id=None):
 
 			if type(data[key]) is list:
 				html += "<dd>%s" % ', '.join(data[key])
-			else: 
+			else:
 				html += "<dd>%s" % unquote_plus(data[key])
 
 		html += '</dl>'
@@ -125,7 +125,7 @@ def create(form_id=None):
 
 @blueprint.route('/forms/submit/<int:form_id>', methods=['POST'])
 def submit(form_id=None):
-	# TODO make sure custom_form rights are set on server 
+	# TODO make sure custom_form rights are set on server
 	if not GroupPermissionAPI.can_read('custom_form'):
 		return abort(403)
 
@@ -160,7 +160,7 @@ def submit(form_id=None):
 
 			if request.form['dieet[]']:
 				user.diet = ', '.join(request.form['dieet[]'])
-	
+
 			if request.form['allergie/medicatie']:
 				user.allergy = request.form['allergie/medicatie']
 
@@ -169,9 +169,9 @@ def submit(form_id=None):
 		except Exception :
 			pass
 
-		# Test if user already signed up 
+		# Test if user already signed up
 		duplicate_test = CustomFormResult.query.filter(
-			CustomFormResult.owner_id == user.id, 
+			CustomFormResult.owner_id == user.id,
 			CustomFormResult.form_id == form_id
 		).first()
 
@@ -190,7 +190,7 @@ def submit(form_id=None):
 				response = "reserve"
 			else:
 				result = CustomFormResult(user.id, form_id, request.form['data'])
-		
+
 		db.session.add(user)
 		db.session.commit()
 
@@ -200,7 +200,7 @@ def submit(form_id=None):
 	return response
 
 @blueprint.route('/forms/follow/<int:form_id>', methods=['GET', 'POST'])
-def submit(form_id=None):
+def follow(form_id=None):
 	if not GroupPermissionAPI.can_write('custom_form'):
 		return abort(403)
 
@@ -213,7 +213,7 @@ def submit(form_id=None):
 
 	# TODO Unfollow if re-submitted
 	follows = CustomFormFollower.query.filter(CustomFormFollower.form_id == form_id).first()
-	
+
 	if follows:
 		response = "removed"
 		db.session.delete(follows)
