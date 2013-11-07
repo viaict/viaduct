@@ -1,8 +1,16 @@
+## General
+* talen module voor multi-language site
+
 ## sign-in/sign-up
 * wat is er aan de hand als je je inloggegevens kwijt bent?
+* Voeg jaartal van begin studie toe aan user
+* Zorg dat mensen die zich aanmelden met een jaartal van voor 2013 automatisch betaald zijn.
 
 ## errorpaginas, 'BRAM'
 * zoals 403 mooier maken
+
+## User paginas
+* Foto uploaden per profiel
 
 ## Forms, 'FABIEN'
 * tutorial
@@ -17,7 +25,6 @@
 * categorieen
 
 ## pimpy, 'TIJMEN'
-* tasks aanpasbaar maken - moet nog gebeuren met deadline
 * get_tasks querys toch nog maar wat efficienter maken
 * tasks niet standaard op edit laten staan
 
