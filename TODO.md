@@ -43,6 +43,7 @@ Alles moet eigenlijk even nagelopen worden of het allemaal 1 taal is en spelfout
 ## documentatie
 * systeem opzetten wat de documenatie voor viaduct organiseert
 * alle modules etc documenteren
+* Tutorial maken voor wiki-systeem wanneer het er is
 
 ## bugs/FIXMEs
 * current user heeft id = 0 lokaal maar is None op de server. Het ligt iig niet aan verschillende versies van Flask. Verder kon ik (Inja) niet echt iets vinden. Daarom moet je altijd eerst checken op current_user != None en daarna pas op id == 0 voor een niet ingelogde user.
