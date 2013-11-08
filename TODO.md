@@ -19,6 +19,7 @@
 * Automatisch herkennen of formulier al is ingevuld / pre-vullen oid (of uitklapbaar zeg maar, dat je niet meteen in scherm hebt)
 * Paar extra `shortcuts` en shortcuts duidelijker vermelden ( Poep | user geeft je bijv. student nr / email / naam / studie die je een gebruiker wilt laten invullen (GAAT NIET GEBEUREN)
 * Toevoegen dat wanneer formulier wordt ingevuld, het de gebruiker data ook update als die zou ontbreken (bijv. telefoon nummer, wordt het nu ingevuld dan is het wel chill om die te blijven houden)
+* Mogelijkheid tot entries deleten
 
 ## wiki-systeem
 * zoeksysteem (zie zoekmodule)
@@ -81,5 +82,7 @@ In viaduct hebben we modules, zoals pimpy, group, user etc. Kijk maar naar svia.
 Vorige keer was dit vrij snel bij elkaar gehackt maar we willen natuurlijk dat de modules die we in viaduct stoppen automagisch getoond worden, en aanpasbaar zijn (indien juiste rechten). Nu is het zo dat je zelf de naam van een module moet toevoegen.
 
 Een verbetering is als module_permission dit zelf bijhoudt. Hiervoor moet het dus dynamisch kunnen zien welke modules in viaduct zitten OF we moeten zorgen dat modules zichzelf ergens registreren zodat de module_permission daar kan zien welke modules er allemaal zijn.
+
+* een functie toevoegen voor 'heeft betaald' als permissie. (dus content voor enkel leden)
 
 
