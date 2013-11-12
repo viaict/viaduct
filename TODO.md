@@ -1,9 +1,17 @@
+## General
+* talen module voor multi-language site
+
 ## sign-in/sign-up
 * wat is er aan de hand als je je inloggegevens kwijt bent?
 * misschien inloggegevens van CAS gebruiken. De zelfde authenticatie die datanose etc gebruikt. Eerst mailen of het mag. Dit is een ingrijpende verandering, dus gaat voorlopig niet gebeuren (wss).
+* Voeg jaartal van begin studie toe aan user
+* Zorg dat mensen die zich aanmelden met een jaartal van voor 2013 automatisch betaald zijn.
 
 ## errorpaginas, 'BRAM'
 * zoals 403 mooier maken
+
+## User paginas
+* Foto uploaden per profiel
 
 ## Forms, 'FABIEN'
 * tutorial
@@ -12,13 +20,13 @@
 * Automatisch herkennen of formulier al is ingevuld / pre-vullen oid (of uitklapbaar zeg maar, dat je niet meteen in scherm hebt)
 * Paar extra `shortcuts` en shortcuts duidelijker vermelden ( Poep | user geeft je bijv. student nr / email / naam / studie die je een gebruiker wilt laten invullen (GAAT NIET GEBEUREN)
 * Toevoegen dat wanneer formulier wordt ingevuld, het de gebruiker data ook update als die zou ontbreken (bijv. telefoon nummer, wordt het nu ingevuld dan is het wel chill om die te blijven houden)
+* Mogelijkheid tot entries deleten
 
 ## wiki-systeem
 * zoeksysteem (zie zoekmodule)
 * categorieen
 
 ## pimpy, 'TIJMEN'
-* tasks aanpasbaar maken - moet nog gebeuren met deadline
 * get_tasks querys toch nog maar wat efficienter maken
 * tasks niet standaard op edit laten staan
 
@@ -37,6 +45,7 @@ Alles moet eigenlijk even nagelopen worden of het allemaal 1 taal is en spelfout
 ## documentatie
 * systeem opzetten wat de documenatie voor viaduct organiseert
 * alle modules etc documenteren
+* Tutorial maken voor wiki-systeem wanneer het er is
 
 ## bugs/FIXMEs
 * current user heeft id = 0 lokaal maar is None op de server. Het ligt iig niet aan verschillende versies van Flask. Verder kon ik (Inja) niet echt iets vinden. Daarom moet je altijd eerst checken op current_user != None en daarna pas op id == 0 voor een niet ingelogde user.
@@ -77,4 +86,6 @@ Een verbetering is als module_permission dit zelf bijhoudt. Hiervoor moet het du
 
 ## user page
 * kunnen zien waar je allemaal voor bent ingeschreven
+* een functie toevoegen voor 'heeft betaald' als permissie. (dus content voor enkel leden)
+
 
