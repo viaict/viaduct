@@ -4,6 +4,8 @@ from flask.ext.login import current_user
 from viaduct.models import Group, User
 from viaduct.models import Minute, Task
 
+from sqlalchemy import desc
+
 from viaduct import db, application
 
 from viaduct.api.group import GroupPermissionAPI
@@ -378,7 +380,7 @@ class PimpyAPI:
 		list_items = {}
 
 		if group_id != 'all':
-			query = Minute.query.filter(Minute.group_id==group_id).order_by(Minute.timestamp.desc())
+			query = Minute.query.filter(Minute.group_id==group_id).order_by(Minute.minute_date.desc())
 			list_items[Group.query.filter(Group.id==group_id).first().name] = query.all()
 		# this should be done with a sql in statement, or something, but meh
 		else:

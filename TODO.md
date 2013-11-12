@@ -1,5 +1,6 @@
 ## sign-in/sign-up
 * wat is er aan de hand als je je inloggegevens kwijt bent?
+* misschien inloggegevens van CAS gebruiken. De zelfde authenticatie die datanose etc gebruikt. Eerst mailen of het mag. Dit is een ingrijpende verandering, dus gaat voorlopig niet gebeuren (wss).
 
 ## errorpaginas, 'BRAM'
 * zoals 403 mooier maken
@@ -74,4 +75,6 @@ Vorige keer was dit vrij snel bij elkaar gehackt maar we willen natuurlijk dat d
 
 Een verbetering is als module_permission dit zelf bijhoudt. Hiervoor moet het dus dynamisch kunnen zien welke modules in viaduct zitten OF we moeten zorgen dat modules zichzelf ergens registreren zodat de module_permission daar kan zien welke modules er allemaal zijn.
 
+## user page
+* kunnen zien waar je allemaal voor bent ingeschreven
 
