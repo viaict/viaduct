@@ -15,6 +15,7 @@
 		<th>Informatie
 		<th>Datum aanmelding
 		<th>Betaald
+		<th>
 
 	{% for result in custom_form.results %}
 		<tr {{ result.class }}>
@@ -28,6 +29,7 @@
 				{{ result.form_entry|safe }}
 			<td>{{ result.time }}
 			<td>{% if result.has_payed %} <i class='icon-ok></i> {% endif %}
+			<td><button id="{{ result.id }}" title="Hey kees, je kan nu dingen verwijderen" class="btn btn-small btn-danger keeswildeleteknopje"><icon class="icon-trash"></i></button>
 	{% endfor %}
 </table>
 
@@ -35,4 +37,5 @@
 <p>Er zijn nog geen resultaten om te tonen
 {% endif %}
 
+<script src="/static/js/keeswildeleteknopje.js"></script>
 {% endblock %}

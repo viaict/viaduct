@@ -77,6 +77,7 @@ def view_single(form_id=None):
 		html += '</dl>'
 
 		results.append({
+			'id'				  : entry.id,
 			'owner'				: entry.owner,
 			'form_entry'	: html,
 			'class'				: 'class="is_reserve"' if entry.is_reserve else '',
@@ -122,6 +123,27 @@ def create(form_id=None):
 		flash_form_errors(form)
 
 	return render_template('custom_form/create.htm', form=form)
+
+
+@blueprint.route('/forms/remove/<int:submit_id>', methods=['POST'])
+def remove_response(submit_id=None):
+	response = "success"
+
+	if not GroupPermissionAPI.can_read('custom_form'):
+		return abort(403)
+
+	# Test if user already signed up
+	submission = CustomFormResult.query.filter(
+		CustomFormResult.id == submit_id
+	).first()
+
+	if not submission:
+		abort(404)
+
+	db.session.delete(submission)
+	db.session.commit()
+
+	return response
 
 @blueprint.route('/forms/submit/<int:form_id>', methods=['POST'])
 def submit(form_id=None):
