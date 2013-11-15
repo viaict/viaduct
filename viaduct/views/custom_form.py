@@ -24,6 +24,7 @@ def view(page=1):
 		return abort(403)
 
 	custom_forms = CustomForm.query.order_by("created")
+	
 
 	if current_user and current_user.id > 0:
 		follows = CustomFormFollower.query.filter(CustomFormFollower.owner_id == current_user.id).all()

@@ -2,7 +2,10 @@
 
 {% block content %}
 
-<h1>Inzendingen <small>'{{ custom_form.name }}'</small></h1>
+<h1>
+	Inzendingen <small>'{{ custom_form.name }}'</small>
+	<span class="badge badge-info pull-right">{{ custom_form.custom_form_results.count() }} inzendingen</span>
+</h1>
 
 <p><em>Gele entries zijn "reserve" inschrijvingen</em>
 
@@ -29,7 +32,7 @@
 				{{ result.form_entry|safe }}
 			<td>{{ result.time }}
 			<td>{% if result.has_payed %} <i class='icon-ok></i> {% endif %}
-			<td><button id="{{ result.id }}" title="Hey kees, je kan nu dingen verwijderen" class="btn btn-small btn-danger keeswildeleteknopje"><icon class="icon-trash"></i></button>
+			<td><button id="{{ result.id }}" title="Inzending verwijderen" message="Hoi {{ current_user.first_name }}, weet je zeker dat je deze wilt verwijderen?" class="btn btn-small btn-danger keeswildeleteknopje"><icon class="icon-trash"></i></button>
 	{% endfor %}
 </table>
 

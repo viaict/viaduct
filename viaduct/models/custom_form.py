@@ -25,13 +25,15 @@ class CustomFormResult(db.Model):
 
 	id				= db.Column(db.Integer, primary_key=True)
 	owner_id	= db.Column(db.Integer, db.ForeignKey('user.id'))
-	form_id		= db.Column(db.Integer)
+	form_id		= db.Column(db.Integer, db.ForeignKey('custom_form.id'))
 	data			= db.Column(db.String(4096))
 	is_reserve = db.Column(db.Boolean)
 	has_payed	= db.Column(db.Boolean)
 	created		= db.Column(db.DateTime, default=datetime.datetime.now())
 
+
 	owner = db.relationship('User', backref=db.backref('custom_form_results', lazy='dynamic'))
+	form  = db.relationship('CustomForm', backref=db.backref('custom_form_results', lazy='dynamic'))
 
 	def __init__(self, owner_id=None, form_id=None, data="", is_reserve=False, has_payed=False):
 		self.owner_id = owner_id

@@ -27,7 +27,7 @@
 				</a>
 				
 				<a href="/forms/view/{{ form.id }}" class="btn btn-mini btn-primary pull-right">
-					Inzendingen bekijken
+					Inzendingen bekijken <span class="badge badge-inverse">{{ form.custom_form_results.count() }}</span>
 				</a>
 		{% endif %}
 {% endfor %}

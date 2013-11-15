@@ -1,7 +1,7 @@
 var keeswildeleteknopje = $(".keeswildeleteknopje");
 
 keeswildeleteknopje.click(function() {
-	if (confirm("Hoi kees, weet je zeker dat je deze wilt verwijderen?")) {
+	if (confirm($(this).attr("message"))) {
 		
 		$.post("/forms/remove/" + this.id);
 		$(this).closest("tr").fadeOut(300);
