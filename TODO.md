@@ -84,6 +84,8 @@ Vorige keer was dit vrij snel bij elkaar gehackt maar we willen natuurlijk dat d
 
 Een verbetering is als module_permission dit zelf bijhoudt. Hiervoor moet het dus dynamisch kunnen zien welke modules in viaduct zitten OF we moeten zorgen dat modules zichzelf ergens registreren zodat de module_permission daar kan zien welke modules er allemaal zijn.
 
+Module permissie moet niet overridden worden door page permission. (bestuur moet altijd toegang hebben tot page bijvoorbeeld)
+
 ## user page
 * kunnen zien waar je allemaal voor bent ingeschreven
 * een functie toevoegen voor 'heeft betaald' als permissie. (dus content voor enkel leden)
