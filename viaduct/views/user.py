@@ -1,7 +1,7 @@
 import bcrypt
 
 from flask import flash, get_flashed_messages, redirect, render_template, \
-		request, url_for, abort
+		request, url_for, abort, session
 from flask import Blueprint, Markup
 from flask.ext.login import current_user, login_user, logout_user
 
@@ -173,8 +173,12 @@ def sign_in():
 			login_user(user)
 
 			flash('You\'ve been signed in successfully.')
-
-			return redirect(url_for('page.get_page'))
+			print request.args
+			if session['prev']:
+				return redirect(url_for(session['prev'])) 
+			else:
+				return redirect(url_for("page.get_page"))
+			# return redirect(url_for('page.get_page'))
 	else:
 		flash_form_errors(form)
 
@@ -186,6 +190,8 @@ def sign_out():
 	logout_user()
 
 	flash('You\'ve been signed out.')
+
+	session['prev'] = None
 
 	return redirect(url_for('page.get_page'))
 

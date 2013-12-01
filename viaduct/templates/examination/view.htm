@@ -26,13 +26,15 @@
 			</thead>
 
 			<tbody>
-				{% for examination in examinations %}
+				{% for examination in examinations.items %}
 					<tr>
 						<td>
 							<a href="?search={{ (examination.course.name) }}">{{ examination.course.name }}</a>
 						</td>
 						<td>
-							<a href="{{ path + examination.path }}" target="_blank">{{ examination.title }}</a>
+							<a href="{{ path + examination.path }}" target="_blank">{{ examination.title }}</a>{% if not examination.answer_path == '1' %}
+							<a href="{{ path + examination.answer_path }}" role="button" data-toggle="modal" style="cursor: pointer;"><i class="icon-file"></i></a>
+							{% endif %}
 						</td>
 						<td>
 							<a href="?search={{ (examination.education.name) }}">{{ examination.education.name }}</a>
@@ -41,6 +43,7 @@
 				{% endfor %}
 			</tbody>
 		</table>
+		{{ render_pagination(examinations, 'examination.view_examination') }}
 	</fieldset>
 <script>
 function searchKeyPress(e)

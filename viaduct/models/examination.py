@@ -12,6 +12,7 @@ class Examination(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(128))
 	path = db.Column(db.String(256), unique=True)
+	answer_path = db.Column(db.String(256))
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	timestamp = db.Column(db.DateTime)
 	course_id = db.Column(db.Integer,
@@ -35,13 +36,14 @@ class Examination(db.Model):
 	# 	lazy='dynamic'))
 
 
-	def __init__(self, path, title, course_id, education_id, 
-			timestamp=datetime.datetime.utcnow()):
+	def __init__(self, path, title, course_id, education_id,
+			timestamp=datetime.datetime.utcnow(), answers=''):
 		self.timestamp = timestamp
 		self.path = path
 		self.title = title
 		self.course_id = course_id
 		self.education_id = education_id
+		self.answer_path = answers
 		
 	# @staticmethod
 	# def get_by_path(path):
