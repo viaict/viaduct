@@ -12,6 +12,9 @@ I hope the general work flow will be clear after explaining what these folders
 contain.
 
 ### Views  
+More about views: http://flask.pocoo.org/docs/
+
+
 Here are the entry points of the site. Lets take a look at Pimpy:  
 
 blueprint = Blueprint('pimpy', __name__, url_prefix='/pimpy')
