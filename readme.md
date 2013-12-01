@@ -86,3 +86,12 @@ bijvoorbeeld:
 	pip install flask-wtf==0.8.3
 
 Ik hoop dat alles klopt, heb het niet weer allemaal nagelopen.
+
+TROUBLESHOOTING:
+- mysql-python fails with EnvironmentError: mysql_config not found
+Install libmysqlclient-dev
+- error: command 'x86_64-linux-gnu-gcc' failed with exit status 1
+Install python-dev. 
+- IOError: [Errno 13] Permission denied: '/home/username/.pip/pip.log'
+sudo chown username:username /home/username/.pip/pip.log
+
