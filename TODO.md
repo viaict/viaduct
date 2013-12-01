@@ -57,7 +57,6 @@ hebben.. Kan er eigenlijk niet zo veel aan doen.. IS NIET GELUKT, REQUIRE LINUX 
 * paginas waar je geen rechten toe hebt verwijderen uit het menu (zoals admin)
 * Een aparte groep voor ingelogde users
 * CAS gebruiken?
-* paginas kunnen verwijderen (in plaats van enkel de navigation entries)
 * page edit permissies via het algemene permissie systeem
 
 ## mail
