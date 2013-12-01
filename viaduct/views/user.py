@@ -15,6 +15,7 @@ from viaduct.models.group import Group
 from viaduct.forms.user import EditUserForm, EditUserInfoForm#, EditUserPermissionForm
 from viaduct.models.education import Education
 from viaduct.api.group import GroupPermissionAPI
+from viaduct.api import UserAPI
 
 blueprint = Blueprint('user', __name__)
 
@@ -75,11 +76,12 @@ def edit(user_id=None):
 		user.email = form.email.data
 		user.first_name = form.first_name.data
 		user.last_name = form.last_name.data
+
 		if GroupPermissionAPI.can_write('user'):
 			user.has_payed = form.has_payed.data
 		user.student_id = form.student_id.data
 		user.education_id = form.education_id.data
-
+		
 		if form.password.data != '':
 			user.password = bcrypt.hashpw(form.password.data, bcrypt.gensalt())
 
@@ -90,6 +92,8 @@ def edit(user_id=None):
 
 		db.session.add(group)
 		db.session.commit()
+
+		UserAPI.upload(request.files['avatar'], user.id)
 
 		flash('The user has been %s successfully.' %
 			('edited' if user_id else 'created'), 'success')
@@ -137,6 +141,10 @@ def sign_up():
 
 			db.session.add(group)
 			db.session.commit()
+
+			#Upload avatar
+			UserAPI.upload(request.files['avatar'], user.id)
+			
 			#user.add_to_all()
 
 			flash('You\'ve signed up successfully.')

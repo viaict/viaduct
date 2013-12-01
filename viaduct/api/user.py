@@ -1,10 +1,43 @@
 from flask.ext.login import current_user
 from viaduct.models.page import Page, PagePermission
+from flask import flash
+from werkzeug import secure_filename
+import os, difflib
 
 from viaduct.models.group import Group
+from viaduct.api.file import FileAPI
+
+ALLOWED_EXTENSIONS = set(['png', 'gif', 'jpg', 'jpeg'])
+UPLOAD_DIR = 'viaduct/static/files/'
 
 class UserAPI:
+	
+	@staticmethod
+	def upload(f, user_id):
+		filename = f.filename
+		# Check if the file is allowed.
+		if not '.' in filename or \
+				not filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS:
+			flash('Bestandstype is niet toegestaan.')
+			return
 
+		# convert the name.
+		filename = 'avatar_%d.%s' %(user_id, filename.rsplit('.', 1)[1])
+		
+		path = os.path.join(os.getcwd(), UPLOAD_DIR, filename)
+
+		# Check if avatar exists if so remove.
+
+		filename_noext, filename_ext = FileAPI.split_name(filename)
+
+		if FileAPI.exists(filename, UPLOAD_DIR):
+			os.remove(path)
+
+		# Save file.
+		f.save(path)
+
+		return
+	
 	@staticmethod
 	def get_groups_for_current_user():
 		"""

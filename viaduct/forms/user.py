@@ -1,6 +1,6 @@
 from flask.ext.wtf import Form, TextField, PasswordField, BooleanField, \
 		RecaptchaField, SelectField, FieldList, FormField, SubmitField
-from flask.ext.wtf import Required, Email, EqualTo, IntegerField
+from flask.ext.wtf import Required, Email, EqualTo, IntegerField, FileField
 from flask.ext.wtf import ValidationError
 
 class SignUpForm(Form):
@@ -11,6 +11,7 @@ class SignUpForm(Form):
 	last_name = TextField('Achternaam', validators=[Required(message='Geen achternaam opgegeven')])
 	student_id = TextField('Studentnummer', validators=[Required(message='Geen studentnummer opgegeven')])
 	education_id = SelectField('Opleiding', coerce=int)
+	avatar = FileField('Avatar')
 	recaptcha = RecaptchaField()
 
 class EditUserForm(Form):
@@ -24,6 +25,7 @@ class EditUserForm(Form):
 	has_payed = BooleanField('Heeft betaald')
 	student_id = TextField('Studentnummer', validators=[Required(message='Geen studentnummer opgegeven')])
 	education_id = SelectField('Opleiding', coerce=int)
+	avatar = FileField('Avatar')
 
 	def validate_password(form, field):
 		"""Providing a password is only required when creating a new user."""
