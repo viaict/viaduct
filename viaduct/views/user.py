@@ -1,4 +1,5 @@
 import bcrypt
+import datetime
 
 from flask import flash, get_flashed_messages, redirect, render_template, \
         request, url_for, abort, session
@@ -11,6 +12,8 @@ from viaduct import application, db, login_manager
 from viaduct.helpers import flash_form_errors
 from viaduct.forms import SignUpForm, SignInForm
 from viaduct.models import User
+from viaduct.models.activity import Activity
+from viaduct.models.custom_form import CustomFormResult, CustomForm
 from viaduct.models.group import Group
 from viaduct.forms.user import EditUserForm, EditUserInfoForm#, EditUserPermissionForm
 from viaduct.models.education import Education
@@ -28,9 +31,14 @@ def load_user(user_id):
 
 @blueprint.route('/users/view/<int:user_id>', methods=['GET'])
 def view_single(user_id=None):
-    if not GroupPermissionAPI.can_read('user') and (current_user == None or current_user.id != user_id):
-        return abort(403)
-    return render_template('user/view_single.htm', user= User.query.get(user_id))
+	if not GroupPermissionAPI.can_read('user') and (current_user == None or current_user.id != user_id):
+		return abort(403)
+
+	# Get all activity entrees from these forms, order by start_time of activity
+	activities = Activity.query.join(CustomForm).join(CustomFormResult).\
+		filter(CustomFormResult.owner_id == user_id and CustomForm.id == CustomFormResult.form_id and Activity.form_id == CustomForm.id).distinct().order_by(Activity.start_time)
+
+	return render_template('user/view_single.htm', user= User.query.get(user_id), activities=activities)
 
 @blueprint.route('/users/create/', methods=['GET', 'POST'])
 @blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])

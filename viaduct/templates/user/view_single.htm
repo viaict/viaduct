@@ -13,7 +13,6 @@
 	<i class="icon-user"></i>&nbsp;&nbsp;Gebruiker
 	<small>'{{ user.first_name }} {{ user.last_name }}'</small>
 </h1>
-
 <dl>
 	<dt>Studentnummer</dt>
 	<dd>{{ user.student_id }}</a></dd>
@@ -31,4 +30,15 @@
 	<dd>{{ user.education.name }}</dd>
 </dl>
 
+<br />
+
+
+<h4> Ingeschreven activiteiten: </h4>
+<ul>
+{% for result in activities%}
+<li><a href='{{ url_for('activity.get_activity', activity_id=result.id)}}' >
+		{{ result.name }}
+ 	</a> ( {{result.start_time}} )
+<ul>
+{% endfor %}
 {% endblock %}
