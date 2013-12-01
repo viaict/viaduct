@@ -17,8 +17,11 @@ class PageAPI:
 
         for rev in page.revisions.all():
             db.session.delete(rev)
-        db.session.delete(page)
+        for perm in page.permissions.all():
+            db.session.delete(perm)
+        db.session.commit()
 
+        db.session.delete(page)
         db.session.commit()
 
         return True
