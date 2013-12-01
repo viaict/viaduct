@@ -26,7 +26,7 @@
 * zoeksysteem (zie zoekmodule)
 * categorieen
 
-## pimpy, 'TIJMEN'
+## pimpy
 * get_tasks querys toch nog maar wat efficienter maken
 * tasks niet standaard op edit laten staan
 
@@ -62,19 +62,21 @@ bereiken 'BAS'
 * CAS gebruiken?
 
 ## mail
-* alles?
+* alles (sorry ik, maarten, weet niet echt wat hier moet gebeuren :O )? 'JOEY'
 
 ## vacaturenbank, 'BAS'
 * oh yeah
 
 ## zoekmodule/api
-Een dynamische module die gebruikt kan gaan worden in de tentamenbank, vacaturenbank en de wiki. Mischien zelfs pimpy.
+Een dynamische module die gebruikt kan gaan worden in de tentamenbank,
+vacaturenbank en de wiki. Mischien zelfs pimpy. DONE, maar moet nog getest
+worden 'MAARTEN'
 
 ## Export module
 Een module om lijsten te exporteren
 
 ## Ideal
-Ideal betalen bitches
+Ideal betalen bitches 'TIJMEN'
 
 Je geeft op welke tabellen en welke kolommen doorzocht moeten worden. `tijmen zwaan` als query moet matchen op
 een user terwijl de kolomen firstname en lastname zijn.
