@@ -51,6 +51,8 @@ Alles moet eigenlijk even nagelopen worden of het allemaal 1 taal is en spelfout
 * current user heeft id = 0 lokaal maar is None op de server. Het ligt iig niet aan verschillende versies van Flask. Verder kon ik (Inja) niet echt iets vinden. Daarom moet je altijd eerst checken op current_user != None en daarna pas op id == 0 voor een niet ingelogde user.
 * navigation, je kan nog geen paginas deleten (check of een entry geen children heeft faalt altijd).
 * (files uploaden) permissies van het mapje waar we naar uploaden niet op 777
+zetten, 'BAS' - Het lijkt alleen te werken als de 'others' execute recht
+hebben.. Kan er eigenlijk niet zo veel aan doen..
 zetten, IS NIET GELUKT, REQUIRE LINUX GOD
 * als je geen rechten hebt en doorverwezen bent na het inloggen zou het mooi
 zijn als je daarna wel op de pagina komt die je oorspronkelijk probeerde te
