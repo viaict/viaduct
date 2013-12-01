@@ -1,7 +1,10 @@
 from flask.ext.login import current_user
 from viaduct.models.page import Page, PagePermission
 
+from flask import request
+
 from viaduct.models.group import Group
+import inspect
 
 class UserAPI:
 
@@ -28,8 +31,10 @@ class UserAPI:
 
 	@staticmethod
 	def can_read(page):
+		print request.url
 		return PagePermission.get_user_rights(current_user, page.id) > 0
 
 	@staticmethod
 	def can_write(page):
+		print request.url
 		return PagePermission.get_user_rights(current_user, page.id) > 1
