@@ -56,9 +56,6 @@ Alles moet eigenlijk even nagelopen worden of het allemaal 1 taal is en spelfout
 zetten, 'BAS' - Het lijkt alleen te werken als de 'others' execute recht
 hebben.. Kan er eigenlijk niet zo veel aan doen..
 zetten, IS NIET GELUKT, REQUIRE LINUX GOD
-* als je geen rechten hebt en doorverwezen bent na het inloggen zou het mooi
-zijn als je daarna wel op de pagina komt die je oorspronkelijk probeerde te
-bereiken 'BAS'
 * paginas waar je geen rechten toe hebt verwijderen uit het menu (zoals admin)
 * Een aparte groep voor ingelogde users
 * CAS gebruiken?
