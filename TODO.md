@@ -92,6 +92,3 @@ Module permissie moet niet overridden worden door page permission. (bestuur moet
 
 ## user page
 * kunnen zien waar je allemaal voor bent ingeschreven
-* een functie toevoegen voor 'heeft betaald' als permissie. (dus content voor enkel leden)
-
-
