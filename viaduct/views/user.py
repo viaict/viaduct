@@ -174,7 +174,7 @@ def sign_in():
 
             flash('You\'ve been signed in successfully.')
 
-            if session['denied_from']:
+            if 'denied_from' in session:
                 return redirect(session['denied_from'])
 
             return redirect(url_for("page.get_page"))
@@ -190,7 +190,8 @@ def sign_out():
 
     flash('You\'ve been signed out.')
 
-    session['denied_from'] = None
+    if 'denied_from' in session:
+        session['denied_from'] = None
 
     return redirect(url_for('page.get_page'))
 
