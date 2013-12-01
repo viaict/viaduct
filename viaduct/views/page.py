@@ -156,6 +156,7 @@ def edit_page(path=''):
             data.title = revision.title
             data.content = revision.content
             data.filter_html = not revision.filter_html
+            data.needs_payed = page.needs_payed
             data.path = path
     else:
         if not(GroupPermissionAPI.can_write('page')):
@@ -180,8 +181,10 @@ def edit_page(path=''):
         if not page:
             page = Page(path)
 
-            db.session.add(page)
-            db.session.commit()
+        page.needs_payed = 'needs_payed' in request.form
+
+        db.session.add(page)
+        db.session.commit()
 
         # Enter permission in db
         for form_entry, group in zip(form.permissions, groups):
