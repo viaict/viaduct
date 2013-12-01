@@ -28,11 +28,13 @@
 	</form>
 
 	{% if entry and entry.children.count() == 0 %}
-		<form action="{{ url_for('navigation.delete', entry_id=entry.id) }}" method="post" name="delete_navigation_entry">
-			<fieldset>
-				<button class="btn btn-danger" type="submit">Verwijderen</button>
-			</fieldset>
-		</form>
+        <a class="btn btn-danger" href="{{ url_for('navigation.delete',
+            entry_id=entry.id) }}">Verwijderen</a>
+        {% if not entry.external and not entry.activity_list %}
+        <a class="btn btn-danger" href="{{ url_for('navigation.delete',
+            entry_id=entry.id, inc_page=1) }}">Menu-item en pagina
+                verwijderen</a>
+        {% endif %}
 	{% endif %}
 
 {% endblock %}

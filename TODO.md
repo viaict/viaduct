@@ -51,18 +51,17 @@ Alles moet eigenlijk even nagelopen worden of het allemaal 1 taal is en spelfout
 
 ## bugs/FIXMEs
 * current user heeft id = 0 lokaal maar is None op de server. Het ligt iig niet aan verschillende versies van Flask. Verder kon ik (Inja) niet echt iets vinden. Daarom moet je altijd eerst checken op current_user != None en daarna pas op id == 0 voor een niet ingelogde user.
-* navigation, je kan nog geen paginas deleten (check of een entry geen children heeft faalt altijd).
 * (files uploaden) permissies van het mapje waar we naar uploaden niet op 777
-zetten, 'BAS' - Het lijkt alleen te werken als de 'others' execute recht
-hebben.. Kan er eigenlijk niet zo veel aan doen..
-zetten, IS NIET GELUKT, REQUIRE LINUX GOD
+zetten, 'BAS' - Het lijkt alleen te werken als de `others` execute recht
+hebben.. Kan er eigenlijk niet zo veel aan doen.. IS NIET GELUKT, REQUIRE LINUX GOD
 * paginas waar je geen rechten toe hebt verwijderen uit het menu (zoals admin)
 * Een aparte groep voor ingelogde users
 * CAS gebruiken?
-* paginas kunnen verwijderen (in plaats van enkel de navigaion entries)
+* paginas kunnen verwijderen (in plaats van enkel de navigation entries)
+* page edit permissies via het algemene permissie systeem
 
 ## mail
-* alles (sorry ik, maarten, weet niet echt wat hier moet gebeuren :O )? 'JOEY'
+* alles (sorry ik, Maarten, weet niet echt wat hier moet gebeuren :O)? 'JOEY'
 
 ## vacaturenbank, 'BAS'
 * oh yeah
