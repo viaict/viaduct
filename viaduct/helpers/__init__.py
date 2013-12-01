@@ -18,6 +18,7 @@ markdown_extensions = [
 
 @application.errorhandler(403)
 def permission_denied(e):
+	print next
 	""" When permission denied and not logged in you will be redirected. """
 	content = "403, The police has been notified!"
 	image = '/static/img/403.jpg'
