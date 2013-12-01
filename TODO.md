@@ -29,6 +29,8 @@
 ## pimpy, 'TIJMEN'
 * get_tasks querys toch nog maar wat efficienter maken
 * tasks niet standaard op edit laten staan
+* als user mist toch het puntje aanmaken.
+* notulen editable tot ze zijn goedgekeurd
 
 ## boekensysteem
 Is nu nog heel basic, we kunnen boeken toevoegen, een bepaalde stock, boeken verkopen (stock --) maar er word niet gechekct of er nog is. Er wordt niet gefilterd (geen zoekfunctie). Er is niet zo iets als boekenpaketten. Er moeten nog database entries komen voor bij welk jaar een boek hoort.
@@ -55,6 +57,7 @@ Alles moet eigenlijk even nagelopen worden of het allemaal 1 taal is en spelfout
 * paginas waar je geen rechten toe hebt verwijderen uit het menu (zoals admin)
 * Een aparte groep voor ingelogde users
 * CAS gebruiken?
+* paginas kunnen verwijderen (in plaats van enkel de navigaion entries)
 
 ## mail
 * alles?

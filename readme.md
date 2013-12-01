@@ -1,6 +1,6 @@
 ## INSTALL MODULES:
 
-You will require modules such as these. 
+You will require modules such as these.
 
  - flask
  - flask-login
@@ -46,7 +46,7 @@ waarin je kan zeggen wat voor python packages en versies je wilt gebruiken. Zo
 kan je ook makkelijk switchen door bijvoorbeeld in de eene versie 0.1 te
 installeren en in een andere omgeving 1.4.
 
-	sudo apt-get install virtualenv
+	sudo apt-get install python-virtualenv
 
 Maak een map aan waarin je de instellingen wil installeren:
 mkdir venv
