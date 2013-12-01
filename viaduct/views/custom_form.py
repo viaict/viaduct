@@ -77,6 +77,8 @@ def view_single(form_id=None):
 
 		html += '</dl>'
 
+		time = entry.created.strftime("%Y-%m-%d %H:%I") if entry.created != None else ""
+
 		results.append({
 			'id'				  : entry.id,
 			'owner'				: entry.owner,
