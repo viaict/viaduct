@@ -5,7 +5,7 @@
 {% block content %}
 <form action="" method="post" name="edit_page" class="form-horizontal">
 	<fieldset>
-		<legend>Edit Page</legend>
+        <legend>{% if new_page %}New{% else %}Edit{% endif %} Page</legend>
 
 		{{ form.csrf_token }}
 
@@ -42,8 +42,17 @@
 				{% endfor %}
 			</tbody>
 		</table>
+        {{ render_checkbox(form.needs_payed) }}
 		{{ render_checkbox(form.filter_html) }}
 		{{ render_button(form.save_page) }}
+        {% if not new_page %}
+            <div class="control-group">
+                <div class="controls">
+                    <a class="btn btn-danger" href="{{
+                        url_for('page.remove_page', path=path) }}">Remove page</a>
+                </div>
+            </div>
+        {% endif %}
 	</fieldset>
 </form>
 

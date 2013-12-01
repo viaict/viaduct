@@ -10,7 +10,7 @@
 		{{message}}
 		<form action="" method=post enctype=multipart/form-data>
 			titel </br>
-			<input type=text name=title placeholder="Lineaire algebra 2010 deel 1"> <br />
+			<input type=text name=title placeholder="25 oktober 2011"> <br />
 			vak </br>
 			<select name=course> <br />
 				{% for course in courses %}
@@ -25,7 +25,10 @@
 				{% endfor %}
 			</select>
 			<a href="../education/add" class="btn"><i class="icon-pencil"></i> <strong>nieuw</strong></a><br />
-			<input type=file name=file>
+			Tentamen </br>
+			<input type=file name=file><br />
+			Antwoorden </br>
+			<input type=file name=answers>
 			<input type=submit value=Upload>
 		</form>
 	</fieldset>

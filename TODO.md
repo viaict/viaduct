@@ -29,9 +29,11 @@
 * zoeksysteem (zie zoekmodule)
 * categorieen
 
-## pimpy, 'TIJMEN'
+## pimpy
 * get_tasks querys toch nog maar wat efficienter maken
 * tasks niet standaard op edit laten staan
+* als user mist toch het puntje aanmaken.
+* notulen editable tot ze zijn goedgekeurd
 
 ## boekensysteem
 Is nu nog heel basic, we kunnen boeken toevoegen, een bepaalde stock, boeken verkopen (stock --) maar er word niet gechekct of er nog is. Er wordt niet gefilterd (geen zoekfunctie). Er is niet zo iets als boekenpaketten. Er moeten nog database entries komen voor bij welk jaar een boek hoort.
@@ -52,27 +54,29 @@ Alles moet eigenlijk even nagelopen worden of het allemaal 1 taal is en spelfout
 
 ## bugs/FIXMEs
 * current user heeft id = 0 lokaal maar is None op de server. Het ligt iig niet aan verschillende versies van Flask. Verder kon ik (Inja) niet echt iets vinden. Daarom moet je altijd eerst checken op current_user != None en daarna pas op id == 0 voor een niet ingelogde user.
-* navigation, je kan nog geen paginas deleten (check of een entry geen children heeft faalt altijd).
-* (files uploaden) permissies van het mapje waar we naar uploaden niet op 777 zetten, 'BAS'
-* als je geen rechten hebt en doorverwezen bent na het inloggen zou het mooi zijn als je daarna wel op de pagina komt die je oorspronkelijk probeerde te bereiken
+* (files uploaden) permissies van het mapje waar we naar uploaden niet op 777
+zetten, 'BAS' - Het lijkt alleen te werken als de `others` execute recht
+hebben.. Kan er eigenlijk niet zo veel aan doen.. IS NIET GELUKT, REQUIRE LINUX GOD
 * paginas waar je geen rechten toe hebt verwijderen uit het menu (zoals admin)
 * Een aparte groep voor ingelogde users
 * CAS gebruiken?
 
 ## mail
-* alles?
+* alles (sorry ik, Maarten, weet niet echt wat hier moet gebeuren :O)? 'JOEY'
 
 ## vacaturenbank, 'BAS'
 * oh yeah
 
 ## zoekmodule/api
-Een dynamische module die gebruikt kan gaan worden in de tentamenbank, vacaturenbank en de wiki. Mischien zelfs pimpy.
+Een dynamische module die gebruikt kan gaan worden in de tentamenbank,
+vacaturenbank en de wiki. Mischien zelfs pimpy. DONE, maar moet nog getest
+worden 'MAARTEN'
 
 ## Export module
 Een module om lijsten te exporteren
 
 ## Ideal
-Ideal betalen bitches
+Ideal betalen bitches 'TIJMEN'
 
 Je geeft op welke tabellen en welke kolommen doorzocht moeten worden. `tijmen zwaan` als query moet matchen op
 een user terwijl de kolomen firstname en lastname zijn.
@@ -88,6 +92,4 @@ Vorige keer was dit vrij snel bij elkaar gehackt maar we willen natuurlijk dat d
 Een verbetering is als module_permission dit zelf bijhoudt. Hiervoor moet het dus dynamisch kunnen zien welke modules in viaduct zitten OF we moeten zorgen dat modules zichzelf ergens registreren zodat de module_permission daar kan zien welke modules er allemaal zijn.
 
 Module permissie moet niet overridden worden door page permission. (bestuur moet altijd toegang hebben tot page bijvoorbeeld)
-
-
 
