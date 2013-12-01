@@ -250,9 +250,14 @@ class PimpyAPI:
 					temp_found_users.append(users[i])
 
 			if len(temp_found_users) == 0:
-				return False, "Could not match %s to a user in the group" % comma_sep_user
-			if len(temp_found_users) > 1:
-				return False, "could not disambiguate %s" % comma_sep_user
+				# We want to add an action to all users if none has been found
+				#return False, "Could not match %s to a user in the group" % comma_sep_user
+				temp_found_users = users
+
+			# We actually want to be able to add tasks to more than 1 user
+			#if len(temp_found_users) > 1:
+			#	return False, "could not disambiguate %s" % comma_sep_user
+
 			found_users.extend(temp_found_users)
 		return found_users, ""
 
@@ -385,7 +390,9 @@ class PimpyAPI:
 		# this should be done with a sql in statement, or something, but meh
 		else:
 			for group in current_user.groups:
-				list_items[group.name] = Minute.query.filter(Minute.group_id==group.id).all()
+				query = Minute.query.filter(Minute.group_id==group.id)
+				query = query.order_by(Minute.minute_date.desc())
+				list_items[group.name] = query.all()
 
 		return Markup(render_template('pimpy/api/minutes.htm',
 			list_items=list_items, type='minutes', group_id=group_id))
