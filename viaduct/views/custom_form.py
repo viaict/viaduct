@@ -84,7 +84,7 @@ def view_single(form_id=None):
 			'owner'				: entry.owner,
 			'form_entry'	: html,
 			'class'				: 'class="is_reserve"' if entry.is_reserve else '',
-			'time'				: entry.created.strftime("%Y-%m-%d %H:%I")
+			'time'				: time
 		})
 
 	custom_form.results = results
