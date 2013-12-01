@@ -13,7 +13,7 @@
 ## User paginas 'Fokke'
 * Foto uploaden per profiel
 * commissie lijsten per person
-* kunnen zien waar je allemaal voor bent ingeschreven
+* scheiding maken in lijst waarvoor je bent ingeschreven in al geweest en nog te komen (Sharon)
 * een functie toevoegen voor 'heeft betaald' als permissie. (dus content voor enkel leden)
 
 ## Forms, 'FABIEN'
