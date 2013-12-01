@@ -187,6 +187,18 @@ dd {
 	width: 150px;
 }
 
+.pimpy_task_task {
+	max-width: 400px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.pimpy_task_users {
+	max-width: 150px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
 /* Bootstrap formbuilder */
 .ui-draggable {
 	margin-bottom:4px;
@@ -231,4 +243,4 @@ div.sortable {
 /* Custom Form view-results */
 .is_reserve {
 	background:#FFFD87;
-} 
+}

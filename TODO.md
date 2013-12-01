@@ -10,8 +10,11 @@
 ## errorpaginas, 'BRAM'
 * zoals 403 mooier maken
 
-## User paginas
+## User paginas 'Fokke'
 * Foto uploaden per profiel
+* commissie lijsten per person
+* scheiding maken in lijst waarvoor je bent ingeschreven in al geweest en nog te komen (Sharon)
+* een functie toevoegen voor 'heeft betaald' als permissie. (dus content voor enkel leden)
 
 ## Forms, 'FABIEN'
 * tutorial
@@ -90,5 +93,3 @@ Een verbetering is als module_permission dit zelf bijhoudt. Hiervoor moet het du
 
 Module permissie moet niet overridden worden door page permission. (bestuur moet altijd toegang hebben tot page bijvoorbeeld)
 
-## user page
-* kunnen zien waar je allemaal voor bent ingeschreven
