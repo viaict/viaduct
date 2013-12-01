@@ -35,10 +35,21 @@
 
 <h4> Ingeschreven activiteiten: </h4>
 <ul>
-{% for result in activities%}
+{% for result in new_activities%}
 <li><a href='{{ url_for('activity.get_activity', activity_id=result.id)}}' >
 		{{ result.name }}
- 	</a> ( {{result.start_time}} )
+ 	</a> ( {{result.start_time}} )</li>
 <ul>
 {% endfor %}
+
+<h4> Oude activiteiten: </h4>
+<ul>
+{% for result in old_activities%}
+<li><a href='{{ url_for('activity.get_activity', activity_id=result.id)}}' >
+		{{ result.name }}
+ 	</a> ( {{result.start_time}} )</li>
+<ul>
+{% endfor %}
+
+
 {% endblock %}

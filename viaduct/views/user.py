@@ -36,9 +36,13 @@ def view_single(user_id=None):
 
 	# Get all activity entrees from these forms, order by start_time of activity
 	activities = Activity.query.join(CustomForm).join(CustomFormResult).\
-		filter(CustomFormResult.owner_id == user_id and CustomForm.id == CustomFormResult.form_id and Activity.form_id == CustomForm.id).distinct().order_by(Activity.start_time)
+		filter(CustomFormResult.owner_id == user_id and CustomForm.id == CustomFormResult.form_id and Activity.form_id == CustomForm.id)
 
-	return render_template('user/view_single.htm', user= User.query.get(user_id), activities=activities)
+	new_activities= activities.filter(Activity.end_time > datetime.datetime.today()).distinct().order_by(Activity.start_time)
+	old_activities= activities.filter(Activity.end_time < datetime.datetime.today()).distinct().order_by(Activity.start_time)
+
+
+	return render_template('user/view_single.htm', user= User.query.get(user_id), new_activities=new_activities, old_activities=old_activities)
 
 @blueprint.route('/users/create/', methods=['GET', 'POST'])
 @blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
