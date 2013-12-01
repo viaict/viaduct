@@ -62,6 +62,11 @@ class SignInForm(Form):
 	password = PasswordField('Wachtwoord', validators=[Required()])
 	remember_me = BooleanField('Onthouden', default = False)
 
+class ResetPassword(Form):
+	email = TextField('E-mail adres', validators=[Required(message='Geen emailadres opgegeven'), Email(message='Ongeldig emailadres opgegeven')])
+	student_id = TextField('Studentnummer', validators=[Required(message='Geen studentnummer opgegeven')])
+
+
 #class EditUserPermissionEntry(Form):
 #	select = SelectField(None, coerce=int, choices=[(1, 'Allow'), (-1, 'Deny'), (0, 'Inherit')])
 #
