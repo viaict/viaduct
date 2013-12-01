@@ -147,7 +147,8 @@ def edit_page(path=''):
         if revision:
             if not current_user:
                 abort(403)
-            if revision.author != None and current_user != None and not revision.author.id == current_user.id:
+            if revision.author != None and current_user != None and \
+               not revision.author.id == current_user.id:
                 if not UserAPI.can_write(page):
                     abort(403)
 
