@@ -1,4 +1,6 @@
-Install these modules:
+## INSTALL MODULES:
+
+You will require modules such as these. 
 
  - flask
  - flask-login
@@ -8,32 +10,34 @@ Install these modules:
  - py-bcrypt
  - markdown
 
+However, you will also require the right versions. See Section VIRTUAL ENV for
+that. Otherwise you can try installing them with the following commands, but
+better just skip to the VIRTUAL ENV chapter.
 
 BUT HOW?
-sudo apt-get install python-dev
-sudo apt-get install libmysqlclient-dev
-sudo apt-get install python-pip
-sudo pip install flask flask-login flask-sqlalchemy flask-wtf
-sudo easy_install -U distribute
-sudo pip install MySQL-python py-bcrypt markdown
-sudo pip install flask-babel
-sudo pip install flask-restful
-sudo pip install validictory
+* sudo apt-get install python-dev
+* sudo apt-get install libmysqlclient-dev
+* sudo apt-get install python-pip
+* sudo pip install flask flask-login flask-sqlalchemy flask-wtf
+* sudo easy_install -U distribute
+* sudo pip install MySQL-python py-bcrypt markdown
+* sudo pip install flask-babel
+* sudo pip install flask-restful
+* sudo pip install validictory
 
-VERVOLGENS (in root van de git repo):
+## SYNC CONFIG FILES & RUN SERVER
+(in root of the git repo):
 ln -s local_config.py config.py
 python create_db.py
 python run.py
 
-JEEEJ:
-In de browser nu localhost:5000 checken
-Echter, je db is nog super leeg
-Als het niet werkt omdat ie modules mist, opnieuw pip install proberen!
-
+Check localhost:5000
+However, your db is still super empty
+If stuff still does not work, you might miss modules. Try installing pip again.
 
 https://github.com/jgorset/facepy
 
-MERK OP:
+## VIRUAL ENV:
 het is handig op dit in een virtualenv-omgeving te doen voor als je dingen
 helemaal verneukt.
 (http://simononsoftware.com/virtualenv-tutorial/)
