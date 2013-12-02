@@ -13,32 +13,41 @@
 	<i class="icon-user"></i>&nbsp;&nbsp;Gebruiker
 	<small>'{{ user.first_name }} {{ user.last_name }}'</small>
 </h1>
-<dl>
-	<dt>Studentnummer</dt>
-	<dd>{{ user.student_id }}</a></dd>
 
-	<dt>Heeft lidmaatschap betaald</dt>
-	<dd><i class="icon-check{% if not user.has_payed %}-empty{% endif %}"></i></dd>
+<div class="span5">
+<table class="table table-condensed">
+<tr>
+	<td><b>Studentnummer</b></td>
+	<td>{{ user.student_id }}</td>
+</tr>
+<tr>
+	<td><b>Heeft lidmaatschap betaald</b></td>
+	<td><i class="icon-check{% if not user.has_payed %}-empty{% endif %}"></i></td>
+</tr>
+<tr>
+	<td><b>Contact <i class="icon-envelope-alt"></b></i></td>
+	<td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
+</tr>
+<tr>
+	<td><b>Contact <i class="icon-phone"></i></b></td>
+	<td>{{ user.phone_nr }}</td>
+</tr>
+<tr>
+	<td><b>Studie</b></td>
+	<td>{{ user.education.name }}</td>
+</tr>
+</table>
+</div>
 
-	<dt>Contact <i class="icon-envelope-alt"></i></dt>
-	<dd><a href="mailto:{{ user.email }}">{{ user.email }}</a></dd>
-
-	<dt>Contact <i class="icon-phone"></i></dt>
-	<dd>{{ user.phone_nr }}</dd>
-
-	<dt>Studie</dt>
-	<dd>{{ user.education.name }}</dd>
-</dl>
-
-<br />
-
-
+<div class="span4 pull-right">
 <h4> Ingeschreven activiteiten: </h4>
 <ul>
 {% for result in activities%}
 <li><a href='{{ url_for('activity.get_activity', activity_id=result.id)}}' >
 		{{ result.name }}
  	</a> ( {{result.start_time}} )
-<ul>
+</li>
 {% endfor %}
+</ul>
+</div>
 {% endblock %}
