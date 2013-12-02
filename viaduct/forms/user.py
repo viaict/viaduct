@@ -24,8 +24,8 @@ class EditUserForm(Form):
 	last_name = TextField('Achternaam', validators=[Required(message='Geen achternaam opgegeven')])
 	has_payed = BooleanField('Heeft betaald')
 	student_id = TextField('Studentnummer', validators=[Required(message='Geen studentnummer opgegeven')])
-	education_id = SelectField('Opleiding', coerce=int)
 	avatar = FileField('Avatar')
+	education_id = SelectField('Opleiding', coerce=int)
 
 	def validate_password(form, field):
 		"""Providing a password is only required when creating a new user."""
@@ -47,7 +47,9 @@ class EditUserInfoForm(Form):
 	last_name = TextField('Achternaam', validators=[Required(message='Geen achternaam opgegeven')])
 	student_id = TextField('Studentnummer', validators=[Required(message='Geen studentnummer opgegeven')])
 	education_id = SelectField('Opleiding', coerce=int)
+	avatar = FileField('Avatar')
 
+	recaptcha = RecaptchaField()
 	def validate_password(form, field):
 		"""Providing a password is only required when creating a new user."""
 		if form.id.data == 0 and len(field.data) == 0:

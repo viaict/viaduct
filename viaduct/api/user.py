@@ -3,12 +3,13 @@ from viaduct.models.page import Page, PagePermission
 from flask import flash
 from werkzeug import secure_filename
 import os, difflib
+import fnmatch
 
 from viaduct.models.group import Group
 from viaduct.api.file import FileAPI
 
 ALLOWED_EXTENSIONS = set(['png', 'gif', 'jpg', 'jpeg'])
-UPLOAD_DIR = 'viaduct/static/files/'
+UPLOAD_DIR = 'viaduct/static/files/users/'
 
 class UserAPI:
 	
@@ -27,11 +28,12 @@ class UserAPI:
 		path = os.path.join(os.getcwd(), UPLOAD_DIR, filename)
 
 		# Check if avatar exists if so remove.
-
 		filename_noext, filename_ext = FileAPI.split_name(filename)
 
-		if FileAPI.exists(filename, UPLOAD_DIR):
-			os.remove(path)
+		for file in os.listdir(UPLOAD_DIR):
+			if fnmatch.fnmatch(file, filename_noext + '.*'):
+				remove_path = os.path.join(os.getcwd(), UPLOAD_DIR, file)
+				os.remove(remove_path)
 
 		# Save file.
 		f.save(path)
