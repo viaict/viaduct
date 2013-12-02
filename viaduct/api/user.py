@@ -31,7 +31,8 @@ class UserAPI:
 
     @staticmethod
     def can_read(page):
-        if page.needs_payed and not current_user.has_payed:
+        if page.needs_payed and (not current_user or \
+                                 not current_user.has_payed):
             return False
 
         return PagePermission.get_user_rights(current_user, page.id) > 0
