@@ -31,7 +31,8 @@ def load_user(user_id):
 def view_single(user_id=None):
 	if not GroupPermissionAPI.can_read('user') and (current_user == None or current_user.id != user_id):
 		return abort(403)
-	return render_template('user/view_single.htm', user= User.query.get(user_id))
+	user = User.query.get(user_id)
+	return render_template('user/view_single.htm', user=user, avatar=UserAPI.avatar(user))
 
 @blueprint.route('/users/create/', methods=['GET', 'POST'])
 @blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])

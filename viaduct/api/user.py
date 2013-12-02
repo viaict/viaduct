@@ -4,6 +4,7 @@ from flask import flash
 from werkzeug import secure_filename
 import os, difflib
 import fnmatch
+import urllib, hashlib
 
 from viaduct.models.group import Group
 from viaduct.api.file import FileAPI
@@ -12,9 +13,39 @@ ALLOWED_EXTENSIONS = set(['png', 'gif', 'jpg', 'jpeg'])
 UPLOAD_DIR = 'viaduct/static/files/users/'
 
 class UserAPI:
-	
+
+	@staticmethod
+	def avatar(user):
+		"""
+		Returns users avatar. If the user uploaded a avatar return it. 
+		If the user did not upload an avatar checks if the user has an 
+		gravatar, if so return. 
+		If the user neither has an avatar nor an gravatar return default image.
+		"""
+		
+		# check if user has avatar if so return it
+		for file in os.listdir(UPLOAD_DIR):
+			if fnmatch.fnmatch(file, "avatar_" + str(user.id) + '.*'):
+				path = '/static/files/users/' + file
+				return(path)
+
+		# Set default values gravatar
+		email = user.email
+		default = 'default.png'
+		size = 100
+
+		# Construct the url
+		gravatar_url = 'http://www.gravatar.com/avatar/' + hashlib.md5(email.lower()).hexdigest() + '?'
+		gravatar_url += urllib.urlencode({'d':default, 's':str(size)})
+		return gravatar_url
+
 	@staticmethod
 	def upload(f, user_id):
+		"""
+		Checks if the file type is allowed if so removes any 
+		previous uploaded avatars. 
+		Uploads the new avatar
+		"""
 		filename = f.filename
 		# Check if the file is allowed.
 		if not '.' in filename or \
@@ -24,7 +55,6 @@ class UserAPI:
 
 		# convert the name.
 		filename = 'avatar_%d.%s' %(user_id, filename.rsplit('.', 1)[1])
-		
 		path = os.path.join(os.getcwd(), UPLOAD_DIR, filename)
 
 		# Check if avatar exists if so remove.
@@ -37,7 +67,6 @@ class UserAPI:
 
 		# Save file.
 		f.save(path)
-
 		return
 	
 	@staticmethod
