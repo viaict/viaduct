@@ -35,7 +35,7 @@ class UserAPI:
 
 		# Set default values gravatar
 		email = user.email
-		default = 'default.png'
+		default = 'identicon'
 		size = 100
 
 		# Construct the url
