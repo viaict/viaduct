@@ -1,8 +1,11 @@
 <a style="color: #333;" href="/activities"><h1>Activiteitenoverzicht</h1></a>
 
+<div class="activity-simple-list">
 {% for activity in activities.items[:4] %}
-
 <div class="activity-simple">
+	<div class="activity-simple-image">
+		<img src="/static/activity_pictures/{{ activity.picture }}">
+	</div>
 	<h4>
 		<a href="{{ url_for('activity.get_activity', activity_id=activity.id)}}">
 			{{ activity.name }}
@@ -17,12 +20,12 @@
 		<i class="icon-compass"></i>
 		{{ activity.location }}
 	</div>
-
-	{{ activity.get_short_description(50) | markdown }}
-
 </div>
 
 {% endfor %}
+</div>
 
+<div class="activity-simple-list">
 Heb je een idee voor een activiteit?<br>
 Stuur een mailtje naar de <a href="mailto:actie@svia.nl">actiecommissie</a>.
+</div>
