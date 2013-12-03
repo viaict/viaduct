@@ -13,7 +13,7 @@ ALLOWED_EXTENSIONS = set(['png', 'gif', 'jpg', 'jpeg'])
 UPLOAD_DIR = 'viaduct/static/files/users/'
 
 class UserAPI:
-	
+
 	@staticmethod
 	def has_avatar(user_id):
 		"""
@@ -21,9 +21,8 @@ class UserAPI:
 		"""
 		for file in os.listdir(UPLOAD_DIR):
 			if fnmatch.fnmatch(file, 'avatar_' + str(user_id) + '.*'):
-				path = 'viaduct/static/files/users/' + file
 				return True
-			return False
+		return False
 
 	@staticmethod
 	def remove_avatar(user):
@@ -33,18 +32,18 @@ class UserAPI:
 		# Find avatar by avatar_<userid>.*
 		for file in os.listdir(UPLOAD_DIR):
 			if fnmatch.fnmatch(file, 'avatar_' + str(user.id) + '.*'):
-				path = 'viaduct/static/files/users/' + file
+				path = UPLOAD_DIR + file
 				os.remove(path)
 
 	@staticmethod
 	def avatar(user):
 		"""
-		Returns users avatar. If the user uploaded a avatar return it. 
-		If the user did not upload an avatar checks if the user has an 
-		gravatar, if so return. 
+		Returns users avatar. If the user uploaded a avatar return it.
+		If the user did not upload an avatar checks if the user has an
+		gravatar, if so return.
 		If the user neither has an avatar nor an gravatar return default image.
 		"""
-		
+
 		# check if user has avatar if so return it
 		for file in os.listdir(UPLOAD_DIR):
 			if fnmatch.fnmatch(file, 'avatar_' + str(user.id) + '.*'):
@@ -65,8 +64,8 @@ class UserAPI:
 	@staticmethod
 	def upload(f, user_id):
 		"""
-		Checks if the file type is allowed if so removes any 
-		previous uploaded avatars. 
+		Checks if the file type is allowed if so removes any
+		previous uploaded avatars.
 		Uploads the new avatar
 		"""
 		filename = f.filename
@@ -91,7 +90,7 @@ class UserAPI:
 		# Save file.
 		f.save(path)
 		return
-	
+
 	@staticmethod
 	def get_groups_for_current_user():
 		"""

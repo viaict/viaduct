@@ -53,9 +53,10 @@ def edit(user_id=None):
 		user = User.query.get(user_id)
 	else:
 		user = User()
-	
+
 	user.avatar = UserAPI.has_avatar(user_id)
-	
+	print(user.avatar)
+
 	if GroupPermissionAPI.can_write('user'):
 		form = EditUserForm(request.form, user)
 		isAdmin = True
@@ -92,7 +93,7 @@ def edit(user_id=None):
 			user.has_payed = form.has_payed.data
 		user.student_id = form.student_id.data
 		user.education_id = form.education_id.data
-		
+
 		if form.password.data != '':
 			user.password = bcrypt.hashpw(form.password.data, bcrypt.gensalt())
 
@@ -155,7 +156,7 @@ def sign_up():
 
 			#Upload avatar
 			UserAPI.upload(request.files['avatar'], user.id)
-			
+
 			#user.add_to_all()
 
 			flash('You\'ve signed up successfully.')
