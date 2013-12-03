@@ -19,33 +19,6 @@ label.checkbox {
 	text-align: right;
 }
 
-/* Definition lists */
-
-dl, dt, dd {
-	float:left;
-	margin:0;
-}
-
-dt, dd {
-	min-height:20px;
-	border-top:1px dashed #eee;
-}
-
-dl {
-	width: 490px;
-	padding: 0;
-}
-
-dt {
-	text-transform:capitalize;
-	width: 180px;
-	padding: 5px 5px 5px 0;
-}
-
-dd {
-	width: 300px;
-	padding: 5px 0;
-}
 
 /* Sponsors */
 
@@ -205,7 +178,38 @@ dd {
 
 
 
+
 /* User Pages */
+
+.userpage_dl, .userpage_dl dt, .userpage_dl dd {
+	float: left;
+	margin: 0;
+}
+
+.userpage_dl dt, .userpage_dl dd {
+	min-height: 20px;
+	border-top: 1px dashed #eee;
+}
+
+.userpage_dl {
+	padding: 0;
+}
+
+.userpage_dl dt {
+	text-transform: capitalize;
+	width: 140px;
+	padding: 5px 5px 5px 0px;
+}
+
+.userpage_dl dd {
+	width: 200px;
+	padding: 5px 0;
+}
+
+.userpage_table td {
+	border-top: 1px dashed #eee;
+}
+
 
 
 

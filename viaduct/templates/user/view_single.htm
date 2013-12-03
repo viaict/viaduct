@@ -15,54 +15,49 @@
 </h1>
 
 <div class="span5">
-	<table class="table table-condensed">
-		<tr>
-			<td><b>Studentnummer</b></td>
-			<td>{{ user.student_id }}</td>
-		</tr>
-		<tr>
-			<td><b>Heeft lidmaatschap betaald</b></td>
-			<td><i class="icon-check{% if not user.has_payed %}-empty{% endif %}"></i></td>
-		</tr>
-		<tr>
-			<td><b>Contact <i class="icon-envelope-alt"></b></i></td>
-			<td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
-		</tr>
-		<tr>
-			<td><b>Contact <i class="icon-phone"></i></b></td>
-			<td>{{ user.phone_nr }}</td>
-		</tr>
-		<tr>
-			<td><b>Studie</b></td>
-			<td>{{ user.education.name }}</td>
-		</tr>
-	</table>
+	<h4>Student-informatie:</h4>
+	<dl class="userpage_dl">
+			<dt class="userpage_dt"><b>Studentnummer</b></dt>
+			<dd>{{ user.student_id }}</dd>
+
+			<dt class="userpage_dt"><b>Lidmaatschap</b></dt>
+			<dd><i class="icon-check{% if not user.has_payed %}-empty{% endif %}"></i></dd>
+
+			<dt class="userpage_dt"><b>Contact <i class="icon-envelope-alt"></b></i></dt>
+			<dd><a href="mailto:{{ user.email }}">{{ user.email }}</a></dd>
+
+			<dt class="userpage_dt"><b>Contact <i class="icon-phone"></i></b></dt>
+			<dd>{{ user.phone_nr }}</dd>
+
+			<dt class="userpage_dt"><b>Studie</b></dt>
+			<dd>{{ user.education.name }}</dd>
+	</dl>
 </div>
 
 <div class="span4 pull-right">
 	<h4> Ingeschreven activiteiten: </h4>
-	<ul>
+	<table class="table table-condensed userpage_table">
 		{% for result in new_activities %}
-			<li>
-				<a href="{{ url_for('activity.get_activity', activity_id=result.id)}}">
+			<tr>
+				<td><a href="{{ url_for('activity.get_activity', activity_id=result.id)}}">
 					{{ result.name }}
-				</a>
-				( {{result.start_time}} )
-			</li>
+				</a></td>
+				<td>( {{result.start_time}} )</td>
+			</tr>
 		{% endfor %}
-	</ul>
+	</table>
 
 	<h4> Oude activiteiten: </h4>
-	<ul>
+	<table class="table table-condensed userpage_table">
 		{% for result in old_activities %}
-			<li>
-				<a href="{{ url_for('activity.get_activity', activity_id=result.id)}}">
+			<tr>
+				<td><a href="{{ url_for('activity.get_activity', activity_id=result.id)}}">
 					{{ result.name }}
-				</a>
-				( {{result.start_time}} )
-			</li>
+				</a></td>
+				<td>( {{result.start_time}} )</td>
+			</tr>
 		{% endfor %}
-	</ul>
+	</table>
 </div>
 
 {% endblock %}
