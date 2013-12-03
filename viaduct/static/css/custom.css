@@ -250,33 +250,42 @@ label.checkbox {
 
 /* User Pages */
 
-.userpage_dl, .userpage_dl dt, .userpage_dl dd {
+.user_single dl, .user_single dt, .user_single dd {
 	float: left;
 	margin: 0;
 }
 
-.userpage_dl dt, .userpage_dl dd {
+.user_single dt, .user_single dd {
 	min-height: 20px;
 	border-top: 1px dashed #eee;
 }
 
-.userpage_dl {
+.user_single {
 	padding: 0;
 }
 
-.userpage_dl dt {
+.user_single dt {
 	text-transform: capitalize;
 	width: 140px;
 	padding: 5px 5px 5px 0px;
 }
 
-.userpage_dl dd {
+.user_single dd {
 	width: 200px;
 	padding: 5px 0;
 }
 
-.userpage_table td {
+.user_single td {
 	border-top: 1px dashed #eee;
+}
+
+.user_single h1 {
+	border-top: 1px dashed #eee;
+	border-bottom: 1px dashed #eee;
+}
+
+.user_single img {
+	margin-right: 15px;
 }
 
 

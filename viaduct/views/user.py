@@ -44,8 +44,8 @@ def view_single(user_id=None):
 
 
 	user = User.query.get(user_id)
-	avatar = UserAPI.avatar(user)
-	return render_template('user/view_single.htm', user=user, avatar=avatar, new_activities=new_activities, old_activities=old_activities)
+	user.avatar = UserAPI.avatar(user)
+	return render_template('user/view_single.htm', user=user, new_activities=new_activities, old_activities=old_activities)
 
 @blueprint.route('/users/create/', methods=['GET', 'POST'])
 @blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
