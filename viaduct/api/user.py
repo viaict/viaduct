@@ -13,6 +13,28 @@ ALLOWED_EXTENSIONS = set(['png', 'gif', 'jpg', 'jpeg'])
 UPLOAD_DIR = 'viaduct/static/files/users/'
 
 class UserAPI:
+	
+	@staticmethod
+	def has_avatar(user_id):
+		"""
+		Checks if the user has uploaded an avatar if so return true
+		"""
+		for file in os.listdir(UPLOAD_DIR):
+			if fnmatch.fnmatch(file, 'avatar_' + str(user_id) + '.*'):
+				path = 'viaduct/static/files/users/' + file
+				return True
+			return False
+
+	@staticmethod
+	def remove_avatar(user):
+		"""
+		When called removes user avatar.
+		"""
+		# Find avatar by avatar_<userid>.*
+		for file in os.listdir(UPLOAD_DIR):
+			if fnmatch.fnmatch(file, 'avatar_' + str(user.id) + '.*'):
+				path = 'viaduct/static/files/users/' + file
+				os.remove(path)
 
 	@staticmethod
 	def avatar(user):
@@ -25,7 +47,8 @@ class UserAPI:
 		
 		# check if user has avatar if so return it
 		for file in os.listdir(UPLOAD_DIR):
-			if fnmatch.fnmatch(file, "avatar_" + str(user.id) + '.*'):
+			if fnmatch.fnmatch(file, 'avatar_' + str(user.id) + '.*'):
+				print user.id
 				path = '/static/files/users/' + file
 				return(path)
 

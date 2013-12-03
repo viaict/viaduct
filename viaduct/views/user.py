@@ -34,6 +34,14 @@ def view_single(user_id=None):
 	user = User.query.get(user_id)
 	return render_template('user/view_single.htm', user=user, avatar=UserAPI.avatar(user))
 
+@blueprint.route('/users/remove_avatar/<int:user_id>',methods=['GET'])
+def remove_avatar(user_id=None):
+	user = User.query.get(user_id)
+	if not GroupPermissionAPI.can_write('user') and (current_user == None or current_user.id != user_id):
+		return abort(403)
+	UserAPI.remove_avatar(user)
+	return redirect(url_for('user.view_single', user_id=user_id))
+
 @blueprint.route('/users/create/', methods=['GET', 'POST'])
 @blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
 def edit(user_id=None):
@@ -45,7 +53,9 @@ def edit(user_id=None):
 		user = User.query.get(user_id)
 	else:
 		user = User()
-
+	
+	user.avatar = UserAPI.has_avatar(user_id)
+	
 	if GroupPermissionAPI.can_write('user'):
 		form = EditUserForm(request.form, user)
 		isAdmin = True
