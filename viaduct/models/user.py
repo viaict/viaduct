@@ -22,6 +22,7 @@ class User(db.Model):
 	description = db.Column(db.String(1024)) # Description of user
 	student_id = db.Column(db.String(256))
 	education_id = db.Column(db.Integer, db.ForeignKey('education.id'))
+	
 
 	education = db.relationship(Education,
 		backref=db.backref('user', lazy='dynamic'))
