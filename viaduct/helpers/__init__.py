@@ -36,6 +36,10 @@ def permission_denied(e):
 def internal_server_error(e):
     return "500, External server error."
 
+@application.errorhandler(404)
+def page_not_found(e):
+	return render_template('page/404.htm')
+
 def flash_form_errors(form):
     for field, errors in form.errors.items():
         for error in errors:

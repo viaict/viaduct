@@ -17,23 +17,6 @@ from viaduct.api.page import PageAPI
 
 blueprint = Blueprint('page', __name__)
 
-def get_error_page(path=''):
-    revisions = []
-
-    class struct(object):
-        pass
-
-    data = struct()
-    data.title = 'Oh no! It looks like you have found a dead Link!'
-    data.content = '![alt text](/static/img/404.png "404")'
-    data.filter_html = True
-    data.path = ''
-    data.page = None
-
-    revisions.append(data)
-
-    return render_template('page/get_page.htm', revisions=revisions)
-
 @blueprint.route('/favicon.ico', methods=['GET', 'POST'])
 def favicon_route():
     return "None";

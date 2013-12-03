@@ -35,6 +35,12 @@ def view_single(user_id=None):
 	if not GroupPermissionAPI.can_read('user') and (current_user == None or current_user.id != user_id):
 		return abort(403)
 
+	user = User.query.get(user_id)
+	if user == None:
+		return abort(404)
+
+	user.avatar = UserAPI.avatar(user)
+
 	# Get all activity entrees from these forms, order by start_time of activity
 	activities = Activity.query.join(CustomForm).join(CustomFormResult).\
 		filter(CustomFormResult.owner_id == user_id and CustomForm.id == CustomFormResult.form_id and Activity.form_id == CustomForm.id)
@@ -43,8 +49,6 @@ def view_single(user_id=None):
 	old_activities= activities.filter(Activity.end_time < datetime.datetime.today()).distinct().order_by(Activity.start_time)
 
 
-	user = User.query.get(user_id)
-	user.avatar = UserAPI.avatar(user)
 	return render_template('user/view_single.htm', user=user, new_activities=new_activities, old_activities=old_activities)
 
 @blueprint.route('/users/remove_avatar/<int:user_id>',methods=['GET'])
