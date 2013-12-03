@@ -27,23 +27,82 @@ label.checkbox {
 	padding:20px 0;
 }
 
+
+
+
+
 /* Activity-block (activities) */
 
+.activity-simple-image img {
+	width: 70px;
+	height: 70px;
+}
+
+.activity-simple-image {
+	width: 70px;
+	height: 70px;
+	padding: 0px;
+	margin-right: 10px;
+	float: left;
+}
+
+.activity-simple {
+	margin-top: 10px;
+	border-bottom: 1px dashed #eee;
+	padding-bottom: 10px;
+}
+
+.activity-simple-list {
+	margin-top: 30px;
+}
+
 .activity-block {
-	padding:10px 0;
-	border-bottom:1px solid blue;
+	padding: 20px;
+	border-bottom: 1px dashed #eee;
+}
+
+.activity-block:hover {
+	background-color: #f5f5f5;
 }
 
 .activity-block img {
-	height:186px;
-	width:auto;
-	max-width:220px;
+	max-height: 220px;
+	max-width: 220px;
+}
+
+.activity-block .image {
+	height: 220px;
 }
 
 .activity-block h1 {
-	font-size:3.2em;
-	padding:8px 0;
-	line-height:1em;
+	font-size: 3.2em;
+	padding: 0px;
+	line-height: 1em;
+	float: left;
+	margin: 0px;
+}
+
+.activity-block h2 {
+	font-size: 2em;
+	margin: 10px 0px 0px 0px;
+	padding: 0px;
+	line-height: 1em;
+	float: right;
+}
+
+.activity-block h3 {
+	padding: 0px;
+	font-size: 1.5em;
+	line-height: 1em;
+}
+
+.activity-block h3 i {
+	margin-top: 4px;
+	margin-right: 10px;
+}
+
+.activity-block h2 i {
+	margin-top: 9px;
 }
 
 .activity-block td {
@@ -52,16 +111,26 @@ label.checkbox {
 }
 
 .activity-block .time {
-	background:#fafafa;
 	color:#444;
 	font-weight:bold;
-	padding:4px;
-	margin-top:4px;
+	margin: 10px 0px;
+}
+
+.activity-block .time dt {
+	width: 20px;
+}
+
+.activity-block .time dd {
+	margin-left: 40px;
 }
 
 #acc {
 	margin-top:-14px;
 }
+
+
+
+
 
 /* Twitter widget */
 .twtr-widget h3 {
@@ -181,33 +250,42 @@ label.checkbox {
 
 /* User Pages */
 
-.userpage_dl, .userpage_dl dt, .userpage_dl dd {
+.user_single dl, .user_single dt, .user_single dd {
 	float: left;
 	margin: 0;
 }
 
-.userpage_dl dt, .userpage_dl dd {
+.user_single dt, .user_single dd {
 	min-height: 20px;
 	border-top: 1px dashed #eee;
 }
 
-.userpage_dl {
+.user_single {
 	padding: 0;
 }
 
-.userpage_dl dt {
+.user_single dt {
 	text-transform: capitalize;
 	width: 140px;
 	padding: 5px 5px 5px 0px;
 }
 
-.userpage_dl dd {
+.user_single dd {
 	width: 200px;
 	padding: 5px 0;
 }
 
-.userpage_table td {
+.user_single td {
 	border-top: 1px dashed #eee;
+}
+
+.user_single h1 {
+	border-top: 1px dashed #eee;
+	border-bottom: 1px dashed #eee;
+}
+
+.user_single img {
+	margin-right: 15px;
 }
 
 

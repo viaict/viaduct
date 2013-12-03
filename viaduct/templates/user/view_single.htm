@@ -4,60 +4,63 @@
 
 <!-- TODO check permission -->
 
-<a href="{{ url_for('user.edit', user_id=user.id) }}" class="btn btn-warning pull-right">
-	<i class="icon-pencil"></i>
-	Aanpassen
-</a>
+<div class="user_single">
+	<a href="{{ url_for('user.edit', user_id=user.id) }}" class="btn btn-warning pull-right">
+		<i class="icon-pencil"></i>
+		Aanpassen
+	</a>
 
-<h1>
-	<i class="icon-user"></i>&nbsp;&nbsp;Gebruiker
-	<small>'{{ user.first_name }} {{ user.last_name }}'</small>
-</h1>
+	<h1>
+		<img src="{{ user.avatar }}">
+		{{ user.first_name }} {{ user.last_name }}
+		<small> - Gebruiker</small>
+	</h1>
 
-<div class="span5">
-	<h4>Student-informatie:</h4>
-	<dl class="userpage_dl">
-			<dt class="userpage_dt"><b>Studentnummer</b></dt>
+	<div class="span5">
+		<h4>Student-informatie:</h4>
+		<dl>
+			<dt><b>Studentnummer</b></dt>
 			<dd>{{ user.student_id }}</dd>
 
-			<dt class="userpage_dt"><b>Lidmaatschap</b></dt>
+			<dt><b>Lidmaatschap</b></dt>
 			<dd><i class="icon-check{% if not user.has_payed %}-empty{% endif %}"></i></dd>
 
-			<dt class="userpage_dt"><b>Contact <i class="icon-envelope-alt"></b></i></dt>
+			<dt><b>Contact <i class="icon-envelope-alt"></b></i></dt>
 			<dd><a href="mailto:{{ user.email }}">{{ user.email }}</a></dd>
 
-			<dt class="userpage_dt"><b>Contact <i class="icon-phone"></i></b></dt>
+			<dt><b>Contact <i class="icon-phone"></i></b></dt>
 			<dd>{{ user.phone_nr }}</dd>
 
-			<dt class="userpage_dt"><b>Studie</b></dt>
+			<dt><b>Studie</b></dt>
 			<dd>{{ user.education.name }}</dd>
-	</dl>
-</div>
+		</dl>
+	</div>
 
-<div class="span4 pull-right">
-	<h4> Ingeschreven activiteiten: </h4>
-	<table class="table table-condensed userpage_table">
-		{% for result in new_activities %}
-			<tr>
-				<td><a href="{{ url_for('activity.get_activity', activity_id=result.id)}}">
-					{{ result.name }}
-				</a></td>
-				<td>( {{result.start_time}} )</td>
-			</tr>
-		{% endfor %}
-	</table>
+	<div class="span4 pull-right">
+		<h4> Ingeschreven activiteiten: </h4>
+		<table class="table table-condensed userpage_table">
+			{% for result in new_activities %}
+				<tr>
+					<td><a href="{{ url_for('activity.get_activity', activity_id=result.id)}}">
+						{{ result.name }}
+					</a></td>
+					<td>( {{result.start_time}} )</td>
+				</tr>
+			{% endfor %}
+		</table>
 
-	<h4> Oude activiteiten: </h4>
-	<table class="table table-condensed userpage_table">
-		{% for result in old_activities %}
-			<tr>
-				<td><a href="{{ url_for('activity.get_activity', activity_id=result.id)}}">
-					{{ result.name }}
-				</a></td>
-				<td>( {{result.start_time}} )</td>
-			</tr>
-		{% endfor %}
-	</table>
+		<h4> Oude activiteiten: </h4>
+		<table class="table table-condensed userpage_table">
+			{% for result in old_activities %}
+				<tr>
+					<td><a href="{{ url_for('activity.get_activity', activity_id=result.id)}}">
+						{{ result.name }}
+					</a></td>
+					<td>( {{result.start_time}} )</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</div>
 </div>
 
 {% endblock %}

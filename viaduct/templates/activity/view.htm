@@ -15,52 +15,51 @@
 
 {% for activity in activities.items %}
 
-<div class="activity-block row-fluid">
-
-	{% if activity.picture %}
-	<div class="span4">
-		<a href="/activities/{{ activity.id }}">
-			<img src="/static/activity_pictures/{{ activity.picture }}">
-		</a>
-	</div>
-
-	<div class="span8">
-
-	{% else %}
-
-	<div class="span12">
-
-	{% endif %}
-
-		<h1>
+<div class="activity-block">
+	<div class="row-fluid">
+		<div class="span4 image">
 			<a href="/activities/{{ activity.id }}">
-				{{activity.name}}
+				{% if activity.picture %}
+					<img src="/static/activity_pictures/{{ activity.picture }}">
+				{% else %}
+					<img src="/static/img/via.png">
+				{% endif %}
 			</a>
-		</h1>
-
-		<table>
-			<tr>
-				<td><i class="icon-compass"></i> Location
-				<td>{{ activity.location}}
-
-			<tr>
-				<td>Price
-				<td><i class="icon-euro"></i> {{ activity.price}}
-
-		</table>
-
-		<div class="time">
-			<i class="icon-calendar"></i>
-			{{ activity.get_time() }}
 		</div>
-		<hr>
+
+		<div class="span6">
+			<h1>
+				<a href="/activities/{{ activity.id }}">
+					{{activity.name}}
+				</a>
+			</h1>
+			<h2>
+				<i class="icon-euro"></i> {{ activity.price}}
+			</h2>
+			<div class="clearfix"></div>
+
+			<dl class="time dl-horizontal">
+				<dt><i class="icon-compass"></i></dt>
+				<dd>{{ activity.location}}</dd>
+				<dt><i class="icon-calendar"></i></dt>
+				<dd>{{ activity.get_time() }}</dd>
+			</dl>
+
+		</div>
+		<div class="span8">
+			{{ activity.get_short_description(300) | markdown }}
+		</div>
 	</div>
+	<div class="row-fluid">
+		<div class="span10">
 
-	<p>{{ activity.get_short_description(650) | markdown }}
+			<p>{{ activity.get_short_description(300) | markdown }}</p>
 
-	<a href='{{ url_for('activity.get_activity', activity_id=activity.id)}}' class="btn btn-primary">
-		Lees verder
-	</a>
+			<a href='{{ url_for('activity.get_activity', activity_id=activity.id)}}' class="btn succes">
+				Lees verder
+			</a>
+		</div>
+	</div>
 
 </div>
 
