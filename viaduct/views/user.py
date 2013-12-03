@@ -121,7 +121,9 @@ def edit(user_id=None):
 		db.session.add(group)
 		db.session.commit()
 
-		UserAPI.upload(request.files['avatar'], user.id)
+		avatar = request.files['avatar']
+		if avatar:
+			UserAPI.upload(avatar, user.id)
 
 		flash('The user has been %s successfully.' %
 			('edited' if user_id else 'created'), 'success')
