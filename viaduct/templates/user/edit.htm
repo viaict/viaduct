@@ -19,7 +19,13 @@
 		{{ render_field(form.student_id) }}
 		{{ render_field(form.education_id) }}
 		{{ render_field(form.avatar) }}
-
+		{% if user.avatar %}
+		<div class="control-groep">
+			<div class="controls">
+				<a href='/users/remove_avatar/{{ user.id }}' class='btn btn-danger'>Verwijder avatar</a>
+			</div>
+		</div>
+		{% endif  %}
 
 		{% if isAdmin %} {{render_field(form.has_payed) }} {% endif %}
 
