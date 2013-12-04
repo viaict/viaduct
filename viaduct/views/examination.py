@@ -67,7 +67,7 @@ def upload_file():
 		# if(education_id == None):
 		# 	return render_template('examination/upload.htm', courses = courses,
 		# 	educations = educations, message = 'Er is een fout opgetreden!');
-		
+
 		if not title:
 			flash('Geen titel opgegeven', 'error')
 			error = True
@@ -118,8 +118,9 @@ def upload_file():
 @blueprint.route('/tentamenbank/', methods=['GET', 'POST'])
 @blueprint.route('/tentamenbank/<int:page_nr>/', methods=['GET', 'POST'])
 @blueprint.route('/examination/<int:page_nr>/', methods=['GET', 'POST'])
-@login_required
 def view_examination(page_nr=1):
+	if not GroupPermissionAPI.can_read('examination', True):
+		return abort(403)
 	path = '/static/uploads/examinations/'
 
 	if request.args.get('search') != None:
@@ -140,7 +141,7 @@ def view_examination(page_nr=1):
 @blueprint.route('/examination/admin', methods=['GET', 'POST'])
 @blueprint.route('/examination/admin/<int:page_nr>/', methods=['GET', 'POST'])
 def examination_admin(page_nr=1):
-	if not GroupPermissionAPI.can_write('examination'):
+	if not GroupPermissionAPI.can_write('examination', True):
 		session['prev'] = 'examination.examination_admin'
 		return abort(403)
 
@@ -184,7 +185,7 @@ def examination_admin(page_nr=1):
 @blueprint.route('/examination/edit', methods=['GET', 'POST'])
 @login_required
 def edit_examination():
-	if not GroupPermissionAPI.can_write('examination'):
+	if not GroupPermissionAPI.can_write('examination', True):
 		session['prev'] = 'examination.edit_examination'
 		return abort(403)
 
