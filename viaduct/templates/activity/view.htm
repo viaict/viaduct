@@ -17,49 +17,40 @@
 
 <div class="activity-block">
 	<div class="row-fluid">
-		<div class="span4 image">
-			<a href="/activities/{{ activity.id }}">
+		<a href="{{ url_for('activity.get_activity', activity_id=activity.id)}}">
+			<div class="span4 image">
 				{% if activity.picture %}
 					<img src="/static/activity_pictures/{{ activity.picture }}">
 				{% else %}
 					<img src="/static/img/via.png">
 				{% endif %}
-			</a>
-		</div>
+			</div>
 
-		<div class="span6">
-			<h1>
-				<a href="/activities/{{ activity.id }}">
-					{{activity.name}}
-				</a>
-			</h1>
-			<h2>
-				<i class="icon-euro"></i> {{ activity.price}}
-			</h2>
-			<div class="clearfix"></div>
+			<div class="span8">
+				<h1>
+						{{activity.name}}
+				</h1>
 
-			<dl class="time dl-horizontal">
-				<dt><i class="icon-compass"></i></dt>
-				<dd>{{ activity.location}}</dd>
-				<dt><i class="icon-calendar"></i></dt>
-				<dd>{{ activity.get_time() }}</dd>
-			</dl>
+				<dl class="time dl-horizontal">
+					<dt><i class="icon-compass"></i></dt>
+					<dd>{{ activity.location}}</dd>
+					<dt><i class="icon-calendar"></i></dt>
+					<dd>{{ activity.get_time() }}</dd>
+				</dl>
+				<h2>
+					{% if activity.price != "gratis" %}
+						<i class="icon-euro"></i>
+					{% endif %}
+						{{ activity.price}}
+				</h2>
 
-		</div>
-		<div class="span8">
-			{{ activity.get_short_description(300) | markdown }}
-		</div>
+			</div>
+			<div class="span8 short_content">
+				{{ activity.get_short_description(600) | markdown }}
+			</div>
+		</a>
 	</div>
-	<div class="row-fluid">
-		<div class="span10">
 
-			<p>{{ activity.get_short_description(300) | markdown }}</p>
-
-			<a href='{{ url_for('activity.get_activity', activity_id=activity.id)}}' class="btn succes">
-				Lees verder
-			</a>
-		</div>
-	</div>
 
 </div>
 
