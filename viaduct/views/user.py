@@ -36,7 +36,7 @@ def view_single(user_id=None):
 		return abort(403)
 
 	user = User.query.get(user_id)
-	if user == None:
+	if not user:
 		return abort(404)
 
 	user.avatar = UserAPI.avatar(user)
