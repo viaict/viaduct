@@ -34,7 +34,7 @@ def permission_denied(e):
 
 @application.errorhandler(500)
 def internal_server_error(e):
-    return "500, External server error."
+    return render_template('page/500.htm')
 
 @application.errorhandler(404)
 def page_not_found(e):
