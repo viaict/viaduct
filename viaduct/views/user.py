@@ -35,6 +35,8 @@ def view_single(user_id=None):
 	if not GroupPermissionAPI.can_read('user') and (current_user == None or current_user.id != user_id):
 		return abort(403)
 
+	if not user_id:
+		return abort(404)
 	user = User.query.get(user_id)
 	if not user:
 		return abort(404)
