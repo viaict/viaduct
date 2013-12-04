@@ -1,5 +1,6 @@
 ## General
 * talen module voor multi-language site
+* Cascades voor models maken
 
 ## sign-in/sign-up
 * wat is er aan de hand als je je inloggegevens kwijt bent?
