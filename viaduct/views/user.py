@@ -131,8 +131,7 @@ def edit(user_id=None):
 		flash('The user has been %s successfully.' %
 			('edited' if user_id else 'created'), 'success')
 
-		if not user_id:
-			return redirect(url_for('user.view'))
+		return redirect(url_for('user.view'))
 	else:
 		flash_form_errors(form)
 
