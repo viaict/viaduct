@@ -23,7 +23,7 @@
 * Automatisch herkennen of formulier al is ingevuld / pre-vullen oid (of uitklapbaar zeg maar, dat je niet meteen in scherm hebt)
 * Paar extra `shortcuts` en shortcuts duidelijker vermelden ( Poep | user geeft je bijv. student nr / email / naam / studie die je een gebruiker wilt laten invullen (GAAT NIET GEBEUREN)
 * Toevoegen dat wanneer formulier wordt ingevuld, het de gebruiker data ook update als die zou ontbreken (bijv. telefoon nummer, wordt het nu ingevuld dan is het wel chill om die te blijven houden)
-* Mogelijkheid tot entries deleten
+* Mogelijkheid maken om activiteiten ook inschrijfbaar te maken voor niet ingelogde peoples
 
 ## wiki-systeem
 * zoeksysteem (zie zoekmodule)
