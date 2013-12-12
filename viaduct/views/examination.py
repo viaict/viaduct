@@ -119,7 +119,7 @@ def upload_file():
 @blueprint.route('/tentamenbank/<int:page_nr>/', methods=['GET', 'POST'])
 @blueprint.route('/examination/<int:page_nr>/', methods=['GET', 'POST'])
 def view_examination(page_nr=1):
-	if not GroupPermissionAPI.can_read('examination', True):
+	if not GroupPermissionAPI.can_read('examination', False):
 		return abort(403)
 	path = '/static/uploads/examinations/'
 
