@@ -12,7 +12,7 @@ class SignUpForm(Form):
 	student_id = TextField('Studentnummer', validators=[Required(message='Geen studentnummer opgegeven')])
 	education_id = SelectField('Opleiding', coerce=int)
 	avatar = FileField('Avatar')
-	recaptcha = RecaptchaField()
+	#recaptcha = RecaptchaField()
 
 class EditUserForm(Form):
 	""" Edit a user as administrator """
