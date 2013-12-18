@@ -362,3 +362,11 @@ div.sortable {
 .is_reserve {
 	background:#FFFD87;
 }
+
+#athenaeum {
+    width: 100%;
+    height: 700px;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
