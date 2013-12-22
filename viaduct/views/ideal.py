@@ -5,6 +5,6 @@ from viaduct import application, db
 
 blueprint = Blueprint('ideal', __name__, url_prefix='/ideal')
 
-@blueprint.route('')
+@blueprint.route('/')
 def ideal_overview():
 	return abort(404)
