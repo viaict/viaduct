@@ -17,9 +17,6 @@ from viaduct.api.page import PageAPI
 
 blueprint = Blueprint('page', __name__)
 
-@blueprint.route('/favicon.ico', methods=['GET', 'POST'])
-def favicon_route():
-    return "None";
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<path:path>', methods=['GET', 'POST'])
