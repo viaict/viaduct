@@ -319,8 +319,10 @@ class PimpyAPI:
 		else:
 			tasks = Task.query.filter(Task.group_id==group_id).all()
 			group = Group.query.filter(Group.id==group_id).first()
-			if not (group and tasks):
+			if not group:
 				abort(404)
+			if not group in UserAPI.get_groups_for_current_user():
+				abort(403)
 			list_users['Iedereen'] = tasks
 			list_items[group.name] = list_users
 
@@ -358,7 +360,7 @@ class PimpyAPI:
 				if not group in UserAPI.get_groups_for_current_user():
 					abort(403)
 				tasks = Task.query.filter(Task.group_id==group_id).all()
-				if not (group or tasks):
+				if not group:
 					abort(404)
 				items = []
 				list_users = {}
