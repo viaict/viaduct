@@ -312,7 +312,7 @@ class PimpyAPI:
 
 		if group_id == 'all':
 			for group in UserAPI.get_groups_for_current_user():
-				list_items = {}
+				list_users = {}
 				list_items = {}
 				list_users['Iedereen'] = group.tasks
 				list_items[group.name] = list_users
