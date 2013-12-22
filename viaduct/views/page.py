@@ -96,7 +96,7 @@ def get_page(path=''):
         revisions.append(data)
 
         # Allow revision path for normal page templates
-        revision.path = page.path
+        revision.path = path
 
     if is_main_page:
       return render_template('page/get_page.htm', revisions=revisions)
