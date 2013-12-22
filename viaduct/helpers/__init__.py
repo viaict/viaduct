@@ -16,6 +16,10 @@ markdown_extensions = [
 	'toc'
 ]
 
+@application.errorhandler(404)
+def page_not_found(e):
+	return render_template('page/404.htm')
+
 @application.errorhandler(403)
 def permission_denied(e):
 	""" When permission denied and not logged in you will be redirected. """
@@ -30,7 +34,7 @@ def permission_denied(e):
 
 @application.errorhandler(500)
 def internal_server_error(e):
-	return "500, External server error."
+	return render_template('page/500.htm')
 
 def flash_form_errors(form):
 	for field, errors in form.errors.items():
