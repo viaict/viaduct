@@ -309,14 +309,16 @@ class PimpyAPI:
 
 
 
-		list_items = {}
-		list_users = {}
 
 		if group_id == 'all':
 			for group in UserAPI.get_groups_for_current_user():
+				list_items = {}
+				list_items = {}
 				list_users['Iedereen'] = group.tasks
 				list_items[group.name] = list_users
 		else:
+			list_items = {}
+			list_users = {}
 			tasks = Task.query.filter(Task.group_id==group_id).all()
 			group = Group.query.filter(Group.id==group_id).first()
 			if not group:
