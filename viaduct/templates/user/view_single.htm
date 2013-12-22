@@ -16,6 +16,7 @@
 		<small> - Gebruiker</small>
 	</h1>
 
+
 	<div class="span5">
 		<h4>Student-informatie:</h4>
 		<dl>
@@ -34,8 +35,14 @@
 			<dt><b>Studie</b></dt>
 			<dd>{{ user.education.name }}</dd>
 		</dl>
-	</div>
 
+	<h4>Groups:</h4>
+	<ul>
+	{% for group in user.groups %}
+		<li> {{ group.name }} </li>
+	{% endfor %}
+	</ul>
+	</div>
 	<div class="span4 pull-right">
 		<h4> Ingeschreven activiteiten: </h4>
 		<table class="table table-condensed userpage_table">
@@ -60,6 +67,7 @@
 				</tr>
 			{% endfor %}
 		</table>
+		
 	</div>
 </div>
 
