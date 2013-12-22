@@ -8,7 +8,7 @@ from viaduct.utilities import validate_form
 from viaduct.forms import ContactForm
 from viaduct.api.group import GroupPermissionAPI
 
-blueprint = Blueprint('contact', __name__, url_prefix='/contacts/')
+blueprint = Blueprint('contact', __name__, url_prefix='/contacts')
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page>/', methods=['GET', 'POST'])

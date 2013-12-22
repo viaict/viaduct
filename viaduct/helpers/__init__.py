@@ -1,5 +1,5 @@
 from flask import flash, request, Markup, url_for, render_template, redirect, \
-                  session
+				  session
 from flask.ext.login import current_user
 
 
@@ -14,48 +14,53 @@ from viaduct.models.activity import Activity
 import datetime
 
 markdown_extensions = [
-    'toc'
+	'toc'
 ]
 
 @application.errorhandler(403)
 def permission_denied(e):
-    # Save the path you were rejected from.
-    session['denied_from'] = request.path
+	""" When permission denied and not logged in you will be redirected. """
+	content = "403, The police has been notified!"
+	image = '/static/img/403.jpg'
 
-    # When permission denied and not logged in you will be redirected.
-    content = "403, The police has been notified!"
-    image = '/static/img/403.jpg'
+	# Save the path you were rejected from.
+	session['denied_from'] = request.path
 
-    if(current_user == None or current_user.is_anonymous()):
-        flash('Je hebt geen rechten om deze pagina te bekijken.')
-        return redirect(url_for('user.sign_in'))
+	# When permission denied and not logged in you will be redirected.
+	content = "403, The police has been notified!"
+	image = '/static/img/403.jpg'
 
-    return render_template('page/403.htm', content=content, image=image)
+	if(current_user == None or current_user.is_anonymous()):
+		flash('Je hebt geen rechten om deze pagina te bekijken.')
+		return redirect(url_for('user.sign_in'))
+
+	return render_template('page/403.htm', content=content, image=image)
 
 @application.errorhandler(500)
 def internal_server_error(e):
-    return render_template('page/500.htm')
+	return render_template('page/500.htm')
 
 @application.errorhandler(404)
 def page_not_found(e):
 	return render_template('page/404.htm')
 
 def flash_form_errors(form):
-    for field, errors in form.errors.items():
-        for error in errors:
-            flash(error, 'error')
+	for field, errors in form.errors.items():
+		for error in errors:
+			flash(error, 'error')
 
 @application.template_filter('markdown')
 def markdown_filter(data):
-    return Markup(markdown(data, safe_mode='escape', enable_attributes=False,
-        extensions=markdown_extensions))
+	return Markup(markdown(data, safe_mode='escape', enable_attributes=False,
+		extensions=markdown_extensions))
 
 @application.template_filter('safe_markdown')
 def safe_markdown_filter(data):
-    return Markup(markdown(data, extensions=markdown_extensions))
+	return Markup(markdown(data, extensions=markdown_extensions))
 
 @application.template_filter('pages')
 def pages_filter(data):
+
     content = '<div class="container">'
 
     for i in range(len(data)):

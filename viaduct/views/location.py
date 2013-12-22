@@ -7,7 +7,7 @@ from viaduct.utilities import serialize_sqla, validate_form
 from viaduct.forms import LocationForm
 from viaduct.api.group import GroupPermissionAPI
 
-blueprint = Blueprint('location', __name__, url_prefix='/locations/')
+blueprint = Blueprint('location', __name__, url_prefix='/locations')
 
 @blueprint.route('/<int:location_id>/contacts/', methods=['GET'])
 def get_contacts(location_id):

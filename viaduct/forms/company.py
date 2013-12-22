@@ -9,4 +9,5 @@ class CompanyForm(Form):
 	contract_end_date = DateField('Contract einddatum', validators=[Required()])
 	location_id = SelectField('Locatie', coerce=int)
 	contact_id = SelectField('Contactpersoon', coerce=int)
+	website = TextField('Website')
 	submit = SubmitField('Opslaan')
