@@ -35,14 +35,31 @@
 	</div>
 {% endmacro %}
 
+
 {% macro render_datefield(field) %}
 	<div class="control-group">
 		{{ field.label(class='content-label') }}
-		<div class="controls">
-			{{ field(placeholder=field.label.text, **kwargs) }}
+
+		<div class="controls form-inline">
+			<input value="2013-12-12" type='text' name='end_date' id='end_date' data-date-format="yyyy-mm-dd">
 		</div>
 	</div>
 {% endmacro %}
+
+{% macro render_datefield_picker(field, id) %}
+	<div class="control-group">
+		{{ field.label(class='content-label') }}
+
+		<div class="controls form-inline">
+			<input class="datepicker" value="{{field.data}}" type='text' name='{{id}}' id='{{id}}' data-date-format="yyyy-mm-dd">
+		</div>
+	</div>	
+<script>
+$('#' + "{{id}}").datepicker();
+</script>
+{% endmacro %}
+
+
 
 {% macro render_select(field) %}
 	<div class="control-group">

@@ -1,34 +1,44 @@
-{% from "macros/form.htm" import render_field, render_button, render_textarea, render_datefield, render_select %}
-
+{% from "macros/form.htm" import render_field, render_button, render_textarea, render_datefield, render_datefield_picker, render_select %}
 {% extends "content.htm" %}
 
 {% block content %}
+
+<script src='/static/js/datepicker.js'></script>
+<link href='/static/css/datepicker.css' rel='stylesheet'>
+	<div class="container">
 	<form method="post">
 		<fieldset>
-			<legend>Bedrijf {% if company.id %}bewerken{% else %}aanmaken{% endif %}</legend>
-
-			{{ form.csrf_token }}
-
-			{{ render_field(form.name) }}
-			{{ render_textarea(form.description) }}
-			{{ render_datefield(form.contract_start_date) }}
-			{{ render_datefield(form.contract_end_date) }}
-			{{ render_select(form.location_id) }}
-			{{ render_select(form.contact_id) }}
-
-			{% if GroupPermissionAPI.can_write('company') %}
-				{{ render_button(form.submit) }}
-			{% endif %}
+	{% if company.id and GroupPermissionAPI.can_write('company') %}
+		<a class="btn" href="{{ url_for('company.edit', company_id=company.id) }}">Bewerken</a>
+		<br />
+		<br />
+		<form action="{{ url_for('company.delete', company_id=company.id) }}" method="post">
+	{% endif %}
+				<div id='{{ company.name }}'>
+					<div class="span4">
+						<blockquote>
+							<small><cite title="Source Title">{{company.location.address}}, {{company.location.city}}, {{company.location.country}}<i class="icon-map-marker"></i></cite></small>
+						</blockquote>
+						<p>
+							<i class="icon-envelope"></i> {{company.contact.email}} <br>
+							<i class="icon-globe"></i> {{company.website}} <br>
+							<i class="icon-user"></i> {{company.contact.phone_nr}} <br>
+						</p>
+						</div>
+						<div class="span6">
+							<h3>{{company.name}}</h3>
+						{{ company.description | markdown }}
+					</div>
+				</div>
 		</fieldset>
 	</form>
 
 	{% if company.id and GroupPermissionAPI.can_write('company') %}
-		<form action="{{ url_for('company.delete', company_id=company.id) }}" method="post">
 			<fieldset>
 				<button class="btn btn-danger" type="submit">Verwijderen</button>
 			</fieldset>
 		</form>
 	{% endif %}
-
-	<script src="/static/js/company_view.js"></script>
+</div>
+	<script src="/static/js/company_view.js"></srcript>
 {% endblock %}
