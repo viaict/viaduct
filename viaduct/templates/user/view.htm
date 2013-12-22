@@ -7,7 +7,7 @@
 
 <div class="row">
 	<div class="span12">
-		<form method="get" action="" enctype=multipart/form-data class="form-inline" >
+		<form method="get" action="{{ url_for('user.view') }}" enctype=multipart/form-data class="form-inline" >
 			<input name="search" id="search" class="span5" type="text" placeholder="Zoeken" value="{{search}}"></input>
 			<button type="submit" class="btn btn-primary"> <i class="icon-search icon-white" id="submit"></i></button>
 		</form>
@@ -62,7 +62,7 @@
 				</button>
 			</div>
 
-			{{ render_pagination(users, 'user.view') }}
+			{{ render_pagination(users, 'user.view', "?search=" + search) }}
 		</form>
 	</div>
 </div>
