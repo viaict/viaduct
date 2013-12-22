@@ -294,6 +294,35 @@ class PimpyAPI:
 			type=type, endpoints=endpoints))
 
 	@staticmethod
+	def get_all_tasks(group_id):
+		"""
+		Shows all tasks ever made.
+		Can specify specific group.
+		No internal permission system made yet.
+		Do not make routes to this module yet.
+		"""
+		if not GroupPermissionAPI.can_read('pimpy'):
+			abort(403)
+		if not current_user:
+			flash('Current_user not found')
+			return redirect(url_for('pimpy.view_tasks'))
+		if group_id == 'all':
+			tasks = Task.query.all()
+		else:
+			tasks = Task.query.filter(Task.group_id==group_id).all()
+
+		list_items = {}
+		list_users = {}
+
+		list_users['Iedereen'] = tasks
+
+		list_items['Alle actiepunten'] = list_users
+
+		return Markup(render_template('pimpy/api/tasks.htm',
+			list_items=list_items, type='tasks', group_id=group_id,
+			personal=False))
+
+	@staticmethod
 	def get_tasks(group_id, personal):
 		if not GroupPermissionAPI.can_read('pimpy'):
 			abort(403)
