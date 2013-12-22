@@ -19,10 +19,6 @@ from viaduct.api.category import CategoryAPI
 
 blueprint = Blueprint('page', __name__)
 
-@blueprint.route('/favicon.ico', methods=['GET', 'POST'])
-def favicon_route():
-	return "None";
-
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<path:path>', methods=['GET', 'POST'])
 def get_page(path=''):
@@ -251,7 +247,7 @@ def edit_page(path=''):
 
 		# redirect newly created page
 		return redirect(url_for('page.get_page', path=path))
-	# form submission has an error we do not think 
+	# form submission has an error we do not think
 	else:
 		# TODO: check if we even use this
 		for group in groups:
