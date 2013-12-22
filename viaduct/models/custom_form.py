@@ -31,7 +31,6 @@ class CustomFormResult(db.Model):
 	has_payed	= db.Column(db.Boolean)
 	created		= db.Column(db.DateTime, default=datetime.datetime.now())
 
-
 	owner = db.relationship('User', backref=db.backref('custom_form_results', lazy='dynamic'))
 	form  = db.relationship('CustomForm', backref=db.backref('custom_form_results', lazy='dynamic'))
 
@@ -41,6 +40,9 @@ class CustomFormResult(db.Model):
 		self.data = data
 		self.is_reserve = is_reserve
 		self.has_payed = has_payed
+
+	def __repr__(self):
+		return "<FormResult owner:%s has_payed:%s>" % (self.owner.first_name, self.has_payed)
 
 class CustomFormFollower(db.Model):
 	__tablename__ = 'custom_form_follower'

@@ -42,7 +42,7 @@ def view_single(user_id=None):
 		return abort(404)
 
 	user.avatar = UserAPI.avatar(user)
-	user.groups = UserAPI.get_groups_for_current_user()
+	user.groups = UserAPI.get_groups_for_user_id(user)
 
 	# Get all activity entrees from these forms, order by start_time of activity
 	activities = Activity.query.join(CustomForm).join(CustomFormResult).\

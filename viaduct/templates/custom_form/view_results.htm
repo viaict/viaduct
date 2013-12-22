@@ -31,8 +31,16 @@
 				{{ result.owner.phone_nr }}<br>
 				{{ result.form_entry|safe }}
 			<td>{{ result.time }}
-			<td>{% if result.has_payed %} <i class='icon-ok></i> {% endif %}
-			<td><button id="{{ result.id }}" title="Inzending verwijderen" message="Hoi {{ current_user.first_name }}, weet je zeker dat je deze wilt verwijderen?" class="btn btn-small btn-danger keeswildeleteknopje"><icon class="icon-trash"></i></button>
+			<td>
+				<button id="{{ result.id }}" title="Gebruiker als betaald aan- / afvinken" class="btn btn-small btn-success has_payed">
+					{% if result.has_payed %} 
+						<i class="icon-ok"></i>
+					{% else %}
+						<i class="icon-money"></i>
+					{% endif %}
+				</button>
+				
+			<td><button id="{{ result.id }}" title="Inzending verwijderen" message="Hoi {{ current_user.first_name }}, weet je zeker dat je deze wilt verwijderen?" class="btn btn-small btn-danger keeswildeleteknopje"><i class="icon-trash"></i></button>
 	{% endfor %}
 </table>
 
@@ -40,5 +48,6 @@
 <p>Er zijn nog geen resultaten om te tonen
 {% endif %}
 
+<script src="/static/js/has_payed.js"></script>
 <script src="/static/js/keeswildeleteknopje.js"></script>
 {% endblock %}

@@ -24,7 +24,6 @@ def view(page=1):
 		return abort(403)
 
 	custom_forms = CustomForm.query.order_by("created")
-	
 
 	if current_user and current_user.id > 0:
 		follows = CustomFormFollower.query.filter(CustomFormFollower.owner_id == current_user.id).all()
@@ -84,6 +83,7 @@ def view_single(form_id=None):
 			'owner'				: entry.owner,
 			'form_entry'	: html,
 			'class'				: 'class="is_reserve"' if entry.is_reserve else '',
+			'has_payed'		: entry.has_payed,
 			'time'				: time
 		})
 
@@ -236,7 +236,7 @@ def follow(form_id=None):
 		# Need to be logged in
 		return abort(403)
 
-	# TODO Unfollow if re-submitted
+	# Unfollow if re-submitted
 	follows = CustomFormFollower.query.filter(CustomFormFollower.form_id == form_id).first()
 
 	if follows:
@@ -247,6 +247,39 @@ def follow(form_id=None):
 		result = CustomFormFollower(current_user.id, form_id)
 		db.session.add(result)
 
+	db.session.commit()
+
+	return response
+
+@blueprint.route('/forms/has_payed/<int:submit_id>', methods=['POST'])
+def has_payed(submit_id=None):
+	response = "success"
+
+	if not GroupPermissionAPI.can_write('custom_form'):
+		return abort(403)
+
+	# Logged in user
+	if current_user and current_user.id > 0:
+		user = User.query.get(current_user.id)
+	else:
+		# Need to be logged in
+		return abort(403)
+
+	# Test if user already signed up
+	submission = CustomFormResult.query.filter(
+		CustomFormResult.id == submit_id
+	).first()
+
+	if not submission:
+		response = "Error, submission could not be found"
+
+	# Adjust the "has_payed"
+	if submission.has_payed:
+		submission.has_payed = False
+	else:
+		submission.has_payed = True
+
+	db.session.add(submission)
 	db.session.commit()
 
 	return response

@@ -7,13 +7,15 @@ class EditGroupPagePermissionEntry(wtforms.Form):
     select = SelectField(None, coerce=int, choices=[(0, 'Geen'), (1, 'Lees'), (2, 'Lees/Schrijf')])
 
 class EditPageForm(Form):
-    title = TextField('Title', [Required()])
-    content = TextAreaField('Content', [Optional()])
-    comment = TextField('Comment')
+    title       = TextField('Title', [Required()])
+    content     = TextAreaField('Content', [Optional()])
+    comment     = TextField('Comment')
     filter_html = BooleanField('Disable HTML filtering for the current page.')
     needs_payed = BooleanField('Betaling vereist.')
     permissions = FieldList(FormField(EditGroupPagePermissionEntry))
-    save_page = SubmitField('Save Page')
+    save_page   = SubmitField('Save Page')
+    form_id     = SelectField('Formulier', coerce=int)
+
 
 class HistoryPageForm(Form):
     previous = RadioField('Previous', coerce=int)
