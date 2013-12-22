@@ -1,6 +1,6 @@
 from flask.ext.wtf import Form, TextField, PasswordField, BooleanField, \
 		RecaptchaField, SelectField, FieldList, FormField, SubmitField
-from flask.ext.wtf import Required, Email, EqualTo, IntegerField
+from flask.ext.wtf import Required, Email, EqualTo, IntegerField, FileField
 from flask.ext.wtf import ValidationError
 
 class SignUpForm(Form):
@@ -11,7 +11,8 @@ class SignUpForm(Form):
 	last_name = TextField('Achternaam', validators=[Required(message='Geen achternaam opgegeven')])
 	student_id = TextField('Studentnummer', validators=[Required(message='Geen studentnummer opgegeven')])
 	education_id = SelectField('Opleiding', coerce=int)
-	recaptcha = RecaptchaField()
+	avatar = FileField('Avatar')
+	#recaptcha = RecaptchaField()
 
 class EditUserForm(Form):
 	""" Edit a user as administrator """
@@ -24,6 +25,7 @@ class EditUserForm(Form):
 	has_payed = BooleanField('Heeft betaald')
 	student_id = TextField('Studentnummer', validators=[Required(message='Geen studentnummer opgegeven')])
 	education_id = SelectField('Opleiding', coerce=int)
+	avatar = FileField('Avatar')
 
 	def validate_password(form, field):
 		"""Providing a password is only required when creating a new user."""
@@ -45,6 +47,7 @@ class EditUserInfoForm(Form):
 	last_name = TextField('Achternaam', validators=[Required(message='Geen achternaam opgegeven')])
 	student_id = TextField('Studentnummer', validators=[Required(message='Geen studentnummer opgegeven')])
 	education_id = SelectField('Opleiding', coerce=int)
+	avatar = FileField('Avatar')
 
 	def validate_password(form, field):
 		"""Providing a password is only required when creating a new user."""
@@ -61,6 +64,11 @@ class SignInForm(Form):
 	email = TextField('E-mail adres', validators=[Required(), Email()])
 	password = PasswordField('Wachtwoord', validators=[Required()])
 	remember_me = BooleanField('Onthouden', default = False)
+
+class ResetPassword(Form):
+	email = TextField('E-mail adres', validators=[Required(message='Geen emailadres opgegeven'), Email(message='Ongeldig emailadres opgegeven')])
+	student_id = TextField('Studentnummer', validators=[Required(message='Geen studentnummer opgegeven')])
+
 
 #class EditUserPermissionEntry(Form):
 #	select = SelectField(None, coerce=int, choices=[(1, 'Allow'), (-1, 'Deny'), (0, 'Inherit')])

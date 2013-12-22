@@ -250,9 +250,14 @@ class PimpyAPI:
 					temp_found_users.append(users[i])
 
 			if len(temp_found_users) == 0:
-				return False, "Could not match %s to a user in the group" % comma_sep_user
-			if len(temp_found_users) > 1:
-				return False, "could not disambiguate %s" % comma_sep_user
+				# We want to add an action to all users if none has been found
+				#return False, "Could not match %s to a user in the group" % comma_sep_user
+				temp_found_users = users
+
+			# We actually want to be able to add tasks to more than 1 user
+			#if len(temp_found_users) > 1:
+			#	return False, "could not disambiguate %s" % comma_sep_user
+
 			found_users.extend(temp_found_users)
 		return found_users, ""
 
@@ -289,6 +294,46 @@ class PimpyAPI:
 			type=type, endpoints=endpoints))
 
 	@staticmethod
+	def get_all_tasks(group_id):
+		"""
+		Shows all tasks ever made.
+		Can specify specific group.
+		No internal permission system made yet.
+		Do not make routes to this module yet.
+		"""
+		if not GroupPermissionAPI.can_read('pimpy'):
+			abort(403)
+		if not current_user:
+			flash('Current_user not found')
+			return redirect(url_for('pimpy.view_tasks'))
+
+
+
+
+		list_items = {}
+		if group_id == 'all':
+			for group in UserAPI.get_groups_for_current_user():
+				list_users = {}
+				list_users['Iedereen'] = group.tasks
+				list_items[group.name] = list_users
+		else:
+			list_users = {}
+			tasks = Task.query.filter(Task.group_id==group_id).all()
+			group = Group.query.filter(Group.id==group_id).first()
+			if not group:
+				abort(404)
+			if not group in UserAPI.get_groups_for_current_user():
+				abort(403)
+			list_users['Iedereen'] = tasks
+			list_items[group.name] = list_users
+
+
+
+		return Markup(render_template('pimpy/api/tasks.htm',
+			list_items=list_items, type='tasks', group_id=group_id,
+			personal=False))
+
+	@staticmethod
 	def get_tasks(group_id, personal):
 		if not GroupPermissionAPI.can_read('pimpy'):
 			abort(403)
@@ -312,7 +357,12 @@ class PimpyAPI:
 					if len(list_users):
 						list_items[group.name] = list_users
 			else:
+				group = Group.query.filter(Group.id==group_id).first()
+				if not group in UserAPI.get_groups_for_current_user():
+					abort(403)
 				tasks = Task.query.filter(Task.group_id==group_id).all()
+				if not group:
+					abort(404)
 				items = []
 				list_users = {}
 				for task in tasks:
@@ -346,6 +396,10 @@ class PimpyAPI:
 
 			else:
 				group = Group.query.filter(Group.id==group_id).first()
+				if not group:
+					abort(404)
+				if not group in UserAPI.get_groups_for_current_user():
+					abort(403)
 				list_users = {}
 				for user in group.users:
 					items = []
@@ -385,7 +439,9 @@ class PimpyAPI:
 		# this should be done with a sql in statement, or something, but meh
 		else:
 			for group in current_user.groups:
-				list_items[group.name] = Minute.query.filter(Minute.group_id==group.id).all()
+				query = Minute.query.filter(Minute.group_id==group.id)
+				query = query.order_by(Minute.minute_date.desc())
+				list_items[group.name] = query.all()
 
 		return Markup(render_template('pimpy/api/minutes.htm',
 			list_items=list_items, type='minutes', group_id=group_id))

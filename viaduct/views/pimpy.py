@@ -21,6 +21,19 @@ from viaduct.api.group import GroupPermissionAPI
 
 blueprint = Blueprint('pimpy', __name__, url_prefix='/pimpy')
 
+@blueprint.route('/archive/', methods=['GET', 'POST'])
+@blueprint.route('/archive/<group_id>', methods=['GET', 'POST'])
+def view_task_archive(group_id='all'):
+	"""
+	Shows all tasks ever made.
+	Can specify specific group.
+	No internal permission system made yet.
+	Do not make routes to this module yet.
+	"""
+	if not GroupPermissionAPI.can_read('pimpy'):
+		return abort(403)
+	return PimpyAPI.get_all_tasks(group_id)
+
 @blueprint.route('/minutes/', methods=['GET', 'POST'])
 @blueprint.route('/minutes/<group_id>', methods=['GET', 'POST'])
 def view_minutes(group_id='all'):

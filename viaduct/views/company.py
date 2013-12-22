@@ -8,11 +8,11 @@ from viaduct.models.contact import Contact
 from viaduct.forms import CompanyForm
 from viaduct.api.group import GroupPermissionAPI
 
-blueprint = Blueprint('company', __name__, url_prefix='/companies/')
+blueprint = Blueprint('company', __name__, url_prefix='/companies')
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page>/', methods=['GET', 'POST'])
-def list(page=1):
+def view_list(page=1):
 	if not GroupPermissionAPI.can_read('company'):
 		return abort(403)
 
@@ -22,7 +22,7 @@ def list(page=1):
 
 @blueprint.route('/create/', methods=['GET'])
 @blueprint.route('/edit/<int:company_id>/', methods=['GET'])
-def view(company_id=None):
+def edit(company_id=None):
 	'''
 	FRONTEND
 	Create, view or edit a company.
@@ -49,11 +49,33 @@ def view(company_id=None):
 		location = locations.first()
 
 	# Add contacts.
+	# form.contact_id.choices = \
+	# 		[(c.id, c.name) for c in Contact.query\
+	# 				.filter_by(location=location).order_by('name')]
 	form.contact_id.choices = \
 			[(c.id, c.name) for c in Contact.query\
-					.filter_by(location=location).order_by('name')]
+					.filter_by().order_by('name')]
 
-	return render_template('company/view.htm', company=company, form=form)
+	return render_template('company/edit.htm', company=company, form=form)
+
+@blueprint.route('/view/', methods=['GET'])
+@blueprint.route('/view/<int:company_id>/', methods=['GET'])
+def view(company_id=None):
+	'''
+	FRONTEND
+	view a company.
+	'''
+	if not GroupPermissionAPI.can_read('company'):
+		return abort(403)
+
+
+	# Select company.
+	if company_id:
+		company = Company.query.get(company_id)
+	if company_id == None or not company:
+		redirect(url_for('vacancy.view_list'))
+
+	return render_template('company/view.htm', company=company)
 
 @blueprint.route('/create/', methods=['POST'])
 @blueprint.route('/edit/<int:company_id>/', methods=['POST'])
@@ -91,6 +113,9 @@ def update(company_id=None):
 		error_found = True
 	if not 'contact_id' in request.form:
 		flash('Geen contactpersoon opgegeven', 'error')
+		error_found = True	
+	if not 'website' in request.form:
+		flash('Geen website opgegeven', 'error')
 		error_found = True
 
 	if error_found:
@@ -102,6 +127,7 @@ def update(company_id=None):
 	company.contract_end_date = form.contract_end_date.data
 	company.location = Location.query.get(form.location_id.data)
 	company.contact = Contact.query.get(form.contact_id.data)
+	company.website = form.website.data
 
 	db.session.add(company)
 	db.session.commit()

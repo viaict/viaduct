@@ -7,57 +7,63 @@
 
 <div class="row">
 	<div class="span12">
-		<form method="get" action="" enctype=multipart/form-data class="form-inline" >
+		<form method="get" action="{{ url_for('user.view') }}" enctype=multipart/form-data class="form-inline" >
 			<input name="search" id="search" class="span5" type="text" placeholder="Zoeken" value="{{search}}"></input>
 			<button type="submit" class="btn btn-primary"> <i class="icon-search icon-white" id="submit"></i></button>
 		</form>
 	</div>
 </div>
-<form method="post" name="user_view">
-	<table class="table table-striped">
-		<thead>
-			<tr>
-				<th>E-mail adres
-				<th>Voornaam
-				<th>Achternaam
-				<th>Student ID
-				<th>Study
-				<th>
-			</tr>
-		</thead>
+<div class="row">
+	<div class="span12">
+		<form method="post" name="user_view">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>E-mail adres
+						<th>Voornaam
+						<th>Achternaam
+						<th>Student ID
+						<th>Studie
+						<th>Lid
+						<th>
+					</tr>
+				</thead>
 
-		<tbody>
-			{% for user in users.items %}
-				<tr>
-					<td>
-						<label class="checkbox">
-							<input type=checkbox name="select" value="{{ user.id }}" />
-							{{ user.email }}
-						</label>
-					<td>{{ user.first_name }}
-					<td>{{ user.last_name }}
-					<td>{{ user.student_id }}
-					<td>{{ user.education.name }}
-					<td>
-						<a class="btn btn-mini btn-primary" href="{{ url_for('user.view_single', user_id=user.id) }}">
-							Bekijken
-						</a>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+				<tbody>
+					{% for user in users.items %}
+						<tr>
+							<td>
+								<label class="checkbox">
+									<input type=checkbox name="select" value="{{ user.id }}" />
+									{{ user.email }}
+								</label>
+							<td>{{ user.first_name }}
+							<td>{{ user.last_name }}
+							<td>{{ user.student_id }}
+							<td>{{ user.education.name }}
+							<td>{% if user.has_payed %}<i class="icon-ok"></i>{% endif %}
+							<td>
+								<a class="btn btn-mini btn-primary" href="{{ url_for('user.view_single', user_id=user.id) }}">
+									Bekijken
+								</a>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
 
-	<div class="btn-group">
-		<a href="/users/create" class="btn btn-success">
-			<i class="icon-user"></i> Gebruiker aanmaken
-		</a>
+			<div class="btn-group">
+				<a href="/users/create" class="btn btn-success">
+					<i class="icon-user"></i> Gebruiker aanmaken
+				</a>
 
-		<button type="submit" class="btn btn-danger">
-			<i class="icon-remove"></i>
-			Verwijderen
-		</button>
+				<button type="submit" class="btn btn-danger">
+					<i class="icon-remove"></i>
+					Verwijderen
+				</button>
+			</div>
+
+			{{ render_pagination(users, 'user.view', "?search=" + search) }}
+		</form>
 	</div>
-
-	{{ render_pagination(users, 'user.view') }}
-</form>
+</div>
 {% endblock %}

@@ -13,58 +13,48 @@
 	<a href="/activities/archive/" class="btn">Toon activiteiten in het archief</a>
 </div>
 
-{% for activity in activities.items %}
+<div class="activity">
+	{% for activity in activities.items %}
 
-<div class="activity-block row-fluid">
+	<a href="{{ url_for('activity.get_activity', activity_id=activity.id)}}">
+		<div class="activity-block">
+			<div class="row-fluid">
+				<div class="span4 image">
+					{% if activity.picture %}
+						<img src="/static/activity_pictures/{{ activity.picture }}">
+					{% else %}
+						<img src="/static/img/via_thumbnail.png">
+					{% endif %}
+				</div>
 
-	{% if activity.picture %}
-	<div class="span4">
-		<a href="/activities/{{ activity.id }}">
-			<img src="/static/activity_pictures/{{ activity.picture }}">
-		</a>
-	</div>
+				<div class="span8">
+					<h1>
+							{{activity.name}}
+					</h1>
 
-	<div class="span8">
+					<dl class="time dl-horizontal">
+						<dt><i class="icon-compass"></i></dt>
+						<dd>{{ activity.location}}</dd>
+						<dt><i class="icon-calendar"></i></dt>
+						<dd>{{ activity.get_time() }}</dd>
+					</dl>
+					<h2>
+						{% if activity.price != "gratis" %}
+							<i class="icon-euro"></i>
+						{% endif %}
+							{{ activity.price}}
+					</h2>
 
-	{% else %}
-
-	<div class="span12">
-
-	{% endif %}
-
-		<h1>
-			<a href="/activities/{{ activity.id }}">
-				{{activity.name}}
-			</a>
-		</h1>
-
-		<table>
-			<tr>
-				<td><i class="icon-compass"></i> Location
-				<td>{{ activity.location}}
-
-			<tr>
-				<td>Price
-				<td><i class="icon-euro"></i> {{ activity.price}}
-
-		</table>
-
-		<div class="time">
-			<i class="icon-calendar"></i>
-			{{ activity.get_time() }}
+				</div>
+				<div class="span8 short_content">
+					{{ activity.get_short_description(600) | markdown }}
+				</div>
+			</div>
 		</div>
-		<hr>
-	</div>
-
-	<p>{{ activity.get_short_description(650) | markdown }}
-
-	<a href='{{ url_for('activity.get_activity', activity_id=activity.id)}}' class="btn btn-primary">
-		Lees verder
 	</a>
 
+	{% endfor %}
 </div>
-
-{% endfor %}
 
 <hr />
 

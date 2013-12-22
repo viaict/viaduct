@@ -1,7 +1,6 @@
 from viaduct import db
 import datetime
 
-
 # many to many relationship tables
 task_group = db.Table('pimpy_task_group',
 	db.Column('task_id', db.Integer, db.ForeignKey('pimpy_task.id')),
@@ -92,11 +91,16 @@ class Minute(db.Model):
 	__tablename__ = 'pimpy_minute'
 
 	id = db.Column(db.Integer, primary_key=True)
+
+	# timestamp when the minutes were uploaded
 	timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+
 	content = db.Column(db.Text)
 	group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
 	group = db.relationship('Group', backref=db.backref('minutes',
 		lazy='dynamic'))
+
+	# the date when the meeting took place
 	minute_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
 
 
@@ -122,5 +126,9 @@ class Minute(db.Model):
 	def get_group(self):
 		return self.group
 
+	def get_minute_day(self):
+		""" returns the date of when the meeting took place in yyyy-mm-dd"""
+		return self.minute_date.strftime('%Y-%m-%d')
+
 	def get_title(self):
-		return '%s van %s' % (self.group.name, self.timestamp)
+		return "Van %s" % self.get_minute_day()

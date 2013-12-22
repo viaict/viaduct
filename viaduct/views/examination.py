@@ -1,7 +1,7 @@
 import os
 from flask import Blueprint
-from flask import Flask, abort, flash, redirect, render_template, request, url_for
-from flask.ext.login import current_user
+from flask import Flask, abort, flash, session, redirect, render_template, request, url_for
+from flask.ext.login import current_user, login_required
 
 from sqlalchemy import or_
 
@@ -29,6 +29,7 @@ def file_exists(filename):
 	return os.path.exists(os.path.join(UPLOAD_FOLDER, filename))
 
 def create_unique_file(filename):
+
 	temp_filename = filename
 
 	i = 0
@@ -44,6 +45,7 @@ def create_unique_file(filename):
 @blueprint.route('/examination/add', methods=['GET', 'POST'])
 def upload_file():
 	if not GroupPermissionAPI.can_write('examination'):
+		session['prev'] = 'examination.upload_file'
 		return abort(403)
 
 	courses = Course.query.all()
@@ -51,9 +53,12 @@ def upload_file():
 
 	if request.method == 'POST':
 		file = request.files['file']
+		answers = request.files['answers']
 		title = request.form.get("title", None)
 		course_id = request.form.get("course", None)
 		education_id = request.form.get("education", None)
+
+		error = False
 
 		# course_id = get_course_id(course);
 		# if(course_id == None):
@@ -63,48 +68,90 @@ def upload_file():
 		# if(education_id == None):
 		# 	return render_template('examination/upload.htm', courses = courses,
 		# 	educations = educations, message = 'Er is een fout opgetreden!');
+		
+		if not title:
+			flash('Geen titel opgegeven', 'error')
+			error = True
 
-		if file and allowed_file(file.filename):
-			filename = secure_filename(file.filename)
-			filename = create_unique_file(filename)
-
-			file.save(os.path.join(UPLOAD_FOLDER, filename))
-			exam = Examination(filename, title, course_id, education_id)
-			db.session.add(exam)
-			db.session.commit()
-
-			return render_template('examination/upload.htm', courses = courses,
-			educations = educations, message = 'Het tentamen is geupload!');
+		filename = upload_file(file)
+		if file:
+			if not filename:
+				flash('Fout formaat tentamen', 'error')
+				error = True
+			answer_path = upload_file(answers)
+			if not answer_path:
+				flash('Fout formaat antwoorden', 'error')
+				error = True
 		else:
+			flash('Geen tentamen opgegeven', 'error')
+			error = True
+
+		if not title:
+			flash('Geen titel opgegeven', 'error')
+			error = True
+
+		filename = upload_file(file)
+		if file:
+			if not filename:
+				flash('Fout formaat tentamen', 'error')
+				error = True
+			answer_path = upload_file(answers)
+			if not answer_path:
+				flash('Fout formaat antwoorden', 'error')
+				error = True
+		else:
+			flash('Geen tentamen opgegeven', 'error')
+			error = True
+
+		if error:
 			return render_template('examination/upload.htm', courses = courses,
-			educations = educations, message = 'Fout file format!');
+			educations = educations, message = '');
+
+		exam = Examination(filename, title, course_id, education_id, answers=answer_path)
+		db.session.add(exam)
+		db.session.commit()
+
+		flash('Het tentamen is geupload')
+
+		return render_template('examination/upload.htm', courses = courses,
+			educations = educations, message = '');
 
 	return render_template('examination/upload.htm', courses = courses,
 		educations = educations);
 
 
 @blueprint.route('/examination/', methods=['GET', 'POST'])
-@blueprint.route('/tentamenbank/', methods=['GET', 'POST'])
-def view_examination():
+@blueprint.route('/examination/<int:page_nr>/', methods=['GET', 'POST'])
+@login_required
+def view_examination(page_nr=1):
+	if not GroupPermissionAPI.can_read('examination', False):
+		return abort(403)
+
+	# action = url_for('examination.view_examination')
+
 	path = '/static/uploads/examinations/'
 
 	if request.args.get('search') != None:
 		search = request.args.get('search')
+
 		examinations = Examination.query.join(Course).join(Education).\
 			filter(or_(Examination.title.like('%' + search + '%'),
 				Course.name.like('%' + search + '%'),
-				Education.name.like('%' + search + '%'))).all()
+				Education.name.like('%' + search + '%'))).order_by(Course.name).paginate(page_nr, 15, True)
 		return render_template('examination/view.htm', path = path,
 			examinations = examinations, search=search)
 
 
-	examinations = Examination.query.all()
+	examinations = Examination.query.join(Course).\
+			order_by(Course.name).paginate(page_nr, 15, True)
 	return render_template('examination/view.htm', path = path,
 		examinations = examinations, search="")
 
 @blueprint.route('/examination/admin', methods=['GET', 'POST'])
-def examination_admin():
-	if not GroupPermissionAPI.can_write('examination'):
+@blueprint.route('/examination/admin/<int:page_nr>/', methods=['GET', 'POST'])
+def examination_admin(page_nr=1):
+	if not GroupPermissionAPI.can_write('examination', False):
+		session['prev'] = 'examination.examination_admin'
 		return abort(403)
 
 	path = '/static/uploads/examinations/'
@@ -114,7 +161,7 @@ def examination_admin():
 		examinations = Examination.query.join(Course).join(Education).\
 			filter(or_(Examination.title.like('%' + search + '%'),
 				Course.name.like('%' + search + '%'),
-				Education.name.like('%' + search + '%'))).all()
+				Education.name.like('%' + search + '%'))).paginate(page_nr, 15, False)
 		return render_template('examination/admin.htm', path = path,
 			examinations = examinations, search=search, message="")
 
@@ -127,7 +174,7 @@ def examination_admin():
 		title = examination.title
 		db.session.delete(examination)
 		db.session.commit()
-		examinations = Examination.query.all()
+		examinations = Examination.query.paginate(page_nr, 15, False)
 		return render_template('examination/admin.htm', path = path,
 			examinations = examinations, search="",
 			message="Tentamen " + title + " succesvol verwijderd")
@@ -140,26 +187,36 @@ def examination_admin():
 		db.session.delete(examination)
 		db.session.commit()
 
-	examinations = Examination.query.all()
+	examinations = Examination.query.paginate(page_nr, 15, False)
 	return render_template('examination/admin.htm', path = path,
 		examinations = examinations, search="", message="")
 
 @blueprint.route('/examination/edit', methods=['GET', 'POST'])
+@login_required
 def edit_examination():
-	if not GroupPermissionAPI.can_write('examination'):
+	if not GroupPermissionAPI.can_write('examination', True):
+		session['prev'] = 'examination.edit_examination'
 		return abort(403)
 
 	path = '../static/'
 
 	courses = Course.query.all()
 	educations = Education.query.all()
+	message = False
 
 	if request.method == 'POST':
 		file = request.files['file']
+		answers = request.files['answers']
 		title = request.form.get("title", None)
 		course_id = request.form.get("course", None)
 		education_id = request.form.get("education", None)
 		exam_id = request.form.get("examination", None)
+
+
+		if not title:
+			flash('Geen titel opgegeven', 'error')
+			error = True
+			print "wut"
 
 		if title and education_id and exam_id:
 			examination = Examination.query.filter(Examination.id == exam_id).\
@@ -169,24 +226,52 @@ def edit_examination():
 			examination.course_id = course_id
 			examination.education_id = education_id
 
-			if file:
-				if allowed_file(file.filename):
-					filename = secure_filename(file.filename)
-					filename = create_unique_file(filename)
+			if not title:
+				flash('Geen titel opgegeven', 'error')
+				error = True
 
-					os.remove(os.path.join(UPLOAD_FOLDER,
-							examination.path))
+			if file.name:
+				examination.path = upload_file(file, examination.path)
+				if not examination.path:
+					flash('Fout formaat tentamen', 'error')
+					error = True
+			else:
+				flash('Geen tentamen opgegeven', 'error')
+				error = True
 
-					file.save(os.path.join(UPLOAD_FOLDER, filename))
 
-					examination.path = filename
-				else:
-					return render_template('examination/edit.htm', courses = courses,
-					educations = educations, examination=examination,
-					message = 'Fout file format!');
+			if answers:
+				examination.answer_path = upload_file(answers)
+				if not examination.answer_path:
+					flash('Fout formaat antwoorden', 'error')
+					error = True
+				if examination.answer_path == True:
+					examination.answer_path = None
+
+			if message:
+				return render_template('examination/edit.htm', courses = courses,
+				educations = educations, examination=examination,
+				message = '');
+
+			# if file:
+			# 	if allowed_file(file.filename):
+			# 		filename = secure_filename(file.filename)
+			# 		filename = create_unique_file(filename)
+
+			# 		os.remove(os.path.join(UPLOAD_FOLDER,
+			# 				examination.path))
+
+			# 		file.save(os.path.join(UPLOAD_FOLDER, filename))
+
+			# 		examination.path = filename
+			# 	else:
+			# 		return render_template('examination/edit.htm', courses = courses,
+			# 		educations = educations, examination=examination,
+			# 		message = 'Fout file format!');
 
 			db.session.commit()
 
+			flash('Het tentamen is aangepast!')
 			return render_template('examination/edit.htm', courses = courses,
 			educations = educations, examination=examination,
 			message = 'Het tentamen is aangepast!');
@@ -209,6 +294,7 @@ def edit_examination():
 @blueprint.route('/course/add', methods=['GET', 'POST'])
 def add_course():
 	if not GroupPermissionAPI.can_write('examination'):
+		session['prev'] = 'examination.add_course'
 		return abort(403)
 
 	if request.method == 'POST':
@@ -224,6 +310,7 @@ def add_course():
 @blueprint.route('/education/add', methods=['GET', 'POST'])
 def add_education():
 	if not GroupPermissionAPI.can_write('examination'):
+		session['prev'] = 'examination.add_education'
 		return abort(403)
 
 	if request.method == 'POST':
@@ -251,3 +338,21 @@ def get_course_id(course):
 	if(course_object == None):
 		return None
 	return course_object.id
+
+def upload_file(file, old_path = '1'):
+	if file:
+		if allowed_file(file.filename):
+			filename = secure_filename(file.filename)
+			filename = create_unique_file(filename)
+
+			if old_path != '1':
+				os.remove(os.path.join(UPLOAD_FOLDER,
+						old_path))
+
+			file.save(os.path.join(UPLOAD_FOLDER, filename))
+
+			return filename
+		else:
+			return False
+	else:
+		return True
