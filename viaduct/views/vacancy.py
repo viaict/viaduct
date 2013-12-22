@@ -10,7 +10,7 @@ from viaduct.models.company import Company
 from viaduct.forms import VacancyForm
 from viaduct.api.group import GroupPermissionAPI
 
-blueprint = Blueprint('vacancy', __name__, url_prefix='/vacancies/')
+blueprint = Blueprint('vacancy', __name__, url_prefix='/vacancies')
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page>/', methods=['GET', 'POST'])
