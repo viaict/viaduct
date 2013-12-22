@@ -37,10 +37,11 @@
 	</div>
 	<hr>
 	{% for company in companies.items %}
-
-		<div class="row">
+		<div class="row" {% if company.expired %} style="background:rgba(255, 100, 0, 0.3); ;"{% endif %}>
 			<div class="span12" data-toggle="collapse" data-target='#{{ company.id
 				}}'>
+			
+			
 				<div class="row">
 				<div class="span3">{{company.name}}</div>
 				<div class="span3"> <a target="_blank" href="{{company.website}}"> {{company.website}} </a></div>

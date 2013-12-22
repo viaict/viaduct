@@ -40,14 +40,14 @@
 	<hr>
 	{% for vacancy in vacancies.items %}
 
-		<div class="row">
-			<div class="span12" data-toggle="collapse" data-target='#{{ vacancy.id
+		<div class="row" {% if vacancy.expired %} style="background:rgba(255, 100, 0, 0.3); ;"{% endif %}>
+			<div class="span12" style="cursor:pointer;" data-toggle="collapse" data-target='#{{ vacancy.id
 				}}'>
 				<div class="row">
-				<div class="span3">{{vacancy.title}}</div>
-				<div class="span3">{{vacancy.workload}}</div>
-				<div class="span3">{{vacancy.contract_of_service}}</div>
-				<div class="span3">{{vacancy.company.name}}</div>
+				<div class="span3"><a href="?search={{vacancy.title}}">{{vacancy.title}}</a></div>
+				<div class="span3"><a href="?search={{vacancy.workload}}" >{{vacancy.workload}}</a></div>
+				<div class="span3"><a href="?search={{vacancy.contract_of_service}}">{{vacancy.contract_of_service}}</a></div>
+				<div class="span3"><a href="?search={{vacancy.company.name}}" >{{vacancy.company.name}}</a></div>
 				</div>
 				<div id='{{ vacancy.id }}' class="collapse">
 					<hr>

@@ -1,6 +1,10 @@
 from flask import Blueprint, flash, redirect, render_template, request, \
 		url_for, abort
 
+from sqlalchemy import or_, and_
+
+from datetime import datetime
+
 from viaduct import db
 from viaduct.models.company import Company
 from viaduct.models.location import Location
@@ -16,9 +20,45 @@ def view_list(page=1):
 	if not GroupPermissionAPI.can_read('company'):
 		return abort(403)
 
-	companies = Company.query.paginate(page, 15, False)
+	if request.args.get('search') != None:
+		search = request.args.get('search')
 
-	return render_template('company/list.htm', companies=companies)
+		companies = Company.query.join(Location).\
+			filter(or_(Company.name.like('%' + search + '%'),
+				Location.city.like('%' + search + '%'))).order_by(Company.name).order_by(Company.rank)
+		
+		if not GroupPermissionAPI.can_write('company'):
+			companies = companies.filter(and_(Company.contract_start_date < datetime.utcnow(), 
+				Company.contract_end_date > datetime.utcnow())).paginate(page, 15, True)
+		else:
+			for i, company in enumerate(companies):
+				print i, company
+				if company.contract_start_date < datetime.date(datetime.utcnow()) and company.contract_end_date < datetime.date(datetime.utcnow()):
+					companies[i].expired = True
+			companies = companies.paginate(page, 15, False)
+
+
+		return render_template('company/list.htm', companies=companies, 
+			search=search)
+
+
+	if not GroupPermissionAPI.can_write('company'):
+		companies = Company.query.filter(and_(Company.contract_start_date < datetime.utcnow(), 
+			Company.contract_end_date > datetime.utcnow())).order_by(Company.name).order_by(Company.rank).paginate(page, 15, True)
+	else:
+		companies = Company.query.filter().order_by(Company.name).order_by(Company.rank)
+		for i, company in enumerate(companies):
+			print i, company
+			if company.contract_start_date < datetime.date(datetime.utcnow()) and company.contract_end_date < datetime.date(datetime.utcnow()):
+				print "I exist"
+				companies[i].expired = True
+		companies = companies.paginate(page, 15, False)
+		#todo fix message if inactive
+
+	# companies = Company.query.paginate(page, 15, False)
+
+	return render_template('company/list.htm', companies=companies, 
+		search="")
 
 @blueprint.route('/create/', methods=['GET'])
 @blueprint.route('/edit/<int:company_id>/', methods=['GET'])
