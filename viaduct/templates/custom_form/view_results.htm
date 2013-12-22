@@ -23,12 +23,19 @@
 	{% for result in custom_form.results %}
 		<tr {{ result.class }}>
 			<td>
+				{% if result.owner.id %}
 				<a href="{{ url_for('user.view_single', user_id=result.owner.id) }}">
 					{{ result.owner.first_name[:1] }}. {{ result.owner.last_name }}
 				</a>
+				{% else %}
+					Verwijderde account
+				{% endif %}
 			<td>
+				{% if result.owner.id %}
 				{{ result.owner.email }}<br>
 				{{ result.owner.phone_nr }}<br>
+				{% endif %}
+
 				{{ result.form_entry|safe }}
 			<td>{{ result.time }}
 			<td>

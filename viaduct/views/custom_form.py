@@ -59,9 +59,6 @@ def view_single(form_id=None):
 
 	for entry in entries:
 		# Hide form entries from non existing users
-		if not entry.owner:
-			continue
-
 		data = parse_qs(entry.data)
 
 		html = '<dl>'
