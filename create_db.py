@@ -369,3 +369,9 @@ db.session.add(custom_form_permission)
 db.session.add(activity_permission)
 db.session.commit()
 
+
+# VERY IMPORTANT!!! Do NOT delete
+minute = Minute('content', 0, None)
+db.session.add(minute)
+db.session.commit()
+

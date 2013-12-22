@@ -13,11 +13,14 @@ from viaduct import application, db, login_manager
 from viaduct.helpers import flash_form_errors
 from viaduct.forms import SignUpForm, SignInForm, ResetPassword
 from viaduct.models import User
+from viaduct.models.activity import Activity
+from viaduct.models.custom_form import CustomFormResult, CustomForm
 from viaduct.models.group import Group
 from viaduct.models.request_ticket import Password_ticket
 from viaduct.forms.user import EditUserForm, EditUserInfoForm#, EditUserPermissionForm
 from viaduct.models.education import Education
 from viaduct.api.group import GroupPermissionAPI
+from viaduct.api import UserAPI
 
 blueprint = Blueprint('user', __name__)
 
@@ -33,7 +36,33 @@ def load_user(user_id):
 def view_single(user_id=None):
 	if not GroupPermissionAPI.can_read('user') and (current_user == None or current_user.id != user_id):
 		return abort(403)
-	return render_template('user/view_single.htm', user= User.query.get(user_id))
+
+	if not user_id:
+		return abort(404)
+	user = User.query.get(user_id)
+	if not user:
+		return abort(404)
+
+	user.avatar = UserAPI.avatar(user)
+	user.groups = UserAPI.get_groups_for_current_user()
+
+	# Get all activity entrees from these forms, order by start_time of activity
+	activities = Activity.query.join(CustomForm).join(CustomFormResult).\
+		filter(CustomFormResult.owner_id == user_id and CustomForm.id == CustomFormResult.form_id and Activity.form_id == CustomForm.id)
+
+	new_activities= activities.filter(Activity.end_time > datetime.datetime.today()).distinct().order_by(Activity.start_time)
+	old_activities= activities.filter(Activity.end_time < datetime.datetime.today()).distinct().order_by(Activity.start_time)
+
+
+	return render_template('user/view_single.htm', user=user, new_activities=new_activities, old_activities=old_activities)
+
+@blueprint.route('/users/remove_avatar/<int:user_id>',methods=['GET'])
+def remove_avatar(user_id=None):
+	user = User.query.get(user_id)
+	if not GroupPermissionAPI.can_write('user') and (current_user == None or current_user.id != user_id):
+		return abort(403)
+	UserAPI.remove_avatar(user)
+	return redirect(url_for('user.view_single', user_id=user_id))
 
 @blueprint.route('/users/create/', methods=['GET', 'POST'])
 @blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
@@ -46,6 +75,9 @@ def edit(user_id=None):
 		user = User.query.get(user_id)
 	else:
 		user = User()
+
+	user.avatar = UserAPI.has_avatar(user_id)
+	print(user.avatar)
 
 	if GroupPermissionAPI.can_write('user'):
 		form = EditUserForm(request.form, user)
@@ -94,11 +126,14 @@ def edit(user_id=None):
 		db.session.add(group)
 		db.session.commit()
 
+		avatar = request.files['avatar']
+		if avatar:
+			UserAPI.upload(avatar, user.id)
+
 		flash('The user has been %s successfully.' %
 			('edited' if user_id else 'created'), 'success')
 
-		if not user_id:
-			return redirect(url_for('user.view'))
+		return redirect(url_for('user.view'))
 	else:
 		flash_form_errors(form)
 
@@ -140,6 +175,10 @@ def sign_up():
 
 			db.session.add(group)
 			db.session.commit()
+
+			#Upload avatar
+			UserAPI.upload(request.files['avatar'], user.id)
+
 			#user.add_to_all()
 
 			flash('You\'ve signed up successfully.')
@@ -157,7 +196,7 @@ def sign_in():
 	# Redirect the user to the index page if he or she has been authenticated
 	# already.
 	#if current_user and current_user.is_authenticated():
-	#	return redirect(url_for('page.get_page'))
+	#   return redirect(url_for('page.get_page'))
 
 	form = SignInForm(request.form)
 
@@ -176,12 +215,11 @@ def sign_in():
 			login_user(user)
 
 			flash('You\'ve been signed in successfully.')
-			print request.args
-			if session['prev']:
-				return redirect(url_for(session['prev'])) 
-			else:
-				return redirect(url_for("page.get_page"))
-			# return redirect(url_for('page.get_page'))
+
+			if 'denied_from' in session:
+				return redirect(session['denied_from'])
+
+			return redirect(url_for("page.get_page"))
 	else:
 		flash_form_errors(form)
 
@@ -194,7 +232,8 @@ def sign_out():
 
 	flash('You\'ve been signed out.')
 
-	session['prev'] = None
+	if 'denied_from' in session:
+		session['denied_from'] = None
 
 	return redirect(url_for('page.get_page'))
 
@@ -275,7 +314,7 @@ def create_hash(bits=96):
 @blueprint.route('/users/<int:page_nr>/', methods=['GET', 'POST'])
 def view(page_nr=1):
 	#if not current_user.has_permission('user.view'):
-	#	abort(403)
+	#   abort(403)
 	if not GroupPermissionAPI.can_read('user'):
 		return abort(403)
 

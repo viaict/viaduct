@@ -3,7 +3,7 @@
 {% extends "content.htm" %}
 
 {% block content %}
-<form action="" method="post" name="sign_up" class="form-horizontal">
+<form action="" method="post" name="sign_up" class="form-horizontal" enctype="multipart/form-data">
 	<fieldset>
 		<legend>Registreren</legend>
 
@@ -15,12 +15,14 @@
 		{{ render_field(form.last_name) }}
 		{{ render_field(form.student_id) }}
 		{{ render_field(form.education_id) }}
-
+		{{ render_field(form.avatar) }}
+		{#
 		<div class="control-group">
 			<div class="controls">
 				{{ form.recaptcha }}
 			</div>
 		</div>
+		#}
 
 		<div class="control-group">
 			<div class="controls">

@@ -18,8 +18,8 @@
 						</ul>
 					</div>
 					<div class="btn-group" style="margin-bottom: 8px;">
-						<button class="btn" data-toggle="collapse" data-target='#{{ list_item.id }}'>{{ list_item.title }}</button>
-						<button class="btn" data-toggle="collapse" data-target='#{{ list_item.id }}'> {{ list_item.get_users() }} </button>
+						<button class="btn pimpy_task_task" data-toggle="collapse" data-target='#{{ list_item.id }}'>{{ list_item.title }}</button>
+						<button class="btn pimpy_task_users" data-toggle="collapse" data-target='#{{ list_item.id }}'> {{ list_item.get_users() }} </button>
 					</div>
 					<div id='{{ list_item.id }}' class="collapse">
 						<div class="well well-small">

@@ -7,11 +7,15 @@
 			{% for list_item in list_items[group_header] %}
 				{% if list_item.id > 0 %}
 					<div class="btn-group">
-						<button class="btn" data-toggle="collapse" data-target='#{{ list_item.get_name() }}'>{{ list_item.get_title() }} ({{list_item.id }})</button>
-						<button class="btn" data-toggle="collapse" data-target='#{{ list_item.get_name() }}'>{{ list_item.group.name }} (id: {{list_item.group.id }})</button>
+						<button class="btn" data-toggle="collapse"
+data-target='#{{ list_item.get_name() }}'>{{ list_item.get_title() }} </button>
+						<!-- <button class="btn" data-toggle="collapse"
+data-target='#{{ list_item.get_name() }}'>{{ list_item.group.name }} (id: {{list_item.group.id }})</button> -->
+<button class="btn" data-toggle="collapse" data-target='#{{ list_item.get_name()
+}}'>Geupload op: {{ list_item.timestamp.strftime('%Y-%m-%d') }}</button>
 					</div>
 					<div id='{{ list_item.get_name() }}' class="collapse">
-						<div class="well" style="white-space: pre-wrap;">{{ list_item.get_content() | markdown }}</div>
+						<div class="well" style="white-space: pre-wrap;">{{ list_item.get_content() }}{# list_item.get_content() | markdown #}</div>
 					</div>
 				{% endif %}
 			{% endfor %}

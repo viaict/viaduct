@@ -42,16 +42,16 @@ class FileAPI:
 		db.session.commit()
 
 		if new_file:
-			flash('Het bestand is geupload onder de naam %s' % (new_file.name),
-				'success')
+			flash('Het bestand is succesbol geupload onder de naam <em>%s</em>'%(new_file.name))
 		else:
 			flash('Er is iets misgegaan, waarschuw de ICT-commissie', 'error')
 
 		return new_file
 
 	@staticmethod
-	def exists(filename):
-		path = os.path.join(os.getcwd(), UPLOAD_DIR, filename)
+	def exists(filename, upload_dir=None):
+		if not upload_dir: upload_dir = UPLOAD_DIR
+		path = os.path.join(os.getcwd(), upload_dir, filename)
 		return os.path.exists(path)
 
 	@staticmethod

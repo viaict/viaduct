@@ -19,33 +19,6 @@ label.checkbox {
 	text-align: right;
 }
 
-/* Definition lists */
-
-dl, dt, dd {
-	float:left;
-	margin:0;
-}
-
-dt, dd {
-	min-height:20px;
-	border-top:1px dashed #eee;
-}
-
-dl {
-	width: 490px;
-	padding: 0;
-}
-
-dt {
-	text-transform:capitalize;
-	width: 180px;
-	padding: 5px 5px 5px 0;
-}
-
-dd {
-	width: 300px;
-	padding: 5px 0;
-}
 
 /* Sponsors */
 
@@ -54,23 +27,104 @@ dd {
 	padding:20px 0;
 }
 
+
+
+
+
 /* Activity-block (activities) */
 
+.activity-simple-image img {
+	width: 70px;
+	height: 70px;
+}
+
+.activity-simple-image {
+	width: 70px;
+	height: 70px;
+	padding: 0px;
+	margin-right: 10px;
+	float: left;
+}
+
+.activity-simple {
+	margin-top: 10px;
+	border-bottom: 1px dashed #eee;
+	padding-bottom: 10px;
+}
+
+.activity-simple-list {
+	margin-top: 30px;
+}
+
 .activity-block {
-	padding:10px 0;
-	border-bottom:1px solid blue;
+	padding: 20px;
+	border-bottom: 1px dashed #eee;
+}
+
+.activity a {
+	color: #333;
+}
+
+.activity-block:hover {
+	background-color: #f5f5f5;
 }
 
 .activity-block img {
-	height:186px;
-	width:auto;
-	max-width:220px;
+	max-height: 220px;
+	max-width: 220px;
+}
+
+.activity-block .image {
+	height: 220px;
+}
+
+.activity-block .short_content {
+	height: 115px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.activity-block .short_content p {
+	height: 115px;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .activity-block h1 {
-	font-size:3.2em;
-	padding:8px 0;
-	line-height:1em;
+	font-size: 2em;
+	padding: 0px;
+	line-height: 1em;
+	margin: 0px;
+	color: #0088cc;
+}
+
+.activity-block .row-fluid {
+	height: 220px;
+	overflow: hidden;
+}
+
+.activity-block h2 {
+	font-size: 2em;
+	margin: 10px 0px 0px 0px;
+	padding: 0px;
+	line-height: 1em;
+	float: right;
+}
+
+.activity-block h3 {
+	padding: 0px;
+	font-size: 1.5em;
+	line-height: 1em;
+}
+
+.activity-block h3 i {
+	margin-top: 4px;
+	margin-right: 10px;
+}
+
+.activity-block h2 i {
+	position: relative;
+	top: 8px;
 }
 
 .activity-block td {
@@ -79,16 +133,27 @@ dd {
 }
 
 .activity-block .time {
-	background:#fafafa;
 	color:#444;
 	font-weight:bold;
-	padding:4px;
-	margin-top:4px;
+	margin: 10px 0px;
+	float: left;
+}
+
+.activity-block .time dt {
+	width: 20px;
+}
+
+.activity-block .time dd {
+	margin-left: 40px;
 }
 
 #acc {
 	margin-top:-14px;
 }
+
+
+
+
 
 /* Twitter widget */
 .twtr-widget h3 {
@@ -174,6 +239,9 @@ dd {
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0);
 }
 
+
+
+
 /* PimPy */
 .pimpy-btn-group {
 	margin-bottom: 8px;
@@ -186,6 +254,68 @@ dd {
 .pimpy-menu-group {
 	width: 150px;
 }
+
+.pimpy_task_task {
+	max-width: 400px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.pimpy_task_users {
+	max-width: 150px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+
+
+
+
+/* User Pages */
+
+.user_single dl, .user_single dt, .user_single dd {
+	float: left;
+	margin: 0;
+}
+
+.user_single dt, .user_single dd {
+	min-height: 20px;
+	border-top: 1px dashed #eee;
+}
+
+.user_single {
+	padding: 0;
+}
+
+.user_single dt {
+	text-transform: capitalize;
+	width: 140px;
+	padding: 5px 5px 5px 0px;
+}
+
+.user_single dd {
+	width: 200px;
+	padding: 5px 0;
+}
+
+.user_single td {
+	border-top: 1px dashed #eee;
+}
+
+.user_single h1 {
+	border-top: 1px dashed #eee;
+	border-bottom: 1px dashed #eee;
+}
+
+.user_single img {
+	margin-right: 15px;
+	max-width: 100px;
+	max-height: 100px;
+}
+
+
+
+
 
 /* Bootstrap formbuilder */
 .ui-draggable {
@@ -231,4 +361,12 @@ div.sortable {
 /* Custom Form view-results */
 .is_reserve {
 	background:#FFFD87;
-} 
+}
+
+#athenaeum {
+    width: 100%;
+    height: 700px;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
