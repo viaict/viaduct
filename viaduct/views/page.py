@@ -27,7 +27,7 @@ def favicon_route():
 def get_page(path=''):
 	revisions = []
 
-	custom_form  = False
+	custom_form = False
 	is_main_page = False
 
 	if path == '' or path == 'index':
@@ -47,23 +47,23 @@ def get_page(path=''):
 
 			# Check if there is a custom_form
 			if revision.form_id:
-			  custom_form = CustomForm.query.get(revision.form_id)
+				custom_form = CustomForm.query.get(revision.form_id)
 
-			  # Count current attendants for "reserved" message
-			  entries = CustomFormResult.query.filter(CustomFormResult.form_id == revision.form_id)
-			  custom_form.num_attendants = entries.count()
+				# Count current attendants for "reserved" message
+				entries = CustomFormResult.query.filter(CustomFormResult.form_id == revision.form_id)
+				custom_form.num_attendants = entries.count()
 
-			  # Check if the current user has already entered data in this custom form
-			  if current_user and current_user.id > 0:
+			# Check if the current user has already entered data in this custom form
+			if current_user and current_user.id > 0:
 				form_result = CustomFormResult.query \
-				  .filter(CustomFormResult.form_id  == revision.form_id) \
-				  .filter(CustomFormResult.owner_id == current_user.id).first()
+					.filter(CustomFormResult.form_id == revision.form_id) \
+					.filter(CustomFormResult.owner_id == current_user.id).first()
 
 				if form_result:
-				  custom_form.form_data = form_result.data.replace('"', "'")
-				  custom_form.form_info = "Je hebt het formulier ingevuld. Je kan je inzending wel aanpassen!"
+					custom_form.form_data = form_result.data.replace('"', "'")
+					custom_form.form_info = "Je hebt het formulier ingevuld. Je kan je inzending wel aanpassen!"
 				else:
-				  custom_form.form_info = "Het formulier is vol, als je je nu inschrijft kom je op de reserve lijst!" if custom_form.num_attendants >= custom_form.max_attendants else "Er zijn op het moment %s inschrijvingen" % custom_form.num_attendants
+					custom_form.form_info = "Het formulier is vol, als je je nu inschrijft kom je op de reserve lijst!" if custom_form.num_attendants >= custom_form.max_attendants else "Er zijn op het moment %s inschrijvingen" % custom_form.num_attendants
 
 			# Add custom form to revision
 			revision.custom_form = custom_form
@@ -96,18 +96,18 @@ def get_page(path=''):
 		revisions.append(data)
 
 		# Allow revision path for normal page templates
-		revision.path = page.path
+		revision.path = path
 
 	if is_main_page:
-	  return render_template('page/get_page.htm', revisions=revisions)
+		return render_template('page/get_page.htm', revisions=revisions)
 	else:
-	  return render_template('page/view_single.htm', page=revision)
+		return render_template('page/view_single.htm', page=revision)
 
 @blueprint.route('/history/', methods=['GET', 'POST'])
 @blueprint.route('/history/<path:path>', methods=['GET', 'POST'])
 def get_page_history(path=''):
 	#if not current_user.is_authenticated():
-	#   return get_error_page()
+	#	return get_error_page()
 
 	form = HistoryPageForm(request.form)
 
@@ -148,8 +148,8 @@ def edit_page(path=''):
 	class struct(object):
 		pass
 
-#   if not current_user.is_authenticated():
-#	   return get_error_page()
+#	if not current_user.is_authenticated():
+#		return get_error_page()
 
 	# find current page
 	page = Page.query.filter(Page.path==path).first()
@@ -166,7 +166,7 @@ def edit_page(path=''):
 			if not current_user:
 				abort(403)
 			if revision.author != None and current_user != None and \
-			   not revision.author.id == current_user.id:
+					not revision.author.id == current_user.id:
 				if not UserAPI.can_write(page):
 					abort(403)
 

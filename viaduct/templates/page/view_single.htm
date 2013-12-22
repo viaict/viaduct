@@ -12,7 +12,7 @@
 	{% if GroupPermissionAPI.can_write('page') %}
 
 	<div class="btn-group">
-		<a class="btn" href="history/{{ page.id }}">
+		<a class="btn" href="{{ url_for('page.get_page_history', path=page.path) }}">
 			<i class="icon-time"></i> View History
 		</a>
 		
@@ -20,7 +20,7 @@
 			<i class="icon-share-alt"></i> Move Page
 		</a> -->
 
-		<a class="btn btn-warning" href="/edit/{{ page.path }}">
+		<a class="btn btn-warning" href="{{ url_for('page.edit_page', path=page.path) }}">
 			<i class="icon-pencil"></i> Edit Page
 		</a>
 
@@ -69,17 +69,16 @@
 		</div>
 	</div>
 </div>
+
+	{% if page.custom_form.form_data %}
+		<script src="/static/js/unserialize.js"></script>
+		<script>
+			$("#custom").unserializeForm("{{ page.custom_form.form_data | safe }}");
+		</script>
+	{% endif %}
 {% endif %}
 
 <p>{{ page.content| markdown }}</p>
 
-{% if page.custom_form.form_data %}
-	<script src="/static/js/unserialize.js"></script>
-	<script>
-		$("#custom").unserializeForm("{{ page.custom_form.form_data | safe }}");
-	</script>
-{% endif %}
-
 <script src="/static/js/custom_form_submission.js"></script>
-
 {% endblock %}
