@@ -33,7 +33,10 @@ class Category(db.Model):
 	def __init__(self, name):
 		self.name = name
 
-	def has_parent_category():
+	def has_parent_category(self):
 		#categories = Category.query(filter(func.count(Category.super_categories)>0)).all()
 		return len(super_categories) > 0
 
+
+	def __str__(self):
+		return "Category: %s" % self.name

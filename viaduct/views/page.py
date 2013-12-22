@@ -15,6 +15,7 @@ from viaduct.models.custom_form import CustomForm, CustomFormResult
 from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.user import UserAPI
 from viaduct.api.page import PageAPI
+from viaduct.api.category import CategoryAPI
 
 blueprint = Blueprint('page', __name__)
 
@@ -49,24 +50,26 @@ def get_page(path=''):
 			if revision.form_id:
 				custom_form = CustomForm.query.get(revision.form_id)
 
-				# Count current attendants for "reserved" message
-				entries = CustomFormResult.query.filter(CustomFormResult.form_id == revision.form_id)
-				custom_form.num_attendants = entries.count()
+				if custom_form:
 
-			# Check if the current user has already entered data in this custom form
-			if current_user and current_user.id > 0:
-				form_result = CustomFormResult.query \
-					.filter(CustomFormResult.form_id == revision.form_id) \
-					.filter(CustomFormResult.owner_id == current_user.id).first()
+					# Count current attendants for "reserved" message
+					entries = CustomFormResult.query.filter(CustomFormResult.form_id == revision.form_id)
+					custom_form.num_attendants = entries.count()
 
-				if form_result:
-					custom_form.form_data = form_result.data.replace('"', "'")
-					custom_form.form_info = "Je hebt het formulier ingevuld. Je kan je inzending wel aanpassen!"
-				else:
-					custom_form.form_info = "Het formulier is vol, als je je nu inschrijft kom je op de reserve lijst!" if custom_form.num_attendants >= custom_form.max_attendants else "Er zijn op het moment %s inschrijvingen" % custom_form.num_attendants
+					# Check if the current user has already entered data in this custom form
+					if current_user and current_user.id > 0:
+						form_result = CustomFormResult.query \
+							.filter(CustomFormResult.form_id == revision.form_id) \
+							.filter(CustomFormResult.owner_id == current_user.id).first()
 
-			# Add custom form to revision
-			revision.custom_form = custom_form
+						if form_result:
+							custom_form.form_data = form_result.data.replace('"', "'")
+							custom_form.form_info = "Je hebt het formulier ingevuld. Je kan je inzending wel aanpassen!"
+						else:
+							custom_form.form_info = "Het formulier is vol, als je je nu inschrijft kom je op de reserve lijst!" if custom_form.num_attendants >= custom_form.max_attendants else "Er zijn op het moment %s inschrijvingen" % custom_form.num_attendants
+
+					# Add custom form to revision
+					revision.custom_form = custom_form
 
 			if not current_user:
 				if not UserAPI.can_read(page):
@@ -235,8 +238,7 @@ def edit_page(path=''):
 		form_id = request.form['form_id']
 
 		# extract category from content and update stuff!
-		# TODO: do above
-		CategoryAPI.get_categories_from_content(content)
+		CategoryAPI.update_categories_from_content(content, page)
 
 		# create the revision (the first if is an entire new page)
 		revision = PageRevision(page, current_user, title, content, comment,
