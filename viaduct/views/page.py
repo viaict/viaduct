@@ -11,6 +11,7 @@ from viaduct.helpers import flash_form_errors
 from viaduct.forms import EditPageForm, HistoryPageForm
 from viaduct.models import Group
 from viaduct.models.page import Page, PageRevision, PagePermission
+from viaduct.models.custom_form import CustomForm, CustomFormResult
 from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.user import UserAPI
 from viaduct.api.page import PageAPI
@@ -26,7 +27,9 @@ def favicon_route():
 def get_page(path=''):
     revisions = []
 
+    custom_form  = False
     is_main_page = False
+
     if path == '' or path == 'index':
         paths = ['laatste_bestuursblog', 'activities', 'twitter', 'contact']
         is_main_page = True
@@ -41,6 +44,29 @@ def get_page(path=''):
 
         if page.revisions.count() > 0:
             revision = page.revisions.order_by(PageRevision.id.desc()).first()
+
+            # Check if there is a custom_form
+            if revision.form_id:
+              custom_form = CustomForm.query.get(revision.form_id)
+
+              # Count current attendants for "reserved" message
+              entries = CustomFormResult.query.filter(CustomFormResult.form_id == revision.form_id)
+              custom_form.num_attendants = entries.count()
+
+              # Check if the current user has already entered data in this custom form
+              if current_user and current_user.id > 0:
+                form_result = CustomFormResult.query \
+                  .filter(CustomFormResult.form_id  == revision.form_id) \
+                  .filter(CustomFormResult.owner_id == current_user.id).first()
+
+                if form_result:
+                  custom_form.form_data = form_result.data.replace('"', "'")
+                  custom_form.form_info = "Je hebt het formulier ingevuld. Je kan je inzending wel aanpassen!"
+                else:
+                  custom_form.form_info = "Het formulier is vol, als je je nu inschrijft kom je op de reserve lijst!" if custom_form.num_attendants >= custom_form.max_attendants else "Er zijn op het moment %s inschrijvingen" % custom_form.num_attendants
+
+            # Add custom form to revision
+            revision.custom_form = custom_form
 
             if not current_user:
                 if not UserAPI.can_read(page):
@@ -58,6 +84,7 @@ def get_page(path=''):
         class struct(object):
             pass
 
+        # TODO this data object is for the front page -> Seperate logic for normal pages and index page
         data = struct()
         data.is_main_page = is_main_page
         data.title = revision.title
@@ -68,7 +95,13 @@ def get_page(path=''):
 
         revisions.append(data)
 
-    return render_template('page/get_page.htm', revisions=revisions)
+        # Allow revision path for normal page templates
+        revision.path = page.path
+
+    if is_main_page:
+      return render_template('page/get_page.htm', revisions=revisions)
+    else:
+      return render_template('page/view_single.htm', page=revision)
 
 @blueprint.route('/history/', methods=['GET', 'POST'])
 @blueprint.route('/history/<path:path>', methods=['GET', 'POST'])
@@ -141,12 +174,18 @@ def edit_page(path=''):
             data.filter_html = not revision.filter_html
             data.needs_payed = page.needs_payed
             data.path = path
+            data.form_id = revision.form_id
     else:
         if not(GroupPermissionAPI.can_write('page')):
             return abort(403);
 
-
     form = EditPageForm(request.form, obj=data)
+
+    # Add a dropdown select for available custom_forms
+    form.form_id.choices = [(c.id, c.name) for c in CustomForm.query.order_by('name')]
+
+    # Set default to "No form"
+    form.form_id.choices.insert(0, (0, 'Geen formulier'))
 
     groups = Group.query.all()
 
@@ -184,8 +223,12 @@ def edit_page(path=''):
             db.session.add(permission_entry)
             db.session.commit()
 
+        # Set a custom_form id
+        # TODO get previous form id
+        form_id = request.form['form_id']
+
         revision = PageRevision(page, current_user, title, content, comment,
-            filter_html, timestamp=datetime.datetime.utcnow())
+            filter_html, timestamp=datetime.datetime.utcnow(), form_id=form_id)
 
         db.session.add(revision)
         db.session.commit()
