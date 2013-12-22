@@ -21,6 +21,7 @@ UPLOAD_DIR = 'viaduct/static/files/users/'
 
 class UserAPI:
 
+
 	@staticmethod
 	def has_avatar(user_id):
 		"""
@@ -97,9 +98,9 @@ class UserAPI:
 		# Save file.
 		f.save(path)
 		return
-
+	
 	@staticmethod
-	def get_groups_for_current_user():
+	def get_groups_for_user_id(user):
 		"""
 		Returns all the groups the current user belongs in.
 		If there is no current_user (no sign in), all is returned if guests exists,
@@ -108,15 +109,21 @@ class UserAPI:
 		I believe we cant put this in user because current_user can be None if there is no
 		user currently logged in, but I might be mistaken (Inja july 10 2013)
 		"""
-		# if there is no user we treat them as if in the guests group
-		if not current_user or not current_user.id:
+		if not user or not user.id:
 			group = Group.query.filter(Group.name == 'all').first()
 
 			if not(group):
-				raise Exception("No group 'guests', this should never happen!")
+				raise Excpetion("No group 'guests, this should never happen!")
 			return [group]
 
-		return current_user.groups.order_by(Group.name)
+		return  user.groups.order_by(Group.name)
+	
+	@staticmethod
+	def get_groups_for_current_user():
+		"""
+		calls the get_groups_for_user_id function with current user
+		"""
+		return UserAPI.get_groups_for_user_id(current_user)
 
 	@staticmethod
 	def can_read(page):

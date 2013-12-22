@@ -44,11 +44,10 @@ class Activity(db.Model):
 					self.end_time)
 
 	def get_time(self):
-		if self.start_time.month == self.end_time.month:
-			if self.start_time.day == self.end_time.day:
-				return self.start_time.strftime("%A %d %b, %H:%M - ") + self.end_time.strftime("%H:%M")
-			else:
-				return self.start_time.strftime("%a. %d %b (%H:%M) - ") + \
+		if self.start_time.month == self.end_time.month and self.start_time.day == self.end_time.day:
+			return self.start_time.strftime("%A %d %b, %H:%M - ") + self.end_time.strftime("%H:%M")
+		else:
+			return self.start_time.strftime("%a. %d %b (%H:%M) - ") + \
 					self.end_time.strftime("%a. %d (%H:%M) %b")
 
 	def get_short_description(self, characters):
