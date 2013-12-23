@@ -4,7 +4,7 @@
 
 {% block content %}
 	<div class="container">
-	<div class="span8">
+	<div class="span12">
 	{% if GroupPermissionAPI.can_write('location') %}
 		<a class="btn" href="{{ url_for('location.view') }}">Nieuwe locatie</a>
 	{% endif %}
@@ -54,12 +54,12 @@
 					<div class="span4">
 						<blockquote>
 							<a href="{{url_for('company.view', company_id=vacancy.company.id)}}">{{vacancy.company.name}}</a>
-							<small><cite title="Source Title">{{vacancy.company.location.address}}, {{vacancy.company.location.city}}, {{vacancy.company.location.country}}<i class="icon-map-marker"></i></cite></small>
+							<small><i class="icon-map-marker"></i><cite title="Source Title"><a target="blank_"href="https://maps.google.nl/maps?q={{vacancy.company.location.address}} {{vacancy.company.location.city}} {{vacancy.company.location.country}}">{{vacancy.company.location.address}}, {{vacancy.company.location.city}}, {{vacancy.company.location.country}}</a></cite></small>
 						</blockquote>
 						<p>
-							<i class="icon-envelope"></i> {{vacancy.company.contact.email}} <br>
+							<i class="icon-envelope"></i><a target="blank_" href="mailto:{{vacancy.company.contact.email}}"> {{vacancy.company.contact.email}}</a> <br />
 							<i class="icon-globe"></i> <a target="_blank" href="{{vacancy.company.website}}"> {{vacancy.company.website}} </a> <br>
-							<i class="icon-user"></i> {{vacancy.company.contact.phone_nr}} <br>
+							<i class="icon-user"></i><a href="tel:{{vacancy.company.contact.phone_nr}}">{{vacancy.company.contact.phone_nr}}</a> <br>
 							{% if GroupPermissionAPI.can_write('vacancy') %}
 							<a href="{{ url_for('vacancy.edit', vacancy_id=vacancy.id) }}">edit</a>  <br>
 							{% endif %}
