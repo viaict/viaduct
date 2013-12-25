@@ -1,7 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, url_for,\
 		abort, flash
 
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
+
+from datetime import datetime
 
 from viaduct import application, db
 from viaduct.helpers import flash_form_errors
@@ -24,12 +26,34 @@ def view_list(page=1):
 		vacancies = Vacancy.query.join(Company).\
 			filter(or_(Vacancy.title.like('%' + search + '%'),
 				Company.name.like('%' + search + '%'),
-				Vacancy.contract_of_service.like('%' + search + '%'))).order_by(Vacancy.title).order_by(Company.rank).paginate(page, 15, True)
+				Vacancy.workload.like('%' + search + '%'),
+				Vacancy.contract_of_service.like('%' + search + '%'))).order_by(Vacancy.title).order_by(Company.rank)
+		
+		if not GroupPermissionAPI.can_write('vacancy'):
+			vacancies = vacancies.query.filter(and_(Vacancy.start_date < datetime.utcnow(), 
+				Vacancy.end_date > datetime.utcnow())).paginate(page, 15, True)
+		else:
+			for i, vacancy in enumerate(vacancies):
+				print i, vacancy
+				if vacancy.start_date < datetime.date(datetime.utcnow()) and vacancy.end_date < datetime.date(datetime.utcnow()):
+					vacancies[i].expired = True
+			vacancies = vacancies.paginate(page, 15, False)
+
 		return render_template('vacancy/list.htm',
 			vacancies = vacancies, search=search)
 
+	if not GroupPermissionAPI.can_write('vacancy'):
+		vacancies = Vacancy.query.filter(and_(Vacancy.start_date < datetime.utcnow(), 
+			Vacancy.end_date > datetime.utcnow())).paginate(page, 15, True)
+	else:
+		vacancies = Vacancy.query.join(Company).filter().order_by(Vacancy.title).order_by(Company.rank)
+		for i, vacancy in enumerate(vacancies):
+			print i, vacancy
+			if vacancy.start_date < datetime.date(datetime.utcnow()) and vacancy.end_date < datetime.date(datetime.utcnow()):
+				print "I exist"
+				vacancies[i].expired = True
+		vacancies = vacancies.paginate(page, 15, False)
 
-	vacancies = Vacancy.query.paginate(page, 15, False)
 	return render_template('vacancy/list.htm',
 		vacancies = vacancies, search="")
 
