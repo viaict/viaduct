@@ -60,8 +60,13 @@ def flash_form_errors(form):
 
 
 @application.template_filter('markdown')
-def markdown_filter(data):
-    return Markup(markdown(data, safe_mode='escape', enable_attributes=False,
+def markdown_filter(data, filter_html=True):
+    if filter_html:
+        safe_mode = False
+    else:
+        safe_mode = 'escape'
+
+    return Markup(markdown(data, safe_mode=safe_mode, enable_attributes=False,
                            extensions=markdown_extensions))
 
 
@@ -106,8 +111,14 @@ def pages_filter(data):
         # hard coded but, well, what can you do?
         if data[i].is_main_page:
             if data[i].path == 'twitter':
+                if data[i].filter_html:
+                    safe_mode = False
+                else:
+                    safe_mode = 'escape'
+
                 content += '<h1>{0}</h1>'.format(data[i].title)
                 content += markdown(data[i].content, enable_attributes=False,
+                                    safe_mode=safe_mode,
                                     extensions=markdown_extensions)
             elif data[i].path == 'activities':
                 activities = Activity.query \
@@ -118,14 +129,24 @@ def pages_filter(data):
                                            .paginate(1, 12, False))
             elif data[i].path == 'contact'\
                     or data[i].path == 'laatste_bestuursblog':
+                if data[i].filter_html:
+                    safe_mode = False
+                else:
+                    safe_mode = 'escape'
+
                 content += '<h1>{0}</h1>'.format(data[i].title)
-                content += markdown(data[i].content,
+                content += markdown(data[i].content, safe_mode=safe_mode,
                                     extensions=markdown_extensions)
         else:
+            if data[i].filter_html:
+                safe_mode = False
+            else:
+                safe_mode = 'escape'
+
             #print data[i].path
             content += '<h1>{0}</h1>'.format(data[i].title)
             content += '<h2>Hello</h2>'
-            content += markdown(data[i].content,
+            content += markdown(data[i].content, safe_mode=safe_mode,
                                 extensions=markdown_extensions)
 
         content += '</div></div>'
