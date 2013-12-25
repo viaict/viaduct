@@ -294,6 +294,46 @@ class PimpyAPI:
 			type=type, endpoints=endpoints))
 
 	@staticmethod
+	def get_all_tasks(group_id):
+		"""
+		Shows all tasks ever made.
+		Can specify specific group.
+		No internal permission system made yet.
+		Do not make routes to this module yet.
+		"""
+		if not GroupPermissionAPI.can_read('pimpy'):
+			abort(403)
+		if not current_user:
+			flash('Current_user not found')
+			return redirect(url_for('pimpy.view_tasks'))
+
+
+
+
+		list_items = {}
+		if group_id == 'all':
+			for group in UserAPI.get_groups_for_current_user():
+				list_users = {}
+				list_users['Iedereen'] = group.tasks
+				list_items[group.name] = list_users
+		else:
+			list_users = {}
+			tasks = Task.query.filter(Task.group_id==group_id).all()
+			group = Group.query.filter(Group.id==group_id).first()
+			if not group:
+				abort(404)
+			if not group in UserAPI.get_groups_for_current_user():
+				abort(403)
+			list_users['Iedereen'] = tasks
+			list_items[group.name] = list_users
+
+
+
+		return Markup(render_template('pimpy/api/tasks.htm',
+			list_items=list_items, type='tasks', group_id=group_id,
+			personal=False))
+
+	@staticmethod
 	def get_tasks(group_id, personal):
 		if not GroupPermissionAPI.can_read('pimpy'):
 			abort(403)
@@ -317,7 +357,12 @@ class PimpyAPI:
 					if len(list_users):
 						list_items[group.name] = list_users
 			else:
+				group = Group.query.filter(Group.id==group_id).first()
+				if not group in UserAPI.get_groups_for_current_user():
+					abort(403)
 				tasks = Task.query.filter(Task.group_id==group_id).all()
+				if not group:
+					abort(404)
 				items = []
 				list_users = {}
 				for task in tasks:
@@ -351,6 +396,10 @@ class PimpyAPI:
 
 			else:
 				group = Group.query.filter(Group.id==group_id).first()
+				if not group:
+					abort(404)
+				if not group in UserAPI.get_groups_for_current_user():
+					abort(403)
 				list_users = {}
 				for user in group.users:
 					items = []

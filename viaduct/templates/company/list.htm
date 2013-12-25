@@ -1,16 +1,82 @@
-{% from 'macros/pagination.htm' import render_pagination %}
+{% from "macros/pagination.htm" import render_pagination %}
 
-{% extends 'content.htm' %}
+{% extends "content.htm" %}
 
 {% block content %}
-	{% if GroupPermissionAPI.can_write('company') %}
-		<p><a class="btn" href="{{ url_for('company.view') }}">Nieuw bedrijf</a></p>
+	<div class="span8">
+	{% if GroupPermissionAPI.can_write('location') %}
+		<a class="btn" href="{{ url_for('location.view') }}">Nieuwe locatie</a>
 	{% endif %}
-	<ul>
-		{% for company in companies.items %}
-			<li><a href="{{ url_for('company.view', company_id=company.id) }}">{{ company.name }}</a></li>
-		{% endfor %}
-	</ul>
+	{% if GroupPermissionAPI.can_write('contact') %}
+		<a class="btn" href="{{ url_for('contact.edit') }}">Nieuw contact</a>
+	{% endif %}
+	{% if GroupPermissionAPI.can_write('company') %}
+		<a class="btn" href="{{ url_for('company.edit') }}">Nieuw bedrijf</a>
+	{% endif %}
+	{% if GroupPermissionAPI.can_write('vacancy') %}
+		<a class="btn" href="{{ url_for('vacancy.edit') }}">Nieuwe vacature</a>
+	{% endif %}
+	<br />
+	<br />
+	<div class="row">
+		<div class="span12">
+			<form method="get" action="{{ url_for('company.view_list') }}" enctype=multipart/form-data class="form-inline" >
+				<input name="search" id="search" class="span5" type="text" placeholder="Zoek op titel, vak of opleiding" value="{{search}}" onkeypress="searchKeyPress(event);"></input>
+				<button type="submit" class="btn btn-primary"> <i class="icon-search icon-white" id="submit"></i></button>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<div class="row">
+			<div class="span3"><h4>Naam</h4></div>
+			<div class="span3"><h4>Website</h4></div>
+			<div class="span3"><h4>Locatie</h4></div>
+			</div>
+		</div>
+	</div>
+	<hr>
+	{% for company in companies.items %}
 
-	{{ render_pagination(companies, 'company.list') }}
+		<div class="row">
+			<div class="span12" data-toggle="collapse" data-target='#{{ company.id
+				}}'>
+				<div class="row">
+				<div class="span3">{{company.name}}</div>
+				<div class="span3"> <a target="_blank" href="{{company.website}}"> {{company.website}} </a></div>
+				<div class="span3">{{company.location.city}}</div>
+				</div>
+				<div id='{{ company.id }}' class="collapse">
+					<hr>
+					<div class="span4">
+						<blockquote>
+							<a href="{{url_for('company.view', company_id=company.id)}}">{{company.name}}</a>
+							<small><cite title="Source Title">{{company.location.address}}, {{company.location.city}}, {{company.location.country}}<i class="icon-map-marker"></i></cite></small>
+						</blockquote>
+						<p>
+							<i class="icon-envelope"></i> {{company.contact.email}} <br>
+							<i class="icon-globe"></i> <a target="_blank" href="{{company.website}}"> {{company.website}} </a> <br>
+							<i class="icon-user"></i> {{company.contact.phone_nr}} <br>
+							{% if GroupPermissionAPI.can_write('company') %}
+							<a href="{{ url_for('company.edit', company_id=company.id) }}">edit</a>  <br>
+							{% endif %}
+						</p>
+						</div>
+						<div class="span6">
+							<h3>
+								{{company.name}}
+							</h3>
+						<br />	
+						{{ company.description | markdown }}
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr>
+		{% endfor %}
+		</tbody>
+	</table>
+
+	{{ render_pagination(companies, 'company.view_list') }}
+	</div>
 {% endblock %}

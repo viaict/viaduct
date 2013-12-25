@@ -66,11 +66,14 @@ class PageRevision(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
 
+    # Allow a form to be added to a page
+    form_id = db.Column(db.Integer, db.ForeignKey('custom_form.id'))
+
     author = db.relationship('User', backref=db.backref('page_edits',
         lazy='dynamic'))
 
     def __init__(self, page, author, title, content, comment="", filter_html=True,
-            timestamp=datetime.datetime.utcnow()):
+            timestamp=datetime.datetime.utcnow(), form_id=None):
         self.title = title
         self.content = content
         self.comment = comment
@@ -78,6 +81,7 @@ class PageRevision(db.Model):
         self.user_id = author.id if author != None else -1
         self.page_id = page.id
         self.timestamp = timestamp
+        self.form_id   = form_id
 
 class PagePermission(db.Model):
     __tablename__ = 'page_permission'

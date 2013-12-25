@@ -29,6 +29,7 @@ def file_exists(filename):
 	return os.path.exists(os.path.join(UPLOAD_FOLDER, filename))
 
 def create_unique_file(filename):
+
 	temp_filename = filename
 
 	i = 0
@@ -67,6 +68,23 @@ def upload_file():
 		# if(education_id == None):
 		# 	return render_template('examination/upload.htm', courses = courses,
 		# 	educations = educations, message = 'Er is een fout opgetreden!');
+		
+		if not title:
+			flash('Geen titel opgegeven', 'error')
+			error = True
+
+		filename = upload_file(file)
+		if file:
+			if not filename:
+				flash('Fout formaat tentamen', 'error')
+				error = True
+			answer_path = upload_file(answers)
+			if not answer_path:
+				flash('Fout formaat antwoorden', 'error')
+				error = True
+		else:
+			flash('Geen tentamen opgegeven', 'error')
+			error = True
 
 		if not title:
 			flash('Geen titel opgegeven', 'error')
@@ -97,51 +115,42 @@ def upload_file():
 
 		return render_template('examination/upload.htm', courses = courses,
 			educations = educations, message = '');
-		# if file and allowed_file(file.filename):
-		# 	filename = secure_filename(file.filename)
-		# 	filename = create_unique_file(filename)
-
-		# 	file.save(os.path.join(UPLOAD_FOLDER, filename))
-		# 	exam = Examination(filename, title, course_id, education_id)
-		# 	db.session.add(exam)
-		# 	db.session.commit()
-
-		# 	return render_template('examination/upload.htm', courses = courses,
-		# 	educations = educations, message = 'Het tentamen is geupload!');
-		# else:
 
 	return render_template('examination/upload.htm', courses = courses,
 		educations = educations);
 
 
 @blueprint.route('/examination/', methods=['GET', 'POST'])
-@blueprint.route('/tentamenbank/', methods=['GET', 'POST'])
-@blueprint.route('/tentamenbank/<int:page_nr>/', methods=['GET', 'POST'])
 @blueprint.route('/examination/<int:page_nr>/', methods=['GET', 'POST'])
+@login_required
 def view_examination(page_nr=1):
 	if not GroupPermissionAPI.can_read('examination', False):
 		return abort(403)
+
+	# action = url_for('examination.view_examination')
+
 	path = '/static/uploads/examinations/'
 
 	if request.args.get('search') != None:
 		search = request.args.get('search')
+
 		examinations = Examination.query.join(Course).join(Education).\
 			filter(or_(Examination.title.like('%' + search + '%'),
 				Course.name.like('%' + search + '%'),
-				Education.name.like('%' + search + '%'))).order_by(Course.name).paginate(page_nr, 15, False)
+				Education.name.like('%' + search + '%'))).order_by(Course.name).paginate(page_nr, 15, True)
 		return render_template('examination/view.htm', path = path,
 			examinations = examinations, search=search)
 
 
 	examinations = Examination.query.join(Course).\
-			order_by(Course.name).paginate(page_nr, 15, False)
+			order_by(Course.name).paginate(page_nr, 15, True)
 	return render_template('examination/view.htm', path = path,
 		examinations = examinations, search="")
 
 @blueprint.route('/examination/admin', methods=['GET', 'POST'])
 @blueprint.route('/examination/admin/<int:page_nr>/', methods=['GET', 'POST'])
 def examination_admin(page_nr=1):
-	if not GroupPermissionAPI.can_write('examination', True):
+	if not GroupPermissionAPI.can_write('examination', False):
 		session['prev'] = 'examination.examination_admin'
 		return abort(403)
 

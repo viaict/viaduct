@@ -1,4 +1,5 @@
 import bcrypt
+import random
 import datetime
 
 from flask import flash, get_flashed_messages, redirect, render_template, \
@@ -10,11 +11,12 @@ from sqlalchemy import or_
 
 from viaduct import application, db, login_manager
 from viaduct.helpers import flash_form_errors
-from viaduct.forms import SignUpForm, SignInForm
+from viaduct.forms import SignUpForm, SignInForm, ResetPassword
 from viaduct.models import User
 from viaduct.models.activity import Activity
 from viaduct.models.custom_form import CustomFormResult, CustomForm
 from viaduct.models.group import Group
+from viaduct.models.request_ticket import Password_ticket
 from viaduct.forms.user import EditUserForm, EditUserInfoForm#, EditUserPermissionForm
 from viaduct.models.education import Education
 from viaduct.api.group import GroupPermissionAPI
@@ -42,7 +44,7 @@ def view_single(user_id=None):
 		return abort(404)
 
 	user.avatar = UserAPI.avatar(user)
-	user.groups = UserAPI.get_groups_for_current_user()
+	user.groups = UserAPI.get_groups_for_user_id(user)
 
 	# Get all activity entrees from these forms, order by start_time of activity
 	activities = Activity.query.join(CustomForm).join(CustomFormResult).\
@@ -234,6 +236,79 @@ def sign_out():
 		session['denied_from'] = None
 
 	return redirect(url_for('page.get_page'))
+
+@blueprint.route('/request_password/', methods=['GET', 'POST'])
+def request_password():
+	form = ResetPassword(request.form)
+
+
+	if form.validate_on_submit():
+		valid_form = True
+
+		user = User.query.filter(User.email==form.email.data, User.student_id==form.student_id.data).all()
+
+		# Check if the user does exist, and if the passwords do match.
+		if not user:
+			flash('De ingevoerde gegevens zijn niet correct.', 'error')
+		else:
+			hash = create_hash(256)
+
+			""" SEND MAIL TO USER WITH THE FOLLOWING LINK """
+			reset_link = "http://www.svia.nl" + url_for('user.reset_password') + hash, 'succes'
+
+			ticket = Password_ticket(current_user.id, hash)
+			db.session.add(ticket)
+			db.session.commit()
+
+			flash('Er is een email verstuurd naar ' + form.email.data + ' met instructies.', 'succes')
+
+			# return redirect(url_for('page.get_page'))
+	else:
+		flash_form_errors(form)
+
+	return render_template('user/request_password.htm', form=form)
+
+@blueprint.route('/reset_password/', methods=['GET', 'POST'])
+@blueprint.route('/reset_password/<string:hash>/', methods=['GET', 'POST'])
+def reset_password(hash=0):
+	fail = True
+
+	ticket = Password_ticket.query.filter(Password_ticket.hash==hash).first()
+
+	if ticket:
+		seconds = ((datetime.datetime.now() - ticket.created_on).seconds) 
+		if seconds < 3600:
+			user = User.query.filter(User.id==ticket.user).first()
+
+			password = create_hash(64)
+
+			user.password = bcrypt.hashpw(password, bcrypt.gensalt())
+			db.session.add(user)
+			db.session.commit()
+
+			""" SEND MAIL TO USER WITH THE FOLLOWING LINK """
+			#password			
+
+			fail = False
+			flash('Uw nieuwe password met instructies is verstuurd naar ' + user.email,\
+					'succes')
+		else:
+			flash('De password-reset ticket is verlopen.', 'error')
+	else:
+		flash('Ongeldige password-reset ticket', 'error')
+
+
+	return render_template('user/reset_password.htm', fail=fail)
+
+def create_hash(bits=96):
+    assert bits % 8 == 0
+    print "test"
+    required_length = bits / 8 * 2
+    s = hex(random.getrandbits(bits)).lstrip('0x').rstrip('L')
+    if len(s) < required_length:
+        return create_hash(bits)
+    else:
+        return s
 
 @blueprint.route('/users/', methods=['GET', 'POST'])
 @blueprint.route('/users/<int:page_nr>/', methods=['GET', 'POST'])

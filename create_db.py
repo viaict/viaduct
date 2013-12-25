@@ -17,6 +17,7 @@ from viaduct.models.programming_language import ProgrammingLanguage
 from viaduct.models.company import Company
 from viaduct.models.location import Location
 from viaduct.models.contact import Contact
+from viaduct.models.category import Category
 from viaduct.models.custom_form import CustomForm, CustomFormResult
 from viaduct.models.file import File
 
@@ -370,3 +371,13 @@ minute = Minute('content', 0, None)
 db.session.add(minute)
 db.session.commit()
 
+# This category is the 'root' of ALL wikis!!!
+wiki_category = Category('wiki')
+db.session.add(wiki_category)
+db.session.commit()
+
+# A basic category for a group
+ict_category = Category('ict')
+ict_category.super_categories.append(wiki_category)
+db.session.add(ict_category)
+db.session.commit()

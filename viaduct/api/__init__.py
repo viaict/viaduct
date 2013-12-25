@@ -4,6 +4,7 @@ from course import CourseAPI
 from degree import DegreeAPI
 from education import EducationAPI
 from navigation import NavigationAPI
+from category import CategoryAPI
 from pimpy import PimpyAPI
 from file import FileAPI
 from booksales import BookSalesAPI
@@ -22,3 +23,4 @@ application.jinja_env.globals.update(UserAPI=UserAPI)
 application.jinja_env.globals.update(GroupPermissionAPI=GroupPermissionAPI)
 application.jinja_env.globals.update(BookSalesAPI=BookSalesAPI)
 #application.jinja_env.globals(update(SearchAPI=SearchAPI)
+application.jinja_env.globals.update(CategoryAPI=CategoryAPI)

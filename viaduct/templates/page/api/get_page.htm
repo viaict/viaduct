@@ -1,4 +1,6 @@
 {% from "macros/flash.htm" import render_flash %}
+{% from "macros/custom_form.htm" import user_fields %}
+{% from "macros/form.htm" import render_field %}
 
 <div class="btn-group">
 	<a class="btn" href="#"><i class="icon-time"></i> View History</a>
@@ -9,7 +11,7 @@
 
 {% if title and content %}
 	<h1>{{ title }}</h1>
-
+	
 	{% if content_type == 1 %}
 		{{ content | safe }}
 	{% else %}
