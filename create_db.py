@@ -7,9 +7,6 @@ from viaduct.models import User, Group, GroupPermission
 from viaduct.models import Activity
 from viaduct.models import Minute, Task
 from viaduct.models import NavigationEntry
-#from viaduct.models.module_permission import ModulePermission
-
-#from viaduct.models.permission import Permission
 from viaduct.models.degree import Degree
 from viaduct.models.education import Education
 
@@ -123,7 +120,6 @@ db.session.commit()
 
 
 # Add stuff for pimpystuff for pimpy
-
 user_tijmen = User('tijmen.zwaan@gmail.com', bcrypt.hashpw('memorystick',
 														bcrypt.gensalt()),
 				'Tijmen', 'Zwaan', 'n/a')
@@ -185,7 +181,6 @@ db.session.commit()
 #self.price = price
 #self.picture = picture
 #'''
-
 custom_form = CustomForm(user.id, "Test formulier", '''Dieet | checkbox
 -Vegetarisch
 -Veganistisch
