@@ -29,29 +29,38 @@
 	<div class="row">
 		<div class="span12">
 			<div class="row">
+			<div class="span1"></div>
 			<div class="span3"><h4>Naam</h4></div>
-			<div class="span3"><h4>Website</h4></div>
+			<div class="span5"><h4>Website</h4></div>
 			<div class="span3"><h4>Locatie</h4></div>
 			</div>
 		</div>
 	</div>
 	<hr>
 	{% for company in companies.items %}
-		<div class="row" {% if company.expired %} style="background:rgba(255, 100, 0, 0.3); ;"{% endif %}>
+		<div style="cursor:pointer;" class="row" {% if company.expired %} style="background:rgba(255, 100, 0, 0.3); ;"{% endif %}>
 			<div class="span12" data-toggle="collapse" data-target='#{{ company.id
 				}}'>
 			
 			
 				<div class="row">
+				<div class="span1"><i class="icon-info-sign"></i></div>
 				<div class="span3">{{company.name}}</div>
-				<div class="span3"> <a target="_blank" href="{{company.website}}"> {{company.website}} </a></div>
+				<div class="span5"> <a target="_blank" href="{{company.website}}"> {{company.website}} </a></div>
 				<div class="span3">{{company.location.city}}</div>
 				</div>
 				<div id='{{ company.id }}' class="collapse">
 					<hr>
 					<div class="span4">
 						<blockquote>
-							<a href="{{url_for('company.view', company_id=company.id)}}">{{company.name}}</a>
+							<a href="{{url_for('company.view', company_id=company.id)}}">
+
+							{% if company.logo_path != '#' %}
+								<img class="img-rounded" style="max-width:250px; max-height:100px;" src="{{path}}{{company.logo_path}}"></img>
+							{% else %}
+							{{company.name}}
+							{% endif %}
+							</a>
 							<small><i class="icon-map-marker"></i><cite title="Source Title"><a target="blank_"href="https://maps.google.nl/maps?q={{company.location.address}} {{company.location.city}} {{company.location.country}}">{{company.location.address}}, {{company.location.city}}, {{company.location.country}}</a></cite></small>
 						</blockquote>
 						<p>

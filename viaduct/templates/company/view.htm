@@ -17,12 +17,15 @@
 				<div id='{{ company.name }}'>
 					<div class="span4">
 						<blockquote>
-							<small><cite title="Source Title">{{company.location.address}}, {{company.location.city}}, {{company.location.country}}<i class="icon-map-marker"></i></cite></small>
+							{% if company.logo_path != '#' %}
+							<img style="max-width:250px; max-height:100px;" src="{{path}}{{company.logo_path}}"></img>
+							{% endif %}
+							<small><cite title="Source Title"><a target="blank_"href="https://maps.google.nl/maps?q={{company.location.address}} {{company.location.city}} {{company.location.country}}">{{company.location.address}}, {{company.location.city}}, {{company.location.country}}</a><i class="icon-map-marker"></i></cite></small>
 						</blockquote>
 						<p>
-							<i class="icon-envelope"></i> {{company.contact.email}} <br>
-							<i class="icon-globe"></i> {{company.website}} <br>
-							<i class="icon-user"></i> {{company.contact.phone_nr}} <br>
+							<i class="icon-envelope"></i><a target="blank_" href="mailto:{{company.contact.email}}"> {{company.contact.email}}</a> <br />
+							<i class="icon-globe"></i> <a target="_blank" href="{{company.website}}"> {{company.website}} </a> <br>
+							<i class="icon-user"></i><a href="tel:{{company.contact.phone_nr}}">{{company.contact.phone_nr}}</a> <br>
 						</p>
 						</div>
 						<div class="span6">
@@ -34,6 +37,7 @@
 	</form>
 
 	{% if company.id and GroupPermissionAPI.can_write('company') %}
+		<form onsubmit="return confirm('Wilt u {{company.name}} echt verwijderen?');"  action="{{ url_for('company.delete', company_id=company.id) }}" method="post">
 			<fieldset>
 				<button class="btn btn-danger" type="submit">Verwijderen</button>
 			</fieldset>

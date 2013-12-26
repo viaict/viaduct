@@ -5,14 +5,21 @@ from sqlalchemy import or_, and_
 
 from datetime import datetime
 
-from viaduct import db
+from viaduct import application, db
 from viaduct.models.company import Company
 from viaduct.models.location import Location
 from viaduct.models.contact import Contact
 from viaduct.forms import CompanyForm
 from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.file import FileAPI
+
+from werkzeug import secure_filename
 
 blueprint = Blueprint('company', __name__, url_prefix='/companies')
+
+UPLOAD_FOLDER = application.config['UPLOAD_DIR']
+FILE_FOLDER = application.config['FILE_DIR']
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page>/', methods=['GET', 'POST'])
@@ -39,7 +46,7 @@ def view_list(page=1):
 
 
 		return render_template('company/list.htm', companies=companies, 
-			search=search)
+			search=search, path=FILE_FOLDER)
 
 
 	if not GroupPermissionAPI.can_write('company'):
@@ -50,7 +57,7 @@ def view_list(page=1):
 		for i, company in enumerate(companies):
 			print i, company
 			if company.contract_start_date < datetime.date(datetime.utcnow()) and company.contract_end_date < datetime.date(datetime.utcnow()):
-				print "I exist"
+				print i
 				companies[i].expired = True
 		companies = companies.paginate(page, 15, False)
 		#todo fix message if inactive
@@ -58,7 +65,7 @@ def view_list(page=1):
 	# companies = Company.query.paginate(page, 15, False)
 
 	return render_template('company/list.htm', companies=companies, 
-		search="")
+		search="", path=FILE_FOLDER)
 
 @blueprint.route('/create/', methods=['GET'])
 @blueprint.route('/edit/<int:company_id>/', methods=['GET'])
@@ -115,11 +122,12 @@ def view(company_id=None):
 	if company_id == None or not company:
 		redirect(url_for('vacancy.view_list'))
 
-	return render_template('company/view.htm', company=company)
+	return render_template('company/view.htm', company=company, path=FILE_FOLDER)
 
 @blueprint.route('/create/', methods=['POST'])
 @blueprint.route('/edit/<int:company_id>/', methods=['POST'])
 def update(company_id=None):
+	# print request.files
 	'''
 	BACKEND
 	Create, view or edit a company.
@@ -157,6 +165,12 @@ def update(company_id=None):
 	if not 'website' in request.form:
 		flash('Geen website opgegeven', 'error')
 		error_found = True
+	if request.files['file']:
+		logo = FileAPI.upload(request.files['file'])
+		company.logo_path = logo.name
+		print vars(logo)
+		pass
+
 
 	if error_found:
 		return redirect(url_for('company.view', company_id=company_id))

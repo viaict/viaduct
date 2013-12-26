@@ -13,6 +13,7 @@ from viaduct.forms import VacancyForm
 from viaduct.api.group import GroupPermissionAPI
 
 blueprint = Blueprint('vacancy', __name__, url_prefix='/vacancies')
+FILE_FOLDER = application.config['FILE_DIR']
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page>/', methods=['GET', 'POST'])
@@ -40,7 +41,7 @@ def view_list(page=1):
 			vacancies = vacancies.paginate(page, 15, False)
 
 		return render_template('vacancy/list.htm',
-			vacancies = vacancies, search=search)
+			vacancies = vacancies, search=search, path=FILE_FOLDER)
 
 	if not GroupPermissionAPI.can_write('vacancy'):
 		vacancies = Vacancy.query.filter(and_(Vacancy.start_date < datetime.utcnow(), 
@@ -55,7 +56,7 @@ def view_list(page=1):
 		vacancies = vacancies.paginate(page, 15, False)
 
 	return render_template('vacancy/list.htm',
-		vacancies = vacancies, search="")
+		vacancies = vacancies, search="", path=FILE_FOLDER)
 
 @blueprint.route('/create/', methods=['GET'])
 @blueprint.route('/edit/<int:vacancy_id>/', methods=['GET'])
