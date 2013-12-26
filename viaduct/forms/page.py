@@ -10,7 +10,7 @@ class EditPageForm(Form):
     title       = TextField('Title', [Required()])
     content     = TextAreaField('Content', [Optional()])
     comment     = TextField('Comment')
-    filter_html = BooleanField('Disable HTML filtering for the current page.')
+    filter_html = BooleanField('Sta HTML tags toe.')
     needs_payed = BooleanField('Betaling vereist.')
     permissions = FieldList(FormField(EditGroupPagePermissionEntry))
     save_page   = SubmitField('Save Page')

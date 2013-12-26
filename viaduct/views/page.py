@@ -201,7 +201,7 @@ def edit_page(path=''):
             data = struct()
             data.title = revision.title
             data.content = revision.content
-            data.filter_html = not revision.filter_html
+            data.filter_html = revision.filter_html
             data.needs_payed = page.needs_payed
             data.path = path
             data.form_id = revision.form_id
@@ -232,7 +232,7 @@ def edit_page(path=''):
         #   filter_html = False
         #else:
         #   filter_html = True
-        filter_html = not 'filter_html' in request.form
+        filter_html = 'filter_html' in request.form
 
         # if there was no page we want to create an entire new page (and not
         # just a revision)
