@@ -114,7 +114,8 @@ def edit(user_id=None):
         if query.count() > 0:
             flash('Een gebruiker met dit email adres bestaat al / A user with '
                   'the e-mail address specified does already exist.', 'error')
-            return render_template('user/edit.htm', form=form, user=user)
+            return render_template('user/edit.htm', form=form, user=user,
+                           isAdmin=isAdmin)
 
         # Because the user model is constructed to have an ID of 0 when it is
         # initialized without an email adress provided, reinitialize the user
@@ -152,7 +153,7 @@ def edit(user_id=None):
         return redirect(url_for('user.view'))
     else:
         flash_form_errors(form)
-
+        
     return render_template('user/edit.htm', form=form, user=user,
                            isAdmin=isAdmin)
 

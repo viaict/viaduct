@@ -19,6 +19,7 @@
 		{{ render_field(form.student_id) }}
 		{{ render_field(form.education_id) }}
 		{{ render_field(form.avatar) }}
+		{% if isAdmin %} {{render_field(form.has_payed) }} {% endif %}
 		{% if user.avatar %}
 		<div class="control-groep">
 			<div class="controls">
@@ -28,7 +29,6 @@
 		{% endif  %}
 
 		{#
-		{% if isAdmin %} {{render_field(form.has_payed) }} {% endif %}
 		<div class="control-group">
 			<div class="controls">
 				{{ form.recaptcha }}
