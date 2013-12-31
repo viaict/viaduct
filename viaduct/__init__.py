@@ -9,43 +9,43 @@ from viaduct.utilities import import_module
 
 
 def is_module(path):
-    init_path = os.path.join(path, '__init__.py')
+	init_path = os.path.join(path, '__init__.py')
 
-    if os.path.isdir(path) and os.path.exists(init_path):
-        return True
-    elif os.path.isfile(path) and os.path.splitext(path)[1] == '.py':
-        return True
+	if os.path.isdir(path) and os.path.exists(init_path):
+		return True
+	elif os.path.isfile(path) and os.path.splitext(path)[1] == '.py':
+		return True
 
-    return False
+	return False
 
 
 def register_views(application, path, extension=''):
-    application_path = os.path.dirname(os.path.abspath(application.root_path))
+	application_path = os.path.dirname(os.path.abspath(application.root_path))
 
-    for filename in os.listdir(path):
-        file_path = os.path.join(path, filename)
+	for filename in os.listdir(path):
+		file_path = os.path.join(path, filename)
 
-        # Check if the current file is a module.
-        if is_module(file_path):
-            # Get the module name from the file path.
-            module_name = os.path.splitext(file_path)[0]
-            module_name = os.path.relpath(module_name, application_path)
-            module_name = module_name.replace('/', '.')
+		# Check if the current file is a module.
+		if is_module(file_path):
+			# Get the module name from the file path.
+			module_name = os.path.splitext(file_path)[0]
+			module_name = os.path.relpath(module_name, application_path)
+			module_name = module_name.replace('/', '.')
 
-            blueprint = getattr(import_module(module_name), 'blueprint', None)
+			blueprint = getattr(import_module(module_name), 'blueprint', None)
 
-            if blueprint:
-                print('{0} has been imported.'.format(module_name))
-                application.register_blueprint(blueprint)
+			if blueprint:
+				print('{0} has been imported.'.format(module_name))
+				application.register_blueprint(blueprint)
 
 
 def model_to_dict(self):
-    result = {}
+	result = {}
 
-    for column in self.__table__.columns:
-        result[column.name] = getattr(self, column.name)
+	for column in self.__table__.columns:
+		result[column.name] = getattr(self, column.name)
 
-    return result
+	return result
 
 # Set up the application and load the configuration file.
 application = Flask(__name__)
