@@ -3,7 +3,7 @@ from flask.ext.login import current_user
 
 from viaduct import application, db
 
-blueprint = Blueprint('ideal', __name__, url_prefix='/ideal')
+blueprint = Blueprint('mollie', __name__, url_prefix='/mollie')
 
 @blueprint.route('/')
 def ideal_overview():

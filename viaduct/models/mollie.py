@@ -1,7 +1,7 @@
 from viaduct import db
 
 class Transaction(db.Model):
-	__tablename__ = 'ideal_transaction'
+	__tablename__ = 'mollie_transaction'
 
 	id = db.Column(db.Integer, primary_key=True)
 	amount = db.Column(db.Float)
@@ -11,9 +11,17 @@ class Transaction(db.Model):
 	paidDatetime = db.Column(db.DateTime)
 	expiredDatetime = db.Column(db.DateTime)
 
-	user = db.relationship('User', backref=db.backref('ideal_transaction', lazy='dynamic'))
+	# method can be
+	#	None
+	#	ideal
+	#	creditcard
+	#	mistercash
+	#	paysafecard
+	method = db.Column(db.String(256))
 
-	def __init__(self, amount=0.0, description="some via iDeal Transaction",
+	user = db.relationship('User', backref=db.backref('mollie_transaction', lazy='dynamic'))
+
+	def __init__(self, amount=0.0, description="some via Mollie Transaction",
 				status='open', createdDatetime=None, paidDatetime=None,
 				expiredDatetime=None):
 		self.amount = amount
