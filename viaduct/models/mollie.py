@@ -4,6 +4,7 @@ class Transaction(db.Model):
 	__tablename__ = 'mollie_transaction'
 
 	id = db.Column(db.Integer, primary_key=True)
+	mollie_id = db.Column(db.String(256))
 	amount = db.Column(db.Float)
 	description = db.Column(db.String(256))
 	status = db.Column(db.Enum('open','cancelled', 'paidout', 'paid', 'expired'))
