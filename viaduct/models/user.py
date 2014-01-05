@@ -2,7 +2,7 @@
 
 from viaduct import db, login_manager
 from viaduct.models.education import Education
-from viaduct.models import Group#, GroupPermission
+
 
 class User(db.Model):
 	__tablename__ = 'user'
@@ -14,18 +14,17 @@ class User(db.Model):
 	last_name = db.Column(db.String(256))
 	has_payed = db.Column(db.Boolean)
 	shirt_size = db.Column(db.Enum('Small', 'Medium', 'Large'))
-	allergy = db.Column(db.String(1024)) # Allergy / medication
+	allergy = db.Column(db.String(1024))  # Allergy / medication
 	diet = db.Column(db.Enum('Vegetarisch', 'Veganistisch', 'Fruitarier'))
 	gender = db.Column(db.Enum('Man', 'Vrouw', 'Geen info'))
 	phone_nr = db.Column(db.String(16))
 	emergency_phone_nr = db.Column(db.String(16))
-	description = db.Column(db.String(1024)) # Description of user
+	description = db.Column(db.String(1024))  # Description of user
 	student_id = db.Column(db.String(256))
 	education_id = db.Column(db.Integer, db.ForeignKey('education.id'))
-	
 
 	education = db.relationship(Education,
-		backref=db.backref('user', lazy='dynamic'))
+								backref=db.backref('user', lazy='dynamic'))
 
 	def __init__(self, email=None, password=None, first_name=None,
 				last_name=None, student_id=None, education_id=None):
@@ -61,9 +60,9 @@ class User(db.Model):
 
 	@staticmethod
 	def get_anonymous_user():
-		return User.query.get(0);
+		return User.query.get(0)
 
 	def __repr__(self):
-		return '<User({0}, "{1}", "{2}", "{3}", "{4}", "{5}">'.format(self.id,
-				self.email, self.password, self.first_name, self.last_name,
-				self.student_id)
+		return '<User({0}, "{1}", "{2}", "{3}", "{4}", "{5}">'\
+			.format(self.id, self.email, self.password, self.first_name,
+					self.last_name, self.student_id)
