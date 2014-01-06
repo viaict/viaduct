@@ -11,14 +11,7 @@ class Transaction(db.Model):
 	createdDatetime = db.Column(db.DateTime)
 	paidDatetime = db.Column(db.DateTime)
 	expiredDatetime = db.Column(db.DateTime)
-
-	# method can be
-	#	None
-	#	ideal
-	#	creditcard
-	#	mistercash
-	#	paysafecard
-	method = db.Column(db.String(256))
+	cancelledDatetime = db.Column(db.DateTime)
 
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	user = db.relationship('User', backref=db.backref('mollie_transaction', lazy='dynamic'))
