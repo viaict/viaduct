@@ -1,4 +1,4 @@
-from flask import Blueprint, abort, redirect, url_for, jsonify
+from flask import Blueprint, abort, redirect, url_for, jsonify, render_template
 from flask.ext.login import current_user
 from viaduct.api.mollie import MollieAPI
 import requests
@@ -16,5 +16,9 @@ def json_test():
 
 @blueprint.route('/mollie_test')
 def mollie_test():
-
 	return MollieAPI.create_transaction(49.83, 'de eerste transactie')
+
+@blueprint.route('/success')
+def mollie_succes():
+	return render_template('mollie/success.htm')
+

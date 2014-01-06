@@ -20,14 +20,16 @@ class Transaction(db.Model):
 	#	paysafecard
 	method = db.Column(db.String(256))
 
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	user = db.relationship('User', backref=db.backref('mollie_transaction', lazy='dynamic'))
 
 	def __init__(self, amount=0.0, description="some via Mollie Transaction",
 				status='open', createdDatetime=None, paidDatetime=None,
-				expiredDatetime=None):
+				expiredDatetime=None, user=None):
 		self.amount = amount
 		self.description = description
 		self.status = status
 		self.createdDatetime = createdDatetime
 		self.paidDatetime = paidDatetime
 		self.expiredDatetime = expiredDatetime
+		self.user = user
