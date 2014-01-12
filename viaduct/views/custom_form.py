@@ -15,10 +15,10 @@ from viaduct.models.group import Group
 from viaduct.models.custom_form import CustomForm, CustomFormResult, CustomFormFollower
 from viaduct.api.group import GroupPermissionAPI
 
-blueprint = Blueprint('custom_form', __name__)
+blueprint = Blueprint('custom_form', __name__, url_prefix='/forms')
 
-@blueprint.route('/forms/', methods=['GET', 'POST'])
-@blueprint.route('/forms/page/<int:page>', methods=['GET', 'POST'])
+@blueprint.route('/', methods=['GET', 'POST'])
+@blueprint.route('/page/<int:page>', methods=['GET', 'POST'])
 def view(page=1):
 	if not GroupPermissionAPI.can_write('custom_form'):
 		return abort(403)
@@ -41,7 +41,7 @@ def view(page=1):
 	# TODO Custom forms for specific groups (i.e coordinator can only see own forms)
 	return render_template('custom_form/overview.htm', custom_forms=custom_forms.paginate(page, 20, False), followed_forms=followed_forms, followed_ids=ids)
 
-@blueprint.route('/forms/view/<int:form_id>', methods=['GET', 'POST'])
+@blueprint.route('/view/<int:form_id>', methods=['GET', 'POST'])
 def view_single(form_id=None):
 	if not GroupPermissionAPI.can_write('custom_form'):
 		return abort(403)
@@ -88,8 +88,8 @@ def view_single(form_id=None):
 
 	return render_template('custom_form/view_results.htm', custom_form=custom_form)
 
-@blueprint.route('/forms/create/', methods=['GET', 'POST'])
-@blueprint.route('/forms/edit/<int:form_id>', methods=['GET', 'POST'])
+@blueprint.route('/create/', methods=['GET', 'POST'])
+@blueprint.route('/edit/<int:form_id>', methods=['GET', 'POST'])
 def create(form_id=None):
 	if not GroupPermissionAPI.can_write('custom_form'):
 		return abort(403)
@@ -105,10 +105,11 @@ def create(form_id=None):
 	form = CreateForm(request.form, custom_form)
 
 	if request.method == 'POST':
-		custom_form.name 		= form.name.data
-		custom_form.origin 	= form.origin.data
-		custom_form.html 		= form.html.data
+		custom_form.name 			= form.name.data
+		custom_form.origin 			= form.origin.data
+		custom_form.html 			= form.html.data
 		custom_form.max_attendants	= form.max_attendants.data
+		custom_form.price 			= form.price.data
 
 		if not form_id:
 			flash('You\'ve created a form successfully.', 'success')
@@ -125,7 +126,7 @@ def create(form_id=None):
 	return render_template('custom_form/create.htm', form=form)
 
 
-@blueprint.route('/forms/remove/<int:submit_id>', methods=['POST'])
+@blueprint.route('/remove/<int:submit_id>', methods=['POST'])
 def remove_response(submit_id=None):
 	response = "success"
 
@@ -145,7 +146,7 @@ def remove_response(submit_id=None):
 
 	return response
 
-@blueprint.route('/forms/submit/<int:form_id>', methods=['POST'])
+@blueprint.route('/submit/<int:form_id>', methods=['POST'])
 def submit(form_id=None):
 	# TODO make sure custom_form rights are set on server
 	if not GroupPermissionAPI.can_read('custom_form'):
@@ -221,7 +222,7 @@ def submit(form_id=None):
 
 	return response
 
-@blueprint.route('/forms/follow/<int:form_id>', methods=['GET', 'POST'])
+@blueprint.route('/follow/<int:form_id>', methods=['GET', 'POST'])
 def follow(form_id=None):
 	if not GroupPermissionAPI.can_write('custom_form'):
 		return abort(403)
@@ -248,7 +249,7 @@ def follow(form_id=None):
 
 	return response
 
-@blueprint.route('/forms/has_payed/<int:submit_id>', methods=['POST'])
+@blueprint.route('/has_payed/<int:submit_id>', methods=['POST'])
 def has_payed(submit_id=None):
 	response = "success"
 

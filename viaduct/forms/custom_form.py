@@ -1,4 +1,4 @@
-from flask.ext.wtf import Form, TextField, PasswordField, SelectField, FieldList, FormField, SubmitField, Required, Email
+from flask.ext.wtf import Form, TextField, PasswordField, SelectField, FieldList, FormField, SubmitField, Required, Email, DecimalField
 
 class CreateForm(Form):
 	name	= TextField(u'Formulier naam')
@@ -9,5 +9,7 @@ class CreateForm(Form):
 	first_name = TextField('First name', validators=[Required()])
 	last_name = TextField('Last name', validators=[Required()])
 	student_id = TextField('Student ID', validators=[Required()])
+	price = DecimalField('Price', places=2, validators=[Required()])
 	education_id = SelectField('Education', coerce=int)
 	submit = SubmitField('Opslaan')
+	transaction_description = TextField('Beschrijving van de transactie')

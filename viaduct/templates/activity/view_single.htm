@@ -57,6 +57,9 @@
 
 								<div class="row-fluid">
 									<div class="span4 offset1 pull-right">
+									{% if activity.form.show_pay_button %}
+										<a href="{{ url_for('activity.create_mollie_transaction', result_id=activity.form.id) }}" class="btn btn-warning">Betalen (€0,99 transactiekosten)</a>
+									{% endif %}
 										<h3>Contact gegevens</h3>
 										<small>Dit zijn gegevens die we van je account halen</small>
 									{{ render_field(form.email) }}
@@ -67,7 +70,7 @@
 									</div>
 									<div class="span7">
 										<h3>Vul a.u.b in :D</h3>
-										<p>Sommige velden (zoals shirt-maat of dieet proberen we op te slaan, zodat je het de volgende keer niet nog eens moet invullen.)
+										<p>Sommige velden (zoals shirt-maat of dieet) proberen we op te slaan, zodat je het de volgende keer niet nog eens moet invullen.</p>
 										{{ activity.form.html | safe }}
 									</div>
 							</div>
