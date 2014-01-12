@@ -5,13 +5,15 @@ class CustomForm(db.Model):
 	__tablename__ = 'custom_form'
 
 	id				= db.Column(db.Integer, primary_key=True)
-	owner_id	= db.Column(db.Integer, db.ForeignKey('user.id'))
+	owner_id		= db.Column(db.Integer, db.ForeignKey('user.id'))
 	name			= db.Column(db.String(256))
-	origin		= db.Column(db.String(4096))
+	origin			= db.Column(db.String(4096))
 	html			= db.Column(db.UnicodeText())
-	max_attendants = db.Column(db.Integer)
-	created		= db.Column(db.DateTime, default=datetime.datetime.now())
-	owner = db.relationship('User', backref=db.backref('custom_forms', lazy='dynamic'))
+	max_attendants	= db.Column(db.Integer)
+	created			= db.Column(db.DateTime, default=datetime.datetime.now())
+	price			= db.Column(db.Float)
+	owner			= db.relationship('User', backref=db.backref('custom_forms', lazy='dynamic'))
+	transaction_description = db.Column(db.String(256))
 
 	def __init__(self, owner_id=None, name="", origin="", html="", max_attendants=150):
 		self.owner_id = owner_id
@@ -26,6 +28,7 @@ class CustomFormResult(db.Model):
 	id				= db.Column(db.Integer, primary_key=True)
 	owner_id	= db.Column(db.Integer, db.ForeignKey('user.id'))
 	form_id		= db.Column(db.Integer, db.ForeignKey('custom_form.id'))
+	transaction_id = db.Column(db.Integer, db.ForeignKey('mollie_transaction.id'))
 	data			= db.Column(db.String(4096))
 	is_reserve = db.Column(db.Boolean)
 	has_payed	= db.Column(db.Boolean)
@@ -33,8 +36,9 @@ class CustomFormResult(db.Model):
 
 	owner = db.relationship('User', backref=db.backref('custom_form_results', lazy='dynamic'))
 	form  = db.relationship('CustomForm', backref=db.backref('custom_form_results', lazy='dynamic'))
+	transaction = db.relationship('Transaction', backref=db.backref('custom_form_results', lazy='dynamic'))
 
-	def __init__(self, owner_id=None, form_id=None, data="", is_reserve=False, has_payed=False):
+	def __init__(self, owner_id=None, form_id=None, data="", is_reserve=False, has_payed=False, transaction_id=None, price=0.0):
 		self.owner_id = owner_id
 		self.form_id = form_id
 		self.data = data

@@ -350,7 +350,8 @@ db.session.commit()
 # in the future we want modules to automagically register themselves but for now we will do this hard coded
 modules = ['activity', 'company', 'contact', 'custom_form',
 	'examination', 'file', 'group', 'location', 'navigation', 'page',
-	'pimpy', 'requirement', 'survey', 'upload', 'user', 'vacancy', 'booksales']
+	'pimpy', 'requirement', 'survey', 'upload', 'user', 'vacancy', 'booksales',
+	'mollie']
 
 for module in modules:
 	group_permission = GroupPermission(module, group.id, 2);
