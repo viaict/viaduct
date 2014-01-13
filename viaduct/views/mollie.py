@@ -1,11 +1,10 @@
-from flask import Blueprint, abort, redirect, url_for, jsonify, \
+from flask import Blueprint, abort, redirect, url_for, \
 	render_template, request
 from flask.ext.login import current_user
 from viaduct.api.mollie import MollieAPI
 from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.custom_form import CustomFormAPI
 import requests
-import json
 
 from viaduct import application, db
 
@@ -15,7 +14,7 @@ blueprint = Blueprint('mollie', __name__, url_prefix='/mollie')
 def create_mollie_transaction():
 	if not GroupPermissionAPI.can_write('mollie'):
 		return abort(403)
-	return MollieAPI.create_transaction(23.9, 'Een mooie transactie')
+	return redirect(MollieAPI.create_transaction(23.9, 'Een mooie transactie'))
 
 @blueprint.route('/check')
 @blueprint.route('/check/<transaction_id>', methods=['GET', 'POST'])
