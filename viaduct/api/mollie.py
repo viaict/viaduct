@@ -1,5 +1,5 @@
 from flask.ext.login import current_user
-from flask import json()ify, redirect, url_for
+from flask import redirect, url_for
 from viaduct.models.mollie import Transaction
 from viaduct.api.custom_form import CustomFormAPI
 
