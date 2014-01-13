@@ -4,7 +4,7 @@ from viaduct.models.mollie import Transaction
 from viaduct.api.custom_form import CustomFormAPI
 
 import requests
-import json()
+import json
 import datetime
 
 from viaduct import db, application
