@@ -13,7 +13,7 @@ blueprint = Blueprint('mollie', __name__, url_prefix='/mollie')
 
 @blueprint.route('/create', methods=['GET', 'POST'])
 def create_mollie_transaction():
-	if not GroupPermissionAPI.can_edit('mollie'):
+	if not GroupPermissionAPI.can_write('mollie'):
 		return abort(403)
 	return MollieAPI.create_transaction(23.9, 'Een mooie transactie')
 
