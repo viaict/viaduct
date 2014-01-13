@@ -110,6 +110,7 @@ def create(form_id=None):
 		custom_form.html 			= form.html.data
 		custom_form.max_attendants	= form.max_attendants.data
 		custom_form.price 			= form.price.data
+		custom_form.transaction_description = form.transaction_description.data
 
 		if not form_id:
 			flash('You\'ve created a form successfully.', 'success')
