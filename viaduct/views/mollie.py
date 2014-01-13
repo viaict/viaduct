@@ -14,7 +14,8 @@ blueprint = Blueprint('mollie', __name__, url_prefix='/mollie')
 def create_mollie_transaction():
 	if not GroupPermissionAPI.can_write('mollie'):
 		return abort(403)
-	return redirect(MollieAPI.create_transaction(23.9, 'Een mooie transactie'))
+	redirectUrl, transaction = MollieAPI.create_transaction(23.9, 'Een mooie transactie')
+	return redirect(redirectUrl)
 
 @blueprint.route('/check')
 @blueprint.route('/check/<transaction_id>', methods=['GET', 'POST'])
