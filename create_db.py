@@ -1,4 +1,6 @@
-import os, bcrypt, datetime
+import os
+import bcrypt
+import datetime
 from viaduct import db, application
 
 from viaduct.models.page import Page, PagePermission, PageRevision
@@ -20,10 +22,11 @@ from viaduct.models.contact import Contact
 from viaduct.models.category import Category
 from viaduct.models.custom_form import CustomForm, CustomFormResult
 from viaduct.models.file import File
+from viaduct.models.news import News
 
 # Remove the old db.
 if os.path.exists('application.db'):
-	os.remove('application.db')
+    os.remove('application.db')
 
 # Create the database.
 db.create_all()
@@ -84,7 +87,9 @@ db.session.commit()
 
 # Add the administrator.
 user = User('administrator@svia.nl', bcrypt.hashpw('ictIsAwesome',
-		bcrypt.gensalt()), 'Administrator', 'de beste', '129181982192818', 2)
+                                                   bcrypt.gensalt()),
+            'Administrator', 'de beste', '129181982192818', 2)
+admin = user
 
 db.session.add(user)
 db.session.commit()
@@ -121,66 +126,21 @@ db.session.commit()
 
 # Add stuff for pimpystuff for pimpy
 user_tijmen = User('tijmen.zwaan@gmail.com', bcrypt.hashpw('memorystick',
-														bcrypt.gensalt()),
-				'Tijmen', 'Zwaan', 'n/a')
+                                                           bcrypt.gensalt()),
+                   'Tijmen', 'Zwaan', 'n/a')
 group_ict = Group('ict')
 group_bestuur = Group('bestuur')
-#user_maarten = User('maarten@maarten.mrt', bcrypt.hashpw('administrator', bcrypt.gensalt()), 'Maarten', 'Inja')
-#user_ed = User('ed@ed.eds', bcrypt.hashpw('administrator', bcrypt.gensalt()), 'Handsome', 'Ed')
-#group_first = Group('first')
-#group_second = Group('second')
-#
-#
-## Add the anonymous user.
-#user = User('-0', '-0', 'Klaas', 'Vaak')
-#db.session.add(user)
-#db.session.commit()
-#
-#user = User('-1', '-1', 'Computer', 'Rekenmachine')
-#db.session.add(user)
-#db.session.commit()
-#
-#
+
 ## could I add more stuff at once?
 db.session.add(user_tijmen)
 db.session.add(group_ict)
 db.session.add(group_bestuur)
 db.session.commit()
-#db.session.add(user_maarten)
-#db.session.commit()
-#db.session.add(user_ed)
-#db.session.commit()
-#db.session.add(group_first)
-#db.session.commit()
-#db.session.add(group_second)
-#db.session.commit()
 
 group_ict.add_user(user_tijmen)
 group_bestuur.add_user(user_tijmen)
 group.add_user(user_tijmen)
 db.session.commit()
-#group_first.add_user(user_maarten)
-#group_first.add_user(user_ed)
-#group_first.add_user(user)
-#group_second.add_user(user_maarten)
-#group_second.add_user(user_ed)
-#group_second.add_user(user)
-#
-#db.session.add(group_first)
-#db.session.commit()
-#db.session.add(group_second)
-#db.session.commit()
-#
-#
-#'''
-#self.name = name
-#self.description = description
-#self.start_time = start_time
-#self.end_time = end_time
-#self.location = location
-#self.price = price
-#self.picture = picture
-#'''
 custom_form = CustomForm(user.id, "Test formulier", '''Dieet | checkbox
 -Vegetarisch
 -Veganistisch
@@ -194,7 +154,26 @@ Noodnummer
 > Telefoon nummer in geval van nood
 Allergie/medicatie | textarea
 
-> Waar moeten we rekening mee houden''', '''<div id="custom_form_data"><div class="control-group"><label class="control-label">Dieet </label><div class="controls"><div name="dieet"><label class="checkbox"><input type="checkbox" name="dieet[]" value="Vegetarisch"> Vegetarisch</label><label class="checkbox"><input type="checkbox" name="dieet[]" value="Veganistisch"> Veganistisch</label></div></div></div><div class="control-group"><label class="control-label">Shirt maat </label><div class="controls"><select name="shirt maat"><option>Small</option><option>Medium</option><option>Large</option></select></div></div><div class="control-group"><label class="control-label">Noodnummer</label><small> Telefoon nummer in geval van nood</small><div class="controls"><input type="text" name="noodnummer"></div></div><div class="control-group"><label class="control-label">Allergie/medicatie </label><small> Waar moeten we rekening mee houden</small><div class="controls"><textarea name="allergie/medicatie"></textarea></div></div></div>''')
+> Waar moeten we rekening mee houden''', '''<div id="custom_form_data"><div
+                         > class="control-group"><label
+                         > class="control-label">Dieet </label><div
+                         > class="controls"><div name="dieet"><label
+                         > class="checkbox"><input type="checkbox"
+                         > name="dieet[]" value="Vegetarisch">
+                         > Vegetarisch</label><label class="checkbox"><input
+                         > type="checkbox" name="dieet[]" value="Veganistisch">
+                         > Veganistisch</label></div></div></div><div
+                         > class="control-group"><label
+> class="control-label">Shirt maat </label><div class="controls"><select
+> name="shirt
+> maat"><option>Small</option><option>Medium</option><option>Large</option>
+</select></div></div><div
+> class="control-group"><label class="control-label">Noodnummer</label><small>
+> Telefoon nummer in geval van nood</small><div class="controls"><input
+> type="text" name="noodnummer"></div></div><div class="control-group"><label
+> class="control-label">Allergie/medicatie </label><small> Waar moeten we
+> rekening mee houden</small><div class="controls"><textarea
+> name="allergie/medicatie"></textarea></div></div></div>''')
 
 db.session.add(custom_form)
 db.session.commit()
@@ -203,55 +182,118 @@ activity1 = Activity()
 activity1.start_time = datetime.datetime(2012, 10, 10, 17, 0)
 activity1.end_time = datetime.datetime(2012, 10, 10, 22, 0)
 activity1.name = "Een activiteit in het verleden"
-activity1.description = """According to some, the system that is designed during the 19th century is on the verge of a revolution. A revolution that could radically change the way we educate ourselves and others, and even the way we look at education. But whether it is a revolution or just an evolution, technology is undoubtedly beginning to play a serious role in many forms of education. Over time, teaching transformed from one on one tutoring to mass education. And the emergence of the internet is now pushing education to the largest scale in history with the introduction of Massive Open Online Courses (early MOOCs had 100000 enrollments). At the same time, education (not unlike the rest of life) is increasingly leaving digital traces.
+activity1.description = """According to some, the system that is designed
+during the 19th century is on the verge of a revolution. A revolution that
+could radically change the way we educate ourselves and others, and even the
+way we look at education. But whether it is a revolution or just an evolution,
+technology is undoubtedly beginning to play a serious role in many forms of
+education. Over time, teaching transformed from one on one tutoring to mass
+education. And the emergence of the internet is now pushing education to the
+largest scale in history with the introduction of Massive Open Online Courses
+(early MOOCs had 100000 enrollments). At the same time, education (not unlike
+the rest of life) is increasingly leaving digital traces.
 
-Learning analytics is a fairly recent technology that takes advantage of these traces. As most technologies it can be used for multiple purposes and can serve both the revolution and the evolution perspectives.
+Learning analytics is a fairly recent technology that takes advantage of these
+traces. As most technologies it can be used for multiple purposes and can serve
+both the revolution and the evolution perspectives.
 
-In this talk I want to elaborate a little bit on the traditional model of education and present the core of the revolution. We'll discuss the current influences that technology can have on education by examining some well known examples. I'll explain what we mean with Learning Analytics, how it might work (technically), what it's potential seems to be, and, of course, what the possible downsides are. We'll conclude with discussing various visions of the future of learning and their potential impact on society.
+In this talk I want to elaborate a little bit on the traditional model of
+education and present the core of the revolution. We'll discuss the current
+influences that technology can have on education by examining some well known
+examples. I'll explain what we mean with Learning Analytics, how it might work
+(technically), what it's potential seems to be, and, of course, what the
+possible downsides are. We'll conclude with discussing various visions of the
+future of learning and their potential impact on society.
 
-Although I will not apply the personalization to this talk, I'll attempt to put something in there for everybody. It is then up to you to interact with me and each other to bend it to the perfect talk."""
+Although I will not apply the personalization to this talk, I'll attempt to put
+something in there for everybody. It is then up to you to interact with me and
+each other to bend it to the perfect talk."""
 
 activity2 = Activity()
 activity2.form_id = custom_form.id
 activity2.start_time = datetime.datetime(2013, 10, 10, 17, 0)
 activity2.end_time = datetime.datetime(2013, 10, 10, 22, 0)
 activity2.name = "Een activiteit die nog moet komen, met formulier"
-activity2.description = """Learning analytics is a fairly recent technology that takes advantage of these traces. As most technologies it can be used for multiple purposes and can serve both the revolution and the evolution perspectives.
+activity2.description = """Learning analytics is a fairly recent technology
+that takes advantage of these traces. As most technologies it can be used for
+multiple purposes and can serve both the revolution and the evolution
+perspectives.
 
-In this talk I want to elaborate a little bit on the traditional model of education and present the core of the revolution. We'll discuss the current influences that technology can have on education by examining some well known examples. I'll explain what we mean with Learning Analytics, how it might work (technically), what it's potential seems to be, and, of course, what the possible downsides are. We'll conclude with discussing various visions of the future of learning and their potential impact on society.
+In this talk I want to elaborate a little bit on the traditional model of
+education and present the core of the revolution. We'll discuss the current
+influences that technology can have on education by examining some well known
+examples. I'll explain what we mean with Learning Analytics, how it might work
+(technically), what it's potential seems to be, and, of course, what the
+possible downsides are. We'll conclude with discussing various visions of the
+future of learning and their potential impact on society.
 
-Although I will not apply the personalization to this talk, I'll attempt to put something in there for everybody. It is then up to you to interact with me and each other to bend it to the perfect talk."""
+Although I will not apply the personalization to this talk, I'll attempt to put
+something in there for everybody. It is then up to you to interact with me and
+each other to bend it to the perfect talk."""
 
 activity3 = Activity()
 activity3.start_time = datetime.datetime(2013, 10, 10, 17, 0)
 activity3.end_time = datetime.datetime(2013, 10, 10, 22, 0)
 activity3.name = "Een activiteit in het heden"
-activity3.description = """Learning analytics is a fairly recent technology that takes advantage of these traces. As most technologies it can be used for multiple purposes and can serve both the revolution and the evolution perspectives.
+activity3.description = """Learning analytics is a fairly recent technology
+that takes advantage of these traces. As most technologies it can be used for
+multiple purposes and can serve both the revolution and the evolution
+perspectives.
 
-In this talk I want to elaborate a little bit on the traditional model of education and present the core of the revolution. We'll discuss the current influences that technology can have on education by examining some well known examples. I'll explain what we mean with Learning Analytics, how it might work (technically), what it's potential seems to be, and, of course, what the possible downsides are. We'll conclude with discussing various visions of the future of learning and their potential impact on society.
+In this talk I want to elaborate a little bit on the traditional model of
+education and present the core of the revolution. We'll discuss the current
+influences that technology can have on education by examining some well known
+examples. I'll explain what we mean with Learning Analytics, how it might work
+(technically), what it's potential seems to be, and, of course, what the
+possible downsides are. We'll conclude with discussing various visions of the
+future of learning and their potential impact on society.
 
-Although I will not apply the personalization to this talk, I'll attempt to put something in there for everybody. It is then up to you to interact with me and each other to bend it to the perfect talk."""
+Although I will not apply the personalization to this talk, I'll attempt to put
+something in there for everybody. It is then up to you to interact with me and
+each other to bend it to the perfect talk."""
 
 activity4 = Activity()
 activity4.start_time = datetime.datetime(2013, 10, 10, 17, 0)
 activity4.end_time = datetime.datetime(2013, 10, 10, 22, 0)
 activity4.name = "Een activiteit in het heden"
-activity4.description = """Learning analytics is a fairly recent technology that takes advantage of these traces. As most technologies it can be used for multiple purposes and can serve both the revolution and the evolution perspectives.
+activity4.description = """Learning analytics is a fairly recent technology
+that takes advantage of these traces. As most technologies it can be used for
+multiple purposes and can serve both the revolution and the evolution
+perspectives.
 
-In this talk I want to elaborate a little bit on the traditional model of education and present the core of the revolution. We'll discuss the current influences that technology can have on education by examining some well known examples. I'll explain what we mean with Learning Analytics, how it might work (technically), what it's potential seems to be, and, of course, what the possible downsides are. We'll conclude with discussing various visions of the future of learning and their potential impact on society.
+In this talk I want to elaborate a little bit on the traditional model of
+education and present the core of the revolution. We'll discuss the current
+influences that technology can have on education by examining some well known
+examples. I'll explain what we mean with Learning Analytics, how it might work
+(technically), what it's potential seems to be, and, of course, what the
+possible downsides are. We'll conclude with discussing various visions of the
+future of learning and their potential impact on society.
 
-Although I will not apply the personalization to this talk, I'll attempt to put something in there for everybody. It is then up to you to interact with me and each other to bend it to the perfect talk."""
+Although I will not apply the personalization to this talk, I'll attempt to put
+something in there for everybody. It is then up to you to interact with me and
+each other to bend it to the perfect talk."""
 
 
 activity5 = Activity()
 activity5.start_time = datetime.datetime(2013, 10, 10, 17, 0)
 activity5.end_time = datetime.datetime(2013, 10, 10, 22, 0)
 activity5.name = "Een activiteit in het heden"
-activity5.description = """Learning analytics is a fairly recent technology that takes advantage of these traces. As most technologies it can be used for multiple purposes and can serve both the revolution and the evolution perspectives.
+activity5.description = """Learning analytics is a fairly recent technology
+that takes advantage of these traces. As most technologies it can be used for
+multiple purposes and can serve both the revolution and the evolution
+perspectives.
 
-In this talk I want to elaborate a little bit on the traditional model of education and present the core of the revolution. We'll discuss the current influences that technology can have on education by examining some well known examples. I'll explain what we mean with Learning Analytics, how it might work (technically), what it's potential seems to be, and, of course, what the possible downsides are. We'll conclude with discussing various visions of the future of learning and their potential impact on society.
+In this talk I want to elaborate a little bit on the traditional model of
+education and present the core of the revolution. We'll discuss the current
+influences that technology can have on education by examining some well known
+examples. I'll explain what we mean with Learning Analytics, how it might work
+(technically), what it's potential seems to be, and, of course, what the
+possible downsides are. We'll conclude with discussing various visions of the
+future of learning and their potential impact on society.
 
-Although I will not apply the personalization to this talk, I'll attempt to put something in there for everybody. It is then up to you to interact with me and each other to bend it to the perfect talk."""
+Although I will not apply the personalization to this talk, I'll attempt to put
+something in there for everybody. It is then up to you to interact with me and
+each other to bend it to the perfect talk."""
 
 
 db.session.add(activity1)
@@ -278,38 +320,46 @@ nav_admin = NavigationEntry(None, 'Admin', '/admin', False, False, 3)
 db.session.add(nav_admin)
 db.session.commit()
 
-nav_nav = NavigationEntry(nav_admin, 'Navigatie', '/navigation', False, False, 1)
+nav_nav = NavigationEntry(nav_admin, 'Navigatie', '/navigation', False, False,
+                          1)
 db.session.add(nav_nav)
 db.session.commit()
 
-nav_forms = NavigationEntry(nav_admin, 'Formulieren', '/forms/', False, False, 2)
+nav_forms = NavigationEntry(nav_admin, 'Formulieren', '/forms/', False, False,
+                            2)
 db.session.add(nav_forms)
 db.session.commit()
 
-nav_activity = NavigationEntry(None, 'Activiteiten', '/activities', False, True, 4)
+nav_activity = NavigationEntry(None, 'Activiteiten', '/activities', False,
+                               True, 4)
 db.session.add(nav_activity)
 db.session.commit()
 
-nav_ext = NavigationEntry(nav_page1, 'Externaal', 'viaduct.svia.nl', True, False, 1)
+nav_ext = NavigationEntry(nav_page1, 'Externaal', 'viaduct.svia.nl', True,
+                          False, 1)
 db.session.add(nav_ext)
 db.session.commit()
 
 nav_pimpy = NavigationEntry(None, 'Pimpy', '/pimpy', False, False, 5)
 db.session.add(nav_pimpy)
 
-nav_vacancies = NavigationEntry(None, 'Vacaturebank', '/vacancies/', False, False, 5)
+nav_vacancies = NavigationEntry(None, 'Vacaturebank', '/vacancies/', False,
+                                False, 5)
 db.session.add(nav_vacancies)
 db.session.commit()
 
-nav_companies = NavigationEntry(None, 'Bedrijven', '/companies/', False, False, 6)
+nav_companies = NavigationEntry(None, 'Bedrijven', '/companies/', False, False,
+                                6)
 db.session.add(nav_companies)
 db.session.commit()
 
-nav_locations = NavigationEntry(None, 'Locaties', '/locations/', False, False, 7)
+nav_locations = NavigationEntry(None, 'Locaties', '/locations/', False, False,
+                                7)
 db.session.add(nav_locations)
 db.session.commit()
 
-nav_contacts = NavigationEntry(None, 'Contactpersonen', '/contacts/', False, False, 7)
+nav_contacts = NavigationEntry(None, 'Contactpersonen', '/contacts/', False,
+                               False, 7)
 db.session.add(nav_contacts)
 db.session.commit()
 
@@ -320,12 +370,12 @@ db.session.commit()
 # VACANCIES
 
 location_1 = Location('Amsterdam', 'The Netherlands', 'Science Park 904',
-		'1098 XH', 'nvt', 'email@sciencepark.nl', '2345613452')
+                      '1098 XH', 'nvt', 'email@sciencepark.nl', '2345613452')
 db.session.add(location_1)
 db.session.commit()
 
 location_2 = Location('Utrecht', 'The Netherlands', 'Drol 2', '1333 DD',
-		'2 uur', 'geen', 'geen')
+                      '2 uur', 'geen', 'geen')
 db.session.add(location_2)
 db.session.commit()
 
@@ -334,12 +384,12 @@ db.session.add(contact_1)
 db.session.commit()
 
 company_1 = Company('test', 'bladiebla', datetime.datetime.now(),
-		datetime.datetime.now(), location_1, contact_1)
+                    datetime.datetime.now(), location_1, contact_1)
 db.session.add(company_1)
 db.session.commit()
 
 vacancy_1 = Vacancy('test', 'bladiebla', datetime.datetime.now(),
-		datetime.datetime.now(), 'deeltijd', 'nvt', company_1)
+                    datetime.datetime.now(), 'deeltijd', 'nvt', company_1)
 db.session.add(vacancy_1)
 db.session.commit()
 
@@ -347,16 +397,14 @@ db.session.commit()
 # MODULE_PERMISSION
 # group should still be administrators!!!
 
-# in the future we want modules to automagically register themselves but for now we will do this hard coded
-modules = ['activity', 'company', 'contact', 'custom_form',
-	'examination', 'file', 'group', 'location', 'navigation', 'page',
-	'pimpy', 'requirement', 'survey', 'upload', 'user', 'vacancy', 'booksales',
-	'mollie']
+# in the future we want modules to automagically register themselves but for
+# now we will do this hard coded
+modules = application.blueprints.keys()
 
 for module in modules:
-	group_permission = GroupPermission(module, group.id, 2);
-	db.session.add(group_permission)
-	db.session.commit()
+    group_permission = GroupPermission(module, group.id, 2)
+    db.session.add(group_permission)
+    db.session.commit()
 
 
 activity_permission = GroupPermission('activity', group_all.id, 1)
@@ -381,4 +429,60 @@ db.session.commit()
 ict_category = Category('ict')
 ict_category.super_categories.append(wiki_category)
 db.session.add(ict_category)
+db.session.commit()
+
+# Dummy news.
+def_content = '''Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
+varius, tortor vel aliquam elementum, nisl massa pellentesque turpis, quis
+vehicula mauris sapien quis ligula. Nunc blandit, lorem nec porta ultricies,
+lorem dui molestie felis, eget tincidunt libero felis sit amet felis. Sed vel
+tortor faucibus, sollicitudin ipsum sed, placerat turpis. Pellentesque eget dui
+nisl. Pellentesque et nibh gravida, adipiscing ipsum eu, varius mauris. Quisque
+tempus justo quis sollicitudin gravida. Quisque a magna risus. Integer eget
+odio laoreet, adipiscing urna eget, porta felis. Curabitur blandit leo ultrices
+nisl laoreet accumsan. Nunc sed lorem risus. Nulla porttitor est eget massa
+mollis, vitae consequat odio cursus.
+
+Nullam molestie aliquam mauris pulvinar pharetra. Aliquam imperdiet vestibulum
+lacus, ac egestas nisi faucibus a. Nam posuere lacus leo, tincidunt ultrices
+nisi malesuada ut. Nullam elementum pellentesque quam, consequat lacinia neque
+porttitor in. Morbi ultrices vitae mauris at vehicula. In placerat luctus est,
+nec ultricies mauris facilisis at. Aliquam venenatis congue facilisis. Donec
+lobortis augue id eros lacinia, non bibendum lorem hendrerit. Duis tincidunt
+viverra sem, id molestie urna eleifend ac. Proin viverra euismod justo, et
+viverra tortor pulvinar lobortis. Nam porttitor nunc eu nulla vehicula, a
+porttitor nulla dignissim. Sed sed porta tellus. Proin quis ultricies magna,
+quis ornare mauris. Mauris quis egestas ligula, ut consectetur arcu.
+Suspendisse hendrerit, sapien vel eleifend aliquet, erat eros euismod nulla, at
+euismod ante mauris sed diam.
+
+Aenean ullamcorper, eros vitae porta adipiscing, arcu est facilisis ipsum, nec
+egestas turpis nisl vitae magna. Donec dapibus nunc eget mi dapibus adipiscing.
+Etiam pharetra bibendum lectus, vel aliquet urna congue nec. Nam id dolor et
+est sollicitudin scelerisque. Sed eget risus leo. Praesent ultricies dui ipsum,
+id hendrerit massa aliquam non. Aliquam congue placerat tincidunt. Fusce turpis
+metus, congue ac massa ut, luctus aliquet erat. Vivamus non nunc sapien. Donec
+id est fermentum, scelerisque eros aliquam, facilisis sapien. Aliquam et orci
+sit amet libero rutrum euismod tincidunt sit amet metus. Quisque quis eros
+metus. Donec enim lacus, congue interdum tellus sed, aliquam scelerisque nibh.
+Ut nec mi sed magna eleifend rutrum. Quisque luctus leo nunc, at pharetra ante
+rutrum sed. Morbi eget euismod diam, ut pretium mi.'''
+
+for n in range(30):
+    item = News(admin.id, 'Item %d' % (n + 1), def_content,
+                datetime.date(2014, 2, 4))
+    item.post_time = datetime.datetime.now()
+    item.update_time = item.post_time
+    db.session.add(item)
+for n in range(10):
+    item = News(admin.id, 'Item %d' % (n + 31), def_content,
+                datetime.date(2013, 12, 30))
+    item.post_time = datetime.datetime.now()
+    item.update_time = item.post_time
+    db.session.add(item)
+db.session.commit()
+
+item = News.query.first()
+item.update_time = item.post_time + datetime.timedelta(hours=5)
+db.session.add(item)
 db.session.commit()

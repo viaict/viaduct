@@ -1,0 +1,55 @@
+{% from 'macros/pagination.htm' import render_pagination %}
+
+{% extends "content.htm" %}
+
+{% block content %}
+
+<div class='row-fluid'>
+    <div class='span12'>
+        <div class='btn-group'>
+            {% if GroupPermissionAPI.can_write('news') %}
+                <a href='{{ url_for('news.edit') }}' class='btn btn-success'>Nieuw</a>
+            {% endif %}
+            {% if archive == 'archive' %}
+                <a href='{{ url_for('news.list') }}' class='btn'>Toon actueel nieuws</a>
+            {% else %}
+                <a href='{{ url_for('news.list', archive='archive') }}' class='btn'>Toon nieuws in het archief</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div id='news-items'>
+    {% for item in items.items %}
+        <div class='news-item'>
+            <div class='row-fluid'>
+                <div class='span8 title'>{{ item.title }}</div>
+                <div class='span4 text-right author'>
+                    {% if item.update_time != item.post_time %}
+                        Bewerkt <em>{{ item.update_time.strftime('%Y-%m-%d %H:%M') }}</em><br />
+                    {% endif %}
+                    Gepubliceerd <em>{{ item.post_time.strftime('%Y-%m-%d %H:%M') }}</em><br />
+                    Door <em>{{ item.author.name }}</em>
+                </div>
+            </div>
+            <div class='row-fluid'>
+                <div class='span12 short-content'>
+                    {{ item.get_short_content(600) | markdown }}
+                </div>
+            </div>
+            <div class='row-fluid'>
+                <div class='span12 read'>
+                    <a href='{{ url_for('news.single', item_id=item.id) }}' class='pull-right'>Meer lezen</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% if archive == 'archive' %}
+    {{ render_pagination(items, 'news.list', archive=archive) }}
+{% else %}
+    {{ render_pagination(items, 'news.list') }}
+{% endif %}
+
+{% endblock %}
