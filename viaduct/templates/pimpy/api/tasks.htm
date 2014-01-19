@@ -8,7 +8,7 @@
 				<h3> {{ user_header }} </h3>
 				{% for list_item in list_items[group_header][user_header]: %}
 					<div class="btn-group" style="margin-bottom: 8px;">
-						<button id="pimpy_task{{ list_item.id }}" class="btn dropdown-toggle {{ list_item.get_status_color() }} " data-toggle="dropdown" href="#"> {{ list_item.get_task_id() }} </button>
+						<a id="pimpy_task{{ list_item.id }}" class="btn dropdown-toggle {{ list_item.get_status_color() }} " data-toggle="dropdown" href="#"> {{ list_item.get_task_id() }} </a>
 						<ul class="dropdown-menu">
 							{% for status_meaning in list_item.get_status_meanings(): %}
 								<li>
@@ -18,8 +18,8 @@
 						</ul>
 					</div>
 					<div class="btn-group" style="margin-bottom: 8px;">
-						<button class="btn pimpy_task_task" data-toggle="collapse" data-target='#{{ list_item.id }}_{{ user_header | replace(" ","_") }}'>{{ list_item.title }}</button>
-						<button class="btn pimpy_task_users" data-toggle="collapse" data-target='#{{ list_item.id }}_{{ user_header | replace(" ","_") }}'> {{ list_item.get_users() }} </button>
+						<a class="btn pimpy_task_task" data-toggle="collapse" data-target='#{{ list_item.id }}_{{ user_header | replace(" ","_") }}'>{{ list_item.title }}</a>
+						<a class="btn pimpy_task_users" data-toggle="collapse" data-target='#{{ list_item.id }}_{{ user_header | replace(" ","_") }}'> {{ list_item.get_users() }} </a>
 					</div>
 					<div id='{{ list_item.id }}_{{ user_header | replace(" ","_") }}' class="collapse">
 						<div class="well well-small">

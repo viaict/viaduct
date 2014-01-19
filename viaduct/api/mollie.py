@@ -11,7 +11,8 @@ from viaduct import db, application
 
 MOLLIE_URL = application.config['MOLLIE_URL']
 MOLLIE_REDIRECT_URL = application.config['MOLLIE_REDIRECT_URL']
-if application.config['MOLLIE_TEST_MODE']:
+MOLLIE_TEST_MODE = application.config.get('MOLLIE_TEST_MODE', False)
+if MOLLIE_TEST_MODE:
 	MOLLIE_KEY = application.config['MOLLIE_TEST_KEY']
 	print 'USING MOLLIE TEST KEY'
 else:
