@@ -239,8 +239,9 @@ def sign_in():
 
             flash('You\'ve been signed in successfully.')
 
-            if 'denied_from' in session:
-                return redirect(session['denied_from'])
+            denied_from = session.get('denied_from')
+            if denied_from:
+                return redirect(denied_from)
 
             return redirect(url_for("page.get_page"))
     else:
