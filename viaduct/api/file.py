@@ -2,10 +2,10 @@ from flask import flash
 from werkzeug import secure_filename
 import os, difflib
 from viaduct.models.file import File
-from viaduct import db
+from viaduct import application, db
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-UPLOAD_DIR = 'viaduct/static/files/'
+UPLOAD_DIR = application.config['UPLOAD_DIR']
 
 class FileAPI:
 	'''
@@ -42,7 +42,7 @@ class FileAPI:
 		db.session.commit()
 
 		if new_file:
-			flash('Het bestand is succesbol geupload onder de naam <em>%s</em>'%(new_file.name))
+			flash('Het bestand is succesvol geupload onder de naam <em>%s</em>'%(new_file.name))
 		else:
 			flash('Er is iets misgegaan, waarschuw de ICT-commissie', 'error')
 

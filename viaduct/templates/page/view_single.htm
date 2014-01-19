@@ -6,79 +6,80 @@
 
 {% block content %}
 
-<div class="page-header">
-	<h1>{{ page.title }}</h1>
+<div class="mainblock">
+	<div class="page-header">
 
-	{% if GroupPermissionAPI.can_write('page') %}
+		{% if GroupPermissionAPI.can_write('page') %}
+		<div class="btn-group pull-right">
+			<a class="btn" href="{{ url_for('page.get_page_history', path=page.path) }}">
+				<i class="icon-time"></i> View History
+			</a>
 
-	<div class="btn-group">
-		<a class="btn" href="{{ url_for('page.get_page_history', path=page.path) }}">
-			<i class="icon-time"></i> View History
-		</a>
-		
-		<!-- <a class="btn" href="#">
-			<i class="icon-share-alt"></i> Move Page
-		</a> -->
+			<!-- <a class="btn" href="#">
+				<i class="icon-share-alt"></i> Move Page
+			</a> -->
 
-		<a class="btn btn-warning" href="{{ url_for('page.edit_page', path=page.path) }}">
-			<i class="icon-pencil"></i> Edit Page
-		</a>
+			<a class="btn btn-warning" href="{{ url_for('page.edit_page', path=page.path) }}">
+				<i class="icon-pencil"></i> Edit Page
+			</a>
 
-		<!-- <a class="btn btn-danger" href="/remove/{{ page.path }}">
-			<i class="icon-trash"></i> Delete Page
-		</a> -->
+			<!-- <a class="btn btn-danger" href="/remove/{{ page.path }}">
+				<i class="icon-trash"></i> Delete Page
+			</a> -->
+		</div>
+
+		{% endif %}
+		<h1>{{ page.title }}</h1>
 	</div>
 
-	{% endif %}
-</div>
+	{% if page.custom_form %}
+		<div class="accordion" id="acc">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc" href="#collapseForm">
+					<i class="icon-star"></i>
+					Formulier invullen
+					<span class="pull-right">Klik om uit te klappen</span>
+				</a>
+			</div>
 
-{% if page.custom_form %}
-<div class="accordion" id="acc">
-<div class="accordion-group">
-	<div class="accordion-heading">
-		<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc" href="#collapseForm">
-			<i class="icon-star"></i>
-			Formulier invullen
-			<span class="pull-right">Klik om uit te klappen</span>
-		</a>
-	</div>
+			<div id="collapseForm" class="accordion-body collapse">
+				<div class="accordion-inner">
+					{% if current_user and current_user.id %}
+						<form id="custom" action="/forms/submit/{{ page.custom_form.id }}" enctype="multipart/form-data">
+								{% if page.custom_form.form_info %}
+								<div class="alert alert-warning">
+									{{ page.custom_form.form_info }}
+								</div>
+								{% endif %}
 
-	<div id="collapseForm" class="accordion-body collapse">
-		<div class="accordion-inner">
-			{% if current_user and current_user.id %}
-				<form id="custom" action="/forms/submit/{{ page.custom_form.id }}" enctype="multipart/form-data">
-						{% if page.custom_form.form_info %}
-						<div class="alert alert-warning">
-							{{ page.custom_form.form_info }}
-						</div>
-						{% endif %}
-
-						<div class="row-fluid">
-							<div class="span7">
-								{{ page.custom_form.html | safe }}
+								<div class="row-fluid">
+									<div class="span7">
+										{{ page.custom_form.html | safe }}
+									</div>
 							</div>
-					</div>
 
-					<button id="custom_form" class="btn btn-success">Verzend formulier</button>
-				</form>
-			{% else %}
-				<p>Je moet ingelogd zijn om je voor een activiteit in te schrijven.
-				<p><a href="{{ url_for('user.sign_in') }}" class="btn btn-huge btn-success">Inloggen</a>
-			{% endif %}
+							<button id="custom_form" class="btn btn-success">Verzend formulier</button>
+						</form>
+					{% else %}
+						<p>Je moet ingelogd zijn om je voor een activiteit in te schrijven.
+						<p><a href="{{ url_for('user.sign_in') }}" class="btn btn-huge btn-success">Inloggen</a>
+					{% endif %}
+					</div>
+				</div>
 			</div>
 		</div>
-	</div>
-</div>
 
-	{% if page.custom_form.form_data %}
-		<script src="/static/js/unserialize.js"></script>
-		<script>
-			$("#custom").unserializeForm("{{ page.custom_form.form_data | safe }}");
-		</script>
+		{% if page.custom_form.form_data %}
+			<script src="/static/js/unserialize.js"></script>
+			<script>
+				$("#custom").unserializeForm("{{ page.custom_form.form_data | safe }}");
+			</script>
+		{% endif %}
 	{% endif %}
-{% endif %}
 
-<p>{{ page.content| markdown }}</p>
+	<p>{{ page.content| markdown(page.filter_html) }}</p>
+</div>
 
 <script src="/static/js/custom_form_submission.js"></script>
 {% endblock %}

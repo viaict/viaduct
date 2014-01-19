@@ -1,27 +1,66 @@
 from flask import Blueprint, render_template, request, redirect, url_for,\
 		abort, flash
 
+from sqlalchemy import or_, and_
+
+from datetime import datetime
+
 from viaduct import application, db
+from viaduct.helpers import flash_form_errors
 from viaduct.models.vacancy import Vacancy
 from viaduct.models.company import Company
 from viaduct.forms import VacancyForm
 from viaduct.api.group import GroupPermissionAPI
 
-blueprint = Blueprint('vacancy', __name__, url_prefix='/vacancies/')
+blueprint = Blueprint('vacancy', __name__, url_prefix='/vacancies')
+FILE_FOLDER = application.config['FILE_DIR']
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page>/', methods=['GET', 'POST'])
-def list(page=1):
+def view_list(page=1):
 	if not GroupPermissionAPI.can_read('vacancy'):
 		return abort(403)
 
-	vacancies = Vacancy.query.paginate(page, 15, False)
+	if request.args.get('search') != None:
+		search = request.args.get('search')
 
-	return render_template('vacancy/list.htm', vacancies=vacancies)
+		vacancies = Vacancy.query.join(Company).\
+			filter(or_(Vacancy.title.like('%' + search + '%'),
+				Company.name.like('%' + search + '%'),
+				Vacancy.workload.like('%' + search + '%'),
+				Vacancy.contract_of_service.like('%' + search + '%'))).order_by(Vacancy.title).order_by(Company.rank)
+		
+		if not GroupPermissionAPI.can_write('vacancy'):
+			vacancies = vacancies.query.filter(and_(Vacancy.start_date < datetime.utcnow(), 
+				Vacancy.end_date > datetime.utcnow())).paginate(page, 15, True)
+		else:
+			for i, vacancy in enumerate(vacancies):
+				print i, vacancy
+				if vacancy.start_date < datetime.date(datetime.utcnow()) and vacancy.end_date < datetime.date(datetime.utcnow()):
+					vacancies[i].expired = True
+			vacancies = vacancies.paginate(page, 15, False)
+
+		return render_template('vacancy/list.htm',
+			vacancies = vacancies, search=search, path=FILE_FOLDER)
+
+	if not GroupPermissionAPI.can_write('vacancy'):
+		vacancies = Vacancy.query.filter(and_(Vacancy.start_date < datetime.utcnow(), 
+			Vacancy.end_date > datetime.utcnow())).paginate(page, 15, True)
+	else:
+		vacancies = Vacancy.query.join(Company).filter().order_by(Vacancy.title).order_by(Company.rank)
+		for i, vacancy in enumerate(vacancies):
+			print i, vacancy
+			if vacancy.start_date < datetime.date(datetime.utcnow()) and vacancy.end_date < datetime.date(datetime.utcnow()):
+				print "I exist"
+				vacancies[i].expired = True
+		vacancies = vacancies.paginate(page, 15, False)
+
+	return render_template('vacancy/list.htm',
+		vacancies = vacancies, search="", path=FILE_FOLDER)
 
 @blueprint.route('/create/', methods=['GET'])
 @blueprint.route('/edit/<int:vacancy_id>/', methods=['GET'])
-def view(vacancy_id=None):
+def edit(vacancy_id=None):
 	'''
 	FRONTEND
 	Create, view or edit a vacancy.
@@ -103,7 +142,7 @@ def update(vacancy_id=None):
 		if not error_handled:
 			flash_form_errors(form)
 
-	return redirect(url_for('vacancy.view', vacancy_id=vacancy_id))
+	return redirect(url_for('vacancy.edit', vacancy_id=vacancy_id))
 
 @blueprint.route('/delete/<int:vacancy_id>/', methods=['POST'])
 def delete(vacancy_id):
@@ -122,4 +161,4 @@ def delete(vacancy_id):
 	db.session.commit()
 	flash('Vacature verwijderd', 'success')
 
-	return redirect(url_for('vacancy.list'))
+	return redirect(url_for('vacancy.view_list'))

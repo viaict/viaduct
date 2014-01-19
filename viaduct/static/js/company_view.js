@@ -1,36 +1,37 @@
 'use strict'
+/*didn't work*/
 
-$(function() {
+// $(function() {
 
-	/* Load contact dynamic per location. */
-	$('#location_id').on('change', function() {
-		var $this, location_id, $contact_select;
+// 	/* Load contact dynamic per location. */
+// 	$('#location_id').on('change', function() {
+// 		var $this, location_id, $contact_select;
 
-		$this = $(this);
-		location_id = $this.val();
+// 		$this = $(this);
+// 		location_id = $this.val();
 
-		$contact_select = $('#contact_id');
-		$contact_select.empty();
-		$contact_select.val('');
+// 		$contact_select = $('#contact_id');
+// 		$contact_select.empty();
+// 		$contact_select.val('');
 
-		$.getJSON('/locations/' + location_id + '/contacts/', function(data) {
-			var contacts;
+// 		$.getJSON('/locations/' + location_id + '/contacts/', function(data) {
+// 			var contacts;
 
-			contacts = data.contacts;
-			for (var i = 0; i < contacts.length; i ++) {
-				var contact, $option;
+// 			contacts = data.contacts;
+// 			for (var i = 0; i < contacts.length; i ++) {
+// 				var contact, $option;
 
-				contact = contacts[i];
+// 				contact = contacts[i];
 
-				$option = $('<option></option>');
-				$option.val(contact.id);
-				$option.text(contact.name);
+// 				$option = $('<option></option>');
+// 				$option.val(contact.id);
+// 				$option.text(contact.name);
 
-				$contact_select.append($option);
-			}
+// 				$contact_select.append($option);
+// 			}
 
-			if (contacts.length > 0)
-				$contact_select.val(contacts[0].id);
-		});
-	});
-});
+// 			if (contacts.length > 0)
+// 				$contact_select.val(contacts[0].id);
+// 		});
+// 	});
+// });

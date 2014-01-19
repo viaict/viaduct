@@ -7,6 +7,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 
 from viaduct.utilities import import_module
 
+
 def is_module(path):
 	init_path = os.path.join(path, '__init__.py')
 
@@ -16,6 +17,7 @@ def is_module(path):
 		return True
 
 	return False
+
 
 def register_views(application, path, extension=''):
 	application_path = os.path.dirname(os.path.abspath(application.root_path))
@@ -36,6 +38,7 @@ def register_views(application, path, extension=''):
 				print('{0} has been imported.'.format(module_name))
 				application.register_blueprint(blueprint)
 
+
 def model_to_dict(self):
 	result = {}
 
@@ -55,7 +58,7 @@ babel = Babel(application)
 # authentication system.
 login_manager = LoginManager()
 login_manager.init_app(application)
-login_manager.login_view = 'signin'
+login_manager.login_view = 'user.sign_in'
 
 # Set up the database.
 db = SQLAlchemy(application)
@@ -71,4 +74,3 @@ register_views(application, os.path.join(path, 'views'))
 from viaduct.models import User
 
 login_manager.anonymous_user = User.get_anonymous_user
-

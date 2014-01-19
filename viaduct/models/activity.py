@@ -5,18 +5,18 @@ import datetime
 class Activity(db.Model):
 	__tablename__ = 'activity'
 
-	id						= db.Column(db.Integer, primary_key=True)
+	id					= db.Column(db.Integer, primary_key=True)
 	owner_id			= db.Column(db.Integer, db.ForeignKey('user.id'))
-	name					= db.Column(db.String(256))
-	description		= db.Column(db.String(2048))
-	start_time		= db.Column(db.DateTime)
+	name				= db.Column(db.String(256))
+	description			= db.Column(db.String(2048))
+	start_time			= db.Column(db.DateTime)
 	end_time			= db.Column(db.DateTime)
 	location			= db.Column(db.String(64))
 	privacy				= db.Column(db.String(64))
-	price					= db.Column(db.String(16))
+	price				= db.Column(db.String(16))
 	picture				= db.Column(db.String(255))
-	venue					= db.Column(db.Integer) # venue ID
-	updated_time	= db.Column(db.DateTime, default=datetime.datetime.now())
+	venue				= db.Column(db.Integer) # venue ID
+	updated_time		= db.Column(db.DateTime, default=datetime.datetime.now())
 	form_id				= db.Column(db.Integer, db.ForeignKey('custom_form.id'))
 
 	owner = db.relationship('User', backref=db.backref('activities', lazy='dynamic'))

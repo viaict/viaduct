@@ -14,7 +14,7 @@
 		{% endif %}
 		<div class="row">
 			<div class="span12">
-				<form method="get" action="" enctype=multipart/form-data class="form-inline" >
+				<form method="get" action="{{ url_for('examination.view_examination') }}" enctype=multipart/form-data class="form-inline" >
 					<input name="search" id="search" class="span5" type="text" placeholder="Zoek op titel, vak of opleiding" value="{{search}}" onkeypress="searchKeyPress(event);"></input>
 					<button type="submit" class="btn btn-primary"> <i class="icon-search icon-white" id="submit"></i></button>
 				</form>
@@ -53,7 +53,7 @@
 				{% endfor %}
 			</tbody>
 		</table>
-		{{ render_pagination(examinations, 'examination.examination_admin') }}
+		{{ render_pagination(examinations, 'examination.examination_admin', "?search=" + search) }}
 	</fieldset>
 <script>
 function searchKeyPress(e)

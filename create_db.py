@@ -7,9 +7,6 @@ from viaduct.models import User, Group, GroupPermission
 from viaduct.models import Activity
 from viaduct.models import Minute, Task
 from viaduct.models import NavigationEntry
-#from viaduct.models.module_permission import ModulePermission
-
-#from viaduct.models.permission import Permission
 from viaduct.models.degree import Degree
 from viaduct.models.education import Education
 
@@ -20,6 +17,7 @@ from viaduct.models.programming_language import ProgrammingLanguage
 from viaduct.models.company import Company
 from viaduct.models.location import Location
 from viaduct.models.contact import Contact
+from viaduct.models.category import Category
 from viaduct.models.custom_form import CustomForm, CustomFormResult
 from viaduct.models.file import File
 
@@ -122,7 +120,6 @@ db.session.commit()
 
 
 # Add stuff for pimpystuff for pimpy
-
 user_tijmen = User('tijmen.zwaan@gmail.com', bcrypt.hashpw('memorystick',
 														bcrypt.gensalt()),
 				'Tijmen', 'Zwaan', 'n/a')
@@ -184,7 +181,6 @@ db.session.commit()
 #self.price = price
 #self.picture = picture
 #'''
-
 custom_form = CustomForm(user.id, "Test formulier", '''Dieet | checkbox
 -Vegetarisch
 -Veganistisch
@@ -354,7 +350,8 @@ db.session.commit()
 # in the future we want modules to automagically register themselves but for now we will do this hard coded
 modules = ['activity', 'company', 'contact', 'custom_form',
 	'examination', 'file', 'group', 'location', 'navigation', 'page',
-	'pimpy', 'requirement', 'survey', 'upload', 'user', 'vacancy', 'booksales']
+	'pimpy', 'requirement', 'survey', 'upload', 'user', 'vacancy', 'booksales',
+	'mollie']
 
 for module in modules:
 	group_permission = GroupPermission(module, group.id, 2);
@@ -375,3 +372,13 @@ minute = Minute('content', 0, None)
 db.session.add(minute)
 db.session.commit()
 
+# This category is the 'root' of ALL wikis!!!
+wiki_category = Category('wiki')
+db.session.add(wiki_category)
+db.session.commit()
+
+# A basic category for a group
+ict_category = Category('ict')
+ict_category.super_categories.append(wiki_category)
+db.session.add(ict_category)
+db.session.commit()

@@ -21,6 +21,8 @@
 
 	{{ render_field(form.name, class="span6") }}
 	{{ render_field(form.max_attendants, class="span3") }}
+	{{ render_field(form.price, class="span3") }}
+	{{ render_field(form.transaction_description, class="span6") }}
 
 	<input type="hidden" name="origin_holder_for_edits" value="{{ form.origin.data }}">
 

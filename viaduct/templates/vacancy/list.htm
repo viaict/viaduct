@@ -3,15 +3,95 @@
 {% extends "content.htm" %}
 
 {% block content %}
-	{% if GroupPermissionAPI.can_write('vacancy') %}
-		<p><a class="btn" href="{{ url_for('vacancy.view') }}">Nieuwe vacature</a></p>
+	<div class="container">
+	<div class="span12">
+	{% if GroupPermissionAPI.can_write('location') %}
+		<a class="btn" href="{{ url_for('location.view') }}">Nieuwe locatie</a>
 	{% endif %}
+	{% if GroupPermissionAPI.can_write('contact') %}
+		<a class="btn" href="{{ url_for('contact.edit') }}">Nieuw contact</a>
+	{% endif %}
+	{% if GroupPermissionAPI.can_write('company') %}
+		<a class="btn" href="{{ url_for('company.edit') }}">Nieuw bedrijf</a>
+	{% endif %}
+	{% if GroupPermissionAPI.can_write('vacancy') %}
+		<a class="btn" href="{{ url_for('vacancy.edit') }}">Nieuwe vacature</a>
+	{% endif %}
+	<br />
+	<br />
+	<div class="row">
+		<div class="span12">
+			<form method="get" action="{{ url_for('vacancy.view_list') }}" enctype=multipart/form-data class="form-inline" >
+				<input name="search" id="search" class="span5" type="text" placeholder="Zoek op titel, vak of opleiding" value="{{search}}" onkeypress="searchKeyPress(event);"></input>
+				<button type="submit" class="btn btn-primary"> <i class="icon-search icon-white" id="submit"></i></button>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<div class="row">
+			<div class="span1"></div>
 
-	<ul>
-		{% for vacancy in vacancies.items %}
-			<li><a href="{{ url_for('vacancy.view', vacancy_id=vacancy.id) }}">{{ vacancy.title }}</a></li>
+			<div class="span3"><h4>Titel</h4></div>
+			<div class="span2"><h4>Werklast</h4></div>
+			<div class="span3"><h4>Contract</h4></div>
+			<div class="span3"><h4>Bedrijf</h4></div>
+			</div>
+		</div>
+	</div>
+	<hr>
+	{% for vacancy in vacancies.items %}
+
+		<div style="cursor:pointer;" class="row" {% if vacancy.expired %} style="background:rgba(255, 100, 0, 0.3); ;"{% endif %}>
+			<div class="span12" data-toggle="collapse" data-target='#{{ vacancy.id
+				}}'>
+				<div class="row">
+				<div class="span1"><i class="icon-list-alt"></i></div>
+				<div class="span3"><a href="?search={{vacancy.title}}">{{vacancy.title}}</a></div>
+				<div class="span2"><a href="?search={{vacancy.workload}}" >{{vacancy.workload}}</a></div>
+				<div class="span3"><a href="?search={{vacancy.contract_of_service}}">{{vacancy.contract_of_service}}</a></div>
+				<div class="span3"><a href="?search={{vacancy.company.name}}" >{{vacancy.company.name}}</a> </div>
+				</div>
+				<div id='{{ vacancy.id }}' class="collapse">
+					<hr>
+					<div class="span4">
+						<blockquote>
+							<a href="{{url_for('company.view', company_id=vacancy.company.id)}}">
+
+							{% if vacancy.company.logo_path != '#' %}
+								<img class="img-rounded" style="max-width:250px; max-height:100px;" src="{{path}}{{vacancy.company.logo_path}}"></img>
+							{% else %}
+							{{vacancy.company.name}}
+							{% endif %}
+							</a>
+							<small><i class="icon-map-marker"></i><cite title="Source Title"><a target="blank_"href="https://maps.google.nl/maps?q={{vacancy.company.location.address}} {{vacancy.company.location.city}} {{vacancy.company.location.country}}">{{vacancy.company.location.address}}, {{vacancy.company.location.city}}, {{vacancy.company.location.country}}</a></cite></small>
+						</blockquote>
+						<p>
+							<i class="icon-envelope"></i><a target="blank_" href="mailto:{{vacancy.company.contact.email}}"> {{vacancy.company.contact.email}}</a> <br />
+							<i class="icon-globe"></i> <a target="_blank" href="{{vacancy.company.website}}"> {{vacancy.company.website}} </a> <br>
+							<i class="icon-user"></i><a href="tel:{{vacancy.company.contact.phone_nr}}">{{vacancy.company.contact.phone_nr}}</a> <br>
+							{% if GroupPermissionAPI.can_write('vacancy') %}
+							<a href="{{ url_for('vacancy.edit', vacancy_id=vacancy.id) }}">edit</a>  <br>
+							{% endif %}
+						</p>
+						</div>
+						<div class="span6">
+							<h3>
+								{{vacancy.title}}
+							</h3>
+						<br />	
+						{{ vacancy.description | markdown }}
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr>
 		{% endfor %}
-	</ul>
+		</tbody>
+	</table>
 
-	{{ render_pagination(vacancies, 'vacancy.list') }}
+	{{ render_pagination(vacancies, 'vacancy.view_list') }}
+	</div>
+	</div>
 {% endblock %}

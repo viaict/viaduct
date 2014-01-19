@@ -13,18 +13,19 @@ from viaduct.forms.activity import ActivityForm, CreateForm
 from viaduct.models.activity import Activity
 from viaduct.models.custom_form import CustomForm, CustomFormResult
 from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.mollie import MollieAPI
 from viaduct.models.education import Education
 
-blueprint = Blueprint('activity', __name__)
+blueprint = Blueprint('activity', __name__, url_prefix='/activities')
 
 def allowed_file(filename):
 	return '.' in filename and filename.rsplit('.', 1)[1] in set(['png', 'jpg', 'gif', 'jpeg'])
 
 # Overview of activities
-@blueprint.route('/activities/', methods=['GET', 'POST'])
-@blueprint.route('/activities/<string:archive>/', methods=['GET', 'POST'])
-@blueprint.route('/activities/page/<int:page>', methods=['GET', 'POST'])
-@blueprint.route('/activities/<string:archive>/page/<int:page>', methods=['GET', 'POST'])
+@blueprint.route('/', methods=['GET', 'POST'])
+@blueprint.route('/<string:archive>/', methods=['GET', 'POST'])
+@blueprint.route('/page/<int:page>', methods=['GET', 'POST'])
+@blueprint.route('/<string:archive>/page/<int:page>', methods=['GET', 'POST'])
 def view(archive="", page=1):
 	if not GroupPermissionAPI.can_read('activity'):
 		return abort(403);
@@ -40,7 +41,7 @@ def view(archive="", page=1):
 
 	return render_template('activity/view.htm', activities=activities.paginate(page, 10, False), archive=archive)
 
-@blueprint.route('/activities/<int:activity_id>', methods=['GET', 'POST'])
+@blueprint.route('/<int:activity_id>', methods=['GET', 'POST'])
 def get_activity(activity_id = 0):
 	if not GroupPermissionAPI.can_read('activity'):
 		return abort(403);
@@ -74,16 +75,22 @@ def get_activity(activity_id = 0):
 
 			if form_result:
 				activity.form_data = form_result.data.replace('"', "'")
+				if not form_result.has_payed:
+					activity.form.show_pay_button = True
+					activity.form.id = form_result.id
 
-				activity.info	= "Je hebt je al ingeschreven! Je kunt wel je inschrijving aanpassen door opniew het formulier in te vullen en te verzenden."
+				if form_result.has_payed:
+					activity.info = "Je hebt je al ingeschreven en betaald! Je kunt wel je inschrijving aanpassen door opniew het formulier in te vullen en te verzenden."
+				else:
+					activity.info	= "Je hebt je al ingeschreven! Je kunt wel je inschrijving aanpassen door opniew het formulier in te vullen en te verzenden."
 			else :
 				activity.info	= "De activiteit zit vol qua inschrijvingen, als je je nu inschrijft kom je op de reserve lijst!" if activity.num_attendants >= activity.form.max_attendants else "Er zijn op het moment %s inschrijvingen" % activity.num_attendants
 
 
 	return render_template('activity/view_single.htm', activity=activity, form=form)
 
-@blueprint.route('/activities/create/', methods=['GET', 'POST'])
-@blueprint.route('/activities/edit/<int:activity_id>', methods=['GET', 'POST'])
+@blueprint.route('/create/', methods=['GET', 'POST'])
+@blueprint.route('/edit/<int:activity_id>', methods=['GET', 'POST'])
 def create(activity_id=None):
 	# Need to be logged in + actie group or admin etc.
 	if not GroupPermissionAPI.can_write('activity'):
@@ -143,7 +150,7 @@ def create(activity_id=None):
 
 		venue	= 1 # Facebook ID location, not used yet
 
-		# Set a custom_form if it actually exists 
+		# Set a custom_form if it actually exists
 		if form.form_id and form.form_id.data > 0:
 			activity.form_id = form.form_id.data
 		else:
@@ -171,4 +178,22 @@ def create(activity_id=None):
 		flash_form_errors(form)
 
 	return render_template('activity/create.htm', activity=activity, form=form)
+
+@blueprint.route('/transaction/<int:result_id>', methods=['GET', 'POST'])
+def create_mollie_transaction(result_id=None):
+	form_result = CustomFormResult.query.filter(CustomFormResult.id == result_id).first()
+	if not form_result.transaction:
+		description = form_result.form.transaction_description
+		amount = form_result.form.price
+		user = form_result.owner
+		payment_url, form_result.transaction = MollieAPI.create_transaction(amount, description, user=user)
+		db.session.commit()
+		return redirect(payment_url)
+	else:
+		payment_url = MollieAPI.get_payment_url(form_result.transaction.id)
+		print payment_url
+		return redirect(payment_url)
+
+
+	return False
 

@@ -9,7 +9,10 @@ import inspect
 
 from flask import request, url_for
 
+from flask import request
+
 from viaduct.models.group import Group
+import inspect
 from viaduct.api.file import FileAPI
 
 ALLOWED_EXTENSIONS = set(['png', 'gif', 'jpg', 'jpeg'])
@@ -132,4 +135,5 @@ class UserAPI:
 
 	@staticmethod
 	def can_write(page):
+		print request.url
 		return PagePermission.get_user_rights(current_user, page.id) > 1

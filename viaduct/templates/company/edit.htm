@@ -1,0 +1,39 @@
+{% from "macros/form.htm" import render_field, render_button, render_textarea, render_datefield, render_datefield_picker, render_select, render_file %}
+{% extends "content.htm" %}
+
+{% block content %}
+
+<script src='/static/js/datepicker.js'></script>
+<link href='/static/css/datepicker.css' rel='stylesheet'>
+
+	<form method="post" enctype="multipart/form-data">
+		<fieldset>
+			<legend>Bedrijf {% if company.id %}bewerken{% else %}aanmaken{% endif %}</legend>
+
+			{{ form.csrf_token }}
+
+			{{ render_field(form.name) }}
+			{{ render_textarea(form.description) }}
+			{{ render_textarea(form.website) }}
+			{{ render_file(form.file) }}
+
+			{{ render_datefield_picker(form.contract_start_date, "contract_start_date") }}
+			{{ render_datefield_picker(form.contract_end_date, "contract_end_date") }}
+
+			{{ render_select(form.location_id) }}
+			{{ render_select(form.contact_id) }}
+
+			{{ render_button(form.submit) }}
+		</fieldset>
+	</form>
+
+	{% if company.id %}
+	<form onsubmit="return confirm('Wilt u {{company.name}} echt verwijderen?');" action="{{ url_for('company.delete', company_id=company.id) }}" method="post">
+		<fieldset>
+			<button class="btn btn-danger" type="submit">Verwijderen</button>
+		</fieldset>
+	</form>
+	{% endif %}
+
+	<script src="/static/js/company_view.js"></script>
+{% endblock %}

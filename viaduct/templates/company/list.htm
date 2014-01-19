@@ -1,16 +1,92 @@
-{% from 'macros/pagination.htm' import render_pagination %}
+{% from "macros/pagination.htm" import render_pagination %}
 
-{% extends 'content.htm' %}
+{% extends "content.htm" %}
 
 {% block content %}
-	{% if GroupPermissionAPI.can_write('company') %}
-		<p><a class="btn" href="{{ url_for('company.view') }}">Nieuw bedrijf</a></p>
+	<div class="span12">
+	{% if GroupPermissionAPI.can_write('location') %}
+		<a class="btn" href="{{ url_for('location.view') }}">Nieuwe locatie</a>
 	{% endif %}
-	<ul>
-		{% for company in companies.items %}
-			<li><a href="{{ url_for('company.view', company_id=company.id) }}">{{ company.name }}</a></li>
-		{% endfor %}
-	</ul>
+	{% if GroupPermissionAPI.can_write('contact') %}
+		<a class="btn" href="{{ url_for('contact.edit') }}">Nieuw contact</a>
+	{% endif %}
+	{% if GroupPermissionAPI.can_write('company') %}
+		<a class="btn" href="{{ url_for('company.edit') }}">Nieuw bedrijf</a>
+	{% endif %}
+	{% if GroupPermissionAPI.can_write('vacancy') %}
+		<a class="btn" href="{{ url_for('vacancy.edit') }}">Nieuwe vacature</a>
+	{% endif %}
+	<br />
+	<br />
+	<div class="row">
+		<div class="span12">
+			<form method="get" action="{{ url_for('company.view_list') }}" enctype=multipart/form-data class="form-inline" >
+				<input name="search" id="search" class="span5" type="text" placeholder="Zoek op titel, vak of opleiding" value="{{search}}" onkeypress="searchKeyPress(event);"></input>
+				<button type="submit" class="btn btn-primary"> <i class="icon-search icon-white" id="submit"></i></button>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<div class="row">
+			<div class="span1"></div>
+			<div class="span3"><h4>Naam</h4></div>
+			<div class="span5"><h4>Website</h4></div>
+			<div class="span3"><h4>Locatie</h4></div>
+			</div>
+		</div>
+	</div>
+	<hr>
+	{% for company in companies.items %}
+		<div style="cursor:pointer;" class="row" {% if company.expired %} style="background:rgba(255, 100, 0, 0.3); ;"{% endif %}>
+			<div class="span12" data-toggle="collapse" data-target='#{{ company.id
+				}}'>
+			
+			
+				<div class="row">
+				<div class="span1"><i class="icon-info-sign"></i></div>
+				<div class="span3">{{company.name}}</div>
+				<div class="span5"> <a target="_blank" href="{{company.website}}"> {{company.website}} </a></div>
+				<div class="span3">{{company.location.city}}</div>
+				</div>
+				<div id='{{ company.id }}' class="collapse">
+					<hr>
+					<div class="span4">
+						<blockquote>
+							<a href="{{url_for('company.view', company_id=company.id)}}">
 
-	{{ render_pagination(companies, 'company.list') }}
+							{% if company.logo_path != '#' %}
+								<img class="img-rounded" style="max-width:250px; max-height:100px;" src="{{path}}{{company.logo_path}}"></img>
+							{% else %}
+							{{company.name}}
+							{% endif %}
+							</a>
+							<small><i class="icon-map-marker"></i><cite title="Source Title"><a target="blank_"href="https://maps.google.nl/maps?q={{company.location.address}} {{company.location.city}} {{company.location.country}}">{{company.location.address}}, {{company.location.city}}, {{company.location.country}}</a></cite></small>
+						</blockquote>
+						<p>
+							<i class="icon-envelope"></i><a target="blank_" href="mailto:{{company.contact.email}}"> {{company.contact.email}}</a> <br />
+							<i class="icon-globe"></i> <a target="_blank" href="{{company.website}}"> {{company.website}} </a> <br>
+							<i class="icon-user"></i><a href="tel:{{company.contact.phone_nr}}">{{company.contact.phone_nr}}</a> <br>
+							{% if GroupPermissionAPI.can_write('company') %}
+							<a href="{{ url_for('company.edit', company_id=company.id) }}">edit</a>  <br>
+							{% endif %}
+						</p>
+						</div>
+						<div class="span6">
+							<h3>
+								{{company.name}}
+							</h3>
+						<br />	
+						{{ company.description | markdown }}
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr>
+		{% endfor %}
+		</tbody>
+	</table>
+
+	{{ render_pagination(companies, 'company.view_list') }}
+	</div>
 {% endblock %}
