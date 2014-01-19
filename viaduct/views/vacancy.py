@@ -33,7 +33,7 @@ def view_list(page=1):
             order_by(Vacancy.title).order_by(Company.rank)
 
         if not GroupPermissionAPI.can_write('vacancy'):
-            vacancies = vacancies.query.\
+            vacancies = vacancies.\
                 filter(and_(Vacancy.start_date < datetime.utcnow(),
                             Vacancy.end_date >
                             datetime.utcnow())).paginate(page, 15, True)
