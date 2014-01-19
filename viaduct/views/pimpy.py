@@ -4,7 +4,6 @@ from viaduct import application, db
 from viaduct.helpers import flash_form_errors
 
 from flask.ext.login import current_user
-import datetime
 
 from viaduct.forms.pimpy import AddTaskForm, AddMinuteForm, EditTaskForm
 from viaduct.api.pimpy import PimpyAPI
@@ -84,7 +83,7 @@ def add_task(group_id='all'):
     if not GroupPermissionAPI.can_write('pimpy'):
         return abort(403)
     if group_id == '':
-        groud_id = 'all'
+        group_id = 'all'
 
     form = AddTaskForm(request.form)
     if request.method == 'POST':
@@ -129,8 +128,8 @@ def add_task(group_id='all'):
                            group_id=group_id, type='tasks', form=form)
 
 
-@blueprint.route('/tasks/edit/', methods=['GET', 'POST'])
-@blueprint.route('/tasks/edit/<string:task_id>', methods=['GET', 'POST'])
+@blueprint.route('/tasks/edit/', methods=['POST'])
+@blueprint.route('/tasks/edit/<string:task_id>', methods=['POST'])
 def edit_task(task_id=-1):
     if not GroupPermissionAPI.can_write('pimpy'):
         return abort(403)
@@ -155,18 +154,13 @@ def edit_task(task_id=-1):
 
         return message
 
-    group = Group.query.filter(Group.id == task.group_id).first()
-    form.load_groups(current_user.groups.all())
-    return render_template('pimpy/edit_task.htm', group=group,
-                           group_id=group.id, type='tasks', form=form)
-
 
 @blueprint.route('/minutes/add/<string:group_id>', methods=['GET', 'POST'])
 def add_minute(group_id='all'):
     if not GroupPermissionAPI.can_write('pimpy'):
         return abort(403)
     if group_id == '':
-        groud_id = 'all'
+        group_id = 'all'
     group = Group.query.filter(Group.id == group_id).first()
 
     form = AddMinuteForm(request.form)

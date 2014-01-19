@@ -1,4 +1,5 @@
-import os, datetime
+import os
+import datetime
 
 from flask import flash, get_flashed_messages, redirect, render_template, \
     request, url_for, abort
@@ -18,8 +19,11 @@ from viaduct.models.education import Education
 
 blueprint = Blueprint('activity', __name__, url_prefix='/activities')
 
+
 def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1] in set(['png', 'jpg', 'gif', 'jpeg'])
+    return '.' in filename and filename.rsplit('.', 1)[1] in \
+        set(['png', 'jpg', 'gif', 'jpeg'])
+
 
 # Overview of activities
 @blueprint.route('/', methods=['GET', 'POST'])
@@ -36,13 +40,17 @@ def view(archive="", page=1):
             .order_by(Activity.start_time.desc())
     else:
         activities = Activity.query \
-            .filter(Activity.end_time > (datetime.datetime.now() - datetime.timedelta(hours=12))) \
+            .filter(Activity.end_time >
+                    (datetime.datetime.now() - datetime.timedelta(hours=12))) \
             .order_by(Activity.start_time.asc())
 
-    return render_template('activity/view.htm', activities=activities.paginate(page, 10, False), archive=archive)
+    return render_template('activity/view.htm',
+                           activities=activities.paginate(page, 10, False),
+                           archive=archive)
+
 
 @blueprint.route('/remove/<int:activity_id>', methods=['POST'])
-def remove_activity(activity_id = 0):
+def remove_activity(activity_id=0):
     if not GroupPermissionAPI.can_write('activity'):
         return abort(403)
     activity = Activity.query.filter(Activity.id == activity_id).first()
@@ -50,10 +58,11 @@ def remove_activity(activity_id = 0):
     db.session.commit()
     return redirect(url_for('activity.view'))
 
+
 @blueprint.route('/<int:activity_id>', methods=['GET', 'POST'])
-def get_activity(activity_id = 0):
+def get_activity(activity_id=0):
     if not GroupPermissionAPI.can_read('activity'):
-        return abort(403);
+        return abort(403)
 
     activity = Activity.query.get(activity_id)
 
