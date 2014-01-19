@@ -368,7 +368,7 @@ db.session.commit()
 
 
 # VERY IMPORTANT!!! Do NOT delete
-minute = Minute('content', 0, None)
+minute = Minute('content', None, datetime.datetime.now())
 db.session.add(minute)
 db.session.commit()
 
