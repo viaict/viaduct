@@ -472,4 +472,13 @@ for n in range(30):
     item = News(admin.id, 'Item %d' % (n + 1), def_content,
                 datetime.datetime(2014, 2, 4))
     db.session.add(item)
+for n in range(10):
+    item = News(admin.id, 'Item %d' % (n + 31), def_content,
+                datetime.datetime(2013, 12, 30))
+    db.session.add(item)
+db.session.commit()
+
+item = News.query.first()
+item.update_time = item.post_time + datetime.timedelta(hours=5)
+db.session.add(item)
 db.session.commit()

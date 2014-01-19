@@ -10,7 +10,8 @@ class News(db.Model):
     title = db.Column(db.String(256))
     content = db.Column(db.Text)
     end_time = db.Column(db.DateTime)
-    updated_time = db.Column(db.DateTime, default=datetime.datetime.now())
+    post_time = db.Column(db.DateTime, default=datetime.datetime.now())
+    update_time = db.Column(db.DateTime, default=None)
 
     author = db.relationship('User', backref=db.backref('news_items',
                                                         lazy='dynamic'))
