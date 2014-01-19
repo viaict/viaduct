@@ -1,8 +1,11 @@
-from flask import abort, render_template, flash, redirect, url_for
+from flask import abort, render_template, flash, redirect, url_for, request
 from flask import Blueprint
+from flask.ext.login import current_user
 from viaduct import db
 from viaduct.models.news import News
+from viaduct.forms.news import NewsForm
 from viaduct.api.group import GroupPermissionAPI
+from viaduct.helpers import flash_form_errors
 from datetime import datetime
 
 #blueprint = Blueprint('news', __name__, url_prefix='/news')
@@ -62,6 +65,60 @@ def delete(item_id):
 
 
 @blueprint.route('/news/item/new/', methods=['GET'])
-@blueprint.route('/news/item/<int:item_id/edit/', methods=['GET'])
+@blueprint.route('/news/item/<int:item_id>/edit/', methods=['GET'])
 def edit(item_id=None):
-    pass
+    if not GroupPermissionAPI.can_write('news'):
+        return abort(403)
+
+    if item_id:
+        item = News.query.get(item_id)
+
+        if not item:
+            flash('Nieuwsartikel niet gevonden', 'error')
+            return abort(404)
+    else:
+        item = News()
+
+    form = NewsForm(request.form, item)
+
+    return render_template('news/edit.htm', item=item, form=form)
+
+
+@blueprint.route('/news/item/new/', methods=['POST'])
+@blueprint.route('/news/item/<int:item_id>/edit/', methods=['POST'])
+def update(item_id=None):
+    if not GroupPermissionAPI.can_write('news'):
+        return abort(403)
+
+    if item_id:
+        item = News.query.get(item_id)
+
+        if not item:
+            flash('Nieuwsartikel niet gevonden', 'error')
+            return abort(404)
+    else:
+        item = News()
+
+    form = NewsForm(request.form, item)
+
+    if form.validate_on_submit():
+        item.title = form.title.data
+        item.content = form.content.data
+        item.end_time = form.end_time.data
+
+        if item_id:
+            item.update_time = datetime.now()
+        else:
+            item.author_id = current_user.id
+            item.post_time = datetime.now()
+            item.update_time = item.post_time
+
+        db.session.add(item)
+        db.session.commit()
+
+        flash('Nieuwsartikel opgeslagen', 'success')
+
+        return redirect(url_for('news.single', item_id=item.id))
+    else:
+        flash_form_errors(form)
+        return render_template('news/edit.htm', item=item, form=form)

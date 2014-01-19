@@ -470,11 +470,15 @@ rutrum sed. Morbi eget euismod diam, ut pretium mi.'''
 
 for n in range(30):
     item = News(admin.id, 'Item %d' % (n + 1), def_content,
-                datetime.datetime(2014, 2, 4))
+                datetime.date(2014, 2, 4))
+    item.post_time = datetime.datetime.now()
+    item.update_time = item.post_time
     db.session.add(item)
 for n in range(10):
     item = News(admin.id, 'Item %d' % (n + 31), def_content,
-                datetime.datetime(2013, 12, 30))
+                datetime.date(2013, 12, 30))
+    item.post_time = datetime.datetime.now()
+    item.update_time = item.post_time
     db.session.add(item)
 db.session.commit()
 

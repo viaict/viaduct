@@ -25,7 +25,7 @@
             <div class='row-fluid'>
                 <div class='span8 title'>{{ item.title }}</div>
                 <div class='span4 text-right author'>
-                    {% if item.update_time %}
+                    {% if item.update_time != item.post_time %}
                         Bewerkt <em>{{ item.update_time.strftime('%Y-%m-%d %H:%M') }}</em><br />
                     {% endif %}
                     Gepubliceerd <em>{{ item.post_time.strftime('%Y-%m-%d %H:%M') }}</em><br />

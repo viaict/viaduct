@@ -9,7 +9,7 @@ class News(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     title = db.Column(db.String(256))
     content = db.Column(db.Text)
-    end_time = db.Column(db.DateTime)
+    end_time = db.Column(db.Date)
     post_time = db.Column(db.DateTime, default=datetime.datetime.now())
     update_time = db.Column(db.DateTime, default=None)
 

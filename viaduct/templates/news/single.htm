@@ -28,7 +28,7 @@
 <div class='row-fluid'>
     <div class='span6 author'>Geschreven door <em>{{ item.author.name }}</em></div>
     <div class='span6 last-edited text-right'>
-        {% if item.update_time %}
+        {% if item.update_time != item.post_time %}
             Laatst bewerkt op <em>{{ item.update_time.strftime('%Y-%m-%d') }}</em> om <em>{{ item.update_time.strftime('%H:%M') }}</em><br />
         {% endif %}
         Gepubliceerd op <em>{{ item.post_time.strftime('%Y-%m-%d') }}</em> om <em>{{ item.post_time.strftime('%H:%M') }}</em>
