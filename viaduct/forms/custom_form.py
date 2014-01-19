@@ -3,6 +3,7 @@ from flask.ext.wtf import Form, TextField, PasswordField, SelectField, FieldList
 class CreateForm(Form):
 	name	= TextField(u'Formulier naam')
 	max_attendants	= TextField(u'Maximale aantal deelnemers')
+	msg_success	= TextField(u'Succes bericht : Wordt getoond wanneer gebruiker zich inschrijft')
 	origin	= TextField(u'Who')
 	html	= TextField(u'Let the dogs out')
 	email = TextField('E-mail', validators=[Required(), Email()])

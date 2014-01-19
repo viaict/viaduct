@@ -24,26 +24,43 @@
   
 })(jQuery);
 
+if (!msg_success)
+	var msg_success = "Je hebt het formulier succesvol ingevuld";
+
 $(document).ready(function() {
+
 	$("#custom_form").click(function() {
 		var custom_form = $(this).closest('form');
+		var validated   = true;
 
-		var args = $.extend(
-			custom_form.serializeObject(),
-			{'data': $('#custom_form_data').find(':input').serialize()}
-		);
+		// Validate required input fields	
+		custom_form.find('.control-group').each(function() {
+			if ($(this).attr('req') == 'true')
+				if ($(this).find('input').val() == '') {
+					validated = false;
+					$(this).find('input').css('border-color', 'red');
+				}
+		});
 
-		$.post(
-			custom_form.attr('action'), args,
-			function(result) {
-				if (result == "success")
-					flash("Je hebt het formulier succesvol ingevuld", "success");
-				else if (result == "edit")
-					flash("Je formulier is aangepast", "alert");
-				else
-					flash("Er is iets misgegaan bij het invullen :(", "error"); 
-			}
-		);
+		if (validated) {
+			var args = $.extend(
+				custom_form.serializeObject(),
+				{'data': $('#custom_form_data').find(':input').serialize()}
+			);
+
+			$.post(
+				custom_form.attr('action'), args,
+		
+				function(result) {
+					if (result == "success")
+						flash(msg_success, "success");
+					else if (result == "edit")
+						flash("Je formulier is aangepast", "alert");
+					else
+						flash("Er is iets misgegaan bij het invullen :(", "error"); 
+				}
+			);
+		}
 
 		return false;
 	});

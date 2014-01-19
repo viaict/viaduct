@@ -82,7 +82,7 @@ def get_activity(activity_id = 0):
 				if form_result.has_payed:
 					activity.info = "Je hebt je al ingeschreven en betaald! Je kunt wel je inschrijving aanpassen door opniew het formulier in te vullen en te verzenden."
 				else:
-					activity.info	= "Je hebt je al ingeschreven! Je kunt wel je inschrijving aanpassen door opniew het formulier in te vullen en te verzenden."
+					activity.info	= "Je hebt je al ingeschreven! Je moet nog wel betalen!"
 			else :
 				activity.info	= "De activiteit zit vol qua inschrijvingen, als je je nu inschrijft kom je op de reserve lijst!" if activity.num_attendants >= activity.form.max_attendants else "Er zijn op het moment %s inschrijvingen" % activity.num_attendants
 
