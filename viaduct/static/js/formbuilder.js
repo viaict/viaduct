@@ -38,14 +38,13 @@ $.fn.formbuilder = function() {
       if (lines[i].charAt(0) == '#') {
 				var str	= '<h3>' + lines[i].substring(1) + '</h3>';
 
-				console.log(form.children())
 				if (form.children().length > 0)
-        	form.children().last().after(str);
-        else
+					form.children().last().after(str);
+				else
 					form.prepend(str);
 
 				continue;
-      }
+			}
 
       if (lines[i].charAt(0) == 'p') {
 				var str = '<p>' + lines[i].substring(1) + '</p>';
@@ -74,7 +73,7 @@ $.fn.formbuilder = function() {
 					'-Veganistisch', 
 
 					'shirt',
-					'Noodnummer',
+					'Noodnummer*',
 					'> Telefoon nummer in geval van nood',
 					'Allergie/medicatie | textarea',
 					'> Waar moeten we rekening mee houden'
@@ -87,22 +86,25 @@ $.fn.formbuilder = function() {
 
 			if (type === "shirt") {
 				lines[i] = '';
-        lines.splice(i, 0, '', 
-					'Shirt maat | select',
+				lines.splice(i, 0, '', 
+					'Shirt* maat | select',
 					'-Small',
 					'-Medium',
 					'-Large'
 				);
 
-        textarea.val(lines.join("\n"));
+				textarea.val(lines.join("\n"));
 				textarea.trigger('keyup');
-        break;
+				break;
 			}
 
       if (! options || !fields[type])
         continue;
 
+			console.log(options);
+
       group
+				.attr('req', options.required)
         .append(label.text(options.label))
         .append(
           controls.html(
@@ -122,7 +124,7 @@ $.fn.formbuilder = function() {
           else
             fields[type].append(
               '<label class="checkbox">' +
-                '<input type="' + type + '" name="' + options.name + '[]" value="' + value + '"> ' + 
+                '<input type="' + type + '" name="' + options.name + '[]" value="' + value + '">' + 
                 value + 
               '</label>'
             );
@@ -141,21 +143,23 @@ $.fn.formbuilder = function() {
 		return str.replace(/[\+\*\-]/g, '');
 	}
 
+	// Also strips spaces
 	function strip_(str) {
 		return str.replace(/[\+\*\- ]/g, '');
 	}
 
-  function parseLine(line) {
-    var line  = line.split("|");
-    var label = strip(line[0]);
+	function parseLine(line) {
+		var line  = line.split("|");
+		var label = strip(line[0]);
 		var name  = $.trim(label).replace(/[ ]/g, '_').toLowerCase();
 
     if (label == "") // Skip empty lines
       return false;
           
     var options = {
-      'label' : label,
-      'name'  : name
+      'label'    : label,
+      'name'     : name,
+      'required' : line[0].indexOf('*') > 0 ? "true" : "false" 
     };
     
     if (line[1])

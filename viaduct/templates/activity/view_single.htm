@@ -36,6 +36,7 @@
 	</div>
 
 	{% if activity.form %}
+
 		<div class="accordion-group">
 			<div class="accordion-heading">
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc" href="#collapseForm">
@@ -48,7 +49,21 @@
 			<div id="collapseForm" class="accordion-body collapse">
 				<div class="accordion-inner">
 					{% if current_user and current_user.id %}
+						<script>
+							var msg_success = '{{ activity.form.msg_success }}';
+						</script>
+
+
 						<form id="custom" action="/forms/submit/{{ activity.form.id }}" enctype="multipart/form-data">
+
+								{% if activity.form_data %}
+								<!-- Display custom success message in case user refreshes / forgot info -->
+								<div class="alert alert-success">
+									{{ activity.form.msg_success }}
+								</div>
+								{% endif %}
+
+
 								{% if activity.info %}
 								<div class="alert alert-warning">
 									{{ activity.info }}
@@ -60,6 +75,7 @@
 									{% if activity.form.show_pay_button %}
 										<a href="{{ url_for('activity.create_mollie_transaction', result_id=activity.form.id) }}" class="btn btn-warning">Betalen (€0,99 transactiekosten)</a>
 									{% endif %}
+								
 										<h3>Contact gegevens</h3>
 										<small>Dit zijn gegevens die we van je account halen</small>
 									{{ render_field(form.email) }}
