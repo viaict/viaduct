@@ -127,6 +127,7 @@ def upload_file():
 @login_required
 def view_examination(page_nr=1):
 	if not GroupPermissionAPI.can_read('examination', False):
+		session['prev'] = 'examination.view_examination'
 		return abort(403)
 
 	# action = url_for('examination.view_examination')

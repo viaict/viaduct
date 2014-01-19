@@ -47,10 +47,10 @@
 				}}'>
 				<div class="row">
 				<div class="span1"><i class="icon-list-alt"></i></div>
-				<div class="span3"><a href="?search={{vacancy.title}}">{{vacancy.title}}</a></div>
-				<div class="span2"><a href="?search={{vacancy.workload}}" >{{vacancy.workload}}</a></div>
-				<div class="span3"><a href="?search={{vacancy.contract_of_service}}">{{vacancy.contract_of_service}}</a></div>
-				<div class="span3"><a href="?search={{vacancy.company.name}}" >{{vacancy.company.name}}</a> </div>
+				<div class="span3"><a class="search_click" href="?search={{vacancy.title}}">{{vacancy.title}}</a></div>
+				<div class="span2"><a class="search_click" href="?search={{vacancy.workload}}" >{{vacancy.workload}}</a></div>
+				<div class="span3"><a class="search_click" href="?search={{vacancy.contract_of_service}}">{{vacancy.contract_of_service}}</a></div>
+				<div class="span3"><a class="search_click" href="?search={{vacancy.company.name}}" >{{vacancy.company.name}}</a> </div>
 				</div>
 				<div id='{{ vacancy.id }}' class="collapse">
 					<hr>
@@ -94,4 +94,15 @@
 	{{ render_pagination(vacancies, 'vacancy.view_list') }}
 	</div>
 	</div>
+<script>
+$( document ).ready(function() {
+
+	/* Prevent the expand function being called when clicking on a link */
+    $( document).on('click', 'a.search_click', function(e){
+    	e.preventdefaults();
+    	document.location.href=$(this).attr("href");
+    });
+});
+</script>
+
 {% endblock %}
