@@ -79,13 +79,6 @@ def update_task_status():
     return jsonify(status=task.get_status_color())
 
 
-@blueprint.route('/tasks/update/', methods=['GET', 'POST'])
-@blueprint.route('/tasks/me/update/', methods=['GET', 'POST'])
-def update_task():
-    if not GroupPermissionAPI.can_write('pimpy'):
-        return abort(403)
-
-
 @blueprint.route('/tasks/add/<string:group_id>', methods=['GET', 'POST'])
 def add_task(group_id='all'):
     if not GroupPermissionAPI.can_write('pimpy'):

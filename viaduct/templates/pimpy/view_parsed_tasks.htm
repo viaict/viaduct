@@ -12,9 +12,7 @@
                 <ul class="dropdown-menu">
                     {% for status_meaning in list_item.get_status_meanings(): %}
                         <li>
-                            <a onclick="update_task_status({{ list_item.id }}, {{ status_meaning[2] }})"
-                                    class="{{ status_meaning[1] }} ">
-                                {{ status_meaning[0] }}</a>
+                            <a data-task-id="{{ list_item.id }}" data-status-id="{{ status_meaning[2] }}" class="pimpy_status {{ status_meaning[1] }}"> {{ status_meaning[0] }}</a>
                         </li>
                     {% endfor %}
                 </ul>
@@ -57,7 +55,7 @@
                 <ul class="dropdown-menu">
                     {% for status_meaning in list_item.get_status_meanings(): %}
                         <li>
-                            <a onclick="update_task_status({{ list_item.id }}, {{ status_meaning[2] }})" class="{{ status_meaning[1] }} "> {{ status_meaning[0] }}</a>
+                            <a data-task-id="{{ list_item.id }}" data-status-id="{{ status_meaning[2] }}" class="pimpy_status {{ status_meaning[1] }}"> {{ status_meaning[0] }}</a>
                         </li>
                     {% endfor %}
                 </ul>
@@ -100,7 +98,7 @@
                 <ul class="dropdown-menu">
                     {% for status_meaning in list_item.get_status_meanings(): %}
                         <li>
-                            <a onclick="update_task_status({{ list_item.id }}, {{ status_meaning[2] }})" class="{{ status_meaning[1] }} "> {{ status_meaning[0] }}</a>
+                            <a data-task-id="{{ list_item.id }}" data-status-id="{{ status_meaning[2] }}" class="pimpy_status {{ status_meaning[1] }}"> {{ status_meaning[0] }}</a>
                         </li>
                     {% endfor %}
                 </ul>

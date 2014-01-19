@@ -1,4 +1,7 @@
 $(document).ready(function() {
+    /* Expander for the home page.
+     * Creates a 'read more' button
+     */
     $('.custom_expander').each(function() {
         var desired_height_text = $(this).css('min-height');
         var desired_height = parseInt(desired_height_text.
@@ -45,41 +48,24 @@ $(document).ready(function() {
             $(this).prepend($read_more_div);
         }
     });
-});
 
-/* PimPy function
- * updates the task status
- */
+    /* PimPy functions */
 
-/* Editable Setting */
-$.fn.editable.defaults.mode = 'inline';
-
-function update_task_status($task_id, $new_status) {
-    $.getJSON('/pimpy/tasks/update_status', {
-        task_id: $task_id,
-        new_status: $new_status
-    }, function(data) {
-        $id = 'pimpy_task'+$task_id;
-        $('#'+$id).attr('class', "btn dropdown-toggle " + data.status);
-    });
-    return false;
-}
-
-function edit_task($task_id) {
-    $result = $.ajax({url:'/pimpy/tasks/edit/' + $task_id});
-    console.log($result);
-    return false;
-    $.getJSON('/pimpy/tasks/edit/' + $task_id, {
-    }, function(data) {
+    /* updates the task status */
+    $('.pimpy_status').click(function() {
+        var task_id = $(this).data('task-id');
+        var status = $(this).data('status-id');
+        $.getJSON('/pimpy/tasks/update_status', {
+            task_id: task_id,
+            new_status: status
+        }, function(data) {
+            $('#pimpy_task'+task_id).attr('class', 'btn dropdown-toggle ' + data.status);
+        });
     });
 
-}
-
-function update_task($task_id, $task_name, $more_info,
-    $deadline, $group, $users, $status) {
-}
-
-$(document).ready(function() {
+    /* Editable Setting */
+    $.fn.editable.defaults.mode = 'inline';
+    /* Makes tasks content editable */
     $('.pimpy_editable').editable();
     $('.pimpy_editable_toggle').click(function() {
         $('.pimpy_editable').editable('toggleDisabled');
@@ -91,4 +77,5 @@ $(document).ready(function() {
             weekStart: 1
         }
     });
+    $('.pimpy_editable').editable('toggleDisabled');
 });

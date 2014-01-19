@@ -12,7 +12,7 @@
                         <ul class="dropdown-menu">
                             {% for status_meaning in list_item.get_status_meanings(): %}
                                 <li>
-                                    <a onclick="update_task_status({{ list_item.id }}, {{ status_meaning[2] }})" class="{{ status_meaning[1] }} "> {{ status_meaning[0] }}</a>
+                                    <a data-task-id="{{ list_item.id }}" data-status-id="{{ status_meaning[2] }}" class="pimpy_status {{ status_meaning[1] }}"> {{ status_meaning[0] }}</a>
                                 </li>
                             {% endfor %}
                         </ul>
@@ -26,12 +26,12 @@
                             <table class="table table-striped">
                                 <tbody>
                                     <tr>
-                                        <td>Task:<td> <a href="#" class="pimpy_editable" id="title" data-pk="{{ list_item.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ list_item.id }}" data-title="Task Content">{{ list_item.title }}</a>
+                                        <td>Task:<td> <a class="pimpy_editable" id="title" data-pk="{{ list_item.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ list_item.id }}" data-title="Task Content">{{ list_item.title }}</a>
                                         <td><button class="btn pimpy_editable_toggle" style="float: right;">Edit</button>
                                     </tr><tr>
-                                        <td>Users:<td> <a href="#" class="pimpy_editable" id="users" data-pk="{{ list_item.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ list_item.id }}" data-title="Task Content">{{ list_item.get_users() }}</a><td>
+                                        <td>Users:<td> <a class="pimpy_editable" id="users" data-pk="{{ list_item.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ list_item.id }}" data-title="Task Content">{{ list_item.get_users() }}</a><td>
                                     </tr><tr>
-                                        <td>Description:<td> <a href="#" class="pimpy_editable" id="content" data-pk="{{ list_item.id }}" data-type="textarea" data-url="/pimpy/tasks/edit/{{ list_item.id }}" data-title="Task Content">{{ list_item.content }}</a><td>
+                                        <td>Description:<td> <a class="pimpy_editable" id="content" data-pk="{{ list_item.id }}" data-type="textarea" data-url="/pimpy/tasks/edit/{{ list_item.id }}" data-title="Task Content">{{ list_item.content }}</a><td>
                                     </tr><tr>
                                         <td>Deadline: <td>{{ list_item.deadline }}<td>
                                     </tr><tr>
