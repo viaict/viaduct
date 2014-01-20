@@ -13,6 +13,7 @@ from viaduct.helpers import flash_form_errors
 from viaduct.forms.activity import ActivityForm, CreateForm
 from viaduct.models.activity import Activity
 from viaduct.models.custom_form import CustomForm, CustomFormResult
+from viaduct.models.mollie import Transaction
 from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.mollie import MollieAPI
 from viaduct.models.education import Education
@@ -198,21 +199,24 @@ def create(activity_id=None):
 
     return render_template('activity/create.htm', activity=activity, form=form)
 
+
 @blueprint.route('/transaction/<int:result_id>', methods=['GET', 'POST'])
-def create_mollie_transaction(result_id=None):
-    form_result = CustomFormResult.query.filter(CustomFormResult.id == result_id).first()
-    if not form_result.transaction:
+def create_mollie_transaction(result_id):
+    form_result = CustomFormResult.query.filter(
+        CustomFormResult.id == result_id).first()
+    transaction = Transaction.query.filter(Transaction.form_result_id == form_result.id).filter(Transaction.status == 'open').first()
+    if not transaction:
         description = form_result.form.transaction_description
         amount = form_result.form.price
         user = form_result.owner
-        payment_url, form_result.transaction = MollieAPI.create_transaction(amount, description, user=user)
+        payment_url, transaction = MollieAPI.create_transaction(
+            amount, description, user=user)
+        transaction.form_result = form_result
         db.session.commit()
         return redirect(payment_url)
     else:
-        payment_url = MollieAPI.get_payment_url(form_result.transaction.id)
+        payment_url = MollieAPI.get_payment_url(transaction.id)
         print payment_url
         return redirect(payment_url)
 
-
     return False
-

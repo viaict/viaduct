@@ -1,7 +1,7 @@
 from flask import make_response
 import csv, os, random, bcrypt
 from flask import flash, get_flashed_messages, redirect, render_template, \
-	request, url_for, abort
+    request, url_for, abort
 from flask import Blueprint
 from flask.ext.login import current_user
 import datetime
@@ -20,269 +20,270 @@ blueprint = Blueprint('custom_form', __name__, url_prefix='/forms')
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/page/<int:page>', methods=['GET', 'POST'])
 def view(page=1):
-	if not GroupPermissionAPI.can_write('custom_form'):
-		return abort(403)
+    if not GroupPermissionAPI.can_write('custom_form'):
+        return abort(403)
 
-	custom_forms = CustomForm.query.order_by("created")
+    custom_forms = CustomForm.query.order_by("created")
 
-	if current_user and current_user.id > 0:
-		follows = CustomFormFollower.query.filter(CustomFormFollower.owner_id == current_user.id).all()
+    if current_user and current_user.id > 0:
+        follows = CustomFormFollower.query.filter(CustomFormFollower.owner_id == current_user.id).all()
 
-		ids = []
+        ids = []
 
-		for follow in follows:
-			ids.append(follow.form_id)
+        for follow in follows:
+            ids.append(follow.form_id)
 
-		followed_forms = CustomForm.query.filter(CustomForm.id.in_(ids)).all()
-	else:
-		followed_forms = []
-		ids = []
+        followed_forms = CustomForm.query.filter(CustomForm.id.in_(ids)).all()
+    else:
+        followed_forms = []
+        ids = []
 
-	# TODO Custom forms for specific groups (i.e coordinator can only see own forms)
-	return render_template('custom_form/overview.htm', custom_forms=custom_forms.paginate(page, 20, False), followed_forms=followed_forms, followed_ids=ids)
+    # TODO Custom forms for specific groups (i.e coordinator can only see own forms)
+    return render_template('custom_form/overview.htm', custom_forms=custom_forms.paginate(page, 20, False), followed_forms=followed_forms, followed_ids=ids)
 
 @blueprint.route('/view/<int:form_id>', methods=['GET', 'POST'])
 def view_single(form_id=None):
-	if not GroupPermissionAPI.can_write('custom_form'):
-		return abort(403)
+    if not GroupPermissionAPI.can_write('custom_form'):
+        return abort(403)
 
-	custom_form = CustomForm.query.get(form_id)
+    custom_form = CustomForm.query.get(form_id)
 
-	if not custom_form:
-		return abort(403)
+    if not custom_form:
+        return abort(403)
 
-	results = []
-	entries = CustomFormResult.query.filter(CustomFormResult.form_id == form_id).order_by("created")
+    results = []
+    entries = CustomFormResult.query.filter(CustomFormResult.form_id == form_id).order_by("created")
 
-	from urllib import unquote_plus
-	from urlparse import parse_qs
+    from urllib import unquote_plus
+    from urlparse import parse_qs
 
-	for entry in entries:
-		# Hide form entries from non existing users
-		data = parse_qs(entry.data)
+    for entry in entries:
+        # Hide form entries from non existing users
+        data = parse_qs(entry.data)
 
-		# Create defenition list of custom form fields
-		html = '<dl>'
+        # Create defenition list of custom form fields
+        html = '<dl>'
 
-		for key in data:
-			html += "<dt>%s" % key.replace('[]', '')
+        for key in data:
+            html += "<dt>%s" % key.replace('[]', '')
 
-			if type(data[key]) is list:
-				html += "<dd>%s" % ', '.join(data[key])
-			else:
-				html += "<dd>%s" % unquote_plus(data[key])
+            if type(data[key]) is list:
+                html += "<dd>%s" % ', '.join(data[key])
+            else:
+                html += "<dd>%s" % unquote_plus(data[key])
 
-		html += '</dl>'
+        html += '</dl>'
 
-		# Add the entry date 
-		time = entry.created.strftime("%Y-%m-%d %H:%I") if entry.created != None else ""
+        # Add the entry date
+        time = entry.created.strftime("%Y-%m-%d %H:%I") if entry.created != None else ""
 
-		# Append the results with a single entry
-		results.append({
-			'id'				  : entry.id,
-			'owner'				: entry.owner,
-			'form_entry'	: html,
-			'class'				: 'class="is_reserve"' if entry.is_reserve else '',
-			'has_payed'		: entry.has_payed,
-			'time'				: time
-		})
+        # Append the results with a single entry
+        results.append({
+            'id': entry.id,
+            'owner': entry.owner,
+            'form_entry': html,
+            'class': 'class="is_reserve"' if entry.is_reserve else '',
+            'has_payed': entry.has_payed,
+            'time': time
+        })
 
-	custom_form.results = results
+    custom_form.results = results
 
-	return render_template('custom_form/view_results.htm', custom_form=custom_form)
+    return render_template('custom_form/view_results.htm', custom_form=custom_form)
+
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<int:form_id>', methods=['GET', 'POST'])
 def create(form_id=None):
-	if not GroupPermissionAPI.can_write('custom_form'):
-		return abort(403)
+    if not GroupPermissionAPI.can_write('custom_form'):
+        return abort(403)
 
-	if form_id:
-		custom_form = CustomForm.query.get(form_id)
+    if form_id:
+        custom_form = CustomForm.query.get(form_id)
 
-		if not custom_form:
-			abort(404)
-	else:
-		custom_form = CustomForm()
+        if not custom_form:
+            abort(404)
+    else:
+        custom_form = CustomForm()
 
-	form = CreateForm(request.form, custom_form)
+    form = CreateForm(request.form, custom_form)
 
-	if request.method == 'POST':
-		custom_form.name 			= form.name.data
-		custom_form.origin 			= form.origin.data
-		custom_form.html 			= form.html.data
-		custom_form.msg_success	= form.msg_success.data
-		custom_form.max_attendants	= form.max_attendants.data
-		custom_form.price 			= form.price.data
-		custom_form.transaction_description = form.transaction_description.data
+    if request.method == 'POST':
+        custom_form.name = form.name.data
+        custom_form.origin = form.origin.data
+        custom_form.html = form.html.data
+        custom_form.msg_success = form.msg_success.data
+        custom_form.max_attendants = form.max_attendants.data
+        custom_form.price = form.price.data
+        custom_form.transaction_description = form.transaction_description.data
 
-		if not form_id:
-			flash('You\'ve created a form successfully.', 'success')
-		else:
-			flash('You\'ve updated a form successfully.', 'success')
+        if not form_id:
+            flash('You\'ve created a form successfully.', 'success')
+        else:
+            flash('You\'ve updated a form successfully.', 'success')
 
-		db.session.add(custom_form)
-		db.session.commit()
+        db.session.add(custom_form)
+        db.session.commit()
 
-		return redirect(url_for('custom_form.view'))
-	else:
-		flash_form_errors(form)
+        return redirect(url_for('custom_form.view'))
+    else:
+        flash_form_errors(form)
 
-	return render_template('custom_form/create.htm', form=form)
+    return render_template('custom_form/create.htm', form=form)
 
 
 @blueprint.route('/remove/<int:submit_id>', methods=['POST'])
 def remove_response(submit_id=None):
-	response = "success"
+    response = "success"
 
-	if not GroupPermissionAPI.can_read('custom_form'):
-		return abort(403)
+    if not GroupPermissionAPI.can_read('custom_form'):
+        return abort(403)
 
-	# Test if user already signed up
-	submission = CustomFormResult.query.filter(
-		CustomFormResult.id == submit_id
-	).first()
+    # Test if user already signed up
+    submission = CustomFormResult.query.filter(
+        CustomFormResult.id == submit_id
+    ).first()
 
-	if not submission:
-		abort(404)
+    if not submission:
+        abort(404)
 
-	db.session.delete(submission)
-	db.session.commit()
+    db.session.delete(submission)
+    db.session.commit()
 
-	return response
+    return response
 
 @blueprint.route('/submit/<int:form_id>', methods=['POST'])
 def submit(form_id=None):
-	# TODO make sure custom_form rights are set on server
-	if not GroupPermissionAPI.can_read('custom_form'):
-		return abort(403)
+    # TODO make sure custom_form rights are set on server
+    if not GroupPermissionAPI.can_read('custom_form'):
+        return abort(403)
 
-	response = "success"
+    response = "success"
 
-	if form_id:
-		custom_form = CustomForm.query.get(form_id)
+    if form_id:
+        custom_form = CustomForm.query.get(form_id)
 
-		if not custom_form:
-			abort(404)
+        if not custom_form:
+            abort(404)
 
-		# Logged in user
-		if current_user and current_user.id > 0:
-			user = User.query.get(current_user.id)
-		else:
-			# Need to be logged in
-			return abort(403)
+        # Logged in user
+        if current_user and current_user.id > 0:
+            user = User.query.get(current_user.id)
+        else:
+            # Need to be logged in
+            return abort(403)
 
-	if not user:
-		response = "error"
-	else:
-		# These fields might be there
-		try :
-			if request.form['phone_nr']:
-				user.phone_nr	= request.form['phone_nr']
+    if not user:
+        response = "error"
+    else:
+        # These fields might be there
+        try :
+            if request.form['phone_nr']:
+                user.phone_nr   = request.form['phone_nr']
 
-			if request.form['noodnummer']:
-				user.emergency_phone_nr = request.form['noodnummer']
+            if request.form['noodnummer']:
+                user.emergency_phone_nr = request.form['noodnummer']
 
-			if request.form['shirt_maat']:
-				user.shirt_size = request.form['shirt maat']
+            if request.form['shirt_maat']:
+                user.shirt_size = request.form['shirt maat']
 
-			if request.form['dieet[]']:
-				user.diet = ', '.join(request.form['dieet[]'])
+            if request.form['dieet[]']:
+                user.diet = ', '.join(request.form['dieet[]'])
 
-			if request.form['allergie/medicatie']:
-				user.allergy = request.form['allergie/medicatie']
+            if request.form['allergie/medicatie']:
+                user.allergy = request.form['allergie/medicatie']
 
-			if request.form['geslacht']:
-				user.gender = request.form['geslacht']
-		except Exception :
-			pass
+            if request.form['geslacht']:
+                user.gender = request.form['geslacht']
+        except Exception :
+            pass
 
-		# Test if user already signed up
-		duplicate_test = CustomFormResult.query.filter(
-			CustomFormResult.owner_id == user.id,
-			CustomFormResult.form_id == form_id
-		).first()
+        # Test if user already signed up
+        duplicate_test = CustomFormResult.query.filter(
+            CustomFormResult.owner_id == user.id,
+            CustomFormResult.form_id == form_id
+        ).first()
 
-		if duplicate_test:
-			result			= duplicate_test
-			result.data	= request.form['data']
-			response = "edit"
-		else:
-			entries = CustomFormResult.query.filter(CustomFormResult.form_id == form_id)
-			num_attendants = entries.count()
+        if duplicate_test:
+            result          = duplicate_test
+            result.data = request.form['data']
+            response = "edit"
+        else:
+            entries = CustomFormResult.query.filter(CustomFormResult.form_id == form_id)
+            num_attendants = entries.count()
 
-			# Check if number attendants allows another registration
-			if num_attendants >= custom_form.max_attendants:
-				# Create "Reserve" signup
-				result = CustomFormResult(user.id, form_id, request.form['data'], True)
-				response = "reserve"
-			else:
-				result = CustomFormResult(user.id, form_id, request.form['data'])
+            # Check if number attendants allows another registration
+            if num_attendants >= custom_form.max_attendants:
+                # Create "Reserve" signup
+                result = CustomFormResult(user.id, form_id, request.form['data'], True)
+                response = "reserve"
+            else:
+                result = CustomFormResult(user.id, form_id, request.form['data'])
 
-		db.session.add(user)
-		db.session.commit()
+        db.session.add(user)
+        db.session.commit()
 
-		db.session.add(result)
-		db.session.commit()
+        db.session.add(result)
+        db.session.commit()
 
-	return response
+    return response
 
 @blueprint.route('/follow/<int:form_id>', methods=['GET', 'POST'])
 def follow(form_id=None):
-	if not GroupPermissionAPI.can_write('custom_form'):
-		return abort(403)
+    if not GroupPermissionAPI.can_write('custom_form'):
+        return abort(403)
 
-	# Logged in user
-	if current_user and current_user.id > 0:
-		user = User.query.get(current_user.id)
-	else:
-		# Need to be logged in
-		return abort(403)
+    # Logged in user
+    if current_user and current_user.id > 0:
+        user = User.query.get(current_user.id)
+    else:
+        # Need to be logged in
+        return abort(403)
 
-	# Unfollow if re-submitted
-	follows = CustomFormFollower.query.filter(CustomFormFollower.form_id == form_id).first()
+    # Unfollow if re-submitted
+    follows = CustomFormFollower.query.filter(CustomFormFollower.form_id == form_id).first()
 
-	if follows:
-		response = "removed"
-		db.session.delete(follows)
-	else:
-		response = "added"
-		result = CustomFormFollower(current_user.id, form_id)
-		db.session.add(result)
+    if follows:
+        response = "removed"
+        db.session.delete(follows)
+    else:
+        response = "added"
+        result = CustomFormFollower(current_user.id, form_id)
+        db.session.add(result)
 
-	db.session.commit()
+    db.session.commit()
 
-	return response
+    return response
 
 @blueprint.route('/has_payed/<int:submit_id>', methods=['POST'])
 def has_payed(submit_id=None):
-	response = "success"
+    response = "success"
 
-	if not GroupPermissionAPI.can_write('custom_form'):
-		return abort(403)
+    if not GroupPermissionAPI.can_write('custom_form'):
+        return abort(403)
 
-	# Logged in user
-	if current_user and current_user.id > 0:
-		user = User.query.get(current_user.id)
-	else:
-		# Need to be logged in
-		return abort(403)
+    # Logged in user
+    if current_user and current_user.id > 0:
+        user = User.query.get(current_user.id)
+    else:
+        # Need to be logged in
+        return abort(403)
 
-	# Test if user already signed up
-	submission = CustomFormResult.query.filter(
-		CustomFormResult.id == submit_id
-	).first()
+    # Test if user already signed up
+    submission = CustomFormResult.query.filter(
+        CustomFormResult.id == submit_id
+    ).first()
 
-	if not submission:
-		response = "Error, submission could not be found"
+    if not submission:
+        response = "Error, submission could not be found"
 
-	# Adjust the "has_payed"
-	if submission.has_payed:
-		submission.has_payed = False
-	else:
-		submission.has_payed = True
+    # Adjust the "has_payed"
+    if submission.has_payed:
+        submission.has_payed = False
+    else:
+        submission.has_payed = True
 
-	db.session.add(submission)
-	db.session.commit()
+    db.session.add(submission)
+    db.session.commit()
 
-	return response
+    return response

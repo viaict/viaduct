@@ -23,10 +23,14 @@ else:
 class MollieAPI:
     @staticmethod
     def create_transaction(amount, description, local_url="",
-                           user=current_user):
+                           user=current_user, form_result=None):
         amount += 0.99
         transaction = Transaction(amount=amount, description=description,
                                   user=user)
+        if form_result:
+            transaction.form_result = form_result
+        db.session.add(transaction)
+        db.session.commit()
 
         auth_header = {'Authorization': 'Bearer ' + MOLLIE_KEY}
         data = {
@@ -39,16 +43,16 @@ class MollieAPI:
         }
 
         r = requests.post(MOLLIE_URL, headers=auth_header, data=data)
-        print r.json()
-        transaction.mollie_id = r.json()['id']
+        print r.json
+        transaction.mollie_id = r.json['id']
         transaction.createdDatetime = datetime.datetime.strptime(
-            r.json()['createdDatetime'], "%Y-%m-%dT%H:%M:%S.0Z")
-        transaction.status = r.json()['status']
+            r.json['createdDatetime'], "%Y-%m-%dT%H:%M:%S.0Z")
+        transaction.status = r.json['status']
         db.session.add(transaction)
         db.session.commit()
-        print r.json()['amount']
-        print r.json()['links']['paymentUrl']
-        return r.json()['links']['paymentUrl'], transaction
+        print r.json['amount']
+        print r.json['links']['paymentUrl']
+        return r.json['links']['paymentUrl'], transaction
 
     @staticmethod
     def get_payment_url(transaction_id=0, mollie_id=""):
@@ -61,12 +65,12 @@ class MollieAPI:
                 filter(Transaction.mollie_id == mollie_id).first()
         r = requests.get(MOLLIE_URL + transaction.mollie_id,
                          headers=auth_header)
-        if 'error' in r.json():
-            return False, r.json()['error']['message']
-        if 'paymentUrl' in r.json()['links']:
-            return r.json()['links']['paymentUrl']
+        if 'error' in r.json:
+            return False, r.json['error']['message']
+        if 'paymentUrl' in r.json['links']:
+            return r.json['links']['paymentUrl']
         else:
-            return r.json()['links']['redirectUrl']
+            return r.json['links']['redirectUrl']
 
     @staticmethod
     def check_transaction(transaction_id=0, mollie_id=""):
@@ -83,17 +87,17 @@ class MollieAPI:
         auth_header = {'Authorization': 'Bearer ' + MOLLIE_KEY}
         r = requests.get(MOLLIE_URL + transaction.mollie_id,
                          headers=auth_header)
-        if 'error' in r.json():
-            return False, r.json()['error']['message']
+        if 'error' in r.json:
+            return False, r.json['error']['message']
         print MOLLIE_URL + transaction.mollie_id
-        print r.json()
-        transaction.status = r.json()['status']
-        if 'expiredDatetime' in r.json():
+        print r.json
+        transaction.status = r.json['status']
+        if 'expiredDatetime' in r.json:
             transaction.expiredDatetime = datetime.datetime.strptime(
-                r.json()['expiredDatetime'], "%Y-%m-%dT%H:%M:%S.0Z")
-        if 'cancelledDatetime' in r.json():
+                r.json['expiredDatetime'], "%Y-%m-%dT%H:%M:%S.0Z")
+        if 'cancelledDatetime' in r.json:
             transaction.cancelledDatetime = datetime.datetime.strptime(
-                r.json()['cancelledDatetime'], "%Y-%m-%dT%H:%M:%S.0Z")
+                r.json['cancelledDatetime'], "%Y-%m-%dT%H:%M:%S.0Z")
         db.session.commit()
         if transaction.status == 'paid':
             return True, 'De transactie is afgerond.'

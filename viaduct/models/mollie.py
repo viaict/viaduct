@@ -14,15 +14,20 @@ class Transaction(db.Model):
     paidDatetime = db.Column(db.DateTime)
     expiredDatetime = db.Column(db.DateTime)
     cancelledDatetime = db.Column(db.DateTime)
+    form_result_id = db.Column(db.Integer,
+                               db.ForeignKey('custom_form_result.id'))
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User',
                            backref=db.backref('mollie_transaction',
                                               lazy='dynamic'))
+    form_result = db.relationship('CustomFormResult',
+                                  backref=db.backref('mollie_transaction',
+                                                     lazy='dynamic'))
 
     def __init__(self, amount=0.0, description="some via Mollie Transaction",
                  status='open', createdDatetime=None, paidDatetime=None,
-                 expiredDatetime=None, user=None):
+                 expiredDatetime=None, user=None, form_result_id=0):
         self.amount = amount
         self.description = description
         self.status = status
@@ -30,3 +35,4 @@ class Transaction(db.Model):
         self.paidDatetime = paidDatetime
         self.expiredDatetime = expiredDatetime
         self.user = user
+        self.form_result_id = form_result_id
