@@ -11,9 +11,7 @@ from viaduct.api.user import UserAPI
 from viaduct.models import Group, User
 from viaduct.models import Minute, Task
 
-
 DATE_FORMAT = application.config['DATE_FORMAT']
-
 
 class PimpyAPI:
     @staticmethod
@@ -322,7 +320,8 @@ class PimpyAPI:
 
         return Markup(render_template('pimpy/api/tasks.htm',
                                       list_items=list_items, type='tasks',
-                                      group_id=group_id, personal=False))
+                                      group_id=group_id, personal=False, 
+                                      status_meanings=Task.get_status_meanings()))
 
     @staticmethod
     def get_tasks(group_id, personal):
@@ -403,6 +402,7 @@ class PimpyAPI:
                         if user in task.users:
                             items.append(task)
                     if len(items):
+                        list_users[user.first_name + " " + user.last_name] = items
                         list_users[user.first_name + " " +
                                    user.last_name] = items
                 if len(list_users):
@@ -416,8 +416,8 @@ class PimpyAPI:
                            list_items[group_header][user_header])
 
         return Markup(render_template('pimpy/api/tasks.htm',
-                                      list_items=list_items, type='tasks',
-                                      group_id=group_id, personal=personal))
+            list_items=list_items, type='tasks', group_id=group_id,
+            personal=personal, status_meanings=Task.get_status_meanings()))
 
     @staticmethod
     def get_minutes(group_id):

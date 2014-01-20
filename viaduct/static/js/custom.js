@@ -78,4 +78,14 @@ $(document).ready(function() {
         }
     });
     $('.pimpy_editable').editable('toggleDisabled');
+
+    $(".btn-filter").on("click",function(){
+      var classes = this.attributes['data-hide'].value;
+      console.log()
+      if ($(this).hasClass('active')) {
+        $("tr.pimpy_status_"+classes).hide()
+      } else {
+        $("tr.pimpy_status_"+classes).show()
+      }
+    });
 });
