@@ -82,9 +82,11 @@
         </div>
     </div>
 </form>
+{% if activity.id: %}
 <form method="post" action="{{ url_for('activity.remove_activity', activity_id=activity.id) }}">
 <button class="btn btn-danger " type="submit">Verwijder activiteit</button>
 </form>
+{% endif %}
 
 <script src="/static/js/form.date.helper.js"></script>
 {% endblock %}
