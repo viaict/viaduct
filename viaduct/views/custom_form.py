@@ -61,6 +61,7 @@ def view_single(form_id=None):
 		# Hide form entries from non existing users
 		data = parse_qs(entry.data)
 
+		# Create defenition list of custom form fields
 		html = '<dl>'
 
 		for key in data:
@@ -73,8 +74,10 @@ def view_single(form_id=None):
 
 		html += '</dl>'
 
+		# Add the entry date 
 		time = entry.created.strftime("%Y-%m-%d %H:%I") if entry.created != None else ""
 
+		# Append the results with a single entry
 		results.append({
 			'id'				  : entry.id,
 			'owner'				: entry.owner,
@@ -108,6 +111,7 @@ def create(form_id=None):
 		custom_form.name 			= form.name.data
 		custom_form.origin 			= form.origin.data
 		custom_form.html 			= form.html.data
+		custom_form.msg_success	= form.msg_success.data
 		custom_form.max_attendants	= form.max_attendants.data
 		custom_form.price 			= form.price.data
 		custom_form.transaction_description = form.transaction_description.data

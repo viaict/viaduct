@@ -1,0 +1,23 @@
+{% from 'macros/form.htm' import render_field %}
+
+{% extends 'content.htm' %}
+
+{% block content %}
+
+<h1>Nieuwsartikel {% if item.id %}bewerken{% else %}aanmaken{% endif %}</h1>
+
+<form method='post'>
+    {{ form.csrf_token }}
+
+    {{ render_field(form.title) }}
+    {{ render_field(form.content) }}
+    {{ render_field(form.end_time) }}
+
+    <div class='control-group'>
+        <div class='controls'>
+            <button type='submit' class='btn'>Opslaan</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

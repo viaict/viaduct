@@ -3,44 +3,43 @@
 {%block content %}
 <div class="span8">
 
-<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-	<div class="control-group">
-		<label class="control-label">Add a minute</label>
-	</div>
-	<div class="control-group">
-		<label class="control-label" for="content">Content (copy paste minutes here)</label>
-		<div class="controls">
-			{{ form.content }}
-		</div>
-	</div>
-	<div class="control-group">
-		<label class="control-label" for="line">Group</label>
-		<div class="controls">
-			{{ form.group}}
-		</div>
-	</div>
-	<div class="control-group">
-		<label class="control-label" for="line">Date (yyyy-mm-dd)</label>
-		<div class="controls">
-			{{ form.date(id='minute_date') }}
-		</div>
-	</div>
-	<div class="control-group">
-		<label class="control-label" for="line">Parse tasks?</label>
-		<div class="controls">
-			{{ form.parse_tasks}}
-		</div>
-	</div>
-	<div class="control-group">
-		<div class="controls">
-			<button type="submit" class="btn">Create minute</button>
-		</div>
-	</div>
+<form class="form-horizontal" action=""
+      method="post" enctype="multipart/form-data">
+    <div class="control-group">
+        <label class="control-label">Add a minute</label>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="content">
+            Content (copy paste minutes here)</label>
+        <div class="controls">
+            {{ form.content }}
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="line">Group</label>
+        <div class="controls">
+            {{ form.group}}
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="line">Date (yyyy-mm-dd)</label>
+        <div class="controls">
+            {{ form.date(id='minute_date') }}
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="line">Parse tasks?</label>
+        <div class="controls">
+            {{ form.parse_tasks}}
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <button type="submit" class="btn">Create minute</button>
+        </div>
+    </div>
 <!-- data-date-format="yyyy-mm-dd", seems not likely to be workin' anytime soon -->
 </form>
 </div>
 
-
 {% endblock content %}
-
-

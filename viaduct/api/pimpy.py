@@ -1,24 +1,19 @@
-from flask import render_template, request, Markup, redirect, url_for, abort, flash
-from flask.ext.login import current_user
-
-from viaduct.models import Group, User
-from viaduct.models import Minute, Task
-
-from sqlalchemy import desc
-
 from viaduct import db, application
-
-from viaduct.api.group import GroupPermissionAPI
-from viaduct.api.user import UserAPI
-
+from flask import render_template, request, Markup, redirect, url_for, abort,\
+    flash
+from flask.ext.login import current_user
+from sqlalchemy import desc
 import datetime
 import re
 
+from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.user import UserAPI
+from viaduct.models import Group, User
+from viaduct.models import Minute, Task
+
 DATE_FORMAT = application.config['DATE_FORMAT']
 
-
 class PimpyAPI:
-
     @staticmethod
     def commit_minute_to_db(content, date, group_id):
         """
@@ -43,8 +38,8 @@ class PimpyAPI:
         return True, minute.id
 
     @staticmethod
-    def commit_task_to_db(name, content, deadline, group_id,
-        filled_in_users, line, minute_id, status):
+    def commit_task_to_db(name, content, deadline, group_id, filled_in_users,
+                          line, minute_id, status):
         """
         Enter task into the database.
         Return succes (boolean), message (string). Message is the new task.id
@@ -56,11 +51,11 @@ class PimpyAPI:
         if group_id == 'all':
             return False, "Group can not be 'all'"
         group = Group.query.filter(Group.id == group_id).first()
-        if group == None:
+        if group is None:
             return False, "Could not distinguish group."
 
-        users, message = PimpyAPI.get_list_of_users_from_string(group_id,
-            filled_in_users)
+        users, message = PimpyAPI.get_list_of_users_from_string(
+            group_id, filled_in_users)
         if not users:
             return False, message
 
@@ -75,14 +70,14 @@ class PimpyAPI:
             minute_id = 1
 
         task = Task(name, content, deadline, group_id,
-                users, minute_id, line, status)
+                    users, minute_id, line, status)
         db.session.add(task)
         db.session.commit()
         return True, task.id
 
     @staticmethod
     def edit_task(task_id, name, content, deadline, group_id,
-        filled_in_users, line):
+                  filled_in_users, line):
         """
         Returns succes (boolean), message (string). Message is irrelevant if
         succes is true, otherwise it contains what exactly went wrong.
@@ -97,8 +92,8 @@ class PimpyAPI:
 
         task = Task.query.filter(Task.id == task_id).first()
 
-        users, message = PimpyAPI.get_list_of_users_from_string(group_id,
-            filled_in_users)
+        users, message = PimpyAPI.get_list_of_users_from_string(
+            group_id, filled_in_users)
         if not users:
             return False, message
 
@@ -159,13 +154,14 @@ class PimpyAPI:
                     flash("could not parse: " + action)
                     continue
 
-                users, message = PimpyAPI.get_list_of_users_from_string(group_id, listed_users)
+                users, message = PimpyAPI.get_list_of_users_from_string(
+                    group_id, listed_users)
                 if not users:
                     print message
                     continue
                 try:
-                    task = Task(title, "", None, group_id, users, minute_id,
-                        i, 0)
+                    task = Task(title, "", None, group_id, users,
+                                minute_id, i, 0)
                 except:
                     print "wasnt given the right input to create a task"
                     continue
@@ -222,10 +218,10 @@ class PimpyAPI:
             abort(403)
 
         group = Group.query.filter(Group.id == group_id).first()
-        if group == None:
+        if group is None:
             return False, "Could not distinguish group."
 
-        if comma_sep == None:
+        if comma_sep is None:
             return False, "Did not receive any comma separated users"
 
         comma_sep = map(lambda x: x.lower().strip(), comma_sep.split(','))
@@ -234,7 +230,9 @@ class PimpyAPI:
 
         users = group.users.all()
 
-        user_names = map(lambda x: "%s %s" % (x.first_name.lower().strip(), x.last_name.lower().strip()), users)
+        user_names = map(lambda x: "%s %s" % (x.first_name.lower().strip(),
+                                              x.last_name.lower().strip()),
+                         users)
 
         for comma_sep_user in comma_sep:
 
@@ -247,8 +245,8 @@ class PimpyAPI:
 
             if len(temp_found_users) == 0:
                 # We want to add an action to all users if none has been found
-                #return False, "Could not match %s to a user in the group" % comma_sep_user
                 temp_found_users = users
+
             # We actually want to be able to add tasks to more than 1 user
             #if len(temp_found_users) > 1:
             #   return False, "could not disambiguate %s" % comma_sep_user
@@ -270,12 +268,13 @@ class PimpyAPI:
             type = 'minutes'
         endpoint = 'pimpy.view_' + type
         endpoints = {'view_chosentype': endpoint,
-                    'view_chosentype_personal': endpoint + '_personal',
-                    'view_chosentype_chosenpersonal': endpoint + (('_personal' if personal else '') if type != 'minutes' else ''),
-                    'view_tasks': 'pimpy.view_tasks',
-                    'view_tasks_personal': 'pimpy.view_tasks_personal',
-                    'view_tasks_chosenpersonal': 'pimpy.view_tasks',
-                    'view_minutes': 'pimpy.view_minutes'}
+                     'view_chosentype_personal': endpoint + '_personal',
+                     'view_chosentype_chosenpersonal': endpoint +
+                     ('_personal' if personal and type != 'minutes' else ''),
+                     'view_tasks': 'pimpy.view_tasks',
+                     'view_tasks_personal': 'pimpy.view_tasks_personal',
+                     'view_tasks_chosenpersonal': 'pimpy.view_tasks',
+                     'view_minutes': 'pimpy.view_minutes'}
         if personal:
             endpoints['view_tasks_chosenpersonal'] += '_personal'
 
@@ -284,9 +283,9 @@ class PimpyAPI:
         if group_id != 'all':
             group_id = int(group_id)
 
-        return Markup(render_template('pimpy/api/side_menu.htm',
-            groups=groups, group_id=group_id, personal=personal,
-            type=type, endpoints=endpoints))
+        return Markup(render_template('pimpy/api/side_menu.htm', groups=groups,
+                                      group_id=group_id, personal=personal,
+                                      type=type, endpoints=endpoints))
 
     @staticmethod
     def get_all_tasks(group_id):
@@ -320,8 +319,9 @@ class PimpyAPI:
             list_items[group.name] = list_users
 
         return Markup(render_template('pimpy/api/tasks.htm',
-            list_items=list_items, type='tasks', group_id=group_id,
-            personal=False))
+                                      list_items=list_items, type='tasks',
+                                      group_id=group_id, personal=False, 
+                                      status_meanings=Task.get_status_meanings()))
 
     @staticmethod
     def get_tasks(group_id, personal):
@@ -343,7 +343,8 @@ class PimpyAPI:
                         if current_user in task.users:
                             items.append(task)
                     if len(items):
-                        list_users[current_user.first_name + " " + current_user.last_name] = items
+                        list_users[current_user.first_name + " " +
+                                   current_user.last_name] = items
                     if len(list_users):
                         list_items[group.name] = list_users
             else:
@@ -359,13 +360,16 @@ class PimpyAPI:
                     if current_user in task.users:
                         items.append(task)
                 if len(items):
-                    list_users[current_user.first_name + " " + current_user.last_name] = items
+                    list_users[current_user.first_name + " " +
+                               current_user.last_name] = items
                 if len(list_users):
-                    list_items[Group.query.filter(Group.id == group_id).first().name] = list_users
+                    list_items[Group.query.filter(Group.id == group_id).
+                               first().name] = list_users
 
-                #group_name = Group.query.filter(Group.id==group_id).first().name
-                #list_items[group_name] = []
-                #for task in query.all():
+                # group_name = Group.query.filter(Group.id==group_id).
+                #                          first().name
+                # list_items[group_name] = []
+                # for task in query.all():
                 #   for u in task.users:
                 #       if u.id == current_user.id:
                 #           list_items[group_name].append(task)
@@ -380,7 +384,8 @@ class PimpyAPI:
                             if user in task.users:
                                 items.append(task)
                         if len(items):
-                            list_users[user.first_name + " " + user.last_name] = items
+                            list_users[user.first_name + " " +
+                                       user.last_name] = items
                     if len(list_users):
                         list_items[group.name] = list_users
 
@@ -398,19 +403,21 @@ class PimpyAPI:
                             items.append(task)
                     if len(items):
                         list_users[user.first_name + " " + user.last_name] = items
+                        list_users[user.first_name + " " +
+                                   user.last_name] = items
                 if len(list_users):
                     list_items[group.name] = list_users
 
         # remove those list items that have been set to checked and removed
         for group_header in list_items:
             for user_header in list_items[group_header]:
-                list_items[group_header][user_header] = filter(lambda x: x.status < 4, list_items[group_header][user_header])
-
-        meanings = Task.get_status_meanings()
+                list_items[group_header][user_header] = \
+                    filter(lambda x: x.status < 4,
+                           list_items[group_header][user_header])
 
         return Markup(render_template('pimpy/api/tasks.htm',
             list_items=list_items, type='tasks', group_id=group_id,
-            personal=personal, status_meanings=meanings))
+            personal=personal, status_meanings=Task.get_status_meanings()))
 
     @staticmethod
     def get_minutes(group_id):
@@ -426,8 +433,10 @@ class PimpyAPI:
         list_items = {}
 
         if group_id != 'all':
-            query = Minute.query.filter(Minute.group_id == group_id).order_by(Minute.minute_date.desc())
-            list_items[Group.query.filter(Group.id == group_id).first().name] = query.all()
+            query = Minute.query.filter(Minute.group_id == group_id).\
+                order_by(Minute.minute_date.desc())
+            list_items[Group.query.filter(Group.id == group_id).first().name]\
+                = query.all()
         # this should be done with a sql in statement, or something, but meh
         else:
             for group in current_user.groups:
@@ -436,7 +445,8 @@ class PimpyAPI:
                 list_items[group.name] = query.all()
 
         return Markup(render_template('pimpy/api/minutes.htm',
-            list_items=list_items, type='minutes', group_id=group_id))
+                                      list_items=list_items, type='minutes',
+                                      group_id=group_id))
 
     @staticmethod
     def get_minute(group_id, minute_id):
@@ -455,7 +465,8 @@ class PimpyAPI:
         list_items[group.name] = query.all()
 
         return Markup(render_template('pimpy/api/minutes.htm',
-            list_items=list_items, type='minutes', group_id=group_id))
+                                      list_items=list_items, type='minutes',
+                                      group_id=group_id))
 
     @staticmethod
     def update_content(task_id, content):
@@ -483,8 +494,8 @@ class PimpyAPI:
         Update the users of the task with the given id
         """
         task = Task.query.filter(Task.id == task_id).first()
-        users, message = PimpyAPI.get_list_of_users_from_string(task.group_id,
-            comma_sep_users)
+        users, message = PimpyAPI.get_list_of_users_from_string(
+            task.group_id, comma_sep_users)
         if not users:
             return False, message
         task.users = users
