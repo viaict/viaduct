@@ -21,7 +21,7 @@ def create_mollie_transaction():
 
 
 @blueprint.route('/check')
-@blueprint.route('/check/<transaction_id>', methods=['GET', 'POST'])
+@blueprint.route('/check/<trans_id>', methods=['GET', 'POST'])
 def mollie_check(trans_id=0):
     success, message = MollieAPI.check_transaction(transaction_id=trans_id)
     CustomFormAPI.update_payment(trans_id, success)
