@@ -94,8 +94,9 @@ def get_activity(activity_id=0):
             if form_result:
                 activity.form_data = form_result.data.replace('"', "'")
                 if not form_result.has_payed:
-                    activity.form.show_pay_button = True
-                    activity.form.id = form_result.id
+                    if form_result.form.price > 1.20:
+                        activity.form.show_pay_button = True
+                        activity.form.id = form_result.id
 
                 if form_result.has_payed:
                     activity.info = "Je hebt je al ingeschreven en betaald! Je kunt wel je inschrijving aanpassen door opniew het formulier in te vullen en te verzenden."
