@@ -1,5 +1,5 @@
 from flask.ext.login import current_user
-from flask import redirect, url_for
+from flask import redirect, url_for, abort
 from viaduct.models.mollie import Transaction
 from viaduct.api.custom_form import CustomFormAPI
 
@@ -76,6 +76,9 @@ class MollieAPI:
         else:
             transaction = Transaction.query.\
                 filter(Transaction.mollie_id == mollie_id).first()
+
+        if not transaction:
+            abort(404)
 
         auth_header = {'Authorization': 'Bearer ' + MOLLIE_KEY}
         r = requests.get(MOLLIE_URL + transaction.mollie_id,
