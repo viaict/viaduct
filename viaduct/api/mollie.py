@@ -27,8 +27,6 @@ class MollieAPI:
         amount += 0.99
         transaction = Transaction(amount=amount, description=description,
                                   user=user)
-        db.session.add(transaction)
-        db.session.commit()
 
         auth_header = {'Authorization': 'Bearer ' + MOLLIE_KEY}
         data = {
@@ -46,6 +44,7 @@ class MollieAPI:
         transaction.createdDatetime = datetime.datetime.strptime(
             r.json()['createdDatetime'], "%Y-%m-%dT%H:%M:%S.0Z")
         transaction.status = r.json()['status']
+        db.session.add(transaction)
         db.session.commit()
         print r.json()['amount']
         print r.json()['links']['paymentUrl']
