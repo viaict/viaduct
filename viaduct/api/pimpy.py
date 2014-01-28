@@ -358,19 +358,6 @@ class PimpyAPI:
         tasks_rel = tasks_rel.order_by(Group.name.asc(), User.first_name.asc(),
                                        User.last_name.asc(), Task.id.asc())
 
-        user = None
-        group = None
-        for tr in tasks_rel:
-            if group != tr.task.group.id:
-                group = tr.task.group.id
-                print('Group:' + tr.task.group.name)
-
-            if user != tr.user.id:
-                user = tr.user.id
-                print('  ' + str(tr.user))
-
-            print('    ' + str(tr.task))
-
         return Markup(render_template('pimpy/api/tasks.htm',
                                       personal=personal,
                                       tasks_rel=tasks_rel,
