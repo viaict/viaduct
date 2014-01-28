@@ -341,10 +341,7 @@ class PimpyAPI:
         groups = UserAPI.get_groups_for_current_user()
         groups = map(lambda x: x.id, groups)
 
-        tasks = Task.query
-        tasks = tasks.filter(~Task.status.in_((2, 5)))
         if group_id == 'all':
-            tasks = tasks.filter(Task.group_id.in_(groups))
             tasks_rel = tasks_rel.filter(Task.group_id.in_(groups))
 
         else:
@@ -352,11 +349,9 @@ class PimpyAPI:
             if group_id not in groups:
                 abort(403)
 
-            tasks = tasks.filter_by(group_id=group_id)
-            tasks_rel = tasks_rel.filter_by(Task.group_id == group_id)
+            tasks_rel = tasks_rel.filter(Task.group_id == group_id)
 
         if personal:
-            tasks = tasks.filter(Task.users.any(User.id == current_user.id))
             tasks_rel = tasks_rel.filter(User.id == current_user.id)
 
         tasks_rel = tasks_rel.filter(~Task.status.in_((4, 5))).join(Group)
