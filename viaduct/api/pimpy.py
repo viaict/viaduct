@@ -360,6 +360,7 @@ class PimpyAPI:
 
         return Markup(render_template('pimpy/api/tasks.htm',
                                       personal=personal,
+                                      group_id=group_id,
                                       tasks_rel=tasks_rel,
                                       type='tasks',
                                       status_meanings=status_meanings))
