@@ -1,24 +1,28 @@
 from viaduct import db
 import datetime
+from viaduct.models import BaseEntity
 
 # many to many relationship tables
-task_group = db.Table(
-    'pimpy_task_group',
-    db.Column('task_id', db.Integer, db.ForeignKey('pimpy_task.id')),
-    db.Column('group_id', db.Integer, db.ForeignKey('group.id'))
-)
-
 task_user = db.Table(
     'pimpy_task_user',
+    db.Column('id', db.Integer, primary_key=True),
     db.Column('task_id', db.Integer, db.ForeignKey('pimpy_task.id')),
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
 )
 
 
-class Task(db.Model):
+class TaskUserRel(db.Model):
+    __table__ = task_user
+
+    task = db.relationship('Task')
+    user = db.relationship('User')
+
+
+class Task(db.Model, BaseEntity):
     __tablename__ = 'pimpy_task'
 
-    id = db.Column(db.Integer, primary_key=True)
+    prints = ('id', 'title')
+
     title = db.Column(db.Text)
     content = db.Column(db.Text)
     deadline = db.Column(db.DateTime)
