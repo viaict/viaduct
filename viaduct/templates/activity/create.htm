@@ -31,15 +31,15 @@
             <div class="controls">
                 <div class="alert alert-info">
                     <b>Tip</b>
-                    Please select a date and time, using timepickers (click the clock)
+                    Selecteer een datum en tijd door op de klok te klikken
                 </div>
             </div>
         </div>
 
         <div class="control-group">
-            <span class="control-label">
-                Start date + time
-            </span>
+            <label class="control-label">
+                Start datum + tijd
+            </label>
 
             <div class="controls form-inline">
                 <input value="{{ form.start_time.data.strftime('%Y-%m-%d') }}" type='text' name='start_date' id='start_date' data-date-format="yyyy-mm-dd">
@@ -52,9 +52,9 @@
         </div>
 
         <div class="control-group">
-            <span class="control-label">
-                End date + time
-            </span>
+            <label class="control-label">
+                Eind datum + tijd
+            </label>
 
             <div class="controls form-inline">
                 <input value="{{ form.end_time.data.strftime('%Y-%m-%d') }}" type='text' name='end_date' id='end_date' data-date-format="yyyy-mm-dd">
@@ -70,7 +70,7 @@
         {{ render_field(form.price) }}
 
         {% if form.data.picture %}
-            <p>Current image:<br>
+            <p>Huidig plaatje:<br>
             <img src="/static/activity_pictures/{{ form.data.picture }}" style="height:200px;width:auto;">
         {% endif %}
 
@@ -78,7 +78,7 @@
 
     <div class="control-group">
         <div class="controls">
-            <button type="submit" class="btn">Save activity</button>
+            <button type="submit" class="btn btn-primary">Opslaan</button>
         </div>
     </div>
 </form>
