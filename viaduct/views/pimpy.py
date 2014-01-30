@@ -17,7 +17,7 @@ blueprint = Blueprint('pimpy', __name__, url_prefix='/pimpy')
 
 
 @blueprint.route('/archive/', methods=['GET', 'POST'])
-@blueprint.route('/archive/<group_id>', methods=['GET', 'POST'])
+@blueprint.route('/archive/<int:group_id>/', methods=['GET', 'POST'])
 def view_task_archive(group_id='all'):
     """
     Shows all tasks ever made.
@@ -38,7 +38,7 @@ def view_minutes(group_id='all'):
     return PimpyAPI.get_minutes(group_id)
 
 
-@blueprint.route('/minutes/<group_id>/<minute_id>')
+@blueprint.route('/minutes/<group_id>/<minute_id>/')
 def view_minute(group_id='all', minute_id=0):
     if not GroupPermissionAPI.can_read('pimpy'):
         return abort(403)
@@ -46,8 +46,9 @@ def view_minute(group_id='all', minute_id=0):
 
 
 @blueprint.route('/tasks/', methods=['GET', 'POST'])
-@blueprint.route('/tasks/<group_id>', methods=['GET', 'POST'])
+@blueprint.route('/tasks/<group_id>/', methods=['GET', 'POST'])
 def view_tasks(group_id='all'):
+    print(group_id)
     if not GroupPermissionAPI.can_read('pimpy'):
         return abort(403)
     return PimpyAPI.get_tasks(group_id, False)

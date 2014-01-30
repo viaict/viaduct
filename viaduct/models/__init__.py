@@ -1,4 +1,4 @@
-#!/usr/bin/python
+from base_model import BaseEntity
 
 from activity import Activity
 from course import Course

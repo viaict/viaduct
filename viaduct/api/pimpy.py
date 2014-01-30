@@ -1,8 +1,7 @@
 from viaduct import db, application
-from flask import render_template, request, Markup, redirect, url_for, abort,\
+from flask import render_template, Markup, redirect, url_for, abort,\
     flash
 from flask.ext.login import current_user
-from sqlalchemy import desc
 import datetime
 import re
 
@@ -10,8 +9,10 @@ from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.user import UserAPI
 from viaduct.models import Group, User
 from viaduct.models import Minute, Task
+from viaduct.models.pimpy import TaskUserRel
 
 DATE_FORMAT = application.config['DATE_FORMAT']
+
 
 class PimpyAPI:
     @staticmethod
@@ -150,20 +151,20 @@ class PimpyAPI:
                 try:
                     listed_users, title = action.split(":")
                 except:
-                    print "could not split the line on ':'.\nSkipping hit."
+                    print("could not split the line on ':'.\nSkipping hit.")
                     flash("could not parse: " + action)
                     continue
 
                 users, message = PimpyAPI.get_list_of_users_from_string(
                     group_id, listed_users)
                 if not users:
-                    print message
+                    print(message)
                     continue
                 try:
                     task = Task(title, "", None, group_id, users,
                                 minute_id, i, 0)
                 except:
-                    print "wasnt given the right input to create a task"
+                    print("wasnt given the right input to create a task")
                     continue
                 tasks_found.append(task)
 
@@ -173,13 +174,13 @@ class PimpyAPI:
             try:
                 done_task = Task.query.filter(Task.id == done_id).first()
             except:
-                print "could not find the given task"
+                print("could not find the given task")
                 flash("could not find DONE " + done_id)
                 continue
             if done_task:
                 dones_found.append(done_task)
             else:
-                print "Could not find task " + done_id
+                print("Could not find task " + done_id)
                 flash("could not find DONE " + done_id)
 
         regex = re.compile("\s*(?:REMOVE) ([^\n\r]*)")
@@ -188,13 +189,13 @@ class PimpyAPI:
             try:
                 remove_task = Task.query.filter(Task.id == remove_id).first()
             except:
-                print "could not find the given task"
+                print("could not find the given task")
                 flash("could not find REMOVE " + remove_id)
                 continue
             if remove_task:
                 removes_found.append(remove_task)
             else:
-                print "Could not find REMOVE " + remove_id
+                print("Could not find REMOVE " + remove_id)
                 flash("could not find REMOVE " + remove_id)
 
         return tasks_found, dones_found, removes_found
@@ -301,6 +302,8 @@ class PimpyAPI:
             flash('Current_user not found')
             return redirect(url_for('pimpy.view_tasks'))
 
+        status_meanings = Task.get_status_meanings()
+
         list_items = {}
         if group_id == 'all':
             for group in UserAPI.get_groups_for_current_user():
@@ -320,8 +323,8 @@ class PimpyAPI:
 
         return Markup(render_template('pimpy/api/tasks.htm',
                                       list_items=list_items, type='tasks',
-                                      group_id=group_id, personal=False, 
-                                      status_meanings=Task.get_status_meanings()))
+                                      group_id=group_id, personal=False,
+                                      status_meanings=status_meanings))
 
     @staticmethod
     def get_tasks(group_id, personal):
@@ -330,94 +333,37 @@ class PimpyAPI:
         if not current_user:
             flash('Current_user not found')
             return redirect(url_for('pimpy.view_tasks'))
-        # TODO: only return tasks with status != completed
 
-        list_items = {}
+        status_meanings = Task.get_status_meanings()
 
-        if personal:
-            if group_id == 'all':
-                for group in UserAPI.get_groups_for_current_user():
-                    list_users = {}
-                    items = []
-                    for task in group.tasks:
-                        if current_user in task.users:
-                            items.append(task)
-                    if len(items):
-                        list_users[current_user.first_name + " " +
-                                   current_user.last_name] = items
-                    if len(list_users):
-                        list_items[group.name] = list_users
-            else:
-                group = Group.query.filter(Group.id == group_id).first()
-                if not group in UserAPI.get_groups_for_current_user():
-                    abort(403)
-                tasks = Task.query.filter(Task.group_id == group_id).all()
-                if not group:
-                    abort(404)
-                items = []
-                list_users = {}
-                for task in tasks:
-                    if current_user in task.users:
-                        items.append(task)
-                if len(items):
-                    list_users[current_user.first_name + " " +
-                               current_user.last_name] = items
-                if len(list_users):
-                    list_items[Group.query.filter(Group.id == group_id).
-                               first().name] = list_users
+        tasks_rel = TaskUserRel.query.join(Task).join(User)
 
-                # group_name = Group.query.filter(Group.id==group_id).
-                #                          first().name
-                # list_items[group_name] = []
-                # for task in query.all():
-                #   for u in task.users:
-                #       if u.id == current_user.id:
-                #           list_items[group_name].append(task)
+        groups = UserAPI.get_groups_for_current_user()
+        groups = map(lambda x: x.id, groups)
+
+        if group_id == 'all':
+            tasks_rel = tasks_rel.filter(Task.group_id.in_(groups))
 
         else:
-            if group_id == 'all':
-                for group in UserAPI.get_groups_for_current_user():
-                    list_users = {}
-                    for user in group.users:
-                        items = []
-                        for task in group.tasks:
-                            if user in task.users:
-                                items.append(task)
-                        if len(items):
-                            list_users[user.first_name + " " +
-                                       user.last_name] = items
-                    if len(list_users):
-                        list_items[group.name] = list_users
+            group_id = int(group_id)
+            if group_id not in groups:
+                abort(403)
 
-            else:
-                group = Group.query.filter(Group.id == group_id).first()
-                if not group:
-                    abort(404)
-                if not group in UserAPI.get_groups_for_current_user():
-                    abort(403)
-                list_users = {}
-                for user in group.users:
-                    items = []
-                    for task in group.tasks:
-                        if user in task.users:
-                            items.append(task)
-                    if len(items):
-                        list_users[user.first_name + " " + user.last_name] = items
-                        list_users[user.first_name + " " +
-                                   user.last_name] = items
-                if len(list_users):
-                    list_items[group.name] = list_users
+            tasks_rel = tasks_rel.filter(Task.group_id == group_id)
 
-        # remove those list items that have been set to checked and removed
-        for group_header in list_items:
-            for user_header in list_items[group_header]:
-                list_items[group_header][user_header] = \
-                    filter(lambda x: x.status < 4,
-                           list_items[group_header][user_header])
+        if personal:
+            tasks_rel = tasks_rel.filter(User.id == current_user.id)
+
+        tasks_rel = tasks_rel.filter(~Task.status.in_((4, 5))).join(Group)
+        tasks_rel = tasks_rel.order_by(Group.name.asc(), User.first_name.asc(),
+                                       User.last_name.asc(), Task.id.asc())
 
         return Markup(render_template('pimpy/api/tasks.htm',
-            list_items=list_items, type='tasks', group_id=group_id,
-            personal=personal, status_meanings=Task.get_status_meanings()))
+                                      personal=personal,
+                                      group_id=group_id,
+                                      tasks_rel=tasks_rel,
+                                      type='tasks',
+                                      status_meanings=status_meanings))
 
     @staticmethod
     def get_minutes(group_id):

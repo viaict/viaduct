@@ -1,77 +1,102 @@
 {% extends "pimpy/view_page.htm" %}
 
 {% block content %}
-	<div class="span8">
-		Filter:
-		<div class="btn-group" data-toggle="buttons-checkbox">
-			{% for status_meaning in status_meanings: %}
-				<button type="button" class="btn btn-filter btn-primary active" data-hide='{{ status_meaning[0] | replace(" ","_")}}'> {{ status_meaning[0] }}</button>
-			{% endfor %}
-		</div>
-		{% for group_header in list_items: %}
-			<h1> {{ group_header }} </h1>
-			{% for user_header in list_items[group_header]: %}
-				<h3> {{ user_header }} </h3>
-				<table class="table table-hover">
-					<tbody>
-						{% for list_item in list_items[group_header][user_header]: %}
-						<tr class='pimpy_status_{{ list_item.get_status_string() | replace(" ","_")}}' data-toggle="collapse" data-target='#{{ list_item.id }}_{{ user_header | replace(" ","_") }}'>
-							<td>
-			                    <div class="btn-group" style="margin-bottom: 8px;">
-			                        <a id="pimpy_task{{ list_item.id }}" class="btn dropdown-toggle {{ list_item.get_status_color() }} " data-toggle="dropdown" href="#"> {{ list_item.get_task_id() }} </a>
-			                        <ul class="dropdown-menu">
-			                            {% for status_meaning in status_meanings: %}
-			                                <li>
-			                                    <a href="#" data-toggle="dropdown" data-task-id="{{ list_item.id }}" data-status-id="{{ status_meaning[2] }}" class="pimpy_status {{ status_meaning[1] }}"> {{ status_meaning[0] }}</a>
-			                                </li>
-			                            {% endfor %}
-			                        </ul>
-			                    </div>
-							</td><td>
-							{{ list_item.title }}
-							</td><td>
-							{{ list_item.get_users() }}
-							</td>
-						</tr><tr class='pimpy_status_{{ list_item.get_status_string() | replace(" ","_")}}'>
-							<td colspan="3" style="padding: 0px;">
-							<div class="collapse" id='{{ list_item.id }}_{{ user_header | replace(" ","_") }}'>
-								<div class="well well-small">
-									<dl>
-										<dt>Task:</dt>
-										<dd>
-											<a href="#" class="pimpy_editable" id="title" data-pk="{{ list_item.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ list_item.id }}" data-title="Task Content">{{ list_item.title }}</a>
-											<button class="btn pimpy_editable_toggle" style="float: right;">Edit</button>
-										</dd>
-										<dt>Users:</dt>
-										<dd>
-											<a href="#" class="pimpy_editable" id="users" data-pk="{{ list_item.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ list_item.id }}" data-title="Task Content">{{ list_item.get_users() }}</a>
-										</dd> 
-										<dt>Description:</dt>
-										<dd>
-											<a href="#" class="pimpy_editable" id="content" data-pk="{{ list_item.id }}" data-type="textarea" data-url="/pimpy/tasks/edit/{{ list_item.id }}" data-title="Task Content">{{ list_item.content }}</a>
-										</dd>
-										<dt>Deadline: </dt>
-										<dd>
-											{{ list_item.deadline }}
-										</dd>
-										<dt>Created on:</dt>
-										<dd>
-											{{list_item.timestamp }}
-										</dd>
-									</dl>
-									{% if list_item.minute_id > 1 %}
-									<a href="{{ url_for('pimpy.view_minute', group_id=list_item.group_id, minute_id=list_item.minute_id) }}"> Go to minute </a>
-									{% endif %}
-								</div>
-							</div>
-							</td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-				<br>
-			{% endfor %}
-			<br><br>
-		{% endfor %}
-	</div>
+    <div class="span8">
+        Filter:
+        <div class="btn-group" data-toggle="buttons-checkbox">
+            {% for status_meaning in status_meanings: %}
+                <button type="button" class="btn btn-filter btn-primary active" data-hide='{{ status_meaning[0] | replace(" ","_")}}'> {{ status_meaning[0] }}</button>
+            {% endfor %}
+        </div>
+        {% for i, tr in enumerate(tasks_rel): %}
+
+            {% if prev_group != tr.task.group_id %}
+                {% set prev_group = tr.task.group_id %}
+                {% set changed = True %}
+
+                {% if i %}
+                    </tbody>
+                    </table>
+                {% endif %}
+
+                <h1> {{ tr.task.group.name }} </h1>
+            {% endif %}
+
+            {% if not personal: %}
+                {% if prev_user != tr.user_id %}
+                    {% set prev_user = tr.user_id %}
+
+                    {% if not changed %}
+                        {% set changed = True %}
+                        </tbody>
+                        </table>
+                    {% endif %}
+
+                    <h3> {{ tr.user.name }} </h3>
+                {% endif %}
+            {% endif %}
+
+            {% if changed: %}
+                {% set changed = False %}
+                <table class="table table-hover">
+                <tbody>
+            {% endif %}
+
+            {% set t = tr.task %}
+
+            <tr class='pimpy_status_{{ t.get_status_string() | replace(" ","_")}}' data-toggle="collapse" data-target='#{{ t.id }}_{{ user_name | replace(" ","_") }}'>
+                <td>
+                    <div class="btn-group" style="margin-bottom: 8px;">
+                        <a id="pimpy_task{{ t.id }}" class="btn dropdown-toggle {{ t.get_status_color() }} " data-toggle="dropdown" href="#"> {{ t.get_task_id() }} </a>
+                        <ul class="dropdown-menu">
+                            {% for status_meaning in status_meanings: %}
+                                <li>
+                                    <a href="#" data-toggle="dropdown" data-task-id="{{ t.id }}" data-status-id="{{ status_meaning[2] }}" class="pimpy_status {{ status_meaning[1] }}"> {{ status_meaning[0] }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </td><td>
+                {{ t.title }}
+                </td><td>
+                {{ t.get_users() }}
+                </td>
+            </tr>
+            <tr class='pimpy_status_{{ t.get_status_string() | replace(" ","_")}}'>
+                <td colspan="3" style="padding: 0px;">
+                <div class="collapse" id='{{ t.id }}_{{ user_header | replace(" ","_") }}'>
+                    <div class="well well-small">
+                        <dl>
+                            <dt>Task:</dt>
+                            <dd>
+                                <a href="#" class="pimpy_editable" id="title" data-pk="{{ t.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ t.id }}" data-title="Task Content">{{ t.title }}</a>
+                                <button class="btn pimpy_editable_toggle" style="float: right;">Edit</button>
+                            </dd>
+                            <dt>Users:</dt>
+                            <dd>
+                                <a href="#" class="pimpy_editable" id="users" data-pk="{{ t.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ t.id }}" data-title="Task Content">{{ t.get_users() }}</a>
+                            </dd>
+                            <dt>Description:</dt>
+                            <dd>
+                                <a href="#" class="pimpy_editable" id="content" data-pk="{{ t.id }}" data-type="textarea" data-url="/pimpy/tasks/edit/{{ t.id }}" data-title="Task Content">{{ t.content }}</a>
+                            </dd>
+                            <dt>Deadline: </dt>
+                            <dd>
+                                {{ t.deadline }}
+                            </dd>
+                            <dt>Created on:</dt>
+                            <dd>
+                                {{t.timestamp }}
+                            </dd>
+                        </dl>
+                        {% if t.minute_id > 1 %}
+                        <a href="{{ url_for('pimpy.view_minute', group_id=t.group_id, minute_id=t.minute_id) }}"> Go to minute </a>
+                        {% endif %}
+                    </div>
+                </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody></table>
+    </div>
 {% endblock %}
