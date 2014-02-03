@@ -1,30 +1,47 @@
 body {
-	overflow-y: scroll;
-	margin-bottom:20px;
+    overflow-y: scroll;
+    margin-bottom:20px;
 }
 
 form label {
-	font-weight:bold;
+    font-weight:bold;
 }
 
 label.checkbox {
-	font-weight:normal;
+    font-weight:normal;
 }
 
 #sublogo {
-	min-height: 120px;
+    min-height: 120px;
 }
 
 #login-info {
-	text-align: right;
+    text-align: right;
 }
 
 
 /* Sponsors */
 
 .sponsors {
-	margin-top:40px;
-	padding:20px 0;
+    margin-top: 0px;
+}
+
+/* align sponsors on one line */
+.sponsors div {
+    height: 150px;
+}
+
+.sponsors div:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.sponsors a {
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
 }
 
 
@@ -34,121 +51,121 @@ label.checkbox {
 /* Activity-block (activities) */
 
 .activity-simple-image img {
-	width: 70px;
-	height: 70px;
+    width: 70px;
+    height: 70px;
 }
 
 .activity-simple-image {
-	width: 70px;
-	height: 70px;
-	padding: 0px;
-	margin-right: 10px;
-	float: left;
+    width: 70px;
+    height: 70px;
+    padding: 0px;
+    margin-right: 10px;
+    float: left;
 }
 
 .activity-simple {
-	margin-top: 10px;
-	border-bottom: 1px dashed #eee;
-	padding-bottom: 10px;
+    margin-top: 10px;
+    border-bottom: 1px dashed #eee;
+    padding-bottom: 10px;
 }
 
 .activity-simple-list {
-	margin-top: 30px;
+    margin-top: 30px;
 }
 
 .activity-block {
-	padding: 20px;
-	border-bottom: 1px dashed #eee;
+    padding: 20px;
+    border-bottom: 1px dashed #eee;
 }
 
 .activity a {
-	color: #333;
+    color: #333;
 }
 
 .activity-block:hover {
-	background-color: #f5f5f5;
+    background-color: #f5f5f5;
 }
 
 .activity-block img {
-	max-height: 220px;
-	max-width: 220px;
+    max-height: 220px;
+    max-width: 220px;
 }
 
 .activity-block .image {
-	height: 220px;
+    height: 220px;
 }
 
 .activity-block .short_content {
-	height: 115px;
-	overflow: hidden;
-	text-overflow: ellipsis;
+    height: 115px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .activity-block .short_content p {
-	height: 115px;
-	overflow: hidden;
-	text-overflow: ellipsis;
+    height: 115px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .activity-block h1 {
-	font-size: 2em;
-	padding: 0px;
-	line-height: 1em;
-	margin: 0px;
-	color: #0088cc;
+    font-size: 2em;
+    padding: 0px;
+    line-height: 1em;
+    margin: 0px;
+    color: #0088cc;
 }
 
 .activity-block .row-fluid {
-	height: 220px;
-	overflow: hidden;
+    height: 220px;
+    overflow: hidden;
 }
 
 .activity-block h2 {
-	font-size: 2em;
-	margin: 10px 0px 0px 0px;
-	padding: 0px;
-	line-height: 1em;
-	float: right;
+    font-size: 2em;
+    margin: 10px 0px 0px 0px;
+    padding: 0px;
+    line-height: 1em;
+    float: right;
 }
 
 .activity-block h3 {
-	padding: 0px;
-	font-size: 1.5em;
-	line-height: 1em;
+    padding: 0px;
+    font-size: 1.5em;
+    line-height: 1em;
 }
 
 .activity-block h3 i {
-	margin-top: 4px;
-	margin-right: 10px;
+    margin-top: 4px;
+    margin-right: 10px;
 }
 
 .activity-block h2 i {
-	position: relative;
-	top: 8px;
+    position: relative;
+    top: 8px;
 }
 
 .activity-block td {
-	min-width:70px;
-	padding:3px;
+    min-width:70px;
+    padding:3px;
 }
 
 .activity-block .time {
-	color:#444;
-	font-weight:bold;
-	margin: 10px 0px;
-	float: left;
+    color:#444;
+    font-weight:bold;
+    margin: 10px 0px;
+    float: left;
 }
 
 .activity-block .time dt {
-	width: 20px;
+    width: 20px;
 }
 
 .activity-block .time dd {
-	margin-left: 40px;
+    margin-left: 40px;
 }
 
 #acc {
-	margin-top:-14px;
+    margin-top:-14px;
 }
 
 
@@ -157,86 +174,86 @@ label.checkbox {
 
 /* Twitter widget */
 .twtr-widget h3 {
-	font-size: 200% !important;
-	float: left;
+    font-size: 200% !important;
+    float: left;
 }
 .twtr-widget h4 {
-	float: right;
+    float: right;
 }
 
 .logo {
-	margin: 10px;
+    margin: 10px;
 }
 
 .logo.pimpy {
-	float: right;
-	margin-top: 13px;
-	height: 100px;
+    float: right;
+    margin-top: 13px;
+    height: 100px;
 }
 
 .sponsor {
-	float: left;
-	clear: none;
-	width: 180px;
-	padding: 2em;
+    float: left;
+    clear: none;
+    width: 180px;
+    padding: 2em;
 }
 .mainblock {
-	border-radius: 6px 6px 6px 6px;
-	border: 1px solid #ddd;
-	margin-bottom: 20px;
-	padding-top: 0.5em;
-	padding-bottom: 0.5em;
-	padding-left: 1em;
-	padding-right: 1em;
-	min-height: 540px;
+    border-radius: 6px 6px 6px 6px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    padding-left: 1em;
+    padding-right: 1em;
+    min-height: 540px;
 }
 .readmore {
-	background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgba(255,255,255,1) 20%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(20%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 20%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 20%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 20%); /* IE10+ */
-	background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 20%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
-	position: absolute;
-	bottom: 0;
-	padding-top: 10px;
-	text-align: right;
+    background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgba(255,255,255,1) 20%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(20%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 20%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 20%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 20%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 20%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+    position: absolute;
+    bottom: 0;
+    padding-top: 10px;
+    text-align: right;
 }
 
 .edit-group {
-	margin-right: 8px;
+    margin-right: 8px;
 }
 
 .dropdown-menu > li > input {
-	display: block;
-	padding: 3px 20px;
-	clear: both;
-	font-weight: normal;
-	line-height: 20px;
-	color: #333333;
-	white-space: nowrap;
-	border: 0px;
-	border-radius: 0px;
-	webkit-border-radius: 0px;
-	moz-border-radius: 0px;
-	text-align: left;
-	background-color: white;
-	width: 100%;
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 20px;
+    color: #333333;
+    white-space: nowrap;
+    border: 0px;
+    border-radius: 0px;
+    webkit-border-radius: 0px;
+    moz-border-radius: 0px;
+    text-align: left;
+    background-color: white;
+    width: 100%;
 }
 
 .dropdown-menu > li > input:hover,
 .dropdown-menu > li > input:focus {
-	color: #ffffff;
-	text-decoration: none;
-	background-color: #0081c2;
-	background-image: -moz-linear-gradient(top, #0088cc, #0077b3);
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3));
-	background-image: -webkit-linear-gradient(top, #0088cc, #0077b3);
-	background-image: -o-linear-gradient(top, #0088cc, #0077b3);
-	background-image: linear-gradient(to bottom, #0088cc, #0077b3);
-	background-repeat: repeat-x;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0);
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #0081c2;
+    background-image: -moz-linear-gradient(top, #0088cc, #0077b3);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3));
+    background-image: -webkit-linear-gradient(top, #0088cc, #0077b3);
+    background-image: -o-linear-gradient(top, #0088cc, #0077b3);
+    background-image: linear-gradient(to bottom, #0088cc, #0077b3);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0);
 }
 
 
@@ -244,27 +261,27 @@ label.checkbox {
 
 /* PimPy */
 .pimpy-btn-group {
-	margin-bottom: 8px;
+    margin-bottom: 8px;
 }
 
 .pimpy-menu {
-	width: 75px;
+    width: 75px;
 }
 
 .pimpy-menu-group {
-	width: 150px;
+    width: 150px;
 }
 
 .pimpy_task_task {
-	max-width: 400px;
-	overflow: hidden;
-	text-overflow: ellipsis;
+    max-width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .pimpy_task_users {
-	max-width: 150px;
-	overflow: hidden;
-	text-overflow: ellipsis;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 
@@ -274,43 +291,43 @@ label.checkbox {
 /* User Pages */
 
 .user_single dl, .user_single dt, .user_single dd {
-	float: left;
-	margin: 0;
+    float: left;
+    margin: 0;
 }
 
 .user_single dt, .user_single dd {
-	min-height: 20px;
-	border-top: 1px dashed #eee;
+    min-height: 20px;
+    border-top: 1px dashed #eee;
 }
 
 .user_single {
-	padding: 0;
+    padding: 0;
 }
 
 .user_single dt {
-	text-transform: capitalize;
-	width: 140px;
-	padding: 5px 5px 5px 0px;
+    text-transform: capitalize;
+    width: 140px;
+    padding: 5px 5px 5px 0px;
 }
 
 .user_single dd {
-	width: 200px;
-	padding: 5px 0;
+    width: 200px;
+    padding: 5px 0;
 }
 
 .user_single td {
-	border-top: 1px dashed #eee;
+    border-top: 1px dashed #eee;
 }
 
 .user_single h1 {
-	border-top: 1px dashed #eee;
-	border-bottom: 1px dashed #eee;
+    border-top: 1px dashed #eee;
+    border-bottom: 1px dashed #eee;
 }
 
 .user_single img {
-	margin-right: 15px;
-	max-width: 100px;
-	max-height: 100px;
+    margin-right: 15px;
+    max-width: 100px;
+    max-height: 100px;
 }
 
 
@@ -319,48 +336,48 @@ label.checkbox {
 
 /* Bootstrap formbuilder */
 .ui-draggable {
-	margin-bottom:4px;
+    margin-bottom:4px;
 }
 
 .ui-state-highlight {
-	background:#fff;
+    background:#fff;
 }
 
 .hoverDragged {
-	background:#fff;
+    background:#fff;
 }
 
 .hoverDroppable {
-	background-color: lightblue;
+    background-color: lightblue;
 }
 
 .draggableField {
-	padding-left:5px;
+    padding-left:5px;
 }
 
 li.leave-alone {
-	visibility: hidden;
-	height: 10px;
+    visibility: hidden;
+    height: 10px;
 }
 
 ul.parent > li {
-	margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 /* Navigation. */
 div.nav_entry {
-	border: 1px solid black;
-	padding: 5px;
+    border: 1px solid black;
+    padding: 5px;
 }
 
 div.sortable {
-	padding: 10px;
-	clear: both;
+    padding: 10px;
+    clear: both;
 }
 
 /* Custom Form view-results */
 .is_reserve {
-	background:#FFFD87;
+    background:#FFFD87;
 }
 
 #athenaeum {
