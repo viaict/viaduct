@@ -24,7 +24,7 @@ class MollieAPI:
     @staticmethod
     def create_transaction(amount, description, local_url="",
                            user=current_user, form_result=None):
-        amount += 0.99
+        amount += 1.20
         transaction = Transaction(amount=amount, description=description,
                                   user=user)
         if form_result:

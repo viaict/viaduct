@@ -75,7 +75,7 @@ def get_activity(activity_id=0):
     # Add education for activity form
     educations = Education.query.all()
     form.education_id.choices = \
-            [(e.id, e.name) for e in educations]
+        [(e.id, e.name) for e in educations]
 
     # Check if there is a custom_form for this activity
     if activity.form_id:
@@ -83,10 +83,12 @@ def get_activity(activity_id=0):
         activity.form = CustomForm.query.get(activity.form_id)
 
         # Count current attendants for "reserved" message
-        entries = CustomFormResult.query.filter(CustomFormResult.form_id == activity.form_id)
+        entries = CustomFormResult.query.filter(CustomFormResult.form_id ==
+                                                activity.form_id)
         activity.num_attendants = entries.count()
 
-        # Check if the current user has already entered data in this custom form
+        # Check if the current user has already entered data in this custom
+        # form
         if current_user and current_user.id > 0:
             form_result = CustomFormResult.query \
                 .filter(CustomFormResult.form_id == activity.form_id) \
@@ -100,21 +102,31 @@ def get_activity(activity_id=0):
                         activity.form.id = form_result.id
 
                 if form_result.has_payed:
-                    activity.info = "Je hebt je al ingeschreven en betaald! Je kunt wel je inschrijving aanpassen door opniew het formulier in te vullen en te verzenden."
+                    activity.info = "Je hebt je al ingeschreven en betaald!"\
+                        " je kunt wel je inschrijving aanpassen door opniew "\
+                        "het formulier in te vullen en te verzenden."
                 else:
-                    activity.info   = "Je hebt je al ingeschreven! Je moet nog wel betalen!"
-            else :
-                activity.info   = "De activiteit zit vol qua inschrijvingen, als je je nu inschrijft kom je op de reserve lijst!" if activity.num_attendants >= activity.form.max_attendants else "Er zijn op het moment %s inschrijvingen" % activity.num_attendants
+                    activity.info = "Je hebt je al ingeschreven! Je moet nog "\
+                        "wel betalen!"
+            else:
+                if activity.num_attendants >= activity.form.max_attendants:
+                    activity.info = "De activiteit zit vol qua "\
+                        "inschrijvingen, als je je nu inschrijft kom je op "\
+                        "de reserve lijst!"
+                else:
+                    activity.info = "Er zijn op het moment %s "\
+                        "inschrijvingen" % activity.num_attendants
 
+    return render_template('activity/view_single.htm', activity=activity,
+                           form=form)
 
-    return render_template('activity/view_single.htm', activity=activity, form=form)
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<int:activity_id>', methods=['GET', 'POST'])
 def create(activity_id=None):
     # Need to be logged in + actie group or admin etc.
     if not GroupPermissionAPI.can_write('activity'):
-        return abort(403);
+        return abort(403)
 
     if activity_id:
         activity = Activity.query.get(activity_id)
@@ -136,9 +148,9 @@ def create(activity_id=None):
     if request.method == 'POST':
         valid_form = True
 
-        owner_id        = current_user.id
+        owner_id = current_user.id
 
-        name                = form.name.data
+        name = form.name.data
         description = form.description.data
 
         start_date = form.start_date.data
@@ -147,28 +159,31 @@ def create(activity_id=None):
         end_date = form.end_date.data
         end_time = form.end_time.data
 
-        start = datetime.datetime.strptime(start_date + start_time, '%Y-%m-%d%H:%M')
+        start = datetime.datetime.strptime(start_date + start_time,
+                                           '%Y-%m-%d%H:%M')
         end = datetime.datetime.strptime(end_date + end_time, '%Y-%m-%d%H:%M')
 
         location = form.location.data
-        price   = form.price.data
+        price = form.price.data
 
         file = request.files['picture']
 
         if file and allowed_file(file.filename):
             picture = secure_filename(file.filename)
-            file.save(os.path.join('viaduct/static/activity_pictures', picture))
+            file.save(os.path.join('viaduct/static/activity_pictures',
+                                   picture))
 
             # Remove old picture
             if activity.picture:
-                os.remove(os.path.join('viaduct/static/activity_pictures', activity.picture))
+                os.remove(os.path.join('viaduct/static/activity_pictures',
+                                       activity.picture))
 
         elif activity.picture:
             picture = activity.picture
         else:
             picture = None
 
-        venue   = 1 # Facebook ID location, not used yet
+        venue = 1  # Facebook ID location, not used yet
 
         # Set a custom_form if it actually exists
         if form.form_id and form.form_id.data > 0:
@@ -193,7 +208,8 @@ def create(activity_id=None):
             db.session.add(activity)
             db.session.commit()
 
-            return redirect(url_for('activity.view'))
+            return redirect(url_for('activity.get_activity',
+                                    activity_id=activity.id))
     else:
         flash_form_errors(form)
 
@@ -204,7 +220,9 @@ def create(activity_id=None):
 def create_mollie_transaction(result_id):
     form_result = CustomFormResult.query.filter(
         CustomFormResult.id == result_id).first()
-    transaction = Transaction.query.filter(Transaction.form_result_id == form_result.id).filter(Transaction.status == 'open').first()
+    transaction = Transaction.query\
+        .filter(Transaction.form_result_id == form_result.id)\
+        .filter(Transaction.status == 'open').first()
     if not transaction:
         description = form_result.form.transaction_description
         amount = form_result.form.price
@@ -216,7 +234,7 @@ def create_mollie_transaction(result_id):
         return redirect(payment_url)
     else:
         payment_url = MollieAPI.get_payment_url(transaction.id)
-        print payment_url
+        print(payment_url)
         return redirect(payment_url)
 
     return False
