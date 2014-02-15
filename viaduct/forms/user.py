@@ -5,10 +5,10 @@ from flask.ext.wtf import ValidationError
 
 
 class SignUpForm(Form):
-    email = TextField('E-mail adres',
-                      validators=[Required(message='Geen emailadres '
+    email = TextField('E-mailadres',
+                      validators=[Required(message='Geen e-mailadres '
                                                    'opgegeven'),
-                                  Email(message='Ongelding emailadres '
+                                  Email(message='Ongelding e-mailadres '
                                                 'opgegeven')])
     password = PasswordField('Wachtwoord',
                              validators=[Required(message='Geen wachtwoord '
@@ -38,10 +38,10 @@ class SignUpForm(Form):
 class EditUserForm(Form):
     """ Edit a user as administrator """
     id = IntegerField('ID')
-    email = TextField('E-mail adres',
-                      validators=[Required(message='Geen emailadres '
+    email = TextField('E-mailadres',
+                      validators=[Required(message='Geen e-mailadres '
                                                    'opgegeven'),
-                                  Email(message='Ongeldig emailadres '
+                                  Email(message='Ongeldig e-mailadres '
                                                 'opgegeven')])
     password = PasswordField('Wachtwoord')
     repeat_password = PasswordField('Herhaal wachtwoord')
@@ -72,10 +72,10 @@ class EditUserForm(Form):
 class EditUserInfoForm(Form):
     """ Edit your own user information """
     id = IntegerField('ID')
-    email = TextField('E-mail adres',
-                      validators=[Required(message='Geen emailadres '
+    email = TextField('E-mailadres',
+                      validators=[Required(message='Geen e-mailadres '
                                                    'opgegeven'),
-                                  Email(message='Ongeldig emailadres '
+                                  Email(message='Ongeldig e-mailadres '
                                                 'opgegeven')])
     password = PasswordField('Wachtwoord')
     repeat_password = PasswordField('Herhaal wachtwoord')
@@ -103,16 +103,16 @@ class EditUserInfoForm(Form):
 
 
 class SignInForm(Form):
-    email = TextField('E-mail adres', validators=[Required(), Email()])
+    email = TextField('E-mailadres', validators=[Required(), Email()])
     password = PasswordField('Wachtwoord', validators=[Required()])
     remember_me = BooleanField('Onthouden', default=False)
 
 
 class ResetPassword(Form):
-    email = TextField('E-mail adres',
-                      validators=[Required(message='Geen emailadres '
+    email = TextField('E-mailadres',
+                      validators=[Required(message='Geen e-mailadres '
                                                    'opgegeven'),
-                                  Email(message='Ongeldig emailadres '
+                                  Email(message='Ongeldig e-mailadres '
                                                 'opgegeven')])
     student_id = TextField('Studentnummer',
                            validators=[Required(message='Geen studentnummer '
