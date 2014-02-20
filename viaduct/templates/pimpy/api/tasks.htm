@@ -19,7 +19,9 @@
                     </table>
                 {% endif %}
 
-                <h1> {{ tr.task.group.name }} </h1>
+                <h1>
+                    <a href="{% if personal %}{{ url_for('pimpy.view_tasks_personal', group_id=tr.task.group.id) }}{% else %}{{ url_for('pimpy.view_tasks', group_id=tr.task.group.id) }}{% endif %}">{{ tr.task.group.name }}</a>
+                </h1>
             {% endif %}
 
             {% if not personal: %}
