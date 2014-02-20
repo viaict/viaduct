@@ -44,7 +44,7 @@
 
             {% set t = tr.task %}
 
-            <tr class='pimpy_status_{{ t.get_status_string() | replace(" ","_")}}' data-toggle="collapse" data-target='#{{ t.id }}_{{ user_name | replace(" ","_") }}'>
+            <tr class='pimpy_status_{{ t.get_status_string() | replace(" ","_")}}' data-toggle="collapse" data-target='#{{ t.id }}_{{ tr.user.name | replace(" ","_") }}'>
                 <td>
                     <div class="btn-group" style="margin-bottom: 8px;">
                         <a id="pimpy_task{{ t.id }}" class="btn dropdown-toggle {{ t.get_status_color() }} " data-toggle="dropdown" href="#"> {{ t.get_task_id() }} </a>
@@ -64,7 +64,7 @@
             </tr>
             <tr class='pimpy_status_{{ t.get_status_string() | replace(" ","_")}}'>
                 <td colspan="3" style="padding: 0px;">
-                <div class="collapse" id='{{ t.id }}_{{ user_header | replace(" ","_") }}'>
+                <div class="collapse" id='{{ t.id }}_{{ tr.user.name | replace(" ","_") }}'>
                     <div class="well well-small">
                         <dl>
                             <dt>Task:</dt>
