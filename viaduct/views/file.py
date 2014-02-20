@@ -12,8 +12,8 @@ blueprint = Blueprint('file', __name__, url_prefix='/files')
 
 
 @blueprint.route('/', methods=['GET'])
-@blueprint.route('/<int:page>/', methods=['GET'])
-def list(page=1):
+@blueprint.route('/<int:page_nr>/', methods=['GET'])
+def list(page_nr=1):
     '''
     List all files that are not assigned to a page.
     '''
@@ -21,15 +21,15 @@ def list(page=1):
         return abort(403)
 
     files = File.query.filter_by(page=None).order_by(File.name)\
-                .paginate(page, 30, False)
+                .paginate(page_nr, 30, False)
     form = FileForm()
 
     return render_template('files/list.htm', files=files, form=form)
 
 
 @blueprint.route('/', methods=['POST'])
-@blueprint.route('/<int:page>/', methods=['POST'])
-def upload(page=1):
+@blueprint.route('/<int:page_nr>/', methods=['POST'])
+def upload(page_nr=1):
     '''
     Upload a file.
     '''
@@ -39,7 +39,7 @@ def upload(page=1):
     new_file = request.files['file']
     FileAPI.upload(new_file)
 
-    return redirect(url_for('file.list', page=page))
+    return redirect(url_for('file.list', page_nr=page_nr))
 
 
 @blueprint.route('/search/<string:query>/', methods=['GET'])
