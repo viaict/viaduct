@@ -25,6 +25,8 @@
 						<th>Student ID
 						<th>Studie
 						<th>Lid
+						<th>Erelid
+						<th>Begunstiger
 						<th>
 					</tr>
 				</thead>
@@ -42,6 +44,8 @@
 							<td>{{ user.student_id }}
 							<td>{{ user.education.name }}
 							<td>{% if user.has_payed %}<i class="icon-ok"></i>{% endif %}
+							<td>{% if user.honorary_member %}<i class="icon-ok"></i>{% endif %}
+							<td>{% if user.favourer %}<i class="icon-ok"></i>{% endif %}
 							<td>
 								<a class="btn btn-mini btn-primary" href="{{ url_for('user.view_single', user_id=user.id) }}">
 									Bekijken
@@ -60,6 +64,10 @@
 					<i class="icon-remove"></i>
 					Verwijderen
 				</button>
+
+				<a href="/users/export" class="btn btn-success">
+					<i class="icon-linux"></i> Gebruikers Exporteren
+				</a>
 			</div>
 
 			{{ render_pagination(users, 'user.view', "?search=" + search) }}

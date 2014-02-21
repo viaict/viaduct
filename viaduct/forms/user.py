@@ -52,6 +52,8 @@ class EditUserForm(Form):
                           validators=[Required(message='Geen achternaam '
                                                        'opgegeven')])
     has_payed = BooleanField('Heeft betaald')
+    honorary_member = BooleanField('Erelid')
+    favourer = BooleanField('Begunstiger')
     student_id = TextField('Studentnummer',
                            validators=[Required(message='Geen studentnummer '
                                                         'opgegeven')])

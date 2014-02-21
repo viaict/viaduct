@@ -2,7 +2,7 @@
 
 from viaduct import db
 from viaduct.models.education import Education
-
+from datetime import datetime
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -22,6 +22,9 @@ class User(db.Model):
     description = db.Column(db.String(1024))  # Description of user
     student_id = db.Column(db.String(256))
     education_id = db.Column(db.Integer, db.ForeignKey('education.id'))
+    created = db.Column(db.DateTime, default=datetime.now())
+    honorary_member = db.Column(db.Boolean, default=False)
+    favourer = db.Column(db.Boolean, default=False)
 
     education = db.relationship(Education,
                                 backref=db.backref('user', lazy='dynamic'))

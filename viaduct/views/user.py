@@ -1,6 +1,8 @@
 import bcrypt
 import random
 import datetime
+from csv import writer
+from StringIO import StringIO
 
 from flask import flash, redirect, render_template, request, url_for, abort,\
     session
@@ -129,6 +131,8 @@ def edit(user_id=None):
         user.last_name = form.last_name.data
         if GroupPermissionAPI.can_write('user'):
             user.has_payed = form.has_payed.data
+            user.honorary_member = form.honorary_member.data
+            user.favourer = form.favourer.data
         user.student_id = form.student_id.data
         user.education_id = form.education_id.data
 
@@ -383,3 +387,18 @@ def view(page_nr=1):
             .paginate(page_nr, 15, False)
 
     return render_template('user/view.htm', users=users, search=search)
+
+@blueprint.route('/users/export', methods=['GET'])
+def user_export():
+    #if not current_user.has_permission('user.view'):
+    #   abort(403)
+    if not GroupPermissionAPI.can_read('user'):
+        return abort(403)
+
+    users = User.query.all() 
+    si = StringIO()
+    cw = writer(si)
+    cw.writerow([c.name for c in User.__mapper__.columns ])
+    for user in users:
+      cw.writerow([getattr(user, c.name) for c in User.__mapper__.columns ])
+    return si.getvalue().strip('\r\n')

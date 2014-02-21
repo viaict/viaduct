@@ -26,6 +26,12 @@
 			<dt><b>Lidmaatschap</b></dt>
 			<dd><i class="icon-check{% if not user.has_payed %}-empty{% endif %}"></i></dd>
 
+			<dt><b>Erelid</b></dt>
+			<dd><i class="icon-check{% if not user.honorary_member %}-empty{% endif %}"></i></dd>
+
+			<dt><b>Begunstiger</b></dt>
+			<dd><i class="icon-check{% if not user.favourer %}-empty{% endif %}"></i></dd>
+
 			<dt><b>Contact <i class="icon-envelope-alt"></b></i></dt>
 			<dd><a href="mailto:{{ user.email }}">{{ user.email }}</a></dd>
 
