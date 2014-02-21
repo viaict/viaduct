@@ -88,4 +88,33 @@ $(document).ready(function() {
         $("tr.pimpy_status_"+classes).show()
       }
     });
+
+
+    /* sponsor carousel */
+    $(function() {
+
+        var $c = $('#carousel'),
+            $w = $(".container");
+
+        $c.carouFredSel({
+            align: false,
+            items: 7,
+            scroll: {
+                items: 1,
+                duration: 4000,
+                timeoutDuration: 0,
+                easing: 'linear',
+                pauseOnHover: 'immediate'
+            }
+        });
+
+
+        $w.bind('resize.example', function() {
+            var nw = $w.width();
+
+            $c.width(nw * 3);
+            $c.parent().width(nw);
+
+        }).trigger('resize.example');
+    });
 });

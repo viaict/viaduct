@@ -44,7 +44,45 @@ label.checkbox {
     width: 100%;
 }
 
-
+/* sponsor carousel */
+#carousel {
+    padding: 0px;
+    margin: 0px;
+}
+#carousel div {
+    text-align: center;
+    height: 250px;
+    position: relative;
+}
+#carousel div:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+#carousel a {
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
+}
+#carousel div span {
+    display: none;
+}
+#carousel div:hover span {
+    background-color: #333;
+    color: #fff;
+    font-family: Arial, Geneva, SunSans-Regular, sans-serif;
+    font-size: 14px;
+    line-height: 22px;
+    display: inline-block;
+    width: 100px;
+    padding: 2px 0;
+    margin: 0 0 0 -50px;
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    border-radius: 3px;
+}
 
 
 
