@@ -53,6 +53,8 @@ label.checkbox {
     text-align: center;
     height: 250px;
     position: relative;
+    float: left;
+    display: block;
 }
 #carousel div:before {
     content: '';
@@ -60,7 +62,7 @@ label.checkbox {
     height: 100%;
     vertical-align: middle;
 }
-#carousel a {
+#carousel img {
     display: inline-block;
     vertical-align: middle;
     width: 100%;

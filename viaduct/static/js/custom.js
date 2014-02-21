@@ -98,7 +98,7 @@ $(document).ready(function() {
 
         $c.carouFredSel({
             align: false,
-            items: 7,
+            items: 6,
             scroll: {
                 items: 1,
                 duration: 4000,
@@ -109,12 +109,12 @@ $(document).ready(function() {
         });
 
 
-        $w.bind('resize.example', function() {
+        /*$w.bind('resize.example', function() {
             var nw = $w.width();
 
             $c.width(nw * 3);
             $c.parent().width(nw);
 
-        }).trigger('resize.example');
+        }).trigger('resize.example');*/
     });
 });
