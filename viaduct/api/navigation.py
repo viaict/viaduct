@@ -17,6 +17,7 @@ class NavigationAPI:
 
 		return render_template('navigation/view_bar.htm', bar_entries=entries)
 
+
 	@staticmethod
 	def get_navigation_menu():
 		my_path = request.path
@@ -32,6 +33,7 @@ class NavigationAPI:
 
 		if me:
 			parent = me.parent
+
 		else:
 			parent_path = my_path.rsplit('/', 1)[0]
 			parent = db.session.query(NavigationEntry)\
@@ -48,6 +50,32 @@ class NavigationAPI:
 
 		return render_template('navigation/view_sidebar.htm', back=parent,
 				pages=entries, current=me)
+
+	@staticmethod
+	def current_entry():
+		my_path = request.path
+
+		temp_strip = my_path.rstrip('0123456789')
+		if temp_strip.endswith('/'):
+			my_path = temp_strip
+
+		my_path = my_path.rstrip('/')
+
+		return db.session.query(NavigationEntry).filter_by(url=my_path)\
+				.first()
+
+	@staticmethod
+	def parent_entry():
+		my_path = request.path
+
+		temp_strip = my_path.rstrip('0123456789')
+		if temp_strip.endswith('/'):
+			my_path = temp_strip
+
+		my_path = my_path.rstrip('/')
+
+		return db.session.query(NavigationEntry).filter_by(url=my_path)\
+				.first()
 
 	@staticmethod
 	def order(entries, parent):
@@ -133,3 +161,14 @@ class NavigationAPI:
 	def order_entries(query):
 		"""Order entries."""
 		return query.order_by(NavigationEntry.position)
+
+	@staticmethod
+	def get_navigation_backtrack():
+		backtrack = []
+		tracker = NavigationAPI.current_entry()
+		while tracker:
+			backtrack.append(tracker)
+			tracker = tracker.parent
+
+		backtrack.reverse()
+		return render_template('navigation/view_backtrack.htm', backtrack=backtrack)
