@@ -9,6 +9,7 @@
 			<a href="{{ back.url }}"><i class="icon-arrow-left"></i> Go back</a>
 		{% endif %}
 
+		<ul class="nav nav-stacked nav-tabs nav_indent_level">
 		{% for page in pages %}
 
 			<li {% if page.url == current.url %}class="active"{% endif %}>
@@ -21,8 +22,8 @@
 				{% set children = page.activities if page.activities else page.children %}
 				{% set children = NavigationAPI.remove_unauthorized(children) %}
 
-				{% if children %}
-					<ul class="nav nav-stacked nav-tabs">
+				{% if children and page.url == current.url %}
+					<ul class="nav nav-stacked nav-tabs nav_indent_level">
 						{% for child in children %}
 							<li>
 								<a href="{% if child.external %}http://{% endif %}{{ child.url }}"
@@ -36,6 +37,7 @@
 			</li>
 
 		{% endfor %}
+		</ul>
 	</li>
 </ul>
 </div>

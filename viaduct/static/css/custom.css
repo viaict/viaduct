@@ -427,3 +427,13 @@ div.sortable {
     padding: 0;
     border: none;
 }
+
+.nav_indent_level {
+    margin-left: 10px;
+}
+
+.nav a {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; 
+}
