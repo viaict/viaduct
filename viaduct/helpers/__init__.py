@@ -2,7 +2,6 @@ from flask import flash, request, Markup, url_for, render_template, redirect, \
     session
 from flask.ext.login import current_user
 
-
 from viaduct import application, login_manager
 from markdown import markdown
 from resource import Resource
@@ -95,14 +94,14 @@ def pages_filter(data):
 
         page = data[i].page if data[i].page.id else None
         if (page and current_user and (UserAPI.can_write(page) or
-                                    GroupPermissionAPI.can_write('page')))\
+                                    GroupPermissionAPI.can_write('page'))) \
                 or (not page and GroupPermissionAPI.can_write('page')):
             content += '<div class="btn-group">'
-            content += '<a class="btn" href="' +\
-                url_for('page.get_page_history', path=data[i].path) +\
+            content += '<a class="btn" href="' + \
+                url_for('page.get_page_history', path=data[i].path) + \
                 '"><i class="icon-time"></i> View History</a>'
-            content += '<a class="btn" href="' +\
-                url_for('page.edit_page', path=data[i].path) +\
+            content += '<a class="btn" href="' + \
+                url_for('page.edit_page', path=data[i].path) + \
                 '"><i class="icon-pencil"></i> Edit Page</a>'
             content += '</div>'
 
@@ -127,7 +126,7 @@ def pages_filter(data):
                 content += render_template('activity/view_simple.htm',
                                         activities=activities
                                         .paginate(1, 12, False))
-            elif data[i].path == 'contact'\
+            elif data[i].path == 'contact' \
                     or data[i].path == 'laatste_bestuursblog':
                 if data[i].filter_html:
                     safe_mode = False

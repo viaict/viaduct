@@ -1,5 +1,6 @@
 application.db
 config.py
+*.bak
 *.pyc
 *.jpg
 *.gif
