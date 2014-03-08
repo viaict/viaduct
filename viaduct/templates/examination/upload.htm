@@ -17,14 +17,14 @@
 					<option value="{{ course.id }}">{{course.name}}</option>
 				{% endfor %}
 			</select>
-			<a href="../course/add" class="btn"><i class="icon-pencil"></i> <strong>nieuw</strong></a><br />
+			<a href="../course/add" class="btn"><i class="glyphicon glyphicon-pencil"></i> <strong>nieuw</strong></a><br />
 			studie <br />
 			<select name=education> <br />
 				{% for education in educations %}
 					<option value="{{ education.id }}">{{education.name}}</option>
 				{% endfor %}
 			</select>
-			<a href="../education/add" class="btn"><i class="icon-pencil"></i> <strong>nieuw</strong></a><br />
+			<a href="../education/add" class="btn"><i class="glyphicon glyphicon-pencil"></i> <strong>nieuw</strong></a><br />
 			Tentamen </br>
 			<input type=file name=file><br />
 			Antwoorden </br>

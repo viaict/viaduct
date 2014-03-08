@@ -9,7 +9,7 @@
 <div class="page-header">
 	{% if GroupPermissionAPI.can_write('activity') %}
 	<a href="/activities/edit/{{ activity.id }}" class="btn btn-warning pull-right">
-		<i class="icon-pencil"></i>
+		<i class="glyphicon glyphicon-pencil"></i>
 		Aanpassen
 	</a>
 	{% endif %}
@@ -22,7 +22,7 @@
 
 		<div class="accordion-heading">
 			<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc" href="#collapseLocation">
-				<i class="icon-compass"></i>
+				<i class="glyphicon glyphicon-compass"></i>
 				Locatie: {{ activity.location}}
 				<span class="pull-right">Klik om uit te klappen</span>
 			</a>
@@ -40,7 +40,7 @@
 		<div class="accordion-group">
 			<div class="accordion-heading">
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc" href="#collapseForm">
-					<i class="icon-star"></i>
+					<i class="glyphicon glyphicon-star"></i>
 					Inschrijven voor deze activiteit
 					<span class="pull-right">Klik om uit te klappen</span>
 				</a>
@@ -70,8 +70,8 @@
 								</div>
 								{% endif %}
 
-								<div class="row-fluid">
-									<div class="span4 offset1 pull-right">
+								<div class="row">
+									<div class="col-md-4 col-md-offset-1 pull-right">
 									{% if activity.form.show_pay_button %}
 										<a href="{{ url_for('activity.create_mollie_transaction', result_id=activity.form.id) }}" class="btn btn-warning">Betalen (+€1,20 transactiekosten)</a>
 									{% endif %}
@@ -84,7 +84,7 @@
 									{{ render_field(form.student_id) }}
 									{{ render_field(form.education_id) }}
 									</div>
-									<div class="span7">
+									<div class="col-md-7">
 										<h3>Vul a.u.b in :D</h3>
 										<p>Sommige velden (zoals shirt-maat of dieet) proberen we op te slaan, zodat je het de volgende keer niet nog eens moet invullen.</p>
 										{{ activity.form.html | safe }}
@@ -104,22 +104,22 @@
 		{% endif %}
 </div>
 
-<div class="row-fluid">
-	<div class="span8">
+<div class="row">
+	<div class="col-md-8">
 		<h4>Prijs:
 		{% if not activity.price == "gratis"  %}
-			<i class="icon-euro"></i>
+			<i class="glyphicon glyphicon-euro"></i>
 		{% endif %}
 		{{ activity.price }}
 		</h4>
 
 		<div class="time">
-			<i class="icon-calendar"></i>
+			<i class="glyphicon glyphicon-calendar"></i>
 			{{ activity.get_time() }}
 		</div>
 	</div>
 
-	<div class="span4">
+	<div class="col-md-4">
 		<img src="/static/activity_pictures/{{ activity.picture }}">
 	</div>
 </div>

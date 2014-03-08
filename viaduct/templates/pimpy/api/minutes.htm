@@ -1,7 +1,7 @@
 {% extends "pimpy/view_page.htm" %}
 
 {%block content %}
-    <div class="span8">
+    <div class="col-md-8">
         {% for group_header in list_items: %}
             <h1>{{ group_header }}</h1>
             {% for list_item in list_items[group_header] %}

@@ -7,27 +7,27 @@
 {% if GroupPermissionAPI.can_write('news') %}
     <form id='delete' method='post' action='{{ url_for('news.delete', item_id=item.id) }}'></form>
 
-    <div class='row-fluid'>
-        <div class='span12'>
+    <div class='row'>
+        <div class='col-md-12'>
             <div class='btn-group pull-right'>
-                <a href='{{ url_for('news.edit', item_id=item.id) }}' class='btn btn-warning'><i class='icon-pencil'></i> Bewerken</a>
-                <button id='btn-delete' class='btn btn-danger'><i class='icon-trash'></i> Verwijderen</button>
+                <a href='{{ url_for('news.edit', item_id=item.id) }}' class='btn btn-warning'><i class='glyphicon glyphicon-pencil'></i> Bewerken</a>
+                <button id='btn-delete' class='btn btn-danger'><i class='glyphicon glyphicon-trash'></i> Verwijderen</button>
             </div>
         </div>
     </div>
 {% endif %}
 
-<div class='row-fluid'>
-    <div class='span12 title'>
+<div class='row'>
+    <div class='col-md-12 title'>
         <h1>{{ item.title }}</h1>
     </div>
 </div>
-<div class='row-fluid'>
-    <div class='span12 content'>{{ item.content | markdown }}</div>
+<div class='row'>
+    <div class='col-md-12 content'>{{ item.content | markdown }}</div>
 </div>
-<div class='row-fluid'>
-    <div class='span6 author'>Geschreven door <em>{{ item.author.name }}</em></div>
-    <div class='span6 last-edited text-right'>
+<div class='row'>
+    <div class='col-md-6 author'>Geschreven door <em>{{ item.author.name }}</em></div>
+    <div class='col-md-6 last-edited text-right'>
         {% if item.update_time != item.post_time %}
             Laatst bewerkt op <em>{{ item.update_time.strftime('%Y-%m-%d') }}</em> om <em>{{ item.update_time.strftime('%H:%M') }}</em><br />
         {% endif %}

@@ -19,6 +19,9 @@ label.checkbox {
     text-align: right;
 }
 
+.nav a {
+    overflow: visible !important;
+}
 
 /* Sponsors */
 
