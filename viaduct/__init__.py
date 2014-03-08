@@ -1,10 +1,10 @@
 import os
 
-from flask import Flask
+from flask import Flask, request
 from flask.ext.babel import Babel
-from flask.ext.login import LoginManager
+from flask.ext.login import LoginManager, current_user
 from flask.ext.sqlalchemy import SQLAlchemy
-
+from config import LANGUAGES
 from viaduct.utilities import import_module
 
 
@@ -53,6 +53,14 @@ application.config.from_object('config')
 
 # Set up Flask Babel, which is used for internationalisation support.
 babel = Babel(application)
+@babel.localeselector
+def get_locale():
+    # if a user is logged in, use the locale from the user settings
+    if current_user is not None and current_user.locale is not None and \
+            not current_user.is_anonymous():
+        print current_user
+        return current_user.locale
+    return request.accept_languages.best_match(LANGUAGES.keys())
 
 # Set up the login manager, which is used to store the details related to the
 # authentication system.

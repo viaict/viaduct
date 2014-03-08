@@ -26,7 +26,22 @@ Run site with:
 For troubleshooting tips, see bottom of document.
 
 ##Language
-Site will be in **Dutch**, documentation and code in **English**.
+All code shall be written in **English**, translations should be added through 
+Babel. After writing code with **English** strings, add their **Dutch**
+translations.
+
+Adding a language through Babel:
+    python babel_init.py [locale]
+
+Updating translation files after creating new pages:
+    python babel_update.py
+Then, update the **nl** language files for your new strings.
+
+Compiling changed language files:
+    python babel_compile.py
+
+Note: lots of pages contain multiple languages, please update and create new
+according to this standard.
 
 ##Documentation
 Documentation according to python's [Docstring Conventions](http://www.python.org/dev/peps/pep-0257/).

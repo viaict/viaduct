@@ -2,7 +2,7 @@ from viaduct import db
 from viaduct.models.education import Education
 from datetime import datetime
 from viaduct.models import BaseEntity
-
+from config import LANGUAGES
 
 class User(db.Model, BaseEntity):
     __tablename__ = 'user'
@@ -14,6 +14,7 @@ class User(db.Model, BaseEntity):
     password = db.Column(db.String(60))
     first_name = db.Column(db.String(256))
     last_name = db.Column(db.String(256))
+    locale = db.Column(db.Enum(*LANGUAGES.keys()), default="nl")
     has_payed = db.Column(db.Boolean)
     shirt_size = db.Column(db.Enum('Small', 'Medium', 'Large'))
     allergy = db.Column(db.String(1024))  # Allergy / medication
