@@ -17,6 +17,9 @@ class Page(db.Model):
     path = db.Column(db.String(256), unique=True)
     needs_payed = db.Column(db.Boolean)
 
+    types = ['page', 'news']
+    type = db.Column(db.Integer)
+
     parent = db.relationship('Page',
             remote_side=id,
             backref=db.backref('children', lazy='dynamic'))
