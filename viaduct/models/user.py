@@ -25,6 +25,7 @@ class User(db.Model):
     created = db.Column(db.DateTime, default=datetime.now())
     honorary_member = db.Column(db.Boolean, default=False)
     favourer = db.Column(db.Boolean, default=False)
+    payed_date = db.Column(db.DateTime)
 
     education = db.relationship(Education,
                                 backref=db.backref('user', lazy='dynamic'))
@@ -40,6 +41,13 @@ class User(db.Model):
         self.last_name = last_name
         self.student_id = student_id
         self.education_id = education_id
+
+    """ if has_payed is set to true, we want to store the date that happend.
+        Because of legacy code and sqlalchemy we do it this way """
+    def __setattr__(self, name, value):
+        if name == 'has_payed' and value == True:
+            super(User, self).__setattr__("payed_date", datetime.now()) 
+        super(User, self).__setattr__(name, value) 
 
     def is_authenticated(self):
         """Necessary."""

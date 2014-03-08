@@ -10,58 +10,22 @@ import dateutil.parser
 class BaseEntity(object):
     __table_args__ = {'sqlite_autoincrement': True}
 
-    # Only json items if explicitly defined, and just print id when not defined
+    # Columns (in order) to be printed when an instance of the object is
+    # printed
+    prints = ('id',)
+
+    # Columns to be shown when the to_dict function is used. This should only
+    # be changed when certain values should not be shown in the dictionary.
+    # Relationships should be added when a relationship is supposed to be in
+    # the dictionary as well.
     jsons = None
     json_relationships = None
-    prints = ('id',)
 
     # Columns that every model needs
     id = db.Column(db.Integer, primary_key=True)
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime, default=datetime.now,
                          onupdate=datetime.now)
-
-    # Function used by print to print a model at server side.
-    # It uses the prints attribute from the object to determine what values to
-    # print
-    def __repr__(self):
-        first = True
-        string = '<%s(' % (type(self).__name__)
-
-        for attr in self.prints:
-            if not first:
-                string += ', '
-            string += '"%s"' % (getattr(self, attr))
-            first = False
-
-        string += ')>'
-
-        return string
-
-    # Function to convert a sqlalchemy object instance to a dictionary. This is
-    # needed for json serialization of an object. The jsons attribute is used
-    # to determine what values to serialize (password hashes and such should
-    # not in there)
-    def to_dict(self):
-        attrs = {}
-        set_jsons = False
-
-        if not self.jsons:
-            self.jsons = (column.name for column in self.__table__.columns)
-            set_jsons = True
-
-        for column in self.jsons:
-            value = serialize_sqla(getattr(self, column))
-            attrs[column] = value
-
-        if self.json_relationships:
-            for rel in self.json_relationships:
-                attrs[rel] = serialize_sqla(getattr(self, rel).all())
-
-        if set_jsons:
-            self.jsons = None
-
-        return attrs
 
     # Get all entries.
     @classmethod
@@ -92,7 +56,54 @@ class BaseEntity(object):
         except:
             return []
 
-    # Merge dictionary as object
+    # Function used by print to print a model at server side.
+    # It uses the prints attribute from the object to determine what values to
+    # print. This attribute is the id of the object by default.
+    def __repr__(self):
+        first = True
+        string = '<%s(' % (type(self).__name__)
+
+        for attr in self.prints:
+            if not first:
+                string += ', '
+            string += '"%s"' % (getattr(self, attr))
+            first = False
+
+        string += ')>'
+
+        return string
+
+    # Functionality after this point is a bit hard to understand. Just read the
+    # function comments and that should be enough.
+
+    # Function to convert a sqlalchemy object instance to a dictionary. This is
+    # needed for json serialization of an object. The jsons attribute is used
+    # to determine what values to serialize (password hashes and such should
+    # not in there)
+    def to_dict(self):
+        attrs = {}
+        set_jsons = False
+
+        if not self.jsons:
+            self.jsons = (column.name for column in self.__table__.columns)
+            set_jsons = True
+
+        for column in self.jsons:
+            value = serialize_sqla(getattr(self, column))
+            attrs[column] = value
+
+        if self.json_relationships:
+            for rel in self.json_relationships:
+                attrs[rel] = serialize_sqla(getattr(self, rel).all())
+
+        if set_jsons:
+            self.jsons = None
+
+        return attrs
+
+    # Function that automatically parses a dictionary to the model. It will
+    # change the the entry that it finds with the id. All other key value pairs
+    # will be parsed to column value pairs. The entry will also be saved.
     @classmethod
     def merge_dict(cls, obj, relationships={}):
 
@@ -138,10 +149,3 @@ class BaseEntity(object):
     # For future proofing use new_dict when creating new entries, so it could
     # become a separate function if needed
     new_dict = merge_dict
-
-    # Get entries by filter.
-    @classmethod
-    def get_filtered(cls, **kws):
-        if len(kws) > 0:
-            return db.session.query(cls).filter_by(**kws).all()
-        return cls.get_all()
