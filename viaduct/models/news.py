@@ -1,22 +1,26 @@
 from viaduct import db
-import datetime
+from viaduct.models import BaseEntity
 
 
-class News(db.Model):
-    __tablename__ = 'news'
+class NewsRevision(db.Model, BaseEntity):
+    __tablename__ = 'news_revision'
 
-    id = db.Column(db.Integer, primary_key=True)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     title = db.Column(db.String(256))
     content = db.Column(db.Text)
     end_time = db.Column(db.Date)
-    post_time = db.Column(db.DateTime, default=datetime.datetime.now())
-    update_time = db.Column(db.DateTime, default=None)
+
+    page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
 
     author = db.relationship('User', backref=db.backref('news_items',
                                                         lazy='dynamic'))
+    page = db.relationship('Page', backref=db.backref('news_revisions',
+                                                      lazy='dynamic'))
 
-    def __init__(self, author_id=None, title='', content='', end_time=None):
+    def __init__(self, page=None, author_id=None, title='', content='',
+                 end_time=None):
+        self.page = page
+
         self.author_id = author_id
         self.title = title
         self.content = content

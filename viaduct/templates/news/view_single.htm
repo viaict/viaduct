@@ -1,0 +1,18 @@
+{% extends 'page/view_super.htm' %}
+
+{% block page_title %}{{ revision.title }}{% endblock %}
+
+{% block page_content %}
+    <div class='row'>
+        <div class='col-md-12 content'>{{ revision.content | markdown }}</div>
+    </div>
+    <div class='row'>
+        <div class='col-md-6 author'>Geschreven door <em>{{ revision.author.name }}</em></div>
+        <div class='col-md-6 last-edited text-right'>
+            {% if revision.modified != revision.created %}
+                Laatst bewerkt op <em>{{ revision.modified.strftime('%Y-%m-%d') }}</em> om <em>{{ revision.modified.strftime('%H:%M') }}</em><br />
+            {% endif %}
+            Gepubliceerd op <em>{{ revision.created.strftime('%Y-%m-%d') }}</em> om <em>{{ revision.created.strftime('%H:%M') }}</em>
+        </div>
+    </div>
+{% endblock %}

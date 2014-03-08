@@ -15,7 +15,7 @@ class Page(db.Model, BaseEntity):
     type = db.Column(db.String(256))
 
     def __init__(self, path, type='page'):
-        self.path = path
+        self.path = path.rstrip('/')
         self.type = type
 
     def __repr__(self):
@@ -39,7 +39,8 @@ class Page(db.Model, BaseEntity):
             return None
 
         class_name = '%sRevision' % (self.type.capitalize())
-        revision_class = getattr(sys.modules[__name__], class_name)
+        revision_class = getattr(
+            sys.modules['viaduct.models.%s' % (self.type)], class_name)
 
         return revision_class
 
@@ -61,6 +62,10 @@ class Page(db.Model, BaseEntity):
         return revision
 
     @staticmethod
+    def strip_path(path):
+        return path.rstrip('/')
+
+    @staticmethod
     def get_by_path(path):
         return Page.query.filter(Page.path == path).first()
 
@@ -68,7 +73,6 @@ class Page(db.Model, BaseEntity):
 class PageRevision(db.Model, BaseEntity):
     __tablename__ = 'page_revision'
 
-    id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(128))
     filter_html = db.Column(db.Boolean)
     content = db.Column(db.Text)

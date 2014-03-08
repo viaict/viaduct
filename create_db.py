@@ -1,4 +1,5 @@
-#!venv/bin/python2.7
+#!venv/bin/python
+
 import os
 import bcrypt
 import datetime
@@ -23,7 +24,7 @@ from viaduct.models.contact import Contact
 from viaduct.models.category import Category
 from viaduct.models.custom_form import CustomForm, CustomFormResult
 from viaduct.models.file import File
-from viaduct.models.news import News
+from viaduct.models.news import NewsRevision
 
 # Remove the old db.
 if os.path.exists('application.db'):
@@ -34,6 +35,15 @@ db.create_all()
 
 page = Page('')
 db.session.add(page)
+db.session.commit()
+
+news_page = Page('news/1/', 'news')
+db.session.add(news_page)
+db.session.commit()
+
+news_revision = NewsRevision(news_page, None, 'Yolo',
+                             'Wat een nieuws zeg! Poe hee!')
+db.session.add(news_revision)
 db.session.commit()
 
 #Add the all group
@@ -430,60 +440,4 @@ db.session.commit()
 ict_category = Category('ict')
 ict_category.super_categories.append(wiki_category)
 db.session.add(ict_category)
-db.session.commit()
-
-# Dummy news.
-def_content = '''Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-varius, tortor vel aliquam elementum, nisl massa pellentesque turpis, quis
-vehicula mauris sapien quis ligula. Nunc blandit, lorem nec porta ultricies,
-lorem dui molestie felis, eget tincidunt libero felis sit amet felis. Sed vel
-tortor faucibus, sollicitudin ipsum sed, placerat turpis. Pellentesque eget dui
-nisl. Pellentesque et nibh gravida, adipiscing ipsum eu, varius mauris. Quisque
-tempus justo quis sollicitudin gravida. Quisque a magna risus. Integer eget
-odio laoreet, adipiscing urna eget, porta felis. Curabitur blandit leo ultrices
-nisl laoreet accumsan. Nunc sed lorem risus. Nulla porttitor est eget massa
-mollis, vitae consequat odio cursus.
-
-Nullam molestie aliquam mauris pulvinar pharetra. Aliquam imperdiet vestibulum
-lacus, ac egestas nisi faucibus a. Nam posuere lacus leo, tincidunt ultrices
-nisi malesuada ut. Nullam elementum pellentesque quam, consequat lacinia neque
-porttitor in. Morbi ultrices vitae mauris at vehicula. In placerat luctus est,
-nec ultricies mauris facilisis at. Aliquam venenatis congue facilisis. Donec
-lobortis augue id eros lacinia, non bibendum lorem hendrerit. Duis tincidunt
-viverra sem, id molestie urna eleifend ac. Proin viverra euismod justo, et
-viverra tortor pulvinar lobortis. Nam porttitor nunc eu nulla vehicula, a
-porttitor nulla dignissim. Sed sed porta tellus. Proin quis ultricies magna,
-quis ornare mauris. Mauris quis egestas ligula, ut consectetur arcu.
-Suspendisse hendrerit, sapien vel eleifend aliquet, erat eros euismod nulla, at
-euismod ante mauris sed diam.
-
-Aenean ullamcorper, eros vitae porta adipiscing, arcu est facilisis ipsum, nec
-egestas turpis nisl vitae magna. Donec dapibus nunc eget mi dapibus adipiscing.
-Etiam pharetra bibendum lectus, vel aliquet urna congue nec. Nam id dolor et
-est sollicitudin scelerisque. Sed eget risus leo. Praesent ultricies dui ipsum,
-id hendrerit massa aliquam non. Aliquam congue placerat tincidunt. Fusce turpis
-metus, congue ac massa ut, luctus aliquet erat. Vivamus non nunc sapien. Donec
-id est fermentum, scelerisque eros aliquam, facilisis sapien. Aliquam et orci
-sit amet libero rutrum euismod tincidunt sit amet metus. Quisque quis eros
-metus. Donec enim lacus, congue interdum tellus sed, aliquam scelerisque nibh.
-Ut nec mi sed magna eleifend rutrum. Quisque luctus leo nunc, at pharetra ante
-rutrum sed. Morbi eget euismod diam, ut pretium mi.'''
-
-for n in range(30):
-    item = News(admin.id, 'Item %d' % (n + 1), def_content,
-                datetime.date(2014, 2, 4))
-    item.post_time = datetime.datetime.now()
-    item.update_time = item.post_time
-    db.session.add(item)
-for n in range(10):
-    item = News(admin.id, 'Item %d' % (n + 31), def_content,
-                datetime.date(2013, 12, 30))
-    item.post_time = datetime.datetime.now()
-    item.update_time = item.post_time
-    db.session.add(item)
-db.session.commit()
-
-item = News.query.first()
-item.update_time = item.post_time + datetime.timedelta(hours=5)
-db.session.add(item)
 db.session.commit()
