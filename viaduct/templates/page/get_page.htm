@@ -3,6 +3,64 @@
 {% extends "content.htm" %}
 
 {% block content %}
-{{ revisions | pages }}
+
+<div class="container">
+    {% for i, content in enumerate(revisions) %}
+
+        {% if i % 2 == 0 %}
+            <div class="row">
+        {% endif %}
+
+        <div class="col-md-6">
+            <div class="mainblock custom_expander">
+                {% set page = content.page if content.page.id else None %}
+                {% if (page and (UserAPI.can_write(page) or
+                    GroupPermissionAPI.can_write('page'))) or (not page and
+                    GroupPermissionAPI.can_write('page')) %}
+                    <div class="btn-group">
+                        <a class="btn btn-default"
+                            href="{{url_for('page.get_page_history',
+                            path=content.path)}}" ><i class="icon-time"></i> View History
+                        </a>
+                        <a class="btn btn-default"
+                            href="{{url_for('page.edit_page', path=content.path)}}" >
+                            <i class="icon-pencil"></i> Edit page
+                        </a>
+                    </div>
+                {% endif %}
+
+                {% if content.filter_html %}
+                    {% set safe_mode = False %}
+                {% else %}
+                    {% set safe_mode = 'escape' %}
+                {% endif %}
+
+                {% if content.is_main_page %}
+                    {% if content.path != 'activities' %}
+                        <h1>{{ content.title }}</h1>
+                        {% if content.path == 'twitter' %}
+                            {{ Markup(markdown(content.content, enable_attributes=False, safe_mode=safe_mode, extensions=['toc'])) }}
+                        {% else %}
+                            {{ Markup(markdown(content.content, safe_mode=safe_mode, extensions=['toc'])) }}
+                        {% endif %}
+
+                    {% else %}
+                        {{ Markup(render_template('activity/view_simple.htm', activities=activities)) }}
+                    {% endif %}
+                {% else %}
+                        <h1>{{ content.title }}</h1>
+                        {{ Markup(markdown(content.content, safe_mode=safe_mode, extensions=['toc'])) }}
+                {% endif %}
+
+
+            </div>
+        </div>
+
+        {% if i % 2 != 0 %}
+            </div>
+        {% endif %}
+
+    {% endfor %}
+</div>
 
 {% endblock %}

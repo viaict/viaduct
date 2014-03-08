@@ -16,6 +16,7 @@ from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.user import UserAPI
 from viaduct.api.page import PageAPI
 from viaduct.api.category import CategoryAPI
+from viaduct.models.activity import Activity
 
 blueprint = Blueprint('page', __name__)
 
@@ -97,8 +98,8 @@ def get_page(path=''):
 		else:
 			revision = PageRevision(page, current_user,
 									'Oh no! It looks like you have found a '
-									'dead Link!', '![alt text](/static/img/'
-									'404.png "404")', True)
+									'dead Link!', '<img class="linkimg404" src="/static/img/404.png">'
+									'', True)
 
 		class struct(object):
 			pass
@@ -119,7 +120,11 @@ def get_page(path=''):
 		revision.path = path
 
 	if is_main_page:
-		return render_template('page/get_page.htm', revisions=revisions)
+		activities = Activity.query \
+			.filter(Activity.end_time > datetime.datetime.now()) \
+			.order_by(Activity.start_time.asc())\
+			.paginate(1, 12, False)
+		return render_template('page/get_page.htm', revisions=revisions, activities=activities)
 	else:
 		return render_template('page/view_single.htm', page=revision)
 
