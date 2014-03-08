@@ -2,35 +2,17 @@ import datetime
 import sys
 
 from viaduct import db
-from viaduct.models import Group
+from viaduct.models import BaseEntity, Group
 
 
-page_ancestor = db.Table('page_ancestor',
-                         db.Column('page_id', db.Integer,
-                                   db.ForeignKey('page.id')),
-                         db.Column('ancestor_id', db.Integer,
-                                   db.ForeignKey('page.id')))
-
-
-class Page(db.Model):
+class Page(db.Model, BaseEntity):
     __tablename__ = 'page'
 
-    id = db.Column(db.Integer, primary_key=True)
     parent_id = db.Column(db.Integer, db.ForeignKey('page.id'))
     path = db.Column(db.String(256), unique=True)
     needs_payed = db.Column(db.Boolean)
 
     type = db.Column(db.String(256))
-
-    parent = db.relationship('Page', remote_side=id,
-                             backref=db.backref('children', lazy='dynamic'))
-    ancestors = db.relationship('Page', secondary=page_ancestor,
-                                primaryjoin=id == page_ancestor.c.page_id,
-                                secondaryjoin=id == page_ancestor.c
-                                .ancestor_id,
-                                backref=db.backref('descendants',
-                                                   lazy='dynamic'),
-                                lazy='dynamic')
 
     def __init__(self, path, type='page'):
         self.path = path
@@ -77,7 +59,7 @@ class Page(db.Model):
         return Page.query.filter(Page.path == path).first()
 
 
-class PageRevision(db.Model):
+class PageRevision(db.Model, BaseEntity):
     __tablename__ = 'page_revision'
 
     id = db.Column(db.Integer, primary_key=True)
