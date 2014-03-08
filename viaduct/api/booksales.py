@@ -1,10 +1,7 @@
 from flask import render_template, request, Markup, redirect, url_for, abort
 from flask.ext.login import current_user
-
 from viaduct.models.booksales import Book, Sale
-
 from viaduct import db, application
-
 from viaduct.api.group import GroupPermissionAPI
 
 import re
