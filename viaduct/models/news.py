@@ -5,6 +5,8 @@ from viaduct.models import BaseEntity
 class NewsRevision(db.Model, BaseEntity):
     __tablename__ = 'news_revision'
 
+    item_id = db.Column(db.Integer)
+
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     title = db.Column(db.String(256))
     content = db.Column(db.Text)

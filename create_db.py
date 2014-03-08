@@ -43,6 +43,7 @@ db.session.commit()
 
 news_revision = NewsRevision(news_page, None, 'Yolo',
                              'Wat een nieuws zeg! Poe hee!')
+news_revision.item_id = 1
 db.session.add(news_revision)
 db.session.commit()
 
