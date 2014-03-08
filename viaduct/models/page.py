@@ -5,9 +5,11 @@ from viaduct.models import Group
 
 
 page_ancestor = db.Table('page_ancestor',
-    db.Column('page_id', db.Integer, db.ForeignKey('page.id')),
-    db.Column('ancestor_id', db.Integer, db.ForeignKey('page.id'))
-)
+                         db.Column('page_id', db.Integer,
+                                   db.ForeignKey('page.id')),
+                         db.Column('ancestor_id', db.Integer,
+                                   db.ForeignKey('page.id')))
+
 
 class Page(db.Model):
     __tablename__ = 'page'
@@ -20,13 +22,15 @@ class Page(db.Model):
     types = ['page', 'news']
     type = db.Column(db.Integer)
 
-    parent = db.relationship('Page',
-            remote_side=id,
-            backref=db.backref('children', lazy='dynamic'))
+    parent = db.relationship('Page', remote_side=id,
+                             backref=db.backref('children', lazy='dynamic'))
     ancestors = db.relationship('Page', secondary=page_ancestor,
-        primaryjoin=id==page_ancestor.c.page_id,
-        secondaryjoin=id==page_ancestor.c.ancestor_id,
-        backref=db.backref('descendants', lazy='dynamic'), lazy='dynamic')
+                                primaryjoin=id == page_ancestor.c.page_id,
+                                secondaryjoin=id == page_ancestor.c
+                                .ancestor_id,
+                                backref=db.backref('descendants',
+                                                   lazy='dynamic'),
+                                lazy='dynamic')
     revisions = db.relationship('PageRevision', backref='page', lazy='dynamic')
 
     def __init__(self, path):
@@ -37,7 +41,7 @@ class Page(db.Model):
 
     @staticmethod
     def get_by_path(path):
-        return Page.query.filter(Page.path==path).first()
+        return Page.query.filter(Page.path == path).first()
 
     def has_revisions(self):
         return self.revisions.count() > 0
@@ -57,6 +61,7 @@ class Page(db.Model):
     def get_newest_revision(self):
         return self.revisions.order_by(PageRevision.timestamp.desc()).first()
 
+
 class PageRevision(db.Model):
     __tablename__ = 'page_revision'
 
@@ -73,18 +78,20 @@ class PageRevision(db.Model):
     form_id = db.Column(db.Integer, db.ForeignKey('custom_form.id'))
 
     author = db.relationship('User', backref=db.backref('page_edits',
-        lazy='dynamic'))
+                                                        lazy='dynamic'))
 
-    def __init__(self, page, author, title, content, comment="", filter_html=True,
-            timestamp=datetime.datetime.utcnow(), form_id=None):
+    def __init__(self, page, author, title, content, comment="",
+                 filter_html=True, timestamp=datetime.datetime.utcnow(),
+                 form_id=None):
         self.title = title
         self.content = content
         self.comment = comment
         self.filter_html = filter_html
-        self.user_id = author.id if author != None else -1
+        self.user_id = author.id if author else -1
         self.page_id = page.id
         self.timestamp = timestamp
-        self.form_id   = form_id
+        self.form_id = form_id
+
 
 class PagePermission(db.Model):
     __tablename__ = 'page_permission'
@@ -107,21 +114,23 @@ class PagePermission(db.Model):
         rights = 0
 
         if not user or not user.is_active():
-            groups = [Group.query.filter(Group.name=='all').first()]
+            groups = [Group.query.filter(Group.name == 'all').first()]
         else:
             groups = user.groups.all()
 
-        page = Page.query.filter(Page.id==page_id).first()
+        page = Page.query.filter(Page.id == page_id).first()
 
         if page:
             for group in groups:
                 if group.name == 'administrators':
                     return 2
 
-                permissions = PagePermission.query.filter(PagePermission.page_id==page.id,
-                    PagePermission.group_id==group.id).first()
+                permissions = PagePermission.query\
+                    .filter(PagePermission.page_id == page.id,
+                            PagePermission.group_id == group.id).first()
+
                 if permissions:
-                    if (permissions.permission >= 2) :
+                    if (permissions.permission >= 2):
                         return permissions.permission
 
                     if (permissions.permission > rights):
