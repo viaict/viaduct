@@ -14,7 +14,7 @@
         <div class="col-md-6">
             <div class="mainblock custom_expander">
                 {% set page = content.page if content.page.id else None %}
-                {% if (page and (UserAPI.can_write(page) or
+                {% if (page and current_user and (UserAPI.can_write(page) or
                     GroupPermissionAPI.can_write('page'))) or (not page and
                     GroupPermissionAPI.can_write('page')) %}
                     <div class="btn-group">

@@ -56,7 +56,7 @@ babel = Babel(application)
 @babel.localeselector
 def get_locale():
     # if a user is logged in, use the locale from the user settings
-    if current_user is not None and current_user.locale is not None and \
+    if current_user and current_user.locale is not None and \
             not current_user.is_anonymous():
         return current_user.locale
     return request.accept_languages.best_match(LANGUAGES.keys())
