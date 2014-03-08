@@ -1,4 +1,5 @@
 import datetime
+import sys
 
 from viaduct import db
 from viaduct.models import Group
@@ -19,6 +20,8 @@ class Page(db.Model):
     path = db.Column(db.String(256), unique=True)
     needs_payed = db.Column(db.Boolean)
 
+    type = db.Column(db.String(256))
+
     parent = db.relationship('Page', remote_side=id,
                              backref=db.backref('children', lazy='dynamic'))
     ancestors = db.relationship('Page', secondary=page_ancestor,
@@ -28,20 +31,13 @@ class Page(db.Model):
                                 backref=db.backref('descendants',
                                                    lazy='dynamic'),
                                 lazy='dynamic')
-    page_revisions = db.relationship('PageRevision', backref='page',
-                                     lazy='dynamic')
 
-    def __init__(self, path):
+    def __init__(self, path, type='page'):
         self.path = path
+        self.type = type
 
     def __repr__(self):
         return '<Page(%s, "%s")>' % (self.id, self.path)
-
-    def get_type(self):
-        if self.page_revisions.count():
-            return 'page'
-
-        return None
 
     def can_read(self, user):
         if PagePermission.get_user_rights(user, self.id) > 0:
@@ -50,10 +46,31 @@ class Page(db.Model):
             return False
 
     def can_write(self, user):
-        if(PagePermission.get_user_rights(user, self.id) > 1):
+        if PagePermission.get_user_rights(user, self.id) > 1:
             return True
         else:
             return False
+
+    def get_revision_class(self):
+        """Turn the page's type into a revision class."""
+        if not self.type:
+            return None
+
+        class_name = '%sRevision' % (self.type.capitalize())
+        revision_class = getattr(sys.modules[__name__], class_name)
+
+        return revision_class
+
+    def get_latest_revision(self):
+        """Get the latest revision of this page."""
+        revision_class = self.get_revision_class()
+
+        revision = revision_class.query\
+            .filter(revision_class.page_id == self.id)\
+            .order_by(revision_class.id.desc())\
+            .first()
+
+        return revision
 
     @staticmethod
     def get_by_path(path):

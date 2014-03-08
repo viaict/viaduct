@@ -24,9 +24,20 @@ blueprint = Blueprint('page', __name__)
 @blueprint.route('/<path:path>', methods=['GET', 'POST'])
 def get_page(path=''):
     page = Page.get_by_path(path)
-    print(page)
 
-    return ''
+    if not page:
+        return abort(404)
+
+    if not UserAPI.can_read(page):
+        return abort(403)
+
+    revision = page.get_latest_revision()
+
+    if not revision:
+        return abort(500)
+
+    return render_template('page/view_%s.htm' % (page.type), page=page,
+                           revision=revision)
 
 
 @blueprint.route('/history/', methods=['GET', 'POST'])

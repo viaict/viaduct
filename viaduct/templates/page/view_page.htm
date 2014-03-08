@@ -1,0 +1,7 @@
+{% extends 'page/view_single.htm' %}
+
+{% block page_title %}{{ revision.title }}{% endblock %}
+
+{% block page_content %}
+    <p>{{ revision.content | markdown(revision.filter_html) }}</p>
+{% endblock %}
