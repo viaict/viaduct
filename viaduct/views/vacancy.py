@@ -17,8 +17,8 @@ FILE_FOLDER = application.config['FILE_DIR']
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
-@blueprint.route('/<int:page>/', methods=['GET', 'POST'])
-def view_list(page=1):
+@blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
+def view_list(page_nr=1):
     if not GroupPermissionAPI.can_read('vacancy'):
         return abort(403)
 
@@ -35,7 +35,7 @@ def view_list(page=1):
         if not GroupPermissionAPI.can_write('vacancy'):
             vacancies = vacancies.filter(and_(Vacancy.start_date <
                                          datetime.utcnow(), Vacancy.end_date >
-                                         datetime.utcnow())).paginate(page, 15,
+                                         datetime.utcnow())).paginate(page_nr, 15,
                                                                       True)
         else:
             for i, vacancy in enumerate(vacancies):
@@ -44,7 +44,7 @@ def view_list(page=1):
                         vacancy.end_date < datetime.date(datetime.utcnow())):
                     vacancies[i].expired = True
 
-            vacancies = vacancies.paginate(page, 15, False)
+            vacancies = vacancies.paginate(page_nr, 15, False)
 
         return render_template('vacancy/list.htm', vacancies=vacancies,
                                search=search, path=FILE_FOLDER)
@@ -52,7 +52,7 @@ def view_list(page=1):
     if not GroupPermissionAPI.can_write('vacancy'):
         vacancies = Vacancy.query.filter(and_(Vacancy.start_date <
                                          datetime.utcnow(), Vacancy.end_date >
-                                         datetime.utcnow())).paginate(page, 15,
+                                         datetime.utcnow())).paginate(page_nr, 15,
                                                                       True)
     else:
         vacancies = Vacancy.query.join(Company).filter().\
@@ -65,7 +65,7 @@ def view_list(page=1):
                 print "I exist"
                 vacancies[i].expired = True
 
-        vacancies = vacancies.paginate(page, 15, False)
+        vacancies = vacancies.paginate(page_nr, 15, False)
 
     return render_template('vacancy/list.htm', vacancies=vacancies,
                            search="", path=FILE_FOLDER)
