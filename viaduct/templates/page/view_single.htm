@@ -9,7 +9,7 @@
         <div class="page-header">
             {% if GroupPermissionAPI.can_write('page') %}
                 <div class='btn-group pull-right'>
-                    <a class='btn' href='{{ url_for('page.get_page_history', path=page.path) }}'>
+                    <a class='btn btn-default' href='{{ url_for('page.get_page_history', path=page.path) }}'>
                         <i class='glyphicon glyphicon-time'></i> View History
                     </a>
                     <a class='btn btn-warning' href='{{ url_for('page.edit_page', path=page.path) }}'>
