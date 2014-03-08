@@ -11,7 +11,7 @@ user_group = db.Table(
 class Group(db.Model, BaseEntity):
     __tablename__ = 'group'
 
-    name = db.Column(db.String(256), unique=True)
+    name = db.Column(db.String(200), unique=True)
 
     users = db.relationship('User', secondary=user_group,
                             backref=db.backref('groups', lazy='dynamic'),

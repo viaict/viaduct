@@ -24,7 +24,7 @@ class Category(db.Model, BaseEntity):
     __tablename__ = 'category'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(256), unique=True)
+    name = db.Column(db.String(200), unique=True)
 
     pages = db.relationship('Page', secondary=category_page,
                             backref=db.backref('categories'))

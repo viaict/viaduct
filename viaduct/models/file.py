@@ -8,7 +8,7 @@ class File(db.Model, BaseEntity):
     '''
     __tablename__ = 'file'
 
-    name = db.Column(db.String(256), unique=True)
+    name = db.Column(db.String(200), unique=True)
     page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
 
     page = db.relationship('Page', backref=db.backref('files', lazy='dynamic'))

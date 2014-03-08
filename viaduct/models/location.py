@@ -10,7 +10,7 @@ class Location(db.Model, BaseEntity):
     address = db.Column(db.String(256))
     zip = db.Column(db.String(32))
     postoffice_box = db.Column(db.String(32))
-    email = db.Column(db.String(256), unique=True)
+    email = db.Column(db.String(256))
     phone_nr = db.Column(db.String(64))
 
     def __init__(self, city='', country='', address='', zip='',

@@ -6,7 +6,7 @@ class Contact(db.Model, BaseEntity):
     __tablename__ = 'contact'
 
     name = db.Column(db.String(256))
-    email = db.Column(db.String(256), unique=True)
+    email = db.Column(db.String(200), unique=True)
     phone_nr = db.Column(db.String(64))
     location_id = db.Column(db.Integer, db.ForeignKey('location.id'))
 

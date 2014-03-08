@@ -7,9 +7,9 @@ from viaduct.models import BaseEntity
 class Company(db.Model, BaseEntity):
     __tablename__ = 'company'
 
-    name = db.Column(db.String(256), unique=True)
+    name = db.Column(db.String(200), unique=True)
     description = db.Column(db.String(1024))
-    logo_path = db.Column(db.String(256), unique=True)
+    logo_path = db.Column(db.String(256))
     website = db.Column(db.String(256))
     contract_start_date = db.Column(db.Date)
     contract_end_date = db.Column(db.Date)

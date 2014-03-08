@@ -10,7 +10,7 @@ class User(db.Model, BaseEntity):
     prints = ('id', 'email', 'password', 'first_name', 'last_name',
               'student_id')
 
-    email = db.Column(db.String(256), unique=True)
+    email = db.Column(db.String(200), unique=True)
     password = db.Column(db.String(60))
     first_name = db.Column(db.String(256))
     last_name = db.Column(db.String(256))
@@ -48,8 +48,8 @@ class User(db.Model, BaseEntity):
         Because of legacy code and sqlalchemy we do it this way """
     def __setattr__(self, name, value):
         if name == 'has_payed' and value == True:
-            super(User, self).__setattr__("payed_date", datetime.now()) 
-        super(User, self).__setattr__(name, value) 
+            super(User, self).__setattr__("payed_date", datetime.now())
+        super(User, self).__setattr__(name, value)
 
     def is_authenticated(self):
         """Necessary."""

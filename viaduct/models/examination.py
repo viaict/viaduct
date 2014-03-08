@@ -12,7 +12,7 @@ class Examination(db.Model, BaseEntity):
     __tablename__ = 'examination'
 
     title = db.Column(db.String(128))
-    path = db.Column(db.String(256), unique=True)
+    path = db.Column(db.String(256))
     answer_path = db.Column(db.String(256))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     timestamp = db.Column(db.DateTime)
