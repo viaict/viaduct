@@ -17,16 +17,16 @@
 	<td>{{ form.name }}
 	<td>
 		{% if GroupPermissionAPI.can_write('custom_form') %}
-				<a href="/forms/edit/{{ form.id }}" class="btn btn-mini btn-warning pull-right">
-					<i class="icon-pencil"></i>
+				<a href="/forms/edit/{{ form.id }}" class="btn btn-xs btn-warning pull-right">
+					<i class="glyphicon glyphicon-pencil"></i>
 					Aanpassen
 				</a>
 
-				<a href="/forms/follow/{{ form.id }}" class="follow btn btn-mini btn-danger pull-right">
+				<a href="/forms/follow/{{ form.id }}" class="follow btn btn-xs btn-danger pull-right">
 					Niet meer volgen
 				</a>
 				
-				<a href="/forms/view/{{ form.id }}" class="btn btn-mini btn-primary pull-right">
+				<a href="/forms/view/{{ form.id }}" class="btn btn-xs btn-primary pull-right">
 					Inzendingen bekijken <span class="badge badge-inverse">{{ form.custom_form_results.count() }}</span>
 				</a>
 		{% endif %}
@@ -38,7 +38,7 @@
 
 	{% if GroupPermissionAPI.can_write('custom_form') %}
 		<a href="/forms/create/" class="btn btn-success pull-right">
-			<i class="icon-plus"></i>
+			<i class="glyphicon glyphicon-plus"></i>
 			Nieuw formulier
 		</a>
 	{% endif %}
@@ -59,22 +59,22 @@
 	<td>{{ form.name }}
 	<td>
 		{% if GroupPermissionAPI.can_write('custom_form') %}
-				<a href="/forms/edit/{{ form.id }}" class="btn btn-mini btn-warning pull-right">
-					<i class="icon-pencil"></i>
+				<a href="/forms/edit/{{ form.id }}" class="btn btn-xs btn-warning pull-right">
+					<i class="glyphicon glyphicon-pencil"></i>
 					Aanpassen
 				</a>
 
 				{% if form.id in followed_ids %}
-				<a href="/forms/follow/{{ form.id }}" class="follow btn btn-mini btn-danger pull-right">
+				<a href="/forms/follow/{{ form.id }}" class="follow btn btn-xs btn-danger pull-right">
 					Niet meer volgen
 				</a>
 				{% else %}
-				<a href="/forms/follow/{{ form.id }}" class="follow btn btn-mini btn-success pull-right">
+				<a href="/forms/follow/{{ form.id }}" class="follow btn btn-xs btn-success pull-right">
 					Formulier volgen
 				</a>
 				{% endif %}
 
-				<a href="/forms/view/{{ form.id }}" class="btn btn-mini btn-primary pull-right">
+				<a href="/forms/view/{{ form.id }}" class="btn btn-xs btn-primary pull-right">
 					Inzendingen bekijken
 				</a>
 

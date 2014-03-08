@@ -6,7 +6,7 @@
 
 		{% if GroupPermissionAPI.can_write('navigation') %}
 			<a class="btn btn-success pull-right" href="{{ url_for('navigation.edit', parent_id=entry.id) }}">
-				<i class="icon-plus"></i>
+				<i class="glyphicon glyphicon-plus"></i>
 			</a>
 		{% endif %}
 

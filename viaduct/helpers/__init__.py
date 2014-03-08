@@ -85,9 +85,9 @@ def pages_filter(data):
             content += '<div class="row">'
 
         if i == len(data) - 1 and i % 2 == 0:
-            content += '<div class="span10">'
+            content += '<div class="col-md-10">'
         else:
-            content += '<div class="span6">'
+            content += '<div class="col-md-6">'
 
         content += '<div class="mainblock'
         # expander toevoegen als het over de mainpage gaat

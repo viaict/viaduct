@@ -4,13 +4,13 @@
 
 {% block content %}
 <h1>Boeken overzicht</h1>
-<a class="btn btn-mini btn-primary" href="{{ url_for('booksales.view_sales') }}">
+<a class="btn btn-xs btn-primary" href="{{ url_for('booksales.view_sales') }}">
 Verkochte Boeken
 </a>
-<a class="btn btn-mini btn-primary" href="{{ url_for('booksales.edit_book') }}">
+<a class="btn btn-xs btn-primary" href="{{ url_for('booksales.edit_book') }}">
 Boek toevoegen
 </a>
-<a class="btn btn-mini btn-primary" href="{{ url_for('booksales.add_sale') }}">
+<a class="btn btn-xs btn-primary" href="{{ url_for('booksales.add_sale') }}">
 Boeken verkopen
 </a>
 
@@ -33,7 +33,7 @@ Boeken verkopen
 				<td>{{ book.price }}
 				<td>{{ book.stock }}
 				<td>
-					<a class="btn btn-mini btn-primary" href="{{ url_for('booksales.edit_book', book_id=book.id) }}">
+					<a class="btn btn-xs btn-primary" href="{{ url_for('booksales.edit_book', book_id=book.id) }}">
 						Edit
 					</a>
 			</tr>

@@ -12,7 +12,7 @@
 		{% if GroupPermissionAPI.can_write('page') %}
 		<div class="btn-group pull-right">
 			<a class="btn" href="{{ url_for('page.get_page_history', path=page.path) }}">
-				<i class="icon-time"></i> View History
+				<i class="glyphicon glyphicon-time"></i> View History
 			</a>
 
 			<!-- <a class="btn" href="#">
@@ -20,11 +20,11 @@
 			</a> -->
 
 			<a class="btn btn-warning" href="{{ url_for('page.edit_page', path=page.path) }}">
-				<i class="icon-pencil"></i> Edit Page
+				<i class="glyphicon glyphicon-pencil"></i> Edit Page
 			</a>
 
 			<!-- <a class="btn btn-danger" href="/remove/{{ page.path }}">
-				<i class="icon-trash"></i> Delete Page
+				<i class="glyphicon glyphicon-trash"></i> Delete Page
 			</a> -->
 		</div>
 
@@ -37,7 +37,7 @@
 		<div class="accordion-group">
 			<div class="accordion-heading">
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc" href="#collapseForm">
-					<i class="icon-star"></i>
+					<i class="glyphicon glyphicon-star"></i>
 					Formulier invullen
 					<span class="pull-right">Klik om uit te klappen</span>
 				</a>
@@ -53,8 +53,8 @@
 								</div>
 								{% endif %}
 
-								<div class="row-fluid">
-									<div class="span7">
+								<div class="row">
+									<div class="col-md-7">
 										{{ page.custom_form.html | safe }}
 									</div>
 							</div>

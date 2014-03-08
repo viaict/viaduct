@@ -39,15 +39,15 @@
 				{{ result.form_entry|safe }}
 			<td>{{ result.time }}
 			<td>
-				<button id="{{ result.id }}" title="Gebruiker als betaald aan- / afvinken" class="btn btn-small btn-success has_payed">
+				<button id="{{ result.id }}" title="Gebruiker als betaald aan- / afvinken" class="btn btn-sm btn-success has_payed">
 					{% if result.has_payed %} 
-						<i class="icon-ok"></i>
+						<i class="glyphicon glyphicon-ok"></i>
 					{% else %}
-						<i class="icon-money"></i>
+						<i class="glyphicon glyphicon-money"></i>
 					{% endif %}
 				</button>
 				
-			<td><button id="{{ result.id }}" title="Inzending verwijderen" message="Hoi {{ current_user.first_name }}, weet je zeker dat je deze wilt verwijderen?" class="btn btn-small btn-danger keeswildeleteknopje"><i class="icon-trash"></i></button>
+			<td><button id="{{ result.id }}" title="Inzending verwijderen" message="Hoi {{ current_user.first_name }}, weet je zeker dat je deze wilt verwijderen?" class="btn btn-sm btn-danger keeswildeleteknopje"><i class="glyphicon glyphicon-trash"></i></button>
 	{% endfor %}
 </table>
 

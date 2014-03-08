@@ -6,7 +6,7 @@
 
 <div class="user_single">
 	<a href="{{ url_for('user.edit', user_id=user.id) }}" class="btn btn-warning pull-right">
-		<i class="icon-pencil"></i>
+		<i class="glyphicon glyphicon-pencil"></i>
 		Aanpassen
 	</a>
 
@@ -17,7 +17,7 @@
 	</h1>
 
 
-	<div class="span5">
+	<div class="col-md-5">
 		<h4>Student-informatie:</h4>
 		<dl>
 			<dt><b>Studentnummer</b></dt>
@@ -35,7 +35,7 @@
 			<dt><b>Contact <i class="icon-envelope-alt"></b></i></dt>
 			<dd><a href="mailto:{{ user.email }}">{{ user.email }}</a></dd>
 
-			<dt><b>Contact <i class="icon-phone"></i></b></dt>
+			<dt><b>Contact <i class="glyphicon glyphicon-phone"></i></b></dt>
 			<dd>{{ user.phone_nr }}</dd>
 
 			<dt><b>Studie</b></dt>
@@ -49,7 +49,7 @@
 	{% endfor %}
 	</ul>
 	</div>
-	<div class="span4 pull-right">
+	<div class="col-md-4 pull-right">
 		<h4> Ingeschreven activiteiten: </h4>
 		<table class="table table-condensed userpage_table">
 			{% for result in new_activities %}
