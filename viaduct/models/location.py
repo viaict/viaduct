@@ -1,10 +1,10 @@
 from viaduct import db
+from viaduct.models import BaseEntity
 
 
-class Location(db.Model):
+class Location(db.Model, BaseEntity):
     __tablename__ = 'location'
 
-    id = db.Column(db.Integer, primary_key=True)
     city = db.Column(db.String(256))
     country = db.Column(db.String(256))
     address = db.Column(db.String(256))

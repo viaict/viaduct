@@ -1,18 +1,16 @@
 from viaduct import db
-import datetime
+from viaduct.models import BaseEntity
 
 
-class CustomForm(db.Model):
+class CustomForm(db.Model, BaseEntity):
     __tablename__ = 'custom_form'
 
-    id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     name = db.Column(db.String(256))
     origin = db.Column(db.String(4096))
     html = db.Column(db.UnicodeText())
     msg_success = db.Column(db.String(2048))
     max_attendants = db.Column(db.Integer)
-    created = db.Column(db.DateTime, default=datetime.datetime.now())
     price = db.Column(db.Float)
     owner = db.relationship('User', backref=db.backref('custom_forms',
                                                        lazy='dynamic'))
@@ -28,16 +26,14 @@ class CustomForm(db.Model):
         self.max_attendants = max_attendants
 
 
-class CustomFormResult(db.Model):
+class CustomFormResult(db.Model, BaseEntity):
     __tablename__ = 'custom_form_result'
 
-    id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     form_id = db.Column(db.Integer, db.ForeignKey('custom_form.id'))
     data = db.Column(db.String(4096))
     is_reserve = db.Column(db.Boolean)
     has_payed = db.Column(db.Boolean)
-    created = db.Column(db.DateTime, default=datetime.datetime.now())
 
     owner = db.relationship('User', backref=db.backref('custom_form_results',
                                                        lazy='dynamic'))
@@ -59,10 +55,9 @@ class CustomFormResult(db.Model):
                                                        self.has_payed)
 
 
-class CustomFormFollower(db.Model):
+class CustomFormFollower(db.Model, BaseEntity):
     __tablename__ = 'custom_form_follower'
 
-    id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     form_id = db.Column(db.Integer)
 

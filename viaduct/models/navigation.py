@@ -1,34 +1,30 @@
-from viaduct import db, application
-from viaduct.models.activity import Activity
+from viaduct import db
+from viaduct.models import BaseEntity
 
-import inspect
-import datetime
 
-class NavigationEntry(db.Model):
-	__tablename__ = 'nagivation_entry'
+class NavigationEntry(db.Model, BaseEntity):
+    __tablename__ = 'nagivation_entry'
 
-	id = db.Column(db.Integer, primary_key=True)
-	parent_id = db.Column(db.Integer, db.ForeignKey('nagivation_entry.id'))
-	title = db.Column(db.String(256))
-	url = db.Column(db.String(256))
-	external = db.Column(db.Boolean)
-	activity_list = db.Column(db.Boolean)
-	position = db.Column(db.Integer)
+    prints = ('id', 'parent_id', 'title', 'url', 'external')
 
-	parent = db.relationship('NavigationEntry', remote_side=[id],
-			primaryjoin=('NavigationEntry.parent_id==NavigationEntry.id'),
-			backref=db.backref('children', lazy='dynamic'))
+    parent_id = db.Column(db.Integer, db.ForeignKey('nagivation_entry.id'))
+    title = db.Column(db.String(256))
+    url = db.Column(db.String(256))
+    external = db.Column(db.Boolean)
+    activity_list = db.Column(db.Boolean)
+    position = db.Column(db.Integer)
 
-	def __init__(self, parent, title, url, external, activity_list, position):
-		if parent:
-			self.parent_id = parent.id
+    parent = db.relationship(
+        'NavigationEntry', remote_side='NavigationEntry.id',
+        primaryjoin=('NavigationEntry.parent_id==NavigationEntry.id'),
+        backref=db.backref('children', lazy='dynamic'))
 
-		self.title = title
-		self.url = url
-		self.external = external
-		self.activity_list = activity_list
-		self.position = position
+    def __init__(self, parent, title, url, external, activity_list, position):
+        if parent:
+            self.parent_id = parent.id
 
-	def __repr__(self):
-		return '<NavigationEntry(%s, %s, "%s", "%s", %s)>' % (self.id,
-				self.parent_id, self.title, self.url, self.external)
+        self.title = title
+        self.url = url
+        self.external = external
+        self.activity_list = activity_list
+        self.position = position

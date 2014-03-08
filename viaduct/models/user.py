@@ -1,13 +1,15 @@
-#!/usr/bin/python
-
 from viaduct import db
 from viaduct.models.education import Education
 from datetime import datetime
+from viaduct.models import BaseEntity
 
-class User(db.Model):
+
+class User(db.Model, BaseEntity):
     __tablename__ = 'user'
 
-    id = db.Column(db.Integer, primary_key=True)
+    prints = ('id', 'email', 'password', 'first_name', 'last_name',
+              'student_id')
+
     email = db.Column(db.String(256), unique=True)
     password = db.Column(db.String(60))
     first_name = db.Column(db.String(256))
@@ -72,8 +74,3 @@ class User(db.Model):
     @staticmethod
     def get_anonymous_user():
         return User.query.get(0)
-
-    def __repr__(self):
-        return '<User({0}, "{1}", "{2}", "{3}", "{4}", "{5}">'\
-            .format(self.id, self.email, self.password, self.first_name,
-                    self.last_name, self.student_id)

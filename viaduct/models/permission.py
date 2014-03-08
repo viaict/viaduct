@@ -1,7 +1,8 @@
 from viaduct import db
+from viaduct.models import BaseEntity
 
 
-class GroupPermission(db.Model):
+class GroupPermission(db.Model, BaseEntity):
     """Modules have names, this is not stored or registered, it is simply the
     name a module uses when it checks for permissions of a certain user. In the
     future we would like that modules register themselves so we can keep track
@@ -21,7 +22,8 @@ class GroupPermission(db.Model):
     but right now we just do not care enough for such pretty things.
     """
 
-    id = db.Column(db.Integer, primary_key=True)
+    __tablename__ = 'group_permission'
+
     module_name = db.Column(db.Text)
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
     group = db.relationship("Group", backref=db.backref('module_permissions',

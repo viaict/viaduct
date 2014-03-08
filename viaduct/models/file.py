@@ -1,13 +1,13 @@
 from viaduct import db
+from viaduct.models import BaseEntity
 
 
-class File(db.Model):
+class File(db.Model, BaseEntity):
     '''
     A file for pages and generic file usage.
     '''
     __tablename__ = 'file'
 
-    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), unique=True)
     page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
 

@@ -1,11 +1,13 @@
 from viaduct import db
 import datetime
+from viaduct.models import BaseEntity
 
 
-class News(db.Model):
+class News(db.Model, BaseEntity):
     __tablename__ = 'news'
 
-    id = db.Column(db.Integer, primary_key=True)
+    prints = ('id', 'end_time')
+
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     title = db.Column(db.String(256))
     content = db.Column(db.Text)
@@ -21,9 +23,6 @@ class News(db.Model):
         self.title = title
         self.content = content
         self.end_time = end_time
-
-    def __repr__(self):
-        return '<News(%s, "%s")>' % (self.id, self.end_time)
 
     def get_short_content(self, characters):
         if (len(self.content) > characters):

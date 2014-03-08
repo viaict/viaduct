@@ -1,12 +1,12 @@
 from viaduct import db
 from viaduct.models.location import Location
 from viaduct.models.contact import Contact
+from viaduct.models import BaseEntity
 
 
-class Company(db.Model):
+class Company(db.Model, BaseEntity):
     __tablename__ = 'company'
 
-    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), unique=True)
     description = db.Column(db.String(1024))
     logo_path = db.Column(db.String(256), unique=True)

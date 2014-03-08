@@ -1,12 +1,11 @@
-#!/usr/bin/python
-
 from viaduct import db
 from viaduct.models import BaseEntity
 
-user_group = db.Table('user_group', db.Column('user_id', db.Integer,
-                                              db.ForeignKey('user.id')),
-                      db.Column('group_id', db.Integer,
-                                db.ForeignKey('group.id')))
+user_group = db.Table(
+    'user_group',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('group_id', db.Integer, db.ForeignKey('group.id'))
+)
 
 
 class Group(db.Model, BaseEntity):

@@ -1,10 +1,10 @@
 from viaduct import db
+from viaduct.models import BaseEntity
 
 
-class Transaction(db.Model):
+class Transaction(db.Model, BaseEntity):
     __tablename__ = 'mollie_transaction'
 
-    id = db.Column(db.Integer, primary_key=True)
     mollie_id = db.Column(db.String(256))
     amount = db.Column(db.Float)
     description = db.Column(db.String(256))
