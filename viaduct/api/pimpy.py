@@ -265,7 +265,7 @@ class PimpyAPI:
             flash('Current_user not found')
             return redirect(url_for('pimpy.view_minutes'))
 
-        groups = current_user.groups.all()
+        groups = current_user.groups.filter(Group.name != 'all').all()
 
         if not type:
             type = 'minutes'
