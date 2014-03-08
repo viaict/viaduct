@@ -2,6 +2,7 @@ from viaduct import db, application
 from flask import render_template, Markup, redirect, url_for, abort,\
     flash
 from flask.ext.login import current_user
+from unidecode import unidecode
 import datetime
 import re
 
@@ -234,6 +235,7 @@ class PimpyAPI:
         user_names = map(lambda x: "%s %s" % (x.first_name.lower().strip(),
                                               x.last_name.lower().strip()),
                          users)
+        user_names = [unidecode(x) for x in user_names]
 
         for comma_sep_user in comma_sep:
 

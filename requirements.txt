@@ -25,3 +25,4 @@ validate-email==1.1
 validictory==0.9.0
 wsgiref==0.1.2
 python-dateutil==2.2
+Unidecode==0.04.14
