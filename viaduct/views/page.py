@@ -23,105 +23,10 @@ blueprint = Blueprint('page', __name__)
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<path:path>', methods=['GET', 'POST'])
 def get_page(path=''):
-	revisions = []
+    page = Page.get_by_path(path)
+    print(page)
 
-	custom_form = False
-	is_main_page = False
-
-	if path == '' or path == 'index':
-		paths = ['laatste_bestuursblog', 'activities', 'twitter', 'contact']
-		is_main_page = True
-	else:
-		paths = [path]
-
-	for path in paths:
-		page = Page.query.filter(Page.path == path).first()
-
-		if not page:
-			page = Page('')
-
-		if page.revisions.count() > 0:
-			revision = page.revisions.order_by(PageRevision.id.desc()).first()
-
-			# Check if there is a custom_form
-			if revision.form_id:
-				custom_form = CustomForm.query.get(revision.form_id)
-
-				if custom_form:
-
-					# Count current attendants for "reserved" message
-					entries = CustomFormResult.query\
-						.filter(CustomFormResult.form_id == revision.form_id)
-					custom_form.num_attendants = entries.count()
-
-					# Check if the current user has already entered data in
-					# this custom form.
-					if current_user and current_user.id > 0:
-						form_result = CustomFormResult.query \
-							.filter(CustomFormResult.form_id ==
-									revision.form_id) \
-							.filter(CustomFormResult.owner_id ==
-									current_user.id).first()
-
-						if form_result:
-							custom_form.form_data = form_result.data\
-								.replace('"', "'")
-							custom_form.form_info = 'Je hebt het formulier '\
-													'ingevuld. Je kan je '\
-													'inzending wel aanpassen!'
-						else:
-							if custom_form.num_attendants >=\
-									custom_form.max_attendants:
-								custom_form.form_info = 'Het formulier is '\
-														'vol, als je je nu '\
-														'inschrijft kom je '\
-														'op de reserve lijst!'
-							else:
-								custom_form.form_info = 'Er zijn op het '\
-														'moment %s '\
-														'inschrijvingen' %\
-									(custom_form.num_attendants)
-
-					# Add custom form to revision
-					revision.custom_form = custom_form
-
-			if not current_user:
-				if not UserAPI.can_read(page):
-					if not path == 'activities':
-						abort(403)
-			elif revision.author and current_user and\
-					not revision.author.id == current_user.id:
-				if not UserAPI.can_read(page):
-					if not path == 'activities':
-						abort(403)
-		else:
-			revision = PageRevision(page, current_user,
-									'Oh no! It looks like you have found a '
-									'dead Link!', '![alt text](/static/img/'
-									'404.png "404")', True)
-
-		class struct(object):
-			pass
-
-		# TODO this data object is for the front page -> Seperate logic for
-		# normal pages and index page.
-		data = struct()
-		data.is_main_page = is_main_page
-		data.title = revision.title
-		data.content = revision.content
-		data.filter_html = revision.filter_html
-		data.path = path
-		data.page = page
-
-		revisions.append(data)
-
-		# Allow revision path for normal page templates
-		revision.path = path
-
-	if is_main_page:
-		return render_template('page/get_page.htm', revisions=revisions)
-	else:
-		return render_template('page/view_single.htm', page=revision)
+    return ''
 
 
 @blueprint.route('/history/', methods=['GET', 'POST'])

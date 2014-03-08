@@ -19,9 +19,6 @@ class Page(db.Model):
     path = db.Column(db.String(256), unique=True)
     needs_payed = db.Column(db.Boolean)
 
-    types = ['page', 'news']
-    type = db.Column(db.Integer)
-
     parent = db.relationship('Page', remote_side=id,
                              backref=db.backref('children', lazy='dynamic'))
     ancestors = db.relationship('Page', secondary=page_ancestor,
@@ -31,7 +28,8 @@ class Page(db.Model):
                                 backref=db.backref('descendants',
                                                    lazy='dynamic'),
                                 lazy='dynamic')
-    revisions = db.relationship('PageRevision', backref='page', lazy='dynamic')
+    page_revisions = db.relationship('PageRevision', backref='page',
+                                     lazy='dynamic')
 
     def __init__(self, path):
         self.path = path
@@ -39,15 +37,14 @@ class Page(db.Model):
     def __repr__(self):
         return '<Page(%s, "%s")>' % (self.id, self.path)
 
-    @staticmethod
-    def get_by_path(path):
-        return Page.query.filter(Page.path == path).first()
+    def get_type(self):
+        if self.page_revisions.count():
+            return 'page'
 
-    def has_revisions(self):
-        return self.revisions.count() > 0
+        return None
 
     def can_read(self, user):
-        if(PagePermission.get_user_rights(user, self.id) > 0):
+        if PagePermission.get_user_rights(user, self.id) > 0:
             return True
         else:
             return False
@@ -58,8 +55,9 @@ class Page(db.Model):
         else:
             return False
 
-    def get_newest_revision(self):
-        return self.revisions.order_by(PageRevision.timestamp.desc()).first()
+    @staticmethod
+    def get_by_path(path):
+        return Page.query.filter(Page.path == path).first()
 
 
 class PageRevision(db.Model):
