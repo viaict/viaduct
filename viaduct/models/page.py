@@ -43,6 +43,12 @@ class Page(db.Model, BaseEntity):
 
         return revision_class
 
+    def get_revisions_query(self):
+        """Get the page's revisions."""
+        revision_class = self.get_revision_class()
+
+        return revision_class.query
+
     def get_latest_revision(self):
         """Get the latest revision of this page."""
         revision_class = self.get_revision_class()
@@ -71,8 +77,8 @@ class PageRevision(db.Model, BaseEntity):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
 
-    # Allow a form to be added to a page
-    form_id = db.Column(db.Integer, db.ForeignKey('custom_form.id'))
+    page = db.relationship('Page', backref=db.backref('page_revisions',
+                                                      lazy='dynamic'))
 
     author = db.relationship('User', backref=db.backref('page_edits',
                                                         lazy='dynamic'))
@@ -88,6 +94,9 @@ class PageRevision(db.Model, BaseEntity):
         self.page_id = page.id
         self.timestamp = timestamp
         self.form_id = form_id
+
+    def get_comparable(self):
+        return self.content
 
 
 class PagePermission(db.Model):

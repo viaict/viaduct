@@ -36,30 +36,29 @@ def get_page(path=''):
     if not revision:
         return abort(500)
 
-    return render_template('page/view_%s.htm' % (page.type), page=page,
+    return render_template('%s/view_single.htm' % (page.type), page=page,
                            revision=revision)
 
 
 @blueprint.route('/history/', methods=['GET', 'POST'])
 @blueprint.route('/history/<path:path>', methods=['GET', 'POST'])
 def get_page_history(path=''):
-    #if not current_user.is_authenticated():
-    #   return get_error_page()
-
     form = HistoryPageForm(request.form)
 
-    page = Page.query.filter(Page.path == path).first()
-
-    if not UserAPI.can_write(page):
-        abort(403)
+    page = Page.get_by_path(path)
 
     if not page:
-        page = Page('')
+        return abort(404)
 
-    if page.revisions.count() > 0:
-        revisions = page.revisions.order_by(PageRevision.id.desc()).all()
-    else:
-        revisions = None
+    if not UserAPI.can_write(page):
+        return abort(403)
+
+    revision_class = page.get_revision_class()
+    revisions_query = page.get_revisions_query()
+
+    revisions = revisions_query\
+        .order_by(revision_class.id.desc())\
+        .all()
 
     form.previous.choices = [(revision.id, '') for revision in revisions]
     form.current.choices = [(revision.id, '') for revision in revisions]
@@ -68,14 +67,14 @@ def get_page_history(path=''):
         previous = request.form['previous']
         current = request.form['current']
 
-        previous_revision = page.revisions\
-            .filter(PageRevision.id == previous).first()
-        current_revision = page.revisions\
-            .filter(PageRevision.id == current).first()
+        previous_revision = revisions_query\
+            .filter(revision_class.id == previous).first()
+        current_revision = revisions_query\
+            .filter(revision_class.id == current).first()
 
         diff = difflib.HtmlDiff()\
-            .make_table(previous_revision.content.splitlines(),
-                        current_revision.content.splitlines())
+            .make_table(previous_revision.get_comparable().splitlines(),
+                        current_revision.get_comparable().splitlines())
 
         return render_template('page/compare_page_history.htm', diff=diff)
 

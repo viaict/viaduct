@@ -1,0 +1,26 @@
+{% from "macros/flash.htm" import render_flash %}
+{% from "macros/custom_form.htm" import user_fields %}
+{% from "macros/form.htm" import render_field %}
+
+{% extends "content.htm" %}
+
+{% block content %}
+    <div class="mainblock">
+        <div class="page-header">
+            {% if GroupPermissionAPI.can_write('page') %}
+                <div class='btn-group pull-right'>
+                    <a class='btn btn-default' href='{{ url_for('page.get_page_history', path=page.path) }}'>
+                        <i class='glyphicon glyphicon-time'></i> View History
+                    </a>
+                    <a class='btn btn-warning' href='{{ url_for('page.edit_page', path=page.path) }}'>
+                        <i class='glyphicon glyphicon-pencil'></i> Edit Page
+                    </a>
+                </div>
+            {% endif %}
+
+            <h1>{% block page_title %}{% endblock %}</h1>
+        </div>
+
+        {% block page_content %}{% endblock %}
+    </div>
+{% endblock %}
