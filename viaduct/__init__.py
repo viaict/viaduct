@@ -1,12 +1,12 @@
 import os
 
-from flask import Flask
+from flask import Flask, request, Markup, render_template
 from flask.ext.babel import Babel
-from flask.ext.login import LoginManager
+from flask.ext.login import LoginManager, current_user
 from flask.ext.sqlalchemy import SQLAlchemy
-
+from config import LANGUAGES
 from viaduct.utilities import import_module
-
+from markdown import markdown
 
 def is_module(path):
     init_path = os.path.join(path, '__init__.py')
@@ -53,6 +53,13 @@ application.config.from_object('config')
 
 # Set up Flask Babel, which is used for internationalisation support.
 babel = Babel(application)
+@babel.localeselector
+def get_locale():
+    # if a user is logged in, use the locale from the user settings
+    if current_user and current_user.locale is not None and \
+            not current_user.is_anonymous():
+        return current_user.locale
+    return request.accept_languages.best_match(LANGUAGES.keys())
 
 # Set up the login manager, which is used to store the details related to the
 # authentication system.
@@ -64,8 +71,16 @@ login_manager.login_view = 'user.sign_in'
 db = SQLAlchemy(application)
 db.Model.to_dict = model_to_dict
 
+from viaduct.api.user import UserAPI
+from viaduct.api.group import GroupPermissionAPI
+
 # Set jinja global variables
 application.jinja_env.globals.update(enumerate=enumerate)
+application.jinja_env.globals.update(render_template=render_template)
+application.jinja_env.globals.update(markdown=markdown)
+application.jinja_env.globals.update(Markup=Markup)
+application.jinja_env.globals.update(UserAPI=UserAPI)
+application.jinja_env.globals.update(GroupPermissionAPI=GroupPermissionAPI)
 
 # Register the blueprints.
 import api

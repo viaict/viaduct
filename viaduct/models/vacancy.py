@@ -2,13 +2,13 @@ from viaduct import db
 from datetime import datetime
 
 from viaduct.models.company import Company
+from viaduct.models import BaseEntity
 
 
-class Vacancy(db.Model):
+class Vacancy(db.Model, BaseEntity):
     __tablename__ = 'vacancy'
 
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(256), unique=True)
+    title = db.Column(db.String(200), unique=True)
     description = db.Column(db.String(1024))
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)

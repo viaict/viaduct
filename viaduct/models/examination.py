@@ -5,14 +5,14 @@ from viaduct import db
 from viaduct.models.course import Course
 from viaduct.models.education import Education
 from viaduct.models.user import User
+from viaduct.models import BaseEntity
 
 
-class Examination(db.Model):
+class Examination(db.Model, BaseEntity):
     __tablename__ = 'examination'
 
-    id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(128))
-    path = db.Column(db.String(256), unique=True)
+    path = db.Column(db.String(256))
     answer_path = db.Column(db.String(256))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     timestamp = db.Column(db.DateTime)

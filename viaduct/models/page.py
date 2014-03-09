@@ -9,7 +9,7 @@ class Page(db.Model, BaseEntity):
     __tablename__ = 'page'
 
     parent_id = db.Column(db.Integer, db.ForeignKey('page.id'))
-    path = db.Column(db.String(256), unique=True)
+    path = db.Column(db.String(200), unique=True)
     needs_payed = db.Column(db.Boolean)
 
     type = db.Column(db.String(256))

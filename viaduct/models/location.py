@@ -1,16 +1,16 @@
 from viaduct import db
+from viaduct.models import BaseEntity
 
 
-class Location(db.Model):
+class Location(db.Model, BaseEntity):
     __tablename__ = 'location'
 
-    id = db.Column(db.Integer, primary_key=True)
     city = db.Column(db.String(256))
     country = db.Column(db.String(256))
     address = db.Column(db.String(256))
     zip = db.Column(db.String(32))
     postoffice_box = db.Column(db.String(32))
-    email = db.Column(db.String(256), unique=True)
+    email = db.Column(db.String(256))
     phone_nr = db.Column(db.String(64))
 
     def __init__(self, city='', country='', address='', zip='',

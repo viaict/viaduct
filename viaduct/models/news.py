@@ -28,9 +28,6 @@ class NewsRevision(db.Model, BaseEntity):
         self.content = content
         self.end_time = end_time
 
-    def __repr__(self):
-        return '<News(%s, "%s")>' % (self.id, self.end_time)
-
     def get_short_content(self, characters):
         if (len(self.content) > characters):
             short_content = self.content[:characters].strip()

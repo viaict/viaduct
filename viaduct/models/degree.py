@@ -1,10 +1,10 @@
 from viaduct import db
+from viaduct.models import BaseEntity
 
 
-class Degree(db.Model):
+class Degree(db.Model, BaseEntity):
     __tablename__ = 'degree'
 
-    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), nullable=False)
     abbreviation = db.Column(db.String(128), nullable=False)
 

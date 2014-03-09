@@ -129,6 +129,7 @@ def edit(user_id=None):
         user.email = form.email.data
         user.first_name = form.first_name.data
         user.last_name = form.last_name.data
+        user.locale = form.locale.data
         if GroupPermissionAPI.can_write('user'):
             user.has_payed = form.has_payed.data
             user.honorary_member = form.honorary_member.data

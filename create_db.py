@@ -31,6 +31,7 @@ if os.path.exists('application.db'):
     os.remove('application.db')
 
 # Create the database.
+db.drop_all()
 db.create_all()
 
 page = Page('')
@@ -191,8 +192,8 @@ db.session.add(custom_form)
 db.session.commit()
 
 activity1 = Activity()
-activity1.start_time = datetime.datetime(2012, 10, 10, 17, 0)
-activity1.end_time = datetime.datetime(2012, 10, 10, 22, 0)
+activity1.start_time = datetime.datetime(2012, 10, 10, 17, 0).date()
+activity1.end_time = datetime.datetime(2012, 10, 10, 22, 0).date()
 activity1.name = "Een activiteit in het verleden"
 activity1.description = """According to some, the system that is designed
 during the 19th century is on the verge of a revolution. A revolution that
@@ -223,8 +224,8 @@ each other to bend it to the perfect talk."""
 
 activity2 = Activity()
 activity2.form_id = custom_form.id
-activity2.start_time = datetime.datetime(2013, 10, 10, 17, 0)
-activity2.end_time = datetime.datetime(2013, 10, 10, 22, 0)
+activity2.start_time = datetime.datetime(2013, 10, 10, 17, 0).date()
+activity2.end_time = datetime.datetime(2013, 10, 10, 22, 0).date()
 activity2.name = "Een activiteit die nog moet komen, met formulier"
 activity2.description = """Learning analytics is a fairly recent technology
 that takes advantage of these traces. As most technologies it can be used for
@@ -244,8 +245,8 @@ something in there for everybody. It is then up to you to interact with me and
 each other to bend it to the perfect talk."""
 
 activity3 = Activity()
-activity3.start_time = datetime.datetime(2013, 10, 10, 17, 0)
-activity3.end_time = datetime.datetime(2013, 10, 10, 22, 0)
+activity3.start_time = datetime.datetime(2013, 10, 10, 17, 0).date()
+activity3.end_time = datetime.datetime(2013, 10, 10, 22, 0).date()
 activity3.name = "Een activiteit in het heden"
 activity3.description = """Learning analytics is a fairly recent technology
 that takes advantage of these traces. As most technologies it can be used for
@@ -265,8 +266,8 @@ something in there for everybody. It is then up to you to interact with me and
 each other to bend it to the perfect talk."""
 
 activity4 = Activity()
-activity4.start_time = datetime.datetime(2013, 10, 10, 17, 0)
-activity4.end_time = datetime.datetime(2013, 10, 10, 22, 0)
+activity4.start_time = datetime.datetime(2013, 10, 10, 17, 0).date()
+activity4.end_time = datetime.datetime(2013, 10, 10, 22, 0).date()
 activity4.name = "Een activiteit in het heden"
 activity4.description = """Learning analytics is a fairly recent technology
 that takes advantage of these traces. As most technologies it can be used for
@@ -287,8 +288,8 @@ each other to bend it to the perfect talk."""
 
 
 activity5 = Activity()
-activity5.start_time = datetime.datetime(2013, 10, 10, 17, 0)
-activity5.end_time = datetime.datetime(2013, 10, 10, 22, 0)
+activity5.start_time = datetime.datetime(2013, 10, 10, 17, 0).date()
+activity5.end_time = datetime.datetime(2013, 10, 10, 22, 0).date()
 activity5.name = "Een activiteit in het heden"
 activity5.description = """Learning analytics is a fairly recent technology
 that takes advantage of these traces. As most technologies it can be used for
@@ -395,13 +396,13 @@ contact_1 = Contact('Bas de Boer', 'jemoeder@jemoder.nl', '12', location_1)
 db.session.add(contact_1)
 db.session.commit()
 
-company_1 = Company('test', 'bladiebla', datetime.datetime.now(),
-                    datetime.datetime.now(), location_1, contact_1)
+company_1 = Company('test', 'bladiebla', datetime.datetime.now().date(),
+                    datetime.datetime.now().date(), location_1, contact_1)
 db.session.add(company_1)
 db.session.commit()
 
-vacancy_1 = Vacancy('test', 'bladiebla', datetime.datetime.now(),
-                    datetime.datetime.now(), 'deeltijd', 'nvt', company_1)
+vacancy_1 = Vacancy('test', 'bladiebla', datetime.datetime.now().date(),
+                    datetime.datetime.now().date(), 'deeltijd', 'nvt', company_1)
 db.session.add(vacancy_1)
 db.session.commit()
 
@@ -420,7 +421,7 @@ for module in modules:
 
 
 activity_permission = GroupPermission('activity', group_all.id, 1)
-custom_form_permission = GroupPermission('custom_form', group_all.id, 1)
+custom_form_permission = GroupPermission(u'custom_form', group_all.id, 1)
 
 db.session.add(custom_form_permission)
 db.session.add(activity_permission)

@@ -1,17 +1,20 @@
-#!/usr/bin/python
-
 from viaduct import db
 from viaduct.models.education import Education
 from datetime import datetime
+from viaduct.models import BaseEntity
+from config import LANGUAGES
 
-class User(db.Model):
+class User(db.Model, BaseEntity):
     __tablename__ = 'user'
 
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(256), unique=True)
+    prints = ('id', 'email', 'password', 'first_name', 'last_name',
+              'student_id')
+
+    email = db.Column(db.String(200), unique=True)
     password = db.Column(db.String(60))
     first_name = db.Column(db.String(256))
     last_name = db.Column(db.String(256))
+    locale = db.Column(db.Enum(*LANGUAGES.keys()), default="nl")
     has_payed = db.Column(db.Boolean)
     shirt_size = db.Column(db.Enum('Small', 'Medium', 'Large'))
     allergy = db.Column(db.String(1024))  # Allergy / medication
@@ -46,8 +49,8 @@ class User(db.Model):
         Because of legacy code and sqlalchemy we do it this way """
     def __setattr__(self, name, value):
         if name == 'has_payed' and value == True:
-            super(User, self).__setattr__("payed_date", datetime.now()) 
-        super(User, self).__setattr__(name, value) 
+            super(User, self).__setattr__("payed_date", datetime.now())
+        super(User, self).__setattr__(name, value)
 
     def is_authenticated(self):
         """Necessary."""
@@ -72,8 +75,3 @@ class User(db.Model):
     @staticmethod
     def get_anonymous_user():
         return User.query.get(0)
-
-    def __repr__(self):
-        return '<User({0}, "{1}", "{2}", "{3}", "{4}", "{5}">'\
-            .format(self.id, self.email, self.password, self.first_name,
-                    self.last_name, self.student_id)

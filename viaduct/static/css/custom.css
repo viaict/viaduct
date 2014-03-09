@@ -3,6 +3,7 @@ body {
     margin-bottom:20px;
 }
 
+
 form label {
     font-weight:bold;
 }
@@ -146,7 +147,6 @@ label.checkbox {
 
 .activity-block .short_content p {
     height: 115px;
-    overflow: hidden;
     text-overflow: ellipsis;
 }
 
@@ -438,5 +438,9 @@ div.sortable {
 .nav a {
   overflow: hidden;
   white-space: nowrap;
-  text-overflow: ellipsis; 
+  text-overflow: ellipsis;
+}
+
+.linkimg404 {
+    max-width: 100%;
 }

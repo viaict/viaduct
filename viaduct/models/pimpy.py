@@ -2,6 +2,7 @@ from viaduct import db
 import datetime
 from viaduct.models import BaseEntity
 
+
 # many to many relationship tables
 task_user = db.Table(
     'pimpy_task_user',
@@ -99,10 +100,8 @@ class Task(db.Model, BaseEntity):
                              self.users))
 
 
-class Minute(db.Model):
+class Minute(db.Model, BaseEntity):
     __tablename__ = 'pimpy_minute'
-
-    id = db.Column(db.Integer, primary_key=True)
 
     # timestamp when the minutes were uploaded
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow())

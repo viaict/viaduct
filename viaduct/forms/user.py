@@ -2,7 +2,7 @@ from flask.ext.wtf import Form, TextField, PasswordField, BooleanField, \
     SelectField
 from flask.ext.wtf import Required, Email, EqualTo, IntegerField, FileField
 from flask.ext.wtf import ValidationError
-
+from config import LANGUAGES
 
 class SignUpForm(Form):
     email = TextField('E-mailadres',
@@ -53,6 +53,7 @@ class EditUserForm(Form):
                                                        'opgegeven')])
     has_payed = BooleanField('Heeft betaald')
     honorary_member = BooleanField('Erelid')
+    locale = SelectField('Taal', choices=LANGUAGES.items())
     favourer = BooleanField('Begunstiger')
     student_id = TextField('Studentnummer',
                            validators=[Required(message='Geen studentnummer '
