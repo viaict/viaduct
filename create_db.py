@@ -38,6 +38,11 @@ page = Page('')
 db.session.add(page)
 db.session.commit()
 
+revision = PageRevision(page, 'Homepage!', '', None, 'herr derr 1')
+db.session.add(revision)
+db.session.commit()
+
+
 news_page = Page('news/1/', 'news')
 db.session.add(news_page)
 db.session.commit()
@@ -316,10 +321,6 @@ db.session.add(activity4)
 db.session.add(activity5)
 db.session.commit()
 
-
-revision = PageRevision(page, user, 'Page 1', 'herr derr 1', 0)
-db.session.add(revision)
-db.session.commit()
 
 nav_home = NavigationEntry(None, 'Home', '/', False, False, 1)
 db.session.add(nav_home)

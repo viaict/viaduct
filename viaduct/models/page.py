@@ -4,6 +4,8 @@ import sys
 from viaduct import db
 from viaduct.models import BaseEntity, Group
 
+from sqlalchemy import event
+
 
 class Page(db.Model, BaseEntity):
     __tablename__ = 'page'
@@ -17,6 +19,9 @@ class Page(db.Model, BaseEntity):
     def __init__(self, path, type='page'):
         self.path = path.rstrip('/')
         self.type = type
+
+        # Store the page's revision class, based upon its type.
+        self.revision_cls = Page.get_revision_class(self.type)
 
     def __repr__(self):
         return '<Page(%s, "%s")>' % (self.id, self.path)
@@ -33,33 +38,26 @@ class Page(db.Model, BaseEntity):
         else:
             return False
 
-    def get_revision_class(self):
-        """Turn the page's type into a revision class."""
-        if not self.type:
-            return None
-
-        class_name = '%sRevision' % (self.type.capitalize())
-        revision_class = getattr(
-            sys.modules['viaduct.models.%s' % (self.type)], class_name)
-
-        return revision_class
-
-    def get_revisions_query(self):
-        """Get the page's revisions."""
-        revision_class = self.get_revision_class()
-
-        return revision_class.query
-
     def get_latest_revision(self):
         """Get the latest revision of this page."""
-        revision_class = self.get_revision_class()
-
-        revision = revision_class.query\
-            .filter(revision_class.page_id == self.id)\
-            .order_by(revision_class.id.desc())\
+        revision = self.revision_cls.query\
+            .filter(self.revision_cls.page_id == self.id)\
+            .order_by(self.revision_cls.id.desc())\
             .first()
 
         return revision
+
+    @staticmethod
+    def get_revision_class(type):
+        """Turn a page's type into a revision class."""
+        if not type:
+            return None
+
+        class_name = '%sRevision' % (type.capitalize())
+        revision_class = getattr(
+            sys.modules['viaduct.models.%s' % (type)], class_name)
+
+        return revision_class
 
     @staticmethod
     def strip_path(path):
@@ -70,34 +68,59 @@ class Page(db.Model, BaseEntity):
         return Page.query.filter(Page.path == path).first()
 
 
-class PageRevision(db.Model, BaseEntity):
-    __tablename__ = 'page_revision'
+# Calculate revision class.
+@event.listens_for(Page, 'load')
+def set_revision_class(target, context):
+    target.revision_cls = Page.get_revision_class(target)
+
+
+class SuperRevision(db.Model, BaseEntity):
+    """Any revision class should inherit from this one. It contains all general
+    revision fields, as well as some helper functions.
+
+    NOTE: I am not able to get a relationship to work with page here, so you
+    will have to implement that yourself."""
+    __abstract__ = True
 
     title = db.Column(db.String(128))
+    comment = db.Column(db.String(1024))
+
+    def __init__(self, title, comment):
+        """Any necessary initialization. Don't forget to call
+        `super().__init__(title, comment)`!"""
+        self.title = title
+        self.comment = comment
+
+    def get_comparable(self):
+        """As long as no alternative comparable is given, compare titles."""
+        return self.title
+
+
+class PageRevision(SuperRevision):
+    __tablename__ = 'page_revision'
+
     filter_html = db.Column(db.Boolean)
     content = db.Column(db.Text)
-    comment = db.Column(db.String(1024))
     timestamp = db.Column(db.DateTime)
+
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
-
-    page = db.relationship('Page', backref=db.backref('page_revisions',
-                                                      lazy='dynamic'))
-
     author = db.relationship('User', backref=db.backref('page_edits',
                                                         lazy='dynamic'))
 
-    def __init__(self, page, author, title, content, comment="",
-                 filter_html=True, timestamp=datetime.datetime.utcnow(),
-                 form_id=None):
-        self.title = title
-        self.content = content
-        self.comment = comment
-        self.filter_html = filter_html
-        self.user_id = author.id if author else -1
+    page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
+    page = db.relationship('Page', backref=db.backref('page_revisions',
+                                                      lazy='dynamic'))
+
+    def __init__(self, page, title, comment, author, content, filter_html=True,
+                 timestamp=datetime.datetime.utcnow()):
+        super(PageRevision, self).__init__(title, comment)
+
         self.page_id = page.id
+
+        self.filter_html = filter_html
+        self.content = content
         self.timestamp = timestamp
-        self.form_id = form_id
+        self.user_id = author.id if author else None
 
     def get_comparable(self):
         return self.content
