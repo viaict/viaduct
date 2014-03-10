@@ -1,5 +1,7 @@
 application.db
 config.py
+client_secrets.json
+*.dat
 *.bak
 *.pyc
 *.jpg
