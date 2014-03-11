@@ -181,8 +181,8 @@ db.session.add(custom_form)
 db.session.commit()
 
 activity1 = Activity()
-activity1.start_time = datetime.datetime(2012, 10, 10, 17, 0).date()
-activity1.end_time = datetime.datetime(2012, 10, 10, 22, 0).date()
+activity1.start_time = datetime.datetime(2014, 4, 10, 17, 0).date()
+activity1.end_time = datetime.datetime(2014, 4, 10, 22, 0).date()
 activity1.name = "Een activiteit in het verleden"
 activity1.description = """According to some, the system that is designed
 during the 19th century is on the verge of a revolution. A revolution that
@@ -407,15 +407,6 @@ for module in modules:
     group_permission = GroupPermission(module, group.id, 2)
     db.session.add(group_permission)
     db.session.commit()
-
-
-activity_permission = GroupPermission('activity', group_all.id, 1)
-custom_form_permission = GroupPermission(u'custom_form', group_all.id, 1)
-
-db.session.add(custom_form_permission)
-db.session.add(activity_permission)
-db.session.commit()
-
 
 # VERY IMPORTANT!!! Do NOT delete
 minute = Minute('content', None, datetime.datetime.now())

@@ -1,7 +1,7 @@
 import os
 import datetime
 
-from viaduct.api.google_calendar.calendar import authenticate, list_events
+import viaduct.api.calendar.google as google
 
 from flask import flash, get_flashed_messages, redirect, render_template, \
     request, url_for, abort
@@ -56,9 +56,11 @@ def view(archive="", page=1):
 def remove_activity(activity_id=0):
     if not GroupPermissionAPI.can_write('activity'):
         return abort(403)
+
     activity = Activity.query.filter(Activity.id == activity_id).first()
     db.session.delete(activity)
     db.session.commit()
+
     return redirect(url_for('activity.view'))
 
 
@@ -127,8 +129,8 @@ def get_activity(activity_id=0):
 @blueprint.route('/edit/<int:activity_id>', methods=['GET', 'POST'])
 def create(activity_id=None):
     # Need to be logged in + actie group or admin etc.
-    #if not GroupPermissionAPI.can_write('activity'):
-    #    return abort(403)
+    if not GroupPermissionAPI.can_write('activity'):
+        return abort(403)
 
     if activity_id:
         activity = Activity.query.get(activity_id)
@@ -204,16 +206,20 @@ def create(activity_id=None):
 
             if activity.id:
                 flash('You\'ve created an activity successfully.', 'success')
+
+                # TODO save the google event_id
+                #google.update_activity(activity.google_event_id, name, description, start, end)
             else:
                 flash('You\'ve updated an activity successfully.', 'success')
+
+                google_activity = google.insert_activity(name, description, start, end)
+                # TODO
+                #activity.google_event_id = google_activity.id
 
             db.session.add(activity)
             db.session.commit()
 
-            redirect_url = url_for('activity.get_activity', activity_id=activity.id)
-
-            list_events(redirect_url)
-            #return redirect()
+            return redirect(url_for('activity.get_activity', activity_id=activity.id))
     else:
         flash_form_errors(form)
 
