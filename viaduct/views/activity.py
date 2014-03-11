@@ -1,6 +1,8 @@
 import os
 import datetime
 
+from viaduct.api.google_calendar.calendar import authenticate, list_events
+
 from flask import flash, get_flashed_messages, redirect, render_template, \
     request, url_for, abort
 from flask import Blueprint, Markup
@@ -125,8 +127,8 @@ def get_activity(activity_id=0):
 @blueprint.route('/edit/<int:activity_id>', methods=['GET', 'POST'])
 def create(activity_id=None):
     # Need to be logged in + actie group or admin etc.
-    if not GroupPermissionAPI.can_write('activity'):
-        return abort(403)
+    #if not GroupPermissionAPI.can_write('activity'):
+    #    return abort(403)
 
     if activity_id:
         activity = Activity.query.get(activity_id)
@@ -208,8 +210,10 @@ def create(activity_id=None):
             db.session.add(activity)
             db.session.commit()
 
-            return redirect(url_for('activity.get_activity',
-                                    activity_id=activity.id))
+            redirect_url = url_for('activity.get_activity', activity_id=activity.id)
+
+            list_events(redirect_url)
+            #return redirect()
     else:
         flash_form_errors(form)
 
