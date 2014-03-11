@@ -1,4 +1,4 @@
-import httplib2
+import os, httplib2
 from apiclient.discovery import build
 from oauth2client.client import SignedJwtAssertionCredentials
 
@@ -14,7 +14,7 @@ private_key = "9fade611b382d682a14ad86ed2e5585272f0b3e6-privatekey.p12"
 
 
 def build_service():
-    f = file(private_key, "rb")
+    f = file(os.path.dirname(os.path.abspath(__file__)) + "/" + private_key, "rb")
     key = f.read()
     f.close()
 
@@ -61,8 +61,8 @@ def insert_event(title="", location="VIA kamer", start="", end="", calendar_id=N
     event = {
       'summary': title,
       'location': location,
-      'start': {'dateTime': start},
-      'end': {'dateTime': end}
+      'start': {'dateTime': start, 'timeZone':'Europe/Amsterdam'},
+      'end': {'dateTime': end,     'timeZone':'Europe/Amsterdam'}
     }
 
     return service.events() \
@@ -99,8 +99,8 @@ def update_event(event_id, title="", location="VIA Kamer", start="", end="", cal
     event = {
       'summary': title,
       'location': location,
-      'start': {'dateTime': start},
-      'end': {'dateTime': end}
+      'start': {'dateTime': start, 'timeZone':'Europe/Amsterdam'},
+      'end': {'dateTime': end,     'timeZone':'Europe/Amsterdam'}
     }
 
     return service.events() \
@@ -121,6 +121,6 @@ def delete_event(event_id, calendar_id=None):
     service = build_service()
 
     return service.events() \
-            .delete(calendarId=calendar_id, eventId=event_id, body=event) \
+            .delete(calendarId=calendar_id, eventId=event_id) \
             .execute()
 
