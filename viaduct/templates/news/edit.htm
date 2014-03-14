@@ -1,4 +1,4 @@
-{% from 'macros/form.htm' import render_field %}
+{% from 'macros/form.htm' import render_field, render_datefield_picker, render_checkbox, render_submit %}
 
 {% extends 'content.htm' %}
 
@@ -12,16 +12,12 @@
     {{ render_field(form.title) }}
 
     {{ render_field(form.content) }}
-    {{ render_field(form.end_time) }}
+    {{ render_datefield_picker(form.end_time) }}
 
     {{ render_field(form.comment) }}
-    {{ render_field(form.needs_payed) }}
+    {{ render_checkbox(form.needs_payed) }}
 
-    <div class='control-group'>
-        <div class='controls'>
-            <button type='submit' class='btn'>Opslaan</button>
-        </div>
-    </div>
+    {{ render_submit('Opslaan') }}
 </form>
 
 {% endblock %}
