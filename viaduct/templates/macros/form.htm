@@ -1,80 +1,59 @@
 {% macro render_field(field) %}
-	<div class="control-group">
-		{{ field.label(class='control-label') }}
-
-		<div class="controls">
-			{{ field(placeholder=field.label.text, **kwargs) }}
-		</div>
+	<div class="form-group">
+        {{ field.label }}
+        {{ field(placeholder=field.label.text, class='form-control') }}
 	</div>
 {% endmacro %}
 
 {% macro render_button(field) %}
-	<div class="control-group">
-		<div class="controls">
-			{{ field(class='btn', **kwargs) }}
-		</div>
-	</div>
+    {{ field(class='btn btn-default') }}
+{% endmacro %}
+
+{% macro render_submit(text) %}
+    <button class='btn btn-primary' type='submit'>{{ text }}</button>
 {% endmacro %}
 
 {% macro render_checkbox(field) %}
-	<div class="control-group">
-		<div class="controls">
-			<label class="checkbox">
-				{{ field(**kwargs) }} {{ field.label.text }}
-			</label>
-		</div>
-	</div>
+    <div class="checkbox">
+        <label>
+            {{ field }} {{ field.label.text }}
+        </label>
+    </div>
 {% endmacro %}
 
 {% macro render_textarea(field) %}
-	<div class="control-group">
-		{{ field.label(class='content-label') }}
-		<div class="controls">
-			{{ field(placeholder=field.label.text, **kwargs) }}
-		</div>
+	<div class="form-group">
+		{{ field.label }}
+        {{ field(placeholder=field.label.text, class='form-control') }}
 	</div>
 {% endmacro %}
-
 
 {% macro render_datefield(field) %}
-	<div class="control-group">
-		{{ field.label(class='content-label') }}
-
-		<div class="controls form-inline">
-			<input value="2013-12-12" type='text' name='end_date' id='end_date' data-date-format="yyyy-mm-dd">
-		</div>
+	<div class="form-group">
+		{{ field.label }}
+        {{ field(class='form-control', **{'data-date-format': 'yyyy-mm-dd'}) }}
 	</div>
 {% endmacro %}
 
-{% macro render_datefield_picker(field, id) %}
-	<div class="control-group">
-		{{ field.label(class='content-label') }}
+{% macro render_datefield_picker(field) %}
+	<div class="form-group">
+		{{ field.label }}
+        {{ field(class='form-control', **{'data-date-format': 'yyyy-mm-dd'}) }}
+    </div>
 
-		<div class="controls form-inline">
-			<input class="datepicker" value="{{field.data}}" type='text' name='{{id}}' id='{{id}}' data-date-format="yyyy-mm-dd">
-		</div>
-	</div>	
-<script>
-$('#' + "{{id}}").datepicker();
-</script>
+    <script>$('#' + "{{ field.id }}").datepicker();</script>
 {% endmacro %}
 
-
-
 {% macro render_select(field) %}
-	<div class="control-group">
-		{{ field.label(class='content-label') }}
-		<div class="controls">
-			{{ field(**kwargs) }}
-		</div>
+	<div class="form-group">
+		{{ field.label }}
+        {{ field(class='form-control') }}
 	</div>
 {% endmacro %}
 
 {% macro render_file(field) %}
-	<div class="control-group">
-		{{ field.label(class='content-label') }}
-		<div class="controls">
-			{{ field(**kwargs) }}
-		</div>
+	<div class="form-group">
+		{{ field.label }}
+        {{ field(class='form-control') }}
 	</div>
 {% endmacro %}
