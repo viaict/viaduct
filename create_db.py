@@ -47,8 +47,9 @@ news_page = Page('news/1/', 'news')
 db.session.add(news_page)
 db.session.commit()
 
-news_revision = NewsRevision(news_page, None, 'Yolo',
-                             'Wat een nieuws zeg! Poe hee!')
+news_revision = NewsRevision(news_page, 'Yolo', '', NewsRevision.get_new_id(),
+                             'Wat een nieuws zeg! Poe hee!', None,
+                             datetime.date(2014, 3, 20))
 news_revision.item_id = 1
 db.session.add(news_revision)
 db.session.commit()
@@ -403,7 +404,8 @@ db.session.add(company_1)
 db.session.commit()
 
 vacancy_1 = Vacancy('test', 'bladiebla', datetime.datetime.now().date(),
-                    datetime.datetime.now().date(), 'deeltijd', 'nvt', company_1)
+                    datetime.datetime.now().date(), 'deeltijd', 'nvt',
+                    company_1)
 db.session.add(vacancy_1)
 db.session.commit()
 

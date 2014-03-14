@@ -96,10 +96,30 @@ class SuperRevision(db.Model, BaseEntity):
 
     @classmethod
     def get_query(cls):
-        query = cls.query.order_by(cls.id.desc())
-        print(query)
+        return cls.query.order_by(cls.id.desc())
 
-        return query
+
+class IdRevision(SuperRevision):
+    """Class that page types can inherit from to let their pages to work with
+    id's instead of paths."""
+    __abstract__ = True
+
+    instance_id = db.Column(db.Integer)
+
+    def __init__(self, title, comment, instance_id):
+        """Initialization. Don't forget to call
+        `super().__init__(title, comment, instance_id)`."""
+        super(IdRevision, self).__init__(title, comment)
+
+        self.instance_id = instance_id
+
+    @classmethod
+    def get_new_id(cls):
+        first = cls.get_query().first()
+        if first:
+            print(first.id)
+
+        return first.id + 1 if first else 1
 
 
 class PageRevision(SuperRevision):

@@ -10,8 +10,12 @@
     {{ form.csrf_token }}
 
     {{ render_field(form.title) }}
+
     {{ render_field(form.content) }}
     {{ render_field(form.end_time) }}
+
+    {{ render_field(form.comment) }}
+    {{ render_field(form.needs_payed) }}
 
     <div class='control-group'>
         <div class='controls'>
