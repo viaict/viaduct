@@ -1,6 +1,8 @@
 import os
 import datetime
 
+import viaduct.api.calendar.google as google
+
 from flask import flash, get_flashed_messages, redirect, render_template, \
     request, url_for, abort
 from flask import Blueprint, Markup
@@ -54,9 +56,15 @@ def view(archive="", page=1):
 def remove_activity(activity_id=0):
     if not GroupPermissionAPI.can_write('activity'):
         return abort(403)
+
     activity = Activity.query.filter(Activity.id == activity_id).first()
+
+    # Remove the event from google calendar
+    google.delete_activity(activity.google_event_id)
+
     db.session.delete(activity)
     db.session.commit()
+
     return redirect(url_for('activity.view'))
 
 
@@ -159,9 +167,8 @@ def create(activity_id=None):
         end_date = form.end_date.data
         end_time = form.end_time.data
 
-        start = datetime.datetime.strptime(start_date + start_time,
-                                           '%Y-%m-%d%H:%M')
-        end = datetime.datetime.strptime(end_date + end_time, '%Y-%m-%d%H:%M')
+        start = datetime.datetime.strptime(start_date, '%Y-%m-%d %H:%M:%S')
+        end = datetime.datetime.strptime(end_date,     '%Y-%m-%d %H:%M:%S')
 
         location = form.location.data
         price = form.price.data
@@ -202,14 +209,28 @@ def create(activity_id=None):
 
             if activity.id:
                 flash('You\'ve created an activity successfully.', 'success')
+
+                google.update_activity(
+                  activity.google_event_id, 
+                  name, 
+                  location, 
+                  start.isoformat(), end.isoformat()
+                )
             else:
                 flash('You\'ve updated an activity successfully.', 'success')
+
+                google_activity = google.insert_activity(
+                  name, 
+                  location, 
+                  start.isoformat(), end.isoformat()
+                )
+
+                activity.google_event_id = google_activity['id']
 
             db.session.add(activity)
             db.session.commit()
 
-            return redirect(url_for('activity.get_activity',
-                                    activity_id=activity.id))
+            return redirect(url_for('activity.get_activity', activity_id=activity.id))
     else:
         flash_form_errors(form)
 

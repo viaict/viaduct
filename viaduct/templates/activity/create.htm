@@ -42,10 +42,10 @@
             </label>
 
             <div class="controls form-inline">
-                <input value="{{ form.start_time.data.strftime('%Y-%m-%d') }}" type='text' name='start_date' id='start_date' data-date-format="yyyy-mm-dd">
+                <input value="{{ form.start_time.data }}" type='text' name='start_date' id='start_date' data-date-format="yyyy-mm-dd">
 
                 <div class="input-group bootstrap-timepicker">
-                    <input value="{{ form.start_time.data.strftime('%H:%M') }}" type='text' name='start_time' id="start_time" class="input-sm">
+                    <input value="{{ form.start_time.data }}" type='text' name='start_time' id="start_time" class="input-sm">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                 </div>
             </div>
@@ -57,10 +57,10 @@
             </label>
 
             <div class="controls form-inline">
-                <input value="{{ form.end_time.data.strftime('%Y-%m-%d') }}" type='text' name='end_date' id='end_date' data-date-format="yyyy-mm-dd">
+                <input value="{{ form.end_time.data }}" type='text' name='end_date' id='end_date' data-date-format="yyyy-mm-dd">
 
                 <div class="input-group bootstrap-timepicker">
-                    <input value="{{ form.end_time.data.strftime('%H:%M') }}" type='text' name='end_time' id="end_time" class="input-sm">
+                    <input value="{{ form.end_time.data }}" type='text' name='end_time' id="end_time" class="input-sm">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                 </div>
             </div>
