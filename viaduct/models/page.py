@@ -170,6 +170,3 @@ class PagePermission(db.Model):
                         rights = permissions.permission
 
         return rights
-
-    def set_permission(self, permission):
-        self.permission = permission

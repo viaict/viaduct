@@ -165,7 +165,7 @@ def edit_page(path=''):
             permission_level = form_entry.select.data
 
             if permission_entry:
-                permission_entry.set_permission(permission_level)
+                permission_entry.permission = permission_level
             else:
                 permission_entry = PagePermission(group.id, page.id,
                                                   permission_level)
