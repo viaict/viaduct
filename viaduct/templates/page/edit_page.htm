@@ -9,11 +9,11 @@
 
 		{{ form.csrf_token }}
 
-		{{ form.title.csrf_token }}{{ render_field(form.title, class='input-block-level') }}
+		{{ form.title.csrf_token }}{{ render_field(form.title) }}
 		{{ form.content.csrf_token }}
 		<div class="row">
 			<div class="col-md-8">
-				{{ render_field(form.content, rows=20, class='input-block-level') }}
+				{{ render_field(form.content) }}
 			</div>
 
 			<div class="col-md-12">
@@ -35,7 +35,7 @@
 				</div>
 			</div>
 		</div>
-		{{ form.comment.csrf_token }}{{ render_field(form.comment, class='input-block-level') }}
+		{{ form.comment.csrf_token }}{{ render_field(form.comment) }}
 		<table class="table table-bordered table-striped">
 			<thead>
 				<tr>

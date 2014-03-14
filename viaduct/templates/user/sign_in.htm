@@ -1,26 +1,22 @@
-{% from "macros/form.htm" import render_field, render_checkbox %}
+{% from "macros/form.htm" import render_field, render_checkbox, render_submit %}
 
 {% extends "content.htm" %}
 
 {% block content %}
 <h1>Inloggen</h1>
 
-Nog geen account? Registreer <a href="{{ url_for('user.sign_up') }}">HIER</a><br>
-<form action="." method="post" name="sign-in" id="sign-in" class="form-horizontal">
-	<fieldset>
-		<legend>Inloggen</legend>
+<p>Nog geen account? Registreer <a href="{{ url_for('user.sign_up') }}">HIER</a></p>
+<div class='row'>
+    <div class='col-md-5'>
+        <form method="post" name="sign-in" id="sign-in">
+            {{ form.csrf_token }}
+            {{ render_field(form.email) }}
+            {{ render_field(form.password) }}
+            {{ render_checkbox(form.remember_me) }}
 
-		{{ form.csrf_token }}
-		{{ render_field(form.email) }}
-		{{ render_field(form.password) }}
-		{{ render_checkbox(form.remember_me) }}
-
-		<div class="control-group">
-			<div class="controls">
-				<button type="submit" class="btn">Log in</button>
-			</div>
-		</div>
-	</fieldset>
-</form>
+            {{ render_submit('Log in') }}
+        </form>
+    </div>
+</div>
 {% endblock %}
 
