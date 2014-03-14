@@ -54,7 +54,7 @@ def get_page_history(path=''):
     if not UserAPI.can_write(page):
         return abort(403)
 
-    revisions = page.revision_cls.query\
+    revisions = page.revision_cls.get_query()\
         .order_by(page.revision_cls.id.desc())\
         .all()
 
@@ -65,9 +65,9 @@ def get_page_history(path=''):
         previous = request.form['previous']
         current = request.form['current']
 
-        previous_revision = page.revision_cls.query\
+        previous_revision = page.revision_cls.get_query()\
             .filter(page.revision_cls.id == previous).first()
-        current_revision = page.revision_cls.query\
+        current_revision = page.revision_cls.get_query()\
             .filter(page.revision_cls.id == current).first()
 
         diff = difflib.HtmlDiff()\

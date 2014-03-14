@@ -21,7 +21,7 @@ class Page(db.Model, BaseEntity):
         self.type = type
 
         # Store the page's revision class, based upon its type.
-        self.revision_cls = Page.get_revision_class(self.type)
+        self.revision_cls = self.get_revision_class()
 
     def __repr__(self):
         return '<Page(%s, "%s")>' % (self.id, self.path)
@@ -40,22 +40,21 @@ class Page(db.Model, BaseEntity):
 
     def get_latest_revision(self):
         """Get the latest revision of this page."""
-        revision = self.revision_cls.query\
+        revision = self.revision_cls.get_query()\
             .filter(self.revision_cls.page_id == self.id)\
             .order_by(self.revision_cls.id.desc())\
             .first()
 
         return revision
 
-    @staticmethod
-    def get_revision_class(type):
+    def get_revision_class(self):
         """Turn a page's type into a revision class."""
-        if not type:
+        if not self.type:
             return None
 
-        class_name = '%sRevision' % (type.capitalize())
+        class_name = '%sRevision' % (self.type.capitalize())
         revision_class = getattr(
-            sys.modules['viaduct.models.%s' % (type)], class_name)
+            sys.modules['viaduct.models.%s' % (self.type)], class_name)
 
         return revision_class
 
@@ -70,8 +69,8 @@ class Page(db.Model, BaseEntity):
 
 # Calculate revision class.
 @event.listens_for(Page, 'load')
-def set_revision_class(target, context):
-    target.revision_cls = Page.get_revision_class(target)
+def set_revision_class(page, context):
+    page.revision_cls = page.get_revision_class()
 
 
 class SuperRevision(db.Model, BaseEntity):
@@ -95,6 +94,13 @@ class SuperRevision(db.Model, BaseEntity):
         """As long as no alternative comparable is given, compare titles."""
         return self.title
 
+    @classmethod
+    def get_query(cls):
+        query = cls.query.order_by(cls.id.desc())
+        print(query)
+
+        return query
+
 
 class PageRevision(SuperRevision):
     __tablename__ = 'page_revision'
@@ -103,7 +109,7 @@ class PageRevision(SuperRevision):
     content = db.Column(db.Text)
     timestamp = db.Column(db.DateTime)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     author = db.relationship('User', backref=db.backref('page_edits',
                                                         lazy='dynamic'))
 
@@ -120,7 +126,7 @@ class PageRevision(SuperRevision):
         self.filter_html = filter_html
         self.content = content
         self.timestamp = timestamp
-        self.user_id = author.id if author else None
+        self.author_id = author.id if author else None
 
     def get_comparable(self):
         return self.content
