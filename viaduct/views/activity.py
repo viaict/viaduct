@@ -3,7 +3,7 @@ import datetime
 
 # this is now uncommented for breaking activity for some reason
 # please some one check out what is happening
-# import viaduct.api.calendar.google as google
+import viaduct.api.calendar.google as google
 
 from flask import flash, get_flashed_messages, redirect, render_template, \
     request, url_for, abort
