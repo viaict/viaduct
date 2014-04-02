@@ -1,6 +1,7 @@
 import os, httplib2
 from apiclient.discovery import build
 from oauth2client.client import SignedJwtAssertionCredentials
+from viaduct import application
 
 # google calendar Settings > via_events > id
 via_calendar_id = "bka8j77cis5ffr2pokn5ef5cso@group.calendar.google.com"
@@ -10,7 +11,7 @@ via_lezingen_id = "dp1qibentsgl50vj6lt31ekk3g@group.calendar.google.com"
 service_email = "913209651562-jorctggrfuanpqrc5hvmu0ep3rmg2tca@developer.gserviceaccount.com"
 
 # name of the private key file
-private_key = "9fade611b382d682a14ad86ed2e5585272f0b3e6-privatekey.p12"
+private_key = application.config['GOOGLE_API_KEY']
 
 
 def build_service():
