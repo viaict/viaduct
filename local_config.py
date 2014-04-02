@@ -26,6 +26,8 @@ FILE_DIR = '/static/files/'
 # One date format string to rule them all (use this in for example strftime)
 DATE_FORMAT = "%Y-%m-%d"
 
+ADMIN_PW = 'wachtwoord'
+
 GOOGLE_API_KEY = ''
 
 # Mollie config

@@ -25,6 +25,7 @@ from viaduct.models.custom_form import CustomForm, CustomFormResult
 from viaduct.models.file import File
 from viaduct.models.news import News
 
+
 # Remove the old db.
 if os.path.exists('application.db'):
     os.remove('application.db')
@@ -88,7 +89,7 @@ db.session.add(ed)
 db.session.commit()
 
 # Add the administrator.
-user = User('administrator@svia.nl', bcrypt.hashpw('ictIsAwesome',
+user = User('administrator@svia.nl', bcrypt.hashpw(application.config['ADMIN_PW'],
                                                    bcrypt.gensalt()),
             'Administrator', 'de beste', '129181982192818', 2)
 admin = user
