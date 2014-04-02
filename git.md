@@ -1,4 +1,4 @@
-## weghalen sensitive data (config.py remote_config.py local_config.py)
+# weghalen sensitive data (config.py remote_config.py local_config.py)
 
 git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch config.py remote_config.py local_config.py' --prune-empty --tag-name-filter cat -- --all
 rm -rf .git/refs/original/
