@@ -58,4 +58,3 @@ Install python-dev.
 - **IOError: [Errno 13] Permission denied: '/home/username/.pip/pip.log'**
 sudo chown username:username /home/username/.pip/pip.log
 - **ImportError: No module named config** Make sure you have a config file (see `config.py.sample`)
-- Whoohoo
