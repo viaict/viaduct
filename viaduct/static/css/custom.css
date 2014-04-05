@@ -453,6 +453,7 @@ div.sortable {
     max-width: 100%;
 }
 
+<<<<<<< HEAD
 #wrapper {
     background-color: #fff;
     border-top: 1px solid #ccc;
@@ -491,4 +492,13 @@ div.sortable {
     bottom: 0;
     left: 50%;
     border-radius: 3px;
+}
+
+a.pimpy_minute_line{
+    display:block;
+    color: black; text-decoration: none;
+}
+
+a.selected_line{
+    background-color:rgba(0, 0, 255, .2);
 }

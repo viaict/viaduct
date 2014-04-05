@@ -92,7 +92,10 @@
                             </dd>
                         </dl>
                         {% if t.minute_id > 1 %}
-                        <a href="{{ url_for('pimpy.view_minute', group_id=t.group_id, minute_id=t.minute_id) }}"> Go to minute </a>
+                        <a href="{{ url_for('pimpy.view_minute',
+    group_id=t.group_id,
+    minute_id=t.minute_id,
+    line_number=t.line) }}"> Go to minute </a>
                         {% endif %}
                     </div>
                 </div>
