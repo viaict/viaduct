@@ -15,22 +15,24 @@ private_key = application.config['GOOGLE_API_KEY']
 
 
 def build_service():
-    f = file(os.path.dirname(os.path.abspath(__file__)) + "/" + private_key, "rb")
-    key = f.read()
-    f.close()
+    try:
+      f = file(os.path.dirname(os.path.abspath(__file__)) + "/" + private_key, "rb")
+      key = f.read()
+      f.close()
 
-    credentials = SignedJwtAssertionCredentials(
-    service_email,
-    key,
-    scope="https://www.googleapis.com/auth/calendar"
-    )
+      credentials = SignedJwtAssertionCredentials(
+      service_email,
+      key,
+      scope="https://www.googleapis.com/auth/calendar"
+      )
 
-  # Create an authorized http instance
-    http = httplib2.Http()
-    http = credentials.authorize(http)
+    # Create an authorized http instance
+      http = httplib2.Http()
+      http = credentials.authorize(http)
 
-    return build("calendar", "v3", http=http)
-
+      return build("calendar", "v3", http=http)
+    except:
+      return None
 
 # Helper method to insert a via activity
 def insert_activity(title, location, start, end):
@@ -58,17 +60,18 @@ def insert_lecture(title, location, start, end):
 def insert_event(title="", location="VIA kamer", start="", end="", calendar_id=None):
     service = build_service()
 
-    # Event to insert
-    event = {
-      'summary': title,
-      'location': location,
-      'start': {'dateTime': start, 'timeZone':'Europe/Amsterdam'},
-      'end': {'dateTime': end,     'timeZone':'Europe/Amsterdam'}
-    }
+    if service:
+      # Event to insert
+      event = {
+        'summary': title,
+        'location': location,
+        'start': {'dateTime': start, 'timeZone':'Europe/Amsterdam'},
+        'end': {'dateTime': end,     'timeZone':'Europe/Amsterdam'}
+      }
 
-    return service.events() \
-            .insert(calendarId=calendar_id, body=event) \
-            .execute()
+      return service.events() \
+              .insert(calendarId=calendar_id, body=event) \
+              .execute()
 
 
 def update_activity(event_id, title, location, start, end):
@@ -96,17 +99,18 @@ def update_lecture(event_id, title, location, start, end):
 def update_event(event_id, title="", location="VIA Kamer", start="", end="", calendar_id=None):
     service = build_service()
 
-    # Event to update
-    event = {
-      'summary': title,
-      'location': location,
-      'start': {'dateTime': start, 'timeZone':'Europe/Amsterdam'},
-      'end': {'dateTime': end,     'timeZone':'Europe/Amsterdam'}
-    }
+    if service:
+      # Event to update
+      event = {
+        'summary': title,
+        'location': location,
+        'start': {'dateTime': start, 'timeZone':'Europe/Amsterdam'},
+        'end': {'dateTime': end,     'timeZone':'Europe/Amsterdam'}
+      }
 
-    return service.events() \
-            .update(calendarId=calendar_id, eventId=event_id, body=event) \
-            .execute()
+      return service.events() \
+              .update(calendarId=calendar_id, eventId=event_id, body=event) \
+              .execute()
 
 
 def delete_activity(event_id):
@@ -120,8 +124,9 @@ def delete_lecture(event_id):
 # Delete an event
 def delete_event(event_id, calendar_id=None):
     service = build_service()
-
-    return service.events() \
-            .delete(calendarId=calendar_id, eventId=event_id) \
-            .execute()
+    
+    if service:
+      return service.events() \
+              .delete(calendarId=calendar_id, eventId=event_id) \
+              .execute()
 

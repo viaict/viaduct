@@ -59,11 +59,13 @@ def remove_activity(activity_id=0):
     if not GroupPermissionAPI.can_write('activity'):
         return abort(403)
 
+    # Get activity
     activity = Activity.query.filter(Activity.id == activity_id).first()
 
     # Remove the event from google calendar
     google.delete_activity(activity.google_event_id)
 
+    # Remove it
     db.session.delete(activity)
     db.session.commit()
 
@@ -164,13 +166,10 @@ def create(activity_id=None):
         description = form.description.data
 
         start_date = form.start_date.data
-        start_time = form.start_time.data
-
         end_date = form.end_date.data
-        end_time = form.end_time.data
 
-        start = datetime.datetime.strptime(start_date, '%Y-%m-%d %H:%M:%S')
-        end = datetime.datetime.strptime(end_date,     '%Y-%m-%d %H:%M:%S')
+        start = datetime.datetime.strptime(start_date, '%Y-%m-%dT%H:%M')
+        end = datetime.datetime.strptime(end_date,     '%Y-%m-%dT%H:%M')
 
         location = form.location.data
         price = form.price.data
@@ -227,7 +226,8 @@ def create(activity_id=None):
                   start.isoformat(), end.isoformat()
                 )
 
-                activity.google_event_id = google_activity['id']
+                if google_activity:
+                  activity.google_event_id = google_activity['id']
 
             db.session.add(activity)
             db.session.commit()
