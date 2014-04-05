@@ -4,10 +4,11 @@
 
 {% block content %}
 
-	<p><a href="{{ url_for('navigation.edit') }}">Nieuw item</a></p>
-
+	<a class="btn btn-success pull-left" href="{{ url_for('navigation.edit') }}" style="margin-bottom: 15px;">
+		Nieuw item <i class="glyphicon glyphicon-plus"></i>
+	</a>
 	{% if nav_entries %}
-		<div id="outer" class="sortable">
+		<div id="outer" class="sortable col-md-6">
 			{% for entry in nav_entries %}
 				{{ render_entry_list(entry) }}
 			{% endfor %}
@@ -18,6 +19,7 @@
 	$(function() {
 		$('.sortable').sortable({
 				connectWith: $('.sortable'),
+				handle: ".sortable_handler",
 				items: '> div[class!="leave-alone"]',
 				stop: function(event, ui) {
 					var list = crawl_entries($('#outer'));
@@ -26,7 +28,7 @@
 							function(data) {
 								clearflash();
 								flash('De volgorde is succesvol opgeslagen',
-										'success');
+										'success', false);
 							}
 					);
 				}

@@ -1,44 +1,38 @@
-
 {% if current != None %}
-<div class="col-md-2">
-<ul class="nav nav-stacked nav-tabs">
 
-	<li>
-
-		{% if back %}
-			<a href="{{ back.url }}"><i class="icon-arrow-left"></i> Go back</a>
-		{% endif %}
-
-		<ul class="nav nav-stacked nav-tabs nav_indent_level">
-		{% for page in pages %}
-
-			<li {% if page.url == current.url %}class="active"{% endif %}>
-				<a
-				href="{% if page.url == current.url %}#{% else %}{% if page.external %}http://{% endif %}{{ page.url }}{% endif %}"
-				{% if page.external %}target="_blank"{% endif %}>
-					{{ page.title }}
-				</a>
-
-				{% set children = page.activities if page.activities else page.children %}
+<div class="col-sm-2 col-md-2">
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+        	{% for i, page in enumerate(pages) %}
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a {% if page.external %}target="_blank"{% endif %} data-toggle="collapse" data-parent="#accordion" href="{% if page.url == current.url %}#{% else %}{% if page.external %}http://{% endif %}{{ page.url }}{% endif %}">{{ page.title }}</a>
+                    </h4>
+                </div>
+                {% set children = page.activities if page.activities else page.children %}
 				{% set children = NavigationAPI.remove_unauthorized(children) %}
 
 				{% if children and page.url == current.url %}
-					<ul class="nav nav-stacked nav-tabs nav_indent_level">
-						{% for child in children %}
-							<li>
-								<a href="{% if child.external %}http://{% endif %}{{ child.url }}"
-								{% if child.external %}target="_blank"{% endif %}>
-									{{ child.title }}
-								</a>
-							</li>
-						{% endfor %}
-					</ul>
-				{% endif %}
-			</li>
-
-		{% endfor %}
-		</ul>
-	</li>
-</ul>
+                    <div id="{{i}}" class="panel-collapse">
+                        <div class="panel-body">
+                            <table class="table">
+                            	{% for child in children %}
+	                                <tr>
+	                                    <td>
+	                                        <span></span><a {% if child.external %}target="_blank"{% endif %} href="{% if child.external %}http://{% endif %}{{ child.url }}">{{ child.title }}</a>
+	                                    </td>
+	                                </tr>
+	                            {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
 </div>
+
 {% endif %}
+
+
+

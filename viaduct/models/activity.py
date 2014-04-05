@@ -65,3 +65,7 @@ class Activity(db.Model, BaseEntity):
             return ' '.join(words) + '...'
 
         return self.description
+
+    def format_form_time(self, time):
+        return time.strftime("%Y-%m-%dT%H:%M")
+

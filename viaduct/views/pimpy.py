@@ -39,10 +39,11 @@ def view_minutes(group_id='all'):
 
 
 @blueprint.route('/minutes/<group_id>/<minute_id>/')
-def view_minute(group_id='all', minute_id=0):
+@blueprint.route('/minutes/<group_id>/<minute_id>/<line_number>')
+def view_minute(group_id='all', minute_id=0, line_number=-1):
     if not GroupPermissionAPI.can_read('pimpy'):
         return abort(403)
-    return PimpyAPI.get_minute(group_id, minute_id)
+    return PimpyAPI.get_minute(group_id, minute_id, line_number)
 
 
 @blueprint.route('/tasks/', methods=['GET', 'POST'])

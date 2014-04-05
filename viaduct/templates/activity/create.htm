@@ -7,25 +7,27 @@
 <script src='/static/js/throttle.js'></script>
 <script src='/static/js/textarea.dev.js'></script>
 
-<script src='/static/js/timepicker.js'></script>
-<link href='/static/css/timepicker.css' rel='stylesheet'>
+{% if activity.id: %}
+<form method="post" class="pull-right" action="{{ url_for('activity.remove_activity', activity_id=activity.id) }}">
+<button class="confirmation btn btn-danger btn-xs" type="submit"> {{ _("Verwijder activiteit") }}</button>
+</form>
+{% endif %}
+
 
 <h1>Activiteit</h1>
 
 <form method="post" enctype="multipart/form-data">
-        {{ form.csrf_token }}
+    {{ form.csrf_token }}
 
-        <div style="position:relative; margin-bottom:30px;">
-            {{ render_select(form.form_id) }}
-            <small style="position:absolute; top:60px; left:240px;">Je moet de pagina opnieuw laden voor resultaat.</small>
+    {{ render_select(form.form_id) }}
+    <small>{{ _("Je moet de pagina opnieuw laden voor resultaat") }}</small>
 
-            <a style="position:absolute; top:24px; left:240px" class="show-window btn btn-success" target="_blank" href="http://{{ request.host }}/forms/create/">
-                Formulier aanmaken
-            </a>
-        </div>
+    <a class="show-window btn btn-success" target="_blank" href="http://{{ request.host }}/forms/create/">
+      {{ _("Formulier aanmaken") }}
+    </a>
 
-        {{ render_field(form.name, class="col-md-6") }}
-        {{ render_field(form.description, class="col-md-6") }}
+        {{ render_field(form.name) }}
+        {{ render_field(form.description) }}
 
         <div class="control-group">
             <div class="controls">
@@ -36,18 +38,14 @@
             </div>
         </div>
 
+        <h3>Datum formaat: Y-m-d H:M (AM / PM)</h3>
         <div class="control-group">
             <label class="control-label">
                 Start datum + tijd
             </label>
 
             <div class="controls form-inline">
-                <input value="{{ form.start_time.data }}" type='text' name='start_date' id='start_date' data-date-format="yyyy-mm-dd">
-
-                <div class="input-group bootstrap-timepicker">
-                    <input value="{{ form.start_time.data }}" type='text' name='start_time' id="start_time" class="input-sm">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-                </div>
+                <input value="{{ activity.format_form_time(form.start_time.data) }}" type='datetime-local' name='start_date'>
             </div>
         </div>
 
@@ -57,12 +55,7 @@
             </label>
 
             <div class="controls form-inline">
-                <input value="{{ form.end_time.data }}" type='text' name='end_date' id='end_date' data-date-format="yyyy-mm-dd">
-
-                <div class="input-group bootstrap-timepicker">
-                    <input value="{{ form.end_time.data }}" type='text' name='end_time' id="end_time" class="input-sm">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-                </div>
+                <input value="{{ activity.format_form_time(form.end_time.data) }}" type='datetime-local' name='end_date'>
             </div>
         </div>
 
@@ -82,11 +75,6 @@
         </div>
     </div>
 </form>
-{% if activity.id: %}
-<form method="post" action="{{ url_for('activity.remove_activity', activity_id=activity.id) }}">
-<button class="btn btn-danger " type="submit">Verwijder activiteit</button>
-</form>
-{% endif %}
 
 <script src="/static/js/form.date.helper.js"></script>
 {% endblock %}

@@ -38,6 +38,7 @@
         <!-- <script src="http://localhost/handiger/handiger.js"></script> -->
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
     </head>
 
     <body>
@@ -74,7 +75,8 @@
 
             {% block page %}
             {% endblock %}
-            <div class="row">
+            {{ PageAPI.get_footer()|safe }}
+            <!-- <div class="row">
                 <div id="carousel">
                     <div class="col-md-2 logo_wrapper"><a href="http://www.copernica.com/nl/over-ons/vacatures"><img class="logo_img" src="/static/img/sponsors/copernica.png" alt="copernica" /></a>
                         <a href="http://www.copernica.com/nl/over-ons/vacatures"><span>Copernica</span></a>
@@ -94,7 +96,12 @@
                     <div class="col-md-2 logo_wrapper"><a href="http://www.optiver.com/amsterdam/"><img class="logo_img" src="/static/img/sponsors/optiver.png" alt="fruit6" /></a>
                         <a href="http://www.optiver.com/amsterdam/"><span>Optiver</span></a>
                     </div>
+                    <div class="span2 logo_wrapper"><a href="http://www.eitictlabs.eu"><img class="logo_img" src="/static/img/sponsors/eitictlab.jpg" alt="fruit6" /></a>
+                        <a href="http://www.eitictlabs.eu"><span>EIT ICT Labs</span></a>
+                    </div>
                 </div>
+            </div>
+            <div class="row"> -->
             </div>
         </div>
         <script src='/static/js/textarea.js'></script>

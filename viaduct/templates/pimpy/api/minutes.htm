@@ -1,5 +1,6 @@
 {% extends "pimpy/view_page.htm" %}
 
+
 {%block content %}
     <div class="col-md-8">
         {% for group_header in list_items: %}
@@ -15,13 +16,31 @@ data-target='#{{ list_item.get_name() }}'>{{ list_item.group.name }} (id: {{list
                                 data-target='#{{ list_item.get_name()}}'>
                             Geupload op: {{ list_item.timestamp.strftime('%Y-%m-%d') }}</button>
                     </div>
-                    <div id='{{ list_item.get_name() }}' class="collapse">
-                        <div class="well" style="white-space: pre-wrap;">
-                            {{ list_item.get_content() }}
-                            {# list_item.get_content() | markdown #}</div>
+                    <div id='{{ list_item.get_name() }}' 
+                        {% if line_number != -1 %}
+                            class="collapse in"
+                        {% else %}
+                            class="collapse"
+                        {% endif %}
+                        >
+                        <div class="well" style="white-space: pre-wrap;"> -->
+                            {# list_item.get_content_numbered() }}
+                            {# list_item.get_content() | pimpy_minute_line_numbers | markup #}
+                            {{ list_item.get_content_numbered() | markup }}
+                        </div>
                     </div>
                 {% endif %}
             {% endfor %}
         {% endfor %}
     </div>
+
+    {% if line_number != -1 %}
+<script> 
+$(document).ready(function() {
+        location.hash = '{{ tag }}'
+        var s = document.getElementById('{{tag}}')
+        s.className += ' selected_line'
+});
+</script>
+    {% endif %}
 {% endblock %}

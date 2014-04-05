@@ -68,11 +68,13 @@ def markdown_filter(data, filter_html=True):
     return Markup(markdown(data, safe_mode=safe_mode, enable_attributes=False,
                         extensions=markdown_extensions))
 
+@application.template_filter('markup')
+def markup_filter(data):
+    return Markup(data)
 
 @application.template_filter('safe_markdown')
 def safe_markdown_filter(data):
     return Markup(markdown(data, extensions=markdown_extensions))
-
 
 @application.template_filter('pages')
 def pages_filter(data):
@@ -156,3 +158,12 @@ def pages_filter(data):
     content += '</div>'
 
     return Markup(content)
+
+@application.template_filter('pimpy_minute_line_numbers')
+def pimpy_minute_line_numbers(data):
+    #assert False
+    s = ''
+    for i, line in enumerate(data.split('\n')):
+        #s += '%d%s\n' % (i, line[:-1])
+        s += '<a id="ln%d" class="pimpy_minute_line"/>%s</a>\n' % (i, line[:-1])
+    return s

@@ -8,6 +8,7 @@ from category import CategoryAPI
 from pimpy import PimpyAPI
 from file import FileAPI
 from booksales import BookSalesAPI
+from page import PageAPI
 
 from user import UserAPI
 from group import GroupPermissionAPI
@@ -22,5 +23,6 @@ application.jinja_env.globals.update(PimpyAPI=PimpyAPI)
 application.jinja_env.globals.update(UserAPI=UserAPI)
 application.jinja_env.globals.update(GroupPermissionAPI=GroupPermissionAPI)
 application.jinja_env.globals.update(BookSalesAPI=BookSalesAPI)
+application.jinja_env.globals.update(PageAPI=PageAPI)
 #application.jinja_env.globals(update(SearchAPI=SearchAPI)
 application.jinja_env.globals.update(CategoryAPI=CategoryAPI)

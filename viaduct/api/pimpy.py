@@ -394,10 +394,10 @@ class PimpyAPI:
 
         return Markup(render_template('pimpy/api/minutes.htm',
                                       list_items=list_items, type='minutes',
-                                      group_id=group_id))
+                                      group_id=group_id, line_number=-1))
 
     @staticmethod
-    def get_minute(group_id, minute_id):
+    def get_minute(group_id, minute_id, line_number):
         """
         Load (and thus view) specifically one minute
         """
@@ -411,10 +411,16 @@ class PimpyAPI:
         query = Minute.query.filter(Minute.id == minute_id)
         group = Group.query.filter(Group.id == group_id).first()
         list_items[group.name] = query.all()
+        tag = "%dln%d" % (list_items[group.name][0].id, int(line_number))
 
-        return Markup(render_template('pimpy/api/minutes.htm',
+        #return Markup(render_template('pimpy/api/minutes.htm',
+        #                              list_items=list_items, type='minutes',
+        #                              group_id=group_id, line_number=line_number))
+        return render_template('pimpy/api/minutes.htm',
                                       list_items=list_items, type='minutes',
-                                      group_id=group_id))
+                                      group_id=group_id,
+                                      line_number=line_number,
+                                      tag=tag)
 
     @staticmethod
     def update_content(task_id, content):
