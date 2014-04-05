@@ -444,3 +444,43 @@ div.sortable {
 .linkimg404 {
     max-width: 100%;
 }
+
+#wrapper {
+    background-color: #fff;
+    border-top: 1px solid #ccc;
+    width: 100%;
+    height: 350px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+#carousel div {
+    text-align: center;
+    width: 200px;
+    height: 140px;
+    padding: 0 20px;
+    float: left;
+    position: relative;
+}
+#carousel div img {
+    border: none;
+    width: 100%;
+    height: auto;
+}
+#carousel div span {
+    display: none;
+}
+#carousel div:hover span,
+#carousel div.hover span {
+    background-color: #333;
+    color: #fff;
+    display: inline-block;
+    width: 100px;
+    padding: 2px 0;
+    margin: 0 0 0 -50px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    border-radius: 3px;
+}
