@@ -409,13 +409,21 @@ ul.parent > li {
 
 /* Navigation. */
 div.nav_entry {
-    border: 1px solid black;
+    border: 1px solid #ccc;
     padding: 5px;
 }
 
+div.droppable {
+    height: 15px; 
+    border: 1px dotted black;
+    float: left;
+    width: 300px;
+}
+
 div.sortable {
-    padding: 10px;
+    margin-left: 5px;
     clear: both;
+    padding-bottom: 10px;
 }
 
 /* Custom Form view-results */

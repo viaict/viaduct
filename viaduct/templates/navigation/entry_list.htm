@@ -1,12 +1,22 @@
 {% macro render_entry_list(entry) %}
 	<div class="nav_entry" data-entry-id="{{ entry.id }}">
-		<a href="{{ url_for('navigation.edit', entry_id=entry.id) }}">
+			<span class="sortable_handler">
+				<i class="glyphicon glyphicon-move"></i>
+			</span>	
 			{{ entry.title }}
-		</a>
 
-		{% if GroupPermissionAPI.can_write('navigation') %}
+		{% if GroupPermissionAPI.can_write('navigation') %}		
 			<a class="btn btn-success pull-right" href="{{ url_for('navigation.edit', parent_id=entry.id) }}">
 				<i class="glyphicon glyphicon-plus"></i>
+			</a>
+			<a class="btn btn-success pull-right" style="margin-right: 5px;" href="{{ url_for('navigation.edit', entry_id=entry.id) }}">
+				<i class="glyphicon glyphicon-pencil"></i>
+			</a>			
+			<a class="btn btn-success pull-right show_nav_entry" style="margin-right: 5px; display:none;" href="#">
+				<i class="glyphicon glyphicon-eye-open"></i>
+			</a>			
+			<a class="btn btn-success pull-right hide_nav_entry" style="margin-right: 5px;" href="#">
+				<i class="glyphicon glyphicon-eye-close"></i>
 			</a>
 		{% endif %}
 

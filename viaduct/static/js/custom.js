@@ -117,4 +117,23 @@ $(document).ready(function() {
 
         }).trigger('resize.example');*/
     });
+
+    $(document).on('click', '.hide_nav_entry', function(e){
+        console.log("test");
+        $(this).hide();
+        $(this).siblings(".show_nav_entry").show();
+        $(this).parent().children().find(".nav_entry").fadeOut( "normal", function() {
+    // Animation complete.
+  });
+    });
+
+    $(document).on('click', '.show_nav_entry', function(e){
+        $(this).hide();
+        $(this).siblings(".hide_nav_entry").show();
+        $(this).parent().children().find(".nav_entry").fadeIn( "normal", function() {
+    // Animation complete.
+  });
+    });
+
+
 });
