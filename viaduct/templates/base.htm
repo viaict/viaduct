@@ -75,7 +75,8 @@
 
             {% block page %}
             {% endblock %}
-            <div class="row">
+            {{ PageAPI.get_footer()|safe }}
+            <!-- <div class="row">
                 <div id="carousel">
                     <div class="col-md-2 logo_wrapper"><a href="http://www.copernica.com/nl/over-ons/vacatures"><img class="logo_img" src="/static/img/sponsors/copernica.png" alt="copernica" /></a>
                         <a href="http://www.copernica.com/nl/over-ons/vacatures"><span>Copernica</span></a>
@@ -100,7 +101,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row"> -->
             </div>
         </div>
         <script src='/static/js/textarea.js'></script>

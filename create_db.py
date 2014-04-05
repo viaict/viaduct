@@ -26,6 +26,7 @@ from viaduct.models.file import File
 from viaduct.models.news import News
 
 
+
 # Remove the old db.
 if os.path.exists('application.db'):
     os.remove('application.db')
@@ -93,6 +94,9 @@ user = User('administrator@svia.nl', bcrypt.hashpw(application.config['ADMIN_PW'
                                                    bcrypt.gensalt()),
             'Administrator', 'de beste', '129181982192818', 2)
 admin = user
+
+# footer = Page('footer')
+# footer = PageRevision(footer, admin, 'Footer', 'Footer')
 
 db.session.add(user)
 db.session.commit()
