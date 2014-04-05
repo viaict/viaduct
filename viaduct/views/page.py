@@ -275,7 +275,7 @@ def edit_page(path=''):
 		revision = PageRevision(page, current_user, title, content, comment,
 								filter_html,
 								timestamp=datetime.datetime.utcnow(),
-								form_id=form_id)
+								form_id=int(form_id))
 
 		db.session.add(revision)
 		db.session.commit()
