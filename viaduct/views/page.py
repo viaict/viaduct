@@ -266,7 +266,10 @@ def edit_page(path=''):
 			db.session.commit()
 
 		# Set a custom_form id
-		form_id = request.form['form_id']
+		form_id = int(request.form['form_id'])
+		if not form_id:
+			form_id = None
+		#form_id = request.get('form_id', None)
 
 		# extract category from content and update stuff!
 		CategoryAPI.update_categories_from_content(content, page)
@@ -275,7 +278,7 @@ def edit_page(path=''):
 		revision = PageRevision(page, current_user, title, content, comment,
 								filter_html,
 								timestamp=datetime.datetime.utcnow(),
-								form_id=int(form_id))
+								form_id=form_id)
 
 		db.session.add(revision)
 		db.session.commit()
