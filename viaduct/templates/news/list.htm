@@ -10,25 +10,24 @@
             {% if GroupPermissionAPI.can_write('news') %}
                 <a href='{{ url_for('news.edit') }}' class='btn btn-success'>Nieuw</a>
             {% endif %}
-            {% if archive == 'archive' %}
-                <a href='{{ url_for('news.list') }}' class='btn'>Toon actueel nieuws</a>
+            {% if archive %}
+                <a href='{{ url_for('news.list') }}' class='btn btn-default'>Toon actueel nieuws</a>
             {% else %}
-                <a href='{{ url_for('news.list', archive='archive') }}' class='btn'>Toon nieuws in het archief</a>
+                <a href='{{ url_for('news.list', archive=1) }}' class='btn btn-default'>Toon nieuws in het archief</a>
             {% endif %}
         </div>
     </div>
 </div>
 
+<div>&nbsp;</div>
+
 <div id='news-items'>
     {% for item in items.items %}
-        <div class='news-item'>
+        <div class='well'>
             <div class='row'>
                 <div class='col-md-8 title'>{{ item.title }}</div>
                 <div class='col-md-4 text-right author'>
-                    {% if item.update_time != item.post_time %}
-                        Bewerkt <em>{{ item.update_time.strftime('%Y-%m-%d %H:%M') }}</em><br />
-                    {% endif %}
-                    Gepubliceerd <em>{{ item.post_time.strftime('%Y-%m-%d %H:%M') }}</em><br />
+                    Laatste bewerking <em>{{ item.created.strftime('%Y-%m-%d %H:%M') }}</em><br />
                     Door <em>{{ item.author.name }}</em>
                 </div>
             </div>
@@ -39,15 +38,15 @@
             </div>
             <div class='row'>
                 <div class='col-md-12 read'>
-                    <a href='{{ url_for('news.single', item_id=item.id) }}' class='pull-right'>Meer lezen</a>
+                    <a href='{{ url_for('page.get_page', path=item.page.path) }}' class='pull-right'>Meer lezen</a>
                 </div>
             </div>
         </div>
     {% endfor %}
 </div>
 
-{% if archive == 'archive' %}
-    {{ render_pagination(items, 'news.list', archive=archive) }}
+{% if archive %}
+    {{ render_pagination(items, 'news.list', archive=1) }}
 {% else %}
     {{ render_pagination(items, 'news.list') }}
 {% endif %}

@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<h1>Nieuwsartikel {% if item.id %}bewerken{% else %}aanmaken{% endif %}</h1>
+<h1>Nieuwsartikel {% if page.id %}bewerken{% else %}aanmaken{% endif %}</h1>
 
 <form method='post'>
     {{ form.csrf_token }}

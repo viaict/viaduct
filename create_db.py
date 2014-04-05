@@ -36,10 +36,6 @@ db.drop_all()
 db.create_all()
 
 
-news_page = Page('news/1/', 'news')
-db.session.add(news_page)
-db.session.commit()
-
 #Add the all group
 group_all = Group('all')
 
@@ -155,6 +151,10 @@ revision = PageRevision(page, 'Homepage!', '', admin, 'herr derr 1')
 db.session.add(revision)
 db.session.commit()
 
+
+news_page = Page('news/1/', 'news')
+db.session.add(news_page)
+db.session.commit()
 
 news_revision = NewsRevision(news_page, 'Yolo', '', NewsRevision.get_new_id(),
                              'Wat een nieuws zeg! Poe hee!', admin.id,

@@ -112,11 +112,18 @@ class IdRevision(SuperRevision):
 
         self.instance_id = instance_id
 
+    def get_path(self):
+        return '/%s/%d/' % (self.page.type, self.instance_id)
+
     @classmethod
     def get_new_id(cls):
         first = cls.get_query().first()
 
-        return first.id + 1 if first else 1
+        return first.instance_id + 1 if first else 1
+
+    @classmethod
+    def get_latest(cls, instance_id):
+        return cls.get_query().filter(cls.instance_id == instance_id).first()
 
 
 class PageRevision(SuperRevision):
@@ -137,7 +144,7 @@ class PageRevision(SuperRevision):
                  filter_html=True):
         super(PageRevision, self).__init__(title, comment)
 
-        self.page_id = page.id
+        self.page = page
 
         self.filter_html = filter_html
         self.content = content

@@ -51,7 +51,7 @@ def get_page_history(path=''):
         return abort(403)
 
     revisions = page.revision_cls.get_query()\
-        .order_by(page.revision_cls.id.desc())\
+        .filter(page.revision_cls.page_id == page.id)\
         .all()
 
     form.previous.choices = [(revision.id, '') for revision in revisions]
