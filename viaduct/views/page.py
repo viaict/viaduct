@@ -1,4 +1,3 @@
-import datetime
 import difflib
 
 from flask import Blueprint
@@ -7,15 +6,12 @@ from flask.ext.login import current_user
 from flask import abort
 
 from viaduct import db
-from viaduct.helpers import flash_form_errors
 from viaduct.forms import PageForm, HistoryPageForm
 from viaduct.models import Group
 from viaduct.models.page import Page, PageRevision, PagePermission
-from viaduct.models.custom_form import CustomForm
 from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.user import UserAPI
 from viaduct.api.page import PageAPI
-from viaduct.api.category import CategoryAPI
 
 blueprint = Blueprint('page', __name__)
 
@@ -90,7 +86,6 @@ def edit_page(path=''):
     page = Page.get_by_path(path)
 
     data = request.form
-
     if page:
         revision = page.get_latest_revision()
 
