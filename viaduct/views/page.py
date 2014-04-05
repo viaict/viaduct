@@ -8,7 +8,7 @@ from flask import abort
 
 from viaduct import db
 from viaduct.helpers import flash_form_errors
-from viaduct.forms import EditPageForm, HistoryPageForm
+from viaduct.forms import PageForm, HistoryPageForm
 from viaduct.models import Group
 from viaduct.models.page import Page, PageRevision, PagePermission
 from viaduct.models.custom_form import CustomForm
@@ -82,78 +82,46 @@ def get_page_history(path=''):
 
 
 @blueprint.route('/edit/', methods=['GET', 'POST'])
-@blueprint.route('/edit/<path:path>/', methods=['GET', 'POST'])
+@blueprint.route('/edit/<path:path>', methods=['GET', 'POST'])
 def edit_page(path=''):
-    class struct(object):
-        pass
-
-#   if not current_user.is_authenticated():
-#       return get_error_page()
-
-    # find current page
-    page = Page.query.filter(Page.path == path).first()
-
-    data = None
-
-    # if the current is page is not found, show the edit form to make a new
-    # page.
-    new_page = True
-    if page:
-        new_page = False
-        revision = page.revisions.order_by(PageRevision.id.desc()).first()
-
-        if revision:
-            if not current_user:
-                abort(403)
-            if revision.author and current_user and\
-                    not revision.author.id == current_user.id:
-                if not UserAPI.can_write(page):
-                    abort(403)
-
-            # data is used on the front page
-            data = struct()
-            data.title = revision.title
-            data.content = revision.content
-            data.filter_html = revision.filter_html
-            data.needs_payed = page.needs_payed
-            data.path = path
-            data.form_id = revision.form_id
-    elif not(GroupPermissionAPI.can_write('page')):
+    if not GroupPermissionAPI.can_write('page'):
         return abort(403)
 
-    # show edit page form
-    form = EditPageForm(request.form, obj=data)
+    page = Page.get_by_path(path)
 
-    # Add a dropdown select for available custom_forms
-    form.form_id.choices =\
-        [(c.id, c.name) for c in CustomForm.query.order_by('name')]
+    data = request.form
 
-    # Set default to "No form"
-    form.form_id.choices.insert(0, (0, 'Geen formulier'))
+    if page:
+        revision = page.get_latest_revision()
 
-    # used to set permissions later in the code
+        # Add the `needs_payed` option to the revision, so it will be inside
+        # the form.
+        revision.needs_payed = revision.page.needs_payed
+
+        form = PageForm(data, revision)
+    else:
+        form = PageForm()
+
     groups = Group.query.all()
 
     # on page submit (edit or create)
     if form.validate_on_submit():
-        title = request.form['title'].strip()
-        content = request.form['content'].strip()
-        comment = request.form['comment'].strip()
-
-        #if 'filter_html' in request.form:
-        #   filter_html = False
-        #else:
-        #   filter_html = True
-        filter_html = 'filter_html' in request.form
-
         # if there was no page we want to create an entire new page (and not
         # just a revision)
         if not page:
             page = Page(path)
 
-        page.needs_payed = 'needs_payed' in request.form
+        page.needs_payed = 'needs_payed' in data
 
         db.session.add(page)
+        db.session.commit()
+
+        new_revision = PageRevision(page, data['title'].strip(),
+                                    data['comment'].strip(), current_user,
+                                    data['content'].strip(),
+                                    'filter_html' in data)
+
+        db.session.add(new_revision)
         db.session.commit()
 
         # Enter permission in db
@@ -173,44 +141,26 @@ def edit_page(path=''):
             db.session.add(permission_entry)
             db.session.commit()
 
-        # Set a custom_form id
-        form_id = request.form['form_id']
-
-        # extract category from content and update stuff!
-        CategoryAPI.update_categories_from_content(content, page)
-
-        # create the revision (the first if is an entire new page)
-        revision = PageRevision(page, current_user, title, content, comment,
-                                filter_html,
-                                timestamp=datetime.datetime.utcnow(),
-                                form_id=form_id)
-
-        db.session.add(revision)
-        db.session.commit()
-
         flash('The page has been saved.', 'success')
 
         # redirect newly created page
         return redirect(url_for('page.get_page', path=path))
-    # form submission has an error we do not think
     else:
-        # TODO: check if we even use this
         for group in groups:
-            data = {}
             if page:
                 permission = PagePermission.query\
                     .filter(PagePermission.group_id == group.id,
-                            PagePermission.page_id == page.id).first()
+                            PagePermission.page_id == page.id)\
+                    .first()
 
-                if permission:
-                    data['select'] = permission.permission
+            if permission:
+                form.permissions\
+                    .append_entry({'select': permission.permission})
+            else:
+                form.permissions.append_entry({})
 
-            form.permissions.append_entry(data)
-        flash_form_errors(form)
-
-    # no page exist, show edit page or create page
-    return render_template('page/edit_page.htm', form=form, new_page=new_page,
-                           groups=zip(groups, form.permissions), path=path)
+    return render_template('page/edit_page.htm', page=page, form=form,
+                           path=path, groups=zip(groups, form.permissions))
 
 
 @blueprint.route('/remove/<path:path>/', methods=['GET'])

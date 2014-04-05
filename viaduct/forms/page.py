@@ -14,19 +14,16 @@ class SuperPageForm(Form):
     """TODO"""
     needs_payed = BooleanField(u'Betaling vereist')
 
-    title = TextField(u'Title', validators=[Required()])
+    title = TextField(u'Titel', validators=[Required()])
     comment = TextField(u'Commentaar', [Optional()])
 
+    save_page = SubmitField('Opslaan')
 
-class EditPageForm(Form):
-    title = TextField('Title', [Required()])
-    content = TextAreaField('Content', [Optional()])
-    comment = TextField('Comment')
-    filter_html = BooleanField('Sta HTML tags toe.')
-    needs_payed = BooleanField('Betaling vereist.')
+
+class PageForm(SuperPageForm):
+    content = TextAreaField(u'Inhoud', [Required()])
+    filter_html = BooleanField(u'Sta HTML tags toe')
     permissions = FieldList(FormField(EditGroupPagePermissionEntry))
-    save_page = SubmitField('Save Page')
-    form_id = SelectField('Formulier', coerce=int)
 
 
 class HistoryPageForm(Form):

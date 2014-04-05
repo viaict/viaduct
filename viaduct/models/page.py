@@ -10,7 +10,6 @@ from sqlalchemy import event
 class Page(db.Model, BaseEntity):
     __tablename__ = 'page'
 
-    parent_id = db.Column(db.Integer, db.ForeignKey('page.id'))
     path = db.Column(db.String(200), unique=True)
     needs_payed = db.Column(db.Boolean)
 
@@ -67,9 +66,9 @@ class Page(db.Model, BaseEntity):
         return Page.query.filter(Page.path == path).first()
 
 
-# Calculate revision class.
 @event.listens_for(Page, 'load')
 def set_revision_class(page, context):
+    """Calculate revision class."""
     page.revision_cls = page.get_revision_class()
 
 
@@ -116,8 +115,6 @@ class IdRevision(SuperRevision):
     @classmethod
     def get_new_id(cls):
         first = cls.get_query().first()
-        if first:
-            print(first.id)
 
         return first.id + 1 if first else 1
 
@@ -127,7 +124,6 @@ class PageRevision(SuperRevision):
 
     filter_html = db.Column(db.Boolean)
     content = db.Column(db.Text)
-    timestamp = db.Column(db.DateTime)
 
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     author = db.relationship('User', backref=db.backref('page_edits',
@@ -137,15 +133,14 @@ class PageRevision(SuperRevision):
     page = db.relationship('Page', backref=db.backref('page_revisions',
                                                       lazy='dynamic'))
 
-    def __init__(self, page, title, comment, author, content, filter_html=True,
-                 timestamp=datetime.datetime.utcnow()):
+    def __init__(self, page, title, comment, author, content,
+                 filter_html=True):
         super(PageRevision, self).__init__(title, comment)
 
         self.page_id = page.id
 
         self.filter_html = filter_html
         self.content = content
-        self.timestamp = timestamp
         self.author_id = author.id if author else None
 
     def get_comparable(self):

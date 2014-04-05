@@ -18,6 +18,7 @@
 					<th>Author</th>
 					<th>Previous</th>
 					<th>Current</th>
+                    <th>Timestamp</th>
 				</tr>
 			</thead>
 
@@ -29,7 +30,7 @@
 						<td>{{ revision.author.first_name }} {{ revision.author.last_name }}</td>
 						<td>{{ previous }}</td>
 						<td>{{ current }}</td>
-						<td>{{ revision.timestamp }}</td>
+						<td>{{ revision.created }}</td>
 					</tr>
 				{% endfor %}
 			</tbody>

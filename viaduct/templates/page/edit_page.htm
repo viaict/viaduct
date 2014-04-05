@@ -5,37 +5,15 @@
 {% block content %}
 <form action="" method="post" name="edit_page" class="form-horizontal">
 	<fieldset>
-		<legend>{% if new_page %}New{% else %}Edit{% endif %} Page</legend>
+		<legend>{% if page.id %}Edit{% else %}New{% endif %} Page</legend>
 
 		{{ form.csrf_token }}
 
-		{{ form.title.csrf_token }}{{ render_field(form.title) }}
-		{{ form.content.csrf_token }}
-		<div class="row">
-			<div class="col-md-8">
-				{{ render_field(form.content) }}
-			</div>
+		{{ render_field(form.title) }}
+        {{ render_field(form.content) }}
 
-			<div class="col-md-12">
-				<div style="position:relative; margin-bottom:30px;">
-				{{ render_select(form.form_id) }}
+		{{ render_field(form.comment) }}
 
-				<a style="position:absolute; top:64px; left:240px" class="show-window btn btn-success" target="_blank" href="http://{{ request.host }}/forms/create/">
-					Formulier aanmaken
-				</a>
-				</div>
-			</div>
-
-			<div class="col-md-12">
-				<strong>Bestanden</strong><br />
-				<label for="file-search-query">Zoeken</label>
-				<input type="text" id="file-search-query" />
-				<div id="file-search-results">
-					<ul></ul>
-				</div>
-			</div>
-		</div>
-		{{ form.comment.csrf_token }}{{ render_field(form.comment) }}
 		<table class="table table-bordered table-striped">
 			<thead>
 				<tr>
@@ -53,9 +31,12 @@
 				{% endfor %}
 			</tbody>
 		</table>
+
         {{ render_checkbox(form.needs_payed) }}
 		{{ render_checkbox(form.filter_html) }}
+
 		{{ render_button(form.save_page) }}
+
         {% if not new_page %}
             <div class="control-group">
                 <div class="controls">

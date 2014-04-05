@@ -35,24 +35,9 @@ if os.path.exists('application.db'):
 db.drop_all()
 db.create_all()
 
-page = Page('')
-db.session.add(page)
-db.session.commit()
-
-revision = PageRevision(page, 'Homepage!', '', None, 'herr derr 1')
-db.session.add(revision)
-db.session.commit()
-
 
 news_page = Page('news/1/', 'news')
 db.session.add(news_page)
-db.session.commit()
-
-news_revision = NewsRevision(news_page, 'Yolo', '', NewsRevision.get_new_id(),
-                             'Wat een nieuws zeg! Poe hee!', None,
-                             datetime.date(2014, 3, 20))
-news_revision.item_id = 1
-db.session.add(news_revision)
 db.session.commit()
 
 #Add the all group
@@ -161,6 +146,23 @@ group_ict.add_user(user_tijmen)
 group_bestuur.add_user(user_tijmen)
 group.add_user(user_tijmen)
 db.session.commit()
+
+page = Page('')
+db.session.add(page)
+db.session.commit()
+
+revision = PageRevision(page, 'Homepage!', '', admin, 'herr derr 1')
+db.session.add(revision)
+db.session.commit()
+
+
+news_revision = NewsRevision(news_page, 'Yolo', '', NewsRevision.get_new_id(),
+                             'Wat een nieuws zeg! Poe hee!', admin.id,
+                             datetime.date(2014, 3, 20))
+news_revision.item_id = 1
+db.session.add(news_revision)
+db.session.commit()
+
 custom_form = CustomForm(user.id, "Test formulier", '''Dieet | checkbox
 -Vegetarisch
 -Veganistisch
