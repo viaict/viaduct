@@ -1,6 +1,8 @@
 import os
 import datetime
 
+# this is now uncommented for breaking activity for some reason
+# please some one check out what is happening
 import viaduct.api.calendar.google as google
 
 from flask import flash, get_flashed_messages, redirect, render_template, \
@@ -211,17 +213,17 @@ def create(activity_id=None):
                 flash('You\'ve created an activity successfully.', 'success')
 
                 google.update_activity(
-                  activity.google_event_id, 
-                  name, 
-                  location, 
+                  activity.google_event_id,
+                  name,
+                  location,
                   start.isoformat(), end.isoformat()
                 )
             else:
                 flash('You\'ve updated an activity successfully.', 'success')
 
                 google_activity = google.insert_activity(
-                  name, 
-                  location, 
+                  name,
+                  location,
                   start.isoformat(), end.isoformat()
                 )
 
