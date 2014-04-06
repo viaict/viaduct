@@ -51,6 +51,10 @@ label.checkbox {
     width: 100%;
 }
 
+#search {
+    padding: 6px;
+}
+
 /* sponsor carousel */
 #carousel {
     padding: 0px;
