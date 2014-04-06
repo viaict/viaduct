@@ -6,7 +6,7 @@
         	{% for i, page in enumerate(pages) %}
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a {% if page.external %}target="_blank"{% endif %} data-toggle="collapse" data-parent="#accordion" href="{% if page.url == current.url %}#{% else %}{% if page.external %}http://{% endif %}{{ page.url }}{% endif %}">{{ page.title }}</a>
+                        <a {% if page.external %}target="_blank"{% endif %} href="{% if page.url == current.url %}#{% else %}{% if page.external %}http://{% endif %}{{ page.url }}{% endif %}">{{ page.title }}</a>
                     </h4>
                 </div>
                 {% set children = page.activities if page.activities else page.children %}
