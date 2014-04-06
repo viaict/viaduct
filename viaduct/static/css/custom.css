@@ -3,6 +3,9 @@ body {
     margin-bottom:20px;
 }
 
+img {
+    max-width: 100%;
+}
 
 form label {
     font-weight:bold;
@@ -453,7 +456,6 @@ div.sortable {
     max-width: 100%;
 }
 
-<<<<<<< HEAD
 #wrapper {
     background-color: #fff;
     border-top: 1px solid #ccc;
