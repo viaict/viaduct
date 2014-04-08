@@ -46,6 +46,21 @@
 				</a>
 			</div>
 
+			<!--<div class="accordion-heading">
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc" href="#collapseAttendees">
+					{{ _("Deelnemers van deze activiteit") }}
+					<span class="pull-right">Klik om uit te klappen</span>
+				</a>
+			</div>
+
+			<div id="collapseAttendees" class="accordion-body collapse">
+				<div class="accordion-inner">
+					{% for result in activity.form.results %}
+						{{ result.owner.first_name }} {{ result.owner.last_name }}
+					{% endfor %}
+				</div>
+			</div>-->
+
 			<div id="collapseForm" class="accordion-body collapse">
 				<div class="accordion-inner">
 					{% if current_user and current_user.id %}
