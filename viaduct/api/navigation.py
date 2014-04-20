@@ -1,5 +1,5 @@
 from flask import render_template, request
-
+# -*- coding: utf-8 -*- 
 import datetime
 
 from viaduct import db, application
