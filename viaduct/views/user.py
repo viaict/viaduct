@@ -1,7 +1,7 @@
 import bcrypt
 import random
 import datetime
-from csv import writer
+from unicodecsv import writer
 from StringIO import StringIO
 
 from flask import flash, redirect, render_template, request, url_for, abort,\
