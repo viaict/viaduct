@@ -251,8 +251,7 @@ def create_mollie_transaction(result_id):
         amount = form_result.form.price
         user = form_result.owner
         payment_url, transaction = MollieAPI.create_transaction(
-            amount, description, user=user)
-        transaction.form_result = form_result
+            amount, description, user=user, form_result=form_result)
         db.session.commit()
         return redirect(payment_url)
     else:

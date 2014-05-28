@@ -29,6 +29,8 @@ class MollieAPI:
                                   user=user)
         if form_result:
             transaction.form_result = form_result
+        else:
+            return False
         db.session.add(transaction)
         db.session.commit()
 
