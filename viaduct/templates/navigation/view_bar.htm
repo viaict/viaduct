@@ -1,25 +1,84 @@
-<ul class="nav nav-pills">
-	{% for entry in bar_entries %}
+{% from "macros/form.htm" import render_field, render_checkbox, render_submit %}
+	<header>
+  	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+	    <div class="container">
+	    	<div class="row" style="margin-left: 0px; margin-right: 0px;">
+	    		<div class="col-sm-12">
+			    	<!-- Brand and toggle get grouped for better mobile display -->
+				    <div class="navbar-header">
+				      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				        <span class="sr-only">Toggle navigation</span>
+				        <span class="icon-bar"></span>
+				        <span class="icon-bar"></span>
+				        <span class="icon-bar"></span>
+				      </button>
+				      <a class="navbar-brand" href="/"><img src="http://svia.nl/static/img/via.png" width="80"/></a>
+				    </div>
 
-		{% set children = entry.activities if entry.activities else NavigationAPI.order_entries(entry.children).all() %}
-		{% set children = NavigationAPI.remove_unauthorized(children) %}
+				    <!-- Collect the nav links, forms, and other content for toggling -->
+				    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav">
+							{% for entry in bar_entries %}
 
-		<li class="{% if children %}dropdown{% endif %}">
-			<a {% if children %}class="dropdown-toggle" data-hover="dropdown" data-delay="200" data-close-others="true"{% endif %} {% if entry.external %}target="_blank"{% endif %}
-			href="{% if entry.external %}http://{% endif %}{{ entry.url }}">
-				{{ entry.title }}
-			</a>
+								{% set children = entry.activities if entry.activities else NavigationAPI.order_entries(entry.children).all() %}
+								{% set children = NavigationAPI.remove_unauthorized(children) %}
 
-			<ul class="dropdown-menu">
-				{% for child in children %}
-					<li>
-						<a {% if child.external %}target="_blank"{% endif %}
-						href="{% if child.external %}http://{% endif %}{{ child.url }}">
-							{{ child.title }}
-						</a>
-					</li>
-				{% endfor %}
-			</ul>
-		</li>
-	{% endfor %}
-</ul>
+								<li class="{% if children %}dropdown{% endif %}">
+									<a {% if children %}class="dropdown-toggle" data-hover="dropdown" data-delay="200" data-close-others="true"{% endif %} {% if entry.external %}target="_blank"{% endif %}
+									href="{% if entry.external %}http://{% endif %}{{ entry.url }}">
+										{{ entry.title }}
+									</a>
+
+									<ul class="dropdown-menu">
+										{% for child in children %}
+											<li>
+												<a {% if child.external %}target="_blank"{% endif %}
+												href="{% if child.external %}http://{% endif %}{{ child.url }}">
+													{{ child.title }}
+												</a>
+											</li>
+										{% endfor %}
+									</ul>
+								</li>
+							{% endfor %}
+						</ul>
+
+						<div class="dropdown">
+						{% if not current_user or current_user.is_anonymous() %}
+						 <a data-toggle="dropdown" href="#">
+						  	<img src="/static/img/user.png" alt="..." id="loginImage" class="img-rounded">
+						  </a>
+						  <div class="dropdown-menu" role="menu" id="loginContainer">
+							<form method="post" name="sign-in" id="sign-in-menu" action="{{ url_for('user.sign_in') }}">
+				            {{ login_form.csrf_token }}
+				            {{ render_field(login_form.email) }}
+				            {{ render_field(login_form.password) }}
+				            {{ render_checkbox(login_form.remember_me) }}
+
+				            {{ render_submit('Log in') }}
+							<a href="{{ url_for('user.sign_up')}}">Registreer</a>
+							</form>
+						  </div>
+						{% else %}
+						  <a data-toggle="dropdown" href="#">
+						  	<img src="{{ UserAPI.avatar( current_user ) }}" alt="..." id="loginImage" class="img-rounded">
+						  </a>
+						  <div class="dropdown-menu" role="menu" id="loginContainer">
+						    <img src="{{ UserAPI.avatar( current_user ) }}" alt="..." id="userImage" class="img-rounded">
+						    <div id="userInformation">
+						    	<p>{{ current_user.name }}</p>
+						    	<p>{{ current_user.email }}</p>
+						    	<p><a href="{{ url_for('user.view_single', user_id=current_user.id) }}">Profiel weergeven</a></p>
+						    </div>
+						    <div id="logoutButtonContainer">
+						    	<a href="{{ url_for('user.sign_out') }}"> <button class="btn btn-primary fullWidth" >uitloggen</button></a>
+						    </div>
+						  </div>
+						   {% endif %}
+						</div>
+					</div><!-- /.navbar-collapse -->
+			  	</div><!-- /.container-fluid -->
+			</div>
+		</div>
+	</nav>
+	</header>

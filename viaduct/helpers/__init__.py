@@ -5,6 +5,7 @@ from flask.ext.login import current_user
 from viaduct import application, login_manager
 from markdown import markdown
 from resource import Resource
+from viaduct.forms import SignInForm
 from viaduct.api.user import UserAPI
 from viaduct.api.group import GroupPermissionAPI
 
@@ -56,6 +57,10 @@ def flash_form_errors(form):
     for field, errors in form.errors.items():
         for error in errors:
             flash(error, 'error')
+
+def get_login_form():
+    form = SignInForm()
+    return form
 
 
 @application.template_filter('markdown')
@@ -167,3 +172,5 @@ def pimpy_minute_line_numbers(data):
         #s += '%d%s\n' % (i, line[:-1])
         s += '<a id="ln%d" class="pimpy_minute_line"/>%s</a>\n' % (i, line[:-1])
     return s
+
+

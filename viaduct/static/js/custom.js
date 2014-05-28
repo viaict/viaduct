@@ -12,7 +12,7 @@ $(document).ready(function() {
         if (actual_height > desired_height) {
             $main_block = $(this);
 
-            $(this).css({'overflow': 'hidden',
+            $(this).css({'overflow': 'hidden', 'overflow-y': 'scroll',
                         'height': sprintf('%dpx', desired_height),
                         'position': 'relative'});
 
@@ -25,23 +25,25 @@ $(document).ready(function() {
                                 'width': $(this).css('width')});
             $read_more_div.addClass('readmore');
 
-            var $read_more_link = $('<a>Meer lezen</a>');
-            $read_more_link.attr('href', '#');
-            $read_more_link.on('click', function() {
-                if (Math.floor($main_block.height()) == desired_height) {
-                    $main_block.animate({'height': sprintf('%dpx',
-                                        actual_height + 20),
-                                        'overflow': 'visible'});
-                    $(this).text('Minder lezen');
-                }
-                else {
-                    $main_block.animate({'overflow': 'hidden',
-                                    'height': sprintf('%dpx', desired_height)});
-                    $(this).text('Meer lezen');
-                }
+            // var $read_more_link = $('<a>Meer lezen</a>');
+            // $read_more_link.attr('href', '#');
+            // $read_more_link.on('click', function() {
+            //     console.log('test');
+            //     $main_block.toggleClass("mainpage_scroll");
+            //     // if (Math.floor($main_block.height()) == desired_height) {
+            //     //     $main_block.animate({'height': sprintf('%dpx',
+            //     //                         actual_height + 20),
+            //     //                         'overflow': 'visible'});
+            //     //     $(this).text('Minder lezen');
+            //     // }
+            //     // else {
+            //     //     $main_block.animate({'overflow': 'hidden',
+            //     //                     'height': sprintf('%dpx', desired_height)});
+            //     //     $(this).text('Meer lezen');
+            //     // }
 
-                return false;
-            });
+            //     return false;
+            // });
 
             $read_more_div.append($read_more_link);
 
