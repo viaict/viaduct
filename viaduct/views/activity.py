@@ -33,8 +33,8 @@ def allowed_file(filename):
 # Overview of activities
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<string:archive>/', methods=['GET', 'POST'])
-@blueprint.route('/page/<int:page>', methods=['GET', 'POST'])
-@blueprint.route('/<string:archive>/page/<int:page>', methods=['GET', 'POST'])
+@blueprint.route('/page/<int:page>/', methods=['GET', 'POST'])
+@blueprint.route('/<string:archive>/page/<int:page>/', methods=['GET', 'POST'])
 def view(archive="", page=1):
     if not GroupPermissionAPI.can_read('activity'):
         return abort(403)
