@@ -221,24 +221,21 @@ def sign_up():
 def sign_in():
     # Redirect the user to the index page if he or she has been authenticated
     # already.
-    #if current_user and current_user.is_authenticated():
-    #   return redirect(url_for('page.get_page'))
+    if current_user and current_user.is_authenticated():
+        return redirect(url_for('page.get_page'))
 
     form = SignInForm(request.form)
 
     if form.validate_on_submit():
-        valid_form = True
-
         user = User.query.filter(User.email == form.email.data).first()
 
         # Check if the user does exist, and if the passwords do match.
-        if not user or bcrypt.hashpw(form.password.data, user.password) !=\
-                user.password:
+        submitted_hash = bcrypt.hashpw(form.password.data, user.password)
+        if not user or submitted_hash != user.password:
             flash('The credentials that have been specified are invalid.',
                   'error')
-            valid_form = False
 
-        if valid_form:
+        else:
             # Notify the login manager that the user has been signed in.
             login_user(user)
 
@@ -396,7 +393,7 @@ def user_export():
     if not GroupPermissionAPI.can_read('user'):
         return abort(403)
 
-    users = User.query.all() 
+    users = User.query.all()
     si = StringIO()
     cw = writer(si)
     cw.writerow([c.name for c in User.__mapper__.columns ])
