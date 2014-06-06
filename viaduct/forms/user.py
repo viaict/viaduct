@@ -91,6 +91,7 @@ class EditUserInfoForm(Form):
     student_id = TextField('Studentnummer',
                            validators=[Required(message='Geen studentnummer '
                                                         'opgegeven')])
+    locale = SelectField('Taal', choices=LANGUAGES.items())
     education_id = SelectField('Opleiding', coerce=int)
     avatar = FileField('Avatar')
 
