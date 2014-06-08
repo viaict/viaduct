@@ -9,10 +9,10 @@
     <div class='row'>
         <div class='col-md-6 author'>Geschreven door <em>{{ revision.author.name }}</em></div>
         <div class='col-md-6 last-edited text-right'>
-            {% if revision.modified != revision.created %}
-                Laatst bewerkt op <em>{{ revision.modified.strftime('%Y-%m-%d') }}</em> om <em>{{ revision.modified.strftime('%H:%M') }}</em><br />
+            {% if (revision.created - page.created) >= datetime.timedelta(0, 1) %}
+                Laatst bewerkt op <em>{{ revision.created.strftime('%Y-%m-%d') }}</em> om <em>{{ revision.created.strftime('%H:%M') }}</em><br />
             {% endif %}
-            Gepubliceerd op <em>{{ revision.created.strftime('%Y-%m-%d') }}</em> om <em>{{ revision.created.strftime('%H:%M') }}</em>
+            Gepubliceerd op <em>{{ page.created.strftime('%Y-%m-%d') }}</em> om <em>{{ page.created.strftime('%H:%M') }}</em>
         </div>
     </div>
 {% endblock %}

@@ -7,6 +7,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from config import LANGUAGES
 from viaduct.utilities import import_module
 from markdown import markdown
+import datetime
 
 def is_module(path):
     init_path = os.path.join(path, '__init__.py')
@@ -81,6 +82,7 @@ application.jinja_env.globals.update(markdown=markdown)
 application.jinja_env.globals.update(Markup=Markup)
 application.jinja_env.globals.update(UserAPI=UserAPI)
 application.jinja_env.globals.update(GroupPermissionAPI=GroupPermissionAPI)
+application.jinja_env.globals.update(datetime=datetime)
 
 # Register the blueprints.
 import api
