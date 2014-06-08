@@ -6,55 +6,53 @@
 
 
 {%block page %}
-	<fieldset>
-		<legend>Tentamens</legend>
+    <fieldset>
+        <legend>Tentamens</legend>
 
-		<div class="row">
-			<div class="col-md-12">
-				<form method="get" action="{{ url_for('examination.list') }}" enctype=multipart/form-data class="form-inline" >
-					<input name="search" id="search" class="col-md-5" type="text" placeholder="Zoek op titel, vak of opleiding" value="{{search}}" onkeypress="searchKeyPress(event);"></input>
-					<button type="submit" class="btn btn-primary"> <i class="glyphicon glyphicon-search" id="submit"></i></button>
-				</form>
-			</div>
-		</div>
-		<table class="table table-bordered table-striped">
-			<thead>
-				<tr>
-					<th>Vak</th>
-					<th>Tentamen</th>
-					<th>Opleiding</th>
-				</tr>
-			</thead>
+        <div class="row">
+            <div class="col-md-12">
+                <form method="get" action="{{ url_for('examination.list') }}" enctype=multipart/form-data class="form-inline" >
+                    <input name="search" id="search" class="col-md-5" type="text" placeholder="Zoek op titel, vak of opleiding" value="{{search}}" onkeypress="searchKeyPress(event);"></input>
+                    <button type="submit" class="btn btn-primary"> <i class="glyphicon glyphicon-search" id="submit"></i></button>
+                </form>
+            </div>
+        </div>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Vak</th>
+                    <th>Tentamen</th>
+                    <th>Opleiding</th>
+                </tr>
+            </thead>
 
-			<tbody>
-				{% for examination in examinations.items %}
-					<tr>
-						<td>
-							<a href="?search={{ (examination.course.name) }}">{{ examination.course.name }}</a>
-						</td>
-						<td>
-							<a href="{{ path + examination.path }}" target="_blank">{{ examination.title }}</a>{% if not examination.answer_path == '1' %}
-							<a href="{{ path + examination.answer_path }}" role="button" data-toggle="modal" style="cursor: pointer;"><i class="glyphicon glyphicon-file"></i></a>
-							{% endif %}
-						</td>
-						<td>
-							<a href="?search={{ (examination.education.name) }}">{{ examination.education.name }}</a>
-						</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-		{{ render_pagination(examinations, 'examination.view_examination', "?search=" + search) }}
-	</fieldset>
+            <tbody>
+                {% for examination in examinations.items %}
+                    <tr>
+                        <td>
+                            <a href="?search={{ (examination.course.name) }}">{{ examination.course.name }}</a>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('page.get_page', path=examination.page.path) }}">{{ examination.title }}</a>
+                        </td>
+                        <td>
+                            <a href="?search={{ (examination.education.name) }}">{{ examination.education.name }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {{ render_pagination(examinations, 'examination.view_examination', "?search=" + search) }}
+    </fieldset>
 <script>
 function searchKeyPress(e)
 {
-	// look for window.event in case event isn't passed in
-	if (typeof e == 'undefined' && window.event) { e = window.event; }
-	if (e.keyCode == 13)
-	{
-		document.getElementById('submit').click();
-	}
+    // look for window.event in case event isn't passed in
+    if (typeof e == 'undefined' && window.event) { e = window.event; }
+    if (e.keyCode == 13)
+    {
+        document.getElementById('submit').click();
+    }
 }
 </script>
 {% endblock %}

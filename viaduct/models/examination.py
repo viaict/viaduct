@@ -18,8 +18,8 @@ class ExaminationRevision(IdRevision):
     path = db.Column(db.String(256))
     answer_path = db.Column(db.String(256))
 
-    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    author = db.relationship('User', backref=db.backref('examination_revisions',
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User', backref=db.backref('examination_revisions',
                                                       lazy='dynamic'))
 
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'))
@@ -37,7 +37,7 @@ class ExaminationRevision(IdRevision):
                                                       lazy='dynamic'))
 
     def __init__(self, page=None, title='', comment='', instance_id=None,
-                 path='', answer_path='', author_id=None, course_id=None,
+                 path='', answer_path='', user_id=None, course_id=None,
                  education_id=None):
         super(ExaminationRevision, self).__init__(title, comment, instance_id)
 
@@ -45,7 +45,7 @@ class ExaminationRevision(IdRevision):
 
         self.path = path
         self.answer_path = answer_path
-        self.author_id = author_id
+        self.user_id = user_id
         self.course_id = course_id
         self.education_id = education_id
 

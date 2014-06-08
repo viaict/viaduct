@@ -99,29 +99,38 @@ def edit(instance_id=None):
     form.course_id.choices = [(c.id, c.name) for c in Course.query.all()]
     form.education_id.choices = [(e.id, e.name) for e in Education.query.all()]
 
-    path = request.files[form.path.name]
-    print(path)
     if form.validate_on_submit():
         path = request.files[form.path.name]
-        print(path)
         answer_path = request.files[form.answer_path.name]
         title = data['title'].strip()
         comment = data['comment'].strip()
         course_id = data.get('course_id', None)
         education_id = data.get('education_id', None)
 
-
         error = False
 
-        real_path = upload_file_real(path)
-        if not real_path:
-            flash('Fout formaat tentamen', 'danger')
-            error = True
+        real_path = ''
+        if not path:
+            if not page:
+                flash('Geen tentamen opgegeven', 'danger')
+                return render_template('examination/edit.htm', page=page,
+                                       form=form)
+            else:
+                real_path = revision.path
+        else:
+            real_path = upload_file_real(path)
+            if not real_path:
+                flash('Fout formaat tentamen', 'danger')
+                error = True
 
-        real_answer_path = upload_file_real(answer_path)
-        if not real_answer_path:
-            flash('Fout formaat antwoorden', 'danger')
-            error = True
+        real_answer_path = ''
+        if answer_path:
+            real_answer_path = upload_file_real(answer_path)
+            if not real_answer_path:
+                flash('Fout formaat antwoorden', 'danger')
+                error = True
+        elif page:
+                real_answer_path = revision.answer_path
 
         if error:
             return render_template('examination/edit.htm', page=page,
@@ -142,7 +151,7 @@ def edit(instance_id=None):
         db.session.add(new_revision)
         db.session.commit()
 
-        flash('Het tentamen is geupload', 'success')
+        flash('Het tentamen is opgeslagen', 'success')
 
         return redirect(url_for('page.get_page', path=page.path))
 
