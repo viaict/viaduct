@@ -261,7 +261,8 @@ label.checkbox {
     padding-bottom: 0.5em;
     padding-left: 1em;
     padding-right: 1em;
-    min-height: 540px;
+    height: 540px;
+    overflow-y: auto;
 }
 .readmore {
     background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgba(255,255,255,1) 20%); /* FF3.6+ */
