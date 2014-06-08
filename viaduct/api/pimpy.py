@@ -171,18 +171,20 @@ class PimpyAPI:
 
         regex = re.compile("\s*(?:DONE) ([^\n\r]*)")
         matches = regex.findall(content)
-        for done_id in matches:
-            try:
-                done_task = Task.query.filter(Task.id == done_id).first()
-            except:
-                print("could not find the given task")
-                flash("could not find DONE " + done_id)
-                continue
-            if done_task:
-                dones_found.append(done_task)
-            else:
-                print("Could not find task " + done_id)
-                flash("could not find DONE " + done_id)
+        for match in matches:
+            done_ids = match.split(",")
+            for done_id in done_ids:
+                try:
+                    done_task = Task.query.filter(Task.id == done_id).first()
+                except:
+                    print("could not find the given task")
+                    flash("could not find DONE " + done_id)
+                    continue
+                if done_task:
+                    dones_found.append(done_task)
+                else:
+                    print("Could not find task " + done_id)
+                    flash("could not find DONE " + done_id)
 
         regex = re.compile("\s*(?:REMOVE) ([^\n\r]*)")
         matches = regex.findall(content)
