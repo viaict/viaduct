@@ -99,8 +99,11 @@ def edit(instance_id=None):
     form.course_id.choices = [(c.id, c.name) for c in Course.query.all()]
     form.education_id.choices = [(e.id, e.name) for e in Education.query.all()]
 
+    path = request.files[form.path.name]
+    print(path)
     if form.validate_on_submit():
         path = request.files[form.path.name]
+        print(path)
         answer_path = request.files[form.answer_path.name]
         title = data['title'].strip()
         comment = data['comment'].strip()

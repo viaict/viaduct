@@ -6,8 +6,11 @@ from viaduct.forms.page import SuperPageForm
 
 
 class ExaminationForm(SuperPageForm):
-    path = FileField(u'Tentamen', validators=[InputRequired()])
+    path = FileField(u'Tentamen',
+                     validators=[InputRequired('Geen tentamen gekozen')])
     answer_path = FileField(u'Antwoorden')
-    course_id = SelectField(u'Vak', coerce=int, validators=[InputRequired()])
+    course_id = SelectField(u'Vak', coerce=int,
+                            validators=[InputRequired('Geen vak gekozen')])
     education_id = SelectField(u'Opleiding', coerce=int,
-                               validators=[InputRequired()])
+                               validators=[InputRequired('Geen opleiding '
+                                                         'gekozen')])
