@@ -150,7 +150,7 @@ class PimpyAPI:
             matches = regex.findall(line)
             for action in matches:
                 try:
-                    listed_users, title = action.split(":")
+                    listed_users, title = action.split(":", 1)
                 except:
                     print("could not split the line on ':'.\nSkipping hit.")
                     flash("could not parse: " + action)
