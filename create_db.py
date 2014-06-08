@@ -14,7 +14,6 @@ from viaduct.models.degree import Degree
 from viaduct.models.education import Education
 
 from viaduct.models.vacancy import Vacancy
-from viaduct.models.requirement import Requirement
 from viaduct.models.education import Education
 from viaduct.models.programming_language import ProgrammingLanguage
 from viaduct.models.company import Company
