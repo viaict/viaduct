@@ -22,6 +22,7 @@ Thumbs.db
 
 viaduct/static/files/*
 venv/*
+venv3/*
 .vimrc
 
 gitlog.txt
