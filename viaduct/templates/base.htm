@@ -43,11 +43,7 @@
     </head>
 
     <body>
-        <div class="row">
-            <div class="col-md-12">
-                    {{ NavigationAPI.get_navigation_bar()|safe }}
-            </div>
-        </div>
+        {{ NavigationAPI.get_navigation_bar()|safe }}
         <div class="container">
             <div class="row">
                 <div class="col-sm-12" id="messages">
