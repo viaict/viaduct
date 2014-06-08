@@ -543,6 +543,19 @@ header #loginImage{
     height: 40px;
 }
 
+header #loginImageMobile{
+    position: relative;
+    right: 0;
+    top: 0;
+    float: right;
+    margin-top: 8px;
+    border: 1px solid #eee;
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    cursor: pointer
+}
+
 header .navbar-nav{
     margin-left: 10px;
     float: left;
@@ -766,7 +779,7 @@ p{line-height: 25px;}
     }
 
     header{
-        max-height: auto;
+        max-height: none;
     }
 
     header .navbar-brand img {
@@ -791,6 +804,11 @@ p{line-height: 25px;}
     header .navbar-fixed-top{
         position: relative;
     }
+
+    header .navbar-default .navbar-toggle{
+        padding: 12px 10px;
+        border-color:#eee;
+    }
 }
 @media(min-width:768px){
     header .navbar-default .navbar-nav>li>a {
@@ -805,6 +823,11 @@ p{line-height: 25px;}
     header .navbar-nav{
         width: 580px;
     }
+
+    header .navbar-collapse.collapse.loginForMobile{
+        display: none !important;
+    }
+
 }
 
 @media(min-width:992px){
