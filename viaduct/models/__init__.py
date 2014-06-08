@@ -10,4 +10,5 @@ from permission import GroupPermission#, Permission, UserPermission
 from pimpy import Minute, Task
 from user import User
 from news import NewsRevision
-from page import Page
+from page import Page, PageRevision, PagePermission
+from custom_form import CustomForm

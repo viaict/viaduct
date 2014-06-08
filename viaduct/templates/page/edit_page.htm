@@ -35,6 +35,8 @@
         {{ render_checkbox(form.needs_payed) }}
 		{{ render_checkbox(form.filter_html) }}
 
+        {{ render_select(form.custom_form_id) }}
+
 		{{ render_button(form.save_page) }}
 
         {% if not new_page %}
