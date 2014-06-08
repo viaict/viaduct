@@ -8,6 +8,7 @@ from viaduct import db
 from viaduct.api import GroupPermissionAPI
 from viaduct.forms import NewsForm
 from viaduct.models import NewsRevision, Page
+from viaduct.helpers import flash_form_errors
 
 blueprint = Blueprint('news', __name__)
 
@@ -72,7 +73,6 @@ def edit(instance_id=None):
         db.session.commit()
 
         end_time = datetime.strptime(data['end_time'], '%Y-%m-%d').date()
-        end_time = None
         new_revision = NewsRevision(page, data['title'].strip(),
                                     data['comment'].strip(), instance_id,
                                     data['content'].strip(), current_user.id,
@@ -84,5 +84,10 @@ def edit(instance_id=None):
         flash('Nieuwsitem opgeslagen.', 'success')
 
         return redirect(url_for('page.get_page', path=page.path))
+
+    else:
+        flash_form_errors(form)
+
+    form.comment.data = ''
 
     return render_template('news/edit.htm', page=page, form=form)
