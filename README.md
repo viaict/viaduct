@@ -17,7 +17,7 @@ A `config.py` file is needed to run the site. Modify `local_config.py` with your
 Build dependencies are for ruby and npm:
 * Install Ruby gems
     - Install Ruby
-    - `mv def_config.rb config.rb`
+    - `cp def_config.rb config.rb`
     - `gem install bundler`
     - `bundle install` (if that does not work try this:
       http://guides.rubygems.org/faqs/#user-install)
