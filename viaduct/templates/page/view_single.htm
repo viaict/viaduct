@@ -5,7 +5,6 @@
 {% block page_content %}
     <p>{{ revision.content | markdown(revision.filter_html) }}</p>
 
-    {{ 'ja' if revision.custom_form_id else 'nee' }}
 	{% if revision.custom_form %}
         <hr />
         <div>
