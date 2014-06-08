@@ -6,7 +6,7 @@
         <div class="row">
             {% for revision in data %}
                 <div class="col-sm-6">
-                    <div class="mainblock">
+                    <div class="mainblock scroll">
                         {% if revision.activity %}
                             {{ revision.activity | safe }}
                         {% else %}

@@ -261,8 +261,11 @@ label.checkbox {
     padding-bottom: 0.5em;
     padding-left: 1em;
     padding-right: 1em;
-    height: 540px;
+    min-height: 560px;
+}
+.scroll {
     overflow-y: auto;
+    height: 560px;
 }
 .readmore {
     background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgba(255,255,255,1) 20%); /* FF3.6+ */
@@ -648,11 +651,6 @@ header ul.navbar-nav>li>ul{
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus {
     background: none;
     border-bottom: 2px solid #004b99;
-}
-
-
-.mainblock{
-    /*padding-top: 60px;*/
 }
 
 .sidebar{
