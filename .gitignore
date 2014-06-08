@@ -22,12 +22,14 @@ Thumbs.db
 
 viaduct/static/files/*
 viaduct/static/css/*
+viaduct/static/js
 venv/*
 .vimrc
 
 .sass-cache/
 Gemfile.lock
 node_modules/
+dist/
 
 gitlog.txt
 gitlog.md
