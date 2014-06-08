@@ -132,15 +132,15 @@ class PageRevision(SuperRevision):
     filter_html = db.Column(db.Boolean)
     content = db.Column(db.Text)
 
-    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    author = db.relationship('User', backref=db.backref('page_edits',
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User', backref=db.backref('page_edits',
                                                         lazy='dynamic'))
 
     page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
     page = db.relationship('Page', backref=db.backref('page_revisions',
                                                       lazy='dynamic'))
 
-    def __init__(self, page, title, comment, author, content,
+    def __init__(self, page, title, comment, user, content,
                  filter_html=True):
         super(PageRevision, self).__init__(title, comment)
 
@@ -148,7 +148,7 @@ class PageRevision(SuperRevision):
 
         self.filter_html = filter_html
         self.content = content
-        self.author_id = author.id if author else None
+        self.user_id = user.id if user else None
 
     def get_comparable(self):
         return self.content
