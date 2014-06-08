@@ -56,7 +56,7 @@ def page_not_found(e):
 def flash_form_errors(form):
     for field, errors in form.errors.items():
         for error in errors:
-            flash(error, 'error')
+            flash(error, 'danger')
 
 def get_login_form():
     form = SignInForm()
