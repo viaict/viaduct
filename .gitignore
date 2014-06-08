@@ -1,5 +1,6 @@
 application.db
 config.py
+config.rb
 client_secrets.json
 *.dat
 *.bak
