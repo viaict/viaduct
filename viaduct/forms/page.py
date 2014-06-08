@@ -4,8 +4,10 @@ from wtforms import BooleanField, StringField, TextAreaField, FieldList, \
 
 from wtforms.validators import Required, Regexp, Optional
 
+from wtforms import Form as UnsafeForm
 
-class EditGroupPagePermissionEntry(Form):
+
+class EditGroupPagePermissionEntry(UnsafeForm):
     select = SelectField(None, coerce=int, choices=[(0, 'Geen'), (1, 'Lees'),
                                                     (2, 'Lees/Schrijf')])
 
