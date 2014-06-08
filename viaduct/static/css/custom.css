@@ -530,14 +530,36 @@ body{
     margin-bottom: 40px;
 }
 
+header{
+    max-height: 80px;
+}
 
 header #loginImage{
     position: absolute;
-    right: 15px;
+    right: 0;
     top: 11px;
     border: 1px solid #eee;
     width: 40px;
     height: 40px;
+}
+
+header #loginImageMobile{
+    position: relative;
+    right: 0;
+    top: 0;
+    float: right;
+    margin-top: 8px;
+    border: 1px solid #eee;
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    cursor: pointer
+}
+
+header .navbar-nav{
+    margin-left: 10px;
+    float: left;
+    height: 60px;
 }
 
 header #loginContainer{
@@ -599,9 +621,12 @@ header #loginContainer .fullWidth{
     padding: 5px 20px 0 20px;
 }
 
-.navbar-default{
+header ul.navbar-nav>li{
     text-transform: uppercase;
-    color:blue;
+}
+
+header ul.navbar-nav>li>ul{
+    text-transform: none;
 }
 
 .navbar-nav>li>a {
@@ -748,6 +773,15 @@ footer{
 p{line-height: 25px;}
 
 @media(max-width:767px){
+
+    body{
+        padding: 0;
+    }
+
+    header{
+        max-height: none;
+    }
+
     header .navbar-brand img {
         width:60px;
     }
@@ -755,15 +789,65 @@ p{line-height: 25px;}
     header .navbar-collapse{
         max-height: none;
     }
-    
-    header .navbar-fixed-top{
-        position: relative;
-    }
-    
+     
     header .navbar-nav>li>a {
         padding-top: 0px;
         padding-bottom: 20px;
     }
+
+    header .navbar-nav{
+        margin: 0;
+        height: auto;
+        position: relative;
+    }
+
+    header .navbar-fixed-top{
+        position: relative;
+    }
+
+    header .navbar-default .navbar-toggle{
+        padding: 12px 10px;
+        border-color:#eee;
+    }
+
+    header #logoutButtonContainerMobile{
+        width: 100%;
+    }
+
+    header #logoutButtonContainerMobile button{
+        width: 100%;
+        margin-bottom: 20px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+    header .navbar-collapse{
+        padding-top: 10px;
+    }
+
+    header #sign-in-menu-mobile{
+        padding-bottom: 20px;
+    }
+
+    header #sign-in-menu-mobile button{
+        width: 100%;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    header #userImageMobile{
+        width: 20%;
+        max-width: 100px;
+        margin-right: 5%;
+        float: left;
+        margin-bottom: 20px;
+    }
+
+    header #userInformationMobile{
+        width: 65%;
+        float: left;
+    }
+
 }
 @media(min-width:768px){
     header .navbar-default .navbar-nav>li>a {
@@ -774,6 +858,15 @@ p{line-height: 25px;}
     header .navbar-brand {
         padding-right: 0;
     }
+
+    header .navbar-nav{
+        width: 580px;
+    }
+
+    header .navbar-collapse.collapse.loginForMobile{
+        display: none !important;
+    }
+
 }
 
 @media(min-width:992px){
@@ -781,10 +874,18 @@ p{line-height: 25px;}
         padding: 20px 10px 20px 10px;
         font-size: 14px;
     }
+
+    header .navbar-nav{
+        width: 800px;
+    }
 }
 @media(min-width:1200px){
     header .navbar-default .navbar-nav>li>a {
         padding: 20px 15px 20px 15px;
         font-size:16px;
+    }
+
+    header .navbar-nav{
+        width: 1000px;
     }
 }

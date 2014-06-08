@@ -3,14 +3,13 @@ from viaduct.models.page import Page, PagePermission, PageRevision
 
 from viaduct import db
 
-from flask import request, url_for, render_template
+from flask import render_template
 
-from viaduct.models.group import Group
 
 class PageAPI:
     @staticmethod
     def remove_page(path):
-        page = Page.query.filter(Page.path==path).first()
+        page = Page.query.filter(Page.path == path).first()
 
         if not page:
             return False
