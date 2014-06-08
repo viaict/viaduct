@@ -1,12 +1,13 @@
-from flask.ext.wtf import Form, Required, TextField, TextAreaField, DateField,\
-		SelectField, SubmitField
+from flask_wtf import Form
+from wtforms import StringField, SubmitField
+
 
 class LocationForm(Form):
-	city = TextField('Plaats')
-	country = TextField('Land')
-	address = TextField('Adres')
-	zip = TextField('Postcode')
-	postoffice_box = TextField('Postbus')
-	email = TextField('Email')
-	phone_nr = TextField('Telefoon')
-	submit = SubmitField('Opslaan')
+    city = StringField('Plaats')
+    country = StringField('Land')
+    address = StringField('Adres')
+    zip = StringField('Postcode')
+    postoffice_box = StringField('Postbus')
+    email = StringField('Email')
+    phone_nr = StringField('Telefoon')
+    submit = SubmitField('Opslaan')

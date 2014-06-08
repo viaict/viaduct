@@ -1,24 +1,26 @@
-from flask.ext.wtf import Form, FloatField, TextField, TextAreaField, DecimalField, FileField, DateTimeField, Required, validators, IntegerField, SelectField, BooleanField, SelectMultipleField
+from flask_wtf import Form
+from wtforms import FloatField, StringField, IntegerField, SelectField
+from wtforms.validators import InputRequired
 
-import datetime
-from viaduct.models.booksales import Book, Sale, MultiCheckboxField
+from viaduct.models.booksales import MultiCheckboxField
 from viaduct import application
 
 DATE_FORMAT = application.config['DATE_FORMAT']
 
 
 class AddBookForm(Form):
-	title = TextField('title', validators=[Required()])
-	price = FloatField('price', validators=[Required()])
-	isbn = TextField('isbn', validators=[Required()])
-	stock = IntegerField('stock', validators=[Required()])
+    title = StringField('title', validators=[InputRequired()])
+    price = FloatField('price', validators=[InputRequired()])
+    isbn = StringField('isbn', validators=[InputRequired()])
+    stock = IntegerField('stock', validators=[InputRequired()])
+
 
 class AddSaleForm(Form):
-	books = MultiCheckboxField('books', validators=[Required()])
-	student_number = IntegerField('student_number', validators=[Required()])
-	payment = SelectField('payment', validators=[Required()], choices=[(1, 'pin'), (2, 'contant')])
+    books = MultiCheckboxField('books', validators=[InputRequired()])
+    student_number = IntegerField('student_number',
+                                  validators=[InputRequired()])
+    payment = SelectField('payment', validators=[InputRequired()],
+                          choices=[(1, 'pin'), (2, 'contant')])
 
-	def load_books(self, books):
-		self.books.choices = map(lambda x: (x.id, x.title), books)
-
-
+    def load_books(self, books):
+        self.books.choices = map(lambda x: (x.id, x.title), books)

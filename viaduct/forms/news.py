@@ -1,9 +1,11 @@
-from flask.ext.wtf import Form, TextField, TextAreaField, DateField, Required
+from flask_wtf import Form
+from wtforms import StringField, TextAreaField, DateField
+from wtforms.validators import InputRequired
 from datetime import date, timedelta
 
 
 class NewsForm(Form):
-    title = TextField(u'Titel', validators=[Required()])
-    content = TextAreaField(u'Inhoud', validators=[Required()])
-    end_time = DateField(u'Archiefdatum', validators=[Required()],
+    title = StringField(u'Titel', validators=[InputRequired()])
+    content = TextAreaField(u'Inhoud', validators=[InputRequired()])
+    end_time = DateField(u'Archiefdatum', validators=[InputRequired()],
                          default=date.today() + timedelta(days=1))

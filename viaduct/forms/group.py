@@ -1,8 +1,12 @@
-from flask.ext.wtf import Form, BooleanField, FormField, FieldList,\
-    SubmitField, SelectField
+from flask_wtf import Form
+
+from wtforms import BooleanField, FormField, FieldList, SubmitField, \
+    SelectField
+
+from wtforms import Form as UnsafeForm
 
 
-class ViewGroupEntry(Form):
+class ViewGroupEntry(UnsafeForm):
     select = BooleanField(None)
 
 
@@ -11,7 +15,7 @@ class ViewGroupForm(Form):
     delete_group = SubmitField('Delete group')
 
 
-class EditGroupPermissionEntry(Form):
+class EditGroupPermissionEntry(UnsafeForm):
     select = SelectField(None, coerce=int, choices=[(0, "Geen"), (1, "Lees"),
                                                     (2, "Lees/Schrijf")])
 
