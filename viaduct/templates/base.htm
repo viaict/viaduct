@@ -20,7 +20,7 @@
 
         <script src="/static/js/jquery.js"></script>
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-
+        
         <script src="/static/js/analytics.js"></script>
         <script src="/static/js/throttle.js"></script>
         <script src="/static/js/jquery.expander.min.js"></script>
@@ -35,6 +35,7 @@
         <script src='/static/js/bootstrap-editable.min.js'></script>
         <script src="/static/js/jquery-carousel.js"></script>
         <script src="/static/js/custom.js"></script>
+        <script src="/static/js/footer.js"></script>
 
         <!-- <script src="http://localhost/handiger/handiger.js"></script> -->
 
@@ -54,6 +55,8 @@
             {% block page %}
             {% endblock %}
             {{ PageAPI.get_footer()|safe }}
+        </div>
+        
             <!-- <div class="row">
                 <div id="carousel">
                     <div class="col-md-2 logo_wrapper"><a href="http://www.copernica.com/nl/over-ons/vacatures"><img class="logo_img" src="/static/img/sponsors/copernica.png" alt="copernica" /></a>
@@ -79,9 +82,9 @@
                     </div>
                 </div>
             </div>
-            <div class="row"> -->
-            </div>
-        </div>
+            <div class="row"> 
+            </div> -->
+       
         <script src='/static/js/textarea.js'></script>
     </body>
 </html>

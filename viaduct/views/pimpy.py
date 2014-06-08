@@ -87,7 +87,7 @@ def add_task(group_id='all'):
     if group_id == '':
         group_id = 'all'
 
-    form = AddTaskForm(request.form)
+    form = AddTaskForm(request.form, default=group_id)
     if request.method == 'POST':
         # FIXME: deadline is also messed up, and I do not know why
 
@@ -124,7 +124,7 @@ def add_task(group_id='all'):
             flash(message)
 
     group = Group.query.filter(Group.id == group_id).first()
-    form.load_groups(current_user.groups.all())
+    form.load_groups(current_user.groups.order_by(Group.name.asc()).all())
 
     return render_template('pimpy/add_task.htm', group=group,
                            group_id=group_id, type='tasks', form=form)
@@ -165,7 +165,7 @@ def add_minute(group_id='all'):
         group_id = 'all'
     group = Group.query.filter(Group.id == group_id).first()
 
-    form = AddMinuteForm(request.form)
+    form = AddMinuteForm(request.form, default=group_id)
     if request.method == 'POST':
 
         # validate still does not work
@@ -205,7 +205,7 @@ def add_minute(group_id='all'):
         else:
             flash(message)
 
-    form.load_groups(current_user.groups.all())
+    form.load_groups(current_user.groups.order_by(Group.name.asc()).all())
 
     return render_template('pimpy/add_minute.htm', group=group,
                            group_id=group_id, type='minutes', form=form)
