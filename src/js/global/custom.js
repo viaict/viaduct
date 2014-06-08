@@ -138,13 +138,4 @@ $(document).ready(function() {
     });
 
 
-    if ($("#userInformation").children().first().text() == "Timo Mulder"){
-        $('div').css('text-transform', 'uppercase');
-        $('button').css('text-transform', 'uppercase');
-        $('a').append('!');
-        $('p').append('!');
-        $('td').append('!');
-        $('button').append('!');
-    }
-
 });

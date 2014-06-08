@@ -1,5 +1,9 @@
 {% extends "content.htm" %}
 
+{% block includes %}
+    <script src="/static/js/custom_form/view_results.js"></script>
+{% endblock %}
+
 {% block content %}
 
 <h1>
@@ -59,6 +63,4 @@
 <p>Er zijn nog geen resultaten om te tonen</p>
 {% endif %}
 
-<script src="/static/js/has_payed.js"></script>
-<script src="/static/js/keeswildeleteknopje.js"></script>
 {% endblock %}

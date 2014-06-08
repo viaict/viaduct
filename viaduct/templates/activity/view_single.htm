@@ -4,6 +4,18 @@
 
 {% extends "content.htm" %}
 
+{% block includes %}
+{% if activity.form_data %}
+	<script src="/static/js/unserialize.js"></script>
+	<script>
+		$("#custom").unserializeForm("{{ activity.form_data | safe }}");
+	</script>
+{% endif %}
+
+<script src="/static/js/custom_form_submission.js"></script>
+{% endblock %}
+
+
 {% block content %}
 
 <div class="page-header">
@@ -142,14 +154,5 @@
 <hr>
 
 <p>{{ activity.description | markdown }}</p>
-
-{% if activity.form_data %}
-	<script src="/static/js/unserialize.js"></script>
-	<script>
-		$("#custom").unserializeForm("{{ activity.form_data | safe }}");
-	</script>
-{% endif %}
-
-<script src="/static/js/custom_form_submission.js"></script>
 
 {% endblock %}

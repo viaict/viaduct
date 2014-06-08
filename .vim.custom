@@ -1,0 +1,3 @@
+let g:ctrlp_custom_ignore = {
+  \ 'dir': 'dist\|viaduct/static\|node_modules',
+  \ }

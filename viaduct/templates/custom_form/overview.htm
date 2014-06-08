@@ -1,6 +1,9 @@
 {% from "macros/pagination.htm" import render_pagination %}
 
 {% extends "content.htm" %}
+{% block includes %}
+    <script src="/static/js/form.follower.js"></script>
+{% endblock %}
 
 {%block content %}
 
@@ -25,7 +28,7 @@
 				<a href="/forms/follow/{{ form.id }}" class="follow btn btn-xs btn-danger pull-right">
 					Niet meer volgen
 				</a>
-				
+
 				<a href="/forms/view/{{ form.id }}" class="btn btn-xs btn-primary pull-right">
 					Inzendingen bekijken <span class="badge badge-inverse">{{ form.custom_form_results.count() }}</span>
 				</a>
@@ -85,7 +88,6 @@
 <hr>
 
 
-<script src="/static/js/form.follower.js"></script>
 
 	{{ render_pagination(custom_forms, 'custom_form.view') }}
 {% endblock %}
