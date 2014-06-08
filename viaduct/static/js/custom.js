@@ -138,7 +138,7 @@ $(document).ready(function() {
     });
 
 
-    if ($("#userInformation").children().first().text() == "Timo Mulder"){
+    if ($("#userInformation").children().first().text() == "Administrator de beste"){
         $('div').css('text-transform', 'uppercase');
     }
 
