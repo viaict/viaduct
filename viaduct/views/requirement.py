@@ -1,6 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 
-from application import db
+from viaduct import db
 
 requirement = Blueprint('requirement', __name__)
 
@@ -8,29 +8,29 @@ requirement = Blueprint('requirement', __name__)
 @requirement.route('/requirements/<int:page>/', methods=['GET', 'POST'])
 def view(page=1):
 
-	requirements = requirement.query.paginate(page, 15, False)
+    requirements = requirement.query.paginate(page, 15, False)
 
-	return render_template('requirement/view.htm', requirements=requirements)
+    return render_template('requirement/view.htm', requirements=requirements)
 
 @requirement.route('/requirements/create/', methods=['GET', 'POST'])
 def create():
-	if not current_user or current_user.email != 'administrator@svia.nl':
-		return abort(403)
+    if not current_user or current_user.email != 'administrator@svia.nl':
+        return abort(403)
 
-	if request.method == 'POST':
-		title = request.form['title'].strip()
-		description = request.form['description'].strip()
-		
-		valid_form = True
+    if request.method == 'POST':
+        title = request.form['title'].strip()
+        description = request.form['description'].strip()
 
-		if valid_form:
-			requirement = Requirement(title, description)
+        valid_form = True
 
-			db.session.add(requirement)
-			db.session.commit()
+        if valid_form:
+            requirement = Requirement(title, description)
 
-			flash('The requirement has been added.', 'success')
+            db.session.add(requirement)
+            db.session.commit()
 
-			return redirect(url_for('requirement.view'))
+            flash('The requirement has been added.', 'success')
 
-	return render_template('requirement/create.htm')
+            return redirect(url_for('requirement.view'))
+
+    return render_template('requirement/create.htm')
