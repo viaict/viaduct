@@ -809,6 +809,45 @@ p{line-height: 25px;}
         padding: 12px 10px;
         border-color:#eee;
     }
+
+    header #logoutButtonContainerMobile{
+        width: 100%;
+    }
+
+    header #logoutButtonContainerMobile button{
+        width: 100%;
+        margin-bottom: 20px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+    header .navbar-collapse{
+        padding-top: 10px;
+    }
+
+    header #sign-in-menu-mobile{
+        padding-bottom: 20px;
+    }
+
+    header #sign-in-menu-mobile button{
+        width: 100%;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    header #userImageMobile{
+        width: 20%;
+        max-width: 100px;
+        margin-right: 5%;
+        float: left;
+        margin-bottom: 20px;
+    }
+
+    header #userInformationMobile{
+        width: 65%;
+        float: left;
+    }
+
 }
 @media(min-width:768px){
     header .navbar-default .navbar-nav>li>a {
