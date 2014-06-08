@@ -4,12 +4,12 @@ Flask-Babel==0.8
 Flask-Login==0.2.4
 Flask-RESTful==0.1.6
 Flask-SQLAlchemy==0.16
-Flask-WTF==0.8.3
+Flask-WTF
 Jinja2==2.7
 Markdown==2.2.1
 MarkupSafe==0.18
 SQLAlchemy==0.9.1
-WTForms==1.0.4
+WTForms
 Werkzeug==0.9.1
 argparse==1.2.1
 distribute==0.6.35
