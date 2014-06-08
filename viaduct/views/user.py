@@ -263,7 +263,7 @@ def sign_out():
     if 'denied_from' in session:
         session['denied_from'] = None
 
-    return redirect(url_for('page.get_page'))
+    return redirect(url_for('svia.nl'))
 
 
 @blueprint.route('/request_password/', methods=['GET', 'POST'])
