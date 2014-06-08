@@ -91,7 +91,7 @@ def pages_filter(data):
             content += '<div class="row">'
 
         if i == len(data) - 1 and i % 2 == 0:
-            content += '<div class="col-md-10">'
+            content += '<div class="col-md-12">'
         else:
             content += '<div class="col-md-6">'
 
