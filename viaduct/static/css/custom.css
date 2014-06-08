@@ -1,6 +1,6 @@
 body {
     overflow-y: scroll;
-   
+
 }
 
 img {
@@ -255,7 +255,8 @@ label.checkbox {
     padding-bottom: 0.5em;
     padding-left: 1em;
     padding-right: 1em;
-    min-height: 540px;
+    height: 540px;
+    overflow-y: auto;
 }
 .readmore {
     background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgba(255,255,255,1) 20%); /* FF3.6+ */
@@ -421,7 +422,7 @@ div.nav_entry {
 }
 
 div.droppable {
-    height: 15px; 
+    height: 15px;
     border: 1px dotted black;
     float: left;
     width: 300px;
@@ -563,7 +564,7 @@ header .navbar-nav{
 }
 
 header #loginContainer{
-    
+
     color: #555;
     position: absolute;
     right: 0;
@@ -635,7 +636,7 @@ header ul.navbar-nav>li>ul{
 }
 
 .navbar-nav>li>a.active {
-    
+
 }
 
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus {
@@ -710,7 +711,7 @@ h1,h2,h3,h4,h5,h6{
     color:#000;
     padding-right: 20px;
 
-    
+
 }
 
 #home #activityNewsTab{
@@ -732,7 +733,7 @@ h1,h2,h3,h4,h5,h6{
 }
 
 #home #activityNewsTab .active a{
-    background: #004B99;    
+    background: #004B99;
 }
 
 #home #activityNewsContainer{
@@ -761,7 +762,7 @@ h1,h2,h3,h4,h5,h6{
 
 #home #activityNewsContent hr{
     border-top: 2px solid #004B99;
-    margin: 5px 0 5px 0; 
+    margin: 5px 0 5px 0;
 }
 
 footer{
@@ -770,7 +771,7 @@ footer{
     margin-top: 40px;
     padding-top: 40px;
     padding-bottom: 40px;
-    color: #fff; 
+    color: #fff;
 }
 
 footer ul{
@@ -804,11 +805,11 @@ p{line-height: 25px;}
     header .navbar-brand img {
         width:60px;
     }
-    
+
     header .navbar-collapse{
         max-height: none;
     }
-     
+
     header .navbar-nav>li>a {
         padding-top: 0px;
         padding-bottom: 20px;
@@ -873,7 +874,7 @@ p{line-height: 25px;}
         padding: 30px 0px 10px 8px;
         font-size: 12px;
     }
-    
+
     header .navbar-brand {
         padding-right: 0;
     }
