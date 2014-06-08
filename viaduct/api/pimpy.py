@@ -133,12 +133,14 @@ class PimpyAPI:
         ACTIE <name_1>, <name_2>, name_n>: <title of task>
         or
         TODO <name_1>, <name_2>, name_n>: <title of task>
+        this creates a single task for one or multiple users
+
+        DONE <task1>, <task2, <taskn>
+        this sets the given tasks on 'done'
 
         usage:
         tasks, dones, removes = parse_minute(content, group_id, minute_id)
         where content is a string with the entire minute
-        group id is the group's id
-        minute id is the minute's id
         """
 
         tasks_found = []
@@ -169,6 +171,31 @@ class PimpyAPI:
                     continue
                 tasks_found.append(task)
 
+        regex = re.compile("\s*(?:ACTIES|TODOS) ([^\n\r]*)")
+        for i, line in enumerate(content.splitlines()):
+            matches = regex.findall(line)
+            for action in matches:
+                try:
+                    listed_users, title = action.split(":", 1)
+                except:
+                    print("could not split the line on ':'.\nSkipping hit.")
+                    flash("could not parse: " + action)
+                    continue
+
+                users, message = PimpyAPI.get_list_of_users_from_string(
+                    group_id, listed_users)
+                if not users:
+                    print(message)
+                    continue
+                for user in users:
+                    try:
+                        task = Task(title, "", None, group_id, [user],
+                                    minute_id, i, 0)
+                    except:
+                        print("wasnt given the right input to create a task")
+                        continue
+                    tasks_found.append(task)
+
         regex = re.compile("\s*(?:DONE) ([^\n\r]*)")
         matches = regex.findall(content)
         for match in matches:
@@ -180,26 +207,20 @@ class PimpyAPI:
                     print("could not find the given task")
                     flash("could not find DONE " + done_id)
                     continue
-                if done_task:
-                    dones_found.append(done_task)
-                else:
-                    print("Could not find task " + done_id)
-                    flash("could not find DONE " + done_id)
+                dones_found.append(done_task)
 
         regex = re.compile("\s*(?:REMOVE) ([^\n\r]*)")
         matches = regex.findall(content)
-        for remove_id in matches:
-            try:
-                remove_task = Task.query.filter(Task.id == remove_id).first()
-            except:
-                print("could not find the given task")
-                flash("could not find REMOVE " + remove_id)
-                continue
-            if remove_task:
+        for match in matches:
+            remove_ids = match.split(",")
+            for remove_id in remove_ids:
+                try:
+                    remove_task = Task.query.filter(Task.id == remove_id).first()
+                except:
+                    print("could not find the given task")
+                    flash("could not find REMOVE " + remove_id)
+                    continue
                 removes_found.append(remove_task)
-            else:
-                print("Could not find REMOVE " + remove_id)
-                flash("could not find REMOVE " + remove_id)
 
         return tasks_found, dones_found, removes_found
 

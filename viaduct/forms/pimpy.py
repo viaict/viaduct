@@ -42,6 +42,11 @@ class AddTaskForm(Form):
     def load_groups(self, groups):
         self.group.choices = map(lambda x: (x.id, x.name), groups)
 
+    def __init__(self, formdata=None, obj=None, prefix='', **kwargs):
+        kwargs.setdefault('group', kwargs.get('default', -1))
+
+        Form.__init__(self, formdata, obj, prefix, **kwargs)
+
 
 class EditTaskForm(Form):
     name = TextField('Name', validators=[Required()])
@@ -62,8 +67,14 @@ class EditTaskForm(Form):
                                       'you are familiar with whilst taking '
                                       'minutes.', validators=[Required()])
 
-    def load_groups(self, groups):
+    def load_groups(self, groups, default=-1):
         self.group.choices = map(lambda x: (x.id, x.name), groups)
+        self.group.default = default
+
+    def __init__(self, formdata=None, obj=None, prefix='', **kwargs):
+        kwargs.setdefault('group', kwargs.get('default', -1))
+
+        Form.__init__(self, formdata, obj, prefix, **kwargs)
 
 
 class AddMinuteForm(Form):
@@ -75,5 +86,11 @@ class AddMinuteForm(Form):
                          default=datetime.date.today())
     parse_tasks = BooleanField('Parse', default=True)
 
-    def load_groups(self, groups):
+    def load_groups(self, groups, default=-1):
         self.group.choices = map(lambda x: (x.id, x.name), groups)
+        self.group.default = default
+
+    def __init__(self, formdata=None, obj=None, prefix='', **kwargs):
+        kwargs.setdefault('group', kwargs.get('default', -1))
+
+        Form.__init__(self, formdata, obj, prefix, **kwargs)
