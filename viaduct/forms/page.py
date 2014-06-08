@@ -25,6 +25,7 @@ class SuperPageForm(Form):
 class PageForm(SuperPageForm):
     content = TextAreaField(u'Inhoud', [InputRequired()])
     filter_html = BooleanField(u'Sta HTML tags toe')
+    custom_form_id = SelectField(u'Formulier', coerce=int)
     permissions = FieldList(FormField(EditGroupPagePermissionEntry))
 
 

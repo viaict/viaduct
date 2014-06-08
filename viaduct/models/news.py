@@ -9,8 +9,8 @@ class NewsRevision(IdRevision):
     end_time = db.Column(db.Date)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user= db.relationship('User', backref=db.backref('news_revisions',
-                                                        lazy='dynamic'))
+    user = db.relationship('User', backref=db.backref('news_revisions',
+                                                      lazy='dynamic'))
 
     page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
     page = db.relationship('Page', backref=db.backref('news_revisions',
