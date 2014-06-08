@@ -5,6 +5,7 @@ from flask.ext.login import current_user
 from unidecode import unidecode
 import datetime
 import re
+import difflib
 
 from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.user import UserAPI
@@ -268,10 +269,11 @@ class PimpyAPI:
         for comma_sep_user in comma_sep:
 
             temp_found_users = []
+            match = difflib.get_close_matches(comma_sep_user, user_names, n=1, cutoff=0.5)
             for i in range(len(users)):
 
                 # could use a filter here, but meh
-                if user_names[i].startswith(comma_sep_user):
+                if user_names[i] == match:
                     temp_found_users.append(users[i])
 
             if len(temp_found_users) == 0:
@@ -279,8 +281,8 @@ class PimpyAPI:
                 temp_found_users = users
 
             # We actually want to be able to add tasks to more than 1 user
-            #if len(temp_found_users) > 1:
-            #   return False, "could not disambiguate %s" % comma_sep_user
+            # if len(temp_found_users) > 1:
+            #     return False, "could not disambiguate %s" % comma_sep_user
 
             found_users.extend(temp_found_users)
         return found_users, ""
