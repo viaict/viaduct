@@ -33,7 +33,6 @@ def get_page(path=''):
         return abort(403)
 
     revision = page.get_latest_revision()
-    print(revision.custom_form.html)
 
     if not revision:
         return abort(500)
