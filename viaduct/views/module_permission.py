@@ -5,7 +5,7 @@ from flask.ext.login import current_user
 from viaduct import application, db
 from viaduct.helpers import flash_form_errors
 
-from viaduct.models.examination import Examination
+from viaduct.models.examination import ExaminationRevision
 from viaduct.models.course import Course
 from viaduct.models.education import Education
 
@@ -24,7 +24,7 @@ blueprint = Blueprint('module_permission', __name__, url_prefix='/module_permiss
 
 @blueprint.route('/', methods=['GET', 'POST'])
 def main_view():
-	stack = [ (Examination, [Examination.title]),
+	stack = [ (ExaminationRevision, [ExaminationRevision.title]),
 			(Course, [Course.name]),
 			(Education, [Education.name])]
 	#stack = [ (Education, [Education.name]) ]

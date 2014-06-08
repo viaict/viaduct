@@ -1,17 +1,15 @@
 import os
-from flask import Blueprint
-from flask import abort, flash, session, redirect, render_template, request
-from flask.ext.login import login_required
 
-from sqlalchemy import or_
+from flask import Blueprint
+from flask import abort, flash, session, redirect, render_template, request,\
+    url_for
+from flask.ext.login import login_required, current_user
 
 from viaduct import application, db
-
-from viaduct.models.examination import Examination
-from viaduct.models.course import Course
-from viaduct.models.education import Education
-
-from viaduct.api.group import GroupPermissionAPI
+from viaduct.api import GroupPermissionAPI
+from viaduct.models import ExaminationRevision, Course, Education, Page
+from viaduct.forms import ExaminationForm
+from viaduct.helpers import flash_form_errors
 
 from werkzeug import secure_filename
 
@@ -31,7 +29,6 @@ def file_exists(filename):
 
 
 def create_unique_file(filename):
-
     temp_filename = filename
 
     i = 0
@@ -43,95 +40,115 @@ def create_unique_file(filename):
     return temp_filename
 
 
-@blueprint.route('/examination/add', methods=['GET', 'POST'])
-def upload_file():
-    if not GroupPermissionAPI.can_write('examination'):
-        session['prev'] = 'examination.upload_file'
-        return abort(403)
-
-    courses = Course.query.all()
-    educations = Education.query.all()
-
-    if request.method == 'POST':
-        file = request.files['file']
-        answers = request.files['answers']
-        title = request.form.get("title", None)
-        course_id = request.form.get("course", None)
-        education_id = request.form.get("education", None)
-
-        error = False
-
-        # course_id = get_course_id(course);
-        # if(course_id == None):
-        #   return render_template('examination/upload.htm', courses = courses,
-        #   educations = educations, message = 'Er is een fout opgetreden!');
-        # education_id = get_education_id(education)
-        # if(education_id == None):
-        #   return render_template('examination/upload.htm', courses = courses,
-        #   educations = educations, message = 'Er is een fout opgetreden!');
-
-        if not title:
-            flash('Geen titel opgegeven', 'error')
-            error = True
-
-        filename = upload_file_real(file)
-        if file:
-            if not filename:
-                flash('Fout formaat tentamen', 'error')
-                error = True
-            answer_path = upload_file_real(answers)
-            if not answer_path:
-                flash('Fout formaat antwoorden', 'error')
-                error = True
-        else:
-            flash('Geen tentamen opgegeven', 'error')
-            error = True
-
-        if error:
-            return render_template('examination/upload.htm', courses=courses,
-                                   educations=educations, message='')
-
-        exam = Examination(filename, title, course_id, education_id,
-                           answers=answer_path)
-        db.session.add(exam)
-        db.session.commit()
-
-        flash('Het tentamen is geupload')
-
-        return render_template('examination/upload.htm', courses=courses,
-                               educations=educations, message='')
-
-    return render_template('examination/upload.htm', courses=courses,
-                           educations=educations)
-
-
-@blueprint.route('/examination/', methods=['GET', 'POST'])
-@blueprint.route('/examination/<int:page_nr>/', methods=['GET', 'POST'])
+@blueprint.route('/examination/', methods=['GET'])
+@blueprint.route('/examination/page/<int:page_nr>/', methods=['GET'])
 @login_required
-def view_examination(page_nr=1):
-    if not GroupPermissionAPI.can_read('examination', False):
-        session['prev'] = 'examination.view_examination'
+def list(page_nr=1):
+    if not GroupPermissionAPI.can_read('examination'):
         return abort(403)
-
-    # action = url_for('examination.view_examination')
 
     path = '/static/uploads/examinations/'
+
+    exasub = db.session.query(db.func.max(ExaminationRevision.id)
+                                   .label('max_id'))\
+        .group_by(ExaminationRevision.instance_id).subquery()
+
+    exas = ExaminationRevision.query\
+        .join(exasub, ExaminationRevision.id == exasub.c.max_id)\
+        .join(Course)
 
     if request.args.get('search'):
         search = request.args.get('search')
 
-        examinations = Examination.query.join(Course).join(Education)\
-            .filter(or_(Examination.title.like('%' + search + '%'),
-                        Course.name.like('%' + search + '%'),
-                        Education.name.like('%' + search + '%')))\
-            .order_by(Course.name).paginate(page_nr, 15, True)
-        return render_template('examination/view.htm', path=path,
-                               examinations=examinations, search=search)
+        exas = exas.join(Education)\
+            .filter(db.or_(ExaminationRevision.title.like('%' + search + '%'),
+                           Course.name.like('%' + search + '%'),
+                           Education.name.like('%' + search + '%')))
+    else:
+        search = ''
 
-    examinations = Examination.query.join(Course)\
-        .order_by(Course.name).paginate(page_nr, 15, True)
-    return render_template('examination/view.htm', path=path,
-                           examinations=examinations, search="")
+    exas = exas.order_by(Course.name).paginate(page_nr, 15, True)
+
+    return render_template('examination/list.htm', path=path,
+                           examinations=exas, search=search)
+
+
+@blueprint.route('/create/examination/', methods=['GET', 'POST'])
+@blueprint.route('/edit/examination/<int:instance_id>/',
+                 methods=['GET', 'POST'])
+def edit(instance_id=None):
+    if not GroupPermissionAPI.can_write('examination'):
+        return abort(403)
+
+    data = request.form
+
+    if instance_id:
+        revision = ExaminationRevision.get_latest(instance_id)
+
+        if not revision:
+            return abort(404)
+
+        page = revision.page
+
+        form = ExaminationForm(data, revision)
+    else:
+        instance_id = ExaminationRevision.get_new_id()
+        form = ExaminationForm()
+        page = None
+
+    form.course_id.choices = [(c.id, c.name) for c in Course.query.all()]
+    form.education_id.choices = [(e.id, e.name) for e in Education.query.all()]
+
+    if form.validate_on_submit():
+        path = request.files[form.path.name]
+        answer_path = request.files[form.answer_path.name]
+        title = data['title'].strip()
+        comment = data['comment'].strip()
+        course_id = data.get('course_id', None)
+        education_id = data.get('education_id', None)
+
+
+        error = False
+
+        real_path = upload_file_real(path)
+        if not real_path:
+            flash('Fout formaat tentamen', 'danger')
+            error = True
+
+        real_answer_path = upload_file_real(answer_path)
+        if not real_answer_path:
+            flash('Fout formaat antwoorden', 'danger')
+            error = True
+
+        if error:
+            return render_template('examination/edit.htm', page=page,
+                                   form=form)
+
+        if not page:
+            page = Page('examination/%d/' % (instance_id), 'examination')
+            page.needs_payed = False
+
+            db.session.add(page)
+            db.session.commit()
+
+        new_revision = ExaminationRevision(page, title, comment, instance_id,
+                                           real_path, real_answer_path,
+                                           current_user.id, course_id,
+                                           education_id)
+
+        db.session.add(new_revision)
+        db.session.commit()
+
+        flash('Het tentamen is geupload', 'success')
+
+        return redirect(url_for('page.get_page', path=page.path))
+
+    else:
+        flash_form_errors(form)
+
+    form.comment.data = ''
+
+    return render_template('examination/edit.htm', page=page, form=form)
 
 
 @blueprint.route('/examination/admin', methods=['GET', 'POST'])
@@ -145,10 +162,10 @@ def examination_admin(page_nr=1):
 
     if request.args.get('search'):
         search = request.args.get('search')
-        examinations = Examination.query.join(Course).join(Education)\
-            .filter(or_(Examination.title.like('%' + search + '%'),
-                        Course.name.like('%' + search + '%'),
-                        Education.name.like('%' + search + '%')))\
+        examinations = ExaminationRevision.query.join(Course).join(Education)\
+            .filter(db.or_(ExaminationRevision.title.like('%' + search + '%'),
+                           Course.name.like('%' + search + '%'),
+                           Education.name.like('%' + search + '%')))\
             .paginate(page_nr, 15, False)
         return render_template('examination/admin.htm', path=path,
                                examinations=examinations, search=search,
@@ -156,14 +173,14 @@ def examination_admin(page_nr=1):
 
     if request.args.get('delete'):
         exam_id = request.args.get('delete')
-        examination = Examination.query.filter(Examination.id == exam_id)\
+        examination = ExaminationRevision.query.filter(ExaminationRevision.id == exam_id)\
             .first()
 
         os.remove(os.path.join(UPLOAD_FOLDER, examination.path))
         title = examination.title
         db.session.delete(examination)
         db.session.commit()
-        examinations = Examination.query.paginate(page_nr, 15, False)
+        examinations = ExaminationRevision.query.paginate(page_nr, 15, False)
         return render_template('examination/admin.htm', path=path,
                                examinations=examinations, search="",
                                message="Tentamen " + title +
@@ -171,14 +188,14 @@ def examination_admin(page_nr=1):
 
     if request.args.get('edit'):
         exam_id = request.args.get('edit')
-        examination = Examination.query.filter(Examination.id == exam_id)\
+        examination = ExaminationRevision.query.filter(ExaminationRevision.id == exam_id)\
             .first()
 
         os.remove(os.path.join(UPLOAD_FOLDER, examination.path))
         db.session.delete(examination)
         db.session.commit()
 
-    examinations = Examination.query.paginate(page_nr, 15, False)
+    examinations = ExaminationRevision.query.paginate(page_nr, 15, False)
     return render_template('examination/admin.htm', path=path,
                            examinations=examinations, search="", message="")
 
@@ -209,7 +226,7 @@ def edit_examination():
             print("wut")
 
         if title and education_id and exam_id:
-            examination = Examination.query.filter(Examination.id == exam_id)\
+            examination = ExaminationRevision.query.filter(ExaminationRevision.id == exam_id)\
                 .first()
 
             examination.title = title
@@ -265,14 +282,14 @@ def edit_examination():
 
     if request.args.get('edit'):
         exam_id = request.args.get('edit')
-        examination = Examination.query.filter(Examination.id == exam_id)\
+        examination = ExaminationRevision.query.filter(ExaminationRevision.id == exam_id)\
             .first()
 
         return render_template('examination/edit.htm', path=path,
                                examination=examination, courses=courses,
                                educations=educations)
 
-    examinations = Examination.query.all()
+    examinations = ExaminationRevision.query.all()
     return render_template('examination/admin.htm', path=path,
                            examinations=examinations, search="",
                            message="Geen examen geselecteerd")

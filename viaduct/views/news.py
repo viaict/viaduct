@@ -47,6 +47,7 @@ def edit(instance_id=None):
         return abort(403)
 
     data = request.form
+
     if instance_id:
         revision = NewsRevision.get_latest(instance_id)
 

@@ -1,46 +1,25 @@
-{% from "macros/pagination.htm" import render_pagination %}
+{% from 'macros/form.htm' import render_field, render_select, render_file, render_submit %}
 
-{% extends "base.htm" %}
+{% extends 'content.htm' %}
 
-{% block title %}Tentamens{% endblock %}
+{% block content %}
 
-{%block page %}
-	<fieldset>
-		<legend>Bewerk {{examination.title}}</legend>
-		{{message}}
-		<form action="?" method=post enctype=multipart/form-data>
-			titel </br>
-			<input type=hidden name=examination value="{{examination.id}}">
-			<input type=text name=title value="{{examination.title}}"> <br />
-			vak </br>
-			<select name=course> <br />
-				{% for course in courses %}
-					<option value="{{ course.id }}"
-					{% if course.id == examination.course_id %}
-						selected="selected"
-					{% endif %}
-					>
-					{{course.name}}</option>
-				{% endfor %}
-			</select>
-			<a href="../course/add" class="btn"><i class="glyphicon glyphicon-pencil"></i> <strong>nieuw</strong></a><br />
-			studie </br>
-				<select name=education> <br />
-					{% for education in educations %}
-						<option value="{{ education.id }}"
-						{% if education.id == examination.education_id %}
-							selected="selected"
-						{% endif %}
-						>
-						{{education.name}}</option>
-					{% endfor %}
-				</select>
-				<a href="../education/add" class="btn"><i class="glyphicon glyphicon-pencil"></i> <strong>nieuw</strong></a><br />
+<h1>Tentamen {% if page.id %}bewerken{% else %}uploaden{% endif %}</h1>
 
-			<input type=file name=file><br />
-			<input type=file name=answers>
-			<input type=submit value=Upload>
-		</form>
-	</fieldset>
+<form method='post' enctype='multipart/form-data'>
+    {{ form.csrf_token }}
+
+    {{ render_field(form.title) }}
+
+    {{ render_select(form.course_id) }}
+    {{ render_select(form.education_id) }}
+
+    {{ render_file(form.path) }}
+    {{ render_file(form.answer_path) }}
+
+    {{ render_field(form.comment) }}
+
+    {{ render_submit('Opslaan') }}
+</form>
+
 {% endblock %}
-
