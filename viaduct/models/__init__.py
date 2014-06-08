@@ -12,3 +12,4 @@ from user import User
 from news import NewsRevision
 from page import Page
 from examination import ExaminationRevision
+from custom_form import CustomForm

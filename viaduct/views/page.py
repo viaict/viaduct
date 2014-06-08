@@ -10,7 +10,8 @@ from flask import abort
 
 from viaduct import db
 from viaduct.forms import PageForm, HistoryPageForm
-from viaduct.models import Group
+from viaduct.models import Group, Page, PageRevision, PagePermission, \
+    CustomForm
 from viaduct.models.page import Page, PageRevision, PagePermission
 from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.user import UserAPI
@@ -100,6 +101,10 @@ def edit_page(path=''):
     else:
         form = PageForm()
 
+    form.custom_form_id.choices = \
+        [(c.id, c.name) for c in CustomForm.query.order_by('name')]
+    form.custom_form_id.choices.insert(0, (0, 'Geen formulier'))
+
     groups = Group.query.all()
 
     # on page submit (edit or create)
@@ -117,7 +122,8 @@ def edit_page(path=''):
         new_revision = PageRevision(page, data['title'].strip(),
                                     data['comment'].strip(), current_user,
                                     data['content'].strip(),
-                                    'filter_html' in data)
+                                    'filter_html' in data,
+                                    data['custom_form_id'])
 
         db.session.add(new_revision)
         db.session.commit()

@@ -5,6 +5,7 @@ from flask.ext.login import current_user
 from unidecode import unidecode
 import datetime
 import re
+import difflib
 
 from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.user import UserAPI
@@ -133,12 +134,19 @@ class PimpyAPI:
         ACTIE <name_1>, <name_2>, name_n>: <title of task>
         or
         TODO <name_1>, <name_2>, name_n>: <title of task>
+        this creates a single task for one or multiple users
+
+        ACTIES <name_1>, <name_2>, name_n>: <title of task>
+        or
+        TODOS <name_1>, <name_2>, name_n>: <title of task>
+        this creates one or multiple tasks for one or multiple users
+
+        DONE <task1>, <task2, <taskn>
+        this sets the given tasks on 'done'
 
         usage:
         tasks, dones, removes = parse_minute(content, group_id, minute_id)
         where content is a string with the entire minute
-        group id is the group's id
-        minute id is the minute's id
         """
 
         tasks_found = []
@@ -150,7 +158,7 @@ class PimpyAPI:
             matches = regex.findall(line)
             for action in matches:
                 try:
-                    listed_users, title = action.split(":")
+                    listed_users, title = action.split(":", 1)
                 except:
                     print("could not split the line on ':'.\nSkipping hit.")
                     flash("could not parse: " + action)
@@ -169,35 +177,56 @@ class PimpyAPI:
                     continue
                 tasks_found.append(task)
 
+        regex = re.compile("\s*(?:ACTIES|TODOS) ([^\n\r]*)")
+        for i, line in enumerate(content.splitlines()):
+            matches = regex.findall(line)
+            for action in matches:
+                try:
+                    listed_users, title = action.split(":", 1)
+                except:
+                    print("could not split the line on ':'.\nSkipping hit.")
+                    flash("could not parse: " + action)
+                    continue
+
+                users, message = PimpyAPI.get_list_of_users_from_string(
+                    group_id, listed_users)
+                if not users:
+                    print(message)
+                    continue
+                for user in users:
+                    try:
+                        task = Task(title, "", None, group_id, [user],
+                                    minute_id, i, 0)
+                    except:
+                        print("wasnt given the right input to create a task")
+                        continue
+                    tasks_found.append(task)
+
         regex = re.compile("\s*(?:DONE) ([^\n\r]*)")
         matches = regex.findall(content)
-        for done_id in matches:
-            try:
-                done_task = Task.query.filter(Task.id == done_id).first()
-            except:
-                print("could not find the given task")
-                flash("could not find DONE " + done_id)
-                continue
-            if done_task:
+        for match in matches:
+            done_ids = match.split(",")
+            for done_id in done_ids:
+                try:
+                    done_task = Task.query.filter(Task.id == done_id).first()
+                except:
+                    print("could not find the given task")
+                    flash("could not find DONE " + done_id)
+                    continue
                 dones_found.append(done_task)
-            else:
-                print("Could not find task " + done_id)
-                flash("could not find DONE " + done_id)
 
         regex = re.compile("\s*(?:REMOVE) ([^\n\r]*)")
         matches = regex.findall(content)
-        for remove_id in matches:
-            try:
-                remove_task = Task.query.filter(Task.id == remove_id).first()
-            except:
-                print("could not find the given task")
-                flash("could not find REMOVE " + remove_id)
-                continue
-            if remove_task:
+        for match in matches:
+            remove_ids = match.split(",")
+            for remove_id in remove_ids:
+                try:
+                    remove_task = Task.query.filter(Task.id == remove_id).first()
+                except:
+                    print("could not find the given task")
+                    flash("could not find REMOVE " + remove_id)
+                    continue
                 removes_found.append(remove_task)
-            else:
-                print("Could not find REMOVE " + remove_id)
-                flash("could not find REMOVE " + remove_id)
 
         return tasks_found, dones_found, removes_found
 
@@ -240,10 +269,11 @@ class PimpyAPI:
         for comma_sep_user in comma_sep:
 
             temp_found_users = []
+            match = difflib.get_close_matches(comma_sep_user, user_names, n=1, cutoff=0.5)
             for i in range(len(users)):
 
                 # could use a filter here, but meh
-                if user_names[i].startswith(comma_sep_user):
+                if user_names[i] == match:
                     temp_found_users.append(users[i])
 
             if len(temp_found_users) == 0:
@@ -251,8 +281,8 @@ class PimpyAPI:
                 temp_found_users = users
 
             # We actually want to be able to add tasks to more than 1 user
-            #if len(temp_found_users) > 1:
-            #   return False, "could not disambiguate %s" % comma_sep_user
+            # if len(temp_found_users) > 1:
+            #     return False, "could not disambiguate %s" % comma_sep_user
 
             found_users.extend(temp_found_users)
         return found_users, ""
@@ -265,7 +295,7 @@ class PimpyAPI:
             flash('Current_user not found')
             return redirect(url_for('pimpy.view_minutes'))
 
-        groups = current_user.groups.filter(Group.name != 'all').all()
+        groups = current_user.groups.filter(Group.name != 'all').order_by(Group.name.asc()).all()
 
         if not type:
             type = 'minutes'

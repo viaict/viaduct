@@ -15,7 +15,7 @@
 				<tr>
 					<th>ID</th>
 					<th>Comment</th>
-					<th>Author</th>
+					<th>User</th>
 					<th>Previous</th>
 					<th>Current</th>
                     <th>Timestamp</th>
@@ -27,7 +27,7 @@
 					<tr>
 						<td>{{ revision.id }}</td>
 						<td>{{ revision.comment }}</td>
-						<td>{{ revision.author.first_name }} {{ revision.author.last_name }}</td>
+						<td>{{ revision.user.first_name }} {{ revision.user.last_name }}</td>
 						<td>{{ previous }}</td>
 						<td>{{ current }}</td>
 						<td>{{ revision.created }}</td>
