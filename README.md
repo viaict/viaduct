@@ -14,18 +14,30 @@ Python dependencies are in `requirements.txt`. Install through pip. Usage of vir
 
 A `config.py` file is needed to run the site. Modify `local_config.py` with your settings and rename the file.
 
+Build dependencies are for ruby and npm:
+* Install Ruby gems
+    - Install Ruby
+    - `gem install bundler`
+    - `bundle install` (if that does not work try this:
+      http://guides.rubygems.org/faqs/#user-install)
+
+* Install Grunt build dependencies
+    - Install nodeJS (with npm included)
+    - `(sudo) npm install -g grunt-cli
+    - `npm install`
+
 Create a database with:
 
 	python create_db.py
 
 Run site with:
 
-	python run.py
+    `./watch.sh`
 
 For troubleshooting tips, see bottom of document.
 
 ##Language
-All code shall be written in **English**, translations should be added through 
+All code shall be written in **English**, translations should be added through
 Babel. After writing code with **English** strings, add their **Dutch**
 translations.
 
