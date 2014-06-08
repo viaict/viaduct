@@ -19,6 +19,7 @@ RECAPTCHA_PRIVATE_KEY = ''
 RECAPTCHA_OPTIONS = {'theme': 'white'}
 
 EXAMINATION_UPLOAD_FOLDER = 'viaduct/static/uploads/examinations'
+EXAMINATION_FILE_DIR = '/static/uploads/examinations'
 UPLOAD_DIR = 'viaduct/static/files/'
 FILE_DIR = '/static/files/'
 

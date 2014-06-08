@@ -1,0 +1,13 @@
+{% extends 'page/view_super.htm' %}
+
+{% block page_title %}{{ revision.title }}{% endblock %}
+
+{% block page_content %}
+
+Tentamen: <a href='{{ revision.get_path() }}' class='btn btn-primary'>Openen</a><br />
+
+{% if revision.answer_path %}
+    Antwoorden: <a href='{{ revision.get_answer_path() }}' class='btn btn-primary'>Openen</a>
+{% endif %}
+
+{% endblock %}

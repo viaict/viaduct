@@ -1,12 +1,15 @@
 import datetime
+import os
 
-from viaduct import db
+from viaduct import application, db
 
 from viaduct.models.page import IdRevision
 from viaduct.models.course import Course
 from viaduct.models.education import Education
 from viaduct.models.user import User
 from viaduct.models import BaseEntity
+
+FILE_FOLDER = application.config['EXAMINATION_FILE_FOLDER']
 
 
 class ExaminationRevision(IdRevision):
@@ -45,3 +48,9 @@ class ExaminationRevision(IdRevision):
         self.user_id = user_id
         self.course_id = course_id
         self.education_id = education_id
+
+    def get_path(self):
+        return os.path.join(FILE_FOLDER, self.path)
+
+    def get_answer_path(self):
+        return os.path.join(FILE_FOLDER, self.answer_path)
