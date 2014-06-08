@@ -246,7 +246,7 @@ def sign_in():
             if denied_from:
                 return redirect(denied_from)
 
-            return redirect(url_for("page.get_page"))
+            return redirect('svia.nl')
     else:
         flash_form_errors(form)
 
