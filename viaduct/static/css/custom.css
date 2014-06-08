@@ -530,14 +530,25 @@ body{
     margin-bottom: 40px;
 }
 
+header{
+    max-height: 80px;
+}
 
 header #loginImage{
     position: absolute;
-    right: 15px;
+    right: 0;
     top: 11px;
     border: 1px solid #eee;
     width: 40px;
     height: 40px;
+}
+
+header .navbar-nav{
+    margin-left: 10px;
+    float: left;
+    width: 1000px;
+    overflow: hidden;
+    height: 60px;
 }
 
 header #loginContainer{
@@ -756,9 +767,7 @@ p{line-height: 25px;}
         max-height: none;
     }
     
-    header .navbar-fixed-top{
-        position: relative;
-    }
+ 
     
     header .navbar-nav>li>a {
         padding-top: 0px;
@@ -774,6 +783,10 @@ p{line-height: 25px;}
     header .navbar-brand {
         padding-right: 0;
     }
+
+    header .navbar-nav{
+        width: 580px;
+    }
 }
 
 @media(min-width:992px){
@@ -781,10 +794,18 @@ p{line-height: 25px;}
         padding: 20px 10px 20px 10px;
         font-size: 14px;
     }
+
+    header .navbar-nav{
+        width: 800px;
+    }
 }
 @media(min-width:1200px){
     header .navbar-default .navbar-nav>li>a {
         padding: 20px 15px 20px 15px;
         font-size:16px;
+    }
+
+    header .navbar-nav{
+        width: 1000px;
     }
 }
