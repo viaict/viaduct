@@ -1,6 +1,6 @@
 body {
     overflow-y: scroll;
-    margin-bottom:20px;
+   
 }
 
 img {
@@ -543,6 +543,19 @@ header #loginImage{
     height: 40px;
 }
 
+header #loginImageMobile{
+    position: relative;
+    right: 0;
+    top: 0;
+    float: right;
+    margin-top: 8px;
+    border: 1px solid #eee;
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    cursor: pointer
+}
+
 header .navbar-nav{
     margin-left: 10px;
     float: left;
@@ -753,8 +766,27 @@ h1,h2,h3,h4,h5,h6{
 
 footer{
     border-top: 4px solid  #004b99;
-    background: #333;
+    background: #004b99;
     margin-top: 40px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    color: #fff; 
+}
+
+footer ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    mar
+}
+
+footer #map-canvas{
+    width: 100%;
+    height: 400px;
+}
+
+footer a{
+    color: #fff;
 }
 
 p{line-height: 25px;}
@@ -766,7 +798,7 @@ p{line-height: 25px;}
     }
 
     header{
-        max-height: auto;
+        max-height: none;
     }
 
     header .navbar-brand img {
@@ -791,6 +823,50 @@ p{line-height: 25px;}
     header .navbar-fixed-top{
         position: relative;
     }
+
+    header .navbar-default .navbar-toggle{
+        padding: 12px 10px;
+        border-color:#eee;
+    }
+
+    header #logoutButtonContainerMobile{
+        width: 100%;
+    }
+
+    header #logoutButtonContainerMobile button{
+        width: 100%;
+        margin-bottom: 20px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+    header .navbar-collapse{
+        padding-top: 10px;
+    }
+
+    header #sign-in-menu-mobile{
+        padding-bottom: 20px;
+    }
+
+    header #sign-in-menu-mobile button{
+        width: 100%;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    header #userImageMobile{
+        width: 20%;
+        max-width: 100px;
+        margin-right: 5%;
+        float: left;
+        margin-bottom: 20px;
+    }
+
+    header #userInformationMobile{
+        width: 65%;
+        float: left;
+    }
+
 }
 @media(min-width:768px){
     header .navbar-default .navbar-nav>li>a {
@@ -805,6 +881,11 @@ p{line-height: 25px;}
     header .navbar-nav{
         width: 580px;
     }
+
+    header .navbar-collapse.collapse.loginForMobile{
+        display: none !important;
+    }
+
 }
 
 @media(min-width:992px){

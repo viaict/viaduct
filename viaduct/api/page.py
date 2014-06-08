@@ -1,16 +1,15 @@
 from flask.ext.login import current_user
-from viaduct.models.page import Page, PagePermission, PageRevision  
+from viaduct.models.page import Page, PageRevision
 
 from viaduct import db
 
-from flask import request, url_for, render_template
+from flask import render_template
 
-from viaduct.models.group import Group
 
 class PageAPI:
     @staticmethod
     def remove_page(path):
-        page = Page.query.filter(Page.path==path).first()
+        page = Page.query.filter(Page.path == path).first()
 
         if not page:
             return False
@@ -34,14 +33,13 @@ class PageAPI:
             footer = Page('footer')
 
         if footer.revisions.count() > 0:
-            revision = footer.revisions.order_by(PageRevision.id.desc()).first()
+            revision = footer.revisions.order_by(PageRevision.id.desc()).\
+                first()
             exists = True
         else:
-            revision = PageRevision(footer, current_user,
-                                                '', '<b> No footer found </b>'
-                                                '', True)
+            revision = PageRevision(footer, current_user, '',
+                                    '<b> No footer found </b>' '', True)
             exists = False
 
-        print vars(footer)
-
-        return render_template('page/get_footer.htm', footer_revision=revision, footer=footer, exists=exists)
+        return render_template('page/get_footer.htm', footer_revision=revision,
+                               footer=footer, exists=exists)
