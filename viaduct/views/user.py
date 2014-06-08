@@ -11,6 +11,7 @@ from flask.ext.login import current_user, login_user, logout_user
 
 from sqlalchemy import or_
 
+
 from viaduct import db, login_manager
 from viaduct.helpers import flash_form_errors
 from viaduct.forms import SignUpForm, SignInForm, ResetPassword

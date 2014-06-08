@@ -20,9 +20,8 @@ from viaduct.api.page import PageAPI
 blueprint = Blueprint('page', __name__)
 
 
-@blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<path:path>', methods=['GET', 'POST'])
-def get_page(path=''):
+def get_page(path=None):
     path = Page.strip_path(path)
     page = Page.get_by_path(path)
 
