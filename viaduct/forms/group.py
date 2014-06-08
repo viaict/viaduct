@@ -1,5 +1,7 @@
-from flask.ext.wtf import Form, BooleanField, FormField, FieldList,\
-    SubmitField, SelectField
+from flask_wtf import Form
+
+from wtforms import BooleanField, FormField, FieldList, SubmitField, \
+    SelectField
 
 
 class ViewGroupEntry(Form):

@@ -1,5 +1,5 @@
 from viaduct import db
-from flask.ext.wtf import widgets, SelectMultipleField
+from wtforms import widgets, SelectMultipleField
 from viaduct.models import BaseEntity
 
 books = db.Table(
