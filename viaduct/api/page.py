@@ -1,5 +1,5 @@
 from flask.ext.login import current_user
-from viaduct.models.page import Page, PagePermission, PageRevision  
+from viaduct.models.page import Page, PagePermission, PageRevision
 
 from viaduct import db
 
@@ -33,15 +33,14 @@ class PageAPI:
         if not footer:
             footer = Page('footer')
 
-        if footer.revisions.count() > 0:
-            revision = footer.revisions.order_by(PageRevision.id.desc()).first()
+        revision = footer.get_latest_revision()
+
+        if revision:
             exists = True
         else:
-            revision = PageRevision(footer, current_user,
-                                                '', '<b> No footer found </b>'
-                                                '', True)
+            revision = PageRevision(footer, 'Footer', '', current_user,
+                                    '<strong>No footer found</strong>')
             exists = False
 
-        print vars(footer)
-
-        return render_template('page/get_footer.htm', footer_revision=revision, footer=footer, exists=exists)
+        return render_template('page/get_footer.htm', footer_revision=revision,
+                               footer=footer, exists=exists)
