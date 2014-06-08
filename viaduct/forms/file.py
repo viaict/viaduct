@@ -1,4 +1,6 @@
-from flask.ext.wtf import Form, FileField, SubmitField
+from flask.ext.wtf import Form
+from flask_wtf.file import FileField
+from wtforms import SubmitField
 
 
 class FileForm(Form):

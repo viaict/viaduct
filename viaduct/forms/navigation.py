@@ -1,9 +1,12 @@
-from flask.ext.wtf import Form, TextField, Required, BooleanField, SubmitField
+from flask_wtf import Form
+from wtforms import StringField, BooleanField, SubmitField
+from wtforms.validators import InputRequired
+
 
 class NavigationEntryForm(Form):
-	title = TextField('Titel', validators=[Required()])
-	parent_id = TextField('Lijst')
-	url = TextField('URL', validators=[Required()])
-	external = BooleanField('Externe link', default=False)
-	activity_list = BooleanField('Lijst van activiteiten', default=False)
-	submit = SubmitField('Opslaan')
+    title = StringField('Titel', validators=[InputRequired()])
+    parent_id = StringField('Lijst')
+    url = StringField('URL', validators=[InputRequired()])
+    external = BooleanField('Externe link', default=False)
+    activity_list = BooleanField('Lijst van activiteiten', default=False)
+    submit = SubmitField('Opslaan')

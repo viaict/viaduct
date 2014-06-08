@@ -1,9 +1,10 @@
-from flask.ext.wtf import Form, Required, TextField, TextAreaField, DateField,\
-		SelectField, SubmitField
+from flask_wtf import Form
+from wtforms import StringField, SelectField, SubmitField
+
 
 class ContactForm(Form):
-	name = TextField('Naam')
-	email = TextField('Email')
-	phone_nr = TextField('Telefoon')
-	location_id = SelectField('Locatie', coerce=int)
-	submit = SubmitField('Opslaan')
+    name = StringField('Naam')
+    email = StringField('Email')
+    phone_nr = StringField('Telefoon')
+    location_id = SelectField('Locatie', coerce=int)
+    submit = SubmitField('Opslaan')
