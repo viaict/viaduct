@@ -26,3 +26,4 @@ wsgiref==0.1.2
 python-dateutil==2.2
 Unidecode==0.04.14
 google-api-python-client
+unicodecsv==0.9.4

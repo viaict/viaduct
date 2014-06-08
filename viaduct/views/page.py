@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+import datetime
 import difflib
 
 from flask import Blueprint

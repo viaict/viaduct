@@ -9,16 +9,17 @@
 
 <p><em>Gele entries zijn "reserve" inschrijvingen</em>
 
-<hr>
+<hr />
 
 {% if custom_form.results %}
 <table class="table">
 	<tr>
-		<th>Gebruiker
-		<th>Informatie
-		<th>Datum aanmelding
-		<th>Betaald
-		<th>
+        <th>Gebruiker</th>
+        <th>Informatie</th>
+        <th>Datum aanmelding</th>
+        <th>Betaald</th>
+        <th></th>
+    </tr>
 
 	{% for result in custom_form.results %}
 		<tr {{ result.class }}>
@@ -30,6 +31,7 @@
 				{% else %}
 					Verwijderde account
 				{% endif %}
+            </td>
 			<td>
 				{% if result.owner.id %}
 				{{ result.owner.email }}<br>
@@ -37,22 +39,24 @@
 				{% endif %}
 
 				{{ result.form_entry|safe }}
-			<td>{{ result.time }}
+            </td>
+            <td>{{ result.time }}</td>
 			<td>
 				<button id="{{ result.id }}" title="Gebruiker als betaald aan- / afvinken" class="btn btn-sm btn-success has_payed">
-					{% if result.has_payed %} 
-						<i class="glyphicon glyphicon-ok"></i>
+					{% if result.has_payed %}
+						<i class="glyphicon glyphicon-check"></i>
 					{% else %}
-						<i class="glyphicon glyphicon-money"></i>
+						<i class="glyphicon glyphicon-unchecked"></i>
 					{% endif %}
 				</button>
-				
-			<td><button id="{{ result.id }}" title="Inzending verwijderen" message="Hoi {{ current_user.first_name }}, weet je zeker dat je deze wilt verwijderen?" class="btn btn-sm btn-danger keeswildeleteknopje"><i class="glyphicon glyphicon-trash"></i></button>
+            </td>
+            <td><button id="{{ result.id }}" title="Inzending verwijderen" message="Hoi {{ current_user.first_name }}, weet je zeker dat je deze wilt verwijderen?" class="btn btn-sm btn-danger keeswildeleteknopje"><i class="glyphicon glyphicon-trash"></i></button></td>
+        </tr>
 	{% endfor %}
 </table>
 
 {% else %}
-<p>Er zijn nog geen resultaten om te tonen
+<p>Er zijn nog geen resultaten om te tonen</p>
 {% endif %}
 
 <script src="/static/js/has_payed.js"></script>

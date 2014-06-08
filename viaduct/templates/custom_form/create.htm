@@ -19,11 +19,11 @@
 
 	<hr>
 
-	{{ render_field(form.name, class="col-md-6") }}
-	{{ render_field(form.max_attendants, class="col-md-3") }}
-	{{ render_field(form.price, class="col-md-3") }}
-	{{ render_field(form.msg_success, class="col-md-6") }}
-	{{ render_field(form.transaction_description, class="col-md-6") }}
+	{{ render_field(form.name) }}
+	{{ render_field(form.max_attendants) }}
+	{{ render_field(form.price) }}
+	{{ render_field(form.msg_success) }}
+	{{ render_field(form.transaction_description) }}
 
 	<input type="hidden" name="origin_holder_for_edits" value="{{ form.origin.data }}">
 

@@ -15,7 +15,6 @@ from viaduct.models.degree import Degree
 from viaduct.models.education import Education
 
 from viaduct.models.vacancy import Vacancy
-from viaduct.models.requirement import Requirement
 from viaduct.models.education import Education
 from viaduct.models.programming_language import ProgrammingLanguage
 from viaduct.models.company import Company
@@ -343,12 +342,12 @@ db.session.add(nav_admin)
 db.session.commit()
 
 nav_nav = NavigationEntry(nav_admin, 'Navigatie', '/navigation', False, False,
-                          1)
+                          3)
 db.session.add(nav_nav)
 db.session.commit()
 
 nav_forms = NavigationEntry(nav_admin, 'Formulieren', '/forms/', False, False,
-                            2)
+                            3)
 db.session.add(nav_forms)
 db.session.commit()
 
@@ -362,7 +361,7 @@ nav_ext = NavigationEntry(nav_page1, 'Externaal', 'viaduct.svia.nl', True,
 db.session.add(nav_ext)
 db.session.commit()
 
-nav_pimpy = NavigationEntry(None, 'Pimpy', '/pimpy', False, False, 5)
+nav_pimpy = NavigationEntry(None, 'Pimpy', '/pimpy', False, False, 1)
 db.session.add(nav_pimpy)
 
 nav_vacancies = NavigationEntry(None, 'Vacaturebank', '/vacancies/', False,

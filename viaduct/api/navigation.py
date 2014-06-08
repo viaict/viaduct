@@ -1,11 +1,12 @@
 from flask import render_template, request
-
+# -*- coding: utf-8 -*- 
 import datetime
 
 from viaduct import db, application
 from viaduct.models.activity import Activity
 from viaduct.models.navigation import NavigationEntry
 from viaduct.models.page import Page
+from viaduct.forms import SignInForm
 from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.user import UserAPI
 
@@ -14,8 +15,10 @@ class NavigationAPI:
 	def get_navigation_bar():
 		entries = NavigationAPI.get_entries(True)
 		entries = NavigationAPI.remove_unauthorized(entries)
+		login_form = SignInForm()
 
-		return render_template('navigation/view_bar.htm', bar_entries=entries)
+		return render_template('navigation/view_bar.htm', bar_entries=entries,
+							   login_form=login_form)
 
 
 	@staticmethod

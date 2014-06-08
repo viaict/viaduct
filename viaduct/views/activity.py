@@ -33,8 +33,8 @@ def allowed_file(filename):
 # Overview of activities
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<string:archive>/', methods=['GET', 'POST'])
-@blueprint.route('/page/<int:page>', methods=['GET', 'POST'])
-@blueprint.route('/<string:archive>/page/<int:page>', methods=['GET', 'POST'])
+@blueprint.route('/page/<int:page>/', methods=['GET', 'POST'])
+@blueprint.route('/<string:archive>/page/<int:page>/', methods=['GET', 'POST'])
 def view(archive="", page=1):
     if not GroupPermissionAPI.can_read('activity'):
         return abort(403)
@@ -251,8 +251,7 @@ def create_mollie_transaction(result_id):
         amount = form_result.form.price
         user = form_result.owner
         payment_url, transaction = MollieAPI.create_transaction(
-            amount, description, user=user)
-        transaction.form_result = form_result
+            amount, description, user=user, form_result=form_result)
         db.session.commit()
         return redirect(payment_url)
     else:

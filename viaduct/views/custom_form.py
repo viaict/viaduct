@@ -15,15 +15,26 @@ from viaduct.models.group import Group
 from viaduct.models.custom_form import CustomForm, CustomFormResult, CustomFormFollower
 from viaduct.api.group import GroupPermissionAPI
 
+from sqlalchemy import desc
+
 blueprint = Blueprint('custom_form', __name__, url_prefix='/forms')
 
 @blueprint.route('/', methods=['GET', 'POST'])
-@blueprint.route('/page/<int:page>', methods=['GET', 'POST'])
-def view(page=1):
+@blueprint.route('/page', methods=['GET', 'POST'])
+@blueprint.route('/page/', methods=['GET', 'POST'])
+def view():
+
+    page = request.args.get('page_nr', '')
+
+    if not page:
+        page = 1
+    else:
+        page = int(page)
+
     if not GroupPermissionAPI.can_write('custom_form'):
         return abort(403)
 
-    custom_forms = CustomForm.query.order_by("created")
+    custom_forms = CustomForm.query.order_by(desc("id"))
 
     if current_user and current_user.id > 0:
         follows = CustomFormFollower.query.filter(CustomFormFollower.owner_id == current_user.id).all()

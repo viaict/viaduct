@@ -3,5 +3,5 @@ $(".has_payed").click(function() {
 
 	// Adjust the money icon -> change it to "Ok" icon
 	$(this).find('i')
-		.toggleClass('icon-money icon-ok');
+		.toggleClass('glyphicon-unchecked glyphicon-check');
 });
