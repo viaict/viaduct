@@ -1,7 +1,7 @@
 import bcrypt
 import random
 import datetime
-from unicodecsv import writer
+from csv import writer
 from StringIO import StringIO
 
 from flask import flash, redirect, render_template, request, url_for, abort,\
@@ -386,6 +386,7 @@ def view(page_nr=1):
 
     return render_template('user/view.htm', users=users, search=search)
 
+
 @blueprint.route('/users/export', methods=['GET'])
 def user_export():
     #if not current_user.has_permission('user.view'):
@@ -396,7 +397,7 @@ def user_export():
     users = User.query.all()
     si = StringIO()
     cw = writer(si)
-    cw.writerow([c.name for c in User.__mapper__.columns ])
+    cw.writerow([c.name for c in User.__mapper__.columns])
     for user in users:
-      cw.writerow([getattr(user, c.name) for c in User.__mapper__.columns ])
+        cw.writerow([getattr(user, c.name) for c in User.__mapper__.columns])
     return si.getvalue().strip('\r\n')

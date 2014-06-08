@@ -11,6 +11,7 @@ Python dependencies are in `requirements.txt`. Install through pip. Usage of vir
 	virtualenv venv/
 	. venv/bin/activate
 	pip install -r requirements.txt
+    pip install git+https://github.com/enorvelle/GoogleApiPython3x.git --upgrade
 
 A `config.py` file is needed to run the site. Modify `local_config.py` with your settings and rename the file.
 
@@ -25,7 +26,7 @@ Run site with:
 For troubleshooting tips, see bottom of document.
 
 ##Language
-All code shall be written in **English**, translations should be added through 
+All code shall be written in **English**, translations should be added through
 Babel. After writing code with **English** strings, add their **Dutch**
 translations.
 
