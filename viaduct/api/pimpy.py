@@ -135,6 +135,11 @@ class PimpyAPI:
         TODO <name_1>, <name_2>, name_n>: <title of task>
         this creates a single task for one or multiple users
 
+        ACTIES <name_1>, <name_2>, name_n>: <title of task>
+        or
+        TODOS <name_1>, <name_2>, name_n>: <title of task>
+        this creates one or multiple tasks for one or multiple users
+
         DONE <task1>, <task2, <taskn>
         this sets the given tasks on 'done'
 
