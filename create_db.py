@@ -150,7 +150,7 @@ page = Page('')
 db.session.add(page)
 db.session.commit()
 
-revision = PageRevision(page, 'Homepage!', '', admin, 'herr derr 1')
+revision = PageRevision(page, 'Homepage!', '', admin, 'herr derr 1', None)
 db.session.add(revision)
 db.session.commit()
 

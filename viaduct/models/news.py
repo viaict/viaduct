@@ -8,21 +8,21 @@ class NewsRevision(IdRevision):
     content = db.Column(db.Text)
     end_time = db.Column(db.Date)
 
-    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    author = db.relationship('User', backref=db.backref('news_revisions',
-                                                        lazy='dynamic'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User', backref=db.backref('news_revisions',
+                                                      lazy='dynamic'))
 
     page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
     page = db.relationship('Page', backref=db.backref('news_revisions',
                                                       lazy='dynamic'))
 
     def __init__(self, page=None, title='', comment='', instance_id=None,
-                 content='', author_id=None, end_time=None):
+                 content='', user_id=None, end_time=None):
         super(NewsRevision, self).__init__(title, comment, instance_id)
 
         self.page = page
 
-        self.author_id = author_id
+        self.user_id = user_id
         self.content = content
         self.end_time = end_time
 
