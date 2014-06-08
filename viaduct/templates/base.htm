@@ -9,30 +9,17 @@
         <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
 
         <link href="http://svia.nl/static/img/via.png" rel="image_src" />
+        <link href='/static/css/bootstrap-editable.css' rel='stylesheet'>
 
 
         <link href="/static/css/custom.css" rel="stylesheet" />
 
-        <script src="/static/js/jquery.js"></script>
-        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
-        <script src="/static/js/analytics.js"></script>
-        <script src="/static/js/throttle.js"></script>
-        <script src="/static/js/jquery.expander.min.js"></script>
-        <script src="/static/js/confirmation.js"></script>
-        <script src="/static/js/twitter-bootstrap-hover-dropdown.min.js"></script>
-        <script src='/static/js/timepicker.js'></script>
-        <script src='/static/js/flash.js'></script>
-        <script src="/static/js/jquery-ui-1.10.4.custom.min.js"></script>
-        <script src="/static/js/sprintf.min.js"></script>
-        <script src="/static/js/jquery.insert-at-caret.js"></script>
-        <script src='/static/js/datepicker.js'></script>
-        <script src='/static/js/bootstrap-editable.min.js'></script>
-        <script src="/static/js/jquery-carousel.js"></script>
-        <script src="/static/js/custom.js"></script>
-        <script src="/static/js/footer.js"></script>
-
+        <script src="/static/js/global.js"></script>
         <!-- <script src="http://localhost/handiger/handiger.js"></script> -->
+
+        {% block includes %}
+        {% endblock %}
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -80,6 +67,5 @@
             <div class="row">
             </div> -->
 
-        <script src='/static/js/textarea.js'></script>
     </body>
 </html>

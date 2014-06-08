@@ -2,10 +2,11 @@
 
 {% extends "content.htm" %}
 
-{% block content %}
+{% block includes %}
+    <script src="/static/js/form.date.helper.js"></script>
+{% endblock %}
 
-<script src='/static/js/throttle.js'></script>
-<script src='/static/js/textarea.dev.js'></script>
+{% block content %}
 
 {% if activity.id: %}
 <form method="post" class="pull-right" action="{{ url_for('activity.remove_activity', activity_id=activity.id) }}">
@@ -76,5 +77,4 @@
     </div>
 </form>
 
-<script src="/static/js/form.date.helper.js"></script>
 {% endblock %}
