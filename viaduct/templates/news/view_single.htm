@@ -7,7 +7,7 @@
         <div class='col-md-12 content'>{{ revision.content | markdown }}</div>
     </div>
     <div class='row'>
-        <div class='col-md-6 author'>Geschreven door <em>{{ revision.author.name }}</em></div>
+        <div class='col-md-6 author'>Geschreven door <em>{{ revision.user.name }}</em></div>
         <div class='col-md-6 last-edited text-right'>
             {% if (revision.created - page.created) >= datetime.timedelta(0, 1) %}
                 Laatst bewerkt op <em>{{ revision.created.strftime('%Y-%m-%d') }}</em> om <em>{{ revision.created.strftime('%H:%M') }}</em><br />
