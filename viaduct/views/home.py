@@ -37,8 +37,6 @@ def home():
         page = Page.get_by_path(Page.strip_path(path))
         pages.append(page)
 
-        print(path, page)
-
         if not page:
             revision = PageRevision(None, None, None, None, None)
             revision.title = 'Not found!'
