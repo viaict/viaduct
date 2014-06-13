@@ -146,14 +146,6 @@ group_bestuur.add_user(user_tijmen)
 group.add_user(user_tijmen)
 db.session.commit()
 
-page = Page('')
-db.session.add(page)
-db.session.commit()
-
-revision = PageRevision(page, 'Homepage!', '', admin, 'herr derr 1', None)
-db.session.add(revision)
-db.session.commit()
-
 
 news_page = Page('news/1/', 'news')
 db.session.add(news_page)

@@ -40,7 +40,6 @@ def get_page(path=''):
                            revision=revision)
 
 
-@blueprint.route('/history/', methods=['GET', 'POST'])
 @blueprint.route('/history/<path:path>', methods=['GET', 'POST'])
 def get_page_history(path=''):
     form = HistoryPageForm(request.form)
@@ -80,7 +79,6 @@ def get_page_history(path=''):
                                          form.current))
 
 
-@blueprint.route('/edit/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<path:path>', methods=['GET', 'POST'])
 def edit_page(path=''):
     if not GroupPermissionAPI.can_write('page'):
@@ -118,11 +116,14 @@ def edit_page(path=''):
         db.session.add(page)
         db.session.commit()
 
+        custom_form_id = int(data['custom_form_id'])
+        if not custom_form_id:
+            custom_form_id = None
+
         new_revision = PageRevision(page, data['title'].strip(),
                                     data['comment'].strip(), current_user,
                                     data['content'].strip(),
-                                    'filter_html' in data,
-                                    data['custom_form_id'])
+                                    'filter_html' in data, custom_form_id)
 
         db.session.add(new_revision)
         db.session.commit()

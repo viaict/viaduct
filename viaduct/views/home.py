@@ -20,30 +20,38 @@ def home():
     revisions = []
 
     for path in data:
-        page = Page.get_by_path(Page.strip_path(path))
-        pages.append(page)
-
-        if not page:
-            return abort(404)
-
-        revision = page.get_latest_revision()
-        if not revision:
-            return abort(500)
-
         if path == 'activities':
+            revision = PageRevision(None, None, None, None, None)
+
             activities = Activity.query \
                 .filter(Activity.end_time > datetime.datetime.now()) \
                 .order_by(Activity.start_time.asc())
             revision.activity = render_template('activity/view_simple.htm',
                                     activities=activities
                                     .paginate(1, 12, False))
-            print(revision.activity)
+
+            revisions.append(revision)
+
+            continue
+
+        page = Page.get_by_path(Page.strip_path(path))
+        pages.append(page)
+
+        print(path, page)
+
+        if not page:
+            revision = PageRevision(None, None, None, None, None)
+            revision.title = 'Not found!'
+            revision.content = 'Page not found'
+
+            revisions.append(revision)
+
+            continue
+
+        revision = page.get_latest_revision()
+        if not revision:
+            return abort(500)
+
         revisions.append(revision)
-
-    for page in pages:
-        print(page)
-
-    for revision in revisions:
-        print(revision.title)
 
     return render_template('home/home.htm', data=revisions)
