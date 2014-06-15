@@ -156,6 +156,7 @@ class PimpyAPI:
         regex = re.compile("\s*(?:ACTIE|TODO) ([^\n\r]*)")
         for i, line in enumerate(content.splitlines()):
             matches = regex.findall(line)
+
             for action in matches:
                 try:
                     listed_users, title = action.split(":", 1)
@@ -169,6 +170,7 @@ class PimpyAPI:
                 if not users:
                     print(message)
                     continue
+
                 try:
                     task = Task(title, "", None, group_id, users,
                                 minute_id, i, 0)
@@ -180,6 +182,7 @@ class PimpyAPI:
         regex = re.compile("\s*(?:ACTIES|TODOS) ([^\n\r]*)")
         for i, line in enumerate(content.splitlines()):
             matches = regex.findall(line)
+
             for action in matches:
                 try:
                     listed_users, title = action.split(":", 1)
@@ -193,6 +196,7 @@ class PimpyAPI:
                 if not users:
                     print(message)
                     continue
+
                 for user in users:
                     try:
                         task = Task(title, "", None, group_id, [user],
@@ -255,6 +259,9 @@ class PimpyAPI:
         if comma_sep is None:
             return False, "Did not receive any comma separated users"
 
+        if not comma_sep:
+            return group.users.all(), ''
+
         comma_sep = map(lambda x: x.lower().strip(), comma_sep.split(','))
 
         found_users = []
@@ -267,24 +274,24 @@ class PimpyAPI:
         user_names = [unidecode(x) for x in user_names]
 
         for comma_sep_user in comma_sep:
+            match = difflib.get_close_matches(comma_sep_user, user_names, n=1,
+                                              cutoff=0)
+            found = False
 
-            temp_found_users = []
-            match = difflib.get_close_matches(comma_sep_user, user_names, n=1, cutoff=0.5)
+            if not match:
+                return False, \
+                    'Could not find a match for %s' % (comma_sep_user)
+
             for i in range(len(users)):
-
                 # could use a filter here, but meh
-                if user_names[i] == match:
-                    temp_found_users.append(users[i])
+                if user_names[i] == match[0]:
+                    found_users.append(users[i])
+                    found = True
+                    break
 
-            if len(temp_found_users) == 0:
-                # We want to add an action to all users if none has been found
-                temp_found_users = users
+            if not found:
+                return False, 'Could not find a match for %s' % (comma_sep_user)
 
-            # We actually want to be able to add tasks to more than 1 user
-            # if len(temp_found_users) > 1:
-            #     return False, "could not disambiguate %s" % comma_sep_user
-
-            found_users.extend(temp_found_users)
         return found_users, ""
 
     @staticmethod
