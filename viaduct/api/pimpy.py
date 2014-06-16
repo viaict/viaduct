@@ -275,7 +275,7 @@ class PimpyAPI:
 
         for comma_sep_user in comma_sep:
             match = difflib.get_close_matches(comma_sep_user, user_names, n=1,
-                                              cutoff=0)
+                                    cutoff=application.config['PIMPY_CUTOFF'])
             found = False
 
             if not match:
