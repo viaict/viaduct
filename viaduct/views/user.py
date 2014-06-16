@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import bcrypt
 import random
 import datetime
