@@ -170,7 +170,7 @@ def sign_up():
     # Redirect the user to the index page if he or she has been authenticated
     # already.
     if current_user and current_user.is_authenticated():
-        return redirect(url_for('page.get_page'))
+        return redirect(url_for('home.home'))
 
     form = SignUpForm(request.form)
 
@@ -224,7 +224,7 @@ def sign_in():
     # Redirect the user to the index page if he or she has been authenticated
     # already.
     if current_user and current_user.is_authenticated():
-        return redirect(url_for('page.get_page'))
+        return redirect(url_for('home.home'))
 
     form = SignInForm(request.form)
 
@@ -293,8 +293,6 @@ def request_password():
 
             flash('Er is een email verstuurd naar ' + form.email.data +
                   ' met instructies.', 'succes')
-
-            # return redirect(url_for('page.get_page'))
     else:
         flash_form_errors(form)
 
