@@ -247,7 +247,7 @@ def sign_in():
             if denied_from:
                 return redirect(denied_from)
 
-            return redirect('/')
+            return redirect('home.home')
     else:
         flash_form_errors(form)
 
@@ -264,7 +264,7 @@ def sign_out():
     if 'denied_from' in session:
         session['denied_from'] = None
 
-    return redirect(url_for('/'))
+    return redirect(url_for('home.home'))
 
 
 @blueprint.route('/request_password/', methods=['GET', 'POST'])
