@@ -65,7 +65,7 @@ def view_single(user_id=None):
         .order_by(Activity.start_time)
     old_activities = activities\
         .filter(Activity.end_time < datetime.datetime.today()).distinct()\
-        .order_by(Activity.start_time)
+        .order_by(Activity.start_time.desc())
 
     return render_template('user/view_single.htm', user=user,
                            new_activities=new_activities,
