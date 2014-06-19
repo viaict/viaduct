@@ -247,7 +247,7 @@ def sign_in():
             if denied_from:
                 return redirect(denied_from)
 
-            return redirect('home.home')
+            return redirect(url_for('home.home'))
     else:
         flash_form_errors(form)
 
