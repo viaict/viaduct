@@ -212,7 +212,7 @@ def sign_up():
 
         login_user(user)
 
-        return redirect(url_for('page.get_page'))
+        return redirect(url_for('home.home'))
     else:
         flash_form_errors(form)
 
