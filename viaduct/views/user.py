@@ -379,11 +379,17 @@ def view(page_nr=1):
         search = request.args.get('search')
 
         if search:
-            users = users\
-                .filter(or_(User.first_name.like('%' + search + '%'),
-                            User.last_name.like('%' + search + '%'),
-                            User.email.like('%' + search + '%'),
-                            User.student_id.like('%' + search + '%')))
+            searches = search.split(' ')
+
+            for s in searches:
+                if not s:
+                    continue
+
+                users = users\
+                    .filter(or_(User.first_name.like('%' + s + '%'),
+                                User.last_name.like('%' + s + '%'),
+                                User.email.like('%' + s + '%'),
+                                User.student_id.like('%' + s + '%')))
 
     if request.args.get('vvv'):
         vvv_checked = True
