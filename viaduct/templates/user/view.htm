@@ -9,6 +9,8 @@
 	<div class="col-md-12">
 		<form method="get" action="{{ url_for('user.view') }}" enctype=multipart/form-data class="form-inline" >
 			<input name="search" id="search" class="col-md-5" type="text" placeholder="Zoeken" value="{{search}}"></input>
+            <label for='vvv_field'>Vriend van <strong>via</strong></label>
+            <input type='checkbox' id='vvv_field' name='vvv' {% if vvv_checked %}checked{% endif %} />
 			<button type="submit" class="btn btn-primary"> <i class="glyphicon glyphicon-search" id="submit"></i></button>
 		</form>
 	</div>

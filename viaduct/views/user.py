@@ -369,22 +369,33 @@ def view(page_nr=1):
 
         redirect(url_for('user.view'))
 
+    vvv_checked = False
+    search = ''
+
     # Get a list of users to render for the current page.
+    users = User.query
+
     if request.args.get('search'):
         search = request.args.get('search')
-        users = User.query\
-            .filter(or_(User.first_name.like('%' + search + '%'),
-                        User.last_name.like('%' + search + '%'),
-                        User.email.like('%' + search + '%'),
-                        User.student_id.like('%' + search + '%')))\
-            .order_by(User.first_name).order_by(User.last_name)\
-            .paginate(page_nr, 15, False)
-    else:
-        search = ''
-        users = User.query.order_by(User.first_name).order_by(User.last_name)\
-            .paginate(page_nr, 15, False)
 
-    return render_template('user/view.htm', users=users, search=search)
+        if search:
+            users = users\
+                .filter(or_(User.first_name.like('%' + search + '%'),
+                            User.last_name.like('%' + search + '%'),
+                            User.email.like('%' + search + '%'),
+                            User.student_id.like('%' + search + '%')))
+
+    if request.args.get('vvv'):
+        vvv_checked = True
+        users = users.filter(User.favourer == True)
+
+    users = users\
+        .order_by(User.first_name)\
+        .order_by(User.last_name)\
+        .paginate(page_nr, 15, False)
+
+    return render_template('user/view.htm', users=users, search=search,
+                           vvv_checked=vvv_checked)
 
 @blueprint.route('/users/export', methods=['GET'])
 def user_export():
