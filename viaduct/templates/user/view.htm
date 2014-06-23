@@ -17,7 +17,7 @@
 
             <div class='row'>
                 <div class='col-md-3'>
-                    <input type='checkbox' id='vvv_field' name='vvv' {% if vvv_checked %}checked{% endif %} />
+                    <input type='checkbox' id='vvv_field' name='vvv' {% if vvv == 'on' %}checked{% endif %} />
                     <label for='vvv_field'>Vriend van <strong>via</strong></label>
                 </div>
 
@@ -95,7 +95,7 @@
 				</a>
 			</div>
 
-			{{ render_pagination(users, 'user.view', "?search=" + search) }}
+			{{ render_pagination(users, 'user.view', "?search=" + search + '&vvv=' + vvv + '&member=' + member) }}
 		</form>
 	</div>
 </div>

@@ -369,44 +369,42 @@ def view(page_nr=1):
 
         redirect(url_for('user.view'))
 
-    vvv_checked = False
-    member = 'nocare'
     search = ''
+    vvv = ''
+    member = 'nocare'
 
     # Get a list of users to render for the current page.
     users = User.query
 
-    if request.args.get('search'):
-        search = request.args.get('search')
+    search = request.args.get('search')
 
-        if search:
-            searches = search.split(' ')
+    if search:
+        searches = search.split(' ')
 
-            for s in searches:
-                if not s:
-                    continue
+        for s in searches:
+            if not s:
+                continue
 
-                users = users\
-                    .filter(or_(User.first_name.like('%' + s + '%'),
-                                User.last_name.like('%' + s + '%'),
-                                User.email.like('%' + s + '%'),
-                                User.student_id.like('%' + s + '%')))
+            users = users\
+                .filter(or_(User.first_name.like('%' + s + '%'),
+                            User.last_name.like('%' + s + '%'),
+                            User.email.like('%' + s + '%'),
+                            User.student_id.like('%' + s + '%')))
 
-    if request.args.get('vvv'):
-        vvv_checked = True
+    if request.args.get('vvv') and request.args.get('vvv') == 'on':
+        vvv = 'on'
         users = users.filter(User.favourer == True)
 
-    if request.args.get('member'):
-        member_set = request.args.get('member')
+    member_set = request.args.get('member')
 
-        if member_set in ['nocare', 'yes', 'no']:
-            member = member_set
+    if member_set in ['nocare', 'yes', 'no']:
+        member = member_set
 
-            if member == 'yes':
-                users = users.filter(User.has_payed == True)
-            elif member == 'no':
-                users = users.filter(or_(User.has_payed == False,
-                                         User.has_payed == None))
+        if member == 'yes':
+            users = users.filter(User.has_payed == True)
+        elif member == 'no':
+            users = users.filter(or_(User.has_payed == False,
+                                     User.has_payed == None))
 
     users = users\
         .order_by(User.first_name)\
@@ -414,7 +412,7 @@ def view(page_nr=1):
         .paginate(page_nr, 15, False)
 
     return render_template('user/view.htm', users=users, search=search,
-                           vvv_checked=vvv_checked, member=member)
+                           vvv=vvv, member=member)
 
 @blueprint.route('/users/export', methods=['GET'])
 def user_export():
