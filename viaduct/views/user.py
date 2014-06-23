@@ -370,6 +370,7 @@ def view(page_nr=1):
         redirect(url_for('user.view'))
 
     vvv_checked = False
+    member = 'nocare'
     search = ''
 
     # Get a list of users to render for the current page.
@@ -395,13 +396,25 @@ def view(page_nr=1):
         vvv_checked = True
         users = users.filter(User.favourer == True)
 
+    if request.args.get('member'):
+        member_set = request.args.get('member')
+
+        if member_set in ['nocare', 'yes', 'no']:
+            member = member_set
+
+            if member == 'yes':
+                users = users.filter(User.has_payed == True)
+            elif member == 'no':
+                users = users.filter(or_(User.has_payed == False,
+                                         User.has_payed == None))
+
     users = users\
         .order_by(User.first_name)\
         .order_by(User.last_name)\
         .paginate(page_nr, 15, False)
 
     return render_template('user/view.htm', users=users, search=search,
-                           vvv_checked=vvv_checked)
+                           vvv_checked=vvv_checked, member=member)
 
 @blueprint.route('/users/export', methods=['GET'])
 def user_export():

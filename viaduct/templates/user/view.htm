@@ -7,11 +7,34 @@
 
 <div class="row">
 	<div class="col-md-12">
-		<form method="get" action="{{ url_for('user.view') }}" enctype=multipart/form-data class="form-inline" >
-			<input name="search" id="search" class="col-md-5" type="text" placeholder="Zoeken" value="{{search}}"></input>
-            <label for='vvv_field'>Vriend van <strong>via</strong></label>
-            <input type='checkbox' id='vvv_field' name='vvv' {% if vvv_checked %}checked{% endif %} />
-			<button type="submit" class="btn btn-primary"> <i class="glyphicon glyphicon-search" id="submit"></i></button>
+		<form method="get" action="{{ url_for('user.view') }}" enctype='multipart/form-data'>
+            <div class='row'>
+                <input name="search" id="search" class="col-md-5" type="text" placeholder="Zoeken" value="{{search}}"></input>
+                <div class='col-md-7'>
+                    <button type="submit" class="btn btn-primary"> <i class="glyphicon glyphicon-search" id="submit"></i></button>
+                </div>
+            </div>
+
+            <div class='row'>
+                <div class='col-md-3'>
+                    <input type='checkbox' id='vvv_field' name='vvv' {% if vvv_checked %}checked{% endif %} />
+                    <label for='vvv_field'>Vriend van <strong>via</strong></label>
+                </div>
+
+                <div class='col-md-9'>
+                    <div class='row'>
+                        <div class='col-md-1'><em>Lid</em></div>
+                        <div class='col-md-11'>
+                            <input type='radio' id='member_nocare' name='member' value='nocare' {% if member == 'nocare' %}checked{% endif %} />
+                            <label for='member_nocare'>Doet er niet toe</label><br />
+                            <input type='radio' id='member_yes' name='member' value='yes' {% if member == 'yes' %}checked{% endif %} />
+                            <label for='member_yes'>Ja</label><br />
+                            <input type='radio' id='member_no' name='member' value='no' {% if member == 'no' %}checked{% endif %} />
+                            <label for='member_no'>Nee</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
 		</form>
 	</div>
 </div>
