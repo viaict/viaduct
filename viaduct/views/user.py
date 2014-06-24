@@ -376,9 +376,8 @@ def view(page_nr=1):
     # Get a list of users to render for the current page.
     users = User.query
 
-    search = request.args.get('search')
-
-    if search:
+    if request.args.get('search'):
+        search = request.args.get('search')
         searches = search.split(' ')
 
         for s in searches:
