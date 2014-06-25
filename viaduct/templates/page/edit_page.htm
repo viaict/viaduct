@@ -42,16 +42,13 @@
         {{ render_select(form.custom_form_id) }}
 
 		{{ render_button(form.save_page) }}
-
-        {% if not new_page %}
-            <div class="control-group">
-                <div class="controls">
-                    <a class="btn btn-danger" href="{{
-                        url_for('page.remove_page', path=path) }}">Remove page</a>
-                </div>
-            </div>
-        {% endif %}
-	</fieldset>
+    </fieldset>
 </form>
+
+{% if not new_page %}
+    <form action='{{ url_for('page.delete', path=page.path) }}' method='post'>
+        <button class="btn btn-danger" type='submit'>Remove page</button>
+    </form>
+{% endif %}
 
 {% endblock %}

@@ -168,8 +168,8 @@ def edit_page(path=''):
                            path=path, groups=zip(groups, form.permissions))
 
 
-@blueprint.route('/remove/<path:path>/', methods=['GET'])
-def remove_page(path):
+@blueprint.route('/remove/<path:path>/', methods=['POST'])
+def delete(path):
     if not GroupPermissionAPI.can_write('page'):
         return abort(403)
 
@@ -178,4 +178,4 @@ def remove_page(path):
     else:
         flash('The page you are trying to remove does not exist.', 'error')
 
-    return redirect('/')
+    return redirect(url_for('home.home'))

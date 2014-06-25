@@ -134,7 +134,7 @@ class PageRevision(SuperRevision):
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User', backref=db.backref('page_edits',
-                                                        lazy='dynamic'))
+                                                      lazy='dynamic'))
 
     custom_form_id = db.Column(db.Integer, db.ForeignKey('custom_form.id'))
     custom_form = db.relationship('CustomForm',
@@ -143,7 +143,8 @@ class PageRevision(SuperRevision):
 
     page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
     page = db.relationship('Page', backref=db.backref('page_revisions',
-                                                      lazy='dynamic'))
+                                                      lazy='dynamic',
+                                                      cascade='all,delete'))
 
     def __init__(self, page, title, comment, user, content,
                  filter_html=True, custom_form_id=None):
