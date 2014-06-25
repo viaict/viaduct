@@ -172,5 +172,3 @@ def pimpy_minute_line_numbers(data):
         #s += '%d%s\n' % (i, line[:-1])
         s += '<a id="ln%d" class="pimpy_minute_line"/>%s</a>\n' % (i, line[:-1])
     return s
-
-

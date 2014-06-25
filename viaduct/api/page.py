@@ -1,5 +1,5 @@
 from flask.ext.login import current_user
-from viaduct.models.page import Page, PagePermission, PageRevision
+from viaduct.models.page import Page, PageRevision
 
 from viaduct import db
 
