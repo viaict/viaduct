@@ -137,7 +137,8 @@ class UserAPI:
     def get_membership_warning():
         """ Renders a warning when the membership status of a member is
         unclear. """
-        if not current_user or current_user.has_payed is not None:
+        if not current_user or current_user.id == 0 or \
+                current_user.has_payed is not None:
             return ''
 
         return render_template('user/membership_warning.htm')
