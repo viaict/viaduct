@@ -4,6 +4,7 @@ from datetime import datetime
 from viaduct.models import BaseEntity
 from config import LANGUAGES
 
+
 class User(db.Model, BaseEntity):
     __tablename__ = 'user'
 
@@ -15,7 +16,7 @@ class User(db.Model, BaseEntity):
     first_name = db.Column(db.String(256))
     last_name = db.Column(db.String(256))
     locale = db.Column(db.Enum(*LANGUAGES.keys()), default="nl")
-    has_payed = db.Column(db.Boolean)
+    has_payed = db.Column(db.Boolean, default=None)
     shirt_size = db.Column(db.Enum('Small', 'Medium', 'Large'))
     allergy = db.Column(db.String(1024))  # Allergy / medication
     diet = db.Column(db.Enum('Vegetarisch', 'Veganistisch', 'Fruitarier'))
@@ -45,10 +46,10 @@ class User(db.Model, BaseEntity):
         self.student_id = student_id
         self.education_id = education_id
 
-    """ if has_payed is set to true, we want to store the date that happend.
-        Because of legacy code and sqlalchemy we do it this way """
     def __setattr__(self, name, value):
-        if name == 'has_payed' and value == True:
+        """ if has_payed is set to true, we want to store the date that
+        happend.  Because of legacy code and sqlalchemy we do it this way """
+        if name == 'has_payed' and value:
             super(User, self).__setattr__("payed_date", datetime.now())
         super(User, self).__setattr__(name, value)
 

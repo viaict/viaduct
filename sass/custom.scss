@@ -29,6 +29,24 @@ label.checkbox {
     text-align: right;
 }
 
+#membership_warning {
+    background-color: orange;
+    border-color: darkgreen;
+    border-width: 4px 0px;
+    border-style: solid;
+    margin-bottom: 25px;
+
+    div {
+        width: 970px;
+        margin: 0px auto;
+        padding: 10px 0px;
+    }
+
+    p {
+        text-align: center;
+    }
+}
+
 .nav a {
     overflow: visible !important;
 }

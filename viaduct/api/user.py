@@ -6,7 +6,7 @@ import fnmatch
 import urllib
 import hashlib
 
-from flask import request
+from flask import render_template
 
 from viaduct.models.group import Group
 from viaduct.api.file import FileAPI
@@ -73,7 +73,7 @@ class UserAPI:
         """
         filename = f.filename
         # Check if the file is allowed.
-        if not '.' in filename or \
+        if '.' not in filename or \
                 not filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS:
             flash('Bestandstype is niet toegestaan.')
             return
@@ -131,5 +131,13 @@ class UserAPI:
 
     @staticmethod
     def can_write(page):
-        print request.url
         return PagePermission.get_user_rights(current_user, page.id) > 1
+
+    @staticmethod
+    def get_membership_warning():
+        """ Renders a warning when the membership status of a member is
+        unclear. """
+        if current_user.has_payed is not None:
+            return ''
+
+        return render_template('user/membership_warning.htm')
