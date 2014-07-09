@@ -15,7 +15,7 @@ WTForms==2.0
 Werkzeug==0.9.6
 aniso8601==0.82
 argparse==1.2.1
-distribute==0.7.3
+fuzzywuzzy==0.2
 google-api-python-client==1.2
 httplib2==0.9
 itsdangerous==0.24

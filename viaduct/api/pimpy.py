@@ -5,7 +5,8 @@ from flask.ext.login import current_user
 from unidecode import unidecode
 import datetime
 import re
-import difflib
+
+from fuzzywuzzy.process import extractOne
 
 from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.user import UserAPI
@@ -225,7 +226,8 @@ class PimpyAPI:
             remove_ids = match.split(",")
             for remove_id in remove_ids:
                 try:
-                    remove_task = Task.query.filter(Task.id == remove_id).first()
+                    remove_task = Task.query\
+                        .filter(Task.id == remove_id).first()
                 except:
                     print("could not find the given task")
                     flash("could not find REMOVE " + remove_id)
@@ -274,8 +276,7 @@ class PimpyAPI:
         user_names = [unidecode(x) for x in user_names]
 
         for comma_sep_user in comma_sep:
-            match = difflib.get_close_matches(comma_sep_user, user_names, n=1,
-                                    cutoff=application.config['PIMPY_CUTOFF'])
+            match = extractOne(comma_sep_user, user_names)
             found = False
 
             if not match:
@@ -290,7 +291,8 @@ class PimpyAPI:
                     break
 
             if not found:
-                return False, 'Could not find a match for %s' % (comma_sep_user)
+                return False, \
+                    'Could not find a match for %s' % (comma_sep_user)
 
         return found_users, ""
 
@@ -302,7 +304,8 @@ class PimpyAPI:
             flash('Current_user not found')
             return redirect(url_for('pimpy.view_minutes'))
 
-        groups = current_user.groups.filter(Group.name != 'all').order_by(Group.name.asc()).all()
+        groups = current_user.groups\
+            .filter(Group.name != 'all').order_by(Group.name.asc()).all()
 
         if not type:
             type = 'minutes'
@@ -355,7 +358,7 @@ class PimpyAPI:
             group = Group.query.filter(Group.id == group_id).first()
             if not group:
                 abort(404)
-            if not group in UserAPI.get_groups_for_current_user():
+            if group not in UserAPI.get_groups_for_current_user():
                 abort(403)
             list_users['Iedereen'] = tasks
             list_items[group.name] = list_users
@@ -450,14 +453,9 @@ class PimpyAPI:
         list_items[group.name] = query.all()
         tag = "%dln%d" % (list_items[group.name][0].id, int(line_number))
 
-        #return Markup(render_template('pimpy/api/minutes.htm',
-        #                              list_items=list_items, type='minutes',
-        #                              group_id=group_id, line_number=line_number))
-        return render_template('pimpy/api/minutes.htm',
-                                      list_items=list_items, type='minutes',
-                                      group_id=group_id,
-                                      line_number=line_number,
-                                      tag=tag)
+        return render_template('pimpy/api/minutes.htm', list_items=list_items,
+                               type='minutes', group_id=group_id,
+                               line_number=line_number, tag=tag)
 
     @staticmethod
     def update_content(task_id, content):
