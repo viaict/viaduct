@@ -18,7 +18,7 @@
 					        <span class="icon-bar"></span>
 					      </button>
 
-				      	<a class="navbar-brand" href="/"><img src="http://svia.nl/static/img/via.png" width="80"/></a>
+				      	<a class="navbar-brand" href="/"><img src="/static/img/via.png" width="80"/></a>
 				    </div>
 
 				    <!-- Collect the nav links, forms, and other content for toggling -->
@@ -31,7 +31,7 @@
 
 								<li class="{% if children %}dropdown{% endif %}">
 									<a {% if children %}class="dropdown-toggle" data-hover="dropdown" data-delay="200" data-close-others="true"{% endif %} {% if entry.external %}target="_blank"{% endif %}
-									href="{% if entry.external %}http://{% endif %}{{ entry.url }}">
+									href="{% if entry.external %}https://{% endif %}{{ entry.url }}">
 										{{ entry.title }}
 									</a>
 
@@ -39,7 +39,7 @@
 										{% for child in children %}
 											<li>
 												<a {% if child.external %}target="_blank"{% endif %}
-												href="{% if child.external %}http://{% endif %}{{ child.url }}">
+												href="{% if child.external %}https://{% endif %}{{ child.url }}">
 													{{ child.title }}
 												</a>
 											</li>
