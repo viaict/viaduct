@@ -208,6 +208,7 @@ def create(activity_id=None):
             activity.location = location
             activity.price = price
             activity.picture = picture
+            activity.owner_id = owner_id
 
             if activity.id:
                 flash('You\'ve created an activity successfully.', 'success')
