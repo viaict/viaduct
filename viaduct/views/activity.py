@@ -6,14 +6,13 @@ import dateutil.parser
 # please some one check out what is happening
 import viaduct.api.calendar.google as google
 
-from flask import flash, get_flashed_messages, redirect, render_template, \
-    request, url_for, abort
-from flask import Blueprint, Markup
+from flask import flash, redirect, render_template, request, url_for, abort
+from flask import Blueprint
 from flask.ext.login import current_user
 
 from werkzeug import secure_filename
 
-from viaduct import application, db
+from viaduct import db
 from viaduct.helpers import flash_form_errors
 from viaduct.forms.activity import ActivityForm, CreateForm
 from viaduct.models.activity import Activity
@@ -192,7 +191,7 @@ def create(activity_id=None):
         else:
             picture = None
 
-        venue = 1  # Facebook ID location, not used yet
+        venue = 1  # Facebook ID location, not used yet  # noqa
 
         # Set a custom_form if it actually exists
         if form.form_id and form.form_id.data > 0:
@@ -213,28 +212,24 @@ def create(activity_id=None):
             if activity.id:
                 flash('You\'ve created an activity successfully.', 'success')
 
-                google.update_activity(
-                  activity.google_event_id,
-                  name,
-                  location,
-                  start.isoformat(), end.isoformat()
-                )
+                google.update_activity(activity.google_event_id, name,
+                                       location, start.isoformat(),
+                                       end.isoformat())
             else:
                 flash('You\'ve updated an activity successfully.', 'success')
 
-                google_activity = google.insert_activity(
-                  name,
-                  location,
-                  start.isoformat(), end.isoformat()
-                )
+                google_activity = google.insert_activity(name, location,
+                                                         start.isoformat(),
+                                                         end.isoformat())
 
                 if google_activity:
-                  activity.google_event_id = google_activity['id']
+                    activity.google_event_id = google_activity['id']
 
             db.session.add(activity)
             db.session.commit()
 
-            return redirect(url_for('activity.get_activity', activity_id=activity.id))
+            return redirect(url_for('activity.get_activity',
+                                    activity_id=activity.id))
     else:
         flash_form_errors(form)
 

@@ -68,4 +68,3 @@ class Activity(db.Model, BaseEntity):
 
     def format_form_time(self, time):
         return time.strftime("%Y-%m-%d %H:%M")
-
