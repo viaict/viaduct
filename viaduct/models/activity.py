@@ -55,7 +55,7 @@ class Activity(db.Model, BaseEntity):
                 self.end_time.strftime("%H:%M")
         else:
             return self.start_time.strftime("%a. %d %b (%H:%M) - ") + \
-                self.end_time.strftime("%a. %d (%H:%M) %b")
+                self.end_time.strftime("%a. %d %b (%H:%M)")
 
     def get_short_description(self, characters):
         if (len(self.description) > characters):
@@ -67,5 +67,5 @@ class Activity(db.Model, BaseEntity):
         return self.description
 
     def format_form_time(self, time):
-        return time.strftime("%Y-%m-%dT%H:%M")
+        return time.strftime("%Y-%m-%d %H:%M")
 

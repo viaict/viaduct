@@ -1,5 +1,6 @@
 import os
 import datetime
+import dateutil.parser
 
 # this is now uncommented for breaking activity for some reason
 # please some one check out what is happening
@@ -168,8 +169,8 @@ def create(activity_id=None):
         start_date = form.start_date.data
         end_date = form.end_date.data
 
-        start = datetime.datetime.strptime(start_date, '%Y-%m-%dT%H:%M')
-        end = datetime.datetime.strptime(end_date,     '%Y-%m-%dT%H:%M')
+        start = dateutil.parser.parse(start_date, dayfirst=True)
+        end = dateutil.parser.parse(end_date, dayfirst=True)
 
         location = form.location.data
         price = form.price.data
