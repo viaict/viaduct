@@ -183,8 +183,12 @@ def create(activity_id=None):
 
             # Remove old picture
             if activity.picture:
-                os.remove(os.path.join('viaduct/static/activity_pictures',
-                                       activity.picture))
+                try:
+                    os.remove(os.path.join('viaduct/static/activity_pictures',
+                                           activity.picture))
+                except OSError:
+                    print('Trying to remove %s, but it does not exist.' %
+                          (activity.picture))
 
         elif activity.picture:
             picture = activity.picture
