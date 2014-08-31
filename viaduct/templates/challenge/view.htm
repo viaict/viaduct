@@ -1,0 +1,36 @@
+{% from "macros/form.htm" import render_field, render_button, render_textarea, render_datefield_picker, render_select %}
+
+{% extends "content.htm" %}
+
+{% block content %}
+<script src='/static/js/datepicker.js'></script>
+	<form method="post" action="{{ url_for('challenge.update', challenge_id=challenge.id) }}">
+		<fieldset>
+			<legend>Challenge {% if challenge.id %}bewerken{% else %}aanmaken{% endif %}</legend>
+
+			{{ form.csrf_token }}
+
+			{{ render_field(form.name) }}
+			{{ render_field(form.hint) }}
+			{{ render_textarea(form.description) }}
+			{{ render_datefield_picker(form.start_date) }}
+			{{ render_datefield_picker(form.end_date) }}
+			{{ render_select(form.type) }}
+			{{ render_field(form.weight) }}
+			{{ render_field(form.answer) }}
+			{{ render_select(form.parent_id) }}
+
+			{% if GroupPermissionAPI.can_write('challenge') %}
+				{{ render_button(form.submit) }}
+			{% endif %}
+		</fieldset>
+	</form>
+
+	{% if challenge.id and GroupPermissionAPI.can_write('challenge') %}
+		<form action="{{ url_for('challenge.delete', challenge_id=challenge.id) }}" method="post">
+			<fieldset>
+				<button class="btn btn-danger" type="submit">Verwijderen</button>
+			</fieldset>
+		</form>
+	{% endif %}
+{% endblock %}

@@ -1,0 +1,139 @@
+{% from "macros/pagination.htm" import render_pagination %}
+
+{% extends "content.htm" %}
+
+
+{% block content %}
+	<div class="container">
+	<div class="col-md-12">
+	{% if GroupPermissionAPI.can_write('company') %}
+		<a class="btn" href="{{ url_for('challenge.edit') }}">Nieuwe challenge</a>
+	{% endif %}
+	<br />
+	<br />
+	<div class="row">
+		<div class="col-md-12">
+			<div class="row">
+			<div class="col-md-1"></div>
+
+			<div class="col-md-4"><h4>Titel</h4></div>
+			<!-- <div class="col-md-2"><h4>Werklast</h4></div> -->
+			<div class="col-md-3"><h4>Contract</h4></div>
+			<div class="col-md-4"><h4>Bedrijf</h4></div>
+			</div>
+		</div>
+	</div>
+	<hr>
+	{% for challenge in challenges %}
+
+		<div style="cursor:pointer;" class="row" {% if challenge.expired %} style="background:rgba(255, 100, 0, 0.3); ;"{% endif %}>
+			<div class="col-md-12" data-toggle="collapse" data-target='#{{ challenge.id
+				}}'>
+				<div class="row">
+				<div class="col-md-1"><i class="icon-list-alt"></i></div>
+				<div class="col-md-4">{{challenge.name}}</div>
+				<!-- <div class="col-md-2"><a class="search_click" href="?search={{challenge.workload}}" >{{challenge.workload}}</a></div> -->
+				<div class="col-md-3">{{challenge.hint}}</div>
+				<div class="col-md-4">{{challenge.description}}</div>
+				</div>
+				<div id='{{ challenge.id }}' class="collapse">
+					<hr>
+					<div class="col-md-4">
+						<blockquote>
+
+
+							{{challenge.name}}
+			
+						</blockquote>
+						<p>
+							<i class="glyphicon glyphicon-envelope"></i>{{challenge.hint}} <br />
+							<i class="glyphicon glyphicon-globe"></i>  {{challenge.weight}}  <br>
+							{% if GroupPermissionAPI.can_write('challenge') %}
+							<a href="{{ url_for('challenge.edit', challenge_id=challenge.id) }}">edit</a>  <br>
+							{% endif %}
+						</p>
+						</div>
+						<div class="col-md-6">
+							<h3>
+								{{challenge.name}}
+							</h3>
+						<br />	
+						{{ challenge.description | markdown }}
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr>
+		{% endfor %}
+		</tbody>
+	</table>
+
+	</div>
+	</div>
+<script>
+$( document ).ready(function() {
+
+	/* Prevent the expand function being called when clicking on a link */
+    $( document).on('click', 'a.search_click', function(e){
+    	e.preventdefaults();
+    	document.location.href=$(this).attr("href");
+    });
+});
+</script>
+
+
+<script>
+function create_challenge(){
+
+}
+
+function update_challenge(){
+
+}
+
+function fetch_challenges(){
+
+}
+
+function create_submission(submission, challenge_id){
+	var request = $.ajax({
+		url: "/challenges/api/validate_submission",
+		type: "GET",
+		data: { challenge_id : challenge_id, submission : submission },
+		dataType: "html"
+	});
+	 
+	request.done(function( msg ) {
+		console.log( msg );
+	});
+	 
+	request.fail(function( jqXHR, textStatus ) {
+		alert( "Request failed: " + textStatus );
+	});
+}
+
+function validate_submission(submission_id){
+	var request = $.ajax({
+		url: "/challenges/api/validate_submission",
+		type: "GET",
+		data: { submission_id : submission_id },
+		dataType: "html"
+	});
+	 
+	request.done(function( msg ) {
+		console.log( msg );
+	});
+	 
+	request.fail(function( jqXHR, textStatus ) {
+		alert( "Request failed: " + textStatus );
+	});
+}
+
+function fetch_points(){
+
+}
+
+</script>
+
+{% endblock %}
