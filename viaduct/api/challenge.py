@@ -101,3 +101,13 @@ class ChallengeAPI:
     @staticmethod
     def fetch_all_challenges():
         return Challenge.query.all()
+
+    @staticmethod
+    def is_open_challenge(challenge_id):
+        challenge = Challenge.filter(and_(Challenge.start_date <
+                                     datetime.utcnow(), Challenge.end_date >
+                                     datetime.utcnow())).first()
+        if challenge is not None:
+            return True
+        else:
+            return False
