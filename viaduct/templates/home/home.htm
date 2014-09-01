@@ -5,7 +5,11 @@
     <div class="col-sm-12">
         <div class="row">
             {% for revision in data %}
-                <div class="col-sm-6">
+                {% if revision.test == "laatste_bestuursblog" %}
+                    <div class="col-sm-7 newsrole">
+                {% else %}
+                    <div class="col-sm-5">
+                {% endif %}
                     <div class="mainblock scroll">
                         {% if revision.activity %}
                             {{ revision.activity | safe }}

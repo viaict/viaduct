@@ -13,7 +13,6 @@ blueprint = Blueprint('home', __name__)
 def home():
     data = ['laatste_bestuursblog',
             'activities',
-            'twitter',
             'contact']
 
     pages = []
@@ -47,6 +46,7 @@ def home():
             continue
 
         revision = page.get_latest_revision()
+        revision.test = path
         if not revision:
             return abort(500)
 
