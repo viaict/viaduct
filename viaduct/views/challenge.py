@@ -28,9 +28,18 @@ def view_list(page=1):
     if not GroupPermissionAPI.can_read('challenge'):
         return abort(403)
 
-    challenges = ChallengeAPI.fetch_all_challenges()
+    if current_user.id == 0:
+        return abort(403)
 
-    return render_template('challenge/dashboard.htm', challenges=challenges)
+    challenges = ChallengeAPI.fetch_all_challenges_user(current_user.id)
+    approved_challenges = \
+            ChallengeAPI.fetch_all_approved_challenges_user(current_user.id)
+    user_points = ChallengeAPI.get_points(current_user.id)
+    ranking = ChallengeAPI.get_ranking()
+
+    return render_template('challenge/dashboard.htm', challenges=challenges, 
+                           user_points = user_points, ranking = ranking,
+                           approved_challenges = approved_challenges)
 
 
 @blueprint.route('/create', methods=['GET', 'POST'])
@@ -40,8 +49,7 @@ def edit(challenge_id=None):
     FRONTEND
     Create, view or edit a challenge.
     '''
-    print "tjsdflkjsldfjsdlkf"
-    if not GroupPermissionAPI.can_read('vacancy'):
+    if not GroupPermissionAPI.can_read('challenge'):
         return abort(403)
 
     # Select vacancy.
@@ -74,7 +82,6 @@ def update(challenge_id=None):
     BACKEND
     Create, view or edit a challenge.
     '''
-    print "tessdfsdfsdfsdfsdt"
     if not GroupPermissionAPI.can_write('challenge'):
         return abort(403)
 
@@ -153,8 +160,8 @@ def view(challenge_id=1):
 """ API's """
 @blueprint.route('/api/fetch_all_challenges', methods=['GET', 'POST'])
 def fetch_all():
-    # if not(GroupPermissionAPI.can_write('challenges')):
-        # abort(403)
+    if not GroupPermissionAPI.can_write('challenge'):
+        abort(403)
 
     challenges = ChallengeAPI.fetch_all_challenges()
 
@@ -163,8 +170,8 @@ def fetch_all():
 @blueprint.route('/api/fetch_challenge', methods=['GET', 'POST'])
 @blueprint.route('/api/fetch_challenge/<challenge_id>', methods=['GET', 'POST'])
 def fetch_question(challenge_id=None):
-    # if not(GroupPermissionAPI.can_write('challenges')):
-        # abort(403)
+    if not GroupPermissionAPI.can_write('challenge'):
+        abort(403)
         
     if challenge_id is None:
         return jsonify({'error': 'No "challenge_id" argument given'})
@@ -175,8 +182,8 @@ def fetch_question(challenge_id=None):
 
 @blueprint.route('/api/create_challenge', methods=['GET', 'POST'])
 def create_challenge(challenge_id=None):
-    # if not(GroupPermissionAPI.can_write('challenges')):
-    #     abort(403)
+    if not GroupPermissionAPI.can_write('challenge'):
+        abort(403)
 
     # Gather all arguments 
     if request.args.get('parent_id'):
@@ -229,8 +236,8 @@ def create_challenge(challenge_id=None):
 
 @blueprint.route('/api/new_submission', methods=['GET', 'POST'])
 def new_submission(challenge_id=None):
-    # if not(GroupPermissionAPI.can_read('challenges')):
-        # abort(403)
+    if not GroupPermissionAPI.can_read('challenge') :
+        abort(403)
 
     if request.args.get('challenge_id'):
         challenge_id = request.args.get('challenge_id')
@@ -245,6 +252,25 @@ def new_submission(challenge_id=None):
     new_submission = ChallengeAPI.create_submission(challenge_id=challenge_id, user_id=current_user.id,
                  submission=submission, image_path=None)
 
+    if new_submission is False:
+        return "Question is already submitted"
+
     challenge = ChallengeAPI.fetch_challenge(challenge_id)
     return ChallengeAPI.validate_question(new_submission, challenge)
+
+
+@blueprint.route('/api/get_points', methods=['GET', 'POST'])
+def get_points(user_id=None):
+    if not GroupPermissionAPI.can_read('challenge'):
+        abort(403)
+
+    if request.args.get('user_id'):
+        user_id = request.args.get('user_id')
+    else:
+        return "Error, no 'user_id' given"
+    
+
+    points = ChallengeAPI.get_points(user_id)
+
+    return str(points)
 

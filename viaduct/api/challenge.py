@@ -2,7 +2,9 @@ from flask.ext.login import current_user
 from viaduct import application, db
 from viaduct.models.page import PagePermission
 from viaduct.models.user import User
-from viaduct.models.challenge import Challenge, Submission
+from viaduct.models.challenge import Challenge, Submission, Competitor
+
+from sqlalchemy import or_, and_
 from flask import flash
 import os
 import fnmatch
@@ -55,6 +57,9 @@ class ChallengeAPI:
         """
         Create a submission for a challenge and user
         """
+        if ChallengeAPI.is_approved(challenge_id, user_id):
+            return False
+
         challenge = ChallengeAPI.fetch_challenge(challenge_id)
         user = User.query.filter_by(id = user_id).first()
         # convert the name.
@@ -87,7 +92,8 @@ class ChallengeAPI:
 
         if submission.submission == challenge.answer:
             submission.approved = True
-            db.session.add(challenge)
+            ChallengeAPI.assign_points_to_user(challenge.weight, submission.user_id)
+            db.session.add(submission)
             db.session.commit()
             return 'Approved'
         else:
@@ -100,14 +106,64 @@ class ChallengeAPI:
 
     @staticmethod
     def fetch_all_challenges():
+        # return Challenge.query.join(Submission).filter(Submission.user_id == current_user.id, Submission.approved == False)
         return Challenge.query.all()
 
     @staticmethod
+    def fetch_all_challenges_user(user_id):
+        subq = Challenge.query.join(Submission).filter(and_(Submission.user_id == user_id, Submission.approved == True))
+        return Challenge.query.except_(subq).all()
+
+    @staticmethod
+    def fetch_all_approved_challenges_user(user_id):
+        return Challenge.query.join(Submission).filter(Submission.user_id == user_id, Submission.approved == True)
+
+    @staticmethod
     def is_open_challenge(challenge_id):
-        challenge = Challenge.filter(and_(Challenge.start_date <
+        challenge = Challenge.query.filter(and_(Challenge.start_date <
                                      datetime.utcnow(), Challenge.end_date >
                                      datetime.utcnow())).first()
-        if challenge is not None:
-            return True
-        else:
+        if challenge is None:
             return False
+        else:
+            return True
+
+    @staticmethod
+    def is_approved(challenge_id, user_id):
+        submission = Submission.query.filter(and_(Submission.user_id == user_id, 
+                                            Submission.challenge_id == challenge_id,
+                                            Submission.approved == True)).first()
+
+        if submission is None:
+            return False
+        else:
+            return True
+
+
+    @staticmethod
+    def get_points(user_id):
+        competitor = Competitor.query.filter(Competitor.user_id == user_id).first()
+
+        if competitor is None:
+            return None
+        else:
+            return competitor.points
+
+    @staticmethod
+    def assign_points_to_user(points, user_id): 
+        competitor = Competitor.query.filter(Competitor.user_id == user_id).first()
+
+        if competitor is None:
+            competitor = Competitor(user_id)
+            competitor.points = points
+            db.session.add(competitor)
+            db.session.commit()
+        else:
+            competitor.points = competitor.points + points
+            db.session.add(competitor)
+            db.session.commit()
+
+    @staticmethod
+    def get_ranking():
+        competitors = Competitor.query.order_by(Competitor.points.desc()).all()
+        return competitors

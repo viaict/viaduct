@@ -75,3 +75,20 @@ class Submission(db.Model, BaseEntity):
         self.submission = submission
         self.image_path = image_path
         self.approved = approved
+
+class Competitor(db.Model, BaseEntity):
+    __tablename__ = 'competitor'
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship(User,
+                           backref=db.backref('competitor', lazy='dynamic'))
+    points = db.Column(db.Integer)
+
+
+    def __init__(self, user_id=None):
+        self.user_id = user_id
+        self.user = User.query.filter(User.id == user_id).first()
+        points = 0
+
+
+
