@@ -49,6 +49,7 @@ class Challenge(db.Model, BaseEntity):
            'end_date'  : dump_datetime(self.end_date),
            'parent_id'  : self.parent_id,
            'answer'  : self.answer,
+           'weight'  : self.weight,
            'type'  : self.type,
        }
 
@@ -90,5 +91,12 @@ class Competitor(db.Model, BaseEntity):
         self.user = User.query.filter(User.id == user_id).first()
         points = 0
 
+    @property
+    def serialize(self):
+       """Return object data in easily serializeable format"""
+       return {
+           'name': self.user.name,
+           'points': self.points,
+       }
 
 

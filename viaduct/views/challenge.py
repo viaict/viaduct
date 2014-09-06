@@ -3,7 +3,7 @@ from flask import Blueprint, flash, redirect, render_template, request, \
 
 from sqlalchemy import or_, and_
 
-from datetime import datetime
+import datetime
 
 from flask.ext.login import current_user
 from viaduct import application, db
@@ -31,6 +31,9 @@ def view_list(page=1):
     if current_user.id == 0:
         return abort(403)
 
+    challenge = Challenge()
+    form = ChallengeForm(request.form, challenge)
+
     challenges = ChallengeAPI.fetch_all_challenges_user(current_user.id)
     approved_challenges = \
             ChallengeAPI.fetch_all_approved_challenges_user(current_user.id)
@@ -39,7 +42,8 @@ def view_list(page=1):
 
     return render_template('challenge/dashboard.htm', challenges=challenges, 
                            user_points = user_points, ranking = ranking,
-                           approved_challenges = approved_challenges)
+                           approved_challenges = approved_challenges,
+                           form = form)
 
 
 @blueprint.route('/create', methods=['GET', 'POST'])
@@ -157,6 +161,7 @@ def view(challenge_id=1):
 
     return render_template('challenge/view_all.htm', challenges=challenges)
 
+
 """ API's """
 @blueprint.route('/api/fetch_all_challenges', methods=['GET', 'POST'])
 def fetch_all():
@@ -167,18 +172,33 @@ def fetch_all():
 
     return jsonify(challenges = [challenge.serialize for challenge in challenges])
 
+
+@blueprint.route('/api/get_ranking', methods=['GET', 'POST'])
+def get_ranking():
+    if not GroupPermissionAPI.can_read('challenge'):
+        abort(403)
+
+    ranking = ChallengeAPI.get_ranking()
+
+    return jsonify(ranking = [user.serialize for user in ranking])
+
+
 @blueprint.route('/api/fetch_challenge', methods=['GET', 'POST'])
-@blueprint.route('/api/fetch_challenge/<challenge_id>', methods=['GET', 'POST'])
-def fetch_question(challenge_id=None):
+@blueprint.route('/api/fetch_challenge/', methods=['GET', 'POST'])
+def fetch_question():
     if not GroupPermissionAPI.can_write('challenge'):
         abort(403)
         
-    if challenge_id is None:
-        return jsonify({'error': 'No "challenge_id" argument given'})
+    # Gather all arguments 
+    if request.args.get('challenge_id'):
+        challenge_id = request.args.get('challenge_id')
+    else:
+        return "Error, no 'challenge_id' given"
 
     challenge = ChallengeAPI.fetch_challenge(challenge_id)
 
     return jsonify(challenges = challenge.serialize)
+
 
 @blueprint.route('/api/create_challenge', methods=['GET', 'POST'])
 def create_challenge(challenge_id=None):
@@ -207,12 +227,12 @@ def create_challenge(challenge_id=None):
         return "Error, no 'type' given"
     
     if request.args.get('start_date'):
-        start_date = datetime.strptime(request.args.get('start_date'), '%d-%m-%Y').date()
+        start_date = datetime.datetime.strptime(request.args.get('start_date'), '%Y-%m-%d').date()
     else:
         return "Error, no 'start_date' given"
     
     if request.args.get('end_date'):
-        end_date = datetime.strptime(request.args.get('end_date'), '%d-%m-%Y').date()
+        end_date = datetime.datetime.strptime(request.args.get('end_date'), '%Y-%m-%d').date()
     else:
         return "Error, no 'end_date' given"
     
@@ -231,8 +251,14 @@ def create_challenge(challenge_id=None):
     else:
         return "Error, no 'hint' given"
 
+    # Check if the name of the challenge is unique
+    if ChallengeAPI.challenge_exists(name):
+        return "Error, challenge with name '" + name + "' already exists" 
+
+
     return ChallengeAPI.create_challenge(name, description, hint, start_date, end_date,
                         parent_id, weight, type, answer)
+
 
 @blueprint.route('/api/new_submission', methods=['GET', 'POST'])
 def new_submission(challenge_id=None):
@@ -256,6 +282,7 @@ def new_submission(challenge_id=None):
         return "Question is already submitted"
 
     challenge = ChallengeAPI.fetch_challenge(challenge_id)
+
     return ChallengeAPI.validate_question(new_submission, challenge)
 
 

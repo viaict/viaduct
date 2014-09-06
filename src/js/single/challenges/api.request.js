@@ -7,6 +7,23 @@ $(document).ready(function(e){
 	    create_submission(submission, challenge_id);
 	    $(this).find("input.submission").val("");
 	});
+
+	$("form#edit_challenge").submit(function (e) {
+	    e.preventDefault();
+	    name = $(this).find("input#name").val();
+	    description = $(this).find("textarea#description").val();
+	    hint = $(this).find("input#hint").val();
+	    start_date = $(this).find("input#start_date").val();
+	    end_date = $(this).find("input#end_date").val();
+        parent_id = 0
+        weight = $(this).find("input#weight").val();
+        type = "Text";
+        answer = $(this).find("input#answer").val();
+
+	    create_challenge(name, description, hint, start_date, end_date,
+                        parent_id, weight, type, answer)
+	    $(this).find("input.submission").val("");
+	});
 });
 
 function create_challenge(name, description, hint, start_date, end_date,
@@ -20,7 +37,10 @@ function create_challenge(name, description, hint, start_date, end_date,
 	});
 	 
 	request.done(function( msg ) {
-		console.log( msg );
+		alert( msg );
+
+        $("#edit_challenge").find("input[type='text']").val("");
+        $("#edit_challenge").find("textarea").val("");
 	});
 	 
 	request.fail(function( jqXHR, textStatus ) {
@@ -28,11 +48,37 @@ function create_challenge(name, description, hint, start_date, end_date,
 	});	
 }
 
+
 function update_challenge(){
 
 }
 
 function fetch_challenges(){
+
+}
+
+function fetch_challenge(challenge_id){
+	var request = $.ajax({
+		url: "/challenge/api/fetch_challenge",
+		type: "GET",
+		data: { challenge_id : challenge_id },
+		dataType: "JSON"
+	});
+
+	request.done(function( msg ) {
+		$("#edit_challenge").find("input#name").val(msg.challenges.name);
+	    $("#edit_challenge").find("textarea#description").val(msg.challenges.description);
+	    $("#edit_challenge").find("input#hint").val(msg.challenges.hint);
+	    $("#edit_challenge").find("input#start_date").val(msg.challenges.start_date);
+	    $("#edit_challenge").find("input#end_date").val(msg.challenges.end_date);
+        $("#edit_challenge").find("input#weight").val(msg.challenges.weight);
+        $("#edit_challenge").find("input#answer").val(msg.challenges.answer);
+		console.log(msg.challenges)
+	});
+	 
+	request.fail(function( jqXHR, textStatus ) {
+		alert( "Request failed: " + textStatus );
+	});
 
 }
 

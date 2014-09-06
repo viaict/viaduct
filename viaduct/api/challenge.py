@@ -10,6 +10,7 @@ import os
 import fnmatch
 import urllib
 import hashlib
+import datetime
 
 from flask import render_template
 
@@ -32,7 +33,30 @@ class ChallengeAPI:
         db.session.add(new_challenge)
         db.session.commit()
 
-        return new_challenge.name
+        return "Succes, challenge with name '" + new_challenge.name +\
+                "' created!"    
+
+    @staticmethod
+    def edit_challenge(id, name, description, hint, start_date, end_date,
+                        parent_id, weight, type, answer):
+        """
+        Create a new challenge
+        """
+        challenge = ChallengeAPI.fetch_challenge(id)
+        challenge.name = name
+        challenge.description = description
+        challenge.hint = hint
+        challenge.start_date = start_date
+        challenge.end_date = end_date
+        challenge.parent_id = parent_id
+        challenge.weight = weight
+        challenge.type = type
+        challenge.answer = answer
+        db.session.add(challenge)
+        db.session.commit()
+
+        return "Succes, challenge with name '" + new_challenge.name +\
+                "' edited!"
 
 
     @staticmethod
@@ -42,6 +66,18 @@ class ChallengeAPI:
         """
         challenge = Challenge.query.filter_by(id = id).first()
         return challenge
+
+    @staticmethod
+    def challenge_exists(name):
+        """
+        Update a challenge, only give the id and new values that have to change.
+        """
+        challenge = Challenge.query.filter_by(name = name).first()
+
+        if challenge is None:
+            return False
+        else:
+            return True
 
     @staticmethod
     def update_challenge(challenge):
@@ -57,7 +93,8 @@ class ChallengeAPI:
         """
         Create a submission for a challenge and user
         """
-        if ChallengeAPI.is_approved(challenge_id, user_id):
+        if ChallengeAPI.is_approved(challenge_id, user_id) or \
+                not ChallengeAPI.is_open_challenge(challenge_id):
             return False
 
         challenge = ChallengeAPI.fetch_challenge(challenge_id)
@@ -95,7 +132,7 @@ class ChallengeAPI:
             ChallengeAPI.assign_points_to_user(challenge.weight, submission.user_id)
             db.session.add(submission)
             db.session.commit()
-            return 'Approved'
+            return 'approved'
         else:
             return 'Bad answer'
 
@@ -112,17 +149,18 @@ class ChallengeAPI:
     @staticmethod
     def fetch_all_challenges_user(user_id):
         subq = Challenge.query.join(Submission).filter(and_(Submission.user_id == user_id, Submission.approved == True))
-        return Challenge.query.except_(subq).all()
-
+        return Challenge.query.except_(subq).filter(and_(Challenge.start_date <=
+                                     datetime.date.today(), Challenge.end_date >=
+                                     datetime.date.today())).all()
     @staticmethod
     def fetch_all_approved_challenges_user(user_id):
         return Challenge.query.join(Submission).filter(Submission.user_id == user_id, Submission.approved == True)
 
     @staticmethod
     def is_open_challenge(challenge_id):
-        challenge = Challenge.query.filter(and_(Challenge.start_date <
-                                     datetime.utcnow(), Challenge.end_date >
-                                     datetime.utcnow())).first()
+        challenge = Challenge.query.filter(and_(Challenge.start_date <=
+                                     datetime.date.today(), Challenge.end_date >=
+                                     datetime.date.today())).first()
         if challenge is None:
             return False
         else:
