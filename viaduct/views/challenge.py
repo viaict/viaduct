@@ -31,6 +31,8 @@ def view_list(page=1):
     if current_user.id == 0:
         return abort(403)
 
+    print application.config['SQLALCHEMY_DATABASE_URI']   
+
     challenge = Challenge()
     form = ChallengeForm(request.form, challenge)
 

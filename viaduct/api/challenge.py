@@ -148,13 +148,17 @@ class ChallengeAPI:
 
     @staticmethod
     def fetch_all_challenges_user(user_id):
-        subq = Challenge.query.join(Submission).filter(and_(Submission.user_id == user_id, Submission.approved == True))
-        return Challenge.query.except_(subq).filter(and_(Challenge.start_date <=
-                                     datetime.date.today(), Challenge.end_date >=
-                                     datetime.date.today())).all()
+        return Challenge.query.filter(and_(Challenge.start_date <=
+                                          datetime.date.today(), Challenge.end_date >=
+                                          datetime.date.today())).all()
+        # subq = Challenge.query.join(Submission).filter(and_(Submission.user_id == user_id, Submission.approved == True))
+        # return Challenge.query.except_(subq).filter(and_(Challenge.start_date <=
+        #                              datetime.date.today(), Challenge.end_date >=
+        #                              datetime.date.today())).all()
     @staticmethod
     def fetch_all_approved_challenges_user(user_id):
-        return Challenge.query.join(Submission).filter(Submission.user_id == user_id, Submission.approved == True)
+        return [];
+        # return Challenge.query.join(Submission).filter(Submission.user_id == user_id, Submission.approved == True)
 
     @staticmethod
     def is_open_challenge(challenge_id):
