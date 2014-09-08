@@ -42,10 +42,13 @@ def view_list(page=1):
     user_points = ChallengeAPI.get_points(current_user.id)
     ranking = ChallengeAPI.get_ranking()
 
+    challenge_description = ChallengeAPI.get_challenge_description()
+
     return render_template('challenge/dashboard.htm', challenges=challenges, 
                            user_points = user_points, ranking = ranking,
                            approved_challenges = approved_challenges,
-                           form = form)
+                           form = form, challenge_description = 
+                           challenge_description)
 
 
 # @blueprint.route('/create', methods=['GET', 'POST'])
