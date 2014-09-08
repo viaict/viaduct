@@ -231,23 +231,28 @@ def sign_in():
     if form.validate_on_submit():
         user = User.query.filter(User.email == form.email.data).first()
 
-        # Check if the user does exist, and if the passwords do match.
+        if user is None:
+            flash('It appears that account does not exist. Try again, or '
+                  'contact the website administration at ict (at) svia (dot) '
+                  'nl.', 'danger')
+            return redirect(url_for('user.sign_in'))
+
         submitted_hash = bcrypt.hashpw(form.password.data, user.password)
-        if not user or submitted_hash != user.password:
+        if submitted_hash != user.password:
             flash('The credentials that have been specified are invalid.',
-                  'error')
+                  'danger')
+            return redirect(url_for('user.sign_in'))
 
-        else:
-            # Notify the login manager that the user has been signed in.
-            login_user(user)
+        # Notify the login manager that the user has been signed in.
+        login_user(user)
 
-            flash('You\'ve been signed in successfully.')
+        flash('You\'ve been signed in successfully.')
 
-            denied_from = session.get('denied_from')
-            if denied_from:
-                return redirect(denied_from)
+        denied_from = session.get('denied_from')
+        if denied_from:
+            return redirect(denied_from)
 
-            return redirect(url_for('home.home'))
+        return redirect(url_for('home.home'))
     else:
         flash_form_errors(form)
 
