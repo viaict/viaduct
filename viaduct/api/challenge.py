@@ -123,6 +123,8 @@ class ChallengeAPI:
     def validate_question(submission, challenge):
         """
         Check if a question is valid
+        Submission: String to be validated
+        Challenge: Challenge object
         """
         if not ChallengeAPI.can_auto_validate(challenge):
             return 'Not validated'
@@ -132,7 +134,7 @@ class ChallengeAPI:
             ChallengeAPI.assign_points_to_user(challenge.weight, submission.user_id)
             db.session.add(submission)
             db.session.commit()
-            return 'approved'
+            return 'Approved'
         else:
             return 'Bad answer'
 
@@ -143,22 +145,25 @@ class ChallengeAPI:
 
     @staticmethod
     def fetch_all_challenges():
+        """
+        Fetch all challenges, no filters applied.
+        """
         # return Challenge.query.join(Submission).filter(Submission.user_id == current_user.id, Submission.approved == False)
         return Challenge.query.all()
 
     @staticmethod
     def fetch_all_challenges_user(user_id):
-        return Challenge.query.filter(and_(Challenge.start_date <=
-                                          datetime.date.today(), Challenge.end_date >=
-                                          datetime.date.today())).all()
-        # subq = Challenge.query.join(Submission).filter(and_(Submission.user_id == user_id, Submission.approved == True))
-        # return Challenge.query.except_(subq).filter(and_(Challenge.start_date <=
-        #                              datetime.date.today(), Challenge.end_date >=
-        #                              datetime.date.today())).all()
+        """
+
+        """
+        ids = db.session.query(Challenge.id).join(Submission).filter(and_(Submission.user_id == user_id, Submission.approved == True)).all()
+        ids = map(lambda x: x[0], ids)
+        return Challenge.query.filter(~Challenge.id.in_(ids), Challenge.start_date <=
+                                      datetime.date.today(), Challenge.end_date >=
+                                      datetime.date.today()).all()
     @staticmethod
     def fetch_all_approved_challenges_user(user_id):
-        return [];
-        # return Challenge.query.join(Submission).filter(Submission.user_id == user_id, Submission.approved == True)
+        return Challenge.query.join(Submission).filter(Submission.user_id == user_id, Submission.approved == True)
 
     @staticmethod
     def is_open_challenge(challenge_id):
