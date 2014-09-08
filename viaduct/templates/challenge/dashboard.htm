@@ -31,6 +31,8 @@
 	</form>
 	{% endif %}
 	<br />
+	<h1>{{ challenge_description.title}}</h1>
+	<p>{{ challenge_description.content | markdown(challenge_description.filter_html) }}</p>
 	<br />
         <li class="list-group-item">
             <div class="col-xs-12 col-sm-2">
@@ -56,10 +58,11 @@
 			<div class="row">
 			<div class="col-md-1"><h4>punten</h4></div>
 
-			<div class="col-md-3"><h4>Titel</h4></div>
+			<div class="col-md-2"><h4>Titel</h4></div>
 			<!-- <div class="col-md-2"><h4>Werklast</h4></div> -->
-			<div class="col-md-5"><h4>Beschrijving</h4></div>
+			<div class="col-md-4"><h4>Beschrijving</h4></div>
 			<div class="col-md-3"><h4>Antwoord</h4></div>
+			<div class="col-md-2"><h4>Beschikbaar</h4></div>
 			</div>
 		</div>
 	</div>
@@ -68,16 +71,17 @@
 		<div style="cursor:pointer;" class="row challenge_todo">
 			<div class="col-md-12">
 				<div class="row">
-				<div class="col-md-1 challenge_weight">{{challenge.weight}}</div>
-				<div class="col-md-3 challenge_name">{{challenge.name}}</div>
-				<!-- <div class="col-md-2"><a class="search_click" href="?search={{challenge.workload}}" >{{challenge.workload}}</a></div> -->
-				<div class="col-md-5 challenge_description">{{challenge.description}}</div>
-				<div class="col-md-3">
-					<form class="challenge_submission" via-challenge-id="{{challenge.id}}" id="challenge_{{challenge.id}}">
-						<input class="submission">
-						<input type="submit" style="display:none;">
-					</form>
-				</div>
+					<div class="col-md-1 challenge_weight">{{challenge.weight}}</div>
+					<div class="col-md-2 challenge_name">{{challenge.name}}</div>
+					<!-- <div class="col-md-2"><a class="search_click" href="?search={{challenge.workload}}" >{{challenge.workload}}</a></div> -->
+					<div class="col-md-4 challenge_description">{{challenge.description}}</div>
+					<div class="col-md-3">
+						<form class="challenge_submission" via-challenge-id="{{challenge.id}}" id="challenge_{{challenge.id}}">
+							<input class="submission">
+							<input type="submit" style="display:none;">
+						</form>
+					</div>
+					<div class="col-md-2">{{challenge.start_date}}{% if challenge.start_date != challenge.end_date %} -<br/> {{challenge.end_date}}{% endif %}</div>
 				</div>
 			</div>
 		</div>

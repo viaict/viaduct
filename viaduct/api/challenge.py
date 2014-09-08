@@ -1,6 +1,6 @@
 from flask.ext.login import current_user
 from viaduct import application, db
-from viaduct.models.page import PagePermission
+from viaduct.models.page import PagePermission, Page
 from viaduct.models.user import User
 from viaduct.models.challenge import Challenge, Submission, Competitor
 
@@ -214,3 +214,17 @@ class ChallengeAPI:
     def get_ranking():
         competitors = Competitor.query.order_by(Competitor.points.desc()).all()
         return competitors
+
+    @staticmethod
+    def get_challenge_description():
+        """ Get the description page for challenges """
+        page = Page.get_by_path(Page.strip_path("challenge_description"))
+
+        if not page:
+            revision = PageRevision(None, None, None, None, None)
+            revision.title = 'Not found!'
+            revision.content = 'Description not found'
+        else:
+            revision = page.get_latest_revision()
+
+        return revision
