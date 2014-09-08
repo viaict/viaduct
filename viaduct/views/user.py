@@ -397,7 +397,7 @@ def view(page_nr=1):
 
     if request.args.get('vvv') and request.args.get('vvv') == 'on':
         vvv = 'on'
-        users = users.filter(User.favourer == True)
+        users = users.filter(User.favourer == True)  # noqa
 
     member_set = request.args.get('member')
 
@@ -405,10 +405,10 @@ def view(page_nr=1):
         member = member_set
 
         if member == 'yes':
-            users = users.filter(User.has_payed == True)
+            users = users.filter(User.has_payed == True)  # noqa
         elif member == 'no':
             users = users.filter(or_(User.has_payed == False,
-                                     User.has_payed == None))
+                                     User.has_payed == None))  # noqa
 
     users = users\
         .order_by(User.first_name)\
@@ -417,6 +417,7 @@ def view(page_nr=1):
 
     return render_template('user/view.htm', users=users, search=search,
                            vvv=vvv, member=member)
+
 
 @blueprint.route('/users/export', methods=['GET'])
 def user_export():
@@ -428,7 +429,7 @@ def user_export():
     users = User.query.all()
     si = StringIO()
     cw = writer(si)
-    cw.writerow([c.name for c in User.__mapper__.columns ])
+    cw.writerow([c.name for c in User.__mapper__.columns])
     for user in users:
-      cw.writerow([getattr(user, c.name) for c in User.__mapper__.columns ])
+        cw.writerow([getattr(user, c.name) for c in User.__mapper__.columns])
     return si.getvalue().strip('\r\n')
