@@ -95,12 +95,15 @@ function create_submission(submission, challenge_id){
 		alert(msg);
 
 		if(msg == "Approved"){
-			$("#before_done_challenges").before($("#challenge_" + challenge_id).closest(".challenge_todo"));
+			var that = $("#challenge_" + challenge_id).closest(".challenge_todo");
+			$("#before_done_challenges").before(that);
+			$(that).before("<hr>");
 			$("#challenge_" + challenge_id).parent().siblings(".challenge_description").removeClass("col-md-5");
 			$("#challenge_" + challenge_id).parent().siblings(".challenge_name").removeClass("col-md-3");
 			$("#challenge_" + challenge_id).parent().siblings(".challenge_description").addClass("col-md-6");
 			$("#challenge_" + challenge_id).parent().siblings(".challenge_name").addClass("col-md-5");
 			$("#challenge_" + challenge_id).parent().remove();
+
 		}
 	});
 	 
