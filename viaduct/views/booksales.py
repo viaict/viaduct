@@ -1,14 +1,7 @@
 from flask import Blueprint, abort, redirect, url_for
-from flask import flash, render_template, request, jsonify
-from flask.ext.login import current_user
-
-from viaduct import application, db
-from viaduct.helpers import flash_form_errors
+from flask import flash, render_template, request
 
 from viaduct.models.booksales import Book, Sale
-
-from viaduct.models.user import User
-from viaduct.models.group import Group
 
 from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.booksales import BookSalesAPI
@@ -17,81 +10,79 @@ from viaduct.forms.booksales import AddBookForm, AddSaleForm
 
 blueprint = Blueprint('booksales', __name__, url_prefix='/booksales')
 
+
 @blueprint.route('/')
 def view():
-	if not GroupPermissionAPI.can_read('booksales'):
-		return abort(403)
+    if not GroupPermissionAPI.can_read('booksales'):
+        return abort(403)
 
-	return render_template('booksales/view.htm', books = Book.query.all())
+    return render_template('booksales/view.htm', books=Book.query.all())
 
 
 @blueprint.route('/sales/')
 def view_sales():
-	if not GroupPermissionAPI.can_read('booksales'):
-		return abort(403)
+    if not GroupPermissionAPI.can_read('booksales'):
+        return abort(403)
 
-	return render_template('booksales/sales.htm', sales = Sale.query.all())
+    return render_template('booksales/sales.htm', sales=Sale.query.all())
 
 
 @blueprint.route('/add_sale/', methods=['GET', 'POST'])
 def add_sale():
-	if not GroupPermissionAPI.can_write('booksales'):
-		return abort(403)
+    if not GroupPermissionAPI.can_write('booksales'):
+        return abort(403)
 
-	form = AddSaleForm(request.form)
+    form = AddSaleForm(request.form)
 
-	if request.method == 'POST':
-		message = ""
-		if form.student_number.data == "":
-			message = "Student number is required"
-		elif form.payment.data == "":
-			message = "Payment is required"
+    if request.method == 'POST':
+        BookSalesAPI.commit_sale_to_db(form.books.data,
+                                       form.student_number.data,
+                                       form.payment.data)
+        print(Sale.query.all())
 
-		BookSalesAPI.commit_sale_to_db(form.books.data, form.student_number.data, form.payment.data)
-		print(Sale.query.all())
+        return redirect(url_for('booksales.view'))
 
-		return redirect(url_for('booksales.view'))
+    books = Book.query.all()
 
-
-
-	books = Book.query.all()
-
-	form.load_books(books)
-	return render_template('booksales/add_sale.htm', form=form)
+    form.load_books(books)
+    return render_template('booksales/add_sale.htm', form=form)
 
 
 @blueprint.route('/edit_book/', methods=['GET', 'POST'])
 @blueprint.route('/edit_book/<book_id>', methods=['GET', 'POST'])
-def edit_book(book_id = -1):
-	if not GroupPermissionAPI.can_write('booksales'):
-		return abort(403)
+def edit_book(book_id=-1):
+    if not GroupPermissionAPI.can_write('booksales'):
+        return abort(403)
 
-	book = Book.query.filter(Book.id==book_id).first()
-	if book:
-		form = AddBookForm(request.form, title=book.title, price=book.price,
-			isbn=book.isbn, stock=book.stock, id=book.id)
-	else:
-		form = AddBookForm(request.form)
+    book = Book.query.filter(Book.id == book_id).first()
+    if book:
+        form = AddBookForm(request.form, title=book.title, price=book.price,
+                           isbn=book.isbn, stock=book.stock, id=book.id)
+    else:
+        form = AddBookForm(request.form)
 
-	if request.method == 'POST':
-		message = ""
-		if form.title.data == "":
-			message = "Title is required"
-		elif form.price.data == 0:
-			message = "Price is required"
-		elif form.isbn.data == "":
-			message = "ISBN Number is required"
-		elif form.stock.data == "":
-			message = "Stock is required"
+    if request.method == 'POST':
+        message = ""
+        if form.title.data == "":
+            message = "Title is required"
+        elif form.price.data == 0:
+            message = "Price is required"
+        elif form.isbn.data == "":
+            message = "ISBN Number is required"
+        elif form.stock.data == "":
+            message = "Stock is required"
 
-		result = message == ""
+        result = message == ""
 
-		if result:
-			result, message = BookSalesAPI.commit_book_to_db(book_id,
-				form.title.data, form.price.data, form.isbn.data, form.stock.data)
+        if result:
+            result, message = BookSalesAPI.commit_book_to_db(book_id,
+                                                             form.title.data,
+                                                             form.price.data,
+                                                             form.isbn.data,
+                                                             form.stock.data)
 
-		if result:
-			flash('The Book was added succesfully')
-			return redirect(url_for('booksales.view'))
+        if result:
+            flash('The Book was added succesfully')
+            return redirect(url_for('booksales.view'))
 
-	return render_template('booksales/edit_book.htm', form=form)
+    return render_template('booksales/edit_book.htm', form=form)
