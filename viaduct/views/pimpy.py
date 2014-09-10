@@ -1,15 +1,13 @@
 from flask import Blueprint, abort, redirect, url_for
 from flask import flash, render_template, request, jsonify
-from viaduct import application, db
-from viaduct.helpers import flash_form_errors
+from viaduct import db
 
 from flask.ext.login import current_user
 
-from viaduct.forms.pimpy import AddTaskForm, AddMinuteForm, EditTaskForm
+from viaduct.forms.pimpy import AddTaskForm, AddMinuteForm
 from viaduct.api.pimpy import PimpyAPI
 from viaduct.api.group import GroupPermissionAPI
-from viaduct.models.pimpy import Minute, Task
-from viaduct.models.user import User
+from viaduct.models.pimpy import Task
 from viaduct.models.group import Group
 
 
