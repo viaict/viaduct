@@ -56,4 +56,5 @@ def add():
     else:
         flash_form_errors(form)
 
-    return render_template('upload/add_file.htm', form=form)
+    return render_template('upload/add_file.htm', form=form,
+                           title='Upload files')

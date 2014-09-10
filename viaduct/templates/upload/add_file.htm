@@ -2,8 +2,6 @@
 
 {% extends "content.htm" %}
 
-{% block title %}Upload Files{% endblock %}
-
 {% block content %}
 <form name="add-file" method="post" action="{{ url_for('upload.add') }}"
 	enctype="multipart/form-data">

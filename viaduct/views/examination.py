@@ -89,7 +89,8 @@ def upload_file():
 
         if error:
             return render_template('examination/upload.htm', courses=courses,
-                                   educations=educations, message='')
+                                   educations=educations, message='',
+                                   title='Tentamens')
 
         exam = Examination(filename, title, course_id, education_id,
                            answers=answer_path)
@@ -99,10 +100,11 @@ def upload_file():
         flash('Het tentamen is geupload')
 
         return render_template('examination/upload.htm', courses=courses,
-                               educations=educations, message='')
+                               educations=educations, message='',
+                               title='Tentamens')
 
     return render_template('examination/upload.htm', courses=courses,
-                           educations=educations)
+                           educations=educations, title='Tentamens')
 
 
 @blueprint.route('/examination/', methods=['GET', 'POST'])
@@ -126,12 +128,14 @@ def view_examination(page_nr=1):
                         Education.name.like('%' + search + '%')))\
             .order_by(Course.name).paginate(page_nr, 15, True)
         return render_template('examination/view.htm', path=path,
-                               examinations=examinations, search=search)
+                               examinations=examinations, search=search,
+                               title='Tentamens')
 
     examinations = Examination.query.join(Course)\
         .order_by(Course.name).paginate(page_nr, 15, True)
     return render_template('examination/view.htm', path=path,
-                           examinations=examinations, search="")
+                           examinations=examinations, search="",
+                           title='Tentamens')
 
 
 @blueprint.route('/examination/admin', methods=['GET', 'POST'])
@@ -152,7 +156,7 @@ def examination_admin(page_nr=1):
             .paginate(page_nr, 15, False)
         return render_template('examination/admin.htm', path=path,
                                examinations=examinations, search=search,
-                               message="")
+                               message="", title='Tentamens')
 
     if request.args.get('delete'):
         exam_id = request.args.get('delete')
@@ -167,7 +171,8 @@ def examination_admin(page_nr=1):
         return render_template('examination/admin.htm', path=path,
                                examinations=examinations, search="",
                                message="Tentamen " + title +
-                                       " succesvol verwijderd")
+                                       " succesvol verwijderd",
+                               title='Tentamens')
 
     if request.args.get('edit'):
         exam_id = request.args.get('edit')
@@ -180,7 +185,8 @@ def examination_admin(page_nr=1):
 
     examinations = Examination.query.paginate(page_nr, 15, False)
     return render_template('examination/admin.htm', path=path,
-                           examinations=examinations, search="", message="")
+                           examinations=examinations, search="", message="",
+                           title='Tentamens')
 
 
 @blueprint.route('/examination/edit', methods=['GET', 'POST'])
@@ -236,7 +242,8 @@ def edit_examination():
             if message:
                 return render_template('examination/edit.htm', courses=courses,
                                        educations=educations,
-                                       examination=examination, message='')
+                                       examination=examination, message='',
+                                       title='Tentamens')
 
             # if file:
             #   if allowed_file(file.filename):
@@ -261,7 +268,8 @@ def edit_examination():
             return render_template('examination/edit.htm', courses=courses,
                                    educations=educations,
                                    examination=examination,
-                                   message='Het tentamen is aangepast!')
+                                   message='Het tentamen is aangepast!',
+                                   title='Tentamens')
 
     if request.args.get('edit'):
         exam_id = request.args.get('edit')
@@ -270,12 +278,14 @@ def edit_examination():
 
         return render_template('examination/edit.htm', path=path,
                                examination=examination, courses=courses,
-                               educations=educations)
+                               educations=educations,
+                               title='Tentamens')
 
     examinations = Examination.query.all()
     return render_template('examination/admin.htm', path=path,
                            examinations=examinations, search="",
-                           message="Geen examen geselecteerd")
+                           message="Geen examen geselecteerd",
+                           title='Tentamens')
 
 
 @blueprint.route('/course/add', methods=['GET', 'POST'])
@@ -292,7 +302,7 @@ def add_course():
         db.session.commit()
         return redirect('../examination/add')
 
-    return render_template('examination/course.htm')
+    return render_template('examination/course.htm', title='Tentamens')
 
 
 @blueprint.route('/education/add', methods=['GET', 'POST'])
@@ -309,7 +319,7 @@ def add_education():
         db.session.commit()
         return redirect('../examination/add')
 
-    return render_template('examination/education.htm')
+    return render_template('examination/education.htm', title='Tentamens')
 
 
 def get_education_id(education):

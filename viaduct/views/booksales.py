@@ -16,7 +16,8 @@ def view():
     if not GroupPermissionAPI.can_read('booksales'):
         return abort(403)
 
-    return render_template('booksales/view.htm', books=Book.query.all())
+    return render_template('booksales/view.htm', books=Book.query.all(),
+                           title='Booksales')
 
 
 @blueprint.route('/sales/')
@@ -24,7 +25,8 @@ def view_sales():
     if not GroupPermissionAPI.can_read('booksales'):
         return abort(403)
 
-    return render_template('booksales/sales.htm', sales=Sale.query.all())
+    return render_template('booksales/sales.htm', sales=Sale.query.all(),
+                           title='Booksales')
 
 
 @blueprint.route('/add_sale/', methods=['GET', 'POST'])
@@ -45,7 +47,8 @@ def add_sale():
     books = Book.query.all()
 
     form.load_books(books)
-    return render_template('booksales/add_sale.htm', form=form)
+    return render_template('booksales/add_sale.htm', form=form,
+                           title='Booksales')
 
 
 @blueprint.route('/edit_book/', methods=['GET', 'POST'])
@@ -85,4 +88,5 @@ def edit_book(book_id=-1):
             flash('The Book was added succesfully')
             return redirect(url_for('booksales.view'))
 
-    return render_template('booksales/edit_book.htm', form=form)
+    return render_template('booksales/edit_book.htm', form=form,
+                           title='Booksales')

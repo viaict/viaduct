@@ -124,7 +124,8 @@ def add_task(group_id='all'):
     form.load_groups(current_user.groups.order_by(Group.name.asc()).all())
 
     return render_template('pimpy/add_task.htm', group=group,
-                           group_id=group_id, type='tasks', form=form)
+                           group_id=group_id, type='tasks', form=form,
+                           title='PimPy')
 
 
 @blueprint.route('/tasks/edit/', methods=['POST'])
@@ -193,7 +194,7 @@ def add_minute(group_id='all'):
 
                 return render_template('pimpy/view_parsed_tasks.htm',
                                        tasks=tasks, dones=dones,
-                                       removes=removes)
+                                       removes=removes, title='PimPy')
 
         if result:
             flash('The minute is added successfully')
@@ -205,4 +206,5 @@ def add_minute(group_id='all'):
     form.load_groups(current_user.groups.order_by(Group.name.asc()).all())
 
     return render_template('pimpy/add_minute.htm', group=group,
-                           group_id=group_id, type='minutes', form=form)
+                           group_id=group_id, type='minutes', form=form,
+                           title='PimPy')
