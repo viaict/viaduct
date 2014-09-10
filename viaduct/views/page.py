@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import datetime
 import difflib
 
 from flask import Blueprint
@@ -12,7 +11,6 @@ from viaduct import db
 from viaduct.forms import PageForm, HistoryPageForm
 from viaduct.models import Group, Page, PageRevision, PagePermission, \
     CustomForm
-from viaduct.models.page import Page, PageRevision, PagePermission
 from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.user import UserAPI
 from viaduct.api.page import PageAPI
