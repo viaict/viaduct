@@ -1,6 +1,7 @@
 import os
 
-from flask import abort, Blueprint, redirect, request, render_template, send_file, url_for
+from flask import abort, Blueprint, redirect, request, render_template, \
+    send_file, url_for
 from flask.ext.login import current_user
 from werkzeug import secure_filename
 
@@ -10,46 +11,49 @@ from viaduct.helpers import flash_form_errors
 
 blueprint = Blueprint('upload', __name__)
 
+
 @blueprint.route('/file/')
 @blueprint.route('/file/<filename>/')
 def view(filename=''):
-	return ''
+    return ''
+
 
 @blueprint.route('/file/direct/<filename>')
 def view_direct(filename):
-	file_path = os.path.join(application.config['UPLOAD_FOLDER'], filename)
-	path = os.path.join(application.root_path, file_path)
+    file_path = os.path.join(application.config['UPLOAD_FOLDER'], filename)
+    path = os.path.join(application.root_path, file_path)
 
-	if not os.path.exists(path):
-		abort(404)
+    if not os.path.exists(path):
+        abort(404)
 
-	return send_file(file_path, as_attachment=True)
+    return send_file(file_path, as_attachment=True)
+
 
 @blueprint.route('/file/add/', methods=['GET', 'POST'])
 def add():
-	if not current_user or current_user.email != 'administrator@svia.nl':
-		return abort(403)
+    if not current_user or current_user.email != 'administrator@svia.nl':
+        return abort(403)
 
-	form = UploadForm(request.form)
+    form = UploadForm(request.form)
 
-	if form.validate_on_submit():
-		file = request.files['upload']
+    if form.validate_on_submit():
+        file = request.files['upload']
 
-		if file:
-			filename = form.filename.data
-			original = secure_filename(file.filename)
+        if file:
+            filename = form.filename.data
+            original = secure_filename(file.filename)
 
-			if len(os.path.splitext(filename)[1]) == 0:
-				filename += os.path.splitext(original)[1]
+            if len(os.path.splitext(filename)[1]) == 0:
+                filename += os.path.splitext(original)[1]
 
-			file_path = os.path.join(application.root_path, application.config['UPLOAD_FOLDER'])
-			file_path = os.path.join(file_path, filename)
+            file_path = os.path.join(application.root_path,
+                                     application.config['UPLOAD_FOLDER'])
+            file_path = os.path.join(file_path, filename)
 
-			file.save(file_path)
+            file.save(file_path)
 
-			return redirect(url_for('file.view', filename=filename))
-	else:
-		flash_form_errors(form)
+            return redirect(url_for('file.view', filename=filename))
+    else:
+        flash_form_errors(form)
 
-	return render_template('upload/add_file.htm', form=form)
-
+    return render_template('upload/add_file.htm', form=form)
