@@ -3,7 +3,6 @@ from viaduct.models.activity import Activity
 from flask import Blueprint, render_template
 from flask import abort
 import datetime
-#from viaduct.models.home import Homepage
 
 blueprint = Blueprint('home', __name__)
 
