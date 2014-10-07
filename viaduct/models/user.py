@@ -29,6 +29,7 @@ class User(db.Model, BaseEntity):
     created = db.Column(db.DateTime, default=datetime.now())
     honorary_member = db.Column(db.Boolean, default=False)
     favourer = db.Column(db.Boolean, default=False)
+    lectures_mail = db.Column(db.Boolean, default=False)
     payed_date = db.Column(db.DateTime)
 
     education = db.relationship(Education,
