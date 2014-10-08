@@ -6,8 +6,7 @@ DEBUG = True
 
 SECRET_KEY = 'secret_key'
 
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(base_path,
-                                                      'application.db')
+SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://viaduct:viaduct@localhost/viaduct'
 DATABASE_CONNECT_OPTIONS = {}
 
 CSRF_ENABLED = True

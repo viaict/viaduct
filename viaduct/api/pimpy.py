@@ -328,7 +328,8 @@ class PimpyAPI:
 
         return Markup(render_template('pimpy/api/side_menu.htm', groups=groups,
                                       group_id=group_id, personal=personal,
-                                      type=type, endpoints=endpoints))
+                                      type=type, endpoints=endpoints,
+                                      title='PimPy'))
 
     @staticmethod
     def get_all_tasks(group_id):
@@ -366,7 +367,8 @@ class PimpyAPI:
         return Markup(render_template('pimpy/api/tasks.htm',
                                       list_items=list_items, type='tasks',
                                       group_id=group_id, personal=False,
-                                      status_meanings=status_meanings))
+                                      status_meanings=status_meanings,
+                                      title='PimPy'))
 
     @staticmethod
     def get_tasks(group_id, personal):
@@ -405,7 +407,8 @@ class PimpyAPI:
                                       group_id=group_id,
                                       tasks_rel=tasks_rel,
                                       type='tasks',
-                                      status_meanings=status_meanings))
+                                      status_meanings=status_meanings,
+                                      title='PimPy'))
 
     @staticmethod
     def get_minutes(group_id):
@@ -434,7 +437,8 @@ class PimpyAPI:
 
         return Markup(render_template('pimpy/api/minutes.htm',
                                       list_items=list_items, type='minutes',
-                                      group_id=group_id, line_number=-1))
+                                      group_id=group_id, line_number=-1,
+                                      title='PimPy'))
 
     @staticmethod
     def get_minute(group_id, minute_id, line_number):
@@ -455,7 +459,8 @@ class PimpyAPI:
 
         return render_template('pimpy/api/minutes.htm', list_items=list_items,
                                type='minutes', group_id=group_id,
-                               line_number=line_number, tag=tag)
+                               line_number=line_number, tag=tag,
+                               title='PimPy')
 
     @staticmethod
     def update_content(task_id, content):

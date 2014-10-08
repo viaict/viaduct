@@ -1,15 +1,13 @@
 from flask import Blueprint, abort, redirect, url_for
 from flask import flash, render_template, request, jsonify
-from viaduct import application, db
-from viaduct.helpers import flash_form_errors
+from viaduct import db
 
 from flask.ext.login import current_user
 
-from viaduct.forms.pimpy import AddTaskForm, AddMinuteForm, EditTaskForm
+from viaduct.forms.pimpy import AddTaskForm, AddMinuteForm
 from viaduct.api.pimpy import PimpyAPI
 from viaduct.api.group import GroupPermissionAPI
-from viaduct.models.pimpy import Minute, Task
-from viaduct.models.user import User
+from viaduct.models.pimpy import Task
 from viaduct.models.group import Group
 
 
@@ -126,7 +124,8 @@ def add_task(group_id='all'):
     form.load_groups(current_user.groups.order_by(Group.name.asc()).all())
 
     return render_template('pimpy/add_task.htm', group=group,
-                           group_id=group_id, type='tasks', form=form)
+                           group_id=group_id, type='tasks', form=form,
+                           title='PimPy')
 
 
 @blueprint.route('/tasks/edit/', methods=['POST'])
@@ -195,7 +194,7 @@ def add_minute(group_id='all'):
 
                 return render_template('pimpy/view_parsed_tasks.htm',
                                        tasks=tasks, dones=dones,
-                                       removes=removes)
+                                       removes=removes, title='PimPy')
 
         if result:
             flash('The minute is added successfully')
@@ -207,4 +206,5 @@ def add_minute(group_id='all'):
     form.load_groups(current_user.groups.order_by(Group.name.asc()).all())
 
     return render_template('pimpy/add_minute.htm', group=group,
-                           group_id=group_id, type='minutes', form=form)
+                           group_id=group_id, type='minutes', form=form,
+                           title='PimPy')

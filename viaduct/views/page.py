@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import datetime
 import difflib
 
 from flask import Blueprint
@@ -12,7 +11,6 @@ from viaduct import db
 from viaduct.forms import PageForm, HistoryPageForm
 from viaduct.models import Group, Page, PageRevision, PagePermission, \
     CustomForm
-from viaduct.models.page import Page, PageRevision, PagePermission
 from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.user import UserAPI
 from viaduct.api.page import PageAPI
@@ -37,7 +35,7 @@ def get_page(path=''):
         return abort(500)
 
     return render_template('%s/view_single.htm' % (page.type), page=page,
-                           revision=revision)
+                           revision=revision, title=revision.title)
 
 
 @blueprint.route('/history/<path:path>', methods=['GET', 'POST'])

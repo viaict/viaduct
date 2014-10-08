@@ -59,7 +59,7 @@ def view(page_nr=1):
 
     return render_template('group/view.htm', form=form, pagination=pagination,
                            groups=zip(pagination.items, form.entries),
-                           current_user=current_user)
+                           current_user=current_user, title='Groups')
 
 
 @blueprint.route('/groups/create/', methods=['GET', 'POST'])
@@ -89,7 +89,7 @@ def create():
 
             return redirect(url_for('group.view'))
 
-    return render_template('group/create.htm')
+    return render_template('group/create.htm', title='Create group')
 
 
 @blueprint.route('/groups/<int:group_id>/users/', methods=['GET', 'POST'])
@@ -135,12 +135,14 @@ def view_users(group_id, page_nr=1):
             .order_by(User.first_name).order_by(User.last_name)\
             .paginate(page_nr, 15, False)
         return render_template('group/view_users.htm', group=group,
-                               users=users, search=search)
+                               users=users, search=search,
+                               title='%s users' % (group.name))
 
     users = group.get_users().order_by(User.first_name)\
         .order_by(User.last_name).paginate(page_nr, 15, False)
 
-    return render_template('group/view_users.htm', group=group, users=users)
+    return render_template('group/view_users.htm', group=group, users=users,
+                           title='%s users' % (group.name))
 
 
 @blueprint.route('/groups/<int:group_id>/users/add/', methods=['GET', 'POST'])
@@ -186,12 +188,13 @@ def add_users(group_id, page_nr=1):
                        User.student_id.like('%' + search + '%')))\
             .order_by(User.last_name).paginate(page_nr, 15, False)
         return render_template('group/add_users.htm', group=group, users=users,
-                               search=search)
+                               search=search, title='Add users')
 
     users = User.query.order_by(User.first_name).order_by(User.last_name)\
         .paginate(page_nr, 15, False)
 
-    return render_template('group/add_users.htm', group=group, users=users)
+    return render_template('group/add_users.htm', group=group, users=users,
+                           title='Add users')
 
 
 @blueprint.route('/groups/edit-permissions/<int:group_id>/',
@@ -262,5 +265,5 @@ def edit_permissions(group_id, page_nr=1):
 
     return render_template('group/edit_permissions.htm', form=form,
                            can_write=GroupPermissionAPI.can_write('group'),
-                           group_name=group_name,
+                           group_name=group_name, title='Module permissions',
                            permissions=zip(permissions, form.permissions))

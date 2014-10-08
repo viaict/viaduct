@@ -3,7 +3,7 @@
 See [tutorial](TUTORIAL.md).
 
 ## Setup:
-OS Packages: Python, SQLite, pip, virtualenv.
+OS Packages: Python, SQLite, pip, virtualenv, mysql.
 Install with your favorite packagemanager.
 
 Python dependencies are in `requirements.txt`. Install through pip. Usage of virtual environments is recommended:
@@ -24,12 +24,15 @@ Build dependencies are for ruby and npm:
 
 * Install Grunt build dependencies
     - Install nodeJS (with npm included)
-    - `(sudo) npm install -g grunt-cli
+    - `(sudo) npm install -g grunt-cli`
     - `npm install`
 
-Create a database with:
+Create a temporary database with:
+    - `(sudo) mysql -u root -p < mysqlinit.sql`
+	- `python create_db.py`
 
-	python create_db.py
+Using a live database by installing mysql and running:
+    - `(sudo) mysql -u root -p < database.sql`
 
 Run site with:
 

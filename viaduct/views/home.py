@@ -2,9 +2,7 @@ from viaduct.models.page import Page, PageRevision
 from viaduct.models.activity import Activity
 from flask import Blueprint, render_template
 from flask import abort
-from viaduct import db
 import datetime
-#from viaduct.models.home import Homepage
 
 blueprint = Blueprint('home', __name__)
 
@@ -25,9 +23,9 @@ def home():
             activities = Activity.query \
                 .filter(Activity.end_time > datetime.datetime.now()) \
                 .order_by(Activity.start_time.asc())
-            revision.activity = render_template('activity/view_simple.htm',
-                                    activities=activities
-                                    .paginate(1, 12, False))
+            revision.activity = \
+                render_template('activity/view_simple.htm',
+                                activities=activities .paginate(1, 12, False))
 
             revisions.append(revision)
 
@@ -52,4 +50,4 @@ def home():
 
         revisions.append(revision)
 
-    return render_template('home/home.htm', data=revisions)
+    return render_template('home/home.htm', data=revisions, title='Homepage')
