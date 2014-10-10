@@ -15,6 +15,14 @@
 
         <script src="/static/js/global.js"></script>
 
+        <script>var viaduct = {};</script>
+
+        {% if data %}
+            <script>
+                viaduct = {{json.dumps(serialize_sqla(data))|safe}};
+            </script>
+        {% endif %}
+
         {% block includes %}
         {% endblock %}
 
