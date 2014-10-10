@@ -1,14 +1,15 @@
-from base_model import BaseEntity
+from base_model import BaseEntity  # noqa
 
-from activity import Activity
-from course import Course
-from degree import Degree
-from education import Education
-from group import Group, user_group
-from navigation import NavigationEntry
-from permission import GroupPermission#, Permission, UserPermission
-from pimpy import Minute, Task
-from user import User
-from news import NewsRevision
-from page import Page, PageRevision, PagePermission
-from custom_form import CustomForm
+from activity import Activity  # noqa
+from course import Course  # noqa
+from degree import Degree  # noqa
+from education import Education  # noqa
+from group import Group, user_group  # noqa
+from navigation import NavigationEntry  # noqa
+from permission import GroupPermission  # noqa
+from pimpy import Minute, Task  # noqa
+from user import User  # noqa
+from news import NewsRevision  # noqa
+from page import Page, PageRevision, PagePermission  # noqa
+from custom_form import CustomForm  # noqa
+from elections import Nominee  # noqa
