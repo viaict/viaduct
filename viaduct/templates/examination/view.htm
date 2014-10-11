@@ -32,7 +32,7 @@
 				{% for examination in examinations.items %}
 					<tr>
 						<td>
-							<a href="?search={{ (examination.course.name) }}">{{ examination.course.name }}</a>
+							<a href="/examination?search={{ (examination.course.name) }}">{{ examination.course.name }}</a>
 						</td>
 						<td>
 							<a href="{{ path + examination.path }}" target="_blank">{{ examination.title }}</a>{% if not examination.answer_path == '1' %}
@@ -40,7 +40,7 @@
 							{% endif %}
 						</td>
 						<td>
-							<a href="?search={{ (examination.education.name) }}">{{ examination.education.name }}</a>
+							<a href="/examination?search={{ (examination.education.name) }}">{{ examination.education.name }}</a>
 						</td>
 						{% if GroupPermissionAPI.can_write('examination') %}
 							<td>
