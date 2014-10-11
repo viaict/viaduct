@@ -97,7 +97,7 @@ def upload_file():
         db.session.add(exam)
         db.session.commit()
 
-        flash('Het tentamen is geupload')
+        flash('Het tentamen is geupload', 'success')
 
         return render_template('examination/upload.htm', courses=courses,
                                educations=educations, message='',
@@ -139,7 +139,7 @@ def view_examination(page_nr=1):
         try:
             os.remove(os.path.join(UPLOAD_FOLDER, examination.path))
         except:
-            flash('File bestaat niet, tentamen is verwijderd')
+            flash('File bestaat niet, tentamen is verwijderd', 'info')
 
         title = examination.title
         db.session.delete(examination)
@@ -284,7 +284,7 @@ def edit_examination():
 
             db.session.commit()
 
-            flash('Het tentamen is aangepast!')
+            flash('Het tentamen is aangepast!', 'success')
             return render_template('examination/edit.htm', courses=courses,
                                    educations=educations,
                                    examination=examination,

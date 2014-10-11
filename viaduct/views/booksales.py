@@ -85,7 +85,7 @@ def edit_book(book_id=-1):
                                                              form.stock.data)
 
         if result:
-            flash('The Book was added succesfully')
+            flash('The Book was added succesfully', 'success')
             return redirect(url_for('booksales.view'))
 
     return render_template('booksales/edit_book.htm', form=form,
