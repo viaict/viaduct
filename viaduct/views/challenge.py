@@ -1,5 +1,5 @@
 from flask import Blueprint, flash, redirect, render_template, request, \
-        url_for, abort, jsonify
+    abort, jsonify
 
 from sqlalchemy import or_, and_
 
