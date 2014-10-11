@@ -5,9 +5,8 @@
 {% block content %}
 <h1>Inloggen</h1>
 
-<p>Nog geen account? Registreer <a href="{{ url_for('user.sign_up') }}">HIER</a></p>
 <div class='row'>
-    <div class='col-md-5'>
+    <div class='col-md-6'>
         <form method="post" name="sign-in" id="sign-in">
             {{ form.csrf_token }}
             {{ render_field(form.email) }}
@@ -15,6 +14,11 @@
             {{ render_checkbox(form.remember_me) }}
 
             {{ render_submit('Log in') }}
+
+        <ul class="list-inline">
+            <li><a href="{{ url_for('user.sign_up') }}">Account registreren!</a></li>
+            <li><a href="{{ url_for('user.request_password') }}">Wachtwoord vergeten?</a></li>
+        </ul>
         </form>
     </div>
 </div>
