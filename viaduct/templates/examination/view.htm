@@ -2,10 +2,9 @@
 
 {% extends "base.htm" %}
 
-{%block page %}
+{% block page %}
 	<fieldset>
 		<legend>Tentamens</legend>
-
 		<div class="row">
 			<div class="col-md-12">
 				<form method="get" action="{{ url_for('examination.view_examination') }}" enctype=multipart/form-data class="form-inline" >
@@ -14,12 +13,18 @@
 				</form>
 			</div>
 		</div>
+		{% if GroupPermissionAPI.can_write('examination') %}
+			<a href="add" class="btn"><i class="glyphicon glyphicon-pencil"></i> <strong>Nieuw tentamen</strong></a>
+		{% endif %}
 		<table class="table table-bordered table-striped">
 			<thead>
 				<tr>
 					<th>Vak</th>
 					<th>Tentamen</th>
 					<th>Opleiding</th>
+					{% if GroupPermissionAPI.can_write('examination') %}
+						<th>Edit</th>
+					{% endif %}
 				</tr>
 			</thead>
 
@@ -37,6 +42,12 @@
 						<td>
 							<a href="?search={{ (examination.education.name) }}">{{ examination.education.name }}</a>
 						</td>
+						{% if GroupPermissionAPI.can_write('examination') %}
+							<td>
+								<a href="edit?edit={{ (examination.id) }}"><i class="glyphicon glyphicon-pencil"></i></a>
+								<a onclick="confirmation({{examination.id}})" role="button" data-toggle="modal" style="cursor: pointer;"><i class="glyphicon glyphicon-remove"></i></a>
+							</td>
+						{% endif %}
 					</tr>
 				{% endfor %}
 			</tbody>
@@ -53,5 +64,15 @@ function searchKeyPress(e)
 		document.getElementById('submit').click();
 	}
 }
+
+function confirmation(id) {
+	var answer = confirm("Weet je zeker dat je het tentamen wil verwijderen?")
+	if (answer){
+		window.location = "?delete="+id;
+	}
+	else{
+	}
+}
 </script>
+
 {% endblock %}
