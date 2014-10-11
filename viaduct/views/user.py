@@ -57,12 +57,16 @@ def view_single(user_id=None):
     user.avatar = UserAPI.avatar(user)
     user.groups = UserAPI.get_groups_for_user_id(user)
 
+    user.groups_amount = user.groups.count()
+
     # Get all activity entrees from these forms, order by start_time of
     # activity.
     activities = Activity.query.join(CustomForm).join(CustomFormResult).\
         filter(CustomFormResult.owner_id == user_id and
                CustomForm.id == CustomFormResult.form_id and
                Activity.form_id == CustomForm.id)
+
+    user.activities_amount = activities.count()
 
     new_activities = activities\
         .filter(Activity.end_time > datetime.datetime.today()).distinct()\

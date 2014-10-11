@@ -62,6 +62,7 @@ $(document).ready(function() {
             new_status: status
         }, function(data) {
             $('#pimpy_task'+task_id).attr('class', 'btn dropdown-toggle ' + data.status);
+            $('#pimpy_task_row_'+task_id).attr('class', 'pimpy_status_' + data.status);
         });
     });
 

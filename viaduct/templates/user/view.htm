@@ -49,8 +49,9 @@
 						<th>Achternaam
 						<th>Student ID
 						<th>Studie
-            <th>Lezingen
 						<th>Lid
+						<th>Erelid
+						<th>Begunstiger
 						<th>
 					</tr>
 				</thead>
@@ -67,8 +68,9 @@
 							<td>{{ user.last_name }}
 							<td>{{ user.student_id }}
 							<td>{{ user.education.name }}
-              <td>{{ user.lectures_mail }}
 							<td>{% if user.has_payed %}<i class="glyphicon glyphicon-ok"></i>{% endif %}
+							<td>{% if user.honorary_member %}<i class="glyphicon glyphicon-ok"></i>{% endif %}
+							<td>{% if user.favourer %}<i class="glyphicon glyphicon-ok"></i>{% endif %}
 							<td>
 								<a class="btn btn-xs btn-primary" href="{{ url_for('user.view_single', user_id=user.id) }}">
 									Bekijken
