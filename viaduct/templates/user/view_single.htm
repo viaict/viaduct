@@ -16,8 +16,8 @@
                 <div class="col-md-6 no-pad">
                     <div class="user-pad">
                         <h3>Welkom, {{ user.first_name }} {{ user.last_name }}</h3>
-                        <button type="button" class="btn btn-labeled btn-info" href="{{ url_for('user.edit', user_id=user.id) }}">
-                            <span class="btn-label"><i class="fa fa-pencil"></i></span>Bewerken</button>
+                        <a href="{{ url_for('user.edit', user_id=user.id) }}"<button type="button" class="btn btn-labeled btn-info" href="{{ url_for('user.edit', user_id=user.id) }}">
+                            <span class="btn-label"><i class="fa fa-pencil"></i></span>Bewerken</button></a>
                     </div>
                 </div>
                 <div class="col-md-6 no-pad">
