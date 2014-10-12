@@ -216,7 +216,7 @@ def sign_up():
 
             #user.add_to_all()
 
-            flash('You\'ve signed up successfully.')
+            flash('You\'ve signed up successfully.', 'success')
 
         login_user(user)
 
@@ -254,7 +254,7 @@ def sign_in():
         # Notify the login manager that the user has been signed in.
         login_user(user)
 
-        flash('You\'ve been signed in successfully.')
+        flash('You\'ve been signed in successfully.', 'succes')
 
         denied_from = session.get('denied_from')
         if denied_from:
@@ -272,7 +272,7 @@ def sign_out():
     # Notify the login manager that the user has been signed out.
     logout_user()
 
-    flash('You\'ve been signed out.')
+    flash('You\'ve been signed out.', 'success')
 
     if 'denied_from' in session:
         session['denied_from'] = None

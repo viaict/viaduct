@@ -21,7 +21,7 @@ class FileAPI:
         # Check if the file is allowed.
         if not '.' in filename or \
                 not filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS:
-            flash('Bestandstype is niet toegestaan.')
+            flash('Bestandstype is niet toegestaan.', 'error')
             return
 
         # Convert the name.
