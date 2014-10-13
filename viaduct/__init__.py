@@ -18,7 +18,8 @@ def serialize_sqla(data, serialize_date=True):
     """
     # If has to_dict this is asumed working and it is used
     if hasattr(data, 'to_dict'):
-        return data.to_dict(serialize_date=serialize_date)
+        #return data.to_dict(serialize_date=serialize_date)
+        return data.to_dict()
 
     # DateTime objects should be returned as isoformat
     if hasattr(data, 'isoformat') and serialize_date:
