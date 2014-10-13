@@ -6,6 +6,7 @@ client_secrets.json
 *.bak
 *.pyc
 *.jpg
+*.jpeg
 *.gif
 *.png
 *.pdf
