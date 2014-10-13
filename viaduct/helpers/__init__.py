@@ -37,7 +37,7 @@ def permission_denied(e):
     session['denied_from'] = request.path
 
     if not current_user or current_user.is_anonymous():
-        flash('Je hebt geen rechten om deze pagina te bekijken.')
+        flash('Je hebt geen rechten om deze pagina te bekijken.', 'error')
         return redirect(url_for('user.sign_in'))
 
     return render_template('page/403.htm', content=content, image=image)

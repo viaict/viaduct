@@ -28,6 +28,11 @@ ADMIN_PW = 'wachtwoord'
 
 GOOGLE_API_KEY = ''
 
+GMAIL_MAIL_ACCOUNT = {
+    'username': 'wachtwoordvergeten.via@gmail.com',
+    'password': 'vergeetJeWachtwoordDanOokNietsukkeltje'
+    }
+
 # Mollie config
 MOLLIE_URL = ''
 MOLLIE_TEST_KEY = ''
@@ -36,6 +41,6 @@ MOLLIE_REDIRECT_URL = ''
 MOLLIE_TEST_MODE = True
 
 LANGUAGES = {
-        'en': 'English',
-        'nl': 'Nederlands'
-        }
+    'en': 'English',
+    'nl': 'Nederlands'
+    }

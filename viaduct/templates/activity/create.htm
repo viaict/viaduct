@@ -45,7 +45,15 @@
             </label>
 
             <div class="controls form-inline">
-                <input value="{{ activity.format_form_time(form.start_time.data) }}" type='datetime-local' name='start_date'>
+                <div id="datetime_start" class="input-append date">
+                    <div class="controls form-inline">
+                        <input data-format="yyyy-MM-dd hh:mm" class="form-control" name='start_date' id='start_date' type="text" value="{{ activity.format_form_time(form.start_time.data) }}"></input>
+                    </div>
+                    <span class="add-on" id="datetime_start_picker">
+                        <i data-time-icon="icon-time" style="opacity:0;" data-date-icon="icon-calendar">
+                        </i>
+                    </span>
+                </div>
             </div>
         </div>
 
@@ -55,7 +63,13 @@
             </label>
 
             <div class="controls form-inline">
-                <input value="{{ activity.format_form_time(form.end_time.data) }}" type='datetime-local' name='end_date'>
+                <div id="datetime_end" class="input-append date" >
+                    <input data-format="yyyy-MM-dd hh:mm" class="form-control" type="text" name='end_date' id='end_date' value="{{ activity.format_form_time(form.end_time.data) }}"></input>
+                    <span class="add-on">
+                        <i data-time-icon="icon-time" style="opacity:0" id="datetime_end_picker" data-date-icon="icon-calendar">
+                        </i>
+                    </span>
+                </div>
             </div>
         </div>
 
@@ -75,5 +89,30 @@
         </div>
     </div>
 </form>
+
+<script>
+$(function() {
+    $('#datetime_start').datetimepicker({
+        language: 'en',
+    });
+});
+
+$(function() {
+    $('#datetime_end').datetimepicker({
+        language: 'en',
+    });
+});
+
+/* Ugly hack to open the datetime picker */
+$(document).on("click", "#start_date" , function(e){
+    $("#datetime_start_picker").click();
+});
+
+/* Ugly hack to open the datetime picker */
+$(document).on("click", "#end_date" , function(e){
+    $("#datetime_end_picker").click();
+});
+
+</script>
 
 {% endblock %}

@@ -38,7 +38,7 @@ def create_unique_file(filename):
     while file_exists(temp_filename):
         split = filename.split('.')
         split[0] = split[0] + "(" + str(i) + ")"
-        temp_filename = split[0] + "." + split[len(split)-1]
+        temp_filename = split[0] + "." + split[len(split) - 1]
         i += 1
     return temp_filename
 
@@ -97,7 +97,7 @@ def upload_file():
         db.session.add(exam)
         db.session.commit()
 
-        flash('Het tentamen is geupload')
+        flash('Het tentamen is geupload', 'success')
 
         return render_template('examination/upload.htm', courses=courses,
                                educations=educations, message='',
@@ -129,6 +129,26 @@ def view_examination(page_nr=1):
             .order_by(Course.name).paginate(page_nr, 15, True)
         return render_template('examination/view.htm', path=path,
                                examinations=examinations, search=search,
+                               title='Tentamens')
+
+    if request.args.get('delete'):
+        exam_id = request.args.get('delete')
+        examination = Examination.query.filter(Examination.id == exam_id)\
+            .first()
+
+        try:
+            os.remove(os.path.join(UPLOAD_FOLDER, examination.path))
+        except:
+            flash('File bestaat niet, tentamen is verwijderd', 'info')
+
+        title = examination.title
+        db.session.delete(examination)
+        db.session.commit()
+        examinations = Examination.query.paginate(page_nr, 15, False)
+        return render_template('examination/admin.htm', path=path,
+                               examinations=examinations, search="",
+                               message="Tentamen " + title +
+                                       " succesvol verwijderd",
                                title='Tentamens')
 
     examinations = Examination.query.join(Course)\
@@ -264,7 +284,7 @@ def edit_examination():
 
             db.session.commit()
 
-            flash('Het tentamen is aangepast!')
+            flash('Het tentamen is aangepast!', 'success')
             return render_template('examination/edit.htm', courses=courses,
                                    educations=educations,
                                    examination=examination,
