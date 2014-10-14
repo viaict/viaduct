@@ -80,5 +80,16 @@ def admin_nominate():
     if not GroupPermissionAPI.can_write('elections'):
         return abort(403)
 
+    nominees = Nominee.query.order_by(Nominee.name)
+
+    unchecked_nominees = nominees.filter(Nominee.valid == None).all()  # noqa
+    valid_nominees = nominees.filter(Nominee.valid == True).all()  # noqa
+    invalid_nominees = nominees.filter(Nominee.valid == False).all()  # noqa
+
+    print(unchecked_nominees, valid_nominees, invalid_nominees)
+
     return render_template('elections/admin_nominate.htm',
-                           title='Docent van het jaar IW/Nomineren/Admin')
+                           title='Docent van het jaar IW/Nomineren/Admin',
+                           unchecked_nominees=unchecked_nominees,
+                           valid_nominees=valid_nominees,
+                           invalid_nominees=invalid_nominees)
