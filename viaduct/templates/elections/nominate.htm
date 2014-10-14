@@ -1,0 +1,23 @@
+{% extends 'content.htm' %}
+
+{% block includes %}
+    <script src='/static/js/elections/nominate.js'></script>
+{% endblock %}
+
+{% block content %}
+    <h1>Docent van het jaar IW</h1>
+    <h2>Nomineren</h2>
+
+    <p>
+        Nomineer hier je <strong>vier</strong> favoriete docenten voor de
+        verkiezingen van docent van IW van het jaar.
+    </p>
+
+    <form method='post'>
+        <div class='form-group'>
+            <label for='nominee_name'>Naam</label>
+            <input class='form-control' id='nominee_select' name='nominee' autocomplete='off' />
+        </div>
+        <button type='submit' class='btn btn-primary' autocomplete='off'>Nomineer</button>
+    </form>
+{% endblock %}
