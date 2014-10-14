@@ -3,6 +3,14 @@ function flash(message, type, scrollToTop) {
 	var $container = $('#messages');
 	var $message = $('<div></div>');
 
+    if (!type) {
+        type = 'info';
+    }
+
+    if (type === 'error') {
+        type = 'danger';
+    }
+
 	$message.addClass('alert').addClass('alert-' + type);
 	$message.text(message);
 	$message.hide();
@@ -10,7 +18,7 @@ function flash(message, type, scrollToTop) {
 	$container.prepend($message);
 	$message.slideDown('slow');
 
-	if(scrollToTop != false)
+	if (scrollToTop !== false)
 		scrollToTop();
 }
 
