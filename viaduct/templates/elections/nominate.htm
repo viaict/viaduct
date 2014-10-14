@@ -28,8 +28,12 @@
         {% for nomination in nominations %}
             <tr class='{% if nomination.verified %}success{% else %}danger{% endif %}' data-nomination-id='{{ nomination.id }}'>
                 <td>{{ nomination.nominee.name }}</td>
-                <td class='text-right'>{% if not nomination.verified %}Niet g{% else %}G{% endif %}everifieerd</td>
-                <td class='text-right'><a href='#' class='remove btn btn-danger'><i class='icon-remove'></i></a></td>
+                <td class='text-right'>
+                    {% if not nomination.verified %}Niet g{% else %}G{% endif %}everifieerd
+                </td>
+                <td class='text-right'>
+                    <a href='#' class='remove btn btn-danger'><i class='icon-remove'></i></a>
+                </td>
             </tr>
         {% endfor %}
     </table>
