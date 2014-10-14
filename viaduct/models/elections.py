@@ -5,9 +5,10 @@ from viaduct.models import BaseEntity, User
 class Nominee(db.Model, BaseEntity):
     __tablename__ = 'dvhj_nominee'
 
-    prints = ('id', 'name')
+    prints = ('id', 'name', 'valid')
 
     name = db.Column(db.String(256))
+    valid = db.Column(db.Boolean)
 
     def __init__(self, name=None):
         self.name = name
@@ -17,7 +18,11 @@ class Nominee(db.Model, BaseEntity):
             raise Exception('Je moet betaald lid zijn om een docent te '
                             'nomineren')
 
-        if user.nominations.count() >= Nomination.MAX_PER_USER:
+        nominee_ids = [n.nominee_id for n in user.nominations.all()]
+        nomination_n = Nominee.query.filter(Nominee.id.in_(nominee_ids))\
+            .filter(db.or_(Nominee.valid == None, Nominee.valid == 1))\
+            .count()  # noqa
+        if nomination_n >= Nomination.MAX_PER_USER:
             raise Exception('Je mag maar %d docenten per persoon nomineren' %
                             (Nomination.MAX_PER_USER))
 
@@ -40,7 +45,6 @@ class Nomination(db.Model, BaseEntity):
 
     nominee_id = db.Column(db.Integer, db.ForeignKey('dvhj_nominee.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    verified = db.Column(db.Boolean)
 
     nominee = db.relationship(Nominee, backref=db.backref('nominations',
                                                           lazy='dynamic'))
@@ -50,4 +54,3 @@ class Nomination(db.Model, BaseEntity):
     def __init__(self, nominee=None, user=None):
         self.nominee = nominee
         self.user = user
-        self.verified = False

@@ -26,10 +26,20 @@
 
     <table class='table'>
         {% for nomination in nominations %}
-            <tr class='{% if nomination.verified %}success{% else %}danger{% endif %}' data-nomination-id='{{ nomination.id }}'>
+            {% if nomination.nominee.valid != none %}
+                {% if nomination.nominee.valid %}{% set tr_class = 'success' %}
+                {% else %}{% set tr_class = 'danger' %}{% endif %}
+            {% else %}
+                {% set tr_class = 'warning' %}
+            {% endif %}
+
+            <tr class='{{ tr_class }}' data-nomination-id='{{ nomination.id }}'>
                 <td>{{ nomination.nominee.name }}</td>
                 <td class='text-right'>
-                    {% if not nomination.verified %}Niet g{% else %}G{% endif %}everifieerd
+                    {% if tr_class == 'success' %}Goedgekeurd
+                    {% elif tr_class == 'danger' %}Afgekeurd
+                    {% elif tr_class == 'warning' %}Niet gekeurd
+                    {% else %}Ik weet niet wat je aan het doen bent, maar het slaat helemaal nergens op.{% endif %}
                 </td>
                 <td class='text-right'>
                     <a href='#' class='remove btn btn-danger'><i class='icon-remove'></i></a>

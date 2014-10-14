@@ -4,6 +4,7 @@ from flask.ext.login import current_user
 
 from viaduct import db
 from viaduct.models import Nominee, Nomination
+from viaduct.api.group import GroupPermissionAPI
 
 blueprint = Blueprint('elections', __name__, url_prefix='/verkiezing')
 
@@ -18,7 +19,8 @@ def nominate():
     if current_user is None or not current_user.has_payed:
         return abort(403)
 
-    nominees = Nominee.query.order_by(Nominee.name).all()
+    nominees = Nominee.query.filter(Nominee.valid == True)\
+        .order_by(Nominee.name).all()  # noqa
 
     return render_template('elections/nominate.htm',
                            title='Docent van het jaar IW/Nomineren',
@@ -66,3 +68,17 @@ def remove_nomination():
     db.session.commit()
 
     return jsonify()
+
+
+@blueprint.route('/admin/', methods=['GET'])
+def admin_main():
+    return redirect(url_for('elections.admin_nominate'))
+
+
+@blueprint.route('/admin/nomineren/', methods=['GET'])
+def admin_nominate():
+    if not GroupPermissionAPI.can_write('elections'):
+        return abort(403)
+
+    return render_template('elections/admin_nominate.htm',
+                           title='Docent van het jaar IW/Nomineren/Admin')
