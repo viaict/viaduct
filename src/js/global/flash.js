@@ -1,5 +1,5 @@
 /* Flash a message. */
-function flash(message, type, scrollToTop) {
+function flash(message, type, scroll) {
 	var $container = $('#messages');
 	var $message = $('<div></div>');
 
@@ -18,7 +18,7 @@ function flash(message, type, scrollToTop) {
 	$container.prepend($message);
 	$message.slideDown('slow');
 
-	if (scrollToTop !== false)
+	if (scroll !== false)
 		scrollToTop();
 }
 
