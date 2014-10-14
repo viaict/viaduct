@@ -34,6 +34,8 @@ class Nominee(db.Model, BaseEntity):
 class Nomination(db.Model, BaseEntity):
     __tablename__ = 'dvhj_nomination'
 
+    prints = ('id', 'nominee', 'user', 'verified')
+
     MAX_PER_USER = 4
 
     nominee_id = db.Column(db.Integer, db.ForeignKey('dvhj_nominee.id'))

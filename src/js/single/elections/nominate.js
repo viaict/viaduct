@@ -42,4 +42,29 @@ $(function() {
             $btn.prop('disabled', false);
         });
     });
+
+    // Remove nomination.
+    var $removes = $('table a.remove');
+    $removes.click(function(e) {
+        e.preventDefault();
+
+        var $this = $(this);
+
+        $removes.addClass('disabled');
+
+        var nomination_id = $this.parents('tr').data('nomination-id');
+
+        var data = {id: nomination_id};
+
+        $.post(viaduct.remove_url, data, function() {
+            location.reload();
+        }).fail(function(jqHXR) {
+            var error = $.parseJSON(jqHXR.responseText).error;
+
+            clearflash();
+            flash(error, 'error');
+
+            $removes.removeClass('disabled');
+        });
+    });
 });

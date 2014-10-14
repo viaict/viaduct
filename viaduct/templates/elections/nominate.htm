@@ -6,8 +6,8 @@
 
 {% block content %}
     <h1>Docent van het jaar IW</h1>
-    <h2>Nomineren</h2>
 
+    <h2>Nomineren</h2>
     <p>
         Nomineer hier je <strong>vier</strong> favoriete docenten voor de
         verkiezingen van docent van IW van het jaar.
@@ -20,4 +20,17 @@
         </div>
         <button type='submit' class='btn btn-primary' autocomplete='off'>Nomineer</button>
     </form>
+
+    <h3>Huidige nominaties</h3>
+    <p>De volgende docenten heb jij genomineerd:</p>
+
+    <table class='table'>
+        {% for nomination in nominations %}
+            <tr class='{% if nomination.verified %}success{% else %}danger{% endif %}' data-nomination-id='{{ nomination.id }}'>
+                <td>{{ nomination.nominee.name }}</td>
+                <td class='text-right'>{% if not nomination.verified %}Niet g{% else %}G{% endif %}everifieerd</td>
+                <td class='text-right'><a href='#' class='remove btn btn-danger'><i class='icon-remove'></i></a></td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

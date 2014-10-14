@@ -12,4 +12,4 @@ from user import User  # noqa
 from news import NewsRevision  # noqa
 from page import Page, PageRevision, PagePermission  # noqa
 from custom_form import CustomForm  # noqa
-from elections import Nominee  # noqa
+from elections import Nominee, Nomination  # noqa
