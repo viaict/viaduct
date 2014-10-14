@@ -64,6 +64,10 @@ def remove_nomination():
         return jsonify(error='Je hebt hier helemaal niks te zoeken'), 500
 
     nomination = Nomination.query.get(request.form.get('id'))
+
+    if nomination.user_id != current_user.id:
+        return jsonify(error='Haha, NOPE! Pff, sukkel.'), 500
+
     db.session.delete(nomination)
     db.session.commit()
 
