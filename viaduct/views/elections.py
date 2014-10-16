@@ -19,7 +19,10 @@ def nominate():
     if current_user is None or not current_user.has_payed:
         return abort(403)
 
+    nominated_ids = [n.nominee.id for n in current_user.nominations.all()]
+
     nominees = Nominee.query.filter(Nominee.valid == True)\
+        .filter(db.not_(Nominee.id.in_(nominated_ids)))\
         .order_by(Nominee.name).all()  # noqa
 
     return render_template('elections/nominate.htm',
