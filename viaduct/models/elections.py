@@ -39,7 +39,7 @@ class Nominee(db.Model, BaseEntity):
 class Nomination(db.Model, BaseEntity):
     __tablename__ = 'dvhj_nomination'
 
-    prints = ('id', 'nominee', 'user', 'verified')
+    prints = ('id', 'nominee', 'user')
 
     MAX_PER_USER = 4
 
