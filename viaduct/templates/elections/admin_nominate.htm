@@ -18,7 +18,7 @@
             {% for nominee in unchecked_nominees %}
                 <tr data-nominee-id='{{ nominee.id }}'>
                     <td>{{ nominee.name }}</td>
-                    <td>{{ nominee.nominations.count() }}</td>
+                    <td class='text-right'>{{ nominee.nominations.count() }}</td>
                     <td class='text-right'>
                         <a href='#' class='btn btn-success valid'><i class='icon-ok'></i></a>
                         <a href='#' class='btn btn-danger invalid'><i class='icon-remove'></i></a>
@@ -37,6 +37,11 @@
                 <tr data-nominee-id='{{ nominee.id }}'>
                     <td>{{ nominee.name }}</td>
                     <td>{{ nominee.nominations.count() }}</td>
+                    <td class='text-right'>
+                        <a href='#' class='btn btn-danger invalid'>
+                            <i class='icon-remove'></i> Toch afkeuren
+                        </a>
+                    </td>
                 </tr>
             {% endfor %}
         </table>
@@ -51,6 +56,11 @@
                 <tr data-nominee-id='{{ nominee.id }}'>
                     <td>{{ nominee.name }}</td>
                     <td>{{ nominee.nominations.count() }}</td>
+                    <td class='text-right'>
+                        <a href='#' class='btn btn-success valid'>
+                            <i class='icon-ok'></i> Toch goedkeuren
+                        </a>
+                    </td>
                 </tr>
             {% endfor %}
         </table>

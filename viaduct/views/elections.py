@@ -90,10 +90,24 @@ def admin_nominate():
     valid_nominees = nominees.filter(Nominee.valid == True).all()  # noqa
     invalid_nominees = nominees.filter(Nominee.valid == False).all()  # noqa
 
-    print(unchecked_nominees, valid_nominees, invalid_nominees)
-
     return render_template('elections/admin_nominate.htm',
                            title='Docent van het jaar IW/Nomineren/Admin',
                            unchecked_nominees=unchecked_nominees,
                            valid_nominees=valid_nominees,
-                           invalid_nominees=invalid_nominees)
+                           invalid_nominees=invalid_nominees,
+                           data={'validate_url': url_for('elections.'
+                                                         'validate_nominate')})
+
+
+@blueprint.route('/admin/nomineren/', methods=['POST'])
+def validate_nominate():
+    if not GroupPermissionAPI.can_write('elections'):
+        return jsonify(error='Hey, dit mag jij helemaal niet doen!'), 500
+
+    nominee = Nominee.query.get(request.form.get('id'))
+    valid = request.form.get('valid') == 'true'
+
+    nominee.valid = valid
+    db.session.commit()
+
+    return jsonify()
