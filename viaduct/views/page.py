@@ -174,6 +174,6 @@ def delete(path):
     if PageAPI.remove_page(path):
         flash('The page has been removed.', 'success')
     else:
-        flash('The page you are trying to remove does not exist.', 'error')
+        flash('The page you are trying to remove does not exist.', 'danger')
 
     return redirect(url_for('home.home'))

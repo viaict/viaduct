@@ -78,7 +78,7 @@ def edit(entry_id=None, parent_id=None):
                         .filter_by(id=parent_id).first()
 
                     if not parent:
-                        flash('Deze navigatie parent bestaat niet.', 'error')
+                        flash('Deze navigatie parent bestaat niet.', 'danger')
                         return redirect(url_for('navigation.edit'))
 
                     last_entry = db.session.query(NavigationEntry)\
@@ -113,11 +113,11 @@ def edit(entry_id=None, parent_id=None):
             known_error = False
 
             if not form.title.data:
-                flash('Geen titel opgegeven.', 'error')
+                flash('Geen titel opgegeven.', 'danger')
                 known_error = True
 
             if not form.url.data:
-                flash('Geen url opgegeven.', 'error')
+                flash('Geen url opgegeven.', 'danger')
                 known_error = True
             if not known_error:
                 flash_form_errors(form)
@@ -148,20 +148,20 @@ def delete(entry_id, inc_page=0):
 
     if not entry.parent:
         if entry.children.count() > 0:
-            flash('Deze item heeft nog subitems.', 'error')
+            flash('Deze item heeft nog subitems.', 'danger')
             return redirect(url_for('navigation.edit', entry_id=entry.id))
 
     if inc_page:
         if entry.external or entry.activity_list:
             flash('Deze item verwijst niet naar een pagina op deze website.',
-                  'error')
+                  'danger')
         else:
             path = entry.url.lstrip('/')
             if PageAPI.remove_page(path):
                 flash('De pagina is verwijderd.', 'success')
             else:
                 flash('De te verwijderen pagina kon niet worden gevonden.',
-                      'error')
+                      'danger')
 
     db.session.delete(entry)
     db.session.commit()
