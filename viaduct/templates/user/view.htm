@@ -1,18 +1,18 @@
-{% from "macros/pagination.htm" import render_pagination %}
+{% from 'macros/pagination.htm' import render_pagination %}
 
-{% extends "content.htm" %}
+{% extends 'content.htm' %}
 
 {%block content %}
 <h1>Gebruiker overzicht</h1>
 
-<div class="row">
-	<div class="col-md-12">
-		<form method="get" action="{{ url_for('user.view') }}" enctype='multipart/form-data' class='form-horizontal'>
+<div class='row'>
+	<div class='col-md-12'>
+		<form method='get' action='{{ url_for('user.view') }}' enctype='multipart/form-data' class='form-horizontal'>
             <div class='form-group'>
                 <div class='col-md-5'>
-                    <input name="search" id="search" class="form-control" type="text" placeholder="Zoeken" value="{{search}}" />
+                    <input name='search' id='search' class='form-control' type='text' placeholder='Zoeken' value='{{search}}' />
                 </div>
-                <button type="submit" class="btn btn-primary"> <i class="glyphicon glyphicon-search" id="submit"></i></button>
+                <button type='submit' class='btn btn-primary'> <i class='glyphicon glyphicon-search' id='submit'></i></button>
             </div>
 
             <div class='row'>
@@ -38,10 +38,10 @@
 		</form>
 	</div>
 </div>
-<div class="row">
-	<div class="col-md-12">
-		<form method="post" name="user_view">
-			<table class="table table-striped">
+<div class='row'>
+	<div class='col-md-12'>
+		<form method='post' name='user_view'>
+			<table class='table table-striped'>
 				<thead>
 					<tr>
 						<th>E-mail adres
@@ -60,19 +60,19 @@
 					{% for user in users.items %}
 						<tr>
 							<td>
-								<label class="checkbox">
-									<input type=checkbox name="select" value="{{ user.id }}" />
+								<label class='checkbox'>
+									<input type=checkbox name='select' value='{{ user.id }}' />
 									{{ user.email }}
 								</label>
 							<td>{{ user.first_name }}
 							<td>{{ user.last_name }}
 							<td>{{ user.student_id }}
 							<td>{{ user.education.name }}
-							<td>{% if user.has_payed %}<i class="glyphicon glyphicon-ok"></i>{% endif %}
-							<td>{% if user.honorary_member %}<i class="glyphicon glyphicon-ok"></i>{% endif %}
-							<td>{% if user.favourer %}<i class="glyphicon glyphicon-ok"></i>{% endif %}
+							<td>{% if user.has_payed %}<i class='glyphicon glyphicon-ok'></i>{% endif %}
+							<td>{% if user.honorary_member %}<i class='glyphicon glyphicon-ok'></i>{% endif %}
+							<td>{% if user.favourer %}<i class='glyphicon glyphicon-ok'></i>{% endif %}
 							<td>
-								<a class="btn btn-xs btn-primary" href="{{ url_for('user.view_single', user_id=user.id) }}">
+								<a class='btn btn-xs btn-primary' href='{{ url_for('user.view_single', user_id=user.id) }}'>
 									Bekijken
 								</a>
 						</tr>
@@ -80,22 +80,22 @@
 				</tbody>
 			</table>
 
-			<div class="btn-group">
-				<a href="/users/create" class="btn btn-success">
-					<i class="glyphicon glyphicon-user"></i> Gebruiker aanmaken
+			<div class='btn-group'>
+				<a href='/users/create' class='btn btn-success'>
+					<i class='glyphicon glyphicon-user'></i> Gebruiker aanmaken
 				</a>
 
-				<button type="submit" class="btn btn-danger">
-					<i class="glyphicon glyphicon-remove"></i>
+				<button type='submit' class='btn btn-danger'>
+					<i class='glyphicon glyphicon-remove'></i>
 					Verwijderen
 				</button>
 
-				<a href="/users/export" class="btn btn-success">
-					<i class="glyphicon glyphicon-linux"></i> Gebruikers Exporteren
+				<a href='/users/export' class='btn btn-success'>
+					<i class='glyphicon glyphicon-linux'></i> Gebruikers Exporteren
 				</a>
 			</div>
 
-			{{ render_pagination(users, 'user.view', "?search=" + search + '&vvv=' + vvv + '&member=' + member) }}
+			{{ render_pagination(users, 'user.view', '?search=' + search + '&vvv=' + vvv + '&member=' + member) }}
 		</form>
 	</div>
 </div>
