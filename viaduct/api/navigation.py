@@ -1,6 +1,7 @@
 from flask import render_template, request
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 import datetime
+import re
 
 from viaduct import db, application
 from viaduct.models.activity import Activity
@@ -10,168 +11,166 @@ from viaduct.forms import SignInForm
 from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.user import UserAPI
 
+
 class NavigationAPI:
-	@staticmethod
-	def get_navigation_bar():
-		entries = NavigationAPI.get_entries(True)
-		entries = NavigationAPI.remove_unauthorized(entries)
-		login_form = SignInForm()
+    @staticmethod
+    def get_navigation_bar():
+        entries = NavigationAPI.get_entries(True)
+        entries = NavigationAPI.remove_unauthorized(entries)
+        login_form = SignInForm()
 
-		return render_template('navigation/view_bar.htm', bar_entries=entries,
-							   login_form=login_form)
+        return render_template('navigation/view_bar.htm', bar_entries=entries,
+                               login_form=login_form)
 
+    @staticmethod
+    def get_navigation_menu():
+        my_path = request.path
 
-	@staticmethod
-	def get_navigation_menu():
-		my_path = request.path
+        my_path = re.sub(r'(/[0-9]+)?/$', '', my_path)
 
-		temp_strip = my_path.rstrip('0123456789')
-		if temp_strip.endswith('/'):
-			my_path = temp_strip
+        me = db.session.query(NavigationEntry).filter_by(url=my_path)\
+            .first()
 
-		my_path = my_path.rstrip('/')
+        if me:
+            parent = me.parent
 
-		me = db.session.query(NavigationEntry).filter_by(url=my_path)\
-				.first()
+        else:
+            parent_path = my_path.rsplit('/', 1)[0]
+            parent = db.session.query(NavigationEntry)\
+                .filter_by(url=parent_path).first()
 
-		if me:
-			parent = me.parent
+        if parent:
+            entries = db.session.query(NavigationEntry)\
+                .filter_by(parent_id=parent.id)\
+                .order_by(NavigationEntry.position).all()
+        else:
+            entries = [me] if me else []
 
-		else:
-			parent_path = my_path.rsplit('/', 1)[0]
-			parent = db.session.query(NavigationEntry)\
-					.filter_by(url=parent_path).first()
+        entries = NavigationAPI.remove_unauthorized(entries)
 
-		if parent:
-			entries = db.session.query(NavigationEntry)\
-					.filter_by(parent_id=parent.id)\
-					.order_by(NavigationEntry.position).all()
-		else:
-			entries = [me] if me else []
+        return render_template('navigation/view_sidebar.htm', back=parent,
+                               pages=entries, current=me)
 
-		entries = NavigationAPI.remove_unauthorized(entries)
+    @staticmethod
+    def current_entry():
+        my_path = request.path
 
-		return render_template('navigation/view_sidebar.htm', back=parent,
-				pages=entries, current=me)
+        temp_strip = my_path.rstrip('0123456789')
+        if temp_strip.endswith('/'):
+            my_path = temp_strip
 
-	@staticmethod
-	def current_entry():
-		my_path = request.path
+        my_path = my_path.rstrip('/')
 
-		temp_strip = my_path.rstrip('0123456789')
-		if temp_strip.endswith('/'):
-			my_path = temp_strip
+        return db.session.query(NavigationEntry).filter_by(url=my_path)\
+            .first()
 
-		my_path = my_path.rstrip('/')
+    @staticmethod
+    def parent_entry():
+        my_path = request.path
 
-		return db.session.query(NavigationEntry).filter_by(url=my_path)\
-				.first()
+        temp_strip = my_path.rstrip('0123456789')
+        if temp_strip.endswith('/'):
+            my_path = temp_strip
 
-	@staticmethod
-	def parent_entry():
-		my_path = request.path
+        my_path = my_path.rstrip('/')
 
-		temp_strip = my_path.rstrip('0123456789')
-		if temp_strip.endswith('/'):
-			my_path = temp_strip
+        return db.session.query(NavigationEntry).filter_by(url=my_path)\
+            .first()
 
-		my_path = my_path.rstrip('/')
+    @staticmethod
+    def order(entries, parent):
+        position = 1
 
-		return db.session.query(NavigationEntry).filter_by(url=my_path)\
-				.first()
+        for entry in entries:
+            db_entry = db.session.query(NavigationEntry)\
+                .filter_by(id=entry['id']).first()
 
-	@staticmethod
-	def order(entries, parent):
-		position = 1
+            db_entry.parent_id = parent.id if parent else None
+            db_entry.position = position
 
-		for entry in entries:
-			db_entry = db.session.query(NavigationEntry)\
-					.filter_by(id=entry['id']).first()
+            NavigationAPI.order(entry['children'], db_entry)
 
-			db_entry.parent_id = parent.id if parent else None
-			db_entry.position = position
+            position += 1
 
-			NavigationAPI.order(entry['children'], db_entry)
+            db.session.add(db_entry)
+            db.session.commit()
 
-			position += 1
+    @staticmethod
+    def get_entries(inc_activities=False):
+        entries = db.session.query(NavigationEntry).filter_by(parent_id=None)\
+            .order_by(NavigationEntry.position).all()
 
-			db.session.add(db_entry)
-			db.session.commit()
+        # Fill in activity lists.
+        if inc_activities:
+            for entry in entries:
+                if entry.activity_list:
+                    entry.activities = []
+                    activities = db.session.query(Activity)\
+                        .filter(Activity.end_time > datetime.datetime.now())\
+                        .order_by("activity_start_time").all()
 
-	@staticmethod
-	def get_entries(inc_activities=False):
-		entries = db.session.query(NavigationEntry).filter_by(parent_id=None)\
-				.order_by(NavigationEntry.position).all()
+                    for activity in activities:
+                        entry.activities.append(
+                            NavigationEntry(entry, activity.name,
+                                            '/activities/' + str(activity.id),
+                                            False, False, 0))
 
-		# Fill in activity lists.
-		if inc_activities:
-			for entry in entries:
-				if entry.activity_list:
-					entry.activities = []
-					activities = db.session.query(Activity)\
-							.filter(Activity.end_time > datetime.datetime.now())\
-							.all()
+        return entries
 
-					for activity in activities:
-						entry.activities.append(NavigationEntry(entry,
-								activity.name, '/activities/' + str(activity.id),
-								False, False, 0))
+    @staticmethod
+    def can_view(entry):
+        '''
+        Check whether the current user can view the entry, so if not it can be
+        removed from the navigation.
+        '''
+        blueprints = [(name, b.url_prefix) for name, b in
+                      application.blueprints.iteritems()]
 
-		return entries
+        if entry.external or entry.activity_list:
+            return True
 
-	@staticmethod
-	def can_view(entry):
-		'''
-		Check whether the current user can view the entry, so if not it can be
-		removed from the navigation.
-		'''
-		blueprints = [(name, b.url_prefix) for name, b in \
-				application.blueprints.iteritems()]
+        url = entry.url
+        if not url[-1:] == '/':
+            path = url
+            url += '/'
+        else:
+            path = url[:-1]
 
-		if entry.external or entry.activity_list:
-			return True
+        for blueprint, url_prefix in blueprints:
+            if not url_prefix:
+                continue
 
-		url = entry.url
-		if not url[-1:] == '/':
-			path = url
-			url += '/'
-		else:
-			path = url[:-1]
+            if url_prefix == url:
+                return GroupPermissionAPI.can_read(blueprint)
 
-		for blueprint, url_prefix in blueprints:
-			if not url_prefix:
-				continue
+        page = Page.query.filter_by(path=path).first()
+        if not page:
+            return True
 
-			if url_prefix == url:
-				return GroupPermissionAPI.can_read(blueprint)
+        return UserAPI.can_read(page)
 
-		page = Page.query.filter_by(path=path).first()
-		if not page:
-			return True
+    @staticmethod
+    def remove_unauthorized(entries):
+        authorized_entries = list(entries)
+        for entry in entries:
+            if not NavigationAPI.can_view(entry):
+                authorized_entries.remove(entry)
 
-		return UserAPI.can_read(page)
+        return authorized_entries
 
-	@staticmethod
-	def remove_unauthorized(entries):
-		authorized_entries = list(entries)
-		for entry in entries:
-			if not NavigationAPI.can_view(entry):
-				authorized_entries.remove(entry)
+    @staticmethod
+    def order_entries(query):
+        """Order entries."""
+        return query.order_by(NavigationEntry.position)
 
-		return authorized_entries
+    @staticmethod
+    def get_navigation_backtrack():
+        backtrack = []
+        tracker = NavigationAPI.current_entry()
+        while tracker:
+            backtrack.append(tracker)
+            tracker = tracker.parent
 
-	@staticmethod
-	def order_entries(query):
-		"""Order entries."""
-		return query.order_by(NavigationEntry.position)
-
-	@staticmethod
-	def get_navigation_backtrack():
-		backtrack = []
-		tracker = NavigationAPI.current_entry()
-		while tracker:
-			backtrack.append(tracker)
-			tracker = tracker.parent
-
-		backtrack.reverse()
-		return render_template('navigation/view_backtrack.htm', backtrack=backtrack)
+        backtrack.reverse()
+        return render_template('navigation/view_backtrack.htm',
+                               backtrack=backtrack)

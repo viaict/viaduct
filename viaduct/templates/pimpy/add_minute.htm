@@ -1,47 +1,35 @@
-{% extends "pimpy/view_page.htm" %}
+{% extends 'pimpy/view_page.htm' %}
 
 {%block content %}
-<div class="col-md-8">
 
-<form class="form-horizontal minute-form" action=""
-      method="post" enctype="multipart/form-data">
-    <div class="control-group">
-        <label class="control-label">Add a minute</label>
-    </div>
-    <div class="control-group">
-        <label class="control-label" for="content">
-            Content (copy paste minutes here)</label>
-        <div class="controls">
-            {{ form.content }}
+<div class='col-md-8'>
+    <h2>Add a minute</h2>
+
+    <form class='minute-form' method='post' enctype='multipart/form-data'>
+        <div class='form-group'>
+            <label for='content'>Content (copy paste minutes here)</label>
+            {{ form.content(class_='form-control') }}
         </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label" for="line">Group</label>
-        <div class="controls">
-            {{ form.group}}
+
+        <div class='form-group'>
+            <label for='line'>Group</label>
+            {{ form.group(class_='form-control') }}
         </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label" for="line">Date (yyyy-mm-dd)</label>
-        <div class="controls">
-            {{ form.date(id='minute_date') }}
+
+        <div class='form-group'>
+            <label for='line'>Date (yyyy-mm-dd)</label>
+            {{ form.date(id='minute_date', class_='form-control') }}
         </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label" for="line">Parse tasks?</label>
-        <div class="controls">
-            {{ form.parse_tasks}}
+
+        <div class='checkbox'>
+            <label for='line'>
+                {{ form.parse_tasks }} Parse tasks
+            </label>
         </div>
-    </div>
-    <div class="control-group">
-        <div class="controls">
-            <button type="submit" class="btn btn-primary submit-button" data-loading-text="Bezig...">Create minute</button>
-        </div>
-    </div>
-<!-- data-date-format="yyyy-mm-dd", seems not likely to be workin' anytime soon -->
-</form>
+
+        <button type='submit' class='btn btn-primary submit-button' data-loading-text='Bezig...'>Create minute</button>
+    </form>
 </div>
-<script src="/static/js/pimpy/add_minute.js"></script>
+<script src='/static/js/pimpy/add_minute.js'></script>
 
 {% endblock content %}
-

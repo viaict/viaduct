@@ -4,7 +4,7 @@
 @import 'timepicker';
 @import 'datepicker';
 @import 'bootstrap-editable';
-
+@import 'css/bootstrap-datetimepicker.min';
 
 body {
     overflow-y: scroll;
@@ -639,6 +639,18 @@ header #loginContainer{
     text-transform: none;
     font-size: 12px;
     line-height: 14px;
+}
+
+#sign-in{
+    padding:20px 0px 60px 0px;
+}
+
+#sign-in .list-inline{
+    margin-top:20px;
+}
+
+#dropmenu-list{
+    margin-top:10px;
 }
 
 header #logoutButtonContainer{

@@ -2,8 +2,11 @@
 import bcrypt
 import random
 import datetime
+import smtplib
 from unicodecsv import writer
 from StringIO import StringIO
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 from flask import flash, redirect, render_template, request, url_for, abort,\
     session
@@ -13,9 +16,10 @@ from flask.ext.login import current_user, login_user, logout_user
 from sqlalchemy import or_
 
 
-from viaduct import db, login_manager
+from viaduct import db, login_manager, application
 from viaduct.helpers import flash_form_errors
-from viaduct.forms import SignUpForm, SignInForm, ResetPassword
+from viaduct.forms import SignUpForm, SignInForm, ResetPassword,\
+    RequestPassword
 from viaduct.models import User
 from viaduct.models.activity import Activity
 from viaduct.models.custom_form import CustomFormResult, CustomForm
@@ -53,12 +57,16 @@ def view_single(user_id=None):
     user.avatar = UserAPI.avatar(user)
     user.groups = UserAPI.get_groups_for_user_id(user)
 
+    user.groups_amount = user.groups.count()
+
     # Get all activity entrees from these forms, order by start_time of
     # activity.
     activities = Activity.query.join(CustomForm).join(CustomFormResult).\
         filter(CustomFormResult.owner_id == user_id and
                CustomForm.id == CustomFormResult.form_id and
                Activity.form_id == CustomForm.id)
+
+    user.activities_amount = activities.count()
 
     new_activities = activities\
         .filter(Activity.end_time > datetime.datetime.today()).distinct()\
@@ -208,7 +216,7 @@ def sign_up():
 
             #user.add_to_all()
 
-            flash('You\'ve signed up successfully.')
+            flash('You\'ve signed up successfully.', 'success')
 
         login_user(user)
 
@@ -246,7 +254,7 @@ def sign_in():
         # Notify the login manager that the user has been signed in.
         login_user(user)
 
-        flash('You\'ve been signed in successfully.')
+        flash('You\'ve been signed in successfully.', 'succes')
 
         denied_from = session.get('denied_from')
         if denied_from:
@@ -264,7 +272,7 @@ def sign_out():
     # Notify the login manager that the user has been signed out.
     logout_user()
 
-    flash('You\'ve been signed out.')
+    flash('You\'ve been signed out.', 'success')
 
     if 'denied_from' in session:
         session['denied_from'] = None
@@ -274,13 +282,13 @@ def sign_out():
 
 @blueprint.route('/request_password/', methods=['GET', 'POST'])
 def request_password():
-    form = ResetPassword(request.form)
+    """ Create a ticket and send a email with link to reset_password page. """
+    form = RequestPassword(request.form)
 
     if form.validate_on_submit():
-        #valid_form = True
-
-        user = User.query.filter(User.email == form.email.data,
-                                 User.student_id == form.student_id.data).all()
+        user = User.query.filter(
+            User.email == form.email.data,
+            User.student_id == form.student_id.data).first()
 
         # Check if the user does exist, and if the passwords do match.
         if not user:
@@ -288,16 +296,40 @@ def request_password():
         else:
             hash = create_hash(256)
 
-            # SEND MAIL TO USER WITH THE FOLLOWING LINK.
-            #reset_link = "http://www.svia.nl" + url_for('user.reset_password')
-                #+ hash, 'succes'
+            reset_link = "http://www.svia.nl" + url_for('user.reset_password')\
+                + hash
 
-            ticket = Password_ticket(current_user.id, hash)
+            # Setup smtp trash
+            msg = MIMEMultipart('alternative')
+            msg['Subject'] = 'Wachtwoord vergeten svia.nl'
+            msg['From'] = application.config['GMAIL_MAIL_ACCOUNT']['username']
+            msg['To'] = user.email
+
+            mail_msg = MIMEText("""<h2>Wachtwoord vergeten link</h2><p>Iemand
+                                heeft op svia.nl het wachtwoord voor het e-mail
+                                adres %s geprobeerd te resetten. Als jij dit
+                                bent, <a href="%s">Volg dan deze
+                                link!</a></p><br><br><p>Groetjes</p>""" %
+                                (user.email, reset_link), 'html')
+
+            msg.attach(mail_msg)
+
+            # Send mail to user with the following link.
+            server = smtplib.SMTP("smtp.gmail.com:587")
+            server.starttls()
+            server.login(application.config['GMAIL_MAIL_ACCOUNT']['username'],
+                         application.config['GMAIL_MAIL_ACCOUNT']['password'])
+            server.sendmail(
+                application.config['GMAIL_MAIL_ACCOUNT']['username'],
+                user.email, msg.as_string())
+
+            # Create validation ticket
+            ticket = Password_ticket(user.id, hash)
             db.session.add(ticket)
             db.session.commit()
 
             flash('Er is een email verstuurd naar ' + form.email.data +
-                  ' met instructies.', 'succes')
+                  ' met instructies.', 'success')
     else:
         flash_form_errors(form)
 
@@ -307,33 +339,43 @@ def request_password():
 @blueprint.route('/reset_password/', methods=['GET', 'POST'])
 @blueprint.route('/reset_password/<string:hash>/', methods=['GET', 'POST'])
 def reset_password(hash=0):
-    fail = True
+    """ Reset form existing of two fields, password and password_repeat.
+    Checks if the hash in the url is found in the database and timestamp
+    has not expired"""
 
-    ticket = Password_ticket.query.filter(Password_ticket.hash == hash).first()
+    form = ResetPassword(request.form)
 
-    if ticket:
-        seconds = ((datetime.datetime.now() - ticket.created_on).seconds)
-        if seconds < 3600:
-            user = User.query.filter(User.id == ticket.user).first()
+    if form.validate_on_submit():
 
-            password = create_hash(64)
+        # Request the ticket to validate the timer
+        ticket = Password_ticket.query.filter(
+            Password_ticket.hash == hash).first()
 
-            user.password = bcrypt.hashpw(password, bcrypt.gensalt())
-            db.session.add(user)
-            db.session.commit()
+        # Check if the request was followed within a hour
+        if ticket:
+            seconds = ((datetime.datetime.now() - ticket.created_on).seconds)
+            if seconds < 3600:
+                user = User.query.filter(User.id == ticket.user).first()
 
-            # SEND MAIL TO USER WITH THE FOLLOWING LINK.
-            #password
+                # Check if the user does exist, and if the passwords do match.
+                if not user:
+                    flash('De ingevoerde gegevens zijn niet correct.', 'error')
 
-            fail = False
-            flash('Uw nieuwe password met instructies is verstuurd naar ' +
-                  user.email, 'succes')
+                # Actually reset the password of the user
+                user.password = bcrypt.hashpw(
+                    form.password.data, bcrypt.gensalt())
+
+                db.session.add(user)
+                db.session.commit()
+
+                flash('Uw wachtwoord is aangepast', 'success')
         else:
-            flash('De password-reset ticket is verlopen.', 'error')
-    else:
-        flash('Ongeldige password-reset ticket', 'error')
+            flash('Ongeldige password-reset ticket', 'error')
 
-    return render_template('user/reset_password.htm', fail=fail)
+    else:
+        flash_form_errors(form)
+
+    return render_template('user/reset_password.htm', form=form)
 
 
 def create_hash(bits=96):

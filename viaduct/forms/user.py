@@ -117,7 +117,7 @@ class SignInForm(Form):
     remember_me = BooleanField('Onthouden', default=False)
 
 
-class ResetPassword(Form):
+class RequestPassword(Form):
     email = StringField('E-mailadres',
                         validators=[InputRequired(message='Geen e-mailadres '
                                                   'opgegeven'),
@@ -127,3 +127,18 @@ class ResetPassword(Form):
                              validators=[InputRequired(message='Geen '
                                                        'studentnummer '
                                                        'opgegeven')])
+
+
+class ResetPassword(Form):
+    password = PasswordField('Wachtwoord',
+                             validators=[InputRequired(message='Geen '
+                                                       'wachtwoord opgegeven')]
+                             )
+    password_repeat = PasswordField('Herhaal wachtwoord',
+                                    validators=[InputRequired(message='Wacht'
+                                                              'woorden komen '
+                                                              'niet overeen'),
+                                                EqualTo('password',
+                                                        message='Wachtwoorden '
+                                                                'komen niet '
+                                                                'overeen')])

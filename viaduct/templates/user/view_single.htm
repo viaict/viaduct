@@ -1,80 +1,140 @@
 {% extends "content.htm" %}
 
+{% block includes %}
+    <link href="/static/css/user.profile.css" rel="stylesheet"></link>
+{% endblock %}
+
 {%block content %}
 
 <!-- TODO check permission -->
 
-<div class="user_single">
-	<a href="{{ url_for('user.edit', user_id=user.id) }}" class="btn btn-warning pull-right">
-		<i class="glyphicon glyphicon-pencil"></i>
-		Aanpassen
-	</a>
-
-	<h1>
-		<img src="{{ user.avatar }}">
-		{{ user.first_name }} {{ user.last_name }}
-		<small> - Gebruiker</small>
-	</h1>
-
-
-	<div class="col-md-5">
-		<h4>Student-informatie:</h4>
-		<dl>
-			<dt><b>Studentnummer</b></dt>
-			<dd>{{ user.student_id }}</dd>
-
-			<dt><b>Lidmaatschap</b></dt>
-			<dd><i class="icon-check{% if not user.has_payed %}-empty{% endif %}"></i></dd>
-
-			<dt><b>Erelid</b></dt>
-			<dd><i class="icon-check{% if not user.honorary_member %}-empty{% endif %}"></i></dd>
-
-			<dt><b>Begunstiger</b></dt>
-			<dd><i class="icon-check{% if not user.favourer %}-empty{% endif %}"></i></dd>
-
-			<dt><b>Contact <i class="icon-envelope-alt"></b></i></dt>
-			<dd><a href="mailto:{{ user.email }}">{{ user.email }}</a></dd>
-
-			<dt><b>Contact <i class="glyphicon glyphicon-phone"></i></b></dt>
-			<dd>{{ user.phone_nr }}</dd>
-
-			<dt><b>Studie</b></dt>
-			<dd>{{ user.education.name }}</dd>
-		</dl>
-
-	<h4>Groups:</h4>
-	<ul>
-	{% for group in user.groups %}
-		<li> {{ group.name }} </li>
-	{% endfor %}
-	</ul>
-	</div>
-	<div class="col-md-4 pull-right">
-		<h4> Ingeschreven activiteiten: </h4>
-		<table class="table table-condensed userpage_table">
-			{% for result in new_activities %}
-				<tr>
-					<td><a href="{{ url_for('activity.get_activity', activity_id=result.id)}}">
-						{{ result.name }}
-					</a></td>
-					<td>( {{result.start_time}} )</td>
-				</tr>
-			{% endfor %}
-		</table>
-
-		<h4> Oude activiteiten: </h4>
-		<table class="table table-condensed userpage_table">
-			{% for result in old_activities %}
-				<tr>
-					<td><a href="{{ url_for('activity.get_activity', activity_id=result.id)}}">
-						{{ result.name }}
-					</a></td>
-					<td>( {{result.start_time}} )</td>
-				</tr>
-			{% endfor %}
-		</table>
-		
-	</div>
+<link href="http://fontawesome.io/assets/font-awesome/css/font-awesome.css" rel="stylesheet" media="screen">  
+<div class="container user-profile-container">
+    <div class="row user-menu-container square">
+        <div class="col-md-7 user-details">
+            <div class="row coralbg white">
+                <div class="col-md-6 no-pad">
+                    <div class="user-pad">
+                        <h3>Welkom, {{ user.first_name }} {{ user.last_name }}</h3>
+                        <a href="{{ url_for('user.edit', user_id=user.id) }}"<button type="button" class="btn btn-labeled btn-info" href="{{ url_for('user.edit', user_id=user.id) }}">
+                            <span class="btn-label"><i class="fa fa-pencil"></i></span>Bewerken</button></a>
+                    </div>
+                </div>
+                <div class="col-md-6 no-pad">
+                    <div class="user-image">
+                        <img src="{{ user.avatar }}&s=341" class="img-responsive thumbnail">
+                    </div>
+                </div>
+            </div>
+            <div class="row overview">
+                <div class="col-md-6 user-pad text-center">
+                    <h3>Activiteiten</h3>
+                    <h4>{{user.activities_amount}}</h4>
+                </div>
+                <div class="col-md-6 user-pad text-center">
+                    <h3>Groepen</h3>
+                    <h4>{{user.groups_amount}}</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1 user-menu-btns">
+            <div class="btn-group-vertical square" id="responsive">
+                <a href="#" class="btn btn-block btn-default active">
+                  <i class="fa fa-user fa-3x"></i>
+                </a>
+                <a href="#" class="btn btn-default">
+                  <i class="fa fa-calendar fa-3x"></i>
+                </a>
+                <a href="#" class="btn btn-default">
+                  <i class="fa fa-users fa-3x"></i>
+                </a>
+                <a href="#" class="btn btn-default">
+                  <i class="fa fa-lightbulb-o fa-3x"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4 user-menu user-pad">
+            <div class="user-menu-content active">
+                <h3>
+                    Info
+                </h3>
+                <ul class="user-menu-list">
+                    <h4> Studentnummer: {{ user.student_id }} </h4>
+                    <h4> Email: {{ user.email}} </h4>
+                    <h4> Studie: {{ user.education.name }} </h4>
+                    <h4> <i class="icon-check{% if not user.has_payed %}-empty{% endif %}"></i> Lid </h4>
+                    {% if user.honorary_member %}<h4> <i class="icon-check"></i> Erelid </h4>{% endif %}
+                    {% if user.favourer %}<h4> <i class="icon-check"></i> Begunstiger </h4>{% endif %}
+                </ul>
+            </div>
+            <div class="user-menu-content">
+                <h3>
+                    Activiteiten
+                </h3>
+                <ul class="user-menu-list">
+                    <h4><b>Ingeschreven activiteiten:</b></h4>      
+                    {% for result in new_activities %}
+                            <a href="{{ url_for('activity.get_activity', activity_id=result.id)}}"><h4><i class="fa fa-user calendar"></i>
+                                {{ result.name }}</h4>
+                            </a>
+                    {% endfor %}           
+                    <h4><b>Oude activiteiten:</b></h4>      
+                    {% for result in old_activities %}
+                            <a href="{{ url_for('activity.get_activity', activity_id=result.id)}}"><h4><i class="fa fa-user fa-check-circle-o"></i>
+                                {{ result.name }}</h4>
+                            </a>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="user-menu-content">
+                <h3>
+                    Groepen
+                </h3>
+                <ul class="user-menu-list">
+                    {% for group in user.groups %}
+                            <h4><i class="fa fa-user fa-users"></i> {{ group.name }} </h4>
+                    {% endfor %}
+                </ul>
+                
+            </div>
+            <div class="user-menu-content">
+                <h2 class="text-center">
+                    Gebruikerstips
+                </h2>
+                <center><i class="fa fa-lightbulb-o fa-4x"></i></center>
+                <div class="share-links">
+                    <center><a href="/vacancies"><button type="button" class="btn btn-lg btn-labeled btn-success" href="/vacancies" style="margin-bottom: 15px;">
+                            <span class="btn-label"><i class="fa fa-bell-o"></i></span>De vacaturebank
+                    </button></a></center>
+                    <center><a href="/examination"><button type="button" class="btn btn-lg btn-labeled btn-warning" href="/examination">
+                            <span class="btn-label"><i class="fa fa-bell-o"></i></span>De tentamenbank
+                    </button></a></center>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+<style>
+
+</style>
+
+<script>
+$(document).ready(function() {
+    var $btnSets = $('#responsive'),
+    $btnLinks = $btnSets.find('a');
+ 
+    $btnLinks.click(function(e) {
+        e.preventDefault();
+        $(this).siblings('a.active').removeClass("active");
+        $(this).addClass("active");
+        var index = $(this).index();
+        $("div.user-menu>div.user-menu-content").removeClass("active");
+        $("div.user-menu>div.user-menu-content").eq(index).addClass("active");
+    });
+});
+
+</script>
 
 {% endblock %}
