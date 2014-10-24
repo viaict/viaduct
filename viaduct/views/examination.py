@@ -71,20 +71,20 @@ def upload_file():
         #   educations = educations, message = 'Er is een fout opgetreden!');
 
         if not title:
-            flash('Geen titel opgegeven', 'error')
+            flash('Geen titel opgegeven', 'danger')
             error = True
 
         filename = upload_file_real(file)
         if file:
             if not filename:
-                flash('Fout formaat tentamen', 'error')
+                flash('Fout formaat tentamen', 'danger')
                 error = True
             answer_path = upload_file_real(answers)
             if not answer_path:
-                flash('Fout formaat antwoorden', 'error')
+                flash('Fout formaat antwoorden', 'danger')
                 error = True
         else:
-            flash('Geen tentamen opgegeven', 'error')
+            flash('Geen tentamen opgegeven', 'danger')
             error = True
 
         if error:
@@ -231,7 +231,7 @@ def edit_examination():
         exam_id = request.form.get("examination", None)
 
         if not title:
-            flash('Geen titel opgegeven', 'error')
+            flash('Geen titel opgegeven', 'danger')
             print("wut")
 
         if title and education_id and exam_id:
@@ -243,19 +243,19 @@ def edit_examination():
             examination.education_id = education_id
 
             if not title:
-                flash('Geen titel opgegeven', 'error')
+                flash('Geen titel opgegeven', 'danger')
 
             if file.name:
                 examination.path = upload_file_real(file, examination.path)
                 if not examination.path:
-                    flash('Fout formaat tentamen', 'error')
+                    flash('Fout formaat tentamen', 'danger')
             else:
-                flash('Geen tentamen opgegeven', 'error')
+                flash('Geen tentamen opgegeven', 'danger')
 
             if answers:
                 examination.answer_path = upload_file_real(answers)
                 if not examination.answer_path:
-                    flash('Fout formaat antwoorden', 'error')
+                    flash('Fout formaat antwoorden', 'danger')
                 if examination.answer_path:
                     examination.answer_path = None
 

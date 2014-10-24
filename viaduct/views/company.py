@@ -29,9 +29,9 @@ def view_list(page=1):
     if request.args.get('search') is not None:
         search = request.args.get('search')
 
-        companies = Company.query.join(Location).\
-            filter(or_(Company.name.like('%' + search + '%'),
-                       Location.city.like('%' + search + '%')))\
+        companies = Company.query.join(Location)\
+            .filter(or_(Company.name.like('%' + search + '%'),
+                        Location.city.like('%' + search + '%')))\
             .order_by(Company.name).order_by(Company.rank)
 
         if not GroupPermissionAPI.can_write('company'):
@@ -43,8 +43,9 @@ def view_list(page=1):
             for i, company in enumerate(companies):
                 print(i, company)
                 if company.contract_start_date < datetime\
-                        .date(datetime.utcnow()) and company\
-                        .contract_end_date < datetime.date(datetime.utcnow()):
+                        .date(datetime.utcnow()) and \
+                        company.contract_end_date < datetime\
+                        .date(datetime.utcnow()):
                     companies[i].expired = True
             companies = companies.paginate(page, 15, False)
 
@@ -150,25 +151,25 @@ def update(company_id=None):
 
     error_found = False
     if not form.name.data:
-        flash('Geen titel opgegeven', 'error')
+        flash('Geen titel opgegeven', 'danger')
         error_found = True
     if not form.description.data:
-        flash('Geen beschrijving opgegeven', 'error')
+        flash('Geen beschrijving opgegeven', 'danger')
         error_found = True
     if not form.contract_start_date.data:
-        flash('Geen contract begindatum opgegeven', 'error')
+        flash('Geen contract begindatum opgegeven', 'danger')
         error_found = True
     if not form.contract_end_date.data:
-        flash('Geen contract einddatum opgegeven', 'error')
+        flash('Geen contract einddatum opgegeven', 'danger')
         error_found = True
     if not 'location_id' in request.form:
-        flash('Geen locatie opgegeven', 'error')
+        flash('Geen locatie opgegeven', 'danger')
         error_found = True
     if not 'contact_id' in request.form:
-        flash('Geen contactpersoon opgegeven', 'error')
+        flash('Geen contactpersoon opgegeven', 'danger')
         error_found = True
     if not 'website' in request.form:
-        flash('Geen website opgegeven', 'error')
+        flash('Geen website opgegeven', 'danger')
         error_found = True
     if request.files['file']:
         logo = FileAPI.upload(request.files['file'])
