@@ -1,63 +1,49 @@
-{% extends "pimpy/view_page.htm" %}
+{% extends 'pimpy/view_page.htm' %}
 
 {%block content %}
-<div class="col-md-8">
 
-<form class="form-horizontal" action=""
-      method="post" enctype="multipart/form-data">
-    <div class="control-group">
-        <label class="control-label">Add a task</label>
-    </div>
-    <div class="control-group">
-        <label class="control-label" for="name">Task</label>
-        <div class="controls">
-            {{ form.name }}
+<div class='col-md-8'>
+    <h2>Add a task</h2>
+
+    <form method='post' enctype='multipart/form-data'>
+        <div class='form-group'>
+            <label for='name'>Task</label>
+            {{ form.name(class_='form-control') }}
         </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label" for="content">More Info</label>
-        <div class="controls">
-            {{ form.content }}
+
+        <div class='form-group'>
+            <label for='content'>More Info</label>
+            {{ form.content(class_='form-control') }}
         </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label" for="deadline">
-            Deadline (jjjj-mm-dd)</label>
-        <div class="controls">
-            {{ form.deadline(id='start_date') }}
+
+        <div class='form-group'>
+            <label for='deadline'>
+                Deadline (jjjj-mm-dd)</label>
+            {{ form.deadline(id='start_date', class_='form-control') }}
         </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label" for="line">Line</label>
-        <div class="controls">
-            {{ form.line }}
+
+        <div class='form-group'>
+            <label for='line'>Line</label>
+            {{ form.line(class_='form-control') }}
         </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label" for="group">Group</label>
-        <div class="controls">
-            {{ form.group }}
+
+        <div class='form-group'>
+            <label for='group'>Group</label>
+            {{ form.group(class_='form-control') }}
         </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label" for="users">Users</label>
-        <div class="controls">
-            {{ form.users }}
+
+        <div class='form-group'>
+            <label for='users'>Users</label>
+            {{ form.users(class_='form-control') }}
         </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label" for="status">Status</label>
-        <div class="controls">
-            {{ form.status }}
+
+        <div class='form-group'>
+            <label for='status'>Status</label>
+            {{ form.status(class_='form-control') }}
         </div>
-    </div>
-    <div class="control-group">
-        <div class="controls">
-            <button type="submit" class="btn">Create task</button>
-        </div>
-    </div>
-<!-- data-date-format="yyyy-mm-dd", seems not likely to be workin' anytime soon -->
-</form>
+
+        <button type='submit' class='btn btn-primary'>Create task</button>
+    </form>
 </div>
 
 {% endblock content %}
