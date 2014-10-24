@@ -1,8 +1,7 @@
-from flask import Blueprint, render_template, abort, request, flash, redirect,\
-        url_for
-from flask.ext.login import current_user
+from flask import Blueprint, render_template, abort, request, flash, \
+    redirect, url_for
 
-from viaduct import db, application
+from viaduct import db
 from viaduct.helpers import flash_form_errors
 from viaduct.models.navigation import NavigationEntry
 from viaduct.forms import NavigationEntryForm
@@ -16,12 +15,14 @@ import re
 
 blueprint = Blueprint('navigation', __name__, url_prefix='/navigation')
 
+
 @blueprint.route('/edit/')
 def edit_back():
     if not GroupPermissionAPI.can_read('navigation'):
         return abort(403)
 
     return redirect(url_for('navigation.view'))
+
 
 @blueprint.route('/')
 def view():
@@ -32,6 +33,7 @@ def view():
 
     return render_template('navigation/view.htm', nav_entries=entries)
 
+
 @blueprint.route('/create/', methods=['GET', 'POST'])
 @blueprint.route('/create/<int:parent_id>/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<int:entry_id>/', methods=['GET', 'POST'])
@@ -40,7 +42,8 @@ def edit(entry_id=None, parent_id=None):
         return abort(403)
 
     if entry_id:
-        entry = db.session.query(NavigationEntry).filter_by(id=entry_id).first()
+        entry = db.session.query(NavigationEntry).filter_by(id=entry_id)\
+            .first()
         if not entry:
             return abort(404)
     else:
@@ -56,7 +59,7 @@ def edit(entry_id=None, parent_id=None):
                 url = '/' + url
 
             if entry:
-                flash('De navigatie link is opgeslagen.', 'success');
+                flash('De navigatie link is opgeslagen.', 'success')
                 entry.title = form.title.data
                 entry.url = url
                 entry.external = form.external.data
@@ -72,10 +75,10 @@ def edit(entry_id=None, parent_id=None):
                     position = last_entry.position + 1
                 else:
                     parent = db.session.query(NavigationEntry) \
-                                            .filter_by(id=parent_id).first()
+                        .filter_by(id=parent_id).first()
 
                     if not parent:
-                        flash('Deze navigatie parent bestaat niet.', 'error');
+                        flash('Deze navigatie parent bestaat niet.', 'error')
                         return redirect(url_for('navigation.edit'))
 
                     last_entry = db.session.query(NavigationEntry)\
@@ -87,8 +90,9 @@ def edit(entry_id=None, parent_id=None):
                         position = 0
 
                 entry = NavigationEntry(parent, form.title.data, url,
-                        form.external.data, form.activity_list.data, position)
-                flash('De navigatie link is aangemaakt.', 'success');
+                                        form.external.data,
+                                        form.activity_list.data, position)
+                flash('De navigatie link is aangemaakt.', 'success')
 
             db.session.add(entry)
             db.session.commit()
@@ -100,14 +104,13 @@ def edit(entry_id=None, parent_id=None):
                 page = Page.get_by_path(path)
                 if not page and form.url.data != '/':
                     flash('De link verwijst naar een pagina die niet bestaat, '
-                            'maak deze aub aan!', 'alert');
-                    return redirect(url_for('page.edit_page',
-                            path=path))
+                          'maak deze aub aan!', 'alert')
+                    return redirect(url_for('page.edit_page', path=path))
 
             return redirect(url_for('navigation.edit', entry_id=entry.id))
 
         else:
-            known_error = False;
+            known_error = False
 
             if not form.title.data:
                 flash('Geen titel opgegeven.', 'error')
@@ -127,7 +130,8 @@ def edit(entry_id=None, parent_id=None):
     parents = parents.all()
 
     return render_template('navigation/edit.htm', entry=entry, form=form,
-            parents=parents)
+                           parents=parents)
+
 
 @blueprint.route('/delete/<int:entry_id>/', methods=['GET'])
 @blueprint.route('/delete/<int:entry_id>/<int:inc_page>', methods=['GET'])
@@ -165,6 +169,7 @@ def delete(entry_id, inc_page=0):
     flash('De navigatie-item is verwijderd.', 'success')
 
     return redirect(url_for('navigation.view'))
+
 
 @blueprint.route('/navigation/reorder', methods=['POST'])
 def reorder():
