@@ -1,6 +1,7 @@
 from flask import render_template, request
 # -*- coding: utf-8 -*-
 import datetime
+import re
 
 from viaduct import db, application
 from viaduct.models.activity import Activity
@@ -25,11 +26,7 @@ class NavigationAPI:
     def get_navigation_menu():
         my_path = request.path
 
-        temp_strip = my_path.rstrip('0123456789')
-        if temp_strip.endswith('/'):
-            my_path = temp_strip
-
-        my_path = my_path.rstrip('/')
+        my_path = re.sub(r'(/[0-9]+)?/$', '', my_path)
 
         me = db.session.query(NavigationEntry).filter_by(url=my_path)\
             .first()
