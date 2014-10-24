@@ -4,7 +4,7 @@ from flask.ext.login import current_user
 
 from viaduct import application, login_manager
 from markdown import markdown
-from resource import Resource
+from resource import Resource  # noqa
 from viaduct.forms import SignInForm
 from viaduct.api.user import UserAPI
 from viaduct.api.group import GroupPermissionAPI
@@ -23,7 +23,7 @@ def unauthorized():
     # Save the path the user was rejected from.
     session['denied_from'] = request.path
 
-    flash('You must be logged in to view this page.', 'error')
+    flash('You must be logged in to view this page.', 'danger')
     return redirect(url_for('user.sign_in'))
 
 
@@ -37,7 +37,7 @@ def permission_denied(e):
     session['denied_from'] = request.path
 
     if not current_user or current_user.is_anonymous():
-        flash('Je hebt geen rechten om deze pagina te bekijken.', 'error')
+        flash('Je hebt geen rechten om deze pagina te bekijken.', 'danger')
         return redirect(url_for('user.sign_in'))
 
     return render_template('page/403.htm', content=content, image=image)
@@ -58,6 +58,7 @@ def flash_form_errors(form):
         for error in errors:
             flash(error, 'danger')
 
+
 def get_login_form():
     form = SignInForm()
     return form
@@ -71,15 +72,18 @@ def markdown_filter(data, filter_html=True):
         safe_mode = 'escape'
 
     return Markup(markdown(data, safe_mode=safe_mode, enable_attributes=False,
-                        extensions=markdown_extensions))
+                           extensions=markdown_extensions))
+
 
 @application.template_filter('markup')
 def markup_filter(data):
     return Markup(data)
 
+
 @application.template_filter('safe_markdown')
 def safe_markdown_filter(data):
     return Markup(markdown(data, extensions=markdown_extensions))
+
 
 @application.template_filter('pages')
 def pages_filter(data):
@@ -101,7 +105,7 @@ def pages_filter(data):
 
         page = data[i].page if data[i].page.id else None
         if (page and current_user and (UserAPI.can_write(page) or
-                                    GroupPermissionAPI.can_write('page'))) \
+                                       GroupPermissionAPI.can_write('page'))) \
                 or (not page and GroupPermissionAPI.can_write('page')):
             content += '<div class="btn-group">'
             content += '<a class="btn" href="' + \
@@ -131,8 +135,8 @@ def pages_filter(data):
                     .filter(Activity.end_time > datetime.datetime.now()) \
                     .order_by(Activity.start_time.asc())
                 content += render_template('activity/view_simple.htm',
-                                        activities=activities
-                                        .paginate(1, 12, False))
+                                           activities=activities
+                                           .paginate(1, 12, False))
             elif data[i].path == 'contact' \
                     or data[i].path == 'laatste_bestuursblog':
                 if data[i].filter_html:
@@ -164,11 +168,13 @@ def pages_filter(data):
 
     return Markup(content)
 
+
 @application.template_filter('pimpy_minute_line_numbers')
 def pimpy_minute_line_numbers(data):
     #assert False
     s = ''
     for i, line in enumerate(data.split('\n')):
         #s += '%d%s\n' % (i, line[:-1])
-        s += '<a id="ln%d" class="pimpy_minute_line"/>%s</a>\n' % (i, line[:-1])
+        s += '<a id="ln%d" class="pimpy_minute_line"/>%s</a>\n' % (i,
+                                                                   line[:-1])
     return s

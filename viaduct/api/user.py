@@ -49,7 +49,7 @@ class UserAPI:
         # check if user has avatar if so return it
         for file in os.listdir(UPLOAD_DIR):
             if fnmatch.fnmatch(file, 'avatar_' + str(user.id) + '.*'):
-                print user.id
+                print(user.id)
                 path = '/static/files/users/' + file
                 return(path)
 
@@ -75,7 +75,7 @@ class UserAPI:
         # Check if the file is allowed.
         if '.' not in filename or \
                 not filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS:
-            flash('Bestandstype is niet toegestaan.', 'error')
+            flash('Bestandstype is niet toegestaan.', 'danger')
             return
 
         # convert the name.

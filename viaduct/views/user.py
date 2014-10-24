@@ -125,7 +125,7 @@ def edit(user_id=None):
 
         if query.count() > 0:
             flash('Een gebruiker met dit email adres bestaat al / A user with '
-                  'the e-mail address specified does already exist.', 'error')
+                  'the e-mail address specified does already exist.', 'danger')
             return render_template('user/edit.htm', form=form, user=user,
                                    isAdmin=isAdmin)
 
@@ -191,7 +191,7 @@ def sign_up():
 
         if query.count() > 0:
             flash('Een gebruiker met dit email adres bestaat al / A user with '
-                  'the e-mail address specified does already exist.', 'error')
+                  'the e-mail address specified does already exist.', 'danger')
             return render_template('user/sign_up.htm', form=form)
 
         user = User(form.email.data, bcrypt.hashpw(form.password.data,
@@ -292,7 +292,7 @@ def request_password():
 
         # Check if the user does exist, and if the passwords do match.
         if not user:
-            flash('De ingevoerde gegevens zijn niet correct.', 'error')
+            flash('De ingevoerde gegevens zijn niet correct.', 'danger')
         else:
             hash = create_hash(256)
 
@@ -359,7 +359,8 @@ def reset_password(hash=0):
 
                 # Check if the user does exist, and if the passwords do match.
                 if not user:
-                    flash('De ingevoerde gegevens zijn niet correct.', 'error')
+                    flash('De ingevoerde gegevens zijn niet correct.',
+                          'danger')
 
                 # Actually reset the password of the user
                 user.password = bcrypt.hashpw(
@@ -370,7 +371,7 @@ def reset_password(hash=0):
 
                 flash('Uw wachtwoord is aangepast', 'success')
         else:
-            flash('Ongeldige password-reset ticket', 'error')
+            flash('Ongeldige password-reset ticket', 'danger')
 
     else:
         flash_form_errors(form)
