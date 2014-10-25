@@ -212,7 +212,9 @@ def sign_up():
             db.session.commit()
 
             # Upload avatar
-            UserAPI.upload(request.files['avatar'], user.id)
+            avatar = request.files['avatar']
+            if avatar:
+                UserAPI.upload(avatar, user.id)
 
             flash('You\'ve signed up successfully.', 'success')
 
