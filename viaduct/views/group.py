@@ -72,11 +72,11 @@ def create():
         valid_form = True
 
         if not name:
-            flash('No group name has been specified.', 'error')
+            flash('No group name has been specified.', 'danger')
             valid_form = False
         elif Group.query.filter(Group.name == name).count() > 0:
             flash('The group name that has been specified is in use already.',
-                  'error')
+                  'danger')
             valid_form = False
 
         if valid_form:

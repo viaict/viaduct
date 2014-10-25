@@ -1,21 +1,11 @@
-from flask.ext.login import current_user
-from viaduct import application, db
-from viaduct.models.page import PagePermission, Page
+from viaduct import db
+
+from viaduct.models.page import Page, PageRevision
 from viaduct.models.user import User
 from viaduct.models.challenge import Challenge, Submission, Competitor
 
-from sqlalchemy import or_, and_
-from flask import flash
-import os
-import fnmatch
-import urllib
-import hashlib
+from sqlalchemy import and_
 import datetime
-
-from flask import render_template
-
-from viaduct.models.group import Group
-from viaduct.api.file import FileAPI
 
 ALLOWED_EXTENSIONS = set(['png', 'gif', 'jpg', 'jpeg'])
 UPLOAD_DIR = 'viaduct/static/files/users/'
@@ -24,24 +14,20 @@ UPLOAD_DIR = 'viaduct/static/files/users/'
 class ChallengeAPI:
     @staticmethod
     def create_challenge(name, description, hint, start_date, end_date,
-                        parent_id, weight, type, answer):
-        """
-        Create a new challenge
-        """
-        new_challenge = Challenge(name, description, hint, start_date, end_date,
-                            parent_id, weight, type, answer)
+                         parent_id, weight, type, answer):
+        """ Create a new challenge """
+        new_challenge = Challenge(name, description, hint, start_date,
+                                  end_date, parent_id, weight, type, answer)
         db.session.add(new_challenge)
         db.session.commit()
 
         return "Succes, challenge with name '" + new_challenge.name +\
-                "' created!"    
+            "' created!"
 
     @staticmethod
     def edit_challenge(id, name, description, hint, start_date, end_date,
-                        parent_id, weight, type, answer):
-        """
-        Create a new challenge
-        """
+                       parent_id, weight, type, answer):
+        """ Create a new challenge """
         challenge = ChallengeAPI.fetch_challenge(id)
         challenge.name = name
         challenge.description = description
@@ -55,24 +41,21 @@ class ChallengeAPI:
         db.session.add(challenge)
         db.session.commit()
 
-        return "Succes, challenge with name '" + new_challenge.name +\
-                "' edited!"
-
+        return "Success, challenge with name '" + challenge.name + \
+            "' edited!"
 
     @staticmethod
     def fetch_challenge(id):
-        """
-        Update a challenge, only give the id and new values that have to change.
-        """
-        challenge = Challenge.query.filter_by(id = id).first()
+        """ Update a challenge, only give the id and new values that have to
+        change. """
+        challenge = Challenge.query.filter_by(id=id).first()
         return challenge
 
     @staticmethod
     def challenge_exists(name):
-        """
-        Update a challenge, only give the id and new values that have to change.
-        """
-        challenge = Challenge.query.filter_by(name = name).first()
+        """ Update a challenge, only give the id and new values that have to
+        change. """
+        challenge = Challenge.query.filter_by(name=name).first()
 
         if challenge is None:
             return False
@@ -88,8 +71,8 @@ class ChallengeAPI:
         db.session.commit()
 
     @staticmethod
-    def create_submission(challenge_id=None, user_id=None,
-                 submission=None, image_path=None):
+    def create_submission(challenge_id=None, user_id=None, submission=None,
+                          image_path=None):
         """
         Create a submission for a challenge and user
         """
@@ -98,20 +81,19 @@ class ChallengeAPI:
             return False
 
         challenge = ChallengeAPI.fetch_challenge(challenge_id)
-        user = User.query.filter_by(id = user_id).first()
+        user = User.query.filter_by(id=user_id).first()
         # convert the name.
-        new_submission = Submission(challenge_id,
-                 challenge, user_id, user,
-                 submission, image_path, approved=False)
+        new_submission = Submission(challenge_id, challenge, user_id, user,
+                                    submission, image_path, approved=False)
         db.session.add(new_submission)
-        db.session.commit()        
+        db.session.commit()
 
         return new_submission
 
     @staticmethod
     def can_auto_validate(challenge):
         """
-        Check if a challenge can be auto validated. 
+        Check if a challenge can be auto validated.
 
         """
         if challenge.type == 'Text':
@@ -131,24 +113,21 @@ class ChallengeAPI:
 
         if submission.submission == challenge.answer:
             submission.approved = True
-            ChallengeAPI.assign_points_to_user(challenge.weight, submission.user_id)
+            ChallengeAPI.assign_points_to_user(challenge.weight,
+                                               submission.user_id)
             db.session.add(submission)
             db.session.commit()
             return 'Approved'
         else:
             return 'Bad answer'
 
-
     @staticmethod
     def fetch_unvalided_submissions(challenge_id):
-        return Submission.query.filter_by(challenge_id = challenge_id).all()
+        return Submission.query.filter_by(challenge_id=challenge_id).all()
 
     @staticmethod
     def fetch_all_challenges():
-        """
-        Fetch all challenges, no filters applied.
-        """
-        # return Challenge.query.join(Submission).filter(Submission.user_id == current_user.id, Submission.approved == False)
+        """ Fetch all challenges, no filters applied. """
         return Challenge.query.all()
 
     @staticmethod
@@ -156,20 +135,25 @@ class ChallengeAPI:
         """
 
         """
-        ids = db.session.query(Challenge.id).join(Submission).filter(and_(Submission.user_id == user_id, Submission.approved == True)).all()
+        ids = db.session.query(Challenge.id).join(Submission)\
+            .filter(and_(Submission.user_id == user_id,
+                         Submission.approved == True)).all()  # noqa
         ids = map(lambda x: x[0], ids)
-        return Challenge.query.filter(~Challenge.id.in_(ids), Challenge.start_date <=
-                                      datetime.date.today(), Challenge.end_date >=
-                                      datetime.date.today()).all()
+        return Challenge.query\
+            .filter(~Challenge.id.in_(ids),
+                    Challenge.start_date <= datetime.date.today(),
+                    Challenge.end_date >= datetime.date.today()).all()
+
     @staticmethod
     def fetch_all_approved_challenges_user(user_id):
-        return Challenge.query.join(Submission).filter(Submission.user_id == user_id, Submission.approved == True)
+        return Challenge.query.join(Submission)\
+            .filter(Submission.user_id == user_id, Submission.approved == True)  # noqa
 
     @staticmethod
     def is_open_challenge(challenge_id):
-        challenge = Challenge.query.filter(and_(Challenge.start_date <=
-                                     datetime.date.today(), Challenge.end_date >=
-                                     datetime.date.today())).first()
+        challenge = Challenge.query\
+            .filter(and_(Challenge.start_date <= datetime.date.today(),
+                         Challenge.end_date >= datetime.date.today())).first()
         if challenge is None:
             return False
         else:
@@ -177,19 +161,20 @@ class ChallengeAPI:
 
     @staticmethod
     def is_approved(challenge_id, user_id):
-        submission = Submission.query.filter(and_(Submission.user_id == user_id, 
-                                            Submission.challenge_id == challenge_id,
-                                            Submission.approved == True)).first()
+        submission = Submission.query\
+            .filter(and_(Submission.user_id == user_id,
+                         Submission.challenge_id == challenge_id,
+                         Submission.approved == True)).first()  # noqa
 
         if submission is None:
             return False
         else:
             return True
 
-
     @staticmethod
     def get_points(user_id):
-        competitor = Competitor.query.filter(Competitor.user_id == user_id).first()
+        competitor = Competitor.query\
+            .filter(Competitor.user_id == user_id).first()
 
         if competitor is None:
             return None
@@ -197,8 +182,9 @@ class ChallengeAPI:
             return competitor.points
 
     @staticmethod
-    def assign_points_to_user(points, user_id): 
-        competitor = Competitor.query.filter(Competitor.user_id == user_id).first()
+    def assign_points_to_user(points, user_id):
+        competitor = Competitor.query\
+            .filter(Competitor.user_id == user_id).first()
 
         if competitor is None:
             competitor = Competitor(user_id)

@@ -35,7 +35,6 @@ class SignUpForm(Form):
                                                        'opgegeven')])
     education_id = SelectField('Opleiding', coerce=int)
     avatar = FileField('Avatar')
-    #recaptcha = RecaptchaField()
 
 
 class EditUserForm(Form):

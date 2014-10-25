@@ -30,10 +30,10 @@ def list(page_nr=1):
 
     if archive:
         items = items.filter(db.or_(NewsRevision.end_time < date.today(),
-                                    NewsRevision.end_time != None))
+                                    NewsRevision.end_time != None))  # noqa
     else:
         items = items.filter(db.or_(NewsRevision.end_time >= date.today(),
-                                    NewsRevision.end_time == None))
+                                    NewsRevision.end_time == None))  # noqa
 
     items = items.paginate(page_nr, 20)
 

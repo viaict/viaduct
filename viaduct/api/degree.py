@@ -1,7 +1,6 @@
 import validictory
 
 from flask import request
-from flask.views import MethodView
 
 from viaduct import application, db
 from viaduct.helpers import Resource
@@ -9,65 +8,70 @@ from viaduct.helpers.api import make_api_response
 
 from viaduct.models import Degree
 
+
 class DegreeAPI(Resource):
-	@staticmethod
-	def register():
-		view = DegreeAPI.as_view('degree_api')
+    @staticmethod
+    def register():
+        view = DegreeAPI.as_view('degree_api')
 
-		application.add_url_rule('/api/degrees/', view_func=view,
-			methods=['DELETE', 'GET', 'POST'])
+        application.add_url_rule('/api/degrees/', view_func=view,
+                                 methods=['DELETE', 'GET', 'POST'])
 
-	@staticmethod
-	def get(degree_id=None):
-		if degree_id:
-			degree = Degree.query.get(degree_id)
+    @staticmethod
+    def get(degree_id=None):
+        if degree_id:
+            degree = Degree.query.get(degree_id)
 
-			if not degree:
-				return make_api_response(400, 'No object has been associated with the degree ID that has been specified.')
+            if not degree:
+                return make_api_response(400, 'No object has been associated '
+                                         'with the degree ID that has been '
+                                         'specified.')
 
-			return degree.to_dict()
-		else:
-			results = []
+            return degree.to_dict()
+        else:
+            results = []
 
-			for degree in Degree.query.all():
-				results.append(degree.to_dict())
+            for degree in Degree.query.all():
+                results.append(degree.to_dict())
 
-			return results
-	
-	@staticmethod
-	def post():
-		data = request.json
-		schema = {'type': 'object', 'properties':
-			{'name': {'type': 'string'},
-			'abbreviation': {'type': 'string'}}
-		}
+            return results
 
-		try:
-			validictory.validate(data, schema)
-		except Exception:
-			return make_api_response(400, 'Data does not correspond to scheme.')
+    @staticmethod
+    def post():
+        data = request.json
+        schema = {'type': 'object',
+                  'properties': {'name': {'type': 'string'},
+                                 'abbreviation': {'type': 'string'}}}
 
-		if Degree.query.filter(Degree.name==data['name']).count() > 0:
-			return make_api_response(400, 'There is already an object with the name that has been specified.')
+        try:
+            validictory.validate(data, schema)
+        except Exception:
+            return make_api_response(400,
+                                     'Data does not correspond to scheme.')
 
-		degree = Degree(data['name'], data['abbreviation'])
-		db.session.add(degree)
-		db.session.commit()
+        if Degree.query.filter(Degree.name == data['name']).count() > 0:
+            return make_api_response(400, 'There is already an object with '
+                                     'the name that has been specified.')
 
-		return degree.to_dict(), '201 The object has been created.'
+        degree = Degree(data['name'], data['abbreviation'])
+        db.session.add(degree)
+        db.session.commit()
 
-	@staticmethod
-	def delete(degree_id=None):
-		if degree_id:
-			degree = Degree.query.get(degree_id)
+        return degree.to_dict(), '201 The object has been created.'
 
-			if not degree:
-				return make_api_response(400, 'No object has been associated with the degree ID that has been specified')
+    @staticmethod
+    def delete(degree_id=None):
+        if degree_id:
+            degree = Degree.query.get(degree_id)
 
-			db.session.delete(degree)
-			db.session.commit()
+            if not degree:
+                return make_api_response(400, 'No object has been associated '
+                                         'with the degree ID that has been '
+                                         'specified')
 
-			return make_api_response(204, 'The object has been deleted')
-		else:
-			return make_api_response(400, 'TODO')
+            db.session.delete(degree)
+            db.session.commit()
 
+            return make_api_response(204, 'The object has been deleted')
+        else:
+            return make_api_response(400, 'TODO')

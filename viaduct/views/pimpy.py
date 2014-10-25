@@ -88,17 +88,11 @@ def add_task(group_id='all'):
     if request.method == 'POST':
         # FIXME: deadline is also messed up, and I do not know why
 
-        #if form.validate():
-        #   flash("VALIDAATES!!!!")
         # FIXME: validate does not seem to work :(, so we are doin' it
         # manually now
         message = ""
         if form.name.data == "":
             message = "Name is required"
-        #elif form.content.data == "":
-        #   message = "More info is required"
-        #elif request.form['deadline'] == "":
-        #   message = "Deadline is required"
         elif form.group == "":
             message = "Group is required"
         elif form.users.data == "":

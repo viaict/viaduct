@@ -1,14 +1,15 @@
 from viaduct import db
-from datetime import datetime
 
 from viaduct.models import BaseEntity
 from viaduct.models.user import User
+
 
 def dump_datetime(value):
     """Deserialize datetime object into string form for JSON processing."""
     if value is None:
         return None
     return [value.strftime("%Y-%m-%d"), value.strftime("%H:%M:%S")]
+
 
 class Challenge(db.Model, BaseEntity):
     __tablename__ = 'challenge'
@@ -24,7 +25,7 @@ class Challenge(db.Model, BaseEntity):
     type = db.Column(db.Enum('Text', 'Image', 'Custom'))
 
     def __init__(self, name='', description='', hint=None,
-                 start_date=None, end_date=None, parent_id=None, 
+                 start_date=None, end_date=None, parent_id=None,
                  weight=None, type='Text', answer=None):
         self.name = name
         self.description = description
@@ -38,27 +39,29 @@ class Challenge(db.Model, BaseEntity):
 
     @property
     def serialize(self):
-       """Return object data in easily serializeable format"""
-       return {
-           'id' : self.id,
-           'name': self.name,
-           'hint': self.hint,
-           'description': self.description,
-           'start_date': dump_datetime(self.start_date),
-           # This is an example how to deal with Many2Many relations
-           'end_date'  : dump_datetime(self.end_date),
-           'parent_id'  : self.parent_id,
-           'answer'  : self.answer,
-           'weight'  : self.weight,
-           'type'  : self.type,
-       }
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id,
+            'name': self.name,
+            'hint': self.hint,
+            'description': self.description,
+            'start_date': dump_datetime(self.start_date),
+            # This is an example how to deal with Many2Many relations
+            'end_date': dump_datetime(self.end_date),
+            'parent_id': self.parent_id,
+            'answer': self.answer,
+            'weight': self.weight,
+            'type': self.type,
+        }
+
 
 class Submission(db.Model, BaseEntity):
     __tablename__ = 'submission'
 
     challenge_id = db.Column(db.Integer, db.ForeignKey('challenge.id'))
-    challenge_rev = db.relationship(Challenge, backref=db.backref('submission',
-                               lazy='dynamic'))
+    challenge_rev = db.relationship(Challenge,
+                                    backref=db.backref('submission',
+                                                       lazy='dynamic'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship(User,
                            backref=db.backref('submission', lazy='dynamic'))
@@ -77,6 +80,7 @@ class Submission(db.Model, BaseEntity):
         self.image_path = image_path
         self.approved = approved
 
+
 class Competitor(db.Model, BaseEntity):
     __tablename__ = 'competitor'
 
@@ -85,18 +89,14 @@ class Competitor(db.Model, BaseEntity):
                            backref=db.backref('competitor', lazy='dynamic'))
     points = db.Column(db.Integer)
 
-
     def __init__(self, user_id=None):
         self.user_id = user_id
         self.user = User.query.filter(User.id == user_id).first()
-        points = 0
 
     @property
     def serialize(self):
-       """Return object data in easily serializeable format"""
-       return {
-           'name': self.user.name,
-           'points': self.points,
-       }
-
-
+        """Return object data in easily serializeable format"""
+        return {
+            'name': self.user.name,
+            'points': self.points,
+        }

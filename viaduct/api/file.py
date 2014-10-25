@@ -19,9 +19,9 @@ class FileAPI:
         filename = f.filename
 
         # Check if the file is allowed.
-        if not '.' in filename or \
+        if '.' not in filename or \
                 not filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS:
-            flash('Bestandstype is niet toegestaan.', 'error')
+            flash('Bestandstype is niet toegestaan.', 'danger')
             return
 
         # Convert the name.
@@ -47,7 +47,7 @@ class FileAPI:
             flash('Het bestand is succesvol geupload onder de naam '
                   '<em>%s</em>' % (new_file.name))
         else:
-            flash('Er is iets misgegaan, waarschuw de ICT-commissie', 'error')
+            flash('Er is iets misgegaan, waarschuw de ICT-commissie', 'danger')
 
         return new_file
 
