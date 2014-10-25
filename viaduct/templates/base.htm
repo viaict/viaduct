@@ -26,6 +26,9 @@
         {{ UserAPI.get_membership_warning() | safe }}
         {{ NavigationAPI.get_navigation_bar()|safe }}
         <div class="container">
+            <p class="text-right">
+                <a href="https://viaduct.atlassian.net/">Report a bug!</a>
+            </p>
             <div class="row">
                 <div class="col-sm-12" id="messages">
                     {{ render_flash() }}
