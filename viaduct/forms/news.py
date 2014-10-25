@@ -1,4 +1,3 @@
-from flask_wtf import Form
 from wtforms import TextAreaField, DateField
 from wtforms.validators import InputRequired
 

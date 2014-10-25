@@ -9,6 +9,7 @@ from viaduct.utilities import import_module
 from markdown import markdown
 import datetime
 
+
 def is_module(path):
     init_path = os.path.join(path, '__init__.py')
 
@@ -54,6 +55,8 @@ application.config.from_object('config')
 
 # Set up Flask Babel, which is used for internationalisation support.
 babel = Babel(application)
+
+
 @babel.localeselector
 def get_locale():
     # if a user is logged in, use the locale from the user settings
@@ -85,7 +88,7 @@ application.jinja_env.globals.update(GroupPermissionAPI=GroupPermissionAPI)
 application.jinja_env.globals.update(datetime=datetime)
 
 # Register the blueprints.
-import api
+import api  # noqa
 
 path = os.path.dirname(os.path.abspath(__file__))
 

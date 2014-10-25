@@ -211,10 +211,8 @@ def sign_up():
             db.session.add(group)
             db.session.commit()
 
-            #Upload avatar
+            # Upload avatar
             UserAPI.upload(request.files['avatar'], user.id)
-
-            #user.add_to_all()
 
             flash('You\'ve signed up successfully.', 'success')
 
@@ -393,8 +391,6 @@ def create_hash(bits=96):
 @blueprint.route('/users/', methods=['GET', 'POST'])
 @blueprint.route('/users/<int:page_nr>/', methods=['GET', 'POST'])
 def view(page_nr=1):
-    #if not current_user.has_permission('user.view'):
-    #   abort(403)
     if not GroupPermissionAPI.can_read('user'):
         return abort(403)
 
@@ -464,8 +460,6 @@ def view(page_nr=1):
 
 @blueprint.route('/users/export', methods=['GET'])
 def user_export():
-    #if not current_user.has_permission('user.view'):
-    #   abort(403)
     if not GroupPermissionAPI.can_read('user'):
         return abort(403)
 

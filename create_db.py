@@ -5,27 +5,22 @@ import bcrypt
 import datetime
 from viaduct import db, application
 
-from viaduct.models.page import Page, PagePermission, PageRevision
+from viaduct.models.page import Page
 
 from viaduct.models import User, Group, GroupPermission
 from viaduct.models import Activity
-from viaduct.models import Minute, Task
+from viaduct.models import Minute
 from viaduct.models import NavigationEntry
 from viaduct.models.degree import Degree
 from viaduct.models.education import Education
 
 from viaduct.models.vacancy import Vacancy
-from viaduct.models.education import Education
-from viaduct.models.programming_language import ProgrammingLanguage
 from viaduct.models.company import Company
 from viaduct.models.location import Location
 from viaduct.models.contact import Contact
 from viaduct.models.category import Category
-from viaduct.models.custom_form import CustomForm, CustomFormResult
-from viaduct.models.file import File
+from viaduct.models.custom_form import CustomForm
 from viaduct.models.news import NewsRevision
-
-
 
 # Remove the old db.
 if os.path.exists('application.db'):
@@ -35,8 +30,7 @@ if os.path.exists('application.db'):
 db.drop_all()
 db.create_all()
 
-
-#Add the all group
+# Add the all group
 group_all = Group('all')
 
 db.session.add(group_all)
@@ -87,8 +81,8 @@ db.session.add(ed)
 db.session.commit()
 
 # Add the administrator.
-user = User('administrator@svia.nl', bcrypt.hashpw(application.config['ADMIN_PW'],
-                                                   bcrypt.gensalt()),
+user = User('administrator@svia.nl',
+            bcrypt.hashpw(application.config['ADMIN_PW'], bcrypt.gensalt()),
             'Administrator', 'de beste', '129181982192818', 2)
 admin = user
 
@@ -121,13 +115,6 @@ group.add_user(user)
 db.session.add(group)
 db.session.commit()
 
-# Grant the permissions.
-#permissions = PagePermission(group, page, permission=2)
-
-#db.session.add(permissions)
-#db.session.commit()
-
-
 # Add stuff for pimpystuff for pimpy
 user_tijmen = User('tijmen.zwaan@gmail.com', bcrypt.hashpw('memorystick',
                                                            bcrypt.gensalt()),
@@ -135,7 +122,7 @@ user_tijmen = User('tijmen.zwaan@gmail.com', bcrypt.hashpw('memorystick',
 group_ict = Group('ict')
 group_bestuur = Group('bestuur')
 
-## could I add more stuff at once?
+# could I add more stuff at once?
 db.session.add(user_tijmen)
 db.session.add(group_ict)
 db.session.add(group_bestuur)

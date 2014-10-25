@@ -153,7 +153,6 @@ def pages_filter(data):
             else:
                 safe_mode = 'escape'
 
-            #print data[i].path
             content += '<h1>{0}</h1>'.format(data[i].title)
             content += '<h2>Hello</h2>'
             content += markdown(data[i].content, safe_mode=safe_mode,
@@ -171,10 +170,8 @@ def pages_filter(data):
 
 @application.template_filter('pimpy_minute_line_numbers')
 def pimpy_minute_line_numbers(data):
-    #assert False
     s = ''
     for i, line in enumerate(data.split('\n')):
-        #s += '%d%s\n' % (i, line[:-1])
         s += '<a id="ln%d" class="pimpy_minute_line"/>%s</a>\n' % (i,
                                                                    line[:-1])
     return s

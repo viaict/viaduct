@@ -69,7 +69,7 @@ def view_list(page=1):
                 print(i)
                 companies[i].expired = True
         companies = companies.paginate(page, 15, False)
-        #todo fix message if inactive
+        # todo fix message if inactive
 
     # companies = Company.query.paginate(page, 15, False)
 
@@ -162,13 +162,13 @@ def update(company_id=None):
     if not form.contract_end_date.data:
         flash('Geen contract einddatum opgegeven', 'danger')
         error_found = True
-    if not 'location_id' in request.form:
+    if 'location_id' not in request.form:
         flash('Geen locatie opgegeven', 'danger')
         error_found = True
-    if not 'contact_id' in request.form:
+    if 'contact_id' not in request.form:
         flash('Geen contactpersoon opgegeven', 'danger')
         error_found = True
-    if not 'website' in request.form:
+    if 'website' not in request.form:
         flash('Geen website opgegeven', 'danger')
         error_found = True
     if request.files['file']:
