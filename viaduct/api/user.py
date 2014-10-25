@@ -49,7 +49,6 @@ class UserAPI:
         # check if user has avatar if so return it
         for file in os.listdir(UPLOAD_DIR):
             if fnmatch.fnmatch(file, 'avatar_' + str(user.id) + '.*'):
-                print(user.id)
                 path = '/static/files/users/' + file
                 return(path)
 
