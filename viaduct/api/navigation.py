@@ -110,8 +110,11 @@ class NavigationAPI:
                         .order_by("activity_start_time").all()
 
                     for activity in activities:
+                        entry_title = '%s %s' % (activity.start_time
+                                                 .strftime('%Y-%m-%d'),
+                                                 activity.name)
                         entry.activities.append(
-                            NavigationEntry(entry, activity.name,
+                            NavigationEntry(entry, entry_title,
                                             '/activities/' + str(activity.id),
                                             False, False, 0))
 
