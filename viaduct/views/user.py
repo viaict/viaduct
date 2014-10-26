@@ -254,7 +254,7 @@ def sign_in():
         # Notify the login manager that the user has been signed in.
         login_user(user)
 
-        flash('You\'ve been signed in successfully.', 'succes')
+        flash('You\'ve been signed in successfully.', 'success')
 
         denied_from = session.get('denied_from')
         if denied_from:
