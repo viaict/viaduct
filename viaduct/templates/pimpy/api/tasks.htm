@@ -71,16 +71,16 @@
                         <dl>
                             <dt>Taak:</dt>
                             <dd>
-                                <a href="#" class="pimpy_editable" id="title" data-pk="{{ t.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ t.id }}" data-title="Task Content">{{ t.title }}</a>
+                                <p class="pimpy_editable" id="title" data-pk="{{ t.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ t.id }}" data-title="Task Content">{{ t.title }}</p>
                                 <button class="btn pimpy_editable_toggle" style="float: right;">Aanpassen</button>
                             </dd>
                             <dt>Gebruikers:</dt>
                             <dd>
-                                <a href="#" class="pimpy_editable" id="users" data-pk="{{ t.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ t.id }}" data-title="Task Content">{{ t.get_users() }}</a>
+                                <p class="pimpy_editable" id="users" data-pk="{{ t.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ t.id }}" data-title="Task Content">{{ t.get_users() }}</p>
                             </dd>
                             <dt>Beschrijving:</dt>
                             <dd>
-                                <a href="#" class="pimpy_editable" id="content" data-pk="{{ t.id }}" data-type="textarea" data-url="/pimpy/tasks/edit/{{ t.id }}" data-title="Task Content">{{ t.content }}</a>
+                                <p class="pimpy_editable" id="content" data-pk="{{ t.id }}" data-type="textarea" data-url="/pimpy/tasks/edit/{{ t.id }}" data-title="Task Content">{{ t.content }}</p>
                             </dd>
                             <dt>Deadline: </dt>
                             <dd>
