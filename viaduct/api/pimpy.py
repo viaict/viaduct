@@ -73,8 +73,17 @@ class PimpyAPI:
         if minute_id <= 0:
             minute_id = 1
 
-        task = Task(name, content, deadline, group_id,
-                    users, minute_id, line, status)
+        task = Task.query.filter(
+            Task.title == name and
+            Task.content == content and
+            Task.group_id == group_id).first()
+
+        if task:
+            return False, "Deze taak bestaat al in de database"
+        else:
+            task = Task(name, content, deadline, group_id,
+                        users, minute_id, line, status)
+
         db.session.add(task)
         db.session.commit()
         return True, task.id
