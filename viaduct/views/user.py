@@ -257,7 +257,7 @@ def sign_in():
 
         flash('You\'ve been signed in successfully.', 'success')
 
-        referer = request.headers.get('Referer', None)
+        referer = request.headers.get('Referer')
         denied = re.match(r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),
                           referer) is not None
         denied_from = session.get('denied_from')
@@ -282,8 +282,9 @@ def sign_out():
 
     flash('You\'ve been signed out.', 'success')
 
-    if 'denied_from' in session:
-        session['denied_from'] = None
+    referer = request.headers.get('Referer')
+    if referer:
+        return redirect(referer)
 
     return redirect(url_for('home.home'))
 
