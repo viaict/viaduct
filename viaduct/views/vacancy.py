@@ -93,7 +93,7 @@ def edit(vacancy_id=None):
     form.company_id.choices = [(c.id, c.name) for c in Company.query.
                                order_by('name')]
 
-    return render_template('vacancy/view.htm', vacancy=vacancy, form=form)
+    return render_template('vacancy/edit.htm', vacancy=vacancy, form=form)
 
 
 @blueprint.route('/create/', methods=['POST'])

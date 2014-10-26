@@ -3,106 +3,149 @@
 {% extends "content.htm" %}
 
 {% block content %}
-	<div class="container">
-	<div class="col-md-12">
-	{% if GroupPermissionAPI.can_write('location') %}
-		<a class="btn btn-default" href="{{ url_for('location.view') }}">Nieuwe locatie</a>
-	{% endif %}
-	{% if GroupPermissionAPI.can_write('contact') %}
-		<a class="btn btn-default" href="{{ url_for('contact.edit') }}">Nieuw contact</a>
-	{% endif %}
-	{% if GroupPermissionAPI.can_write('company') %}
-		<a class="btn btn-default" href="{{ url_for('company.edit') }}">Nieuw bedrijf</a>
-	{% endif %}
-	{% if GroupPermissionAPI.can_write('vacancy') %}
-		<a class="btn btn-default" href="{{ url_for('vacancy.edit') }}">Nieuwe vacature</a>
-	{% endif %}
-	<br />
-	<br />
-	<div class="row">
-		<div class="col-md-12">
-			<form method="get" action="{{ url_for('vacancy.view_list') }}" enctype=multipart/form-data class="form-inline" >
-				<input name="search" id="search" class="col-md-5" type="text" placeholder="Zoek op titel, vak of opleiding" value="{{search}}" onkeypress="searchKeyPress(event);"></input>
-				<button type="submit" class="btn btn-primary"> <i class="glyphicon glyphicon-search" id="submit"></i></button>
-			</form>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-12">
-			<div class="row">
-			<div class="col-md-1"></div>
+<div class="container">
+    <div class="col-md-12">
+    {% if GroupPermissionAPI.can_write('location') %}
+        <a class="btn btn-primary" href="{{ url_for('location.view') }}">Nieuwe locatie</a>
+    {% endif %}
+    {% if GroupPermissionAPI.can_write('contact') %}
+        <a class="btn btn-primary" href="{{ url_for('contact.edit') }}">Nieuw contact</a>
+    {% endif %}
+    {% if GroupPermissionAPI.can_write('company') %}
+        <a class="btn btn-primary" href="{{ url_for('company.edit') }}">Nieuw bedrijf</a>
+    {% endif %}
+    {% if GroupPermissionAPI.can_write('vacancy') %}
+        <a class="btn btn-primary" href="{{ url_for('vacancy.edit') }}">Nieuwe vacature</a>
+    {% endif %}
+    <br />
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <form method="get" action="{{ url_for('vacancy.view_list') }}" enctype=multipart/form-data class="form-inline" >
+                <input name="search" id="search" class="col-md-5" type="text"
+                placeholder="Zoek op titel, contract of bedrijf" value="{{search}}"
+                onkeypress="searchKeyPress(event);">
+                </input>
+                <button type="submit" class="btn btn-primary">
+                    <i class="glyphicon glyphicon-search" id="submit"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+            <div class="col-md-1"></div>
 
-			<div class="col-md-4"><h4>Titel</h4></div>
-			<!-- <div class="col-md-2"><h4>Werklast</h4></div> -->
-			<div class="col-md-3"><h4>Contract</h4></div>
-			<div class="col-md-4"><h4>Bedrijf</h4></div>
-			</div>
-		</div>
-	</div>
-	<hr>
-	{% for vacancy in vacancies.items %}
+            <div class="col-md-4"><h4>Titel</h4></div>
+            <div class="col-md-3"><h4>Contract</h4></div>
+            <div class="col-md-4"><h4>Bedrijf</h4></div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    {% for vacancy in vacancies.items %}
+        <div style="cursor:pointer;" class="row" {% if vacancy.expired %} style="background:rgba(255, 100, 0, 0.3); ;"{% endif %}>
+            <div class="col-md-12" data-toggle="collapse" data-target='#{{ vacancy.id
+                }}'>
+                <div class="row">
+                    <div class="col-md-1 text-center"><i class="glyphicon glyphicon-list-alt"></i></div>
+                    <div class="col-md-4">{{vacancy.title}}</div>
+                    <div class="col-md-3">
+                        <a class="search_click" href="?search={{vacancy.contract_of_service}}">{{vacancy.contract_of_service}}</a>
+                    </div>
+                    <div class="col-md-4">
+                        <a class="search_click" href="?search={{vacancy.company.name}}" >{{vacancy.company.name}}</a>
+                    </div>
+                </div>
+                <div id='{{ vacancy.id }}' class="collapse">
+                    <hr>
+                    <div class="col-md-4">
+                        <blockquote>
+                            <a href="{{url_for('company.view', company_id=vacancy.company.id)}}">
 
-		<div style="cursor:pointer;" class="row" {% if vacancy.expired %} style="background:rgba(255, 100, 0, 0.3); ;"{% endif %}>
-			<div class="col-md-12" data-toggle="collapse" data-target='#{{ vacancy.id
-				}}'>
-				<div class="row">
-				<div class="col-md-1"><i class="icon-list-alt"></i></div>
-				<div class="col-md-4">{{vacancy.title}}</div>
-				<!-- <div class="col-md-2"><a class="search_click" href="?search={{vacancy.workload}}" >{{vacancy.workload}}</a></div> -->
-				<div class="col-md-3"><a class="search_click" href="?search={{vacancy.contract_of_service}}">{{vacancy.contract_of_service}}</a></div>
-				<div class="col-md-4"><a class="search_click" href="?search={{vacancy.company.name}}" >{{vacancy.company.name}}</a> </div>
-				</div>
-				<div id='{{ vacancy.id }}' class="collapse">
-					<hr>
-					<div class="col-md-4">
-						<blockquote>
-							<a href="{{url_for('company.view', company_id=vacancy.company.id)}}">
+                            {% if vacancy.company.logo_path != '#' %}
+                                <img class="img-rounded" style="max-width:250px; max-height:100px;" src="{{path}}{{vacancy.company.logo_path}}"></img>
+                            {% else %}
+                                {{vacancy.company.name}}
+                            {% endif %}
+                            </a>
+                        </blockquote>
+                        <p>
+                            {# Email link #}
+                            <i class="glyphicon glyphicon-envelope"></i>
+                            <a target="_blank" href="mailto:{{vacancy.company.contact.email}}">
+                                {{vacancy.company.contact.email}}
+                            </a>
+                            <br/>
 
-							{% if vacancy.company.logo_path != '#' %}
-								<img class="img-rounded" style="max-width:250px; max-height:100px;" src="{{path}}{{vacancy.company.logo_path}}"></img>
-							{% else %}
-							{{vacancy.company.name}}
+                            {# Website link #}
+                            <i class="glyphicon glyphicon-globe"></i>
+                            <a target="_blank" href="{{vacancy.company.website}}">
+                                {{vacancy.company.website}}
+                            </a>
+                            <br/>
+
+                            {# Google maps link #}
+                            <i class="glyphicon glyphicon-map-marker"></i>
+                            <a target="blank_" href="https://maps.google.nl/maps?q={{vacancy.company.location.address}} {{vacancy.company.location.city}} {{vacancy.company.location.country}}">
+                                {{vacancy.company.location.address}}, {{vacancy.company.location.city}}, {{vacancy.company.location.country}}
+                            </a>
+                            <br/>
+
+                            {# Telephone link #}
+                            <i class="glyphicon glyphicon-user"></i>
+                            <a href="tel:{{vacancy.company.contact.phone_nr}}">
+                                {{vacancy.company.contact.phone_nr}}
+                            </a>
+                            <br>
+
+                            {% if vacancy.id and GroupPermissionAPI.can_write('vacancy') %}
+                            <a class="btn btn-warning"
+                                href="{{ url_for('vacancy.edit', vacancy_id=vacancy.id) }}" >
+                                <i class="glyphicon glyphicon-pencil"></i>
+                                 Bewerken
+                            </a>
+                            <form onsubmit="return confirm('Wilt u {{vacancy.title}} echt verwijderen?');"
+                                action="{{ url_for('vacancy.delete', vacancy_id=vacancy.id) }}"
+                                method="post">
+                                <fieldset>
+                                    <button class="btn btn-danger" type="submit">
+                                        <i class="glyphicon glyphicon-pencil"></i>
+                                        Verwijderen
+                                    </button>
+                                </fieldset>
+                            </form>
 							{% endif %}
-							</a>
-							<small><i class="icon-map-marker"></i><cite title="Source Title"><a target="blank_"href="https://maps.google.nl/maps?q={{vacancy.company.location.address}} {{vacancy.company.location.city}} {{vacancy.company.location.country}}">{{vacancy.company.location.address}}, {{vacancy.company.location.city}}, {{vacancy.company.location.country}}</a></cite></small>
-						</blockquote>
-						<p>
-							<i class="glyphicon glyphicon-envelope"></i><a target="blank_" href="mailto:{{vacancy.company.contact.email}}"> {{vacancy.company.contact.email}}</a> <br />
-							<i class="glyphicon glyphicon-globe"></i> <a target="_blank" href="{{vacancy.company.website}}"> {{vacancy.company.website}} </a> <br>
-							<i class="glyphicon glyphicon-user"></i><a href="tel:{{vacancy.company.contact.phone_nr}}">{{vacancy.company.contact.phone_nr}}</a> <br>
-							{% if GroupPermissionAPI.can_write('vacancy') %}
-							<a href="{{ url_for('vacancy.edit', vacancy_id=vacancy.id) }}">edit</a>  <br>
-							{% endif %}
-						</p>
-						</div>
-						<div class="col-md-6">
-							<h3>
-								{{vacancy.title}}
-							</h3>
-						<br />
-						{{ vacancy.description | markdown }}
+                        </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h3>
+                                {{vacancy.title}}
+                            </h3>
+                        <br />
+                        {{ vacancy.description | markdown }}
 
-					</div>
-				</div>
-			</div>
-		</div>
-		<hr>
-		{% endfor %}
-		</tbody>
-	</table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-	{{ render_pagination(vacancies, 'vacancy.view_list', "?search=" + search) }}
-	</div>
-	</div>
+    {{ render_pagination(vacancies, 'vacancy.view_list', "?search=" + search) }}
+    </div>
+    </div>
 <script>
 $( document ).ready(function() {
 
-	/* Prevent the expand function being called when clicking on a link */
+    /* Prevent the expand function being called when clicking on a link */
     $( document).on('click', 'a.search_click', function(e){
-    	e.preventdefaults();
-    	document.location.href=$(this).attr("href");
+        e.preventdefaults();
+        document.location.href=$(this).attr("href");
     });
 });
 </script>
-
 {% endblock %}

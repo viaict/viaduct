@@ -9,28 +9,29 @@
         <div class="col-md-4">
             <blockquote>
                 {% if company.logo_path != '#' %}
-                <img style="max-width:250px; max-height:100px;" src="{{path}}{{company.logo_path}}"></img></br>
+                <img style="max-width:250px; max-height:100px;" src="{{path}}{{company.logo_path}}"></img>
+                <br/>
                 {% endif %}
             </blockquote>
             <p>
                 <i class="glyphicon glyphicon-envelope"></i>
                 <a target="blank_" href="mailto:{{company.contact.email}}"> {{company.contact.email}}</a>
-                </br>
+                <br/>
 
                 <i class="glyphicon glyphicon-globe"></i>
                 <a target="_blank" href="{{company.website}}"> {{company.website}} </a>
-                </br>
+                <br/>
 
                 <i class="glyphicon glyphicon-map-marker"></i>
                 <a target="blank_" href="https://maps.google.nl/maps?q={{company.location.address}} {{company.location.city}} {{company.location.country}}">
                     {{company.location.address}}, {{company.location.city}}, {{company.location.country}}
                 </a>
-                </br>
+                <br/>
 
                 <i class="glyphicon glyphicon-user"></i>
                 <a href="tel:{{company.contact.phone_nr}}">{{company.contact.phone_nr}}</a>
-                </br>
-                </br>
+                <br/>
+                <br/>
 
                 {% if company.id and GroupPermissionAPI.can_write('company') %}
                 <a class="btn btn-warning"
