@@ -54,7 +54,7 @@ def view(archive="", page=1):
                            archive=archive)
 
 
-@blueprint.route('/remove/<int:activity_id>', methods=['POST'])
+@blueprint.route('/remove/<int:activity_id>/', methods=['POST'])
 def remove_activity(activity_id=0):
     if not GroupPermissionAPI.can_write('activity'):
         return abort(403)
@@ -72,7 +72,7 @@ def remove_activity(activity_id=0):
     return redirect(url_for('activity.view'))
 
 
-@blueprint.route('/<int:activity_id>', methods=['GET', 'POST'])
+@blueprint.route('/<int:activity_id>/', methods=['GET', 'POST'])
 def get_activity(activity_id=0):
     if not GroupPermissionAPI.can_read('activity'):
         return abort(403)
@@ -134,7 +134,7 @@ def get_activity(activity_id=0):
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
-@blueprint.route('/edit/<int:activity_id>', methods=['GET', 'POST'])
+@blueprint.route('/edit/<int:activity_id>/', methods=['GET', 'POST'])
 def create(activity_id=None):
     # Need to be logged in + actie group or admin etc.
     if not GroupPermissionAPI.can_write('activity'):
@@ -241,7 +241,7 @@ def create(activity_id=None):
     return render_template('activity/create.htm', activity=activity, form=form)
 
 
-@blueprint.route('/transaction/<int:result_id>', methods=['GET', 'POST'])
+@blueprint.route('/transaction/<int:result_id>/', methods=['GET', 'POST'])
 def create_mollie_transaction(result_id):
     form_result = CustomFormResult.query.filter(
         CustomFormResult.id == result_id).first()
