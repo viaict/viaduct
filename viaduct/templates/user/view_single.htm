@@ -61,9 +61,9 @@
                     <h4> Studentnummer: {{ user.student_id }} </h4>
                     <h4> Email: {{ user.email}} </h4>
                     <h4> Studie: {{ user.education.name }} </h4>
-                    <h4> <i class="icon-check{% if not user.has_payed %}-empty{% endif %}"></i> Lid </h4>
-                    {% if user.honorary_member %}<h4> <i class="icon-check"></i> Erelid </h4>{% endif %}
-                    {% if user.favourer %}<h4> <i class="icon-check"></i> Begunstiger </h4>{% endif %}
+                    <h4> <i class="glyphicon glyphicon-check{% if not user.has_payed %}-empty{% endif %}"></i> Lid </h4>
+                    {% if user.honorary_member %}<h4> <i class="glyphicon glyphicon-check"></i> Erelid </h4>{% endif %}
+                    {% if user.favourer %}<h4> <i class="glyphicon glyphicon-check"></i> Begunstiger </h4>{% endif %}
                 </ul>
             </div>
             <div class="user-menu-content">
