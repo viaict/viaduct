@@ -15,14 +15,14 @@
 					<option value="{{ course.id }}">{{course.name}}</option>
 				{% endfor %}
 			</select>
-            <a href="{{ url_for('examination.add_course') }}" class="btn"><i class="glyphicon glyphicon-pencil"></i> <strong>nieuw</strong></a><br />
+            <a href="{{ url_for('examination.add_course') }}" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> <strong>nieuw</strong></a><br />
 			studie <br />
 			<select name=education> <br />
 				{% for education in educations %}
 					<option value="{{ education.id }}">{{education.name}}</option>
 				{% endfor %}
 			</select>
-            <a href="{{ url_for('examination.add_education') }}" class="btn"><i class="glyphicon glyphicon-pencil"></i> <strong>nieuw</strong></a><br />
+            <a href="{{ url_for('examination.add_education') }}" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> <strong>nieuw</strong></a><br />
 			Tentamen </br>
 			<input type=file name=file><br />
 			Antwoorden </br>

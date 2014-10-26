@@ -38,9 +38,9 @@
 		</table>
 
 		<div class="btn-group">
-			<a href="{{ url_for('group.add_users', group_id=group.id) }}" class="btn">Add</a>
-			<button type="submit" class="btn">Delete</button>
-			<a href="{{ url_for('group.view') }}" class="btn">Back</a>
+			<a href="{{ url_for('group.add_users', group_id=group.id) }}" class="btn btn-default">Add</a>
+			<button type="submit" class="btn btn-danger">Delete</button>
+			<a href="{{ url_for('group.view') }}" class="btn btn-default">Back</a>
 		</div>
 
 		{{ render_pagination(users, 'group.view_users', group_id=group.id) }}
