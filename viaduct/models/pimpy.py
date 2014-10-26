@@ -44,8 +44,8 @@ class Task(db.Model, BaseEntity):
     status = db.Column(db.Integer)
 
     status_meanings = [
-        "not started", "started", "done",
-        "not done", "checked", "removed"]
+        "Niet begonnen", "Begonnen", "Done",
+        "Niet Done", "Gecheckt", "Verwijderd"]
     status_colors = [
         "btn-info", "btn-warning", "btn-success",
         "btn-danger", "btn-success", "btn-inverse"]
@@ -70,7 +70,7 @@ class Task(db.Model, BaseEntity):
         """
         if self.status >= 0 and self.status < len(self.status_meanings):
             return self.status_meanings[self.status]
-        return "unknown"
+        return "Onbekend"
 
     def update_status(self, status):
         if status >= 0 and status <= len(self.status_meanings):
@@ -83,7 +83,7 @@ class Task(db.Model, BaseEntity):
         """
         if self.status >= 0 and self.status < len(self.status_colors):
             return self.status_colors[self.status]
-        return "unknown"
+        return "Onbekend"
 
     @staticmethod
     def get_status_meanings():
