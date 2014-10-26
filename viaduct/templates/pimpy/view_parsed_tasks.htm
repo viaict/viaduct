@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="col-md-8">
-        <h1>Found Tasks</h1>
+        <h1>Gevonden taken</h1>
         <table class="table table-hover">
             <tbody>
             {% for list_item in tasks: %}
@@ -29,30 +29,30 @@
                 <div class="collapse" id='{{ list_item.id }}_{{ user_header | replace(" ","_") }}'>
                     <div class="well well-small">
                         <dl>
-                            <dt>Task:</dt>
+                            <dt>Taak:</dt>
                             <dd>
                                 <a href="#" class="pimpy_editable" id="title" data-pk="{{ list_item.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ list_item.id }}" data-title="Task Content">{{ list_item.title }}</a>
-                                <button class="btn pimpy_editable_toggle" style="float: right;">Edit</button>
+                                <button class="btn pimpy_editable_toggle" style="float: right;">Aanpassen</button>
                             </dd>
-                            <dt>Users:</dt>
+                            <dt>Gebruikers:</dt>
                             <dd>
                                 <a href="#" class="pimpy_editable" id="users" data-pk="{{ list_item.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ list_item.id }}" data-title="Task Content">{{ list_item.get_users() }}</a>
-                            </dd> 
-                            <dt>Description:</dt>
+                            </dd>
+                            <dt>Beschrijving:</dt>
                             <dd>
                                 <a href="#" class="pimpy_editable" id="content" data-pk="{{ list_item.id }}" data-type="textarea" data-url="/pimpy/tasks/edit/{{ list_item.id }}" data-title="Task Content">{{ list_item.content }}</a>
                             </dd>
-                            <dt>Deadline: </dt>
+                            <dt>Deadline:</dt>
                             <dd>
                                 {{ list_item.deadline }}
                             </dd>
-                            <dt>Created on:</dt>
+                            <dt>Aangemaakt op:</dt>
                             <dd>
                                 {{list_item.timestamp }}
                             </dd>
                         </dl>
                         {% if list_item.minute_id > 1 %}
-                        <a href="{{ url_for('pimpy.view_minute', group_id=list_item.group_id, minute_id=list_item.minute_id) }}"> Go to minute </a>
+                        <a href="{{ url_for('pimpy.view_minute', group_id=list_item.group_id, minute_id=list_item.minute_id) }}">Ga naar notulen!</a>
                         {% endif %}
                     </div>
                 </div>
@@ -64,7 +64,7 @@
 
 
 
-        <h1>Found DONE's</h1>
+        <h1>Gevonden DONE's</h1>
         <table class="table table-hover">
             <tbody>
             {% for list_item in dones: %}
@@ -91,16 +91,16 @@
                 <div class="collapse" id='{{ list_item.id }}_{{ user_header | replace(" ","_") }}'>
                     <div class="well well-small">
                         <dl>
-                            <dt>Task:</dt>
+                            <dt>Taak:</dt>
                             <dd>
                                 <a href="#" class="pimpy_editable" id="title" data-pk="{{ list_item.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ list_item.id }}" data-title="Task Content">{{ list_item.title }}</a>
-                                <button class="btn pimpy_editable_toggle" style="float: right;">Edit</button>
+                                <button class="btn pimpy_editable_toggle" style="float: right;">Aanpassen</button>
                             </dd>
-                            <dt>Users:</dt>
+                            <dt>Gebruikers:</dt>
                             <dd>
                                 <a href="#" class="pimpy_editable" id="users" data-pk="{{ list_item.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ list_item.id }}" data-title="Task Content">{{ list_item.get_users() }}</a>
-                            </dd> 
-                            <dt>Description:</dt>
+                            </dd>
+                            <dt>Beschrijving:</dt>
                             <dd>
                                 <a href="#" class="pimpy_editable" id="content" data-pk="{{ list_item.id }}" data-type="textarea" data-url="/pimpy/tasks/edit/{{ list_item.id }}" data-title="Task Content">{{ list_item.content }}</a>
                             </dd>
@@ -108,13 +108,13 @@
                             <dd>
                                 {{ list_item.deadline }}
                             </dd>
-                            <dt>Created on:</dt>
+                            <dt>Aangemaakt op:</dt>
                             <dd>
                                 {{list_item.timestamp }}
                             </dd>
                         </dl>
                         {% if list_item.minute_id > 1 %}
-                        <a href="{{ url_for('pimpy.view_minute', group_id=list_item.group_id, minute_id=list_item.minute_id) }}"> Go to minute </a>
+                        <a href="{{ url_for('pimpy.view_minute', group_id=list_item.group_id, minute_id=list_item.minute_id) }}">Ga naar notulen!</a>
                         {% endif %}
                     </div>
                 </div>
@@ -124,7 +124,7 @@
             </tbody>
         </table>
 
-        <h1>Found REMOVE's</h1>
+        <h1>Gevonden REMOVE's</h1>
         <table class="table table-hover">
             <tbody>
             {% for list_item in removes: %}
@@ -151,16 +151,16 @@
                 <div class="collapse" id='{{ list_item.id }}_{{ user_header | replace(" ","_") }}'>
                     <div class="well well-small">
                         <dl>
-                            <dt>Task:</dt>
+                            <dt>Taak:</dt>
                             <dd>
                                 <a href="#" class="pimpy_editable" id="title" data-pk="{{ list_item.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ list_item.id }}" data-title="Task Content">{{ list_item.title }}</a>
-                                <button class="btn pimpy_editable_toggle" style="float: right;">Edit</button>
+                                <button class="btn pimpy_editable_toggle" style="float: right;">Aanpassen</button>
                             </dd>
-                            <dt>Users:</dt>
+                            <dt>Gebruikers:</dt>
                             <dd>
                                 <a href="#" class="pimpy_editable" id="users" data-pk="{{ list_item.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ list_item.id }}" data-title="Task Content">{{ list_item.get_users() }}</a>
-                            </dd> 
-                            <dt>Description:</dt>
+                            </dd>
+                            <dt>Beschrijving:</dt>
                             <dd>
                                 <a href="#" class="pimpy_editable" id="content" data-pk="{{ list_item.id }}" data-type="textarea" data-url="/pimpy/tasks/edit/{{ list_item.id }}" data-title="Task Content">{{ list_item.content }}</a>
                             </dd>
@@ -168,13 +168,13 @@
                             <dd>
                                 {{ list_item.deadline }}
                             </dd>
-                            <dt>Created on:</dt>
+                            <dt>Aangemaakt op:</dt>
                             <dd>
                                 {{list_item.timestamp }}
                             </dd>
                         </dl>
                         {% if list_item.minute_id > 1 %}
-                        <a href="{{ url_for('pimpy.view_minute', group_id=list_item.group_id, minute_id=list_item.minute_id) }}"> Go to minute </a>
+                        <a href="{{ url_for('pimpy.view_minute', group_id=list_item.group_id, minute_id=list_item.minute_id) }}">Ga naar notulen!</a>
                         {% endif %}
                     </div>
                 </div>
