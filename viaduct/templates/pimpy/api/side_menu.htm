@@ -2,27 +2,29 @@
 <ul class="nav">
     <li>
         <ul>
-            Show
+            Bekijk
             <ul class="nav nav-pills">
                 <li class="pimpy-menu {% if type == 'minutes' %} active {% endif %} ">
                     <a href="{{ url_for(endpoints['view_minutes'], group_id=group_id) }}">
-                        minutes</a>
+                        Notulen
+                    </a>
                 </li>
                 <li class="pimpy-menu {% if type == 'tasks' %} active {% endif %} ">
                     <a href="{{ url_for(endpoints['view_tasks_chosenpersonal'], group_id=group_id) }}">
-                        tasks</a>
+                        Taken
+                    </a>
                 </li>
             </ul>
         </ul>
         {% if type == 'tasks' %}
             <ul>
-                For
+                Van
                 <ul class="nav nav-pills">
                     <li class="pimpy-menu {% if personal %} active {% endif %} ">
-                        <a href="{{ url_for(endpoints['view_chosentype_personal'], group_id=group_id) }}">me</a>
+                        <a href="{{ url_for(endpoints['view_chosentype_personal'], group_id=group_id) }}">Zelf</a>
                     </li>
                     <li class="pimpy-menu {% if not personal %} active {% endif %} ">
-                        <a href="{{ url_for(endpoints['view_chosentype'], group_id=group_id) }}">all</a>
+                        <a href="{{ url_for(endpoints['view_chosentype'], group_id=group_id) }}">Alle</a>
                     </li>
                 </ul>
             </ul>
@@ -30,10 +32,10 @@
     </li>
     <li>
         <ul>
-            Groups
+            Groepen
             <ul class="nav nav-pills nav-stacked pimpy-menu-group">
                 <li {% if group_id == 'all' %} class="active" {% endif %} >
-                    <a href="{{ url_for(endpoints['view_chosentype_chosenpersonal']) }}">all</a>
+                    <a href="{{ url_for(endpoints['view_chosentype_chosenpersonal']) }}">Alle</a>
                 </li>
                 {% for group in groups %}
                     <li {% if group_id == group.id %} class="active" {% endif %} >
@@ -47,10 +49,10 @@
         <ul>
             <ul class="nav nav-pills nav-stacked pimpy-menu-group">
                 <li>
-                    <a href="{{ url_for('pimpy.add_minute', group_id=group_id) }}">Add minute</a>
+                    <a href="{{ url_for('pimpy.add_minute', group_id=group_id) }}">Nieuwe notulen</a>
                 </li>
                 <li>
-                    <a href="{{ url_for('pimpy.add_task', group_id=group_id) }}">Add task</a>
+                    <a href="{{ url_for('pimpy.add_task', group_id=group_id) }}">Nieuwe taak</a>
                 </li>
             </ul>
         </ul>

@@ -69,16 +69,16 @@
                 <div class="collapse" id='{{ t.id }}_{{ tr.user.name | replace(" ","_") }}'>
                     <div class="well well-small">
                         <dl>
-                            <dt>Task:</dt>
+                            <dt>Taak:</dt>
                             <dd>
                                 <a href="#" class="pimpy_editable" id="title" data-pk="{{ t.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ t.id }}" data-title="Task Content">{{ t.title }}</a>
-                                <button class="btn pimpy_editable_toggle" style="float: right;">Edit</button>
+                                <button class="btn pimpy_editable_toggle" style="float: right;">Aanpassen</button>
                             </dd>
-                            <dt>Users:</dt>
+                            <dt>Gebruikers:</dt>
                             <dd>
                                 <a href="#" class="pimpy_editable" id="users" data-pk="{{ t.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ t.id }}" data-title="Task Content">{{ t.get_users() }}</a>
                             </dd>
-                            <dt>Description:</dt>
+                            <dt>Beschrijving:</dt>
                             <dd>
                                 <a href="#" class="pimpy_editable" id="content" data-pk="{{ t.id }}" data-type="textarea" data-url="/pimpy/tasks/edit/{{ t.id }}" data-title="Task Content">{{ t.content }}</a>
                             </dd>
@@ -86,16 +86,16 @@
                             <dd>
                                 {{ t.deadline }}
                             </dd>
-                            <dt>Created on:</dt>
+                            <dt>Aangemaakt op:</dt>
                             <dd>
                                 {{t.timestamp }}
                             </dd>
                         </dl>
                         {% if t.minute_id > 1 %}
                         <a href="{{ url_for('pimpy.view_minute',
-    group_id=t.group_id,
-    minute_id=t.minute_id,
-    line_number=t.line) }}"> Go to minute </a>
+                            group_id=t.group_id,
+                            minute_id=t.minute_id,
+                            line_number=t.line) }}">Ga naar Notulen!</a>
                         {% endif %}
                     </div>
                 </div>
