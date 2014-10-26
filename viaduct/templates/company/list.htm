@@ -5,24 +5,26 @@
 {% block content %}
 	<div class="col-md-12">
 	{% if GroupPermissionAPI.can_write('location') %}
-		<a class="btn btn-default" href="{{ url_for('location.view') }}">Nieuwe locatie</a>
+		<a class="btn btn-success" href="{{ url_for('location.view') }}">Nieuwe locatie</a>
 	{% endif %}
 	{% if GroupPermissionAPI.can_write('contact') %}
-		<a class="btn btn-default" href="{{ url_for('contact.edit') }}">Nieuw contact</a>
+		<a class="btn btn-success" href="{{ url_for('contact.edit') }}">Nieuw contact</a>
 	{% endif %}
 	{% if GroupPermissionAPI.can_write('company') %}
-		<a class="btn btn-default" href="{{ url_for('company.edit') }}">Nieuw bedrijf</a>
+		<a class="btn btn-success" href="{{ url_for('company.edit') }}">Nieuw bedrijf</a>
 	{% endif %}
 	{% if GroupPermissionAPI.can_write('vacancy') %}
-		<a class="btn btn-default" href="{{ url_for('vacancy.edit') }}">Nieuwe vacature</a>
+		<a class="btn btn-success" href="{{ url_for('vacancy.edit') }}">Nieuwe vacature</a>
 	{% endif %}
 	<br />
 	<br />
 	<div class="row">
 		<div class="col-md-12">
 			<form method="get" action="{{ url_for('company.view_list') }}" enctype=multipart/form-data class="form-inline" >
-				<input name="search" id="search" class="col-md-5" type="text" placeholder="Zoek op titel, vak of opleiding" value="{{search}}" onkeypress="searchKeyPress(event);"></input>
-				<button type="submit" class="btn btn-primary"> <i class="glyphicon glyphicon-search" id="submit"></i></button>
+				<input name="search" id="search" class="col-md-5" type="text" placeholder="Zoek op bedrijf of Locatie" value="{{search}}" onkeypress="searchKeyPress(event);"></input>
+                <button type="submit" class="btn btn-primary">
+                    <i class="glyphicon glyphicon-search" id="submit"></i>
+                </button>
 			</form>
 		</div>
 	</div>
@@ -44,7 +46,7 @@
 
 
 				<div class="row">
-				<div class="col-md-1"><i class="icon-info-sign"></i></div>
+				<div class="col-md-1 text-center"><i class="glyphicon glyphicon-info-sign"></i></div>
 				<div class="col-md-3">{{company.name}}</div>
 				<div class="col-md-5"> <a target="_blank" href="{{company.website}}"> {{company.website}} </a></div>
 				<div class="col-md-3">{{company.location.city}}</div>
@@ -61,22 +63,47 @@
 							{{company.name}}
 							{% endif %}
 							</a>
-							<small><i class="icon-map-marker"></i><cite title="Source Title"><a target="blank_"href="https://maps.google.nl/maps?q={{company.location.address}} {{company.location.city}} {{company.location.country}}">{{company.location.address}}, {{company.location.city}}, {{company.location.country}}</a></cite></small>
 						</blockquote>
 						<p>
-							<i class="glyphicon glyphicon-envelope"></i><a target="blank_" href="mailto:{{company.contact.email}}"> {{company.contact.email}}</a> <br />
-							<i class="glyphicon glyphicon-globe"></i> <a target="_blank" href="{{company.website}}"> {{company.website}} </a> <br>
-							<i class="glyphicon glyphicon-user"></i><a href="tel:{{company.contact.phone_nr}}">{{company.contact.phone_nr}}</a> <br>
-							{% if GroupPermissionAPI.can_write('company') %}
-							<a href="{{ url_for('company.edit', company_id=company.id) }}">edit</a>  <br>
+                            <i class="glyphicon glyphicon-envelope"></i>
+                            <a target="blank_" href="mailto:{{company.contact.email}}"> {{company.contact.email}}</a>
+                            </br>
+
+                            <i class="glyphicon glyphicon-globe"></i>
+                            <a target="_blank" href="{{company.website}}"> {{company.website}} </a>
+                            </br>
+
+                            <i class="glyphicon glyphicon-map-marker"></i>
+                            <a target="blank_"href="https://maps.google.nl/maps?q={{company.location.address}} {{company.location.city}} {{company.location.country}}">{{company.location.address}}, {{company.location.city}}, {{company.location.country}}</a>
+                            </br>
+
+                            <i class="glyphicon glyphicon-user"></i>
+                            <a href="tel:{{company.contact.phone_nr}}">{{company.contact.phone_nr}}</a>
+                            </br>
+                            </br>
+
+                            {% if company.id and GroupPermissionAPI.can_write('company') %}
+                            <a class="btn btn-warning"
+                                href="{{ url_for('company.edit', company_id=company.id) }}" >
+                                <i class="glyphicon glyphicon-pencil"></i>
+                                 Bewerken
+                            </a>
+                            <form onsubmit="return confirm('Wilt u {{company.name}} echt verwijderen?');"
+                                action="{{ url_for('company.delete', company_id=company.id) }}"
+                                method="post">
+                                <fieldset>
+                                    <button class="btn btn-danger" type="submit">
+                                        <i class="glyphicon glyphicon-pencil"></i>
+                                        Verwijderen
+                                    </button>
+                                </fieldset>
+                            </form>
 							{% endif %}
 						</p>
 						</div>
 						<div class="col-md-6">
-							<h3>
-								{{company.name}}
-							</h3>
-						<br />
+							<h3> {{company.name}} </h3>
+						</br>
 						{{ company.description | markdown }}
 					</div>
 				</div>

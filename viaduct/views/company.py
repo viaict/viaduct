@@ -124,7 +124,7 @@ def view(company_id=None):
     if company_id:
         company = Company.query.get(company_id)
     if company_id is None or not company:
-        redirect(url_for('vacancy.view_list'))
+        return redirect(url_for('company.view_list'))
 
     return render_template('company/view.htm', company=company,
                            path=FILE_FOLDER)
@@ -206,6 +206,7 @@ def delete(company_id):
     BACKEND
     Delete a company.
     '''
+    print('POST request received')
     if not GroupPermissionAPI.can_write('company'):
         return abort(403)
 
@@ -217,4 +218,4 @@ def delete(company_id):
     db.session.commit()
     flash('Bedrijf verwijderd', 'success')
 
-    return redirect(url_for('company.list'))
+    return redirect(url_for('company.list_view'))
