@@ -1,4 +1,5 @@
 require 'bootstrap-sass'
+require 'font-awesome-sass'
 
 fonts_dir = "viaduct/static/font"
 http_fonts_path = "/static/font"

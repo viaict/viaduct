@@ -3,6 +3,7 @@ import bcrypt
 import random
 import datetime
 import smtplib
+import re
 from unicodecsv import writer
 from StringIO import StringIO
 from email.mime.text import MIMEText
@@ -254,10 +255,17 @@ def sign_in():
         # Notify the login manager that the user has been signed in.
         login_user(user)
 
-        flash('You\'ve been signed in successfully.', 'succes')
+        flash('You\'ve been signed in successfully.', 'success')
 
+        referer = request.headers.get('Referer', None)
+        denied = re.match(r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),
+                          referer) is not None
         denied_from = session.get('denied_from')
-        if denied_from:
+
+        if not denied:
+            if referer:
+                return redirect(referer)
+        elif denied_from:
             return redirect(denied_from)
 
         return redirect(url_for('home.home'))

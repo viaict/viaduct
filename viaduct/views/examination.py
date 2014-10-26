@@ -43,7 +43,7 @@ def create_unique_file(filename):
     return temp_filename
 
 
-@blueprint.route('/examination/add', methods=['GET', 'POST'])
+@blueprint.route('/examination/add/', methods=['GET', 'POST'])
 def upload_file():
     if not GroupPermissionAPI.can_write('examination'):
         session['prev'] = 'examination.upload_file'
@@ -60,15 +60,6 @@ def upload_file():
         education_id = request.form.get("education", None)
 
         error = False
-
-        # course_id = get_course_id(course);
-        # if(course_id == None):
-        #   return render_template('examination/upload.htm', courses = courses,
-        #   educations = educations, message = 'Er is een fout opgetreden!');
-        # education_id = get_education_id(education)
-        # if(education_id == None):
-        #   return render_template('examination/upload.htm', courses = courses,
-        #   educations = educations, message = 'Er is een fout opgetreden!');
 
         if not title:
             flash('Geen titel opgegeven', 'danger')
@@ -158,7 +149,7 @@ def view_examination(page_nr=1):
                            title='Tentamens')
 
 
-@blueprint.route('/examination/admin', methods=['GET', 'POST'])
+@blueprint.route('/examination/admin/', methods=['GET', 'POST'])
 @blueprint.route('/examination/admin/<int:page_nr>/', methods=['GET', 'POST'])
 def examination_admin(page_nr=1):
     if not GroupPermissionAPI.can_write('examination', False):
@@ -209,7 +200,7 @@ def examination_admin(page_nr=1):
                            title='Tentamens')
 
 
-@blueprint.route('/examination/edit', methods=['GET', 'POST'])
+@blueprint.route('/examination/edit/', methods=['GET', 'POST'])
 @login_required
 def edit_examination():
     if not GroupPermissionAPI.can_write('examination', True):
@@ -265,23 +256,6 @@ def edit_examination():
                                        examination=examination, message='',
                                        title='Tentamens')
 
-            # if file:
-            #   if allowed_file(file.filename):
-            #       filename = secure_filename(file.filename)
-            #       filename = create_unique_file(filename)
-
-            #       os.remove(os.path.join(UPLOAD_FOLDER,
-            #               examination.path))
-
-            #       file.save(os.path.join(UPLOAD_FOLDER, filename))
-
-            #       examination.path = filename
-            #   else:
-            #       return render_template('examination/edit.htm',
-            #                              courses = courses,
-            #       educations = educations, examination=examination,
-            #       message = 'Fout file format!');
-
             db.session.commit()
 
             flash('Het tentamen is aangepast!', 'success')
@@ -308,7 +282,7 @@ def edit_examination():
                            title='Tentamens')
 
 
-@blueprint.route('/course/add', methods=['GET', 'POST'])
+@blueprint.route('/course/add/', methods=['GET', 'POST'])
 def add_course():
     if not GroupPermissionAPI.can_write('examination'):
         session['prev'] = 'examination.add_course'
@@ -325,7 +299,7 @@ def add_course():
     return render_template('examination/course.htm', title='Tentamens')
 
 
-@blueprint.route('/education/add', methods=['GET', 'POST'])
+@blueprint.route('/education/add/', methods=['GET', 'POST'])
 def add_education():
     if not GroupPermissionAPI.can_write('examination'):
         session['prev'] = 'examination.add_education'

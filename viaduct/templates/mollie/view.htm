@@ -18,7 +18,7 @@
 <td>{{ transaction.user.first_name }} {{ transaction.user.last_name }}
 <td>{{ transaction.amount }}
 <td>{{ transaction.status }}
-<td><a href="{{ config.MOLLIE_REDIRECT_URL }}{{ transaction.id }}" class="btn">check status</a>
+<td><a href="{{ config.MOLLIE_REDIRECT_URL }}{{ transaction.id }}" class="btn btn-default">check status</a>
 </tr>
 {% endfor %}
 </table>

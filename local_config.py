@@ -33,6 +33,12 @@ GMAIL_MAIL_ACCOUNT = {
     'password': 'vergeetJeWachtwoordDanOokNietsukkeltje'
     }
 
+# ict@svia.nl
+JIRA_ACCOUNT = {
+    'username': 'ictvia',
+    'password': 'createIssueAccountVIA'
+    }
+
 # Mollie config
 MOLLIE_URL = ''
 MOLLIE_TEST_KEY = ''

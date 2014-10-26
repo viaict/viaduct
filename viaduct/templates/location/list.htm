@@ -4,7 +4,7 @@
 
 {% block content %}
 	{% if GroupPermissionAPI.can_write('location') %}
-		<p><a class="btn" href="{{ url_for('location.view') }}">Nieuwe locatie</a></p>
+		<p><a class="btn btn-default" href="{{ url_for('location.view') }}">Nieuwe locatie</a></p>
 	{% endif %}
 
 	<div class="container">
