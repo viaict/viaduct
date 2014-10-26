@@ -1,17 +1,20 @@
+import datetime
+import re
+
 from flask import flash, request, Markup, url_for, render_template, redirect, \
     session
 from flask.ext.login import current_user
 
-from viaduct import application, login_manager
 from markdown import markdown
 from resource import Resource  # noqa
+
+from viaduct import application, login_manager
 from viaduct.forms import SignInForm
+from viaduct.models import Page
 from viaduct.api.user import UserAPI
 from viaduct.api.group import GroupPermissionAPI
 
 from viaduct.models.activity import Activity
-
-import datetime
 
 markdown_extensions = [
     'toc'
@@ -50,7 +53,12 @@ def internal_server_error(e):
 
 @application.errorhandler(404)
 def page_not_found(e):
-    return render_template('page/404.htm')
+    # Search for file extension.
+    if re.match(r'(?:.*)\.[a-zA-Z]{3,}$', request.path):
+        return '', 404
+
+    page = Page(request.path.lstrip('/'))
+    return render_template('page/404.htm', page=page), 404
 
 
 def flash_form_errors(form):
