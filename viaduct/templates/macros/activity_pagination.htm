@@ -3,29 +3,29 @@
 	<div class="btn-group">
 		{% if pagination.has_prev %}
 			<a href="/activities/{% if archive %}archive/{% endif %}
-page/{{ pagination.prev_num }}/" class="btn">Vorige pagina</a>
+page/{{ pagination.prev_num }}/" class="btn btn-primary">Vorige pagina</a>
 		{% else %}
-			<a href="#" class="btn disabled">Vorige pagina</a>
+			<a href="#" class="btn btn-primary disabled">Vorige pagina</a>
 		{% endif %}
 
 		{% for page in pagination.iter_pages() %}
 			{% if page %}
 				{% if page != pagination.page %}
 					<a href="/activities/{% if archive %}archive/{% endif %}
-page/{{ page }}/" class="btn">{{ page }}</a>
+page/{{ page }}/" class="btn btn-default">{{ page }}</a>
 				{% else %}
-					<a href="#" class="btn disabled">{{ page }}</a>
+					<a href="#" class="btn btn-info disabled">{{ page }}</a>
 				{% endif %}
 			{% else %}
-				<a href="#" class="btn disabled">...</a>
+				<a href="#" class="btn btn-default disabled">...</a>
 			{% endif %}
 		{% endfor %}
 
 		{% if pagination.has_next %}
 			<a href="/activities/{% if archive %}archive/{% endif %}
-page/{{ pagination.next_num }}/" class="btn">Volgende pagina</a>
+page/{{ pagination.next_num }}/" class="btn btn-primary">Volgende pagina</a>
 		{% else %}
-			<a href="#" class="btn disabled">Volgende pagina</a>
+			<a href="#" class="btn btn-primary disabled">Volgende pagina</a>
 		{% endif %}
 	</div>
 {% endmacro %}
