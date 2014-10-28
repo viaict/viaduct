@@ -7,7 +7,7 @@ from viaduct import application
 class JiraAPI:
 
     @staticmethod
-    def create_issue(summary, issue_type, description):
+    def create_issue(form):
         """ Method to query JIRA API to create a new issue. """
 
         # Use the ict@svia.nl account for to authenticate
@@ -20,9 +20,10 @@ class JiraAPI:
 
         payload = {"fields":
                    {"project": {"key": "VIA"},
-                    "summary": "{}".format(summary),
-                    "description": "{}".format(description),
-                    "issuetype": {"id": "{}".format(issue_type)}
+                    "summary": "{}".format(form.summary.data),
+                    "description": "{}\n{}".format(
+                        form.email.data, form.description.data),
+                    "issuetype": {"id": "{}".format(form.issue_type.data)}
                     }
                    }
 
