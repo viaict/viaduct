@@ -14,9 +14,6 @@ from flask import flash, redirect, render_template, request, url_for, abort,\
 from flask import Blueprint
 from flask.ext.login import current_user, login_user, logout_user
 
-from sqlalchemy import or_
-
-
 from viaduct import db, login_manager, application
 from viaduct.helpers import flash_form_errors
 from viaduct.forms import SignUpForm, SignInForm, ResetPassword,\
@@ -427,49 +424,46 @@ def view(page_nr=1):
 
         redirect(url_for('user.view'))
 
-    search = ''
-    vvv = ''
-    member = 'nocare'
-
     # Get a list of users to render for the current page.
     users = User.query
+    # users = users.all()
+    users = users.limit(20)
 
-    if request.args.get('search'):
-        search = request.args.get('search')
-        searches = search.split(' ')
+    # if request.args.get('search'):
+    #     search = request.args.get('search')
+    #     searches = search.split(' ')
+    #
+    #     for s in searches:
+    #         if not s:
+    #             continue
+    #
+    #         users = users\
+    #             .filter(or_(User.first_name.like('%' + s + '%'),
+    #                         User.last_name.like('%' + s + '%'),
+    #                         User.email.like('%' + s + '%'),
+    #                         User.student_id.like('%' + s + '%')))
 
-        for s in searches:
-            if not s:
-                continue
+    # if request.args.get('vvv') and request.args.get('vvv') == 'on':
+    #     vvv = 'on'
+    #     users = users.filter(User.favourer == True)  # noqa
 
-            users = users\
-                .filter(or_(User.first_name.like('%' + s + '%'),
-                            User.last_name.like('%' + s + '%'),
-                            User.email.like('%' + s + '%'),
-                            User.student_id.like('%' + s + '%')))
+    # member_set = request.args.get('member')
 
-    if request.args.get('vvv') and request.args.get('vvv') == 'on':
-        vvv = 'on'
-        users = users.filter(User.favourer == True)  # noqa
+    # if member_set in ['nocare', 'yes', 'no']:
+    #     member = member_set
+    #
+    #     if member == 'yes':
+    #         users = users.filter(User.has_payed == True)  # noqa
+    #     elif member == 'no':
+    #         users = users.filter(or_(User.has_payed == False,
+    #                                  User.has_payed == None))  # noqa
 
-    member_set = request.args.get('member')
+    # users = users\
+    #     .order_by(User.first_name)\
+    #     .order_by(User.last_name)\
+    #     .get(5)
 
-    if member_set in ['nocare', 'yes', 'no']:
-        member = member_set
-
-        if member == 'yes':
-            users = users.filter(User.has_payed == True)  # noqa
-        elif member == 'no':
-            users = users.filter(or_(User.has_payed == False,
-                                     User.has_payed == None))  # noqa
-
-    users = users\
-        .order_by(User.first_name)\
-        .order_by(User.last_name)\
-        .paginate(page_nr, 15, False)
-
-    return render_template('user/view.htm', users=users, search=search,
-                           vvv=vvv, member=member)
+    return render_template('user/view.htm', users=users)
 
 
 @blueprint.route('/users/export', methods=['GET'])

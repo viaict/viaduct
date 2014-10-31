@@ -2,101 +2,86 @@
 
 {% extends 'content.htm' %}
 
-{%block content %}
+{% block includes %}
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.3/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/380cb78f450/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+{% endblock %}
+
+{% block content %}
 <h1>Gebruiker overzicht</h1>
 
 <div class='row'>
 	<div class='col-md-12'>
-		<form method='get' action='{{ url_for('user.view') }}' enctype='multipart/form-data' class='form-horizontal'>
-            <div class='form-group'>
-                <div class='col-md-5'>
-                    <input name='search' id='search' class='form-control' type='text' placeholder='Zoeken' value='{{search}}' />
-                </div>
-                <button type='submit' class='btn btn-primary'> <i class='glyphicon glyphicon-search' id='submit'></i></button>
-            </div>
+        <table id="datatable" class='table'>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>E-mail adres</th>
+                    <th>Voornaam</th>
+                    <th>Achternaam</th>
+                    <th>Student ID</th>
+                    <th>Studie</th>
+                    <th>Lid</th>
+                    <th>Erelid</th>
+                    <th>Begunstiger</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.first_name }}</td>
+                    <td>{{ user.last_name }}</td>
+                    <td>{{ user.student_id }}</td>
+                    <td>{{ user.education.name }}</td>
+                    <td>{% if user.has_payed %}<i class='glyphicon glyphicon-ok'></i>{% endif %}</td>
+                    <td>{% if user.honorary_member %}<i class='glyphicon glyphicon-ok'></i>{% endif %}</td>
+                    <td>{% if user.favourer %}<i class='glyphicon glyphicon-ok'></i>{% endif %}</td>
+                    <td>
+                        <a class='btn btn-xs btn-primary' href='{{ url_for('user.view_single', user_id=user.id) }}'><i class='glyphicon glyphicon-info-sign'></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-            <div class='row'>
-                <div class='col-md-3'>
-                    <input type='checkbox' id='vvv_field' name='vvv' {% if vvv == 'on' %}checked{% endif %} />
-                    <label for='vvv_field'>Vriend van <strong>via</strong></label>
-                </div>
+        <div class='btn-group'>
+            <a href='/users/create' class='btn btn-success'>
+                <i class='glyphicon glyphicon-user'></i> Gebruiker aanmaken
+            </a>
 
-                <div class='col-md-9'>
-                    <div class='row'>
-                        <div class='col-md-1'><em>Lid</em></div>
-                        <div class='col-md-11'>
-                            <input type='radio' id='member_nocare' name='member' value='nocare' {% if member == 'nocare' %}checked{% endif %} />
-                            <label for='member_nocare'>Doet er niet toe</label><br />
-                            <input type='radio' id='member_yes' name='member' value='yes' {% if member == 'yes' %}checked{% endif %} />
-                            <label for='member_yes'>Ja</label><br />
-                            <input type='radio' id='member_no' name='member' value='no' {% if member == 'no' %}checked{% endif %} />
-                            <label for='member_no'>Nee</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-		</form>
+            <button id='delete' class='btn btn-danger'>
+                <i class='glyphicon glyphicon-remove'></i>
+                Verwijderen
+            </button>
+
+            <a href='/users/export' class='btn btn-success'>
+                <i class='glyphicon glyphicon-linux'></i> Gebruikers Exporteren
+            </a>
+        </div>
 	</div>
 </div>
-<div class='row'>
-	<div class='col-md-12'>
-		<form method='post' name='user_view'>
-			<table class='table table-striped'>
-				<thead>
-					<tr>
-						<th>E-mail adres
-						<th>Voornaam
-						<th>Achternaam
-						<th>Student ID
-						<th>Studie
-						<th>Lid
-						<th>Erelid
-						<th>Begunstiger
-						<th>
-					</tr>
-				</thead>
+<script>
+    $(document).ready(function() {
+        var selected_ids = [];
+        var table = $('#datatable').DataTable( {
+            "processing":true
+        });
 
-				<tbody>
-					{% for user in users.items %}
-						<tr>
-							<td>
-								<label class='checkbox'>
-									<input type=checkbox name='select' value='{{ user.id }}' />
-									{{ user.email }}
-								</label>
-							<td>{{ user.first_name }}
-							<td>{{ user.last_name }}
-							<td>{{ user.student_id }}
-							<td>{{ user.education.name }}
-							<td>{% if user.has_payed %}<i class='glyphicon glyphicon-ok'></i>{% endif %}
-							<td>{% if user.honorary_member %}<i class='glyphicon glyphicon-ok'></i>{% endif %}
-							<td>{% if user.favourer %}<i class='glyphicon glyphicon-ok'></i>{% endif %}
-							<td>
-								<a class='btn btn-xs btn-primary' href='{{ url_for('user.view_single', user_id=user.id) }}'>
-									Bekijken
-								</a>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
+        $('#datatable tbody').on( 'click', 'tr', function () {
+            $(this).toggleClass('info');
+        } );
 
-			<div class='btn-group'>
-				<a href='/users/create' class='btn btn-success'>
-					<i class='glyphicon glyphicon-user'></i> Gebruiker aanmaken
-				</a>
-
-				<button type='submit' class='btn btn-danger'>
-					<i class='glyphicon glyphicon-remove'></i>
-					Verwijderen
-				</button>
-
-				<a href='/users/export' class='btn btn-success'>
-					<i class='glyphicon glyphicon-linux'></i> Gebruikers Exporteren
-				</a>
-			</div>
-
-			{{ render_pagination(users, 'user.view', '?search=' + search + '&vvv=' + vvv + '&member=' + member) }}
-		</form>
-	</div>
-</div>
+        $('#delete').click( function () {
+            var selected_rows = table.rows('.info')
+            console.log(selected_rows.data());
+            for (i = 0; i < selected_rows.data().length; i++) {
+                selected_ids.push(selected_rows.data()[i][0]);
+                console.log(selected_ids);
+            }
+        } );
+    } );
+</script>
 {% endblock %}
