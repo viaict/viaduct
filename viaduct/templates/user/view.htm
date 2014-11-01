@@ -3,7 +3,7 @@
 {% extends 'content.htm' %}
 
 {% block includes %}
-    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.3/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.3/js/jquery.dataTables.js"></script>
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/380cb78f450/integration/bootstrap/3/dataTables.bootstrap.js"></script>
 {% endblock %}
 
@@ -12,7 +12,7 @@
 
 <div class='row'>
 	<div class='col-md-12'>
-        <table id="datatable" class='table'>
+        <table id="datatable" class='table table-striped'>
             <thead>
                 <tr>
                     <th>ID</th>
@@ -27,24 +27,20 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
-                {% for user in users %}
+            <tfoot>
                 <tr>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.first_name }}</td>
-                    <td>{{ user.last_name }}</td>
-                    <td>{{ user.student_id }}</td>
-                    <td>{{ user.education.name }}</td>
-                    <td>{% if user.has_payed %}<i class='glyphicon glyphicon-ok'></i>{% endif %}</td>
-                    <td>{% if user.honorary_member %}<i class='glyphicon glyphicon-ok'></i>{% endif %}</td>
-                    <td>{% if user.favourer %}<i class='glyphicon glyphicon-ok'></i>{% endif %}</td>
-                    <td>
-                        <a class='btn btn-xs btn-primary' href='{{ url_for('user.view_single', user_id=user.id) }}'><i class='glyphicon glyphicon-info-sign'></i></a>
-                    </td>
+                    <th>ID</th>
+                    <th>E-mail adres</th>
+                    <th>Voornaam</th>
+                    <th>Achternaam</th>
+                    <th>Student ID</th>
+                    <th>Studie</th>
+                    <th>Lid</th>
+                    <th>Erelid</th>
+                    <th>Begunstiger</th>
+                    <th></th>
                 </tr>
-                {% endfor %}
-            </tbody>
+            </tfoot>
         </table>
 
         <div class='btn-group'>
@@ -52,22 +48,36 @@
                 <i class='glyphicon glyphicon-user'></i> Gebruiker aanmaken
             </a>
 
-            <button id='delete' class='btn btn-danger'>
-                <i class='glyphicon glyphicon-remove'></i>
-                Verwijderen
-            </button>
+            <a id='delete' class='btn btn-danger'>
+                <i class='glyphicon glyphicon-remove'></i> Verwijderen
+            </a>
 
             <a href='/users/export' class='btn btn-success'>
-                <i class='glyphicon glyphicon-linux'></i> Gebruikers Exporteren
+                <i class='glyphicon glyphicon-export'></i> Gebruikers Exporteren
             </a>
         </div>
 	</div>
 </div>
 <script>
     $(document).ready(function() {
-        var selected_ids = [];
         var table = $('#datatable').DataTable( {
-            "processing":true
+            "processing":true,
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "language": {
+                "paginate": {
+                    "next": "Volgende",
+                    "previous": "Vorige"
+                }
+            },
+            "columnDefs": [ {
+                "targets": [0],
+                "visible": false,
+                "searchable": false
+            }],
+            "ajax": {
+                "url": "/users/api/get_users/",
+                "type": "post"
+            }
         });
 
         $('#datatable tbody').on( 'click', 'tr', function () {
@@ -75,11 +85,26 @@
         } );
 
         $('#delete').click( function () {
+            var selected_ids = [];
             var selected_rows = table.rows('.info')
-            console.log(selected_rows.data());
             for (i = 0; i < selected_rows.data().length; i++) {
                 selected_ids.push(selected_rows.data()[i][0]);
-                console.log(selected_ids);
+            }
+            console.log(selected_ids);
+            var json_data = { "selected_ids" : selected_ids }
+            if (confirm('Do you surely want to delete these ' + selected_ids.length + ' rows?')) {
+                $.ajax({
+                    type: "POST",
+                    url: "/users/api/delete_users/",
+                    contentType: 'application/json',
+                    success: function (data) {
+                        table.ajax.reload();
+                    },
+                    data: JSON.stringify(json_data, null, '\t')
+                });
+
+            } else {
+                return;
             }
         } );
     } );
