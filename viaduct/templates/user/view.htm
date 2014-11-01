@@ -3,7 +3,7 @@
 {% extends 'content.htm' %}
 
 {% block includes %}
-    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.3/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.3/js/jquery.dataTables.js"></script>
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/380cb78f450/integration/bootstrap/3/dataTables.bootstrap.js"></script>
 {% endblock %}
 
@@ -87,14 +87,13 @@
 
         $('#delete').click( function () {
             var selected_ids = [];
-            var selected_users = "";
             var selected_rows = table.rows('.info')
             for (i = 0; i < selected_rows.data().length; i++) {
                 selected_ids.push(selected_rows.data()[i][0]);
-                selected_users += "- " + selected_rows.data()[i][1] + "\n";
             }
+            console.log(selected_ids);
             var json_data = { "selected_ids" : selected_ids }
-            if (confirm('Do you surely want to delete these users?\n' + selected_users )) {
+            if (confirm('Do you surely want to delete these ' + selected_ids.length + ' rows?')) {
                 $.ajax({
                     type: "POST",
                     url: "/users/api/delete_users/",
