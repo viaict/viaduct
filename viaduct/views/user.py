@@ -4,6 +4,7 @@ import random
 import datetime
 import smtplib
 import re
+import json
 from unicodecsv import writer
 from StringIO import StringIO
 from email.mime.text import MIMEText
@@ -397,70 +398,10 @@ def create_hash(bits=96):
 
 
 @blueprint.route('/users/', methods=['GET', 'POST'])
-@blueprint.route('/users/<int:page_nr>/', methods=['GET', 'POST'])
-def view(page_nr=1):
+def view():
     if not GroupPermissionAPI.can_read('user'):
         return abort(403)
-
-    # persumably, if the method is a post we have selected stuff to delete,
-    # similary to groups.
-    if request.method == 'POST':
-        user_ids = request.form.getlist('select')
-
-        del_users = User.query.filter(User.id.in_(user_ids)).all()
-
-        for user in del_users:
-            db.session.delete(user)
-
-        db.session.commit()
-
-        if len(del_users) > 1:
-            flash('The selected users have been deleted.', 'success')
-        else:
-            flash('The selected user has been deleted.', 'success')
-
-        redirect(url_for('user.view'))
-
-    # Get a list of users to render for the current page.
-    users = User.query
-    # users = users.all()
-    users = users.limit(20)
-
-    # if request.args.get('search'):
-    #     search = request.args.get('search')
-    #     searches = search.split(' ')
-    #
-    #     for s in searches:
-    #         if not s:
-    #             continue
-    #
-    #         users = users\
-    #             .filter(or_(User.first_name.like('%' + s + '%'),
-    #                         User.last_name.like('%' + s + '%'),
-    #                         User.email.like('%' + s + '%'),
-    #                         User.student_id.like('%' + s + '%')))
-
-    # if request.args.get('vvv') and request.args.get('vvv') == 'on':
-    #     vvv = 'on'
-    #     users = users.filter(User.favourer == True)  # noqa
-
-    # member_set = request.args.get('member')
-
-    # if member_set in ['nocare', 'yes', 'no']:
-    #     member = member_set
-    #
-    #     if member == 'yes':
-    #         users = users.filter(User.has_payed == True)  # noqa
-    #     elif member == 'no':
-    #         users = users.filter(or_(User.has_payed == False,
-    #                                  User.has_payed == None))  # noqa
-
-    # users = users\
-    #     .order_by(User.first_name)\
-    #     .order_by(User.last_name)\
-    #     .get(5)
-
-    return render_template('user/view.htm', users=users)
+    return render_template('user/view.htm')
 
 
 @blueprint.route('/users/export', methods=['GET'])
@@ -475,3 +416,52 @@ def user_export():
     for user in users:
         cw.writerow([getattr(user, c.name) for c in User.__mapper__.columns])
     return si.getvalue().strip('\r\n')
+
+
+###
+# Here starts the public api for users
+###
+@blueprint.route('/users/api/get_users/', methods=['POST'])
+def api_get_users():
+    if not GroupPermissionAPI.can_read('user'):
+        return abort(403)
+
+    users = User.query.all()
+    user_list = []
+
+    for user in users:
+        user_list.append(
+            [user.id,
+             user.email,
+             user.first_name,
+             user.last_name,
+             user.student_id,
+             user.education.name
+                if user.education else "",
+             "<i class='glyphicon glyphicon-ok'></i>"
+                if user.has_payed else "",
+             "<i class='glyphicon glyphicon-ok'></i>"
+                if user.honorary_member else "",
+             "<i class='glyphicon glyphicon-ok'></i>"
+                if user.favourer else "",
+             """
+             <a class='btn btn-xs btn-primary'
+             href='{{ url_for('user.view_single', user_id=user.id) }}'>
+             <i class='glyphicon glyphicon-info-sign'></i></a>"""
+             ])
+    return json.dumps({"data": user_list})
+
+
+@blueprint.route('/users/api/delete_users/', methods=['POST'])
+def api_delete_user():
+    if not GroupPermissionAPI.can_write('user'):
+        return abort(403)
+
+    user_ids = request.json['selected_ids']
+    del_users = User.query.filter(User.id.in_(user_ids)).all()
+
+    for user in del_users:
+        db.session.delete(user)
+        db.session.commit()
+
+    return json.dumps({'status': 'success'})
