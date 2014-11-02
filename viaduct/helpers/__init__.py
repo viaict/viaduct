@@ -63,8 +63,7 @@ def flash_form_errors(form):
 
 
 def get_login_form():
-    form = SignInForm()
-    return form
+    return SignInForm()
 
 
 @application.template_filter('markdown')

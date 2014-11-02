@@ -13,7 +13,7 @@ from flask.ext.login import current_user
 from werkzeug import secure_filename
 
 from viaduct import db
-from viaduct.helpers import flash_form_errors
+from viaduct.helpers import flash_form_errors, get_login_form
 from viaduct.forms.activity import ActivityForm, CreateForm
 from viaduct.models.activity import Activity
 from viaduct.models.custom_form import CustomForm, CustomFormResult
@@ -130,7 +130,7 @@ def get_activity(activity_id=0):
                         "inschrijvingen" % activity.num_attendants
 
     return render_template('activity/view_single.htm', activity=activity,
-                           form=form)
+                           form=form, login_form=get_login_form())
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])

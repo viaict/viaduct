@@ -1,6 +1,6 @@
 {% from "macros/maps.htm" import render_map %}
 {% from "macros/custom_form.htm" import user_fields %}
-{% from "macros/form.htm" import render_field %}
+{% from "macros/form.htm" import render_field, render_checkbox, render_submit %}
 
 {% extends "content.htm" %}
 
@@ -123,7 +123,20 @@
 
                     {% else %}
                     <p>Je moet ingelogd zijn om je voor een activiteit in te schrijven.</p>
-                        <p><a href="{{ url_for('user.sign_in') }}" class="btn btn-huge btn-success">Inloggen</a>
+
+                    <form method='post' name='sign-in-activity'
+                        action='{{ url_for('user.sign_in') }}'>
+                        {{ login_form.csrf_token }}
+                        {{ render_field(login_form.email) }}
+                        {{ render_field(login_form.password) }}
+                        {{ render_checkbox(login_form.remember_me) }}
+                        {{ render_submit('Inloggen') }}
+                    </form>
+
+                    <ul class='list-unstyled'>
+                        <li><a href='{{ url_for('user.sign_up') }}'>Registreren</a></li>
+                        <li><a href='{{ url_for('user.request_password') }}'>Reset wachtwoord</a></li>
+                    </ul>
                     {% endif %}
                 </div>
             </div>
