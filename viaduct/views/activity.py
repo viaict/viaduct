@@ -167,7 +167,6 @@ def create(activity_id=None):
 
         start_date = form.start_date.data
         end_date = form.end_date.data
-        print start_date
 
         start = dateutil.parser.parse(start_date, dayfirst=True)
         end = dateutil.parser.parse(end_date, dayfirst=True)
