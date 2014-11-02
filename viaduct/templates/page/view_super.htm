@@ -12,11 +12,11 @@
                 <div class='btn-group pull-right'>
                     {% if page.id %}
                         <a class='btn btn-default' href='{{ url_for('page.get_page_history', path=page.path) }}'>
-                            <i class='glyphicon glyphicon-time'></i> View History
+                            <i class='glyphicon glyphicon-time'></i> Bekijk geschiedenis
                         </a>
                     {% endif %}
                     <a class='btn btn-warning' href='{{ url_for('page.edit_page', path=page.path) }}'>
-                        <i class='glyphicon glyphicon-pencil'></i> Edit Page
+                        <i class='glyphicon glyphicon-pencil'></i> Bewerk pagina
                     </a>
                 </div>
             {% endif %}

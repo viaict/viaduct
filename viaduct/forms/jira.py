@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from wtforms import StringField, SelectField, TextAreaField
-from wtforms.validators import InputRequired
+from wtforms.validators import InputRequired, Email
 from werkzeug.datastructures import MultiDict
 
 
@@ -8,6 +8,11 @@ class CreateIssueForm(Form):
     summary = StringField('Titel',
                           validators=[InputRequired(
                               message='Geen titel opgegeven')])
+    email = StringField('E-mail',
+                        validators=[
+                            InputRequired(message='Geen e-mail opgegeven'),
+                            Email(message='Ongelding e-mailadres opgegeven')
+                        ])
     issue_type = SelectField('Issue type',
                              choices=[
                                  ('1', 'Bug'),

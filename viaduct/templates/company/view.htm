@@ -4,43 +4,56 @@
 
 {% block content %}
 
-	<div class="container">
-	<form method="post">
-		<fieldset>
-	{% if company.id and GroupPermissionAPI.can_write('company') %}
-		<a class="btn btn-default" href="{{ url_for('company.edit', company_id=company.id) }}">Bewerken</a>
-		<br />
-		<br />
-		<form action="{{ url_for('company.delete', company_id=company.id) }}" method="post">
-	{% endif %}
-				<div id='{{ company.name }}'>
-					<div class="col-md-4">
-						<blockquote>
-							{% if company.logo_path != '#' %}
-							<img style="max-width:250px; max-height:100px;" src="{{path}}{{company.logo_path}}"></img>
-							{% endif %}
-							<small><cite title="Source Title"><a target="blank_"href="https://maps.google.nl/maps?q={{company.location.address}} {{company.location.city}} {{company.location.country}}">{{company.location.address}}, {{company.location.city}}, {{company.location.country}}</a><i class="icon-map-marker"></i></cite></small>
-						</blockquote>
-						<p>
-							<i class="glyphicon glyphicon-envelope"></i><a target="blank_" href="mailto:{{company.contact.email}}"> {{company.contact.email}}</a> <br />
-							<i class="glyphicon glyphicon-globe"></i> <a target="_blank" href="{{company.website}}"> {{company.website}} </a> <br>
-							<i class="glyphicon glyphicon-user"></i><a href="tel:{{company.contact.phone_nr}}">{{company.contact.phone_nr}}</a> <br>
-						</p>
-						</div>
-						<div class="col-md-6">
-							<h3>{{company.name}}</h3>
-						{{ company.description | markdown }}
-					</div>
-				</div>
-		</fieldset>
-	</form>
+<div class="container">
+    <div id='{{ company.name }}'>
+        <div class="col-md-4">
+            <blockquote>
+                {% if company.logo_path != '#' %}
+                <img style="max-width:250px; max-height:100px;" src="{{path}}{{company.logo_path}}"></img>
+                <br/>
+                {% endif %}
+            </blockquote>
+            <p>
+                <i class="glyphicon glyphicon-envelope"></i>
+                <a target="blank_" href="mailto:{{company.contact.email}}"> {{company.contact.email}}</a>
+                <br/>
 
-	{% if company.id and GroupPermissionAPI.can_write('company') %}
-		<form onsubmit="return confirm('Wilt u {{company.name}} echt verwijderen?');"  action="{{ url_for('company.delete', company_id=company.id) }}" method="post">
-			<fieldset>
-				<button class="btn btn-danger" type="submit">Verwijderen</button>
-			</fieldset>
-		</form>
-	{% endif %}
-</div>
+                <i class="glyphicon glyphicon-globe"></i>
+                <a target="_blank" href="{{company.website}}"> {{company.website}} </a>
+                <br/>
+
+                <i class="glyphicon glyphicon-map-marker"></i>
+                <a target="blank_" href="https://maps.google.nl/maps?q={{company.location.address}} {{company.location.city}} {{company.location.country}}">
+                    {{company.location.address}}, {{company.location.city}}, {{company.location.country}}
+                </a>
+                <br/>
+
+                <i class="glyphicon glyphicon-user"></i>
+                <a href="tel:{{company.contact.phone_nr}}">{{company.contact.phone_nr}}</a>
+                <br/>
+                <br/>
+
+                {% if company.id and GroupPermissionAPI.can_write('company') %}
+                <a class="btn btn-warning"
+                    href="{{ url_for('company.edit', company_id=company.id) }}" >
+                    <i class="glyphicon glyphicon-pencil"></i>
+                    Bewerken
+                </a>
+                <form onsubmit="return confirm('Wilt u {{company.name}} echt verwijderen?');"  action="{{ url_for('company.delete', company_id=company.id) }}" method="post">
+                    <fieldset>
+                        <button class="btn btn-danger" type="submit">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                            Verwijderen
+                        </button>
+                    </fieldset>
+                </form>
+                {% endif %}
+            </p>
+        </div>
+        <div class="col-md-6">
+            <h3>{{company.name}}</h3>
+            {{ company.description | markdown }}
+        </div>
+
+    </div>
 {% endblock %}

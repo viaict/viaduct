@@ -1,9 +1,9 @@
 {% macro render_pagination(pagination, end_point, keywords='') %}
 	<div class="btn-group">
 		{% if pagination.has_prev %}
-			<a href="{{ url_for(end_point, page_nr=pagination.prev_num, **kwargs) ~ keywords }}" class="btn btn-primary">Previous</a>
+			<a href="{{ url_for(end_point, page_nr=pagination.prev_num, **kwargs) ~ keywords }}" class="btn btn-primary">Vorige</a>
 		{% else %}
-			<a href="#" class="btn btn-primary disabled">Previous</a>
+			<a href="#" class="btn btn-primary disabled">Vorige</a>
 		{% endif %}
 
 		{% for page in pagination.iter_pages() %}
@@ -19,9 +19,9 @@
 		{% endfor %}
 
 		{% if pagination.has_next %}
-			<a href="{{ url_for(end_point, page_nr=pagination.next_num, **kwargs) ~ keywords }}" class="btn btn-primary">Next</a>
+			<a href="{{ url_for(end_point, page_nr=pagination.next_num, **kwargs) ~ keywords }}" class="btn btn-primary">Volgende</a>
 		{% else %}
-			<a href="#" class="btn btn-primary disabled">Next</a>
+			<a href="#" class="btn btn-primary disabled">Volgende</a>
 		{% endif %}
 	</div>
 {% endmacro %}

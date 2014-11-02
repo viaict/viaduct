@@ -17,8 +17,7 @@ def create_issue():
     if form.validate_on_submit():
 
         # Use JiraAPI to do a POST request to https://viaduct.atlassian.net
-        response = JiraAPI.create_issue(
-            form.summary.data, form.issue_type.data, form.description.data)
+        response = JiraAPI.create_issue(form)
 
         if response:
             flash('Issue is geupload!', 'success')

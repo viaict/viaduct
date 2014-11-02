@@ -12,7 +12,7 @@ class ViewGroupEntry(UnsafeForm):
 
 class ViewGroupForm(Form):
     entries = FieldList(FormField(ViewGroupEntry))
-    delete_group = SubmitField('Delete group')
+    delete_group = SubmitField('Verwijder groep')
 
 
 class EditGroupPermissionEntry(UnsafeForm):

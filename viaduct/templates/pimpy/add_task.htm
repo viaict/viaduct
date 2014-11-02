@@ -3,16 +3,16 @@
 {%block content %}
 
 <div class='col-md-8'>
-    <h2>Add a task</h2>
+    <h2>Creëer nieuwe taak</h2>
 
     <form method='post' enctype='multipart/form-data'>
         <div class='form-group'>
-            <label for='name'>Task</label>
+            <label for='name'>Taak</label>
             {{ form.name(class_='form-control') }}
         </div>
 
         <div class='form-group'>
-            <label for='content'>More Info</label>
+            <label for='content'>Meer informatie</label>
             {{ form.content(class_='form-control') }}
         </div>
 
@@ -28,12 +28,12 @@
         </div>
 
         <div class='form-group'>
-            <label for='group'>Group</label>
+            <label for='group'>Groep</label>
             {{ form.group(class_='form-control') }}
         </div>
 
         <div class='form-group'>
-            <label for='users'>Users</label>
+            <label for='users'>Gebruikers</label>
             {{ form.users(class_='form-control') }}
         </div>
 
@@ -42,7 +42,7 @@
             {{ form.status(class_='form-control') }}
         </div>
 
-        <button type='submit' class='btn btn-primary'>Create task</button>
+        <button type='submit' class='btn btn-primary'>Creëer taak!</button>
     </form>
 </div>
 

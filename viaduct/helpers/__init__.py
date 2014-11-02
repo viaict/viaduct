@@ -1,4 +1,3 @@
-import datetime
 import re
 
 from flask import flash, request, Markup, url_for, render_template, redirect, \
@@ -11,10 +10,6 @@ from resource import Resource  # noqa
 from viaduct import application, login_manager
 from viaduct.forms import SignInForm
 from viaduct.models import Page
-from viaduct.api.user import UserAPI
-from viaduct.api.group import GroupPermissionAPI
-
-from viaduct.models.activity import Activity
 
 markdown_extensions = [
     'toc'
@@ -68,8 +63,7 @@ def flash_form_errors(form):
 
 
 def get_login_form():
-    form = SignInForm()
-    return form
+    return SignInForm()
 
 
 @application.template_filter('markdown')
@@ -91,89 +85,6 @@ def markup_filter(data):
 @application.template_filter('safe_markdown')
 def safe_markdown_filter(data):
     return Markup(markdown(data, extensions=markdown_extensions))
-
-
-@application.template_filter('pages')
-def pages_filter(data):
-
-    content = '<div class="container">'
-
-    for i in range(len(data)):
-        if i % 2 == 0:
-            content += '<div class="row">'
-
-        if i == len(data) - 1 and i % 2 == 0:
-            content += '<div class="col-md-10">'
-        else:
-            content += '<div class="col-md-6">'
-
-        content += '<div class="mainblock'
-        # expander toevoegen als het over de mainpage gaat
-        content += ' custom_expander">' if data[i].is_main_page else '">'
-
-        page = data[i].page if data[i].page.id else None
-        if (page and current_user and (UserAPI.can_write(page) or
-                                       GroupPermissionAPI.can_write('page'))) \
-                or (not page and GroupPermissionAPI.can_write('page')):
-            content += '<div class="btn-group">'
-            content += '<a class="btn" href="' + \
-                url_for('page.get_page_history', path=data[i].path) + \
-                '"><i class="icon-time"></i> View History</a>'
-            content += '<a class="btn" href="' + \
-                url_for('page.edit_page', path=data[i].path) + \
-                '"><i class="icon-pencil"></i> Edit Page</a>'
-            content += '</div>'
-
-        # if we render stuff for the main page we want to make sure
-        # the individual pages are rendered correctly, this is super
-        # hard coded but, well, what can you do?
-        if data[i].is_main_page:
-            if data[i].path == 'twitter':
-                if data[i].filter_html:
-                    safe_mode = False
-                else:
-                    safe_mode = 'escape'
-
-                content += '<h1>{0}</h1>'.format(data[i].title)
-                content += markdown(data[i].content, enable_attributes=False,
-                                    safe_mode=safe_mode,
-                                    extensions=markdown_extensions)
-            elif data[i].path == 'activities':
-                activities = Activity.query \
-                    .filter(Activity.end_time > datetime.datetime.now()) \
-                    .order_by(Activity.start_time.asc())
-                content += render_template('activity/view_simple.htm',
-                                           activities=activities
-                                           .paginate(1, 12, False))
-            elif data[i].path == 'contact' \
-                    or data[i].path == 'laatste_bestuursblog':
-                if data[i].filter_html:
-                    safe_mode = False
-                else:
-                    safe_mode = 'escape'
-
-                content += '<h1>{0}</h1>'.format(data[i].title)
-                content += markdown(data[i].content, safe_mode=safe_mode,
-                                    extensions=markdown_extensions)
-        else:
-            if data[i].filter_html:
-                safe_mode = False
-            else:
-                safe_mode = 'escape'
-
-            content += '<h1>{0}</h1>'.format(data[i].title)
-            content += '<h2>Hello</h2>'
-            content += markdown(data[i].content, safe_mode=safe_mode,
-                                extensions=markdown_extensions)
-
-        content += '</div></div>'
-
-        if i == len(data) - 1 or i % 2 != 0:
-            content += '</div>'
-
-    content += '</div>'
-
-    return Markup(content)
 
 
 @application.template_filter('pimpy_minute_line_numbers')

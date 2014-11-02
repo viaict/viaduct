@@ -5,16 +5,16 @@
         {% if exists %}
         <a class="btn btn-default"
             href="{{url_for('page.get_page_history',
-            path=footer.path)}}" ><i class="icon-time"></i> View History
+            path=footer.path)}}" ><i class="glyphicon glyphicon-time"></i> Bekijk geschiedenis
         </a>
-        <a class="btn btn-default"
+        <a class="btn btn-warning"
             href="{{url_for('page.edit_page', path=footer.path)}}" >
-            <i class="icon-pencil"></i> Edit footer
+            <i class="glyphicon glyphicon-pencil"></i> Bewerk footer
         </a>
         {% else %}
-        <a class="btn btn-default"
+        <a class="btn btn-warning"
             href="{{url_for('page.edit_page', path=footer.path)}}" >
-            <i class="icon-pencil"></i> Create footer
+            <i class="glyphicon glyphicon-pencil"></i> Creëer footer
         </a>
         {% endif %}
     </div>
