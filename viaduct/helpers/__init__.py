@@ -38,12 +38,12 @@ def permission_denied(e):
         flash('Je hebt geen rechten om deze pagina te bekijken.', 'danger')
         return redirect(url_for('user.sign_in'))
 
-    return render_template('page/403.htm', content=content, image=image)
+    return render_template('page/403.htm', content=content, image=image), 403
 
 
 @application.errorhandler(500)
 def internal_server_error(e):
-    return render_template('page/500.htm')
+    return render_template('page/500.htm'), 500
 
 
 @application.errorhandler(404)
