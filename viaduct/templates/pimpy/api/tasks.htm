@@ -8,6 +8,39 @@
                 <button type="button" class="btn btn-filter btn-primary active" data-hide='{{ status_meaning[0] | replace(" ","_")}}'> {{ status_meaning[0] }}</button>
             {% endfor %}
         </div>
+
+        <!-- show the form to create a task for this group, right here! -->
+        {% if group_id != 'all' %}
+            <h2>Creëer nieuwe taak</h2>
+            <form method='post' enctype='multipart/form-data'>
+                <div class='form-group'>
+                    <label for='name'>Taak</label>
+                    {{ form.name(class_='form-control') }}
+
+                <div class='form-group'>
+                    <label for='content'>Meer informatie</label>
+                    {{ form.content(class_='form-control') }}
+                </div>
+
+                <div class='form-group'>
+                    <label for='deadline'>
+                        Deadline (jjjj-mm-dd)</label>
+                    {{ form.deadline(id='start_date', class_='form-control') }}
+                </div>
+                <div class='form-group'>
+                    <label for='users'>Gebruikers</label>
+                    {{ form.users(class_='form-control') }}
+                </div>
+
+                <div class='form-group'>
+                    <label for='status'>Status</label>
+                    {{ form.status(class_='form-control') }}
+                </div>
+
+                <button type='submit' class='btn btn-primary'>Creëer taak!</button>
+            </form>
+        {% endif %}
+
         {% for i, tr in enumerate(tasks_rel): %}
 
             {% if prev_group != tr.task.group_id %}
@@ -109,36 +142,5 @@
             </tr>
         {% endfor %}
         </tbody></table>
-
-        <!-- show the form to create a task for this group, right here! -->
-        {% if group_id != 'all' %}
-            <form method='post' enctype='multipart/form-data'>
-                <div class='form-group'>
-                    <label for='name'>Taak</label>
-                    {{ form.name(class_='form-control') }}
-
-                <div class='form-group'>
-                    <label for='content'>Meer informatie</label>
-                    {{ form.content(class_='form-control') }}
-                </div>
-
-                <div class='form-group'>
-                    <label for='deadline'>
-                        Deadline (jjjj-mm-dd)</label>
-                    {{ form.deadline(id='start_date', class_='form-control') }}
-                </div>
-                <div class='form-group'>
-                    <label for='users'>Gebruikers</label>
-                    {{ form.users(class_='form-control') }}
-                </div>
-
-                <div class='form-group'>
-                    <label for='status'>Status</label>
-                    {{ form.status(class_='form-control') }}
-                </div>
-
-                <button type='submit' class='btn btn-primary'>Creëer taak!</button>
-            </form>
-        {% endif %}
     </div>
 {% endblock %}
