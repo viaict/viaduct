@@ -1,6 +1,5 @@
 from viaduct import db, application
 
-from flask_wtf import Form
 from flask import render_template, Markup, redirect, url_for, abort,\
     flash, request
 from flask.ext.login import current_user
@@ -430,6 +429,7 @@ class PimpyAPI:
                                       status_meanings=status_meanings,
                                       title='PimPy',
                                       form=form))
+
     @staticmethod
     def check_short_form(form):
         message = ""
@@ -452,7 +452,6 @@ class PimpyAPI:
             return redirect(url_for('pimpy.view_tasks', group_id=form.group))
         else:
             flash(message, 'danger')
-
 
     @staticmethod
     def get_minutes(group_id):
