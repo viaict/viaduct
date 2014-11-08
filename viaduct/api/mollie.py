@@ -37,25 +37,29 @@ class MollieAPI:
         amount += 1.20
 
         # Create the mollie payment
-        payment = MOLLIE.payments.create({
-            'amount': amount,
-            'description': description,
-            'redirectUrl': MOLLIE_REDIRECT_URL,
-            'metadata': {
-                'transaction_id': transaction.id,
-                'first_name': form_result.owner.first_name,
-                'last_name': form_result.owner.first_last
-            }
-        })
+        try:
+            payment = MOLLIE.payments.create({
+                'amount': amount,
+                'description': description,
+                'redirectUrl': MOLLIE_REDIRECT_URL,
+                'metadata': {
+                    'transaction_id': transaction.id,
+                    'first_name': form_result.owner.first_name,
+                    'last_name': form_result.owner.first_last
+                }
+            })
 
-        transaction.status = payment['status']
+            transaction.status = payment['status']
 
-        transaction.mollie_id = payment['id']
+            transaction.mollie_id = payment['id']
 
-        db.session.add(transaction)
-        db.session.commit()
+            db.session.add(transaction)
+            db.session.commit()
 
-        return payment.getPaymentUrl(), transaction
+            return payment.getPaymentUrl(), transaction
+
+        except Mollie.API.Error as e:
+            return False, 'API call failed: ' + e.message
 
     @staticmethod
     def get_payment_url(transaction_id=0, mollie_id=""):
@@ -66,9 +70,12 @@ class MollieAPI:
                 filter(Transaction.id == transaction_id).first()
             mollie_id = transaction.mollie_id
 
-        payment = MOLLIE.payments.get(mollie_id)
+        try:
+            payment = MOLLIE.payments.get(mollie_id)
 
-        return payment.getPaymentUrl()
+            return payment.getPaymentUrl(), ''
+        except Mollie.API.Error as e:
+            return False, 'API call failed: ' + e.message
 
     @staticmethod
     def check_transaction(transaction_id=0, mollie_id=""):
@@ -82,21 +89,27 @@ class MollieAPI:
         if not transaction:
             abort(404)
 
-        payment = MOLLIE.payments.get(transaction.mollie_id)
+        try:
+            payment = MOLLIE.payments.get(transaction.mollie_id)
 
-        transaction.status = payment['status']
+            transaction.status = payment['status']
 
-        db.session.commit()
+            db.session.commit()
 
-        if payment.isPaid():
-            return True, 'De transactie is afgerond.'
-        elif payment.isPending():
-            return False, 'De transactie is nog bezig.'
-        elif payment.isOpen():
-            return False, 'De transactie is nog niet begonnen.'
-        return False, 'De transactie is afgebroken.'
+            if payment.isPaid():
+                return True, 'De transactie is afgerond.'
+            elif payment.isPending():
+                return False, 'De transactie is nog bezig.'
+            elif payment.isOpen():
+                return False, 'De transactie is nog niet begonnen.'
+            return False, 'De transactie is afgebroken.'
+        except Mollie.API.Error as e:
+            return False, 'API call failed: ' + e.message
 
     @staticmethod
     def get_all_transactions():
-        payments = MOLLIE.payments.all()
-        return payments
+        try:
+            payments = MOLLIE.payments.all()
+            return payments
+        except Mollie.API.Error as e:
+            return False, 'API call failed: ' + e.message

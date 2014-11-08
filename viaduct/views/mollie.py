@@ -10,7 +10,7 @@ blueprint = Blueprint('mollie', __name__, url_prefix='/mollie')
 @blueprint.route('/check/<trans_id>', methods=['GET', 'POST'])
 def mollie_check(trans_id=0):
     if ('id' not in request.form) and (not trans_id):
-        abort(404)
+        return render_template('mollie/success.htm', message='no ids given')
 
     mollie_id = 0
     if 'id' in request.form:
@@ -35,6 +35,8 @@ def webhook():
 def view_all_transactions():
     if not GroupPermissionAPI.can_read('mollie'):
         return abort(403)
-    payments = MollieAPI.get_all_transactions()
-
-    return render_template('mollie/view.htm', payments=payments)
+    payments, message = MollieAPI.get_all_transactions()
+    if payments:
+        return render_template('mollie/view.htm', payments=payments)
+    else:
+        return render_template('mollie/success.htm', message=message)
