@@ -416,7 +416,6 @@ class PimpyAPI:
         tasks_rel = tasks_rel.order_by(Group.name.asc(), User.first_name.asc(),
                                        User.last_name.asc(), Task.id.asc())
 
-        print group_id
         form = AddTaskShortForm(request.form, group_id=group_id)
         if request.method == 'POST':
             PimpyAPI.check_short_form(form)

@@ -42,10 +42,6 @@ class AddTaskShortForm(Form):
     def __init__(self, formdata=None, obj=None, prefix='', group_id='all', **kwargs):
         # group and line are no options to set with the form
 
-        # do we check valid stuff like this? Probably not
-        if group_id == 'all':
-            raise Exception('Invalid group id for AddTaskShortForm :(');
-
         self.group = group_id
         self.line = -1
 
