@@ -19,6 +19,7 @@ fuzzywuzzy==0.2
 google-api-python-client==1.2
 httplib2==0.9
 itsdangerous==0.24
+mollie-api-python==1.0.0
 py-bcrypt==0.4
 pycrypto==2.6.1
 python-dateutil==2.2

@@ -256,8 +256,7 @@ def create_mollie_transaction(result_id):
         db.session.commit()
         return redirect(payment_url)
     else:
-        payment_url = MollieAPI.get_payment_url(transaction.id)
-        print(payment_url)
+        payment_url = MollieAPI.get_payment_url(transaction.mollie_id)
         return redirect(payment_url)
 
     return False

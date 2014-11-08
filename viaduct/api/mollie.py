@@ -1,76 +1,74 @@
+import Mollie
 from flask.ext.login import current_user
 from flask import abort
 from viaduct.models.mollie import Transaction
 
-import requests
-import datetime
 
 from viaduct import db, application
 
+MOLLIE = Mollie.API.Client()
 MOLLIE_URL = application.config['MOLLIE_URL']
 MOLLIE_REDIRECT_URL = application.config['MOLLIE_REDIRECT_URL']
 MOLLIE_TEST_MODE = application.config.get('MOLLIE_TEST_MODE', False)
 if MOLLIE_TEST_MODE:
-    MOLLIE_KEY = application.config['MOLLIE_TEST_KEY']
+    MOLLIE.setApiKey(application.config['MOLLIE_TEST_KEY'])
     print 'USING MOLLIE TEST KEY'
 else:
-    MOLLIE_KEY = application.config['MOLLIE_KEY']
+    MOLLIE.setApiKey(application.config['MOLLIE_KEY'])
     print 'USING MOLLIE LIVE KEY'
 
 
 class MollieAPI:
     @staticmethod
-    def create_transaction(amount, description, local_url="",
-                           user=current_user, form_result=None):
-        amount += 1.20
-        transaction = Transaction(amount=amount, description=description,
-                                  user=user)
+    def create_transaction(amount, description, user=current_user,
+                           form_result=None):
+        # Only create a new transaction is there is a related form result
         if form_result:
+            transaction = Transaction()
             transaction.form_result = form_result
         else:
             return False
+
+        # Commit transaction to the database so it gets an ID
         db.session.add(transaction)
         db.session.commit()
 
-        auth_header = {'Authorization': 'Bearer ' + MOLLIE_KEY}
-        data = {
+        # Add transaction costs
+        amount += 1.20
+
+        # Create the mollie payment
+        payment = MOLLIE.payments.create({
             'amount': amount,
-            'redirectUrl': MOLLIE_REDIRECT_URL + str(transaction.id),
             'description': description,
+            'redirectUrl': MOLLIE_REDIRECT_URL,
             'metadata': {
-                'localUrl': local_url
+                'transaction_id': transaction.id,
+                'first_name': form_result.owner.first_name,
+                'last_name': form_result.owner.first_last
             }
-        }
+        })
 
-        r = requests.post(MOLLIE_URL, headers=auth_header, data=data)
-        print r.json()
-        transaction.mollie_id = r.json()['id']
-        transaction.createdDatetime = datetime.datetime.strptime(
-            r.json()['createdDatetime'], "%Y-%m-%dT%H:%M:%S.0Z")
-        transaction.status = r.json()['status']
+        transaction.status = payment['status']
+
+        transaction.mollie_id = payment['id']
+
         db.session.add(transaction)
         db.session.commit()
-        print r.json()['amount']
-        print r.json()['links']['paymentUrl']
-        return r.json()['links']['paymentUrl'], transaction
+
+        return payment.getPaymentUrl(), transaction
 
     @staticmethod
     def get_payment_url(transaction_id=0, mollie_id=""):
-        auth_header = {'Authorization': 'Bearer ' + MOLLIE_KEY}
-        if transaction_id:
+        if not (transaction_id or mollie_id):
+            return False, 'no id given'
+        if transaction_id and not mollie_id:
             transaction = Transaction.query.\
                 filter(Transaction.id == transaction_id).first()
-        else:
-            transaction = Transaction.query.\
-                filter(Transaction.mollie_id == mollie_id).first()
-        r = requests.get(MOLLIE_URL + transaction.mollie_id,
-                         headers=auth_header)
-        if 'error' in r.json():
-            return False, r.json()['error']['message']
-        if 'paymentUrl' in r.json()['links']:
-            return r.json()['links']['paymentUrl']
-        else:
-            return r.json()['links']['redirectUrl']
+            mollie_id = transaction.mollie_id
+
+        payment = MOLLIE.payments.get(mollie_id)
+
+        return payment.getPaymentUrl()
 
     @staticmethod
     def check_transaction(transaction_id=0, mollie_id=""):
@@ -84,28 +82,21 @@ class MollieAPI:
         if not transaction:
             abort(404)
 
-        auth_header = {'Authorization': 'Bearer ' + MOLLIE_KEY}
-        r = requests.get(MOLLIE_URL + transaction.mollie_id,
-                         headers=auth_header)
-        if 'error' in r.json():
-            return False, r.json()['error']['message']
-        print MOLLIE_URL + transaction.mollie_id
-        print r.json()
-        transaction.status = r.json()['status']
-        if 'expiredDatetime' in r.json():
-            transaction.expiredDatetime = datetime.datetime.strptime(
-                r.json()['expiredDatetime'], "%Y-%m-%dT%H:%M:%S.0Z")
-        if 'cancelledDatetime' in r.json():
-            transaction.cancelledDatetime = datetime.datetime.strptime(
-                r.json()['cancelledDatetime'], "%Y-%m-%dT%H:%M:%S.0Z")
+        payment = MOLLIE.payments.get(transaction.mollie_id)
+
+        transaction.status = payment['status']
+
         db.session.commit()
-        if transaction.status == 'paid':
+
+        if payment.isPaid():
             return True, 'De transactie is afgerond.'
-        elif transaction.status == 'open':
+        elif payment.isPending():
             return False, 'De transactie is nog bezig.'
+        elif payment.isOpen():
+            return False, 'De transactie is nog niet begonnen.'
         return False, 'De transactie is afgebroken.'
 
     @staticmethod
     def get_all_transactions():
-        transactions = Transaction.query.all()
-        return transactions
+        payments = MOLLIE.payments.all()
+        return payments
