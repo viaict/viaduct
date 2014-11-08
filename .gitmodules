@@ -1,0 +1,3 @@
+[submodule "secrets"]
+	path = secrets
+	url = via_git:/var/repository/secrets
