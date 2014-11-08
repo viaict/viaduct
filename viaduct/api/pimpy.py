@@ -1,6 +1,8 @@
 from viaduct import db, application
+
+from flask_wtf import Form
 from flask import render_template, Markup, redirect, url_for, abort,\
-    flash
+    flash, request
 from flask.ext.login import current_user
 from unidecode import unidecode
 import datetime
@@ -13,6 +15,7 @@ from viaduct.api.user import UserAPI
 from viaduct.models import Group, User
 from viaduct.models import Minute, Task
 from viaduct.models.pimpy import TaskUserRel
+from viaduct.forms.pimpy import AddTaskShortForm
 
 DATE_FORMAT = application.config['DATE_FORMAT']
 
@@ -58,6 +61,8 @@ class PimpyAPI:
         if group is None:
             return False, "Er is niet een groep die voldoet opgegeven."
 
+        print group_id
+        print filled_in_users
         users, message = PimpyAPI.get_list_of_users_from_string(
             group_id, filled_in_users)
         if not users:
@@ -381,7 +386,7 @@ class PimpyAPI:
                                       title='PimPy'))
 
     @staticmethod
-    def get_tasks(group_id, personal):
+    def get_tasks(group_id, personal, request):
         if not GroupPermissionAPI.can_read('pimpy'):
             abort(403)
         if not current_user:
@@ -412,13 +417,42 @@ class PimpyAPI:
         tasks_rel = tasks_rel.order_by(Group.name.asc(), User.first_name.asc(),
                                        User.last_name.asc(), Task.id.asc())
 
+        print group_id
+        form = AddTaskShortForm(request.form, group_id=group_id)
+        if request.method == 'POST':
+            PimpyAPI.check_short_form(form)
+
         return Markup(render_template('pimpy/api/tasks.htm',
                                       personal=personal,
                                       group_id=group_id,
                                       tasks_rel=tasks_rel,
                                       type='tasks',
                                       status_meanings=status_meanings,
-                                      title='PimPy'))
+                                      title='PimPy',
+                                      form=form))
+    @staticmethod
+    def check_short_form(form):
+        message = ""
+        if form.name.data == "":
+            message = "Naam is vereist"
+        elif form.users.data == "":
+            message = "Minimaal 1 gebruiker is vereist"
+
+        result = message == ""
+
+        print 'form users', form.users.data, ',', form.users
+        if result:
+            result, message = PimpyAPI.commit_task_to_db(
+                form.name.data, form.content.data,
+                request.form['deadline'], form.group,
+                form.users.data, form.line, -1, form.status.data)
+
+        if result:
+            flash('De taak is succesvol aangemaakt!', 'success')
+            return redirect(url_for('pimpy.view_tasks', group_id=form.group))
+        else:
+            flash(message, 'danger')
+
 
     @staticmethod
     def get_minutes(group_id):

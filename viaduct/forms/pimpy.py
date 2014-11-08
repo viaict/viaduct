@@ -6,27 +6,25 @@ from wtforms.validators import InputRequired, Optional
 import datetime
 
 from viaduct.models.pimpy import Task
+from viaduct.models import Group
 from viaduct import application
 
 
 DATE_FORMAT = application.config['DATE_FORMAT']
 
 
-class AddTaskForm(Form):
+
+class AddTaskShortForm(Form):
+    """ Form to show when you are viewing a task for group """
     name = StringField('Name', validators=[InputRequired()])
     content = TextAreaField('Content', validators=[Optional()])
     deadline = DateTimeField('Deadline', format=DATE_FORMAT,
                              default=datetime.date.today())
-    # timestamp
-    line = IntegerField(
-        'Line', default=-1,
-        description='Fill in -1 if this is unknown or impossible.')
 
     minute_id = IntegerField(
         'Minute ID', default=-1,
         description='Fill in -1 if this is unknown or impossible.')
 
-    group = SelectField('Group')
     users = TextAreaField(
         'Users',
         description='Type comma separated names for whom this task is, in a '
@@ -39,6 +37,32 @@ class AddTaskForm(Form):
         choices=map(lambda x, y: (x, y),
                     range(0, len(Task.status_meanings)),
                     Task.status_meanings), validators=[])
+
+
+    def __init__(self, formdata=None, obj=None, prefix='', group_id='all', **kwargs):
+        # group and line are no options to set with the form
+
+        # do we check valid stuff like this? Probably not
+        if group_id == 'all':
+            raise Exception('Invalid group id for AddTaskShortForm :(');
+
+        self.group = group_id
+        self.line = -1
+
+        Form.__init__(self, formdata, obj, prefix, **kwargs)
+
+
+
+
+class AddTaskForm(AddTaskShortForm):
+    """ Form to show when you add a new task through the side bar menu"""
+
+    # timestamp
+    line = IntegerField(
+        'Line', default=-1,
+        description='Fill in -1 if this is unknown or impossible.')
+    group = SelectField('Group')
+
 
     def load_groups(self, groups):
         self.group.choices = map(lambda x: (x.id, x.name), groups)
