@@ -1,5 +1,9 @@
 {% extends 'pimpy/view_page.htm' %}
 
+{% block includes %}
+    <script src={{static_url("/static/js/pimpy/add_minute.js")}}></script>
+{% endblock %}
+
 {%block content %}
 
 <div class='col-md-8'>
@@ -30,6 +34,5 @@
         <button type='submit' class='btn btn-primary submit-button' data-loading-text='Bezig...'>Creëer notulen</button>
     </form>
 </div>
-<script src='/static/js/pimpy/add_minute.js'></script>
 
 {% endblock content %}

@@ -9,6 +9,12 @@ from viaduct.utilities import import_module
 from markdown import markdown
 import datetime
 
+version = 'v1.3.1'
+
+
+def static_url(url):
+    return url + '?v=' + version
+
 
 def is_module(path):
     init_path = os.path.join(path, '__init__.py')
@@ -86,6 +92,7 @@ application.jinja_env.globals.update(Markup=Markup)
 application.jinja_env.globals.update(UserAPI=UserAPI)
 application.jinja_env.globals.update(GroupPermissionAPI=GroupPermissionAPI)
 application.jinja_env.globals.update(datetime=datetime)
+application.jinja_env.globals.update(static_url=static_url)
 
 # Register the blueprints.
 import api  # noqa
