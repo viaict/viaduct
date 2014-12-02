@@ -29,7 +29,6 @@ venv/*
 .vimrc
 
 .sass-cache/
-Gemfile.lock
 node_modules/
 dist/
 

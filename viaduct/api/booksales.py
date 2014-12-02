@@ -1,74 +1,69 @@
-from flask import render_template, request, Markup, redirect, url_for, abort
-from flask.ext.login import current_user
+from flask import abort
 from viaduct.models.booksales import Book, Sale
-from viaduct import db, application
+from viaduct import db
 from viaduct.api.group import GroupPermissionAPI
 
-import re
 
 class BookSalesAPI:
+    @staticmethod
+    def commit_sale_to_db(books, student_number, payment):
+        if not GroupPermissionAPI.can_write('booksales'):
+            abort(403)
 
-	@staticmethod
-	def commit_sale_to_db(books, student_number, payment):
-		if not GroupPermissionAPI.can_write('booksales'):
-			abort(403)
+        price = 0
+        sale = Sale(student_number, payment)
+        db.session.add(sale)
+        db.session.commit()
+        for book_id in books:
+            book = Book.query.get(book_id)
+            sale.books.append(book)
+            price += book.price
+            book.update_stock(-1)
+            db.session.add(book)
 
-		price = 0
-		sale = Sale(student_number, payment)
-		db.session.add(sale)
-		db.session.commit()
-		for book_id in books:
-			book = Book.query.get(book_id)
-			sale.books.append(book)
-			price += book.price
-			book.update_stock(-1)
-			db.session.add(book)
+        sale.price = price
+        db.session.commit()
 
-		sale.price = price
-		db.session.commit()
+    @staticmethod
+    def commit_book_to_db(book_id, title, price, isbn, stock):
+        """
+        Adds a new book to the database
 
+        Returns succes(boolean), message (string). Message is the book.id if
+        succes is true, otherwise it contains what exactly went wrong.
 
-	@staticmethod
-	def commit_book_to_db(book_id, title, price, isbn, stock):
-		"""
-		Adds a new book to the database
+        In case of succes the book is entered into the database
+        """
 
-		Returns succes(boolean), message (string). Message is the book.id if
-		succes is true, otherwise it contains what exactly went wrong.
+        if not GroupPermissionAPI.can_write('booksales'):
+            abort(403)
 
-		In case of succes the book is entered into the database
-		"""
+        if book_id == -1:
+            book = Book(title, price, isbn, stock)
+            db.session.add(book)
+            db.session.commit()
+            return True, book.id
 
-		if not GroupPermissionAPI.can_write('booksales'):
-			abort(403)
+        book = Book.query.filter(Book.id == book_id).first()
+        book.title = title
+        book.price = price
+        book.isbn = isbn
+        book.stock = stock
+        db.session.add(book)
+        db.session.commit()
 
-		if book_id==-1:
-			book = Book(title, price, isbn, stock)
-			db.session.add(book)
-			db.session.commit()
-			return True, book.id
+        return True, book.id
 
-		book = Book.query.filter(Book.id==book_id).first()
-		book.title = title
-		book.price = price
-		book.isbn = isbn
-		book.stock = stock
-		db.session.add(book)
-		db.session.commit()
+    def edit_book(book_id, title, price, isbn, stock):
+        if not GroupPermissionAPI.can_write('booksales'):
+            abort(403)
 
-		return True, book.id
+        book = Book.query.filter(Book.id == book_id).first()
+        book.title = title
+        book.price = price
+        book.isbn = isbn
+        book.stock = stock
+        db.session.add(book)
+        db.session.commit()
 
-	def edit_book(book_id, title, price, isbn, stock):
-		if not GroupPermissionAPI.can_write('booksales'):
-			abort(403)
-
-		book = Book.query.filter(Book.id==book_id).first()
-		book.title = title
-		book.price = price
-		book.isbn = isnb
-		book.stock = stock
-		db.session.add(book)
-		db.session.commit()
-
-		return True, book.id
-
+        return True, book.id

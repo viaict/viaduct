@@ -2,7 +2,8 @@
 
 {% block page %}
 <div class="row">
-		{{ NavigationAPI.get_navigation_menu()|safe }}
+    {{ NavigationAPI.get_navigation_menu()|safe }}
+
 	<div class="col-md-10">
 		<div class="row">
 			<div class="col-md-10" id="navigation_backtrack">
@@ -24,11 +25,10 @@
 		<p>One fine body…</p>
 	</div>
 	<div class="modal-footer">
-		<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		<button class="btn btn-warning" data-dismiss="modal" aria-hidden="true">Close</button>
 		<button class="btn btn-primary">Save changes</button>
 	</div>
 </div>
 
 
 {% endblock %}
-

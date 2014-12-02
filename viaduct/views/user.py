@@ -3,6 +3,7 @@ import bcrypt
 import random
 import datetime
 import smtplib
+import re
 from unicodecsv import writer
 from StringIO import StringIO
 from email.mime.text import MIMEText
@@ -125,7 +126,7 @@ def edit(user_id=None):
 
         if query.count() > 0:
             flash('Een gebruiker met dit email adres bestaat al / A user with '
-                  'the e-mail address specified does already exist.', 'error')
+                  'the e-mail address specified does already exist.', 'danger')
             return render_template('user/edit.htm', form=form, user=user,
                                    isAdmin=isAdmin)
 
@@ -191,7 +192,7 @@ def sign_up():
 
         if query.count() > 0:
             flash('Een gebruiker met dit email adres bestaat al / A user with '
-                  'the e-mail address specified does already exist.', 'error')
+                  'the e-mail address specified does already exist.', 'danger')
             return render_template('user/sign_up.htm', form=form)
 
         user = User(form.email.data, bcrypt.hashpw(form.password.data,
@@ -211,10 +212,10 @@ def sign_up():
             db.session.add(group)
             db.session.commit()
 
-            #Upload avatar
-            UserAPI.upload(request.files['avatar'], user.id)
-
-            #user.add_to_all()
+            # Upload avatar
+            avatar = request.files['avatar']
+            if avatar:
+                UserAPI.upload(avatar, user.id)
 
             flash('You\'ve signed up successfully.', 'success')
 
@@ -254,10 +255,17 @@ def sign_in():
         # Notify the login manager that the user has been signed in.
         login_user(user)
 
-        flash('You\'ve been signed in successfully.', 'succes')
+        flash('You\'ve been signed in successfully.', 'success')
 
+        referer = request.headers.get('Referer')
+        denied = re.match(r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),
+                          referer) is not None
         denied_from = session.get('denied_from')
-        if denied_from:
+
+        if not denied:
+            if referer:
+                return redirect(referer)
+        elif denied_from:
             return redirect(denied_from)
 
         return redirect(url_for('home.home'))
@@ -274,8 +282,9 @@ def sign_out():
 
     flash('You\'ve been signed out.', 'success')
 
-    if 'denied_from' in session:
-        session['denied_from'] = None
+    referer = request.headers.get('Referer')
+    if referer:
+        return redirect(referer)
 
     return redirect(url_for('home.home'))
 
@@ -292,7 +301,7 @@ def request_password():
 
         # Check if the user does exist, and if the passwords do match.
         if not user:
-            flash('De ingevoerde gegevens zijn niet correct.', 'error')
+            flash('De ingevoerde gegevens zijn niet correct.', 'danger')
         else:
             hash = create_hash(256)
 
@@ -359,7 +368,8 @@ def reset_password(hash=0):
 
                 # Check if the user does exist, and if the passwords do match.
                 if not user:
-                    flash('De ingevoerde gegevens zijn niet correct.', 'error')
+                    flash('De ingevoerde gegevens zijn niet correct.',
+                          'danger')
 
                 # Actually reset the password of the user
                 user.password = bcrypt.hashpw(
@@ -370,7 +380,7 @@ def reset_password(hash=0):
 
                 flash('Uw wachtwoord is aangepast', 'success')
         else:
-            flash('Ongeldige password-reset ticket', 'error')
+            flash('Ongeldige password-reset ticket', 'danger')
 
     else:
         flash_form_errors(form)
@@ -392,8 +402,6 @@ def create_hash(bits=96):
 @blueprint.route('/users/', methods=['GET', 'POST'])
 @blueprint.route('/users/<int:page_nr>/', methods=['GET', 'POST'])
 def view(page_nr=1):
-    #if not current_user.has_permission('user.view'):
-    #   abort(403)
     if not GroupPermissionAPI.can_read('user'):
         return abort(403)
 
@@ -463,8 +471,6 @@ def view(page_nr=1):
 
 @blueprint.route('/users/export', methods=['GET'])
 def user_export():
-    #if not current_user.has_permission('user.view'):
-    #   abort(403)
     if not GroupPermissionAPI.can_read('user'):
         return abort(403)
 

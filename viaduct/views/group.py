@@ -72,11 +72,11 @@ def create():
         valid_form = True
 
         if not name:
-            flash('No group name has been specified.', 'error')
+            flash('No group name has been specified.', 'danger')
             valid_form = False
         elif Group.query.filter(Group.name == name).count() > 0:
             flash('The group name that has been specified is in use already.',
-                  'error')
+                  'danger')
             valid_form = False
 
         if valid_form:
@@ -103,7 +103,6 @@ def view_users(group_id, page_nr=1):
 
     if not group:
         flash('There is no such group.')
-
         return redirect(url_for('group.view'))
 
     if request.method == 'POST':
@@ -155,8 +154,7 @@ def add_users(group_id, page_nr=1):
     group = Group.query.filter(Group.id == group_id).first()
 
     if not group:
-        flash('There is no such group.')
-
+        flash('There is no such group.', 'danger')
         return redirect(url_for('group.view'))
 
     if request.method == 'POST':
@@ -206,8 +204,10 @@ def edit_permissions(group_id, page_nr=1):
         return abort(403)
 
     group = Group.query.filter(Group.id == group_id).first()
-    # TODO: change into error if group_name is unknown
-    group_name = "unknown" if not group else group.name
+
+    if not group:
+        flash('There is no group with id {}'.format(group_id), 'danger')
+        return redirect(url_for('group.view'))
 
     permissions = GroupPermission.query.order_by(GroupPermission.module_name)\
         .filter(GroupPermission.group_id == group_id).all()
@@ -265,5 +265,5 @@ def edit_permissions(group_id, page_nr=1):
 
     return render_template('group/edit_permissions.htm', form=form,
                            can_write=GroupPermissionAPI.can_write('group'),
-                           group_name=group_name, title='Module permissions',
+                           group_name=group.name, title='Module permissions',
                            permissions=zip(permissions, form.permissions))

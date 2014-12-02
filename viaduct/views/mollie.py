@@ -1,12 +1,7 @@
-from flask import Blueprint, abort, redirect, url_for, \
-    render_template, request
-from flask.ext.login import current_user
+from flask import Blueprint, abort, redirect, render_template, request
 from viaduct.api.mollie import MollieAPI
 from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.custom_form import CustomFormAPI
-import requests
-
-from viaduct import application, db
 
 blueprint = Blueprint('mollie', __name__, url_prefix='/mollie')
 

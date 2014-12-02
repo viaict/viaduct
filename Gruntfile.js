@@ -54,6 +54,7 @@ module.exports = function(grunt) {
                     src: ['**/*.js'],
                     dest: 'dist/js/concat',
                     ext: '.js',
+                    extDot: 'last',
                 }],
             },
 

@@ -32,7 +32,7 @@ class PimpyAPI:
             date = datetime.datetime.strptime(date, DATE_FORMAT)
         except:
             if date != "":
-                return False, "Could not parse the date"
+                return False, "De datum kon niet worden verwerkt."
             date = None
 
         minute = Minute(content, group_id, date)
@@ -53,10 +53,10 @@ class PimpyAPI:
             abort(403)
 
         if group_id == 'all':
-            return False, "Group can not be 'all'"
+            return False, "Groep kan niet 'All' zijn"
         group = Group.query.filter(Group.id == group_id).first()
         if group is None:
-            return False, "Could not distinguish group."
+            return False, "Er is niet een groep die voldoet opgegeven."
 
         users, message = PimpyAPI.get_list_of_users_from_string(
             group_id, filled_in_users)
@@ -67,14 +67,23 @@ class PimpyAPI:
             deadline = datetime.datetime.strptime(deadline, DATE_FORMAT)
         except:
             if deadline != "":
-                return False, "Could not parse the deadline"
+                return False, "De deadline kon niet worden verwerkt."
             deadline = None
 
         if minute_id <= 0:
             minute_id = 1
 
-        task = Task(name, content, deadline, group_id,
-                    users, minute_id, line, status)
+        task = Task.query.filter(
+            Task.title == name and
+            Task.content == content and
+            Task.group_id == group_id).first()
+
+        if task:
+            return False, "Deze taak bestaat al in de database"
+        else:
+            task = Task(name, content, deadline, group_id,
+                        users, minute_id, line, status)
+
         db.session.add(task)
         db.session.commit()
         return True, task.id
@@ -92,7 +101,7 @@ class PimpyAPI:
             abort(403)
 
         if task_id == -1:
-            return False, "no task_id given"
+            return False, "Geen taak ID opgegeven."
 
         task = Task.query.filter(Task.id == task_id).first()
 
@@ -110,7 +119,7 @@ class PimpyAPI:
                 deadline = datetime.datetime.strptime(deadline, DATE_FORMAT)
             except:
                 if deadline != "":
-                    return False, "Could not parse the deadline"
+                    return False, "De deadline kon niet worden verwerkt."
                 deadline = None
             task.deadline = deadline
         if group_id:
@@ -123,7 +132,7 @@ class PimpyAPI:
     #       task.status = status
 
         db.session.commit()
-        return True, "task edited"
+        return True, "Taak bewerkt."
 
     @staticmethod
     def parse_minute(content, group_id, minute_id):
@@ -163,7 +172,7 @@ class PimpyAPI:
                     listed_users, title = action.split(":", 1)
                 except:
                     print("could not split the line on ':'.\nSkipping hit.")
-                    flash("could not parse: " + action)
+                    flash("Kon niet verwerken: " + action, 'danger')
                     continue
 
                 users, message = PimpyAPI.get_list_of_users_from_string(
@@ -189,7 +198,7 @@ class PimpyAPI:
                     listed_users, title = action.split(":", 1)
                 except:
                     print("could not split the line on ':'.\nSkipping hit.")
-                    flash("could not parse: " + action)
+                    flash("Kon niet verwerken: " + action, 'danger')
                     continue
 
                 users, message = PimpyAPI.get_list_of_users_from_string(
@@ -216,7 +225,7 @@ class PimpyAPI:
                     done_task = Task.query.filter(Task.id == done_id).first()
                 except:
                     print("could not find the given task")
-                    flash("could not find DONE " + done_id)
+                    flash("Kan DONE niet vinden, id: " + done_id, "danger")
                     continue
                 dones_found.append(done_task)
 
@@ -230,7 +239,7 @@ class PimpyAPI:
                         .filter(Task.id == remove_id).first()
                 except:
                     print("could not find the given task")
-                    flash("could not find REMOVE " + remove_id)
+                    flash("Kan REMOVE niet vinden, id: " + done_id, "danger")
                     continue
                 removes_found.append(remove_task)
 
@@ -256,10 +265,11 @@ class PimpyAPI:
 
         group = Group.query.filter(Group.id == group_id).first()
         if group is None:
-            return False, "Could not distinguish group."
+            return False, "Kan groep niet vinden."
 
         if comma_sep is None:
-            return False, "Did not receive any comma separated users"
+            return False,
+        "Geen komma gescheiden lijst met gebruikers gevonden."
 
         if not comma_sep:
             return group.users.all(), ''
@@ -281,7 +291,7 @@ class PimpyAPI:
 
             if not match:
                 return False, \
-                    'Could not find a match for %s' % (comma_sep_user)
+                    'Kon geen gebruiker vinden voor: %s' % (comma_sep_user)
 
             for i in range(len(users)):
                 # could use a filter here, but meh
@@ -292,7 +302,7 @@ class PimpyAPI:
 
             if not found:
                 return False, \
-                    'Could not find a match for %s' % (comma_sep_user)
+                    'Kon geen gebruiker vinden voor %s' % (comma_sep_user)
 
         return found_users, ""
 
@@ -301,7 +311,7 @@ class PimpyAPI:
         if not GroupPermissionAPI.can_read('pimpy'):
             abort(403)
         if not current_user:
-            flash('Current_user not found')
+            flash('Huidige gebruiker niet gevonden!', 'danger')
             return redirect(url_for('pimpy.view_minutes'))
 
         groups = current_user.groups\
@@ -342,7 +352,7 @@ class PimpyAPI:
         if not GroupPermissionAPI.can_read('pimpy'):
             abort(403)
         if not current_user:
-            flash('Current_user not found')
+            flash('Huidige gebruiker niet gevonden.', 'danger')
             return redirect(url_for('pimpy.view_tasks'))
 
         status_meanings = Task.get_status_meanings()
@@ -375,7 +385,7 @@ class PimpyAPI:
         if not GroupPermissionAPI.can_read('pimpy'):
             abort(403)
         if not current_user:
-            flash('Current_user not found')
+            flash('Huidige gebruiker niet gevonden', 'danger')
             return redirect(url_for('pimpy.view_tasks'))
 
         status_meanings = Task.get_status_meanings()
@@ -418,7 +428,7 @@ class PimpyAPI:
         if not GroupPermissionAPI.can_read('pimpy'):
             abort(403)
         if not current_user:
-            flash('Current_user not found')
+            flash('Huidige gebruiker niet gevonden', 'danger')
             return redirect(url_for('pimpy.view_minutes'))
 
         list_items = {}
@@ -448,7 +458,7 @@ class PimpyAPI:
         if not GroupPermissionAPI.can_read('pimpy'):
             abort(403)
         if not current_user:
-            flash('Current_user not found')
+            flash('Huidige gebruiker niet gevonden', 'danger')
             return redirect(url_for('pimpy.view_minutes'))
 
         list_items = {}
@@ -470,7 +480,7 @@ class PimpyAPI:
         task = Task.query.filter(Task.id == task_id).first()
         task.content = content
         db.session.commit()
-        return True, "The task is edited sucessfully"
+        return True, "De taak is succesvol aangepast."
 
     @staticmethod
     def update_title(task_id, title):
@@ -480,7 +490,7 @@ class PimpyAPI:
         task = Task.query.filter(Task.id == task_id).first()
         task.title = title
         db.session.commit()
-        return True, "The task is edited sucessfully"
+        return True, "De taak is succesvol aangepast."
 
     @staticmethod
     def update_users(task_id, comma_sep_users):
@@ -494,7 +504,7 @@ class PimpyAPI:
             return False, message
         task.users = users
         db.session.commit()
-        return True, "The task is edited sucessfully"
+        return True, "De taak is succesvol aangepast."
 
     @staticmethod
     def update_date(task_id, date):
@@ -505,10 +515,10 @@ class PimpyAPI:
             date = datetime.datetime.strptime(date, DATE_FORMAT)
         except:
             if date != "":
-                return False, "Could not parse the date"
+                return False, "Kon de datum niet verwerken."
             date = None
 
         task = Task.query.filter(Task.id == task_id).first()
         task.deadline = date
         db.session.commit()
-        return True, "The task is edited sucessfully"
+        return True, "De taak is succesvol aangepast."

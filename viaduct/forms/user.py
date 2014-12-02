@@ -35,7 +35,6 @@ class SignUpForm(Form):
                                                        'opgegeven')])
     education_id = SelectField('Opleiding', coerce=int)
     avatar = FileField('Avatar')
-    #recaptcha = RecaptchaField()
 
 
 class EditUserForm(Form):
@@ -112,8 +111,15 @@ class EditUserInfoForm(Form):
 
 
 class SignInForm(Form):
-    email = StringField('E-mailadres', validators=[InputRequired(), Email()])
-    password = PasswordField('Wachtwoord', validators=[InputRequired()])
+    email = StringField('E-mailadres',
+                        validators=[InputRequired(message='Geen e-mailadres '
+                                                  'opgegeven'),
+                                    Email(message='Ongeldig e-mailadres '
+                                          'opgegeven')])
+    password = PasswordField('Wachtwoord',
+                             validators=[InputRequired(message='Geen '
+                                                       'wachtwoord opgegeven')]
+                             )
     remember_me = BooleanField('Onthouden', default=False)
 
 

@@ -8,15 +8,13 @@
             {% for list_item in list_items[group_header] %}
                 {% if list_item.id > 0 %}
                     <div class="btn-group">
-                        <button class="btn" data-toggle="collapse"
+                        <button class="btn btn-default" data-toggle="collapse"
                                 data-target='#{{ list_item.get_name() }}'>{{ list_item.get_title() }} </button>
-                        <!-- <button class="btn" data-toggle="collapse"
-data-target='#{{ list_item.get_name() }}'>{{ list_item.group.name }} (id: {{list_item.group.id }})</button> -->
-                        <button class="btn" data-toggle="collapse"
+                        <button class="btn btn-default" data-toggle="collapse"
                                 data-target='#{{ list_item.get_name()}}'>
                             Geupload op: {{ list_item.timestamp.strftime('%Y-%m-%d') }}</button>
                     </div>
-                    <div id='{{ list_item.get_name() }}' 
+                    <div id='{{ list_item.get_name() }}'
                         {% if line_number != -1 %}
                             class="collapse in"
                         {% else %}
@@ -24,8 +22,6 @@ data-target='#{{ list_item.get_name() }}'>{{ list_item.group.name }} (id: {{list
                         {% endif %}
                         >
                         <div class="well" style="white-space: pre-wrap;"> -->
-                            {# list_item.get_content_numbered() }}
-                            {# list_item.get_content() | pimpy_minute_line_numbers | markup #}
                             {{ list_item.get_content_numbered() | markup }}
                         </div>
                     </div>
@@ -35,7 +31,7 @@ data-target='#{{ list_item.get_name() }}'>{{ list_item.group.name }} (id: {{list
     </div>
 
     {% if line_number != -1 %}
-<script> 
+<script>
 $(document).ready(function() {
         location.hash = '{{ tag }}'
         var s = document.getElementById('{{tag}}')

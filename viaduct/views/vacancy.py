@@ -35,11 +35,11 @@ def view_list(page_nr=1):
         if not GroupPermissionAPI.can_write('vacancy'):
             vacancies = vacancies.filter(and_(Vacancy.start_date <
                                          datetime.utcnow(), Vacancy.end_date >
-                                         datetime.utcnow())).paginate(page_nr, 15,
-                                                                      True)
+                                         datetime.utcnow())).paginate(page_nr,
+                                                                      15, True)
         else:
             for i, vacancy in enumerate(vacancies):
-                print i, vacancy
+                print(i, vacancy)
                 if (vacancy.start_date < datetime.date(datetime.utcnow()) and
                         vacancy.end_date < datetime.date(datetime.utcnow())):
                     vacancies[i].expired = True
@@ -52,17 +52,17 @@ def view_list(page_nr=1):
     if not GroupPermissionAPI.can_write('vacancy'):
         vacancies = Vacancy.query.filter(and_(Vacancy.start_date <
                                          datetime.utcnow(), Vacancy.end_date >
-                                         datetime.utcnow())).paginate(page_nr, 15,
-                                                                      True)
+                                         datetime.utcnow())).paginate(page_nr,
+                                                                      15, True)
     else:
         vacancies = Vacancy.query.join(Company).filter().\
             order_by(Vacancy.title).order_by(Company.rank)
 
         for i, vacancy in enumerate(vacancies):
-            print i, vacancy
+            print(i, vacancy)
             if (vacancy.start_date < datetime.date(datetime.utcnow()) and
                     vacancy.end_date < datetime.date(datetime.utcnow())):
-                print "I exist"
+                print("I exist")
                 vacancies[i].expired = True
 
         vacancies = vacancies.paginate(page_nr, 15, False)
@@ -93,7 +93,7 @@ def edit(vacancy_id=None):
     form.company_id.choices = [(c.id, c.name) for c in Company.query.
                                order_by('name')]
 
-    return render_template('vacancy/view.htm', vacancy=vacancy, form=form)
+    return render_template('vacancy/edit.htm', vacancy=vacancy, form=form)
 
 
 @blueprint.route('/create/', methods=['POST'])
@@ -138,19 +138,19 @@ def update(vacancy_id=None):
     else:
         error_handled = False
         if not form.title.data:
-            flash('Geen titel opgegeven', 'error')
+            flash('Geen titel opgegeven', 'danger')
             error_handled = True
         if not form.description:
-            flash('Geen beschrijving opgegeven', 'error')
+            flash('Geen beschrijving opgegeven', 'danger')
             error_handled = True
         if not form.start_date:
-            flash('Geen begindatum opgegeven', 'error')
+            flash('Geen begindatum opgegeven', 'danger')
             error_handled = True
         if not form.end_date:
-            flash('Geen einddatum opgegeven', 'error')
+            flash('Geen einddatum opgegeven', 'danger')
             error_handled = True
         if not form.workload:
-            flash('Geen werklast opgegeven', 'error')
+            flash('Geen werklast opgegeven', 'danger')
             error_handled = True
 
         if not error_handled:

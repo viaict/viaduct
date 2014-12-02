@@ -9,9 +9,9 @@ class ChallengeForm(Form):
     description = TextAreaField('Beschrijving', validators=[InputRequired()])
     hint = StringField('Hint', validators=[InputRequired()])
     type = SelectField('Type',
-                        choices=[('text', 'Tekst'),
-                                 ('image', 'Foto'),
-                                 ('custom', 'Handmatig')])
+                       choices=[('text', 'Tekst'),
+                                ('image', 'Foto'),
+                                ('custom', 'Handmatig')])
     start_date = DateField('Begindatum', validators=[InputRequired()])
     end_date = DateField('Einddatum', validators=[InputRequired()])
     weight = StringField('Weging', validators=[InputRequired()])

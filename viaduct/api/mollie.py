@@ -1,10 +1,8 @@
 from flask.ext.login import current_user
-from flask import redirect, url_for, abort
+from flask import abort
 from viaduct.models.mollie import Transaction
-from viaduct.api.custom_form import CustomFormAPI
 
 import requests
-import json
 import datetime
 
 from viaduct import db, application

@@ -1,7 +1,7 @@
 {% extends "content.htm" %}
 
 {% block includes %}
-    <script src="/static/js/custom_form/view_results.js"></script>
+    <script src={{static_url("/static/js/custom_form/view_results.js")}}></script>
 {% endblock %}
 
 {% block content %}
@@ -13,50 +13,54 @@
 
 <p><em>Gele entries zijn "reserve" inschrijvingen</em>
 
-<hr />
-
 {% if custom_form.results %}
 <table class="table">
-	<tr>
-        <th>Gebruiker</th>
-        <th>Informatie</th>
-        <th>Datum aanmelding</th>
-        <th>Betaald</th>
-        <th></th>
-    </tr>
-
-	{% for result in custom_form.results %}
-		<tr {{ result.class }}>
-			<td>
-				{% if result.owner.id %}
-				<a href="{{ url_for('user.view_single', user_id=result.owner.id) }}">
-					{{ result.owner.first_name[:1] }}. {{ result.owner.last_name }}
-				</a>
-				{% else %}
-					Verwijderde account
-				{% endif %}
-            </td>
-			<td>
-				{% if result.owner.id %}
-				{{ result.owner.email }}<br>
-				{{ result.owner.phone_nr }}<br>
-				{% endif %}
-
-				{{ result.form_entry|safe }}
-            </td>
-            <td>{{ result.time }}</td>
-			<td>
-				<button id="{{ result.id }}" title="Gebruiker als betaald aan- / afvinken" class="btn btn-sm btn-success has_payed">
-					{% if result.has_payed %}
-						<i class="glyphicon glyphicon-check"></i>
-					{% else %}
-						<i class="glyphicon glyphicon-unchecked"></i>
-					{% endif %}
-				</button>
-            </td>
-            <td><button id="{{ result.id }}" title="Inzending verwijderen" message="Hoi {{ current_user.first_name }}, weet je zeker dat je deze wilt verwijderen?" class="btn btn-sm btn-danger keeswildeleteknopje"><i class="glyphicon glyphicon-trash"></i></button></td>
+    <thead>
+        <tr>
+            <th></th>
+            <th>Gebruiker</th>
+            <th>Informatie</th>
+            <th>Datum aanmelding</th>
+            <th>Betaald</th>
+            <th></th>
         </tr>
-	{% endfor %}
+    </thead>
+
+    <tbody>
+        {% for result in custom_form.results %}
+            <tr {{ result.class }}>
+                <td><img src='{{ UserAPI.avatar(result.owner) }}' class='img-responsive thumbnail' style='width: 50px;' /></td>
+                <td>
+                    {% if result.owner.id %}
+                    <a href="{{ url_for('user.view_single', user_id=result.owner.id) }}">
+                        {{ result.owner.first_name[:1] }}. {{ result.owner.last_name }}
+                    </a>
+                    {% else %}
+                        Verwijderde account
+                    {% endif %}
+                </td>
+                <td>
+                    {% if result.owner.id %}
+                    {{ result.owner.email }}<br>
+                    {{ result.owner.phone_nr }}<br>
+                    {% endif %}
+
+                    {{ result.form_entry|safe }}
+                </td>
+                <td>{{ result.time }}</td>
+                <td>
+                    <button id="{{ result.id }}" title="Gebruiker als betaald aan- / afvinken" class="btn btn-sm btn-success has_payed">
+                        {% if result.has_payed %}
+                            <i class="glyphicon glyphicon-check"></i>
+                        {% else %}
+                            <i class="glyphicon glyphicon-unchecked"></i>
+                        {% endif %}
+                    </button>
+                </td>
+                <td><button id="{{ result.id }}" title="Inzending verwijderen" message="Hoi {{ current_user.first_name }}, weet je zeker dat je deze wilt verwijderen?" class="btn btn-sm btn-danger keeswildeleteknopje"><i class="glyphicon glyphicon-trash"></i></button></td>
+            </tr>
+        {% endfor %}
+    </tbody>
 </table>
 
 {% else %}

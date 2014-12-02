@@ -5,14 +5,14 @@
 {%block content %}
 <form action="" method="post" name="group_view">
 	<fieldset>
-		<legend>Groups</legend>
+		<legend>Groepen</legend>
 
 		{{ form.csrf_token }}
 
 		<table class="table table-bordered table-striped">
 			<thead>
 				<tr>
-					<th>Group name</th>
+					<th>Groep naam</th>
 					<th></th>
 					<th></th>
 				</tr>
@@ -26,11 +26,11 @@
 						</td>
 
 						<td>
-							<a href="{{ url_for('group.view_users', group_id=group.id) }}"><i class="glyphicon glyphicon-user"></i> View Members</a>
+							<a href="{{ url_for('group.view_users', group_id=group.id) }}"><i class="glyphicon glyphicon-user"></i> Bekijk leden</a>
 						</td>
 
 						<td>
-							<a href="{{ url_for('group.edit_permissions', group_id=group.id) }}"><i class="glyphicon glyphicon-key"></i> Edit Permissions</a>
+							<a href="{{ url_for('group.edit_permissions', group_id=group.id) }}"><i class="glyphicon glyphicon-key"></i> Wijzig permissies</a>
 						</td>
 					</tr>
 				{% endfor %}
@@ -40,8 +40,8 @@
 		<div class="btn-toolbar">
 			<div class="btn-group">
 				{% if GroupPermissionAPI.can_write('group') %}
-					<a href="{{ url_for('group.create') }}" class="btn">Create</a>
-					<button id="{{ form.delete_group.id }}" name="{{ form.delete_group.id }}" type="submit" class="btn">{{ form.delete_group.label.text }}</button>
+					<a href="{{ url_for('group.create') }}" class="btn btn-default btn-success">Creëer groep</a>
+					<button id="{{ form.delete_group.id }}" name="{{ form.delete_group.id }}" type="submit" class="btn btn-danger">{{ form.delete_group.label.text }}</button>
 				{% endif %}
 			</div>
 

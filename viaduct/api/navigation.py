@@ -1,12 +1,13 @@
 from flask import render_template, request
 # -*- coding: utf-8 -*-
 import datetime
+import re
 
 from viaduct import db, application
+from viaduct.helpers import get_login_form
 from viaduct.models.activity import Activity
 from viaduct.models.navigation import NavigationEntry
 from viaduct.models.page import Page
-from viaduct.forms import SignInForm
 from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.user import UserAPI
 
@@ -16,7 +17,7 @@ class NavigationAPI:
     def get_navigation_bar():
         entries = NavigationAPI.get_entries(True)
         entries = NavigationAPI.remove_unauthorized(entries)
-        login_form = SignInForm()
+        login_form = get_login_form()
 
         return render_template('navigation/view_bar.htm', bar_entries=entries,
                                login_form=login_form)
@@ -25,11 +26,7 @@ class NavigationAPI:
     def get_navigation_menu():
         my_path = request.path
 
-        temp_strip = my_path.rstrip('0123456789')
-        if temp_strip.endswith('/'):
-            my_path = temp_strip
-
-        my_path = my_path.rstrip('/')
+        my_path = re.sub(r'(/[0-9]+)?/$', '', my_path)
 
         me = db.session.query(NavigationEntry).filter_by(url=my_path)\
             .first()
@@ -113,8 +110,11 @@ class NavigationAPI:
                         .order_by("activity_start_time").all()
 
                     for activity in activities:
+                        entry_title = '%s %s' % (activity.start_time
+                                                 .strftime('%Y-%m-%d'),
+                                                 activity.name)
                         entry.activities.append(
-                            NavigationEntry(entry, activity.name,
+                            NavigationEntry(entry, entry_title,
                                             '/activities/' + str(activity.id),
                                             False, False, 0))
 

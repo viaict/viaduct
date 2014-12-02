@@ -3,7 +3,7 @@
 {% extends "content.htm" %}
 
 {% block includes %}
-	<script src="/static/js/formbuilder.js "></script>
+    <script src={{static_url("/static/js/formbuilder.js")}}></script>
     <script>
         $(document).ready(function() {
             $('#formbuilder').formbuilder();

@@ -88,21 +88,15 @@ def add_task(group_id='all'):
     if request.method == 'POST':
         # FIXME: deadline is also messed up, and I do not know why
 
-        #if form.validate():
-        #   flash("VALIDAATES!!!!")
         # FIXME: validate does not seem to work :(, so we are doin' it
         # manually now
         message = ""
         if form.name.data == "":
-            message = "Name is required"
-        #elif form.content.data == "":
-        #   message = "More info is required"
-        #elif request.form['deadline'] == "":
-        #   message = "Deadline is required"
+            message = "Naam is vereist"
         elif form.group == "":
-            message = "Group is required"
+            message = "Groep is vereist"
         elif form.users.data == "":
-            message = "A minimum of 1 user is required"
+            message = "Minimaal 1 gebruiker is vereist"
 
         result = message == ""
 
@@ -113,12 +107,12 @@ def add_task(group_id='all'):
                 form.users.data, form.line.data, -1, form.status.data)
 
         if result:
-            flash('The task is added successfully')
+            flash('De taak is succesvol aangemaakt!', 'success')
             return redirect(url_for('pimpy.view_tasks',
                                     group_id=form.group.data))
 
         else:
-            flash(message)
+            flash(message, 'danger')
 
     group = Group.query.filter(Group.id == group_id).first()
     form.load_groups(current_user.groups.order_by(Group.name.asc()).all())
@@ -134,7 +128,7 @@ def edit_task(task_id=-1):
     if not GroupPermissionAPI.can_write('pimpy'):
         return abort(403)
     if task_id is '' or task_id is -1:
-        flash('task not specified')
+        flash('Taak niet gespecificeerd.')
         return redirect(url_for('pimpy.view_tasks', group_id='all'))
 
     if request.method == 'POST':
@@ -169,11 +163,11 @@ def add_minute(group_id='all'):
         # validate still does not work
         message = ""
         if form.content.data == "":
-            message = "Content is required"
+            message = "Content is vereist"
         elif request.form['date'] == "":
-            message = "Date is required"
+            message = "Datum is vereist"
         elif form.group == "":
-            message = "Group is required"
+            message = "Groep is vereist"
 
         result = message == ""
 
@@ -190,18 +184,13 @@ def add_minute(group_id='all'):
                 for remove in removes:
                     remove.update_status(5)
                 db.session.commit()
-                flash('The minute has been parsed:')
+                flash('De notulen is verwerkt!', 'success')
 
                 return render_template('pimpy/view_parsed_tasks.htm',
                                        tasks=tasks, dones=dones,
                                        removes=removes, title='PimPy')
-
-        if result:
-            flash('The minute is added successfully')
-            return redirect(url_for('pimpy.view_minutes',
-                                    group_id=form.group.data))
         else:
-            flash(message)
+            flash(message, 'danger')
 
     form.load_groups(current_user.groups.order_by(Group.name.asc()).all())
 

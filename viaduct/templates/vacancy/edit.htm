@@ -1,9 +1,8 @@
-{% from "macros/form.htm" import render_field, render_button, render_textarea, render_datefield_picker, render_select %}
+{% from "macros/form.htm" import render_field, render_submit, render_textarea, render_datefield_picker, render_select %}
 
 {% extends "content.htm" %}
 
 {% block content %}
-<script src='/static/js/datepicker.js'></script>
 	<form method="post">
 		<fieldset>
 			<legend>Vacature {% if vacancy.id %}bewerken{% else %}aanmaken{% endif %}</legend>
@@ -19,7 +18,7 @@
 			{{ render_select(form.company_id) }}
 
 			{% if GroupPermissionAPI.can_write('vacancy') %}
-				{{ render_button(form.submit) }}
+				{{ render_submit('Opslaan') }}
 			{% endif %}
 		</fieldset>
 	</form>

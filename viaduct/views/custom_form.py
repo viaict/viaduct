@@ -1,23 +1,19 @@
-from flask import make_response
-import csv, os, random, bcrypt
-from flask import flash, get_flashed_messages, redirect, render_template, \
-    request, url_for, abort
+from flask import flash, redirect, render_template, request, url_for, abort
 from flask import Blueprint
 from flask.ext.login import current_user
-import datetime
-from werkzeug import secure_filename
 
-from viaduct import application, db
+from viaduct import db
 from viaduct.helpers import flash_form_errors
 from viaduct.forms.custom_form import CreateForm
 from viaduct.models.user import User
-from viaduct.models.group import Group
-from viaduct.models.custom_form import CustomForm, CustomFormResult, CustomFormFollower
+from viaduct.models.custom_form import CustomForm, CustomFormResult, \
+    CustomFormFollower
 from viaduct.api.group import GroupPermissionAPI
 
 from sqlalchemy import desc
 
 blueprint = Blueprint('custom_form', __name__, url_prefix='/forms')
+
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/page', methods=['GET', 'POST'])
@@ -37,7 +33,8 @@ def view():
     custom_forms = CustomForm.query.order_by(desc("id"))
 
     if current_user and current_user.id > 0:
-        follows = CustomFormFollower.query.filter(CustomFormFollower.owner_id == current_user.id).all()
+        follows = CustomFormFollower.query\
+            .filter(CustomFormFollower.owner_id == current_user.id).all()
 
         ids = []
 
@@ -49,8 +46,12 @@ def view():
         followed_forms = []
         ids = []
 
-    # TODO Custom forms for specific groups (i.e coordinator can only see own forms)
-    return render_template('custom_form/overview.htm', custom_forms=custom_forms.paginate(page, 20, False), followed_forms=followed_forms, followed_ids=ids)
+    # TODO Custom forms for specific groups (i.e coordinator can only see own
+    # forms)
+    return render_template('custom_form/overview.htm',
+                           custom_forms=custom_forms.paginate(page, 20, False),
+                           followed_forms=followed_forms, followed_ids=ids)
+
 
 @blueprint.route('/view/<int:form_id>', methods=['GET', 'POST'])
 def view_single(form_id=None):
@@ -63,7 +64,8 @@ def view_single(form_id=None):
         return abort(403)
 
     results = []
-    entries = CustomFormResult.query.filter(CustomFormResult.form_id == form_id).order_by("created")
+    entries = CustomFormResult.query\
+        .filter(CustomFormResult.form_id == form_id).order_by("created")
 
     from urllib import unquote_plus
     from urlparse import parse_qs
@@ -86,7 +88,8 @@ def view_single(form_id=None):
         html += '</dl>'
 
         # Add the entry date
-        time = entry.created.strftime("%Y-%m-%d %H:%I") if entry.created != None else ""
+        time = entry.created.strftime("%Y-%m-%d %H:%I") if \
+            entry.created is not None else ""
 
         # Append the results with a single entry
         results.append({
@@ -100,7 +103,8 @@ def view_single(form_id=None):
 
     custom_form.results = results
 
-    return render_template('custom_form/view_results.htm', custom_form=custom_form)
+    return render_template('custom_form/view_results.htm',
+                           custom_form=custom_form)
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
@@ -163,6 +167,7 @@ def remove_response(submit_id=None):
 
     return response
 
+
 @blueprint.route('/submit/<int:form_id>', methods=['POST'])
 def submit(form_id=None):
     # TODO make sure custom_form rights are set on server
@@ -188,9 +193,9 @@ def submit(form_id=None):
         response = "error"
     else:
         # These fields might be there
-        try :
+        try:
             if request.form['phone_nr']:
-                user.phone_nr   = request.form['phone_nr']
+                user.phone_nr = request.form['phone_nr']
 
             if request.form['noodnummer']:
                 user.emergency_phone_nr = request.form['noodnummer']
@@ -206,7 +211,7 @@ def submit(form_id=None):
 
             if request.form['geslacht']:
                 user.gender = request.form['geslacht']
-        except Exception :
+        except Exception:
             pass
 
         # Test if user already signed up
@@ -216,20 +221,23 @@ def submit(form_id=None):
         ).first()
 
         if duplicate_test:
-            result          = duplicate_test
+            result = duplicate_test
             result.data = request.form['data']
             response = "edit"
         else:
-            entries = CustomFormResult.query.filter(CustomFormResult.form_id == form_id)
+            entries = CustomFormResult.query\
+                .filter(CustomFormResult.form_id == form_id)
             num_attendants = entries.count()
 
             # Check if number attendants allows another registration
             if num_attendants >= custom_form.max_attendants:
                 # Create "Reserve" signup
-                result = CustomFormResult(user.id, form_id, request.form['data'], True)
+                result = CustomFormResult(user.id, form_id,
+                                          request.form['data'], True)
                 response = "reserve"
             else:
-                result = CustomFormResult(user.id, form_id, request.form['data'])
+                result = CustomFormResult(user.id, form_id,
+                                          request.form['data'])
 
         db.session.add(user)
         db.session.commit()
@@ -239,20 +247,20 @@ def submit(form_id=None):
 
     return response
 
+
 @blueprint.route('/follow/<int:form_id>', methods=['GET', 'POST'])
 def follow(form_id=None):
     if not GroupPermissionAPI.can_write('custom_form'):
         return abort(403)
 
     # Logged in user
-    if current_user and current_user.id > 0:
-        user = User.query.get(current_user.id)
-    else:
+    if not current_user or current_user.id <= 0:
         # Need to be logged in
         return abort(403)
 
     # Unfollow if re-submitted
-    follows = CustomFormFollower.query.filter(CustomFormFollower.form_id == form_id).first()
+    follows = CustomFormFollower.query\
+        .filter(CustomFormFollower.form_id == form_id).first()
 
     if follows:
         response = "removed"
@@ -266,6 +274,7 @@ def follow(form_id=None):
 
     return response
 
+
 @blueprint.route('/has_payed/<int:submit_id>', methods=['POST'])
 def has_payed(submit_id=None):
     response = "success"
@@ -274,9 +283,7 @@ def has_payed(submit_id=None):
         return abort(403)
 
     # Logged in user
-    if current_user and current_user.id > 0:
-        user = User.query.get(current_user.id)
-    else:
+    if not current_user or current_user.id <= 0:
         # Need to be logged in
         return abort(403)
 

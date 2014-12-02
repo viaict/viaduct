@@ -13,7 +13,7 @@ from flask.ext.login import current_user
 from werkzeug import secure_filename
 
 from viaduct import db
-from viaduct.helpers import flash_form_errors
+from viaduct.helpers import flash_form_errors, get_login_form
 from viaduct.forms.activity import ActivityForm, CreateForm
 from viaduct.models.activity import Activity
 from viaduct.models.custom_form import CustomForm, CustomFormResult
@@ -54,7 +54,7 @@ def view(archive="", page=1):
                            archive=archive)
 
 
-@blueprint.route('/remove/<int:activity_id>', methods=['POST'])
+@blueprint.route('/remove/<int:activity_id>/', methods=['POST'])
 def remove_activity(activity_id=0):
     if not GroupPermissionAPI.can_write('activity'):
         return abort(403)
@@ -72,7 +72,7 @@ def remove_activity(activity_id=0):
     return redirect(url_for('activity.view'))
 
 
-@blueprint.route('/<int:activity_id>', methods=['GET', 'POST'])
+@blueprint.route('/<int:activity_id>/', methods=['GET', 'POST'])
 def get_activity(activity_id=0):
     if not GroupPermissionAPI.can_read('activity'):
         return abort(403)
@@ -130,11 +130,11 @@ def get_activity(activity_id=0):
                         "inschrijvingen" % activity.num_attendants
 
     return render_template('activity/view_single.htm', activity=activity,
-                           form=form)
+                           form=form, login_form=get_login_form())
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
-@blueprint.route('/edit/<int:activity_id>', methods=['GET', 'POST'])
+@blueprint.route('/edit/<int:activity_id>/', methods=['GET', 'POST'])
 def create(activity_id=None):
     # Need to be logged in + actie group or admin etc.
     if not GroupPermissionAPI.can_write('activity'):
@@ -167,7 +167,6 @@ def create(activity_id=None):
 
         start_date = form.start_date.data
         end_date = form.end_date.data
-        print start_date
 
         start = dateutil.parser.parse(start_date, dayfirst=True)
         end = dateutil.parser.parse(end_date, dayfirst=True)
@@ -241,7 +240,7 @@ def create(activity_id=None):
     return render_template('activity/create.htm', activity=activity, form=form)
 
 
-@blueprint.route('/transaction/<int:result_id>', methods=['GET', 'POST'])
+@blueprint.route('/transaction/<int:result_id>/', methods=['GET', 'POST'])
 def create_mollie_transaction(result_id):
     form_result = CustomFormResult.query.filter(
         CustomFormResult.id == result_id).first()

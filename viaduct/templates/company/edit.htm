@@ -2,9 +2,6 @@
 {% extends "content.htm" %}
 
 {% block content %}
-
-<script src='/static/js/datepicker.js'></script>
-
 	<form method="post" enctype="multipart/form-data">
 		<fieldset>
 			<legend>Bedrijf {% if company.id %}bewerken{% else %}aanmaken{% endif %}</legend>
@@ -34,5 +31,4 @@
 	</form>
 	{% endif %}
 
-	<script src="/static/js/company_view.js"></script>
 {% endblock %}

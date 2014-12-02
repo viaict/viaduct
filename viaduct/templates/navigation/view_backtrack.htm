@@ -2,7 +2,7 @@
   {% for tracker in backtrack %}
     <a href="{{ tracker.url }}">{{ tracker.title }}</a>
       {% if tracker != backtrack[-1] %}
-        <i class="icon-arrow-right"></i>
+      <i class="glyphicon glyphicon-chevron-right"></i>
       {% endif %}
   {% endfor %}
 </p>

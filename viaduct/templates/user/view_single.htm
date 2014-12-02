@@ -1,14 +1,31 @@
 {% extends "content.htm" %}
 
 {% block includes %}
-    <link href="/static/css/user.profile.css" rel="stylesheet"></link>
+<link href="{{static_url("/static/css/user.profile.css")}}" rel="stylesheet"></link>
+
+    <script>
+    $(document).ready(function() {
+        var $btnSets = $('#responsive'),
+        $btnLinks = $btnSets.find('a');
+
+        $btnLinks.click(function(e) {
+            e.preventDefault();
+            $(this).siblings('a.active').removeClass("active");
+            $(this).addClass("active");
+            var index = $(this).index();
+            $("div.user-menu>div.user-menu-content").removeClass("active");
+            $("div.user-menu>div.user-menu-content").eq(index).addClass("active");
+        });
+    });
+
+</script>
+
 {% endblock %}
 
 {%block content %}
 
 <!-- TODO check permission -->
 
-<link href="http://fontawesome.io/assets/font-awesome/css/font-awesome.css" rel="stylesheet" media="screen">  
 <div class="container user-profile-container">
     <div class="row user-menu-container square">
         <div class="col-md-7 user-details">
@@ -62,9 +79,9 @@
                     <h4> Studentnummer: {{ user.student_id }} </h4>
                     <h4> Email: {{ user.email}} </h4>
                     <h4> Studie: {{ user.education.name }} </h4>
-                    <h4> <i class="icon-check{% if not user.has_payed %}-empty{% endif %}"></i> Lid </h4>
-                    {% if user.honorary_member %}<h4> <i class="icon-check"></i> Erelid </h4>{% endif %}
-                    {% if user.favourer %}<h4> <i class="icon-check"></i> Begunstiger </h4>{% endif %}
+                    <h4> <i class="glyphicon glyphicon-check{% if not user.has_payed %}-empty{% endif %}"></i> Lid </h4>
+                    {% if user.honorary_member %}<h4> <i class="glyphicon glyphicon-check"></i> Erelid </h4>{% endif %}
+                    {% if user.favourer %}<h4> <i class="glyphicon glyphicon-check"></i> Begunstiger </h4>{% endif %}
                 </ul>
             </div>
             <div class="user-menu-content">
@@ -72,13 +89,13 @@
                     Activiteiten
                 </h3>
                 <ul class="user-menu-list">
-                    <h4><b>Ingeschreven activiteiten:</b></h4>      
+                    <h4><b>Ingeschreven activiteiten:</b></h4>
                     {% for result in new_activities %}
                             <a href="{{ url_for('activity.get_activity', activity_id=result.id)}}"><h4><i class="fa fa-user calendar"></i>
                                 {{ result.name }}</h4>
                             </a>
-                    {% endfor %}           
-                    <h4><b>Oude activiteiten:</b></h4>      
+                    {% endfor %}
+                    <h4><b>Oude activiteiten:</b></h4>
                     {% for result in old_activities %}
                             <a href="{{ url_for('activity.get_activity', activity_id=result.id)}}"><h4><i class="fa fa-user fa-check-circle-o"></i>
                                 {{ result.name }}</h4>
@@ -95,7 +112,7 @@
                             <h4><i class="fa fa-user fa-users"></i> {{ group.name }} </h4>
                     {% endfor %}
                 </ul>
-                
+
             </div>
             <div class="user-menu-content">
                 <h2 class="text-center">
@@ -119,22 +136,5 @@
 <style>
 
 </style>
-
-<script>
-$(document).ready(function() {
-    var $btnSets = $('#responsive'),
-    $btnLinks = $btnSets.find('a');
- 
-    $btnLinks.click(function(e) {
-        e.preventDefault();
-        $(this).siblings('a.active').removeClass("active");
-        $(this).addClass("active");
-        var index = $(this).index();
-        $("div.user-menu>div.user-menu-content").removeClass("active");
-        $("div.user-menu>div.user-menu-content").eq(index).addClass("active");
-    });
-});
-
-</script>
 
 {% endblock %}

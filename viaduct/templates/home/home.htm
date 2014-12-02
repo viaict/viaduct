@@ -14,12 +14,15 @@
                         {% if revision.activity %}
                             {{ revision.activity | safe }}
                         {% else %}
-                        <div class="page-header">
-                            <h1>{{ revision.title }}</h1>
-                        </div>
-                        <p>{{ revision.content | markdown(revision.filter_html) }}</p>
+                            <div class="page-header">
+                                <h1>{{ revision.title }}</h1>
+                            </div>
+                            <p>{{ revision.content | markdown(revision.filter_html) }}</p>
                         {% endif %}
                     </div>
+                    {% if revision.test == "laatste_bestuursblog" %}
+                        <p class="text-right"><a href="/laatste_bestuursblog">Lees al het nieuws!</a></p>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>
