@@ -35,6 +35,21 @@ class Nominee(db.Model, BaseEntity):
 
         return nomination
 
+    def vote(self, user):
+        if not user.has_payed:
+            raise Exception('Je moet betaald lid zijn om te stemmen')
+
+        if user.vote:
+            vote = user.vote[0]
+            vote.nominee = self
+        else:
+            vote = Vote(self, user)
+
+        db.session.add(vote)
+        db.session.commit()
+
+        return vote
+
 
 class Nomination(db.Model, BaseEntity):
     __tablename__ = 'dvhj_nomination'
@@ -50,6 +65,23 @@ class Nomination(db.Model, BaseEntity):
                                                           lazy='dynamic'))
     user = db.relationship(User, backref=db.backref('nominations',
                                                     lazy='dynamic'))
+
+    def __init__(self, nominee=None, user=None):
+        self.nominee = nominee
+        self.user = user
+
+
+class Vote(db.Model, BaseEntity):
+    __tablename__ = 'dvhj_vote'
+
+    prints = ('id', 'nominee', 'user')
+
+    nominee_id = db.Column(db.Integer, db.ForeignKey('dvhj_nominee.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+
+    nominee = db.relationship(Nominee, backref=db.backref('votes',
+                                                          lazy='dynamic'))
+    user = db.relationship(User, backref='vote')
 
     def __init__(self, nominee=None, user=None):
         self.nominee = nominee

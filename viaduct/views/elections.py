@@ -2,8 +2,10 @@ from flask import Blueprint, redirect, render_template, url_for, request, \
     jsonify, abort
 from flask.ext.login import current_user
 
+from math import ceil
+
 from viaduct import db
-from viaduct.models import Nominee, Nomination
+from viaduct.models import Nominee, Nomination, Vote
 from viaduct.api.group import GroupPermissionAPI
 
 blueprint = Blueprint('elections', __name__, url_prefix='/verkiezing')
@@ -73,6 +75,45 @@ def remove_nomination():
 
     db.session.delete(nomination)
     db.session.commit()
+
+    return jsonify()
+
+
+@blueprint.route('/stemmen/', methods=['GET'])
+def vote():
+    if current_user is None or not current_user.has_payed:
+        return abort(403)
+
+    nominees = Nominee.query.filter(Nominee.valid == True)\
+        .order_by(Nominee.name).all()  # noqa
+    nominee_bound = int(ceil(len(nominees) / 2))
+
+    vote = current_user.vote[0] if current_user.vote else Vote()
+
+    return render_template('elections/vote.htm',
+                           title='Docent van het jaar IW/Stemmen',
+                           nominees=nominees,
+                           nominee_bound=nominee_bound,
+                           vote=vote)
+
+
+@blueprint.route('/stemmen/', methods=['POST'])
+def submit_vote():
+    if current_user is None:
+        return jsonify(error='Je moet ingelogd zijn om te stemmen'), 500
+    if not current_user.has_payed:
+        return jsonify(error='Je moet betaald lid zijn om te stemmen'), 500
+
+    nominee_id = request.form.get('nominee_id')
+    nominee = Nominee.query.get(nominee_id)
+
+    if not nominee:
+        return jsonify(error='Hey zeg, wel eerlijk zijn!'), 500
+
+    try:
+        nominee.vote(current_user)
+    except Exception as ex:
+        return jsonify(error=ex.message), 500
 
     return jsonify()
 
