@@ -23,9 +23,11 @@ def nominate():
 
     nominated_ids = [n.nominee.id for n in current_user.nominations.all()]
 
-    nominees = Nominee.query.filter(Nominee.valid == True)\
+    nominees = Nominee.query\
+        .filter(db.or_(Nominee.valid == True, Nominee.valid == None))\
         .filter(db.not_(Nominee.id.in_(nominated_ids)))\
         .order_by(Nominee.name).all()  # noqa
+    print(nominees)
 
     return render_template('elections/nominate.htm',
                            title='Docent van het jaar IW/Nomineren',
