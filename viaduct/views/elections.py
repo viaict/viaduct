@@ -157,3 +157,35 @@ def validate_nominate():
     db.session.commit()
 
     return jsonify()
+
+
+@blueprint.route('/admin/stemmen/', methods=['GET'])
+def admin_vote():
+    if not GroupPermissionAPI.can_write('elections'):
+        return abort(403)
+
+    rp = db.engine.execute('SELECT a.*, (SELECT COUNT(*) FROM dvhj_vote b '
+                           'WHERE b.nominee_id=a.id) AS votes '
+                           'FROM dvhj_nominee a WHERE a.valid=1 '
+                           'ORDER BY votes DESC;')
+
+    nominees = []
+
+    def nomi(row):
+        return {'id': row[0],
+                'created': row[1],
+                'modified': row[2],
+                'name': row[3],
+                'valid': row[4],
+                'votes': row[5]}
+
+    while True:
+        row = rp.fetchone()
+        if row is None:
+            break
+
+        nominees.append(nomi(row))
+
+    return render_template('elections/admin_vote.htm',
+                           title='Docent van het jaar IW/Stemmen/Admin',
+                           nominees=nominees)

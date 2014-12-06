@@ -1,0 +1,25 @@
+{% extends 'content.htm' %}
+
+{% block content %}
+    <h1>Docent van het jaar IW</h1>
+
+    <h2>Stemmen - Administratie</h2>
+    <p>Hier kan je stemmen bekijken.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Naam</th>
+                <th>Stemmen</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for nominee in nominees %}
+                <tr>
+                    <td>{{ nominee.name }}</td>
+                    <td>{{ nominee.votes }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
