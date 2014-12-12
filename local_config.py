@@ -1,4 +1,5 @@
 import os
+from datetime import date
 
 base_path = os.path.abspath(os.path.dirname(__file__))
 
@@ -50,3 +51,8 @@ LANGUAGES = {
     'en': 'English',
     'nl': 'Nederlands'
     }
+
+# Teacher's elections configuration
+ELECTIONS_NOMINATE_START = date(2014, 12, 12)
+ELECTIONS_VOTE_START = date(2015, 1, 5)
+ELECTIONS_VOTE_END = date(2015, 1, 9)

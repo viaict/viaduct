@@ -18,8 +18,10 @@ class BaseEntity(object):
     # be changed when certain values should not be shown in the dictionary.
     # Relationships should be added when a relationship is supposed to be in
     # the dictionary as well.
+    json_excludes = tuple()
     jsons = None
     json_relationships = None
+    json_relationship_ids = tuple()
 
     # Columns that every model needs
     id = db.Column(db.Integer, primary_key=True)
@@ -80,24 +82,28 @@ class BaseEntity(object):
     # needed for json serialization of an object. The jsons attribute is used
     # to determine what values to serialize (password hashes and such should
     # not in there)
-    def to_dict(self):
+    def to_dict(self, exclude=True, **kwargs):
         attrs = {}
-        set_jsons = False
 
-        if not self.jsons:
-            self.jsons = (column.name for column in self.__table__.columns)
-            set_jsons = True
+        if not self.jsons or not exclude:
+            if exclude:
+                jsons = (column.name for column in self.__table__.columns if
+                         column.name not in self.json_excludes)
+            else:
+                jsons = (column.name for column in self.__table__.columns)
+        else:
+            jsons = self.jsons
 
-        for column in self.jsons:
-            value = serialize_sqla(getattr(self, column))
+        for column in jsons:
+            value = serialize_sqla(getattr(self, column), **kwargs)
             attrs[column] = value
 
         if self.json_relationships:
             for rel in self.json_relationships:
-                attrs[rel] = serialize_sqla(getattr(self, rel).all())
+                attrs[rel] = serialize_sqla(getattr(self, rel).all(), **kwargs)
 
-        if set_jsons:
-            self.jsons = None
+        for rel in self.json_relationship_ids:
+            attrs[rel] = tuple(a[0] for a in getattr(self, rel).values('id'))
 
         return attrs
 

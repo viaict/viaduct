@@ -1,0 +1,68 @@
+{% extends 'content.htm' %}
+
+{% block includes %}
+    <script src='/static/js/elections/admin_nominate.js'></script>
+{% endblock %}
+
+{% block content %}
+    <h1>Docent van het jaar IW</h1>
+
+    <h2>Nomineren - Administratie</h2>
+    <p>Hier kan je nominaties beheren.</p>
+
+    <h3>Te keuren genomineerden</h3>
+
+    {% if not unchecked_nominees %}<p>Niks.</p>
+    {% else %}
+        <table class='table'>
+            {% for nominee in unchecked_nominees %}
+                <tr data-nominee-id='{{ nominee.id }}'>
+                    <td>{{ nominee.name }}</td>
+                    <td class='text-right'>{{ nominee.nominations.count() }}</td>
+                    <td class='text-right'>
+                        <a href='#' class='btn btn-success valid'><i class='fa fa-check'></i></a>
+                        <a href='#' class='btn btn-danger invalid'><i class='fa fa-remove'></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    <h3>Goedgekeurde genomineerden</h3>
+
+    {% if not valid_nominees %}<p>Niks.</p>
+    {% else %}
+        <table class='table'>
+            {% for nominee in valid_nominees %}
+                <tr data-nominee-id='{{ nominee.id }}'>
+                    <td>{{ nominee.name }}</td>
+                    <td>{{ nominee.nominations.count() }}</td>
+                    <td class='text-right'>
+                        <a href='#' class='btn btn-danger invalid'>
+                            <i class='fa fa-remove'></i> Toch afkeuren
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    <h3>Afgekeurde genomineerden</h3>
+
+    {% if not invalid_nominees %}<p>Niks.</p>
+    {% else %}
+        <table class='table'>
+            {% for nominee in invalid_nominees %}
+                <tr data-nominee-id='{{ nominee.id }}'>
+                    <td>{{ nominee.name }}</td>
+                    <td>{{ nominee.nominations.count() }}</td>
+                    <td class='text-right'>
+                        <a href='#' class='btn btn-success valid'>
+                            <i class='fa fa-check'></i> Toch goedkeuren
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}
