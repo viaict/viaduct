@@ -3,21 +3,48 @@ from flask import Blueprint, redirect, render_template, url_for, request, \
 from flask.ext.login import current_user
 
 from math import ceil
+from datetime import date
 
 from viaduct import db
 from viaduct.models import Nominee, Nomination, Vote
 from viaduct.api.group import GroupPermissionAPI
 
+from config import ELECTIONS_NOMINATE_START, ELECTIONS_VOTE_START, \
+    ELECTIONS_VOTE_END
+
 blueprint = Blueprint('elections', __name__, url_prefix='/verkiezing')
+
+
+def can_nominate():
+    td = date.today()
+    return td >= ELECTIONS_NOMINATE_START and td < ELECTIONS_VOTE_START
+
+
+def can_vote():
+    td = date.today()
+    return td >= ELECTIONS_VOTE_START and td <= ELECTIONS_VOTE_END
 
 
 @blueprint.route('/', methods=['GET'])
 def main():
-    return redirect(url_for('elections.nominate'))
+    if can_nominate():
+        return redirect(url_for('elections.nominate'))
+    elif can_vote():
+        return redirect(url_for('elections.vote'))
+
+    return redirect(url_for('elections.closed'))
+
+
+@blueprint.route('/closed/', methods=['GET'])
+def closed():
+    return render_template('elections/closed.htm')
 
 
 @blueprint.route('/nomineren/', methods=['GET'])
 def nominate():
+    if not can_nominate():
+        return redirect(url_for('elections.main'))
+
     if current_user is None or not current_user.has_payed:
         return abort(403)
 
@@ -41,6 +68,9 @@ def nominate():
 
 @blueprint.route('/nomineren/', methods=['POST'])
 def submit_nomination():
+    if not can_nominate():
+        return jsonify(error='Het nomineren is gesloten')
+
     if current_user is None:
         return jsonify(error='Je moet ingelogd zijn om een docent te '
                        'nomineren'), 500
@@ -67,6 +97,9 @@ def submit_nomination():
 
 @blueprint.route('/nomineren/remove/', methods=['POST'])
 def remove_nomination():
+    if not can_nominate():
+        return jsonify(error='Het nomineren is gesloten')
+
     if current_user is None or not current_user.has_payed:
         return jsonify(error='Je hebt hier helemaal niks te zoeken'), 500
 
@@ -83,6 +116,9 @@ def remove_nomination():
 
 @blueprint.route('/stemmen/', methods=['GET'])
 def vote():
+    if not can_vote():
+        return redirect(url_for('elections.main'))
+
     if current_user is None or not current_user.has_payed:
         return abort(403)
 
@@ -101,6 +137,9 @@ def vote():
 
 @blueprint.route('/stemmen/', methods=['POST'])
 def submit_vote():
+    if not can_vote():
+        return jsonify(error='Het stemmen is gesloten')
+
     if current_user is None:
         return jsonify(error='Je moet ingelogd zijn om te stemmen'), 500
     if not current_user.has_payed:
