@@ -3,6 +3,8 @@ import requests
 from requests.auth import HTTPBasicAuth
 from viaduct import application
 
+from flask.ext.login import current_user
+
 
 class JiraAPI:
 
@@ -22,7 +24,7 @@ class JiraAPI:
                    {"project": {"key": "VIA"},
                     "summary": "{}".format(form.summary.data),
                     "description": "{}\n{}".format(
-                        form.email.data, form.description.data),
+                        current_user.email, form.description.data),
                     "issuetype": {"id": "{}".format(form.issue_type.data)}
                     }
                    }
@@ -32,5 +34,6 @@ class JiraAPI:
             jira_url,
             data=json.dumps(payload),
             headers=headers,
-            auth=auth)
+            auth=auth
+        )
         return response
