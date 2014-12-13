@@ -29,6 +29,10 @@ $.fn.formbuilder = function() {
   textarea.on('keyup change', function() {
     form.html(''); // Reset the form
 
+    if (typeof this === "undefined") {
+      return;
+    }
+    
     var lines = this.value.split("\n");
 
     for (var i=0, N=lines.length; i<N; i++) {
