@@ -31,16 +31,16 @@
 					<h1>
 							{{activity.name}}
 					</h1>
-                    
+
 
 					<dl class="time dl-horizontal">
 						<dt><i class="glyphicon glyphicon-home"></i></dt>
 						<dd>{{ activity.location}}</dd>
 						<dt><i class="glyphicon glyphicon-calendar"></i></dt>
-						<dd>{{ activity.get_time() }} </dd> 
-                        <dd><small> over {{ activity.get_timedelta_to_start_formatted()  }}</small></dd>
+						<dd>{{ activity.get_time() }} </dd>
+                        <dd><small>{{ activity.till_now() }}</small></dd>
 					</dl>
-                    
+
 					<h2>
 						{% if activity.price != "gratis" %}
                             &euro;
