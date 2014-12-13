@@ -1,16 +1,39 @@
+# coding=utf-8
+
 from flask_wtf import Form
-from wtforms import StringField, PasswordField, BooleanField, SelectField, \
-    IntegerField, FileField
+from wtforms import StringField, PasswordField, BooleanField, \
+    SelectField, IntegerField, FileField
+from wtforms.widgets import TextInput
 from wtforms.validators import InputRequired, Email, EqualTo, ValidationError
 from config import LANGUAGES
 
+import dateutil
+
+
+class DateField(StringField):
+    widget = TextInput()
+
+    def _value(self):
+        if self.data:
+            return self.data.strftime('%d-%m-%Y')
+
+        return ''
+
+    def process_formdata(self, valuelist):
+        if valuelist:
+            v = ' '.join(valuelist)
+
+            if v:
+                self.data = dateutil.parser.parse(v, dayfirst=True).date()
+                return
+
+        self.data = None
+
 
 class SignUpForm(Form):
-    email = StringField('E-mailadres',
-                        validators=[InputRequired(message='Geen e-mailadres '
-                                                  'opgegeven'),
-                                    Email(message='Ongelding e-mailadres '
-                                          'opgegeven')])
+    email = StringField('E-mailadres', validators=[
+        InputRequired(message='Geen e-mailadres opgegeven'),
+        Email(message='Ongelding e-mailadres opgegeven')])
     password = PasswordField('Wachtwoord',
                              validators=[InputRequired(message='Geen '
                                                        'wachtwoord opgegeven')]
@@ -35,6 +58,11 @@ class SignUpForm(Form):
                                                        'opgegeven')])
     education_id = SelectField('Opleiding', coerce=int)
     avatar = FileField('Avatar')
+
+    birth_date = DateField('Geboortedatum', validators=[
+        InputRequired(message='Geen geboortedatum opgegeven')])
+    study_start = DateField('Begin studie', validators=[
+        InputRequired(message='Geen begin studie opgegeven')])
 
 
 class EditUserForm(Form):
@@ -63,6 +91,8 @@ class EditUserForm(Form):
                                                        'opgegeven')])
     education_id = SelectField('Opleiding', coerce=int)
     avatar = FileField('Avatar')
+    birth_date = DateField('Geboortedatum')
+    study_start = DateField('Begin studie')
 
     def validate_password(form, field):
         """Providing a password is only required when creating a new user."""
@@ -98,6 +128,8 @@ class EditUserInfoForm(Form):
     locale = SelectField('Taal', choices=LANGUAGES.items())
     education_id = SelectField('Opleiding', coerce=int)
     avatar = FileField('Avatar')
+    birth_date = DateField('Geboortedatum')
+    study_start = DateField('Begin studie')
 
     def validate_password(form, field):
         """Providing a password is only required when creating a new user."""
