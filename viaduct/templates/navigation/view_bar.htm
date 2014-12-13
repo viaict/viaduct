@@ -35,19 +35,25 @@
                                         {{ entry.title }}
                                     </a>
 
-                                    <ul class="dropdown-menu">
+                                    <ul class="dropdown-menu
+                                        {% if entry.activities %}
+                                            dropdown-menu-activity
+
+                                        {% endif %}
+                                        "
+                                        >
                                         {% for child in children %}
-                                            <li>
-                                                <a {% if child.external %}target="_blank"{% endif %}
+                                        <li>
+                                            <a {% if child.external %}target="_blank"{% endif %}
                                                 href="{% if child.external %}https://{% endif %}{{ child.url }}">
-                                                    {{ child.title }}
-                                                    {% if child.subtitle %}
+                                                {% if child.subtitle %}
                                                     <small class="pull-right"> {{ child.subtitle|truncate(40)  }}</small>
-                                                    {% endif %}
+                                                {% endif %}
+                                                <span>{{ child.title }}</span>
 
-                                                </a>
+                                            </a>
 
-                                            </li>
+                                        </li>
                                         {% endfor %}
                                     </ul>
                                 </li>
