@@ -19,7 +19,7 @@ class NavigationEntry(db.Model, BaseEntity):
         primaryjoin=('NavigationEntry.parent_id==NavigationEntry.id'),
         backref=db.backref('children', lazy='dynamic'))
 
-    def __init__(self, parent, title, url, external, activity_list, position):
+    def __init__(self, parent, title, url, external, activity_list, position, subtitle=None):
         if parent:
             self.parent_id = parent.id
 
@@ -28,3 +28,4 @@ class NavigationEntry(db.Model, BaseEntity):
         self.external = external
         self.activity_list = activity_list
         self.position = position
+        self.subtitle = subtitle

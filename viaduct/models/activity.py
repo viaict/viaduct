@@ -1,7 +1,7 @@
 from viaduct import db
 import datetime
 from viaduct.models import BaseEntity
-
+from babel.dates import format_timedelta
 
 # Model to support Facebook/Google API integration
 class Activity(db.Model, BaseEntity):
@@ -66,6 +66,14 @@ class Activity(db.Model, BaseEntity):
 
         return self.description
 
+    def get_timedelta_to_start(self):
+        return datetime.datetime.now() - self.start_time
+        
+    def get_timedelta_to_start_formatted(self, locale="nl_NL"):
+        """
+        Returns over 1 dag
+        """
+        return format_timedelta(self.get_timedelta_to_start(), locale=locale)
+
     def format_form_time(self, time):
         return time.strftime("%Y-%m-%d %H:%M")
-        return time.strftime("%d-%m-%Y %H:%M")
