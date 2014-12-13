@@ -4,10 +4,10 @@ import datetime
 import re
 
 from viaduct import db, application
+from viaduct.helpers import get_login_form
 from viaduct.models.activity import Activity
 from viaduct.models.navigation import NavigationEntry
 from viaduct.models.page import Page
-from viaduct.forms import SignInForm
 from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.user import UserAPI
 
@@ -17,7 +17,7 @@ class NavigationAPI:
     def get_navigation_bar():
         entries = NavigationAPI.get_entries(True)
         entries = NavigationAPI.remove_unauthorized(entries)
-        login_form = SignInForm()
+        login_form = get_login_form()
 
         return render_template('navigation/view_bar.htm', bar_entries=entries,
                                login_form=login_form)

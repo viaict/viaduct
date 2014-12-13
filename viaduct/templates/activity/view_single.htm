@@ -1,15 +1,15 @@
 {% from "macros/maps.htm" import render_map %}
 {% from "macros/custom_form.htm" import user_fields %}
-{% from "macros/form.htm" import render_field %}
+{% from "macros/form.htm" import render_field, render_checkbox, render_submit %}
 
 {% extends "content.htm" %}
 
 {% block includes %}
 {% if activity.form_data %}
-	<script src="/static/js/unserialize.js"></script>
-	<script>
-		$("#custom").unserializeForm("{{ activity.form_data | safe }}");
-	</script>
+    <script src="/static/js/unserialize.js"></script>
+    <script>
+        $("#custom").unserializeForm("{{ activity.form_data | safe }}");
+    </script>
 {% endif %}
 
 <script src="/static/js/custom_form_submission.js"></script>
@@ -19,123 +19,136 @@
 {% block content %}
 
 <div class="page-header">
-	{% if GroupPermissionAPI.can_write('activity') %}
-	<a href="/activities/edit/{{ activity.id }}" class="btn btn-warning pull-right">
-		<i class="glyphicon glyphicon-pencil"></i>
-		Aanpassen
-	</a>
-	{% endif %}
+    {% if GroupPermissionAPI.can_write('activity') %}
+    <a href="/activities/edit/{{ activity.id }}" class="btn btn-warning pull-right">
+        <i class="glyphicon glyphicon-pencil"></i>
+        Aanpassen
+    </a>
+    {% endif %}
 
-	<h1>{{activity.name}}</h1>
+    <h1>{{activity.name}}</h1>
 </div>
 
 <div class="accordion" id="acc">
-	<div class="accordion-group">
+    <div class="accordion-group">
 
-		<div class="accordion-heading">
-			<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc" href="#collapseLocation">
-				<i class="glyphicon glyphicon-compass"></i>
-				Locatie: {{ activity.location}}
-				<span class="pull-right">Klik om uit te klappen</span>
-			</a>
-		</div>
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#acc" href="#collapseLocation">
+                <i class="glyphicon glyphicon-compass"></i>
+                Locatie: {{ activity.location}}
+                <span class="pull-right">Klik om uit te klappen</span>
+            </a>
+        </div>
 
-		<div id="collapseLocation" class="accordion-body collapse">
-			<div class="accordion-inner">
-				{{ render_map(600, 400, activity.location) }}
-			</div>
-		</div>
-	</div>
+        <div id="collapseLocation" class="accordion-body collapse">
+            <div class="accordion-inner">
+                {{ render_map(600, 400, activity.location) }}
+            </div>
+        </div>
+    </div>
 
-	{% if activity.form %}
+    {% if activity.form %}
 
-		<div class="accordion-group">
-			<div class="accordion-heading">
-				<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc" href="#collapseForm">
-					<i class="glyphicon glyphicon-star"></i>
-					Inschrijven voor deze activiteit
-					<span class="pull-right">Klik om uit te klappen</span>
-				</a>
-			</div>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#acc" href="#collapseForm">
+                    <i class="glyphicon glyphicon-star"></i>
+                    Inschrijven voor deze activiteit
+                    <span class="pull-right">Klik om uit te klappen</span>
+                </a>
+            </div>
 
-			<!--<div class="accordion-heading">
-				<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc" href="#collapseAttendees">
-					{{ _("Deelnemers van deze activiteit") }}
-					<span class="pull-right">Klik om uit te klappen</span>
-				</a>
-			</div>
+            <!--<div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#acc" href="#collapseAttendees">
+                    {{ _("Deelnemers van deze activiteit") }}
+                    <span class="pull-right">Klik om uit te klappen</span>
+                </a>
+            </div>
 
-			<div id="collapseAttendees" class="accordion-body collapse">
-				<div class="accordion-inner">
-					{% for result in activity.form.results %}
-						{{ result.owner.first_name }} {{ result.owner.last_name }}
-					{% endfor %}
-				</div>
-			</div>-->
+            <div id="collapseAttendees" class="accordion-body collapse">
+                <div class="accordion-inner">
+                    {% for result in activity.form.results %}
+                        {{ result.owner.first_name }} {{ result.owner.last_name }}
+                    {% endfor %}
+                </div>
+            </div>-->
 
-			<div id="collapseForm" class="accordion-body collapse">
-				<div class="accordion-inner">
-					{% if current_user and current_user.id %}
-						<script>
-							var msg_success = '{{ activity.form.msg_success }}';
-						</script>
-
-
-						<form id="custom" action="/forms/submit/{{ activity.form.id }}" enctype="multipart/form-data">
-
-								{% if activity.form_data %}
-								<!-- Display custom success message in case user refreshes / forgot info -->
-								<div class="alert alert-success">
-									{{ activity.form.msg_success }}
-								</div>
-								{% endif %}
+            <div id="collapseForm" class="accordion-body collapse">
+                <div class="accordion-inner">
+                    {% if current_user and current_user.id %}
+                        <script>
+                            var msg_success = '{{ activity.form.msg_success }}';
+                        </script>
 
 
-								{% if activity.info %}
-								<div class="alert alert-warning">
-									{{ activity.info }}
-								</div>
-								{% endif %}
+                        <form id="custom" action="/forms/submit/{{ activity.form.id }}" enctype="multipart/form-data">
 
-								<div class="row">
-									<div class="col-md-4 col-md-offset-1 pull-right">
-									{% if activity.form.show_pay_button %}
-										<a href="{{ url_for('activity.create_mollie_transaction', result_id=activity.form.id) }}" class="btn btn-warning">Betalen (+€1,20 transactiekosten)</a>
-									{% endif %}
+                                {% if activity.form_data %}
+                                <!-- Display custom success message in case user refreshes / forgot info -->
+                                <div class="alert alert-success">
+                                    {{ activity.form.msg_success }}
+                                </div>
+                                {% endif %}
 
-										<h3>Contact gegevens</h3>
-										<small>Dit zijn gegevens die we van je account halen</small>
-									{{ render_field(form.email) }}
-									{{ render_field(form.first_name) }}
-									{{ render_field(form.last_name) }}
-									{{ render_field(form.student_id) }}
-									{{ render_field(form.education_id) }}
-									</div>
-									<div class="col-md-7">
-										<h3>Vul a.u.b in :D</h3>
-										<p>Sommige velden (zoals shirt-maat of dieet) proberen we op te slaan, zodat je het de volgende keer niet nog eens moet invullen.</p>
-										{{ activity.form.html | safe }}
-									</div>
-							</div>
 
-							<button id="custom_form" class="btn btn-success">Verzend formulier</button>
-						</form>
+                                {% if activity.info %}
+                                <div class="alert alert-warning">
+                                    {{ activity.info }}
+                                </div>
+                                {% endif %}
 
-					{% else %}
-						<p>Je moet ingelogd zijn om je voor een activiteit in te schrijven.
-						<p><a href="{{ url_for('user.sign_in') }}" class="btn btn-huge btn-success">Inloggen</a>
-					{% endif %}
-				</div>
-			</div>
-		</div>
-		{% endif %}
+                                <div class="row">
+                                    <div class="col-md-4 col-md-offset-1 pull-right">
+                                    {% if activity.form.show_pay_button %}
+                                        <a href="{{ url_for('activity.create_mollie_transaction', result_id=activity.form.id) }}" class="btn btn-warning">Betalen (+€1,20 transactiekosten)</a>
+                                    {% endif %}
+
+                                        <h3>Contact gegevens</h3>
+                                        <small>Dit zijn gegevens die we van je account halen</small>
+                                    {{ render_field(form.email) }}
+                                    {{ render_field(form.first_name) }}
+                                    {{ render_field(form.last_name) }}
+                                    {{ render_field(form.student_id) }}
+                                    {{ render_field(form.education_id) }}
+                                    </div>
+                                    <div class="col-md-7">
+                                        <h3>Vul a.u.b in :D</h3>
+                                        <p>Sommige velden (zoals shirt-maat of dieet) proberen we op te slaan, zodat je het de volgende keer niet nog eens moet invullen.</p>
+                                        {{ activity.form.html | safe }}
+                                    </div>
+                            </div>
+
+                            <button id="custom_form" class="btn btn-success">Verzend formulier</button>
+                        </form>
+
+                    {% else %}
+                    <p>Je moet ingelogd zijn om je voor een activiteit in te schrijven.</p>
+
+                    <form method='post' name='sign-in-activity'
+                        action='{{ url_for('user.sign_in') }}'>
+                        {{ login_form.csrf_token }}
+                        {{ render_field(login_form.email) }}
+                        {{ render_field(login_form.password) }}
+                        {{ render_checkbox(login_form.remember_me) }}
+                        {{ render_submit('Inloggen') }}
+                    </form>
+
+                    <ul class='list-unstyled'>
+                        <li><a href='{{ url_for('user.sign_up') }}'>Registreren</a></li>
+                        <li><a href='{{ url_for('user.request_password') }}'>Reset wachtwoord</a></li>
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
 </div>
 
 <div class="row">
 	<div class="col-md-8">
 		<h4>Prijs:
 		{% if not activity.price == "gratis"  %}
-			<i class="glyphicon glyphicon-euro"></i>
+        &euro;
 		{% endif %}
 		{{ activity.price }}
 		</h4>
