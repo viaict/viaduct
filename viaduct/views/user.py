@@ -424,11 +424,7 @@ def user_export():
 ###
 # Here starts the public api for users
 ###
-<<<<<<< HEAD
 @blueprint.route('/users/get_users/', methods=['GET'])
-=======
-@blueprint.route('/users/api/get_users/', methods=['POST'])
->>>>>>> 7ef0ccb980ebe8759a8b903941a29543f040f6d6
 def api_get_users():
     if not GroupPermissionAPI.can_read('user'):
         return abort(403)
