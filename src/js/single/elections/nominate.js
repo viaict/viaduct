@@ -37,7 +37,7 @@ $(function() {
             var error = $.parseJSON(jqHXR.responseText).error;
 
             clearflash();
-            flash(error, 'error');
+            flash(error, 'danger');
 
             $btn.prop('disabled', false);
         });
@@ -62,7 +62,7 @@ $(function() {
             var error = $.parseJSON(jqHXR.responseText).error;
 
             clearflash();
-            flash(error, 'error');
+            flash(error, 'danger');
 
             $removes.removeClass('disabled');
         });
