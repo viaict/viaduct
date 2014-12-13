@@ -1,44 +1,58 @@
-
-m "macros/pagination.htm" import render_pagination %}
-
 {% extends "base.htm" %}
 
 {%block page %}
-	<fieldset>
-		<legend>Bewerk {{examination.title}}</legend>
-		{{message}}
-		<form action="?" method=post enctype=multipart/form-data>
-			titel </br>
-			<input type=hidden name=examination value="{{examination.id}}">
-			<input type=text name=title value="{{examination.title}}"> <br />
-			vak </br>
-			<select name=course> <br />
-				{% for course in courses %}
-					<option value="{{ course.id }}"
-					{% if course.id == examination.course_id %}
-						selected="selected"
-					{% endif %}
-					>
-					{{course.name}}</option>
-				{% endfor %}
-			</select>
-			<a href="../course/add" class="btn"><i class="glyphicon glyphicon-pencil"></i> <strong>nieuw</strong></a><br />
-			studie </br>
-				<select name=education> <br />
-					{% for education in educations %}
-						<option value="{{ education.id }}"
-						{% if education.id == examination.education_id %}
-							selected="selected"
-						{% endif %}
-						>
-						{{education.name}}</option>
-					{% endfor %}
-				</select>
-				<a href="../education/add" class="btn"><i class="glyphicon glyphicon-pencil"></i> <strong>nieuw</strong></a><br />
+    <fieldset>
+        <legend>Bewerk {{examination.title}}</legend>
 
-			<input type=file name=file><br />
-			<input type=file name=answers>
-			<input type=submit value=Upload>
-		</form>
-	</fieldset>
+        {{message}}
+
+        <form action="?" method=post enctype=multipart/form-data>
+            <input type=hidden name=examination value="{{examination.id}}">
+
+            <div class='form-group'>
+                Titel
+                <input type=text name=title value="{{examination.title}}" class='form-control'>
+            </div>
+
+            <div class='form-group'>
+                Vak
+                <select name=course class='form-control'>
+                    {% for course in courses %}
+                        <option value="{{ course.id }}" {% if course.id == examination.course_id %}selected="selected"{% endif %}>
+                            {{course.name}}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class='form-group'>
+                <a href="../course/add" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> <strong>nieuw</strong></a>
+            </div>
+
+            <div class='form-group'>
+                Studie
+                <select name=education class='form-control'>
+                    {% for education in educations %}
+                        <option value="{{ education.id }}" {% if education.id == examination.education_id %}selected="selected"{% endif %}>
+                            {{education.name}}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class='form-group'>
+                <a href="../education/add" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> <strong>nieuw</strong></a>
+            </div>
+
+            <div class='form-group'>
+                <input type=file name=file class='form-control' />
+            </div>
+
+            <div class='form-group'>
+                <input type=file name=answers class='form-control' />
+            </div>
+
+            <input type=submit value=Upload class='btn btn-primary' />
+        </form>
+    </fieldset>
 {% endblock %}

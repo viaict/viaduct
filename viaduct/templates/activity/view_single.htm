@@ -26,7 +26,7 @@
     </a>
     {% endif %}
 
-    <h1>{{activity.name}}</h1>
+    <h1>{{activity.name}}</h1><small> over {{ activity.get_timedelta_to_start_formatted()  }}</small>
 </div>
 
 <div class="accordion" id="acc">
@@ -34,7 +34,7 @@
 
         <div class="accordion-heading">
             <a class="accordion-toggle" data-toggle="collapse" data-parent="#acc" href="#collapseLocation">
-                <i class="glyphicon glyphicon-compass"></i>
+                <i class="glyphicon glyphicon-home"></i>
                 Locatie: {{ activity.location}}
                 <span class="pull-right">Klik om uit te klappen</span>
             </a>
@@ -147,8 +147,8 @@
 <div class="row">
 	<div class="col-md-8">
 		<h4>Prijs:
-		{% if not activity.price == "gratis"  %}
-        &euro;
+		{% if not activity.price.lower() == "gratis"  %}
+        <i class="glyphicon glyphicon-euro"></i>
 		{% endif %}
 		{{ activity.price }}
 		</h4>
