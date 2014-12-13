@@ -52,6 +52,12 @@
 	{% endif %}
 	</fieldset>
 </form>
+<script>
+    $(document).ready(function() {
+        $("select").select2();
+        $("select").addClass('form-control');
+    });
+</script>
 
 
 {% endblock %}
