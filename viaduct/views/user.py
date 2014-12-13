@@ -449,7 +449,7 @@ def api_get_users():
                 if user.favourer else "",
              """
              <a class='btn btn-xs btn-primary'
-             href='{{ url_for('user.view_single', user_id=user.id) }}'>
+             href=""" + url_for('user.view_single', user_id=user.id) + """>
              <i class='glyphicon glyphicon-info-sign'></i></a>"""
              ])
     return json.dumps({"data": user_list})
