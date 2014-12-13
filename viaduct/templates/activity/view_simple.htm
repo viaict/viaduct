@@ -14,6 +14,9 @@
 		<a href="{{ url_for('activity.get_activity', activity_id=activity.id)}}">
 			{{ activity.name }}
 		</a>
+        <small class="pull-right">
+            over {{ activity.get_timedelta_to_start_formatted() }}
+        </small>
 	</h4>
 
 	<div>
@@ -21,7 +24,7 @@
 		{{ activity.get_time() }}
 		<br>
 
-		<i class="glyphicon glyphicon-compass"></i>
+		<i class="glyphicon glyphicon-home"></i>
 		{{ activity.location }}
 	</div>
 </div>
