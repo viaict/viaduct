@@ -26,7 +26,7 @@
     </a>
     {% endif %}
 
-    <h1>{{activity.name}}</h1><small> over {{ activity.get_timedelta_to_start_formatted()  }}</small>
+    <h1>{{activity.name}}</h1><small> {{ activity.till_now() }}</small>
 </div>
 
 <div class="accordion" id="acc">

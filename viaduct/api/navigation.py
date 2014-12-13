@@ -113,7 +113,8 @@ class NavigationAPI:
                         entry.activities.append(
                             NavigationEntry(entry, activity.name,
                                             '/activities/' + str(activity.id),
-                                            False, False, 0, "over " + activity.get_timedelta_to_start_formatted()))
+                                            False, False, 0,
+                                            activity.till_now()))
 
         return entries
 
