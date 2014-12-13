@@ -424,7 +424,7 @@ def user_export():
 ###
 # Here starts the public api for users
 ###
-@blueprint.route('/users/api/get_users/', methods=['POST'])
+@blueprint.route('/users/get_users/', methods=['GET'])
 def api_get_users():
     if not GroupPermissionAPI.can_read('user'):
         return abort(403)
@@ -455,7 +455,7 @@ def api_get_users():
     return json.dumps({"data": user_list})
 
 
-@blueprint.route('/users/api/delete_users/', methods=['POST'])
+@blueprint.route('/users/delete_users/', methods=['DELETE'])
 def api_delete_user():
     if not GroupPermissionAPI.can_write('user'):
         return abort(403)
@@ -465,6 +465,7 @@ def api_delete_user():
 
     for user in del_users:
         db.session.delete(user)
-        db.session.commit()
+
+    db.session.commit()
 
     return json.dumps({'status': 'success'})

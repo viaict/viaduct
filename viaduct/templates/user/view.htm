@@ -60,55 +60,17 @@
 </div>
 <script>
     $(document).ready(function() {
-        var table = $('#datatable').DataTable( {
-            "processing":true,
-            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-            "language": {
-                "paginate": {
-                    "next": "Volgende",
-                    "previous": "Vorige"
-                }
-            },
-            "columnDefs": [ {
-                "targets": [0],
-                "visible": false,
-                "searchable": false
-            }],
+        var table = $('#datatable').DataTable(_.defaults({
             "ajax": {
-                "url": "/users/api/get_users/",
+                "url": "/users/get_users/",
                 "type": "get"
             }
-        });
-
-        $("#datatable").css('cursor', 'pointer');
-        $('#datatable tbody').on( 'click', 'tr', function () {
-            $(this).toggleClass('info');
-        } );
-
-        $('#delete').click( function () {
-            var selected_ids = [];
-            var selected_users = "";
-            var selected_rows = table.rows('.info')
-            for (i = 0; i < selected_rows.data().length; i++) {
-                selected_ids.push(selected_rows.data()[i][0]);
-                selected_users += "- " + selected_rows.data()[i][1] + "\n";
-            }
-            var json_data = { "selected_ids" : selected_ids }
-            if (confirm('Do you surely want to delete these users?\n' + selected_users )) {
-                $.ajax({
-                    type: "POST",
-                    url: "/users/api/delete_users/",
-                    contentType: 'application/json',
-                    success: function (data) {
-                        table.ajax.reload();
-                    },
-                    data: JSON.stringify(json_data, null, '\t')
-                });
-
-            } else {
-                return;
-            }
-        } );
-    } );
+        }, utils.datatables.defaults));
+        utils.datatables.enable_select($('#datatable tbody'));
+        utils.datatables.delete_by_url(
+            $('#delete'),
+            table,
+            '/users/delete_users/');
+    });
 </script>
 {% endblock %}
