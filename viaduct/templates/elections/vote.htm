@@ -1,0 +1,41 @@
+{% extends 'content.htm' %}
+
+{% block includes %}
+    <script src='{{static_url('/static/js/elections/vote.js')}}'></script>
+{% endblock %}
+
+{% block content %}
+    <h1>Docent van het jaar IW</h1>
+
+    <h2>Stemmen</h2>
+    <p>
+        Stem hier op je favoriete docent uit de lijst genomineerden.
+    </p>
+
+    <form method='post'>
+        <div class='row'>
+            <div class='col-md-6'>
+                {% for nominee in nominees[:nominee_bound] %}
+                    <div class='radio'>
+                        <label>
+                            <input type='radio' name='vote_id' value='{{ nominee.id }}' {% if vote.nominee_id == nominee.id %}checked='checked'{% endif %} />
+                            {{ nominee.name }}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class='col-md-6'>
+                {% for nominee in nominees[nominee_bound:] %}
+                    <div class='radio'>
+                        <label>
+                            <input type='radio' name='vote_id' value='{{ nominee.id }}' {% if vote.nominee_id == nominee.id %}checked='checked'{% endif %} />
+                            {{ nominee.name }}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <button type='submit' class='btn btn-primary' autocomplete='off'>Stem</button>
+    </form>
+{% endblock %}

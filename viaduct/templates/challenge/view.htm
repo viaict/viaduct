@@ -3,7 +3,6 @@
 {% extends "content.htm" %}
 
 {% block content %}
-<script src='/static/js/datepicker.js'></script>
 	<form method="post" action="{{ url_for('challenge.update', challenge_id=challenge.id) }}">
 		<fieldset>
 			<legend>Challenge {% if challenge.id %}bewerken{% else %}aanmaken{% endif %}</legend>

@@ -50,4 +50,5 @@ def home():
 
         revisions.append(revision)
 
-    return render_template('home/home.htm', data=revisions, title='Homepage')
+    return render_template('home/home.htm', revisions=revisions,
+                           title='Homepage')

@@ -3,6 +3,20 @@
 
 
 {% extends "content.htm" %}
+{% block includes %}
+    <script src='{{static_url("/static/js/challenges/api.js")}}'></script>
+    <script>
+    $( document ).ready(function() {
+
+        /* Prevent the expand function being called when clicking on a link */
+        $( document).on('click', 'a.search_click', function(e){
+            e.preventdefaults();
+            document.location.href=$(this).attr("href");
+        });
+    });
+    </script>
+{% endblock %}
+
 
 
 {% block content %}
@@ -40,13 +54,13 @@
             </div>
             <div class="col-xs-12 col-sm-9">
                 <h3 class="name">{{current_user.name}}</h3><br/>
-            </div>                        
+            </div>
 			<div class="col-xs-12 col-sm-1">
                 <h3 class="name"><span id="user_points">{{user_points}}</span></h3><br/>
             </div>
             <div class="clearfix"></div>
         </li>
-    
+
 	<div  class="row">
 		<div class="col-md-12">
 		<h1> Open challenges </h1>
@@ -130,7 +144,7 @@
                 <div class="panel-heading c-list">
                     <span class="title">Ranking</span>
                 </div>
-                
+
                 <div class="row" style="display: none;">
                     <div class="col-xs-12">
                         <div class="input-group c-search">
@@ -141,7 +155,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <ul class="list-group" id="contact-list">
 	                {% set counter = 1 -%}
 					{% for user in ranking %}
@@ -151,7 +165,7 @@
                         </div>
                         <div class="col-xs-12 col-sm-8">
                             <h3 class="name">{{user.user.name}}</h3><br/>
-                        </div>                        
+                        </div>
 						<div class="col-xs-12 col-sm-2">
                             <h3 class="name">{{user.points}}</h3><br/>
                         </div>
@@ -164,17 +178,5 @@
             </div>
         </div>
 	</div>
-<script src='/static/js/challenges/api.js'></script>
-<script>
-$( document ).ready(function() {
-
-	/* Prevent the expand function being called when clicking on a link */
-    $( document).on('click', 'a.search_click', function(e){
-    	e.preventdefaults();
-    	document.location.href=$(this).attr("href");
-    });
-});
-</script>
-
 
 {% endblock %}
