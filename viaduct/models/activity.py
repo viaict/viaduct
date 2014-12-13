@@ -49,13 +49,22 @@ class Activity(db.Model, BaseEntity):
         self.form_id = form_id
 
     def get_time(self):
+        today = datetime.datetime.now()
         if self.start_time.month == self.end_time.month and \
                 self.start_time.day == self.end_time.day:
-            return self.start_time.strftime("%A %d %b, %H:%M - ") + \
-                self.end_time.strftime("%H:%M")
+            if self.start_time.year == today.year:
+                return self.start_time.strftime("%A %d %b, %H:%M - ") + \
+                    self.end_time.strftime("%H:%M")
+            else:
+                return self.start_time.strftime("%A %d %b %Y, %H:%M - ") + \
+                    self.end_time.strftime("%H:%M")
         else:
-            return self.start_time.strftime("%a. %d %b (%H:%M) - ") + \
-                self.end_time.strftime("%a. %d %b (%H:%M)")
+            if self.start_time.year == today.year:
+                return self.start_time.strftime("%a. %d %b (%H:%M) - ") + \
+                    self.end_time.strftime("%a. %d %b (%H:%M)")
+            else:
+                return self.start_time.strftime("%a. %d %b %Y (%H:%M) - ") + \
+                    self.end_time.strftime("%a. %d %b %Y (%H:%M)")
 
     def get_short_description(self, characters):
         if (len(self.description) > characters):

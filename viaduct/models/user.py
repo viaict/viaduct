@@ -30,12 +30,15 @@ class User(db.Model, BaseEntity):
     honorary_member = db.Column(db.Boolean, default=False)
     favourer = db.Column(db.Boolean, default=False)
     payed_date = db.Column(db.DateTime)
+    birth_date = db.Column(db.Date)
+    study_start = db.Column(db.Date)
 
     education = db.relationship(Education,
                                 backref=db.backref('user', lazy='dynamic'))
 
     def __init__(self, email=None, password=None, first_name=None,
-                 last_name=None, student_id=None, education_id=None):
+                 last_name=None, student_id=None, education_id=None,
+                 birth_date=None, study_start=None):
         if not email:
             self.id = 0
 
@@ -45,6 +48,9 @@ class User(db.Model, BaseEntity):
         self.last_name = last_name
         self.student_id = student_id
         self.education_id = education_id
+
+        self.birth_date = birth_date
+        self.study_start = study_start
 
     def __setattr__(self, name, value):
         """ if has_payed is set to true, we want to store the date that

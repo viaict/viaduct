@@ -20,7 +20,7 @@ $(function() {
             var error = $.parseJSON(jqHXR.responseText).error;
 
             clearflash();
-            flash(error, 'error');
+            flash(error, 'danger');
 
             $btns.removeClass('disabled');
         });

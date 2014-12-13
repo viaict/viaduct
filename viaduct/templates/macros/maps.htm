@@ -32,7 +32,7 @@
 
 			$("#acc").click(function() {
 				if (!loaded) {
-					$.get("http://maps.googleapis.com/maps/api/geocode/json?address={{ address }}&sensor=false",
+					$.get("https://maps.googleapis.com/maps/api/geocode/json?address={{ address }}&sensor=false",
 						function(data) {
 							if (! data.results)
 								data = JSON.parse(data);

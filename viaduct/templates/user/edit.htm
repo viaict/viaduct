@@ -4,48 +4,52 @@
 
 {% block content %}
 <form action="" method="post" name="sign_up" class="form-horizontal" enctype="multipart/form-data" >
-	<fieldset>
-		<legend>{% if user.id %}Bewerk{% else %}Maak{% endif %} lid</legend>
+    <fieldset>
+        <legend>{% if user.id %}Bewerk{% else %}Maak{% endif %} lid</legend>
 
-		{{ form.csrf_token }}
-		{{ render_field(form.email) }}
+        {{ form.csrf_token }}
+        {{ render_field(form.email) }}
 
-			{{ render_field(form.password) }}
-			{{ render_field(form.repeat_password) }}
+            {{ render_field(form.password) }}
+            {{ render_field(form.repeat_password) }}
 
-		{{ render_field(form.first_name) }}
-		{{ render_field(form.last_name) }}
+        {{ render_field(form.first_name) }}
+        {{ render_field(form.last_name) }}
 
-		{{ render_field(form.student_id) }}
-		{{ render_field(form.education_id) }}
-		{{ render_field(form.locale) }}
-		{{ render_field(form.avatar) }}
-		{% if isAdmin %}
-			{{render_field(form.has_payed) }}
-			{{render_field(form.honorary_member) }}
-			{{render_field(form.favourer) }}
-		{% endif %}
-		{% if user.avatar %}
-		<div class="control-groep">
-			<div class="controls">
-				<a href='/users/remove_avatar/{{ user.id }}' class='btn btn-danger'>Verwijder avatar</a>
-			</div>
-		</div>
-		{% endif %}
+        {{ render_field(form.birth_date) }}
 
-		{#
-		<div class="control-group">
-			<div class="controls">
-				{{ form.recaptcha }}
-			</div>
-		</div>
-		#}
+        {{ render_field(form.student_id) }}
+        {{ render_field(form.education_id) }}
+        {{ render_field(form.study_start) }}
 
-		<div class="control-group">
-			<div class="controls">
-				<button type="submit" class="btn btn-success">{% if user.id %}Bewerk{% else %}Maak{% endif %} lid</button>
-			</div>
-		</div>
-	</fieldset>
+        {{ render_field(form.locale) }}
+        {{ render_field(form.avatar) }}
+        {% if isAdmin %}
+            {{render_field(form.has_payed) }}
+            {{render_field(form.honorary_member) }}
+            {{render_field(form.favourer) }}
+        {% endif %}
+        {% if user.avatar %}
+        <div class="control-groep">
+            <div class="controls">
+                <a href='/users/remove_avatar/{{ user.id }}' class='btn btn-danger'>Verwijder avatar</a>
+            </div>
+        </div>
+        {% endif %}
+
+        {#
+        <div class="control-group">
+            <div class="controls">
+                {{ form.recaptcha }}
+            </div>
+        </div>
+        #}
+
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn btn-success">{% if user.id %}Bewerk{% else %}Maak{% endif %} lid</button>
+            </div>
+        </div>
+    </fieldset>
 </form>
 {% endblock %}
