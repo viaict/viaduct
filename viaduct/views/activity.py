@@ -43,15 +43,17 @@ def view(archive="", page=1):
         activities = Activity.query \
             .filter(Activity.end_time < datetime.datetime.today()) \
             .order_by(Activity.start_time.desc())
+        title = "activiteiten archief - pagina " + str(page)
     else:
         activities = Activity.query \
             .filter(Activity.end_time >
                     (datetime.datetime.now() - datetime.timedelta(hours=12))) \
             .order_by(Activity.start_time.asc())
+        title = "activiteiten - page " + str(page)
 
     return render_template('activity/view.htm',
                            activities=activities.paginate(page, 10, False),
-                           archive=archive)
+                           archive=archive, title=title)
 
 
 @blueprint.route('/remove/<int:activity_id>/', methods=['POST'])
@@ -130,7 +132,8 @@ def get_activity(activity_id=0):
                         "inschrijvingen" % activity.num_attendants
 
     return render_template('activity/view_single.htm', activity=activity,
-                           form=form, login_form=get_login_form())
+                           form=form, login_form=get_login_form(),
+                           title=activity.name)
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
@@ -237,7 +240,10 @@ def create(activity_id=None):
     else:
         flash_form_errors(form)
 
-    return render_template('activity/create.htm', activity=activity, form=form)
+    title = "edit " + str(activity.name)
+
+    return render_template('activity/create.htm', activity=activity, form=form,
+                           title=title)
 
 
 @blueprint.route('/transaction/<int:result_id>/', methods=['GET', 'POST'])
