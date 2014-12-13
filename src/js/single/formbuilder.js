@@ -2,10 +2,7 @@
 
 $.fn.formbuilder = function() {
 
-	var info = $('<div class="alert alert-info"><b>Formulier commandos</b> Naam | type ' +
-							 '(Waar de type een "textarea", "radio", "checkbox" of "select" is)' +
-							 '<p>Radio, checkbox en select opties maak je aan door de regels met <b>"-"</b> te beginnen. <p>Verder zijn er een paar shortcut "types" ("weekend", "shirt"), om automatisch meerdere velden in één keer aan te maken. <p><b>Bijvoorbeeld:</b><br>Dieet | checkbox<br>- Vlees<br>- Vegetarisch<br>- Veganist' +
-'</div>');
+  var info = $('<div class="alert alert-info"><a target="_blank" href="https://github.com/Tessmore/formbuilder">Tips en voorbeelden!</a></div>');
   var textarea = $('<textarea name="origin" class="span6" style="min-height:200px" placeholder="Type hier je formulier commandos" />');
   var result   = $('<input type="hidden" name="html" />').hide();
   var form     = $('<form />');
@@ -22,113 +19,130 @@ $.fn.formbuilder = function() {
   };
 
   this
-		.append(info)
+    .append(info)
     .append(textarea)
-		.append('<h4>Voorbeeld van dit formulier</h4>')
+    .append('<h4>Voorbeeld van dit formulier</h4>')
     .append(form)
     .after(result); // contains the entire form
 
-  textarea.on('keyup', function() {
-    form.html(''); // Reset the control
+  // Build the form on ENTER, losing focus or after certain periods of typing
+  textarea.on('keyup change', function() {
+    form.html(''); // Reset the form
+
     var lines = this.value.split("\n");
 
-
-    for (var i=0; i < lines.length; i++) {
-
-      if (lines[i].charAt(0) == '#') {
-				var str	= '<h3>' + lines[i].substring(1) + '</h3>';
-
-				if (form.children().length > 0)
-					form.children().last().after(str);
-				else
-					form.prepend(str);
-
-				continue;
-			}
-
-      if (lines[i].charAt(0) == 'p') {
-				var str = '<p>' + lines[i].substring(1) + '</p>';
-
-				if (form.children().length > 0)
-        	form.children().last().after(str);
-        else
-					form.prepend(str);
+    for (var i=0, N=lines.length; i<N; i++) {
+      // Skip empty lines
+      if (lines[i].trim() === "") {
+        // Multiple empty lines is whitespace
+        if (i+1 < N && lines[i+1].trim() === "")
+          form = appendText(form, '<br>');
 
         continue;
       }
 
-      if (lines[i].charAt(0) == '>') {
-				form.find('label').last().after('<small>' + lines[i].substring(1) + '</small>');
+      // Allow whitespacing
+      if (lines[i].trim() === "---") {
+        form = appendText(form, '<br>');
+        continue;        
+      }
+
+      /**
+        Start checking for symbols
+      */
+
+      var firstChar = lines[i].charAt(0);
+
+      // (sub) title
+      if (firstChar === '#') {
+        form = appendText(form, '<h3>' + lines[i].substring(1) + '</h3>');
         continue;
       }
 
-      options = parseLine(lines[i]);
-      type    = options.type || "text";
+      // Plain text / descriptions
+      if (firstChar == '=') {
+        form = appendText(form, '<p>' + lines[i].substring(1) + '</p>');
+        continue;
+      }
 
-			if (type === "weekend") {
-				lines[i] = '';
-        lines.splice(i, 0,
-					'Dieet | checkbox',
-					'- Vegetarisch',
-					'- Veganistisch',
+      // Label description
+      if (firstChar == '>') {
+        // Add description to recently added label
+        form.find('label')
+          .last()
+          .after('<small>' + lines[i].substring(1) + '</small>');
 
-					'shirt',
-					'Noodnummer*',
-					'> Telefoon nummer in geval van nood',
-					'Allergie/medicatie | textarea',
-					'> Waar moeten we rekening mee houden'
-				);
+        continue;
+      }
+
+      // Macro's
+      if (startsWith(lines[i], "weekend*")) {
+        lines.splice(i, 1,
+          'Dieet | checkbox',
+          '- Vegetarisch',
+          '- Veganistisch',
+
+          'shirt*',
+       
+          'Noodnummer*',
+          '> Telefoon nummer in geval van nood',
+          'Allergie/medicatie | textarea',
+          '> Waar moeten we rekening mee houden'
+        );
 
         textarea.val(lines.join("\n"));
-				textarea.trigger('keyup');
+        textarea.trigger('keyup');
         break;
-			}
+      }
 
-			if (type === "shirt") {
-				lines[i] = '';
-				lines.splice(i, 0, '',
-					'Shirt* maat | select',
-					'- Small',
-					'- Medium',
-					'- Large'
-				);
+      if (startsWith(lines[i], "shirt*")) {
+        lines.splice(i, 1,
+          'Maat shirt* | select',
+          '- Small',
+          '- Medium',
+          '- Large'
+        );
 
-				textarea.val(lines.join("\n"));
-				textarea.trigger('keyup');
-				break;
-			}
+        textarea.val(lines.join("\n"));
+        textarea.trigger('keyup');
+        break;
+      }
 
-      if (! options || !fields[type])
-        continue;
 
+      /**
+        Check what type of field must be inserted
+      */
+ 
+      options = parseLine(lines[i]);
+     
       group
-				.attr('req', options.required)
+        .attr('req', options.required)
         .append(label.text(options.label))
         .append(
           controls.html(
-            fields[type]
+            fields[options.type]
               .attr('name', options.name)
               .attr('id',   options.id)
          ));
 
-      if (type === 'select' || type === 'radio' || type === 'checkbox') {
-        fields[type].html(''); // Reset the list
+      if (options.type === 'select' || options.type === 'radio' || options.type === 'checkbox') {
+        fields[options.type].html(''); // Reset the list
 
         while (++i < lines.length && lines[i] && (lines[i].charAt(0) == '*' || lines[i].charAt(0) == '-')) {
-          value = stripp(lines[i]);
+          value = ltrim(lines[i]);
 
-          if (type === 'select')
-            fields[type].append($('<option />').text(value));
+          if (options.type === 'select')
+            fields[options.type].append($('<option />').text(value));
           else
-            fields[type].append(
+            fields[options.type].append(
               '<label class="checkbox">' +
-                '<input type="' + type + '" name="' + options.name + '[]" value="' + value + '">' +
+                '<input type="' + options.type + '" name="' + options.name + '[]" value="' + value + '">' +
                 value +
               '</label>'
             );
         }
 
-        i--; // Go back 1 step to parse the next element without #hashtag
+        i--; // Go back 1 step to parse the next element
       }
 
       group.clone().appendTo(form);
@@ -137,38 +151,62 @@ $.fn.formbuilder = function() {
     result.val('<div id="custom_form_data">' + form.html() + '</div>');
   });
 
-	function strip(str) {
-		return str.replace(/[\+\*\-]/g, '');
-	}
+  function appendText(form, str) {
+    if (form.children().length > 0)
+      form.children().last().after(str);
+    else
+      form.prepend(str);
 
-	// Also strips spaces
-	function strip_(str) {
-        return str.replace(/[\+\*\- ]/g, '');
-	}
+    return form;
+  }
 
-    function stripp(str) {
-        return str.replace(/[\+\*\-] /g, '');
-    }
+  function parseLine(line) {
+    var line  = line.split("|");
+    var label = line[0].trim();
 
-	function parseLine(line) {
-		var line  = line.split("|");
-		var label = strip(line[0]);
-		var name  = $.trim(label).replace(/[ ]/g, '_').toLowerCase();
-
-    if (label == "") // Skip empty lines
-      return false;
+    // Just take first 12 chars to avoid very long key names
+    var name  = label.substring(0,12).replace(/[ ]/g, '_').toLowerCase();
 
     var options = {
       'label'    : label,
       'name'     : name,
-      'required' : line[0].indexOf('*') > 0 ? "true" : "false"
+      'type'     : "text",
+      'required' : line[0].indexOf('*') > -1 ? "true" : "false"
     };
 
     if (line[1])
-      options['type'] = strip_(line[1]);
-		else if (options.name === 'weekend' || options.name === 'shirt')
-			options['type'] = options.name;
+      options['type'] = guessType(line[1]);
 
     return options;
   }
-};
+
+  function guessType(str) {
+    if (contains(str, "rad"))
+      return "radio";   
+    else if (contains(str, "check"))
+      return "checkbox"
+    else if (contains(str, "sele"))  
+      return "select"
+    else if (contains(str, "area"))
+      return "textarea"
+    else
+      return "text";
+  }
+
+  function ltrim(str) {
+    var temp = str.trim();
+
+    if (startsWith(str, '-') || startsWith(str, '*'))
+      temp = temp.substring(1).trim();
+
+    return temp;
+  }
+
+  function contains(str, sub) {
+    return str.indexOf(sub) > -1;
+  }
+
+  function startsWith(str, sub) {
+    return str.substring(0, sub.length).trim().toLowerCase() === sub.toLowerCase();
+  }
+}
