@@ -93,9 +93,6 @@
                 selected_ids.push(selected_rows.data()[i][0]);
                 selected_users += "- " + selected_rows.data()[i][1] + "\n";
             }
-
-            console.log(selected_ids);
-
             var json_data = { "selected_ids" : selected_ids }
             if (confirm('Do you surely want to delete these users?\n' + selected_users )) {
                 $.ajax({
