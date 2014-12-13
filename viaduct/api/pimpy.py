@@ -73,9 +73,11 @@ class PimpyAPI:
         if minute_id <= 0:
             minute_id = 1
 
+        group_id = int(group_id)
+
         task = Task.query.filter(
-            Task.title == name and
-            Task.content == content and
+            Task.title == name,
+            Task.content == content,
             Task.group_id == group_id).first()
 
         if task:
