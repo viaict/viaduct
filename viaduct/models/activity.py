@@ -3,6 +3,7 @@ import datetime
 from viaduct.models import BaseEntity
 from babel.dates import format_timedelta
 
+
 # Model to support Facebook/Google API integration
 class Activity(db.Model, BaseEntity):
     __tablename__ = 'activity'
@@ -66,6 +67,12 @@ class Activity(db.Model, BaseEntity):
                 return self.start_time.strftime("%a. %d %b %Y (%H:%M) - ") + \
                     self.end_time.strftime("%a. %d %b %Y (%H:%M)")
 
+    def is_in_future(self):
+        return datetime.datetime.now() < self.start_time
+
+    def is_in_past(self):
+        return datetime.datetime.now() >= self.end_time
+
     def get_short_description(self, characters):
         if (len(self.description) > characters):
             short_description = self.description[:characters].strip()
@@ -77,12 +84,33 @@ class Activity(db.Model, BaseEntity):
 
     def get_timedelta_to_start(self):
         return datetime.datetime.now() - self.start_time
-        
+
     def get_timedelta_to_start_formatted(self, locale="nl_NL"):
         """
         Returns over 1 dag
         """
         return format_timedelta(self.get_timedelta_to_start(), locale=locale)
 
+    def get_timedelta_from_end(self):
+        return datetime.datetime.now() - self.end_time
+
+    def get_timedelta_from_end_formatted(self, locale='nl_NL'):
+        return format_timedelta(self.get_timedelta_from_end(), locale=locale)
+
+    def get_timedelta_to_end(self):
+        return self.end_time - datetime.datetime.now()
+
+    def get_timedelta_to_end_formatted(self, locale='nl_NL'):
+        return format_timedelta(self.get_timedelta_to_end(), locale=locale)
+
     def format_form_time(self, time):
         return time.strftime("%Y-%m-%d %H:%M")
+
+    def till_now(self):
+        if self.is_in_future():
+            return 'over %s' % (self.get_timedelta_to_start_formatted())
+
+        if self.is_in_past():
+            return '%s geleden' % (self.get_timedelta_from_end_formatted())
+
+        return 'nog %s' % (self.get_timedelta_to_end_formatted())
