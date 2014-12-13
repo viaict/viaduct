@@ -21,7 +21,7 @@
 			{% for permission, form_entry in permissions: %}
 			<tr>
 				<td>
-					{{ permission.module_name }}
+                    <label> {{ permission.module_name }} </label>
 				</td>
 				<td>
 					{% if can_write %}
