@@ -3,7 +3,7 @@
 $.fn.formbuilder = function() {
 
   var info = $('<div class="alert alert-info"><a target="_blank" href="https://github.com/Tessmore/formbuilder">Tips en voorbeelden!</a></div>');
-  var textarea = $('<div class="input-group"><textarea name="origin" class="form-control" style="min-height:200px" placeholder="Type hier je formulier commandos" /></div>');
+  var textarea = $('<textarea name="origin" class="form-control" style="min-height:200px" placeholder="Type hier je formulier commandos" />');
   var result   = $('<input type="hidden" name="html" />').hide();
   var form     = $('<form />');
   var group    = $('<div class="control-group" />');
@@ -21,7 +21,9 @@ $.fn.formbuilder = function() {
   this
     .append(info)
     .append(textarea)
+    .append('<div class="input-group">')
     .append('<h4>Voorbeeld van dit formulier</h4>')
+    .append('</div>')
     .append(form)
     .after(result); // contains the entire form
 
@@ -32,7 +34,7 @@ $.fn.formbuilder = function() {
     if (typeof this === "undefined") {
       return;
     }
-    
+
     var lines = this.value.split("\n");
 
     for (var i=0, N=lines.length; i<N; i++) {
