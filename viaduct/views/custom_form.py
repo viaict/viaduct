@@ -96,7 +96,7 @@ def view_single(form_id=None):
             'id': entry.id,
             'owner': entry.owner,
             'form_entry': html,
-            'class': 'class="is_reserve"' if entry.is_reserve else '',
+            'class': 'class=is_reserve' if entry.is_reserve else '',
             'has_payed': entry.has_payed,
             'time': time
         })
