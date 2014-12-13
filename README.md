@@ -1,5 +1,5 @@
 # Version.
-1.3.1
+1.4.0.0
 
 #Viaduct (Opensourced, yeah)
 ## Tutorial
@@ -9,18 +9,26 @@ See [tutorial](TUTORIAL.md).
 OS Packages: Python, SQLite, pip, virtualenv, mysql.
 Install with your favorite packagemanager.
 
+Get the secret via config files with secrets for the server:
+```bash
+git submodule init
+git submodule update
+```
+Set up the awesome hooks:
+```bash
+cd .git/hooks
+ln -s ../../secrets/post-* .
+```
+
 Python dependencies are in `requirements.txt`. Install through pip. Usage of virtual environments is recommended:
 
 	virtualenv venv/
 	. venv/bin/activate
 	pip install -r requirements.txt
 
-A `config.py` file is needed to run the site. Modify `local_config.py` with your settings and rename the file.
-
 Build dependencies are for ruby and npm:
 * Install Ruby gems
     - Install Ruby
-    - `cp def_config.rb config.rb`
     - `gem install bundler`
     - `bundle install` (if that does not work try this:
       http://guides.rubygems.org/faqs/#user-install)

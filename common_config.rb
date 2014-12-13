@@ -11,4 +11,3 @@ images_dir = "viaduct/static/img"
 http_images_path = "/static/img"
 javascript_dir = "viaduct/static/js"
 http_javascript_path = "/static/js"
-output_style = :nested

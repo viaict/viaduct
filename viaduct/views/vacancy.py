@@ -47,7 +47,8 @@ def view_list(page_nr=1):
             vacancies = vacancies.paginate(page_nr, 15, False)
 
         return render_template('vacancy/list.htm', vacancies=vacancies,
-                               search=search, path=FILE_FOLDER)
+                               search=search, path=FILE_FOLDER,
+                               title="Vacatures")
 
     if not GroupPermissionAPI.can_write('vacancy'):
         vacancies = Vacancy.query.filter(and_(Vacancy.start_date <
@@ -68,7 +69,7 @@ def view_list(page_nr=1):
         vacancies = vacancies.paginate(page_nr, 15, False)
 
     return render_template('vacancy/list.htm', vacancies=vacancies,
-                           search="", path=FILE_FOLDER)
+                           search="", path=FILE_FOLDER, title="Vacatures")
 
 
 @blueprint.route('/create/', methods=['GET'])
@@ -93,7 +94,8 @@ def edit(vacancy_id=None):
     form.company_id.choices = [(c.id, c.name) for c in Company.query.
                                order_by('name')]
 
-    return render_template('vacancy/edit.htm', vacancy=vacancy, form=form)
+    return render_template('vacancy/edit.htm', vacancy=vacancy, form=form,
+                           title="Vacatures")
 
 
 @blueprint.route('/create/', methods=['POST'])

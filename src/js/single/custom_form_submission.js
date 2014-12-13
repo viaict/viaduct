@@ -57,7 +57,7 @@ $(document).ready(function() {
 					else if (result == "edit")
 						flash("Je formulier is aangepast", "alert");
 					else
-						flash("Er is iets misgegaan bij het invullen :(", "error");
+						flash("Er is iets misgegaan bij het invullen :(", "danger");
 				}
 			);
 		}

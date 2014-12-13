@@ -5,9 +5,17 @@ from flask.ext.babel import Babel
 from flask.ext.login import LoginManager, current_user
 from flask.ext.sqlalchemy import SQLAlchemy
 from config import LANGUAGES
-from viaduct.utilities import import_module
+from viaduct.utilities import import_module, serialize_sqla
 from markdown import markdown
 import datetime
+import json
+
+
+version = 'v1.4.0.0'
+
+
+def static_url(url):
+    return url + '?v=' + version
 
 
 def is_module(path):
@@ -41,14 +49,6 @@ def register_views(application, path, extension=''):
                 application.register_blueprint(blueprint)
 
 
-def model_to_dict(self):
-    result = {}
-
-    for column in self.__table__.columns:
-        result[column.name] = getattr(self, column.name)
-
-    return result
-
 # Set up the application and load the configuration file.
 application = Flask(__name__)
 application.config.from_object('config')
@@ -73,7 +73,6 @@ login_manager.login_view = 'user.sign_in'
 
 # Set up the database.
 db = SQLAlchemy(application)
-db.Model.to_dict = model_to_dict
 
 from viaduct.api.user import UserAPI
 from viaduct.api.group import GroupPermissionAPI
@@ -86,6 +85,11 @@ application.jinja_env.globals.update(Markup=Markup)
 application.jinja_env.globals.update(UserAPI=UserAPI)
 application.jinja_env.globals.update(GroupPermissionAPI=GroupPermissionAPI)
 application.jinja_env.globals.update(datetime=datetime)
+application.jinja_env.globals.update(json=json)
+application.jinja_env.globals.update(serialize_sqla=serialize_sqla)
+application.jinja_env.globals.update(len=len)
+
+application.jinja_env.globals.update(static_url=static_url)
 
 # Register the blueprints.
 import api  # noqa

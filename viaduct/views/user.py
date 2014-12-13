@@ -147,6 +147,8 @@ def edit(user_id=None):
             user.favourer = form.favourer.data
         user.student_id = form.student_id.data
         user.education_id = form.education_id.data
+        user.birth_date = form.birth_date.data
+        user.study_start = form.study_start.data
 
         if form.password.data != '':
             user.password = bcrypt.hashpw(form.password.data, bcrypt.gensalt())
@@ -198,7 +200,8 @@ def sign_up():
         user = User(form.email.data, bcrypt.hashpw(form.password.data,
                     bcrypt.gensalt()), form.first_name.data,
                     form.last_name.data, form.student_id.data,
-                    form.education_id.data)
+                    form.education_id.data, form.birth_date.data,
+                    form.study_start.data)
 
         exists = User.query.filter(User.email == user.email)
 

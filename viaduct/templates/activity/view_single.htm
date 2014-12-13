@@ -5,14 +5,14 @@
 {% extends "content.htm" %}
 
 {% block includes %}
-{% if activity.form_data %}
-    <script src="/static/js/unserialize.js"></script>
-    <script>
-        $("#custom").unserializeForm("{{ activity.form_data | safe }}");
-    </script>
-{% endif %}
+    {% if activity.form_data %}
+        <script src={{static_url("/static/js/unserialize.js")}}></script>
+        <script>
+            $("#custom").unserializeForm("{{ activity.form_data | safe }}");
+        </script>
+    {% endif %}
+    <script src={{static_url("/static/js/custom_form_submission.js")}}></script>
 
-<script src="/static/js/custom_form_submission.js"></script>
 {% endblock %}
 
 
@@ -145,23 +145,23 @@
 </div>
 
 <div class="row">
-    <div class="col-md-8">
-        <h4>Prijs:
-        {% if not activity.price == "gratis"  %}
-            <i class="glyphicon glyphicon-euro"></i>
-        {% endif %}
-        {{ activity.price }}
-        </h4>
+	<div class="col-md-8">
+		<h4>Prijs:
+		{% if not activity.price == "gratis"  %}
+        &euro;
+		{% endif %}
+		{{ activity.price }}
+		</h4>
 
-        <div class="time">
-            <i class="glyphicon glyphicon-calendar"></i>
-            {{ activity.get_time() }}
-        </div>
-    </div>
+		<div class="time">
+			<i class="glyphicon glyphicon-calendar"></i>
+			{{ activity.get_time() }}
+		</div>
+	</div>
 
-    <div class="col-md-4">
-        <img src="/static/activity_pictures/{{ activity.picture }}">
-    </div>
+	<div class="col-md-4">
+		<img src="/static/activity_pictures/{{ activity.picture }}">
+	</div>
 </div>
 
 <hr>

@@ -62,11 +62,9 @@ def view_list(page=1):
         companies = Company.query.filter().order_by(Company.name)\
             .order_by(Company.rank)
         for i, company in enumerate(companies):
-            print(i, company)
             if company.contract_start_date < datetime.date(datetime.utcnow()) \
                     and company.contract_end_date < datetime.date(datetime
                                                                   .utcnow()):
-                print(i)
                 companies[i].expired = True
         companies = companies.paginate(page, 15, False)
         # todo fix message if inactive
