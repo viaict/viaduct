@@ -49,8 +49,8 @@ def upload_file():
         session['prev'] = 'examination.upload_file'
         return abort(403)
 
-    courses = Course.query.all()
-    educations = Education.query.all()
+    courses = Course.query.order_by(Course.name).all()
+    educations = Education.query.order_by(Education.name).all()
 
     if request.method == 'POST':
         file = request.files['file']
@@ -209,8 +209,9 @@ def edit_examination():
 
     path = '../static/'
 
-    courses = Course.query.all()
-    educations = Education.query.all()
+    courses = Course.query.order_by(Course.name).all()
+    educations = Education.query.order_by(Education.name).all()
+
     message = False
 
     if request.method == 'POST':
