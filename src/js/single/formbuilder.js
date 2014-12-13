@@ -3,7 +3,7 @@
 $.fn.formbuilder = function() {
 
   var info = $('<div class="alert alert-info"><a target="_blank" href="https://github.com/Tessmore/formbuilder">Tips en voorbeelden!</a></div>');
-  var textarea = $('<textarea name="origin" class="span6" style="min-height:200px" placeholder="Type hier je formulier commandos" />');
+  var textarea = $('<div class="input-group"><textarea name="origin" class="form-control" style="min-height:200px" placeholder="Type hier je formulier commandos" /></div>');
   var result   = $('<input type="hidden" name="html" />').hide();
   var form     = $('<form />');
   var group    = $('<div class="control-group" />');
