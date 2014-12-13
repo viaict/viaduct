@@ -69,8 +69,8 @@ $.fn.formbuilder = function() {
 				lines[i] = '';
         lines.splice(i, 0,
 					'Dieet | checkbox',
-					'-Vegetarisch',
-					'-Veganistisch',
+					'- Vegetarisch',
+					'- Veganistisch',
 
 					'shirt',
 					'Noodnummer*',
@@ -88,9 +88,9 @@ $.fn.formbuilder = function() {
 				lines[i] = '';
 				lines.splice(i, 0, '',
 					'Shirt* maat | select',
-					'-Small',
-					'-Medium',
-					'-Large'
+					'- Small',
+					'- Medium',
+					'- Large'
 				);
 
 				textarea.val(lines.join("\n"));
@@ -111,14 +111,11 @@ $.fn.formbuilder = function() {
               .attr('id',   options.id)
          ));
 
-      console.log(type);
       if (type === 'select' || type === 'radio' || type === 'checkbox') {
         fields[type].html(''); // Reset the list
 
         while (++i < lines.length && lines[i] && (lines[i].charAt(0) == '*' || lines[i].charAt(0) == '-')) {
-            console.log(lines[i]);
           value = stripp(lines[i]);
-            console.log(value);
 
           if (type === 'select')
             fields[type].append($('<option />').text(value));
@@ -167,7 +164,6 @@ $.fn.formbuilder = function() {
       'required' : line[0].indexOf('*') > 0 ? "true" : "false"
     };
 
-    console.log(line[1]);
     if (line[1])
       options['type'] = strip_(line[1]);
 		else if (options.name === 'weekend' || options.name === 'shirt')
