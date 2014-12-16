@@ -45,7 +45,7 @@ def nominate():
     if not can_nominate():
         return redirect(url_for('elections.main'))
 
-    if current_user is None or not current_user.has_payed:
+    if not current_user or not current_user.has_payed:
         return abort(403)
 
     nominated_ids = [n.nominee.id for n in current_user.nominations.all()]
@@ -54,7 +54,6 @@ def nominate():
         .filter(db.or_(Nominee.valid == True, Nominee.valid == None))\
         .filter(db.not_(Nominee.id.in_(nominated_ids)))\
         .order_by(Nominee.name).all()  # noqa
-    print(nominees)
 
     return render_template('elections/nominate.htm',
                            title='Docent van het jaar IW/Nomineren',
