@@ -14,7 +14,7 @@ blueprint = Blueprint('jira', __name__)
 @blueprint.route('/create-issue/', methods=['GET', 'POST'])
 def create_issue():
 
-    if not current_user:
+    if not current_user or not current_user.has_payed:
         abort(403)
 
     form = CreateIssueForm(request.form)
