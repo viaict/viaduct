@@ -63,6 +63,25 @@
     </tbody>
 </table>
 
+<form method='post' action='{{ url_for('custom_form.export', form_id=custom_form.id) }}'>
+    <div class='form-group'>
+        <label>
+            <input type='checkbox' name='user_id' /> Gebruiker ID
+        </label>
+    </div>
+    <div class='form-group'>
+        <label>
+            <input type='checkbox' name='user_email' /> Gebruiker email
+        </label>
+    </div>
+    <div class='form-group'>
+        <label>
+            <input type='checkbox' name='user_name' /> Gebruiker naam
+        </label>
+    </div>
+    <button type='submit' class='btn btn-default'>Exporteren</button>
+</form>
+
 {% else %}
 <p>Er zijn nog geen resultaten om te tonen</p>
 {% endif %}

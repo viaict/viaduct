@@ -1,5 +1,5 @@
 from flask import flash, redirect, render_template, request, url_for, abort
-from flask import Blueprint
+from flask import Blueprint, Response
 from flask.ext.login import current_user
 
 from viaduct import db
@@ -11,6 +11,9 @@ from viaduct.models.custom_form import CustomForm, CustomFormResult, \
 from viaduct.api.group import GroupPermissionAPI
 
 from sqlalchemy import desc
+
+import StringIO
+import csv
 
 blueprint = Blueprint('custom_form', __name__, url_prefix='/forms')
 
@@ -105,6 +108,36 @@ def view_single(form_id=None):
 
     return render_template('custom_form/view_results.htm',
                            custom_form=custom_form)
+
+
+@blueprint.route('/export/<int:form_id>/', methods=['POST'])
+def export(form_id):
+    dt = request.form
+    get_data = []
+
+    if 'user_id' in dt:
+        get_data.append(lambda r: r.owner_id)
+    if 'user_email' in dt:
+        get_data.append(lambda r: r.owner.email)
+    if 'user_name' in dt:
+        get_data.append(lambda r: '%s %s' % (r.owner.first_name,
+                                             r.owner.last_name))
+
+    io = StringIO.StringIO()
+    wrt = csv.writer(io)
+
+    form = CustomForm.query.get(form_id)
+    for r in form.custom_form_results:
+        d = []
+        for gd in get_data:
+            d.append(gd(r))
+
+        wrt.writerow(d)
+
+    def generate():
+        yield io.getvalue()
+
+    return Response(generate(), mimetype='text/csv')
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
