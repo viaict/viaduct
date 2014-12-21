@@ -1,6 +1,13 @@
 from viaduct import db
 from viaduct.models import BaseEntity
 
+from collections import OrderedDict
+
+
+def export_form_data(r):
+    import re
+    return re.sub(r'%[0-9A-F]{2}', '', r.data)
+
 
 class CustomForm(db.Model, BaseEntity):
     __tablename__ = 'custom_form'
@@ -15,6 +22,28 @@ class CustomForm(db.Model, BaseEntity):
     owner = db.relationship('User', backref=db.backref('custom_forms',
                                                        lazy='dynamic'))
     transaction_description = db.Column(db.String(256))
+
+    exports = \
+        OrderedDict([('user_id', {
+            'label': 'Gebruiker ID',
+            'export': lambda r: r.owner_id,
+        }), ('user_email', {
+            'label': 'Gebruiker email',
+            'export': lambda r: r.owner.email,
+        }), ('user_name', {
+            'label': 'Gebruiker naam',
+            'export': lambda r: '%s %s' % (r.owner.first_name,
+                                           r.owner.last_name),
+        }), ('date', {
+            'label': 'Inschrijfdatum',
+            'export': lambda r: r.created,
+        }), ('has_payed', {
+            'label': 'Heeft betaald',
+            'export': lambda r: r.has_payed,
+        }), ('form', {
+            'label': 'Form resultaat',
+            'export': export_form_data,
+        })])
 
     def __init__(self, owner_id=None, name="", origin="", html="",
                  msg_success="", max_attendants=150):

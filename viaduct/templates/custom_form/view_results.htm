@@ -1,5 +1,7 @@
 {% extends "content.htm" %}
 
+{% import 'macros/rubber_form.htm' as rubber %}
+
 {% block includes %}
     <script src={{static_url("/static/js/custom_form/view_results.js")}}></script>
 {% endblock %}
@@ -62,6 +64,16 @@
         {% endfor %}
     </tbody>
 </table>
+
+<form method='post' action='{{ url_for('custom_form.export', form_id=custom_form.id) }}'>
+    {{ rubber.checkbox('user_id', 'Gebruiker ID') }}
+    {{ rubber.checkbox('user_email', 'Gebruiker email') }}
+    {{ rubber.checkbox('user_name', 'Gebruiker naam') }}
+    {{ rubber.checkbox('date', 'Inschrijfdatum') }}
+    {{ rubber.checkbox('has_payed', 'Heeft betaald') }}
+    {{ rubber.checkbox('form', 'Form resultaat') }}
+    {{ rubber.button(type='submit', text='Exporteren') }}
+</form>
 
 {% else %}
 <p>Er zijn nog geen resultaten om te tonen</p>
