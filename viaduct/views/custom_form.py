@@ -122,6 +122,13 @@ def export(form_id):
     if 'user_name' in dt:
         get_data.append(lambda r: '%s %s' % (r.owner.first_name,
                                              r.owner.last_name))
+    if 'date' in dt:
+        get_data.append(lambda r: r.created)
+    if 'has_payed' in dt:
+        get_data.append(lambda r: r.has_payed)
+    if 'form' in dt:
+        import re
+        get_data.append(lambda r: re.sub(r'%[0-9A-F]{2}', '', r.data))
 
     io = StringIO.StringIO()
     wrt = csv.writer(io)
