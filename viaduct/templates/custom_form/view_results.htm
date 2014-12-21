@@ -1,5 +1,7 @@
 {% extends "content.htm" %}
 
+{% import 'macros/rubber_form.htm' as rubber %}
+
 {% block includes %}
     <script src={{static_url("/static/js/custom_form/view_results.js")}}></script>
 {% endblock %}
@@ -64,22 +66,10 @@
 </table>
 
 <form method='post' action='{{ url_for('custom_form.export', form_id=custom_form.id) }}'>
-    <div class='form-group'>
-        <label>
-            <input type='checkbox' name='user_id' /> Gebruiker ID
-        </label>
-    </div>
-    <div class='form-group'>
-        <label>
-            <input type='checkbox' name='user_email' /> Gebruiker email
-        </label>
-    </div>
-    <div class='form-group'>
-        <label>
-            <input type='checkbox' name='user_name' /> Gebruiker naam
-        </label>
-    </div>
-    <button type='submit' class='btn btn-default'>Exporteren</button>
+    {{ rubber.checkbox('user_id', 'Gebruiker ID') }}
+    {{ rubber.checkbox('user_email', 'Gebruiker email') }}
+    {{ rubber.checkbox('user_name', 'Gebruiker naam') }}
+    {{ rubber.button(type='submit', text='Exporteren') }}
 </form>
 
 {% else %}
