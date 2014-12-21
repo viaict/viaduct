@@ -112,34 +112,32 @@ def view_single(form_id=None):
 
 @blueprint.route('/export/<int:form_id>/', methods=['POST'])
 def export(form_id):
-    dt = request.form
-    get_data = []
+    xp = CustomForm.exports
+    xp_names = xp.keys()
+    names = request.form.keys()
+    labels = []
+    for name in xp_names:
+        if name not in names:
+            continue
 
-    if 'user_id' in dt:
-        get_data.append(lambda r: r.owner_id)
-    if 'user_email' in dt:
-        get_data.append(lambda r: r.owner.email)
-    if 'user_name' in dt:
-        get_data.append(lambda r: '%s %s' % (r.owner.first_name,
-                                             r.owner.last_name))
-    if 'date' in dt:
-        get_data.append(lambda r: r.created)
-    if 'has_payed' in dt:
-        get_data.append(lambda r: r.has_payed)
-    if 'form' in dt:
-        import re
-        get_data.append(lambda r: re.sub(r'%[0-9A-F]{2}', '', r.data))
+        labels.append(xp[name]['label'])
 
     io = StringIO.StringIO()
     wrt = csv.writer(io)
+    wrt.writerow(labels)
 
     form = CustomForm.query.get(form_id)
     for r in form.custom_form_results:
-        d = []
-        for gd in get_data:
-            d.append(gd(r))
+        data = []
 
-        wrt.writerow(d)
+        for name in xp_names:
+            if name not in names:
+                continue
+
+            export = xp[name]['export']
+            data.append(export(r))
+
+        wrt.writerow(data)
 
     def generate():
         yield io.getvalue()
