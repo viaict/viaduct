@@ -107,7 +107,8 @@ def view_single(form_id=None):
     custom_form.results = results
 
     return render_template('custom_form/view_results.htm',
-                           custom_form=custom_form)
+                           custom_form=custom_form,
+                           xps=CustomForm.exports)
 
 
 @blueprint.route('/export/<int:form_id>/', methods=['POST'])
