@@ -20,6 +20,10 @@ cd .git/hooks
 ln -s ../../secrets/post-* .
 ```
 
+Before installing the Python dependencies, you have to install libjpeg-dev:
+
+    sudo apt-get install libjpeg-dev
+
 Python dependencies are in `requirements.txt`. Install through pip. Usage of virtual environments is recommended:
 
 	virtualenv venv/
