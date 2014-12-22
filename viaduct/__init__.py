@@ -76,6 +76,7 @@ db = SQLAlchemy(application)
 
 from viaduct.api.user import UserAPI
 from viaduct.api.group import GroupPermissionAPI
+from viaduct.helpers.thumb import thumb
 
 # Set jinja global variables
 application.jinja_env.globals.update(enumerate=enumerate)
@@ -88,6 +89,7 @@ application.jinja_env.globals.update(datetime=datetime)
 application.jinja_env.globals.update(json=json)
 application.jinja_env.globals.update(serialize_sqla=serialize_sqla)
 application.jinja_env.globals.update(len=len)
+application.jinja_env.globals.update(thumb=thumb)
 
 application.jinja_env.globals.update(static_url=static_url)
 
