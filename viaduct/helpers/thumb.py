@@ -3,7 +3,7 @@ import viaduct
 import os
 
 
-def thumb(url):
+def thumb(url, size=(100, 100)):
     im_path = os.path.join(viaduct.path, url.lstrip('/'))
 
     im_dir, im_name = os.path.split(im_path)
@@ -16,7 +16,7 @@ def thumb(url):
         os.mkdir(thmb_dir)
     if not os.path.exists(thmb_path):
         im = Image.open(im_path)
-        im.thumbnail((100, 100))
+        im.thumbnail(size)
         im.save(thmb_path)
 
     slash = url.rindex('/')
