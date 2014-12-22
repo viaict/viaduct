@@ -52,7 +52,7 @@
                     </td>
                     {% if GroupPermissionAPI.can_write('examination') %}
                         <td>
-                            <a href='edit?edit={{ (examination.id) }}'><i class='glyphicon glyphicon-pencil'></i></a>
+                            <a href='{{ url_for('examination.edit', exam_id=examination.id) }}'><i class='glyphicon glyphicon-pencil'></i></a>
                             <a onclick='confirmation({{examination.id}})' role='button' data-toggle='modal' style='cursor: pointer;'><i class='glyphicon glyphicon-remove'></i></a>
                         </td>
                     {% endif %}
