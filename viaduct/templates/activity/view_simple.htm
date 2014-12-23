@@ -5,7 +5,7 @@
 <div class="activity-simple">
 	<div class="activity-simple-image">
 		{% if activity.picture %}
-		<img src="/static/activity_pictures/{{ activity.picture }}">
+        <img src="{{ thumb('/static/activity_pictures/' +  activity.picture, (70, 70)) }}">
 		{% else %}
 		<img src="/static/img/via_thumbnail.png">
 		{% endif %}

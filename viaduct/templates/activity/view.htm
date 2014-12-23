@@ -21,7 +21,7 @@
 			<div class="row">
 				<div class="col-md-4 image">
 					{% if activity.picture %}
-						<img src="/static/activity_pictures/{{ activity.picture }}">
+                    <img src="{{ thumb('/static/activity_pictures/' + activity.picture, (220, 220)) }}">
 					{% else %}
 						<img src="/static/img/via_thumbnail.png">
 					{% endif %}
