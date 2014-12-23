@@ -23,7 +23,16 @@ def thumb(url, size=(100, 100)):
         os.mkdir(thmb_dir)
     if not os.path.exists(thmb_path):
         im = Image.open(im_path)
-        im.thumbnail(size)
+
+        if im.size[0] > im.size[1]:
+            mod = float(size[0]) / im.size[0]
+        else:
+            mod = float(size[1]) / im.size[1]
+
+        new_size = (int(im.size[0] * mod), int(im.size[1] * mod))
+        im = im.resize(new_size)
+        im = im.crop((0, 0, size[0], size[1]))
+
         im.save(thmb_path)
 
     slash = url.rindex('/')
