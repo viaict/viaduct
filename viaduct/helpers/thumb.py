@@ -11,7 +11,7 @@ def thumb(url, size=(100, 100)):
     im_title, im_ext = im_name.rsplit('.', 1)
 
     thmb_name = im_title + '-' + str(size[0]) + 'x' \
-        + str(size[1]) + '.' + im_ext
+        + str(size[1]) + '.png'
 
     thmb_dir = os.path.join(im_dir, '.thumb')
     thmb_path = os.path.join(thmb_dir, thmb_name)
@@ -23,6 +23,7 @@ def thumb(url, size=(100, 100)):
         os.mkdir(thmb_dir)
     if not os.path.exists(thmb_path):
         im = Image.open(im_path)
+        im = im.convert('RGBA')
 
         if im.size[0] > im.size[1]:
             mod = float(size[0]) / im.size[0]
