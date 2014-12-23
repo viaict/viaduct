@@ -1,4 +1,4 @@
-from PIL import Image
+from PIL import Image, ImageChops
 import viaduct
 import os
 
@@ -27,12 +27,18 @@ def thumb(url, size=(100, 100)):
 
         if im.size[0] > im.size[1]:
             mod = float(size[0]) / im.size[0]
+            x_off = 0
+            y_off = int(((im.size[0] - im.size[1]) * mod) / 2)
         else:
             mod = float(size[1]) / im.size[1]
+            x_off = int(((im.size[1] - im.size[0]) * mod) / 2)
+            y_off = 0
 
         new_size = (int(im.size[0] * mod), int(im.size[1] * mod))
         im = im.resize(new_size)
         im = im.crop((0, 0, size[0], size[1]))
+
+        im = ImageChops.offset(im, x_off, y_off)
 
         im.save(thmb_path)
 
