@@ -20,6 +20,7 @@ $(function() {
         var data = {nominee_id: selection};
 
         $.post(viaduct.vote_url, data, function() {
+            alert('Succes!');
             location.reload();
         }).fail(function(jqHXR) {
             var error = $.parseJSON(jqHXR.responseText).error;
