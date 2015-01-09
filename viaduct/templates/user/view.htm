@@ -1,15 +1,7 @@
-{% from 'macros/pagination.htm' import render_pagination %}
-
 {% extends 'content.htm' %}
-
-{% block includes %}
-    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.3/js/jquery.dataTables.js"></script>
-    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/380cb78f450/integration/bootstrap/3/dataTables.bootstrap.js"></script>
-{% endblock %}
 
 {% block content %}
 <h1>Gebruiker overzicht</h1>
-
 <div class='row'>
 	<div class='col-md-12'>
         <table id="datatable" class='table table-striped'>
@@ -44,15 +36,13 @@
         </table>
 
         <div class='btn-group'>
-            <a href='/users/create' class='btn btn-success'>
+            <a href='{{ url_for('user.edit') }}' class='btn btn-success'>
                 <i class='glyphicon glyphicon-user'></i> Gebruiker aanmaken
             </a>
-
             <a style='display:none;' id='delete' class='btn btn-danger'>
                 <i class='glyphicon glyphicon-remove'></i> Verwijderen
             </a>
-
-            <a href='/users/export' class='btn btn-success'>
+            <a href='{{ url_for('user.user_export') }}' class='btn btn-success'>
                 <i class='glyphicon glyphicon-export'></i> Gebruikers Exporteren
             </a>
         </div>
@@ -60,9 +50,12 @@
 </div>
 <script>
     $(document).ready(function() {
+
+        console.log('utils:' + utils);
+
         var table = $('#datatable').DataTable(_.defaults({
             "ajax": {
-                "url": "/users/get_users/",
+                "url": "{{ url_for('user.get_users') }}",
                 "type": "get"
             }
         }, utils.datatables.defaults));

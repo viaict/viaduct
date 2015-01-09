@@ -93,9 +93,7 @@ def create():
 
 
 @blueprint.route('/groups/<int:group_id>/users/', methods=['GET', 'POST'])
-@blueprint.route('/groups/<int:group_id>/users/<int:page_nr>/',
-                 methods=['GET', 'POST'])
-def view_users(group_id, page_nr=1):
+def view_users(group_id):
     if not(GroupPermissionAPI.can_read('group')):
         return abort(403)
 
@@ -105,43 +103,49 @@ def view_users(group_id, page_nr=1):
         flash('There is no such group.')
         return redirect(url_for('group.view'))
 
-    if request.method == 'POST':
-        user_ids = request.form.getlist('select')
+    # if request.method == 'POST':
+    #     user_ids = request.form.getlist('select')
+    #
+    #     users = group.get_users().filter(User.id.in_(user_ids))\
+    #         .order_by(User.first_name).order_by(User.last_name).all()
+    #
+    #     for user in users:
+    #         group.delete_user(user)
+    #
+    #     db.session.add(group)
+    #     db.session.commit()
+    #
+    #     if len(user_ids) > 1:
+    #         flash('The selected users have been deleted.', 'success')
+    #     else:
+    #         flash('The selected user has been deleted.', 'success')
+    #
+    #     return redirect(url_for('group.view_users', group_id=group_id))
 
-        users = group.get_users().filter(User.id.in_(user_ids))\
-            .order_by(User.first_name).order_by(User.last_name).all()
+    # if request.args.get('search'):
+    #     search = request.args.get('search')
+    #     users = group.get_users().\
+    #         filter(or_(User.first_name.like('%' + search + '%'),
+    #                    User.last_name.like('%' + search + '%'),
+    #                    User.email.like('%' + search + '%'),
+    #                    User.student_id.like('%' + search + '%')))\
+    #         .order_by(User.first_name).order_by(User.last_name).all()
+        # return render_template('group/view_users.htm', group=group,
+                               # users=users, search=search,
+                               # title='%s users' % (group.name))
 
-        for user in users:
-            group.delete_user(user)
-
-        db.session.add(group)
-        db.session.commit()
-
-        if len(user_ids) > 1:
-            flash('The selected users have been deleted.', 'success')
-        else:
-            flash('The selected user has been deleted.', 'success')
-
-        return redirect(url_for('group.view_users', group_id=group_id))
-
-    if request.args.get('search'):
-        search = request.args.get('search')
-        users = group.get_users().\
-            filter(or_(User.first_name.like('%' + search + '%'),
-                       User.last_name.like('%' + search + '%'),
-                       User.email.like('%' + search + '%'),
-                       User.student_id.like('%' + search + '%')))\
-            .order_by(User.first_name).order_by(User.last_name)\
-            .paginate(page_nr, 15, False)
-        return render_template('group/view_users.htm', group=group,
-                               users=users, search=search,
-                               title='%s users' % (group.name))
-
-    users = group.get_users().order_by(User.first_name)\
-        .order_by(User.last_name).paginate(page_nr, 15, False)
+    users = group.users.order_by(User.first_name)\
+        .order_by(User.last_name).all()
 
     return render_template('group/view_users.htm', group=group, users=users,
                            title='%s users' % (group.name))
+
+
+@blueprint.route('/groups/<int:group_id>/get_users/', methods=['GET'])
+def get_group_users(group_id):
+    if not(GroupPermissionAPI.can_write('group')):
+        return abort(403)
+    return "test"
 
 
 @blueprint.route('/groups/<int:group_id>/users/add/', methods=['GET', 'POST'])
