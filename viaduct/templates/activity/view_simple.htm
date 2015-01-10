@@ -10,23 +10,27 @@
 		<img src="/static/img/via_thumbnail.png">
 		{% endif %}
 	</div>
-	<h4>
-		<a href="{{ url_for('activity.get_activity', activity_id=activity.id)}}">
-			{{ activity.name }}
-		</a>
-        <small class="pull-right">
-            {{ activity.till_now() }}
-        </small>
-	</h4>
+	<div class="activity-simple-description">
+		<h4>
+			<small class="pull-right">
+	            {{ activity.till_now() }}
+	        </small>
+			<a href="{{ url_for('activity.get_activity', activity_id=activity.id)}}">
+				{{ activity.name }}
+			</a>
+	        
+		</h4>
 
-	<div>
-		<i class="glyphicon glyphicon-calendar"></i>
-		{{ activity.get_time() }}
-		<br>
+		<div>
+			<i class="glyphicon glyphicon-calendar"></i>
+			{{ activity.get_time() }}
+			<br>
 
-		<i class="glyphicon glyphicon-home"></i>
-		{{ activity.location }}
+			<i class="glyphicon glyphicon-home"></i>
+			{{ activity.location }}
+		</div>
 	</div>
+
 </div>
 
 {% endfor %}
