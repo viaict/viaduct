@@ -1,0 +1,17 @@
+{% extends 'content.htm' %}
+
+{% block testblok %}
+Nee jij hebt aids, ik niet.
+{% endblock %}
+
+{% block content %}
+<h2>Commissies</h2>
+
+<p>
+    <ul>
+        {% for rev in revisions %}
+            <li><a href='/{{ rev.page.path }}'>{{ rev.title }}</a></li>
+        {% endfor %}
+    </ul>
+</p>
+{% endblock %}

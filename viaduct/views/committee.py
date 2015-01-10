@@ -7,8 +7,15 @@ from viaduct.models import CommitteeRevision, Page, Group, User
 from viaduct.api import GroupPermissionAPI
 from viaduct.forms import CommitteeForm
 from viaduct.helpers import flash_form_errors
+import viaduct.api.committee as CommitteeAPI
 
 blueprint = Blueprint('committee', __name__)
+
+
+@blueprint.route('/commissie/', methods=['GET'])
+def list():
+    revisions = CommitteeAPI.get_alphabetical()
+    return render_template('committee/list.htm', revisions=revisions)
 
 
 @blueprint.route('/edit/commissie/<string:committee>', methods=['GET', 'POST'])
