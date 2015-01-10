@@ -110,6 +110,21 @@ class MollieAPI:
     def get_all_transactions():
         try:
             payments = MOLLIE.payments.all()
-            return payments
+            return payments, 'Success'
         except Mollie.API.Error as e:
             return False, 'API call failed: ' + e.message
+
+    # Switches from local to remote ID, or the other way around.
+    # Returns local ID if both are given. (should never happen)
+    @staticmethod
+    def get_other_id(trans_id=None, mollie_id=None):
+        if trans_id:
+            trans = Transaction.query.\
+                filter(Transaction.id == trans_id).first()
+            return trans.mollie_id
+
+        if mollie_id:
+            trans = Transaction.query.\
+                filter(Transaction.mollie_id == mollie_id).first()
+            return trans.id
+        return None
