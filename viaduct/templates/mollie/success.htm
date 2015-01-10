@@ -3,6 +3,9 @@
 {% block content %}
 <div class="mainblock">
     <h1>Welkom terug</h1>
+    {% if test: %}
+    <h2>Test mode enabled</h2>
+    {% endif %}
     <p>{{ message }}</p>
 </div>
 {% endblock %}
