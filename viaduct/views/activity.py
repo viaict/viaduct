@@ -259,11 +259,15 @@ def create_mollie_transaction(result_id):
         user = form_result.owner
         payment_url, transaction = MollieAPI.create_transaction(
             amount, description, user=user, form_result=form_result)
-        db.session.commit()
-        return redirect(payment_url)
+        if payment_url:
+            return redirect(payment_url)
+        else:
+            return render_template('mollie/success.htm', message=transaction)
     else:
-        payment_url = MollieAPI.get_payment_url(transaction.id)
-        print(payment_url)
-        return redirect(payment_url)
+        payment_url, message = MollieAPI.get_payment_url(transaction.mollie_id)
+        if payment_url:
+            return redirect(payment_url)
+        else:
+            return render_template('mollie/success.htm', message=message)
 
     return False
