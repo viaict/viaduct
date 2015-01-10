@@ -217,13 +217,13 @@ def create(activity_id=None):
             activity.owner_id = owner_id
 
             if activity.id:
-                flash('You\'ve created an activity successfully.', 'success')
+                flash('De activiteit is aangepast', 'success')
 
                 google.update_activity(activity.google_event_id, name,
                                        location, start.isoformat(),
                                        end.isoformat())
             else:
-                flash('You\'ve updated an activity successfully.', 'success')
+                flash('De activiteit is aangemaakt', 'success')
 
                 google_activity = google.insert_activity(name, location,
                                                          start.isoformat(),
