@@ -253,8 +253,10 @@ def create_mollie_transaction(result_id):
     transaction = Transaction.query\
         .filter(Transaction.form_result_id == form_result.id)\
         .filter(Transaction.status == 'open').first()
-    if not transaction:
+    if not transaction or not transaction.mollie_id:
         description = form_result.form.transaction_description
+        description = "VIA transaction: " + description
+        print(description)
         amount = form_result.form.price
         user = form_result.owner
         payment_url, transaction = MollieAPI.create_transaction(

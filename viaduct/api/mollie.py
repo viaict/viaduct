@@ -45,7 +45,7 @@ class MollieAPI:
                 'metadata': {
                     'transaction_id': transaction.id,
                     'first_name': form_result.owner.first_name,
-                    'last_name': form_result.owner.first_last
+                    'last_name': form_result.owner.last_name
                 }
             })
 
@@ -66,9 +66,7 @@ class MollieAPI:
         if not (transaction_id or mollie_id):
             return False, 'no id given'
         if transaction_id and not mollie_id:
-            transaction = Transaction.query.\
-                filter(Transaction.id == transaction_id).first()
-            mollie_id = transaction.mollie_id
+            mollie_id = MollieAPI.get_other_id(transaction_id)
 
         try:
             payment = MOLLIE.payments.get(mollie_id)

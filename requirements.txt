@@ -4,7 +4,7 @@ Flask-Babel==0.9
 Flask-Failsafe==0.2
 Flask-Login==0.2.11
 Flask-RESTful==0.3.1
-Flask-SQLAlchemy==2.0
+Flask-SQLAlchemy==1.0
 Flask-WTF==0.10.3
 Jinja2==2.7.3
 Markdown==2.5.2
