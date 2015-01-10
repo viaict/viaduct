@@ -6,7 +6,7 @@
 See [tutorial](TUTORIAL.md).
 
 ## Setup:
-OS Packages: Python, SQLite, pip, virtualenv, mysql.
+OS Packages: Python, SQLite, pip, virtualenv, mysql, git-flow
 Install with your favorite packagemanager.
 
 Get the secret via config files with secrets for the server:
@@ -19,6 +19,12 @@ Set up the awesome hooks:
 cd .git/hooks
 ln -s ../../secrets/post-* .
 ```
+
+Setup git-flow:
+```bash
+git flow init
+```
+The first one is master, the second develop after that just keep hitting return.
 
 Before installing the Python dependencies, you have to install libjpeg-dev:
 
@@ -42,11 +48,9 @@ Build dependencies are for ruby and npm:
     - `(sudo) npm install -g grunt-cli`
     - `npm install`
 
-Create a temporary database with:
+Get a live database of the via server by asking the coordinator.
+Use it by database by installing mysql and running:
     - `(sudo) mysql -u root -p < mysqlinit.sql`
-	- `python create_db.py`
-
-Using a live database by installing mysql and running:
     - `(sudo) mysql -u root -p < database.sql`
 
 Run site with:
