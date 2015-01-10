@@ -160,7 +160,9 @@
 	</div>
 
 	<div class="col-md-4">
-		<img src="/static/activity_pictures/{{ activity.picture }}">
+        {% if activity.picture %}
+        <img src="{{ thumb('/static/activity_pictures/' + activity.picture, (220, 220)) }}">
+        {% endif %}
 	</div>
 </div>
 
