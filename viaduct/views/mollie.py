@@ -25,7 +25,7 @@ def mollie_check(trans_id=0):
     return render_template('mollie/success.htm', message=message)
 
 
-@blueprint.route('/webhook/', methods=['POST'])
+@blueprint.route('/webhook/', methods=['GET', 'POST'])
 def webhook():
     if 'id' not in request.form:
         return ''
