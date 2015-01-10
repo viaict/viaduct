@@ -446,11 +446,7 @@ def get_users():
              "<i class='glyphicon glyphicon-ok'></i>"
                 if user.honorary_member else "",
              "<i class='glyphicon glyphicon-ok'></i>"
-                if user.favourer else "",
-             """
-             <a class='btn btn-xs btn-primary'
-             href=""" + url_for('user.view_single', user_id=user.id) + """>
-             <i class='glyphicon glyphicon-info-sign'></i></a>"""
+                if user.favourer else ""
              ])
     return json.dumps({"data": user_list})
 
