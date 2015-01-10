@@ -1,7 +1,7 @@
 # coding: utf-8
 
 import copy
-import pprint
+import json
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask import abort, jsonify
@@ -9,7 +9,6 @@ from flask.ext.login import current_user
 
 from viaduct import application, db
 from viaduct.helpers import flash_form_errors
-from viaduct.utilities import serialize_sqla
 
 from sqlalchemy import or_
 
@@ -107,37 +106,6 @@ def view_users(group_id):
         flash('There is no such group.')
         return redirect(url_for('group.view'))
 
-    # if request.method == 'POST':
-    #     user_ids = request.form.getlist('select')
-    #
-    #     users = group.get_users().filter(User.id.in_(user_ids))\
-    #         .order_by(User.first_name).order_by(User.last_name).all()
-    #
-    #     for user in users:
-    #         group.delete_user(user)
-    #
-    #     db.session.add(group)
-    #     db.session.commit()
-    #
-    #     if len(user_ids) > 1:
-    #         flash('The selected users have been deleted.', 'success')
-    #     else:
-    #         flash('The selected user has been deleted.', 'success')
-    #
-    #     return redirect(url_for('group.view_users', group_id=group_id))
-
-    # if request.args.get('search'):
-    #     search = request.args.get('search')
-    #     users = group.get_users().\
-    #         filter(or_(User.first_name.like('%' + search + '%'),
-    #                    User.last_name.like('%' + search + '%'),
-    #                    User.email.like('%' + search + '%'),
-    #                    User.student_id.like('%' + search + '%')))\
-    #         .order_by(User.first_name).order_by(User.last_name).all()
-        # return render_template('group/view_users.htm', group=group,
-                               # users=users, search=search,
-                               # title='%s users' % (group.name))
-
     users = group.users.order_by(User.first_name)\
         .order_by(User.last_name).all()
 
@@ -149,7 +117,43 @@ def view_users(group_id):
 def get_group_users(group_id):
     if not(GroupPermissionAPI.can_write('group')):
         return abort(403)
-    return "test"
+
+    group = Group.query.filter(Group.id == group_id).first()
+    if not group:
+        flash('There is no such group.')
+        return redirect(url_for('group.view'))
+
+    users = group.users.all()
+
+    user_list = [[user.id, user.name]
+                 for user in users]
+    user_list.sort()
+
+    return json.dumps({"data": user_list})
+
+
+@blueprint.route('/groups/<int:group_id>/delete_users/', methods=['DELETE'])
+def delete_group_users(group_id):
+    if not(GroupPermissionAPI.can_write('group')):
+        return abort(403)
+
+    group = Group.query.filter(Group.id == group_id).first()
+    if not group:
+        flash('There is no such group.')
+        return redirect(url_for('group.view'))
+
+    user_ids = request.json['selected_ids']
+
+    users = group.get_users().filter(User.id.in_(user_ids))\
+        .order_by(User.first_name).order_by(User.last_name).all()
+
+    for user in users:
+        group.delete_user(user)
+
+        db.session.add(group)
+        db.session.commit()
+
+    return json.dumps({'status': 'success'})
 
 
 @blueprint.route('/groups/<int:group_id>/users/add/', methods=['GET', 'POST'])

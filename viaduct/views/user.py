@@ -454,6 +454,7 @@ def get_users():
     return json.dumps({"data": user_list})
 
 
+# Not used at the moment due to integrity problems in the database
 @blueprint.route('/users/delete_users/', methods=['DELETE'])
 def api_delete_user():
     if not GroupPermissionAPI.can_write('user'):

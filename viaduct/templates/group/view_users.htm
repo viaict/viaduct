@@ -1,16 +1,21 @@
 {% extends "content.htm" %}
 
 {%block content %}
-<h1></h1>
-
+<h1>{{ group.name }} gebruikers</h1>
 <div class="row">
 	<div class="col-md-12">
-        <table id="datatable" class="table table-bordered table-striped">
+        <table id="datatable" class="table table-striped">
             <thead>
-                <tr><th>User name</th></tr>
+                <tr>
+                    <th>ID</th>
+                    <th>Naam</th>
+                </tr>
             </thead>
             <tfoot>
-                <tr><th>User name</th></tr>
+                <tr>
+                    <th>ID</th>
+                    <th>Naam</th>
+                </tr>
             </tfoot>
         </table>
 
@@ -23,7 +28,8 @@
                 <i class="glyphicon glyphicon-remove"></i> Delete
             </a>
             <a href="{{ url_for('group.view') }}" class="btn btn-primary">
-                <i class="glyphicon glyphicon-arrow-left"/></i> Back</a>
+                <i class="glyphicon glyphicon-arrow-left"/></i> Back
+            </a>
         </div>
     </div>
 </div>
@@ -31,15 +37,18 @@
     $(document).ready(function() {
         var table = $('#datatable').DataTable(_.defaults({
             "ajax": {
-                "url":"{{ url_for('group.get_group_users', group_id=group.id) }}",
+                "url": "{{ url_for('group.get_group_users', group_id=group.id) }}",
                 "type": "get"
             }
         }, utils.datatables.defaults));
+
         utils.datatables.enable_select($('#datatable tbody'));
-     // utils.datatables.delete_by_url(
-     //     $('#delete'),
-     //     table,
-     //     '/users/delete_users/');
+
+        utils.datatables.delete_by_url(
+            $('#delete'),
+            table,
+            "{{ url_for('group.delete_group_users', group_id=group.id) }}"
+        );
     });
 </script>
 {% endblock %}

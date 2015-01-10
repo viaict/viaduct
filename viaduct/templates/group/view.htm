@@ -17,7 +17,6 @@
 					<th></th>
 				</tr>
 			</thead>
-
 			<tbody>
 				{% for group, form_entry in groups %}
 					<tr>
@@ -26,11 +25,13 @@
 						</td>
 
 						<td>
-							<a href="{{ url_for('group.view_users', group_id=group.id) }}"><i class="glyphicon glyphicon-user"></i> Bekijk leden</a>
+                            <a href="{{ url_for('group.view_users', group_id=group.id) }}">
+                                <i class="glyphicon glyphicon-user"></i> Bekijk leden</a>
 						</td>
 
 						<td>
-							<a href="{{ url_for('group.edit_permissions', group_id=group.id) }}"><i class="glyphicon glyphicon-key"></i> Wijzig permissies</a>
+                            <a href="{{ url_for('group.edit_permissions', group_id=group.id) }}">
+                                <i class="glyphicon glyphicon-key"></i> Wijzig permissies</a>
 						</td>
 					</tr>
 				{% endfor %}
@@ -38,8 +39,8 @@
 		</table>
         <div class="btn-group">
             {% if GroupPermissionAPI.can_write('group') %}
-            <a href="{{ url_for('group.create') }}"
-                class="btn btn-success">Creëer groep
+            <a href="{{ url_for('group.create') }}" class="btn btn-success">
+                Creëer groep
             </a>
             <button
                 id="{{ form.delete_group.id }}"
