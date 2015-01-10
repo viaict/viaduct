@@ -42,11 +42,12 @@ def view_all_transactions():
     if not GroupPermissionAPI.can_read('mollie'):
         return abort(403)
     payments, message = MollieAPI.get_all_transactions()
+    print(payments)
     test = application.config.get('MOLLIE_TEST_MODE', False)
     key = application.config.get('MOLLIE_TEST_KEY', False)
     if payments:
         return render_template('mollie/view.htm', payments=payments,
-                               test=test, key=key)
+                               test=test, key=key, message=message)
     else:
         return render_template('mollie/success.htm', message=message,
                                test=test, key=key)
