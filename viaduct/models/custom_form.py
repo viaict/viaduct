@@ -61,7 +61,6 @@ class CustomFormResult(db.Model, BaseEntity):
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     form_id = db.Column(db.Integer, db.ForeignKey('custom_form.id'))
     data = db.Column(db.String(4096))
-    is_reserve = db.Column(db.Boolean)
     has_payed = db.Column(db.Boolean)
 
     owner = db.relationship('User', backref=db.backref('custom_form_results',
@@ -70,12 +69,11 @@ class CustomFormResult(db.Model, BaseEntity):
                            backref=db.backref('custom_form_results',
                                               lazy='dynamic'))
 
-    def __init__(self, owner_id=None, form_id=None, data="", is_reserve=False,
-                 has_payed=False, price=0.0):
+    def __init__(self, owner_id=None, form_id=None, data="", has_payed=False,
+                 price=0.0):
         self.owner_id = owner_id
         self.form_id = form_id
         self.data = data
-        self.is_reserve = is_reserve
         self.has_payed = has_payed
         self.price = price
 

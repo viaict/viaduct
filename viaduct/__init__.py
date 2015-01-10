@@ -90,6 +90,8 @@ application.jinja_env.globals.update(json=json)
 application.jinja_env.globals.update(serialize_sqla=serialize_sqla)
 application.jinja_env.globals.update(len=len)
 application.jinja_env.globals.update(thumb=thumb)
+application.jinja_env.globals.update(isinstance=isinstance)
+application.jinja_env.globals.update(list=list)
 
 application.jinja_env.globals.update(static_url=static_url)
 
