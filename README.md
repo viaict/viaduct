@@ -6,7 +6,7 @@
 See [tutorial](TUTORIAL.md).
 
 ## Setup:
-OS Packages: Python, SQLite, pip, virtualenv, mysql, git-flow
+OS Packages: python, sqlite, pip, virtualenv, mysql-server, git-flow, python-dev
 Install with your favorite packagemanager.
 
 Get the secret via config files with secrets for the server:
