@@ -77,19 +77,6 @@ def view_single(form_id=None):
         # Hide form entries from non existing users
         data = parse_qs(entry.data)
 
-        # Create defenition list of custom form fields
-        html = '<dl>'
-
-        for key in data:
-            html += "<dt>%s" % key.replace('[]', '')
-
-            if type(data[key]) is list:
-                html += "<dd>%s" % ', '.join(data[key])
-            else:
-                html += "<dd>%s" % unquote_plus(data[key])
-
-        html += '</dl>'
-
         # Add the entry date
         time = entry.created.strftime("%Y-%m-%d %H:%I") if \
             entry.created is not None else ""
@@ -98,8 +85,7 @@ def view_single(form_id=None):
         results.append({
             'id': entry.id,
             'owner': entry.owner,
-            'form_entry': html,
-            'class': 'class=is_reserve' if entry.is_reserve else '',
+            'data': data,
             'has_payed': entry.has_payed,
             'time': time
         })
@@ -108,7 +94,8 @@ def view_single(form_id=None):
 
     return render_template('custom_form/view_results.htm',
                            custom_form=custom_form,
-                           xps=CustomForm.exports)
+                           xps=CustomForm.exports,
+                           unquote_plus=unquote_plus)
 
 
 @blueprint.route('/export/<int:form_id>/', methods=['POST'])
@@ -271,12 +258,9 @@ def submit(form_id=None):
             # Check if number attendants allows another registration
             if num_attendants >= custom_form.max_attendants:
                 # Create "Reserve" signup
-                result = CustomFormResult(user.id, form_id,
-                                          request.form['data'], True)
                 response = "reserve"
-            else:
-                result = CustomFormResult(user.id, form_id,
-                                          request.form['data'])
+            result = CustomFormResult(user.id, form_id,
+                                      request.form['data'])
 
         db.session.add(user)
         db.session.commit()

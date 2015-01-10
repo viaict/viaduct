@@ -9,7 +9,7 @@
                         <a {% if page.external %}target="_blank"{% endif %} href="{% if page.url == current.url %}#{% else %}{% if page.external %}http://{% endif %}{{ page.url }}{% endif %}">{{ page.title }}</a>
                     </h4>
                 </div>
-                {% set children = page.activities if page.activities else page.children %}
+                {% set children = page.activities if page.activities else page.get_children() %}
 				{% set children = NavigationAPI.remove_unauthorized(children) %}
 
 				{% if children and page.url == current.url %}

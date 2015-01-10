@@ -60,6 +60,9 @@ def view_single(user_id=None):
 
     user.groups_amount = user.groups.count()
 
+    if "gravatar" in user.avatar:
+        user.avatar = user.avatar + "&s=341"
+
     # Get all activity entrees from these forms, order by start_time of
     # activity.
     activities = Activity.query.join(CustomForm).join(CustomFormResult).\

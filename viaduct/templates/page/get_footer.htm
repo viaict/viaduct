@@ -1,7 +1,9 @@
+{{ Markup(markdown(footer_revision.content, enable_attributes=False, safe_mode=safe_mode, extensions=['toc'])) }}
+
 {% if (page and current_user and (UserAPI.can_write(page) or
     GroupPermissionAPI.can_write('page'))) or (not page and
     GroupPermissionAPI.can_write('page')) %}
-    <div class="btn-group" style="margin-top: 15px;">
+    <div class="btn-group pull-right" style="margin-top: 15px;">
         {% if exists %}
         <a class="btn btn-default"
             href="{{url_for('page.get_page_history',
@@ -20,5 +22,3 @@
     </div>
 {% endif %}
 
-
-{{ Markup(markdown(footer_revision.content, enable_attributes=False, safe_mode=safe_mode, extensions=['toc'])) }}

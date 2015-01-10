@@ -217,13 +217,13 @@ def create(activity_id=None):
             activity.owner_id = owner_id
 
             if activity.id:
-                flash('You\'ve created an activity successfully.', 'success')
+                flash('De activiteit is aangepast', 'success')
 
                 google.update_activity(activity.google_event_id, name,
                                        location, start.isoformat(),
                                        end.isoformat())
             else:
-                flash('You\'ve updated an activity successfully.', 'success')
+                flash('De activiteit is aangemaakt', 'success')
 
                 google_activity = google.insert_activity(name, location,
                                                          start.isoformat(),
@@ -259,11 +259,15 @@ def create_mollie_transaction(result_id):
         user = form_result.owner
         payment_url, transaction = MollieAPI.create_transaction(
             amount, description, user=user, form_result=form_result)
-        db.session.commit()
-        return redirect(payment_url)
+        if payment_url:
+            return redirect(payment_url)
+        else:
+            return render_template('mollie/success.htm', message=transaction)
     else:
-        payment_url = MollieAPI.get_payment_url(transaction.id)
-        print(payment_url)
-        return redirect(payment_url)
+        payment_url, message = MollieAPI.get_payment_url(transaction.mollie_id)
+        if payment_url:
+            return redirect(payment_url)
+        else:
+            return render_template('mollie/success.htm', message=message)
 
     return False
