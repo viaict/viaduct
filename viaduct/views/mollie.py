@@ -28,12 +28,12 @@ def mollie_check(trans_id=0):
 @blueprint.route('/webhook/', methods=['POST'])
 def webhook():
     if 'id' not in request.form:
-        return 'Message received without ID'
+        return ''
     mollie_id = request.form['id']
     success, message = MollieAPI.check_transaction(mollie_id=mollie_id)
     trans_id = MollieAPI.get_other_id(mollie_id=mollie_id)
     CustomFormAPI.update_payment(trans_id, success)
-    return 'Message received'
+    return ''
 
 
 @blueprint.route('/')
