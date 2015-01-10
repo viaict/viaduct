@@ -43,9 +43,10 @@ def view_all_transactions():
         return abort(403)
     payments, message = MollieAPI.get_all_transactions()
     test = application.config.get('MOLLIE_TEST_MODE', False)
+    key = application.config.get('MOLLIE_TEST_KEY', False)
     if payments:
         return render_template('mollie/view.htm', payments=payments,
-                               test=test)
+                               test=test, key=key)
     else:
         return render_template('mollie/success.htm', message=message,
-                               test=test)
+                               test=test, key=key)
