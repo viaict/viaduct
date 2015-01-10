@@ -13,3 +13,4 @@ from news import NewsRevision  # noqa
 from page import Page, PageRevision, PagePermission  # noqa
 from custom_form import CustomForm  # noqa
 from elections import Nominee, Nomination, Vote  # noqa
+from committee import CommitteeRevision  # noqa

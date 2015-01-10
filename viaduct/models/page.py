@@ -79,6 +79,9 @@ class SuperRevision(db.Model, BaseEntity):
     will have to implement that yourself."""
     __abstract__ = True
 
+    # Things needed in template context.
+    context = {}
+
     title = db.Column(db.String(128))
     comment = db.Column(db.String(1024))
 
