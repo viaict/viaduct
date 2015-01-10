@@ -29,8 +29,10 @@
     </thead>
 
     <tbody>
-        {% for result in custom_form.results %}
-            <tr {{ result.class }}>
+        {% for i, result in enumerate(custom_form.results) %}
+            <tr {% if i >= custom_form.max_attendants %}
+                    {{ 'class=is_reserve' }}
+                {% endif %}>
                 <td><img src='{{ UserAPI.avatar(result.owner) }}' class='img-responsive thumbnail' style='width: 50px;' /></td>
                 <td>
                     {% if result.owner.id %}
@@ -47,7 +49,20 @@
                     {{ result.owner.phone_nr }}<br>
                     {% endif %}
 
-                    {{ result.form_entry|safe }}
+                    <dl>
+                        {% for key, val in result.data.items() %}
+                        <dt>
+                            {{ key.replace('[]', '') }}
+                        </dt>
+                        <dd>
+                            {% if isinstance(val, list) %}
+                                {{ ', '.join(val) }}
+                            {% else %}
+                                {{ unquote_plus(val) }}
+                            {% endif %}
+                        </dd>
+                        {% endfor %}
+                    </dl>
                 </td>
                 <td>{{ result.time }}</td>
                 <td>
