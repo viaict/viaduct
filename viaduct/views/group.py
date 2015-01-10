@@ -1,11 +1,15 @@
+# coding: utf-8
+
 import copy
+import pprint
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
-from flask import abort
+from flask import abort, jsonify
 from flask.ext.login import current_user
 
 from viaduct import application, db
 from viaduct.helpers import flash_form_errors
+from viaduct.utilities import serialize_sqla
 
 from sqlalchemy import or_
 
@@ -267,3 +271,12 @@ def edit_permissions(group_id, page_nr=1):
                            can_write=GroupPermissionAPI.can_write('group'),
                            group_name=group.name, title='Module permissions',
                            permissions=zip(permissions, form.permissions))
+
+
+@blueprint.route('/api/group/users/<int:group_id>', methods=['GET'])
+def group_api_get_users(group_id):
+    group = Group.query.get(group_id)
+    users = group.users.order_by(User.first_name, User.last_name).all()
+
+    res = [{'val': user.id, 'label': user.name} for user in users]
+    return jsonify(users=res)
