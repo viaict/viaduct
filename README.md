@@ -1,5 +1,5 @@
 # Version.
-1.4.2.1
+1.4.4.3
 
 #Viaduct (Opensourced, yeah)
 ## Tutorial
@@ -19,6 +19,10 @@ Set up the awesome hooks:
 cd .git/hooks
 ln -s ../../secrets/post-* .
 ```
+
+Before installing the Python dependencies, you have to install libjpeg-dev:
+
+    sudo apt-get install libjpeg-dev
 
 Python dependencies are in `requirements.txt`. Install through pip. Usage of virtual environments is recommended:
 

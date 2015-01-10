@@ -1,5 +1,7 @@
 {% extends "content.htm" %}
 
+{% import 'macros/rubber_form.htm' as rubber %}
+
 {% block includes %}
     <script src={{static_url("/static/js/custom_form/view_results.js")}}></script>
 {% endblock %}
@@ -62,6 +64,13 @@
         {% endfor %}
     </tbody>
 </table>
+
+<form method='post' action='{{ url_for('custom_form.export', form_id=custom_form.id) }}'>
+    {% for name in xps.keys() %}
+        {{ rubber.checkbox(name, xps[name]['label']) }}
+    {% endfor %}
+    {{ rubber.button(type='submit', text='Exporteren') }}
+</form>
 
 {% else %}
 <p>Er zijn nog geen resultaten om te tonen</p>

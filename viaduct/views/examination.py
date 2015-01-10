@@ -1,6 +1,7 @@
 import os
 from flask import Blueprint
-from flask import abort, flash, session, redirect, render_template, request
+from flask import abort, flash, session, redirect, render_template, request, \
+    url_for
 from flask.ext.login import login_required
 
 from sqlalchemy import or_
@@ -200,19 +201,14 @@ def examination_admin(page_nr=1):
                            title='Tentamens')
 
 
-@blueprint.route('/examination/edit/', methods=['GET', 'POST'])
+@blueprint.route('/examination/edit/<int:exam_id>/', methods=['GET', 'POST'])
 @login_required
-def edit_examination():
+def edit(exam_id):
     if not GroupPermissionAPI.can_write('examination', True):
         session['prev'] = 'examination.edit_examination'
         return abort(403)
 
-    path = '../static/'
-
-    courses = Course.query.order_by(Course.name).all()
-    educations = Education.query.order_by(Education.name).all()
-
-    message = False
+    exam = Examination.query.get(exam_id)
 
     if request.method == 'POST':
         file = request.files['file']
@@ -220,67 +216,46 @@ def edit_examination():
         title = request.form.get("title", None)
         course_id = request.form.get("course", None)
         education_id = request.form.get("education", None)
-        exam_id = request.form.get("examination", None)
 
         if not title:
             flash('Geen titel opgegeven', 'danger')
-            print("wut")
+        elif not education_id:
+            flash('Geen opleiding opgegeven', 'danger')
+        else:
+            exam.title = title
+            exam.course_id = course_id
+            exam.education_id = education_id
 
-        if title and education_id and exam_id:
-            examination = Examination.query.filter(Examination.id == exam_id)\
-                .first()
+            new_path = upload_file_real(file, exam.path)
+            if new_path:
+                exam.path = new_path
+            elif new_path is None:
+                flash('Fout formaat tentamen', 'danger')
 
-            examination.title = title
-            examination.course_id = course_id
-            examination.education_id = education_id
+            if not new_path:
+                flash('Oude tentamen bewaard', 'success')
 
-            if not title:
-                flash('Geen titel opgegeven', 'danger')
+            new_answer_path = upload_file_real(answers, exam.answer_path)
+            if new_answer_path:
+                exam.answer_path = new_answer_path
+            elif new_answer_path is None:
+                flash('Fout formaat antwoorden', 'danger')
 
-            if file.name:
-                examination.path = upload_file_real(file, examination.path)
-                if not examination.path:
-                    flash('Fout formaat tentamen', 'danger')
-            else:
-                flash('Geen tentamen opgegeven', 'danger')
-
-            if answers:
-                examination.answer_path = upload_file_real(answers)
-                if not examination.answer_path:
-                    flash('Fout formaat antwoorden', 'danger')
-                if examination.answer_path:
-                    examination.answer_path = None
-
-            if message:
-                return render_template('examination/edit.htm', courses=courses,
-                                       educations=educations,
-                                       examination=examination, message='',
-                                       title='Tentamens')
+            if not new_answer_path:
+                flash('Oude antwoorden bewaard', 'success')
 
             db.session.commit()
-
             flash('Het tentamen is aangepast!', 'success')
-            return render_template('examination/edit.htm', courses=courses,
-                                   educations=educations,
-                                   examination=examination,
-                                   message='Het tentamen is aangepast!',
-                                   title='Tentamens')
 
-    if request.args.get('edit'):
-        exam_id = request.args.get('edit')
-        examination = Examination.query.filter(Examination.id == exam_id)\
-            .first()
+            return redirect(url_for('examination.edit', exam_id=exam_id))
 
-        return render_template('examination/edit.htm', path=path,
-                               examination=examination, courses=courses,
-                               educations=educations,
-                               title='Tentamens')
+    path = '/static/uploads/examinations/'
+    courses = Course.query.order_by(Course.name).all()
+    educations = Education.query.order_by(Education.name).all()
 
-    examinations = Examination.query.all()
-    return render_template('examination/admin.htm', path=path,
-                           examinations=examinations, search="",
-                           message="Geen examen geselecteerd",
-                           title='Tentamens')
+    return render_template(
+        'examination/edit.htm', path=path, examination=exam, title='Tentamens',
+        courses=courses, educations=educations)
 
 
 @blueprint.route('/course/add/', methods=['GET', 'POST'])
@@ -348,6 +323,6 @@ def upload_file_real(file, old_path='1'):
 
             return filename
         else:
-            return False
+            return None
     else:
-        return True
+        return False
