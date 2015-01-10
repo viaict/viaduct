@@ -18,6 +18,7 @@ Set up the awesome hooks:
 ```bash
 cd .git/hooks
 ln -s ../../secrets/post-* .
+.git/hooks/post-merge
 ```
 
 Setup git-flow:
