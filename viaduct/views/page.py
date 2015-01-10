@@ -35,7 +35,8 @@ def get_page(path=''):
         return abort(500)
 
     return render_template('%s/view_single.htm' % (page.type), page=page,
-                           revision=revision, title=revision.title)
+                           revision=revision, title=revision.title,
+                           context=revision.__class__.context)
 
 
 @blueprint.route('/history/<path:path>', methods=['GET', 'POST'])
