@@ -29,3 +29,9 @@ class NavigationEntry(db.Model, BaseEntity):
         self.activity_list = activity_list
         self.position = position
         self.subtitle = subtitle
+
+    def get_children(self, ordered=True):
+        childs = self.children
+        if ordered == True:
+            childs = childs.order_by(NavigationEntry.position)
+        return childs
