@@ -5,7 +5,7 @@ from flask.ext.login import current_user
 from viaduct import db
 from viaduct.models import CommitteeRevision, Page, Group, User, \
     NavigationEntry
-from viaduct.api import GroupPermissionAPI
+from viaduct.api import GroupPermissionAPI, NavigationAPI
 from viaduct.forms import CommitteeForm
 from viaduct.helpers import flash_form_errors
 import viaduct.api.committee as CommitteeAPI
@@ -94,6 +94,9 @@ def edit_committee(committee=''):
 
             db.session.add(navigation_entry)
             db.session.commit()
+
+            # Sort these navigation entries.
+            NavigationAPI.alphabeticalize(root_entry)
 
             # Assign the navigation entry to the new page (committee).
             page.navigation_entry_id = navigation_entry.id
