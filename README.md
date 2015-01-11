@@ -1,5 +1,5 @@
 # Version.
-1.5.2.1
+1.6.0.0
 
 #Viaduct (Opensourced, yeah)
 ## Tutorial
