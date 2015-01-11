@@ -38,10 +38,13 @@ def edit_committee(committee=''):
     form.group_id.choices = [(group.id, group.name) for group in
                              Group.query.order_by(Group.name).all()]
 
-    if revision:
-        selected_group_id = revision.group_id
+    if len(data) == 0:
+        if revision:
+            selected_group_id = revision.group_id
+        else:
+            selected_group_id = form.group_id.choices[0][0]
     else:
-        selected_group_id = form.group_id.choices[0][0]
+        selected_group_id = int(data['group_id'])
 
     selected_group = Group.query.get(selected_group_id)
     form.coordinator_id.choices = [
