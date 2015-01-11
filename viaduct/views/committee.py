@@ -79,6 +79,9 @@ def edit_committee(committee=''):
 
             page = Page(path, 'committee')
 
+            # Never needs payed.
+            page.needs_payed = False
+
             # Create a navigation entry for the new committee.
             last_navigation_entry = NavigationEntry.query\
                 .filter(NavigationEntry.parent_id == root_entry.id)\
