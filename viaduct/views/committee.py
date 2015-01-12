@@ -56,8 +56,9 @@ def edit_committee(committee=''):
         committee_title = data['title'].strip()
 
         if not page:
+            root_entry_url = url_for('committee.list').rstrip('/')
             root_entry = NavigationEntry.query\
-                .filter(NavigationEntry.url == url_for('committee.list'))\
+                .filter(NavigationEntry.url == root_entry_url)\
                 .first()
 
             # Check whether the root navigation entry exists.
@@ -71,7 +72,7 @@ def edit_committee(committee=''):
                     root_entry_position = last_root_entry.position + 1
 
                 root_entry = NavigationEntry(
-                    None, 'Commissies', url_for('committee.list'), False,
+                    None, 'Commissies', root_entry_url, False,
                     False, root_entry_position)
 
                 db.session.add(root_entry)
