@@ -4,7 +4,7 @@ from flask.ext.login import current_user
 
 from viaduct import db
 from viaduct.models import CommitteeRevision, Page, Group, User, \
-    NavigationEntry
+    NavigationEntry, PagePermission
 from viaduct.api import GroupPermissionAPI, NavigationAPI
 from viaduct.forms import CommitteeForm
 from viaduct.helpers import flash_form_errors
@@ -56,8 +56,9 @@ def edit_committee(committee=''):
         committee_title = data['title'].strip()
 
         if not page:
+            root_entry_url = url_for('committee.list').rstrip('/')
             root_entry = NavigationEntry.query\
-                .filter(NavigationEntry.url == url_for('committee.list'))\
+                .filter(NavigationEntry.url == root_entry_url)\
                 .first()
 
             # Check whether the root navigation entry exists.
@@ -71,7 +72,7 @@ def edit_committee(committee=''):
                     root_entry_position = last_root_entry.position + 1
 
                 root_entry = NavigationEntry(
-                    None, 'Commissies', url_for('committee.list'), False,
+                    None, 'Commissies', root_entry_url, False,
                     False, root_entry_position)
 
                 db.session.add(root_entry)
@@ -105,6 +106,17 @@ def edit_committee(committee=''):
             page.navigation_entry_id = navigation_entry.id
 
             db.session.add(page)
+            db.session.commit()
+
+            # Assign read rights to all, and edit rights to BC.
+            all_group = Group.query.filter(Group.name == 'all').first()
+            bc_group = Group.query.filter(Group.name == 'BC').first()
+
+            all_entry = PagePermission(all_group.id, page.id, 1)
+            bc_entry = PagePermission(bc_group.id, page.id, 2)
+
+            db.session.add(all_entry)
+            db.session.add(bc_entry)
             db.session.commit()
 
         group_id = int(data['group_id'])
