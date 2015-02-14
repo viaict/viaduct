@@ -6,7 +6,8 @@
 See [tutorial](TUTORIAL.md).
 
 ## Setup:
-OS Packages: python, sqlite, pip, virtualenv, mysql-server, git-flow, python-dev
+OS Packages: python3, sqlite, pip, virtualenv, mysql-server, git-flow,
+python3-dev, libffi-dev
 Install with your favorite packagemanager.
 
 Get the secret via config files with secrets for the server:
@@ -33,7 +34,7 @@ Before installing the Python dependencies, you have to install libjpeg-dev:
 
 Python dependencies are in `requirements.txt`. Install through pip. Usage of virtual environments is recommended:
 
-	virtualenv venv/
+	virtualenv venv/ -p /usr/bin/python3
 	. venv/bin/activate
 	pip install -r requirements.txt
 
