@@ -63,7 +63,7 @@ def get_locale():
     if current_user and current_user.locale is not None and \
             not current_user.is_anonymous():
         return current_user.locale
-    return request.accept_languages.best_match(LANGUAGES.keys())
+    return request.accept_languages.best_match(list(LANGUAGES.keys()))
 
 # Set up the login manager, which is used to store the details related to the
 # authentication system.

@@ -19,7 +19,7 @@ def serialize_sqla(data, serialize_date=True):
     # Dictionaries get iterated over
     if isinstance(data, dict):
         result = {}
-        for key, value in data.items():
+        for key, value in list(data.items()):
             result[key] = serialize_sqla(value, serialize_date=serialize_date)
 
         return result

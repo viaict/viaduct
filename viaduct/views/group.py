@@ -220,7 +220,7 @@ def edit_permissions(group_id, page_nr=1):
 
     # The application's blueprints are stored as a dict, with key
     # 'blueprint.name' and value '<Blueprint object>'.
-    modules = application.blueprints.keys()
+    modules = list(application.blueprints.keys())
 
     # Remove current permission.
     for permission in permissions:

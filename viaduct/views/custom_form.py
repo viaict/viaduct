@@ -101,8 +101,8 @@ def view_single(form_id=None):
 @blueprint.route('/export/<int:form_id>/', methods=['POST'])
 def export(form_id):
     xp = CustomForm.exports
-    xp_names = xp.keys()
-    names = request.form.keys()
+    xp_names = list(xp.keys())
+    names = list(request.form.keys())
     labels = []
     for name in xp_names:
         if name not in names:
