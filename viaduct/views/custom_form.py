@@ -13,7 +13,7 @@ from viaduct.api.group import GroupPermissionAPI
 from sqlalchemy import desc
 
 import io
-import unicodecsv
+import csv
 
 blueprint = Blueprint('custom_form', __name__, url_prefix='/forms')
 
@@ -110,8 +110,8 @@ def export(form_id):
 
         labels.append(xp[name]['label'])
 
-    io = io.StringIO()
-    wrt = unicodecsv.writer(io)
+    str_io = io.StringIO()
+    wrt = csv.writer(str_io)
     wrt.writerow(labels)
 
     form = CustomForm.query.get(form_id)
@@ -128,7 +128,7 @@ def export(form_id):
         wrt.writerow(data)
 
     def generate():
-        yield io.getvalue()
+        yield str_io.getvalue()
 
     return Response(generate(), mimetype='text/csv')
 
