@@ -241,7 +241,7 @@ def create(activity_id=None):
     else:
         flash_form_errors(form)
 
-    title = "edit " + str(activity.name)
+    title = u"edit " + unicode(activity.name)
 
     return render_template('activity/create.htm', activity=activity, form=form,
                            title=title)

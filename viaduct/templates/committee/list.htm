@@ -4,10 +4,15 @@
 <h2>Commissies</h2>
 
 <p>
-    <ul>
+<div class="panel panel-default">
+    <ul class="list-group">
         {% for rev in revisions %}
-            <li><a href='/{{ rev.page.path }}'>{{ rev.title }}</a></li>
+            <a href='/{{ rev.page.path }}' class="list-group-item">{{ rev.title }}</a>
         {% endfor %}
     </ul>
+</div>
+    <ul>
+    </ul>
 </p>
+
 {% endblock %}
