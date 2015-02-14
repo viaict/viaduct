@@ -17,7 +17,7 @@ class SuperPageForm(Form):
     needs_payed = BooleanField(u'Betaling vereist')
 
     title = StringField(u'Titel', [InputRequired()])
-    comment = StringField(u'Commentaar', [Optional()])
+    comment = StringField(u'Reden van wijziging', [Optional()])
 
     save_page = SubmitField('Opslaan')
 
