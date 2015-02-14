@@ -229,7 +229,8 @@ class PimpyAPI:
                     print("could not find the given task")
                     flash("Kan DONE niet vinden, id: " + done_id, "danger")
                     continue
-                dones_found.append(done_task)
+                if done_task is not None:
+                    dones_found.append(done_task)
 
         regex = re.compile("\s*(?:REMOVE) ([^\n\r]*)")
         matches = regex.findall(content)
@@ -243,7 +244,8 @@ class PimpyAPI:
                     print("could not find the given task")
                     flash("Kan REMOVE niet vinden, id: " + done_id, "danger")
                     continue
-                removes_found.append(remove_task)
+                if remove_task is not None:
+                    removes_found.append(remove_task)
 
         return tasks_found, dones_found, removes_found
 
