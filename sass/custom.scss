@@ -8,6 +8,7 @@
 @import 'css/select2';
 @import 'css/select2-bootstrap';
 @import 'css/bootstrap-datetimepicker.min';
+@import 'dataTables.responsive';
 
 body {
     overflow-y: scroll;
@@ -955,4 +956,11 @@ p{line-height: 25px;}
     header .navbar-nav{
         width: 1000px;
     }
+}
+
+/*
+ * Custom table CSS
+ */
+#datatable {
+    cursor: pointer;
 }

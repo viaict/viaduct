@@ -4,6 +4,7 @@ import random
 import datetime
 import smtplib
 import re
+import json
 from unicodecsv import writer
 from StringIO import StringIO
 from email.mime.text import MIMEText
@@ -13,9 +14,6 @@ from flask import flash, redirect, render_template, request, url_for, abort,\
     session
 from flask import Blueprint
 from flask.ext.login import current_user, login_user, logout_user
-
-from sqlalchemy import or_
-
 
 from viaduct import db, login_manager, application
 from viaduct.helpers import flash_form_errors
@@ -406,73 +404,10 @@ def create_hash(bits=96):
 
 
 @blueprint.route('/users/', methods=['GET', 'POST'])
-@blueprint.route('/users/<int:page_nr>/', methods=['GET', 'POST'])
-def view(page_nr=1):
+def view():
     if not GroupPermissionAPI.can_read('user'):
         return abort(403)
-
-    # persumably, if the method is a post we have selected stuff to delete,
-    # similary to groups.
-    if request.method == 'POST':
-        user_ids = request.form.getlist('select')
-
-        del_users = User.query.filter(User.id.in_(user_ids)).all()
-
-        for user in del_users:
-            db.session.delete(user)
-
-        db.session.commit()
-
-        if len(del_users) > 1:
-            flash('The selected users have been deleted.', 'success')
-        else:
-            flash('The selected user has been deleted.', 'success')
-
-        redirect(url_for('user.view'))
-
-    search = ''
-    vvv = ''
-    member = 'nocare'
-
-    # Get a list of users to render for the current page.
-    users = User.query
-
-    if request.args.get('search'):
-        search = request.args.get('search')
-        searches = search.split(' ')
-
-        for s in searches:
-            if not s:
-                continue
-
-            users = users\
-                .filter(or_(User.first_name.like('%' + s + '%'),
-                            User.last_name.like('%' + s + '%'),
-                            User.email.like('%' + s + '%'),
-                            User.student_id.like('%' + s + '%')))
-
-    if request.args.get('vvv') and request.args.get('vvv') == 'on':
-        vvv = 'on'
-        users = users.filter(User.favourer == True)  # noqa
-
-    member_set = request.args.get('member')
-
-    if member_set in ['nocare', 'yes', 'no']:
-        member = member_set
-
-        if member == 'yes':
-            users = users.filter(User.has_payed == True)  # noqa
-        elif member == 'no':
-            users = users.filter(or_(User.has_payed == False,
-                                     User.has_payed == None))  # noqa
-
-    users = users\
-        .order_by(User.first_name)\
-        .order_by(User.last_name)\
-        .paginate(page_nr, 15, False)
-
-    return render_template('user/view.htm', users=users, search=search,
-                           vvv=vvv, member=member)
+    return render_template('user/view.htm')
 
 
 @blueprint.route('/users/export', methods=['GET'])
@@ -487,3 +422,50 @@ def user_export():
     for user in users:
         cw.writerow([getattr(user, c.name) for c in User.__mapper__.columns])
     return si.getvalue().strip('\r\n')
+
+
+###
+# Here starts the public api for users
+###
+@blueprint.route('/users/get_users/', methods=['GET'])
+def get_users():
+    if not GroupPermissionAPI.can_read('user'):
+        return abort(403)
+
+    users = User.query.all()
+    user_list = []
+
+    for user in users:
+        user_list.append(
+            [user.id,
+             user.email,
+             user.first_name,
+             user.last_name,
+             user.student_id,
+             user.education.name
+                if user.education else "",
+             "<i class='glyphicon glyphicon-ok'></i>"
+                if user.has_payed else "",
+             "<i class='glyphicon glyphicon-ok'></i>"
+                if user.honorary_member else "",
+             "<i class='glyphicon glyphicon-ok'></i>"
+                if user.favourer else ""
+             ])
+    return json.dumps({"data": user_list})
+
+
+# Not used at the moment due to integrity problems in the database
+@blueprint.route('/users/delete_users/', methods=['DELETE'])
+def api_delete_user():
+    if not GroupPermissionAPI.can_write('user'):
+        return abort(403)
+
+    user_ids = request.json['selected_ids']
+    del_users = User.query.filter(User.id.in_(user_ids)).all()
+
+    for user in del_users:
+        db.session.delete(user)
+
+    db.session.commit()
+
+    return json.dumps({'status': 'success'})
