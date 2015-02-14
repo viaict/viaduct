@@ -53,7 +53,7 @@ class CategoryAPI:
             # store the category in a list so we can work with it later
             found_categories.append(category)
 
-        print 'fffooooooooound categories', found_categories
+        print('fffooooooooound categories', found_categories)
 
         # check if previous categories are still present in the content, or
         # delete them otherwise
@@ -62,7 +62,7 @@ class CategoryAPI:
         for absent_category in absent_categories:
             absent_category.pages.remove(page)
 
-            print "fjdsaklfjdsakfjdsaklfjdksal", absent_category.pages
+            print("fjdsaklfjdsakfjdsaklfjdksal", absent_category.pages)
             if len(absent_category.pages) == 0:
                 db.session.delete(absent_category)
             else:

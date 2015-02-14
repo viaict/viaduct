@@ -83,7 +83,7 @@ class EditUserForm(Form):
                                                       ' opgegeven')])
     has_payed = BooleanField('Heeft betaald')
     honorary_member = BooleanField('Erelid')
-    locale = SelectField('Taal', choices=LANGUAGES.items())
+    locale = SelectField('Taal', choices=list(LANGUAGES.items()))
     favourer = BooleanField('Begunstiger')
     student_id = StringField('Studentnummer',
                              validators=[InputRequired(message='Geen '
@@ -125,7 +125,7 @@ class EditUserInfoForm(Form):
                              validators=[InputRequired(message='Geen '
                                                        'studentnummer '
                                                        'opgegeven')])
-    locale = SelectField('Taal', choices=LANGUAGES.items())
+    locale = SelectField('Taal', choices=list(LANGUAGES.items()))
     education_id = SelectField('Opleiding', coerce=int)
     avatar = FileField('Avatar')
     birth_date = DateField('Geboortedatum')

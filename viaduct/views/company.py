@@ -41,7 +41,7 @@ def view_list(page=1):
                 .paginate(page, 15, True)
         else:
             for i, company in enumerate(companies):
-                print(i, company)
+                print((i, company))
                 if company.contract_start_date < datetime\
                         .date(datetime.utcnow()) and \
                         company.contract_end_date < datetime\
@@ -172,7 +172,7 @@ def update(company_id=None):
     if request.files['file']:
         logo = FileAPI.upload(request.files['file'])
         company.logo_path = logo.name
-        print(vars(logo))
+        print((vars(logo)))
         pass
 
     if error_found:

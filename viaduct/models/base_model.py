@@ -133,7 +133,7 @@ class BaseEntity(object):
 
         # Update all values from the dict that exist as a column or a
         # relationship
-        for key, value in obj.items():
+        for key, value in list(obj.items()):
             if key in column_names:
                 columntype = str(cls.__table__.columns[key].type)
                 if columntype == 'DATE' and value is not None:

@@ -20,5 +20,5 @@ def main_view():
              (Education, [Education.name])]
     needle = "inf ku"
     result = SearchAPI.search(stack, needle)
-    print 'result from module_permission view: ', result
+    print('result from module_permission view: ', result)
     return render_template('module_permission/view.htm', result=result)

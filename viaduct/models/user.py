@@ -15,7 +15,7 @@ class User(db.Model, BaseEntity):
     password = db.Column(db.String(60))
     first_name = db.Column(db.String(256))
     last_name = db.Column(db.String(256))
-    locale = db.Column(db.Enum(*LANGUAGES.keys()), default="nl")
+    locale = db.Column(db.Enum(*list(LANGUAGES.keys())), default="nl")
     has_payed = db.Column(db.Boolean, default=None)
     shirt_size = db.Column(db.Enum('Small', 'Medium', 'Large'))
     allergy = db.Column(db.String(1024))  # Allergy / medication
@@ -72,7 +72,7 @@ class User(db.Model, BaseEntity):
 
     def get_id(self):
         """Necessary for Flask-Login."""
-        return unicode(self.id)
+        return str(self.id)
 
     @property
     def name(self):

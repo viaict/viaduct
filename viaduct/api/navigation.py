@@ -125,7 +125,7 @@ class NavigationAPI:
         removed from the navigation.
         '''
         blueprints = [(name, b.url_prefix) for name, b in
-                      application.blueprints.iteritems()]
+                      application.blueprints.items()]
 
         if entry.external or entry.activity_list:
             return True

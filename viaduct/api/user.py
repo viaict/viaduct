@@ -3,7 +3,7 @@ from viaduct.models.page import PagePermission
 from flask import flash
 import os
 import fnmatch
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import hashlib
 
 from flask import render_template
@@ -59,8 +59,8 @@ class UserAPI:
 
         # Construct the url
         gravatar_url = 'https://www.gravatar.com/avatar/' +\
-            hashlib.md5(email.lower()).hexdigest() + '?'
-        gravatar_url += urllib.urlencode({'d': default, 's': str(size)})
+            hashlib.md5(email.lower().encode('utf-8')).hexdigest() + '?'
+        gravatar_url += urllib.parse.urlencode({'d': default, 's': str(size)})
         return gravatar_url
 
     @staticmethod

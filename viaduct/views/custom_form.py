@@ -12,8 +12,8 @@ from viaduct.api.group import GroupPermissionAPI
 
 from sqlalchemy import desc
 
-import StringIO
-import unicodecsv
+import io
+import csv
 
 blueprint = Blueprint('custom_form', __name__, url_prefix='/forms')
 
@@ -70,8 +70,8 @@ def view_single(form_id=None):
     entries = CustomFormResult.query\
         .filter(CustomFormResult.form_id == form_id).order_by("created")
 
-    from urllib import unquote_plus
-    from urlparse import parse_qs
+    from urllib.parse import unquote_plus
+    from urllib.parse import parse_qs
 
     for entry in entries:
         # Hide form entries from non existing users
@@ -101,8 +101,8 @@ def view_single(form_id=None):
 @blueprint.route('/export/<int:form_id>/', methods=['POST'])
 def export(form_id):
     xp = CustomForm.exports
-    xp_names = xp.keys()
-    names = request.form.keys()
+    xp_names = list(xp.keys())
+    names = list(request.form.keys())
     labels = []
     for name in xp_names:
         if name not in names:
@@ -110,8 +110,8 @@ def export(form_id):
 
         labels.append(xp[name]['label'])
 
-    io = StringIO.StringIO()
-    wrt = unicodecsv.writer(io)
+    str_io = io.StringIO()
+    wrt = csv.writer(str_io)
     wrt.writerow(labels)
 
     form = CustomForm.query.get(form_id)
@@ -128,7 +128,7 @@ def export(form_id):
         wrt.writerow(data)
 
     def generate():
-        yield io.getvalue()
+        yield str_io.getvalue()
 
     return Response(generate(), mimetype='text/csv')
 
