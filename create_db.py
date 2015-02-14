@@ -400,7 +400,7 @@ db.session.commit()
 
 # in the future we want modules to automagically register themselves but for
 # now we will do this hard coded
-modules = application.blueprints.keys()
+modules = list(application.blueprints.keys())
 
 for module in modules:
     group_permission = GroupPermission(module, group.id, 2)

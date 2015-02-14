@@ -2,6 +2,7 @@ import httplib2
 from apiclient.discovery import build
 from oauth2client.client import SignedJwtAssertionCredentials
 from viaduct import application
+import traceback
 
 # google calendar Settings > via_events > id
 via_calendar_id = "bka8j77cis5ffr2pokn5ef5cso@group.calendar.google.com"
@@ -17,7 +18,7 @@ private_key = application.config['GOOGLE_API_KEY']
 
 def build_service():
     try:
-        f = file(private_key, "rb")
+        f = open(private_key, "rb")
         key = f.read()
         f.close()
 
@@ -33,9 +34,8 @@ def build_service():
         http = credentials.authorize(http)
 
         return build("calendar", "v3", http=http)
-    except Exception as e:
-        print('ERROR in google api')
-        print(e)
+    except Exception:
+        traceback.print_exc()
         return None
 
 

@@ -5,8 +5,8 @@ import datetime
 import smtplib
 import re
 import json
-from unicodecsv import writer
-from StringIO import StringIO
+from csv import writer
+from io import StringIO
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 

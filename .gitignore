@@ -26,6 +26,7 @@ viaduct/static/files/*
 viaduct/static/css/*
 viaduct/static/js
 venv/*
+venv3
 .vimrc
 
 .sass-cache/

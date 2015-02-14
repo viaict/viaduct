@@ -11,7 +11,7 @@ import datetime
 import json
 
 
-version = 'v1.6.1.0'
+version = 'v2.0.0.0'
 
 
 def static_url(url):
@@ -45,7 +45,7 @@ def register_views(application, path, extension=''):
             blueprint = getattr(import_module(module_name), 'blueprint', None)
 
             if blueprint:
-                print('{0} has been imported.'.format(module_name))
+                print(('{0} has been imported.'.format(module_name)))
                 application.register_blueprint(blueprint)
 
 
@@ -63,7 +63,7 @@ def get_locale():
     if current_user and current_user.locale is not None and \
             not current_user.is_anonymous():
         return current_user.locale
-    return request.accept_languages.best_match(LANGUAGES.keys())
+    return request.accept_languages.best_match(list(LANGUAGES.keys()))
 
 # Set up the login manager, which is used to store the details related to the
 # authentication system.
@@ -96,7 +96,7 @@ application.jinja_env.globals.update(list=list)
 application.jinja_env.globals.update(static_url=static_url)
 
 # Register the blueprints.
-import api  # noqa
+from . import api  # noqa
 
 path = os.path.dirname(os.path.abspath(__file__))
 

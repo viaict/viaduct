@@ -5,26 +5,26 @@ from wtforms.validators import InputRequired, Email
 
 
 class CreateForm(Form):
-    name = StringField(u'Naam', validators=[InputRequired()])
-    description = TextAreaField(u'Beschrijving', validators=[InputRequired()])
-    start_date = StringField(u'start_time', validators=[InputRequired()])
-    start_time = StringField(u'start_time', validators=[InputRequired()])
-    end_date = StringField(u'Venue')
-    end_time = StringField(u'Venue')
-    location = StringField(u'Locatie',
+    name = StringField('Naam', validators=[InputRequired()])
+    description = TextAreaField('Beschrijving', validators=[InputRequired()])
+    start_date = StringField('start_time', validators=[InputRequired()])
+    start_time = StringField('start_time', validators=[InputRequired()])
+    end_date = StringField('Venue')
+    end_time = StringField('Venue')
+    location = StringField('Locatie',
                            default="Studievereniging VIA, Science Park 904,\
                            1098 Amsterdam Nederland")
-    privacy = StringField(u'Privacy')
-    price = StringField(u'Prijs')
-    picture = FileField(u'Plaatje')
-    venue = StringField(u'Venue')
+    privacy = StringField('Privacy')
+    price = StringField('Prijs')
+    picture = FileField('Plaatje')
+    venue = StringField('Venue')
     form_id = SelectField('Formulier', coerce=int)
 
 
 class ActivityForm(Form):
-    email = StringField(u'E-mail address', validators=[InputRequired(),
+    email = StringField('E-mail address', validators=[InputRequired(),
                                                        Email()])
-    first_name = StringField(u'First name', validators=[InputRequired()])
-    last_name = StringField(u'Last name', validators=[InputRequired()])
-    student_id = StringField(u'Student ID', validators=[InputRequired()])
-    education_id = SelectField(u'Education', coerce=int)
+    first_name = StringField('First name', validators=[InputRequired()])
+    last_name = StringField('Last name', validators=[InputRequired()])
+    student_id = StringField('Student ID', validators=[InputRequired()])
+    education_id = SelectField('Education', coerce=int)

@@ -40,7 +40,7 @@ def add_sale():
         BookSalesAPI.commit_sale_to_db(form.books.data,
                                        form.student_number.data,
                                        form.payment.data)
-        print(Sale.query.all())
+        print((Sale.query.all()))
 
         return redirect(url_for('booksales.view'))
 
