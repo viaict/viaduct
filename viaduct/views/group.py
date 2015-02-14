@@ -10,8 +10,6 @@ from flask.ext.login import current_user
 from viaduct import application, db
 from viaduct.helpers import flash_form_errors
 
-from sqlalchemy import or_
-
 from viaduct.api.group import GroupPermissionAPI
 
 from viaduct.models import Group, GroupPermission, User
@@ -157,8 +155,6 @@ def delete_group_users(group_id):
 
 
 @blueprint.route('/groups/<int:group_id>/users/add/', methods=['GET', 'POST'])
-@blueprint.route('/groups/<int:group_id>/users/add/<int:page_nr>',
-                 methods=['GET', 'POST'])
 def add_users(group_id, page_nr=1):
     if not(GroupPermissionAPI.can_write('group')):
         return abort(403)
@@ -169,47 +165,13 @@ def add_users(group_id, page_nr=1):
         flash('There is no such group.', 'danger')
         return redirect(url_for('group.view'))
 
-    if request.method == 'POST':
-        user_ids = request.form.getlist('select')
-
-        users = User.query.filter(User.id.in_(user_ids))\
-            .order_by(User.first_name).order_by(User.last_name).all()
-
-        for user in users:
-            group.add_user(user)
-
-        db.session.add(group)
-        db.session.commit()
-
-        if len(user_ids) > 1:
-            flash('The selected users have been added to the group.',
-                  'success')
-        else:
-            flash('The selected user has been added to the group.', 'success')
-
-        return redirect(url_for('group.view_users', group_id=group_id))
-
-    if request.args.get('search'):
-        search = request.args.get('search')
-        users = User.query.\
-            filter(or_(User.first_name.like('%' + search + '%'),
-                       User.last_name.like('%' + search + '%'),
-                       User.email.like('%' + search + '%'),
-                       User.student_id.like('%' + search + '%')))\
-            .order_by(User.last_name).paginate(page_nr, 15, False)
-        return render_template('group/add_users.htm', group=group, users=users,
-                               search=search, title='Add users')
-
-    users = User.query.order_by(User.first_name).order_by(User.last_name)\
-        .paginate(page_nr, 15, False)
-
-    return render_template('group/add_users.htm', group=group, users=users,
-                           title='Add users')
+    return render_template('group/add_users.htm',
+                           group=group, title='Add users')
 
 
 @blueprint.route('/groups/edit-permissions/<int:group_id>/',
                  methods=['GET', 'POST'])
-@blueprint.route('/groups/edit-permissions/<int:group_id>/<int:page_nr>',
+@blueprint.route('/groups/edit-permissions/<int:group_id>/<int:page_nr>/',
                  methods=['GET', 'POST'])
 def edit_permissions(group_id, page_nr=1):
     if not(GroupPermissionAPI.can_read('group')):
@@ -281,10 +243,29 @@ def edit_permissions(group_id, page_nr=1):
                            permissions=zip(permissions, form.permissions))
 
 
-@blueprint.route('/api/group/users/<int:group_id>', methods=['GET'])
+@blueprint.route('/api/group/users/<int:group_id>/', methods=['GET'])
 def group_api_get_users(group_id):
+    if not(GroupPermissionAPI.can_read('group')):
+        return abort(403)
     group = Group.query.get(group_id)
     users = group.users.order_by(User.first_name, User.last_name).all()
 
     res = [{'val': user.id, 'label': user.name} for user in users]
     return jsonify(users=res)
+
+
+@blueprint.route('/groups/<int:group_id>/users/add_users/', methods=['PUT'])
+def group_api_add_users(group_id):
+    if not(GroupPermissionAPI.can_write('group')):
+        return abort(403)
+    group = Group.query.get(group_id)
+
+    user_ids = request.json['selected_ids']
+    add_users = User.query.filter(User.id.in_(user_ids)).all()
+
+    for user in add_users:
+        group.add_user(user)
+
+    db.session.add(group)
+    db.session.commit()
+    return "testestetsetset", 200

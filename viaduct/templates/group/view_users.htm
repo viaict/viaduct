@@ -44,10 +44,11 @@
 
         utils.datatables.enable_select($('#datatable tbody'));
 
-        utils.datatables.delete_by_url(
+        utils.datatables.action_by_url(
             $('#delete'),
             table,
-            "{{ url_for('group.delete_group_users', group_id=group.id) }}"
+            "{{ url_for('group.delete_group_users', group_id=group.id) }}",
+            "delete"
         );
     });
 </script>

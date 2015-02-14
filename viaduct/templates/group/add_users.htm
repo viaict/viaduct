@@ -15,9 +15,6 @@
                     <th>Achternaam</th>
                     <th>Student ID</th>
                     <th>Studie</th>
-                    <th>Lid</th>
-                    <th>Erelid</th>
-                    <th>Begunstiger</th>
                 </tr>
             </thead>
             <tfoot>
@@ -28,15 +25,15 @@
                     <th>Achternaam</th>
                     <th>Student ID</th>
                     <th>Studie</th>
-                    <th>Lid</th>
-                    <th>Erelid</th>
-                    <th>Begunstiger</th>
                 </tr>
             </tfoot>
         </table>
 
         <div class='btn-group'>
-            <a href='#' id="add-users" class='btn btn-success'>
+            <a href='#' id='add_users' class='btn btn-success'>
+                <i class='glyphicon glyphicon-plus'></i> Add
+            </a>
+            <a href='{{ url_for('user.sign_up') }}' id="add-users" class='btn btn-success'>
                 <i class='glyphicon glyphicon-user'></i> Gebruiker aanmaken
             </a>
             <a href='{{ url_for('group.view_users', group_id=group.id) }}' class='btn btn-primary'>
@@ -53,8 +50,15 @@
                 "type": "get"
             }
         }, utils.datatables.defaults));
-        utils.datatables.enable_select();
-    });
+
+        // Enable the toggle on rows
+        utils.datatables.enable_select(table);
+
+        utils.datatables.action_by_url($('#add_users'), table,
+            "{{ url_for('group.group_api_add_users', group_id=group.id) }}",
+            "put", "{{url_for('group.view_users', group_id=group.id) }}"
+        );
+        });
 </script>
 {% endblock %}
 

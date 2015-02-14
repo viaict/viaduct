@@ -60,8 +60,8 @@
             window.open("/users/view/" + table.row(this).data()[0]);
         });
 
-        utils.datatables.delete_by_url(
-            $('#delete'), table, '/users/delete_users/'
+        utils.datatables.action_by_url( $('#delete'), table,
+                                       '/users/delete_users/', "delete"
         );
     });
 </script>
