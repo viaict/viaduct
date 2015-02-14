@@ -1,4 +1,3 @@
-import Mollie
 from flask.ext.login import current_user
 from flask import abort
 from viaduct.models.mollie import Transaction
@@ -6,15 +5,18 @@ from viaduct.models.mollie import Transaction
 
 from viaduct import db, application
 
-MOLLIE = Mollie.API.Client()
+import mollie.api.error as mollie_error
+from mollie.api.client import Client
+
+MOLLIE = Client()
 MOLLIE_URL = application.config['MOLLIE_URL']
 MOLLIE_REDIRECT_URL = application.config['MOLLIE_REDIRECT_URL']
 MOLLIE_TEST_MODE = application.config.get('MOLLIE_TEST_MODE', False)
 if MOLLIE_TEST_MODE:
-    MOLLIE.setApiKey(application.config['MOLLIE_TEST_KEY'])
+    MOLLIE.set_api_key(application.config['MOLLIE_TEST_KEY'])
     print('USING MOLLIE TEST KEY')
 else:
-    MOLLIE.setApiKey(application.config['MOLLIE_KEY'])
+    MOLLIE.set_api_key(application.config['MOLLIE_KEY'])
     print('USING MOLLIE LIVE KEY')
 
 
@@ -56,9 +58,9 @@ class MollieAPI:
             db.session.add(transaction)
             db.session.commit()
 
-            return payment.getPaymentUrl(), transaction
+            return payment.get_payment_url(), transaction
 
-        except Mollie.API.Error as e:
+        except mollie_error.Error as e:
             return False, 'API call failed: ' + e.message
 
     @staticmethod
@@ -71,8 +73,8 @@ class MollieAPI:
         try:
             payment = MOLLIE.payments.get(mollie_id)
 
-            return payment.getPaymentUrl(), ''
-        except Mollie.API.Error as e:
+            return payment.get_payment_url(), ''
+        except mollie_error.Error as e:
             return False, 'API call failed: ' + e.message
 
     @staticmethod
@@ -94,14 +96,14 @@ class MollieAPI:
 
             db.session.commit()
 
-            if payment.isPaid():
+            if payment.is_paid():
                 return True, 'De transactie is afgerond.'
-            elif payment.isPending():
+            elif payment.is_pending():
                 return False, 'De transactie is nog bezig.'
-            elif payment.isOpen():
+            elif payment.is_open():
                 return False, 'De transactie is nog niet begonnen.'
             return False, 'De transactie is afgebroken.'
-        except Mollie.API.Error as e:
+        except mollie_error.Error as e:
             return False, 'API call failed: ' + e.message
 
     @staticmethod
@@ -109,7 +111,7 @@ class MollieAPI:
         try:
             payments = MOLLIE.payments.all()
             return payments, 'Success'
-        except Mollie.API.Error as e:
+        except mollie_error.Error as e:
             return False, 'API call failed: ' + e.message
 
     # Switches from local to remote ID, or the other way around.

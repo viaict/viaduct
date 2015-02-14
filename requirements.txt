@@ -18,7 +18,7 @@ itsdangerous==0.24
 Jinja2==2.7.3
 Markdown==2.5.2
 MarkupSafe==0.23
-mollie-api-python==1.0.0
+git+git://github.com/JelteF/mollie-api-python@master#egg=mollie-api-client
 oauth2client==1.4.5
 Pillow==2.7.0
 py-bcrypt==0.4
