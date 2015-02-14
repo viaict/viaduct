@@ -108,6 +108,11 @@ class MollieAPI:
 
     @staticmethod
     def get_all_transactions():
+        transactions = Transaction.query.all()
+        return transactions, 'test'
+
+    @staticmethod
+    def get_all_remote_transactions():
         try:
             payments = MOLLIE.payments.all()
             return payments

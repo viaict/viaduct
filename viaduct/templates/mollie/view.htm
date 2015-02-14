@@ -13,11 +13,11 @@
 <td>
 {% for transaction in transactions: %}
 <tr>
-    <td>{{ payment['metadata']['transaction_id'] }}</td>
-    <td>{{ payment['id'] }}</td>
-    <td>{{ payment['metadata']['first_name'] }} {{ payment['metadata']['last_name'] }}</td>
-    <td>{{ payment['amount'] }}</td>
-    <td>{{ payment['status'] }}</td>
+    <td>{{ transaction.id }}</td>
+    <td>{{ transaction.mollie_id }}</td>
+    <td>{{ transaction.user.name }}</td>
+    <td>{{ transaction.amount }}</td>
+    <td>{{ transaction.status }}</td>
 <td><a href="{{ config.MOLLIE_REDIRECT_URL }}{{ payment['metadata']['transaction_id'] }}" class="btn btn-default">check status</a>
 </tr>
 {% endfor %}

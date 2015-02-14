@@ -2,6 +2,7 @@ from flask import Blueprint, abort, render_template, request
 from viaduct.api.mollie import MollieAPI
 from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.custom_form import CustomFormAPI
+from viaduct import application
 
 blueprint = Blueprint('mollie', __name__, url_prefix='/mollie')
 
@@ -35,7 +36,27 @@ def webhook():
 def view_all_transactions():
     if not GroupPermissionAPI.can_read('mollie'):
         return abort(403)
-    payments, message = MollieAPI.get_all_transactions()
+    transactions, message = MollieAPI.get_all_transactions()
+    print(transactions)
+    test = application.config.get('MOLLIE_TEST_MODE', False)
+    key = application.config.get('MOLLIE_TEST_KEY', False)
+    if transactions:
+        return render_template('mollie/view.htm', transactions=transactions,
+                               test=test, key=key, message=message)
+    else:
+        return render_template('mollie/success.htm', message=message,
+                               test=test, key=key)
+
+
+@blueprint.route('/remote/')
+@blueprint.route('/view/remote/')
+def view_all_remote_transactions():
+    if not GroupPermissionAPI.can_read('mollie'):
+        return abort(403)
+    payments, message = MollieAPI.get_all_remote_transactions()
+    print(payments)
+    test = application.config.get('MOLLIE_TEST_MODE', False)
+    key = application.config.get('MOLLIE_TEST_KEY', False)
     if payments:
         return render_template('mollie/view.htm', payments=payments)
     else:
