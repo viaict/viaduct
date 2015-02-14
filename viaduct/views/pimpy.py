@@ -74,6 +74,7 @@ def update_task_status():
     list_items = query.all()
     for task in list_items:
         task.update_status(new_status)
+    db.session.commit()
     return jsonify(status=task.get_status_color())
 
 

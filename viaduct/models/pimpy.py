@@ -75,7 +75,6 @@ class Task(db.Model, BaseEntity):
     def update_status(self, status):
         if status >= 0 and status <= len(self.status_meanings):
             self.status = status
-            db.session.commit()
 
     def get_status_color(self):
         """

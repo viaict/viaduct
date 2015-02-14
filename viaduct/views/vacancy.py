@@ -39,7 +39,6 @@ def view_list(page_nr=1):
                                                                       15, True)
         else:
             for i, vacancy in enumerate(vacancies):
-                print(i, vacancy)
                 if (vacancy.start_date < datetime.date(datetime.utcnow()) and
                         vacancy.end_date < datetime.date(datetime.utcnow())):
                     vacancies[i].expired = True
@@ -60,10 +59,8 @@ def view_list(page_nr=1):
             order_by(Vacancy.title).order_by(Company.rank)
 
         for i, vacancy in enumerate(vacancies):
-            print(i, vacancy)
             if (vacancy.start_date < datetime.date(datetime.utcnow()) and
                     vacancy.end_date < datetime.date(datetime.utcnow())):
-                print("I exist")
                 vacancies[i].expired = True
 
         vacancies = vacancies.paginate(page_nr, 15, False)
