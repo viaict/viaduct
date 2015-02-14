@@ -216,16 +216,17 @@ def create(activity_id=None):
             activity.picture = picture
             activity.owner_id = owner_id
 
-            if activity.id:
+            if activity.id and activity.google_event_id:
                 flash('De activiteit is aangepast', 'success')
 
                 google.update_activity(activity.google_event_id, name,
-                                       location, start.isoformat(),
-                                       end.isoformat())
+                                       description, location,
+                                       start.isoformat(), end.isoformat())
             else:
                 flash('De activiteit is aangemaakt', 'success')
 
-                google_activity = google.insert_activity(name, location,
+                google_activity = google.insert_activity(name, description,
+                                                         location,
                                                          start.isoformat(),
                                                          end.isoformat())
 
@@ -253,8 +254,10 @@ def create_mollie_transaction(result_id):
     transaction = Transaction.query\
         .filter(Transaction.form_result_id == form_result.id)\
         .filter(Transaction.status == 'open').first()
-    if not transaction:
+    if not transaction or not transaction.mollie_id:
         description = form_result.form.transaction_description
+        description = "VIA transaction: " + description
+        print(description)
         amount = form_result.form.price
         user = form_result.owner
         payment_url, transaction = MollieAPI.create_transaction(

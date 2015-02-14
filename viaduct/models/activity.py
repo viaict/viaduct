@@ -23,7 +23,7 @@ class Activity(db.Model, BaseEntity):
     updated_time = db.Column(db.DateTime, default=datetime.datetime.now())
     form_id = db.Column(db.Integer, db.ForeignKey('custom_form.id'))
 
-    google_event_id = db.Column(db.Integer)
+    google_event_id = db.Column(db.String(64))
     owner = db.relationship('User', backref=db.backref('activities',
                                                        lazy='dynamic'))
 

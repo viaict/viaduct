@@ -175,3 +175,16 @@ class NavigationAPI:
         backtrack.reverse()
         return render_template('navigation/view_backtrack.htm',
                                backtrack=backtrack)
+
+    @staticmethod
+    def alphabeticalize(parent_entry):
+        entries = NavigationEntry.query\
+            .filter(NavigationEntry.parent_id == parent_entry.id)\
+            .order_by(NavigationEntry.title)\
+            .all()
+
+        position = 1
+
+        for entry in entries:
+            entry.position = position
+            position += 1

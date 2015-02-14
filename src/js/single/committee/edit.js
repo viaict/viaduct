@@ -4,9 +4,6 @@ $(function () {
     var $coordinator_select = $('#coordinator_id');
     var $group_select = $('#group_id');
 
-    $coordinator_select.select2();
-    $group_select.select2();
-
     function set_group_users() {
         var group_id = $group_select.val();
 

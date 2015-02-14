@@ -59,7 +59,7 @@ def page_not_found(e):
 def flash_form_errors(form):
     for field, errors in form.errors.items():
         for error in errors:
-            flash(error, 'danger')
+            flash('%s: %s' % (field, error), 'danger')
 
 
 def get_login_form():

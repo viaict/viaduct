@@ -19,7 +19,8 @@ class NavigationEntry(db.Model, BaseEntity):
         primaryjoin=('NavigationEntry.parent_id==NavigationEntry.id'),
         backref=db.backref('children', lazy='dynamic'))
 
-    def __init__(self, parent, title, url, external, activity_list, position, subtitle=None):
+    def __init__(self, parent, title, url, external, activity_list, position,
+                 subtitle=None):
         if parent:
             self.parent_id = parent.id
 
@@ -32,6 +33,6 @@ class NavigationEntry(db.Model, BaseEntity):
 
     def get_children(self, ordered=True):
         childs = self.children
-        if ordered == True:
+        if ordered:
             childs = childs.order_by(NavigationEntry.position)
         return childs

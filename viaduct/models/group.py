@@ -11,6 +11,8 @@ user_group = db.Table(
 class Group(db.Model, BaseEntity):
     __tablename__ = 'group'
 
+    prints = ('id', 'name')
+
     name = db.Column(db.String(200), unique=True)
 
     users = db.relationship('User', secondary=user_group,
