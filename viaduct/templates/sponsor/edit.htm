@@ -1,0 +1,33 @@
+{% from "macros/form.htm" import render_field %}
+
+{% extends "content.htm" %}
+
+{% block content %}
+
+<h2>{% if sponsor.id %}{{ sponsor.name }}{% else %}Maak nieuwe sponsor{% endif %}</h2>
+  {% if sponsor.id %}
+    <form action="{{ url_for("sponsor.delete", sponsor_id=sponsor.id) }}" method="post">
+  {% else %}
+    <form>
+  {% endif %}
+    <div class="controls">
+      <a href="{{ url_for("sponsor.main") }}" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-arrow-left"></i> Ga terug naar sponsoren</a>
+      {% if sponsor.id %}
+      <button type="submit"  class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Verwijder Sponsor</button>
+      {% endif %}
+    </div>
+  </form>
+<div>
+<form action="" method="post" name="edit_sponsor" class="form_horizontal" enctype="multipart/form-data">
+  <fieldset>
+    {{ form.csrf_token }}
+    {{ render_field(form.name) }}
+    <div class="control-group">
+        <div class="controls">
+            <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+    </div>
+  </fieldset>
+</div>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'content.htm' %}
+
+
+{% block content %}
+
+<p>
+  <a class="btn btn-primary" href="{{ url_for("sponsor.create") }}">Maak nieuwe sponsor</a>
+<p>
+<div class="panel panel-default">
+  <ul class="list-group">
+  {% for sponsor in sponsors %}
+    <a href="{{ url_for("sponsor.edit", sponsor_id=sponsor.id) }}" class="list-group-item">
+      {{ sponsor.name }}
+    </a>
+  </li>
+  {% endfor %}
+  </ul>
+</div>
+
+
+<div class="panel panel-default">
+  <ul class="list-group">
+    {% for rev in revisions %}
+    <a href='/{{ rev.page.path }}' class="list-group-item">{{ rev.title }}</a>
+    {% endfor %}
+  </ul>
+</div>
+
+{% endblock %}
