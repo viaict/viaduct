@@ -14,18 +14,18 @@ class EditGroupPagePermissionEntry(UnsafeForm):
 
 class SuperPageForm(Form):
     """TODO"""
-    needs_payed = BooleanField(u'Betaling vereist')
+    needs_payed = BooleanField('Betaling vereist')
 
-    title = StringField(u'Titel', [InputRequired()])
-    comment = StringField(u'Reden van wijziging', [Optional()])
+    title = StringField('Titel', [InputRequired()])
+    comment = StringField('Reden van wijziging', [Optional()])
 
     save_page = SubmitField('Opslaan')
 
 
 class PageForm(SuperPageForm):
-    content = TextAreaField(u'Inhoud', [InputRequired()])
-    filter_html = BooleanField(u'Sta HTML tags toe')
-    custom_form_id = SelectField(u'Formulier', coerce=int)
+    content = TextAreaField('Inhoud', [InputRequired()])
+    filter_html = BooleanField('Sta HTML tags toe')
+    custom_form_id = SelectField('Formulier', coerce=int)
     permissions = FieldList(FormField(EditGroupPagePermissionEntry))
 
 

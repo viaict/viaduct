@@ -12,10 +12,10 @@ MOLLIE_REDIRECT_URL = application.config['MOLLIE_REDIRECT_URL']
 MOLLIE_TEST_MODE = application.config.get('MOLLIE_TEST_MODE', False)
 if MOLLIE_TEST_MODE:
     MOLLIE.setApiKey(application.config['MOLLIE_TEST_KEY'])
-    print 'USING MOLLIE TEST KEY'
+    print('USING MOLLIE TEST KEY')
 else:
     MOLLIE.setApiKey(application.config['MOLLIE_KEY'])
-    print 'USING MOLLIE LIVE KEY'
+    print('USING MOLLIE LIVE KEY')
 
 
 class MollieAPI:

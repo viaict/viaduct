@@ -5,7 +5,7 @@ import datetime
 import smtplib
 import re
 from unicodecsv import writer
-from StringIO import StringIO
+from io import StringIO
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 

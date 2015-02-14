@@ -5,7 +5,7 @@ from flask import flash, request, Markup, url_for, render_template, redirect, \
 from flask.ext.login import current_user
 
 from markdown import markdown
-from resource import Resource  # noqa
+from .resource import Resource  # noqa
 
 from viaduct import application, login_manager
 from viaduct.forms import SignInForm

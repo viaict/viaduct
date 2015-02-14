@@ -72,7 +72,7 @@ class User(db.Model, BaseEntity):
 
     def get_id(self):
         """Necessary for Flask-Login."""
-        return unicode(self.id)
+        return str(self.id)
 
     @property
     def name(self):

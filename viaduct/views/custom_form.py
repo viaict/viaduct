@@ -12,7 +12,7 @@ from viaduct.api.group import GroupPermissionAPI
 
 from sqlalchemy import desc
 
-import StringIO
+import io
 import unicodecsv
 
 blueprint = Blueprint('custom_form', __name__, url_prefix='/forms')
@@ -70,8 +70,8 @@ def view_single(form_id=None):
     entries = CustomFormResult.query\
         .filter(CustomFormResult.form_id == form_id).order_by("created")
 
-    from urllib import unquote_plus
-    from urlparse import parse_qs
+    from urllib.parse import unquote_plus
+    from urllib.parse import parse_qs
 
     for entry in entries:
         # Hide form entries from non existing users
@@ -110,7 +110,7 @@ def export(form_id):
 
         labels.append(xp[name]['label'])
 
-    io = StringIO.StringIO()
+    io = io.StringIO()
     wrt = unicodecsv.writer(io)
     wrt.writerow(labels)
 

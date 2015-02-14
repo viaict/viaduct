@@ -1,17 +1,17 @@
 from viaduct import application
 
-from course import CourseAPI
-from degree import DegreeAPI
-from education import EducationAPI
-from navigation import NavigationAPI
-from category import CategoryAPI
-from pimpy import PimpyAPI
-from file import FileAPI  # noqa
-from booksales import BookSalesAPI
-from page import PageAPI
+from .course import CourseAPI
+from .degree import DegreeAPI
+from .education import EducationAPI
+from .navigation import NavigationAPI
+from .category import CategoryAPI
+from .pimpy import PimpyAPI
+from .file import FileAPI  # noqa
+from .booksales import BookSalesAPI
+from .page import PageAPI
 
-from user import UserAPI
-from group import GroupPermissionAPI
+from .user import UserAPI
+from .group import GroupPermissionAPI
 
 CourseAPI.register()
 DegreeAPI.register()
