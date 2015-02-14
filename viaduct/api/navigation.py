@@ -115,14 +115,13 @@ class NavigationAPI:
                                             '/activities/' + str(activity.id),
                                             False, False, 0,
                                             activity.till_now()))
-
         return entries
 
     @staticmethod
     def can_view(entry):
         '''
         Check whether the current user can view the entry, so if not it can be
-        removed from the navigation.
+        removed from the navigation. Note: Currently only working with pages.
         '''
         # blueprints = [(name, b.url_prefix) for name, b in
         #               application.blueprints.iteritems()]
