@@ -4,8 +4,9 @@ from flask_wtf import Form
 from wtforms import StringField, PasswordField, BooleanField, \
     SelectField, IntegerField, FileField
 from wtforms.widgets import TextInput
-from wtforms.validators import InputRequired, Email, EqualTo, ValidationError
-from config import LANGUAGES
+from wtforms.validators import InputRequired, Email, EqualTo, ValidationError,\
+    Length
+from config import LANGUAGES, MIN_PASSWORD_LENGTH
 
 import dateutil
 
@@ -36,7 +37,9 @@ class SignUpForm(Form):
         Email(message='Ongelding e-mailadres opgegeven')])
     password = PasswordField(
         'Wachtwoord', validators=[
-            InputRequired(message='Geen wachtwoord opgegeven')]
+            InputRequired(message='Geen wachtwoord opgegeven'),
+            Length(message='Minumum wachtwoord length: %d' %
+                   MIN_PASSWORD_LENGTH, min=MIN_PASSWORD_LENGTH)]
     )
     repeat_password = PasswordField(
         'Herhaal wachtwoord', validators=[
@@ -72,7 +75,11 @@ class EditUserForm(Form):
             InputRequired(message='Geen e-mailadres opgegeven'),
             Email(message='Ongeldig e-mailadres opgegeven')]
     )
-    password = PasswordField('Wachtwoord')
+    password = PasswordField(
+        'Wachtwoord', validators=[
+            Length(message='Minumum wachtwoord length: %d' %
+                   MIN_PASSWORD_LENGTH, min=MIN_PASSWORD_LENGTH)]
+        )
     repeat_password = PasswordField(
         'Herhaal wachtwoord', validators=[
             EqualTo('password', message='Wachtwoorden komen niet overeen')]
@@ -116,8 +123,15 @@ class EditUserInfoForm(Form):
         'E-mailadres', validators=[
             InputRequired(message='Geen e-mailadres opgegeven'),
             Email(message='Ongeldig e-mailadres opgegeven')])
-    password = PasswordField('Wachtwoord')
-    repeat_password = PasswordField('Herhaal wachtwoord')
+    password = PasswordField(
+        'Wachtwoord', validators=[
+            Length(message='Minumum wachtwoord length: %d' %
+                   MIN_PASSWORD_LENGTH, min=MIN_PASSWORD_LENGTH)]
+        )
+    repeat_password = PasswordField(
+        'Herhaal wachtwoord', validators=[
+            EqualTo('password', message='Wachtwoorden komen niet overeen')]
+    )
     first_name = StringField(
         'Voornaam', validators=[
             InputRequired(message='Geen voornaam opgegeven')])
@@ -168,8 +182,12 @@ class RequestPassword(Form):
 class ResetPassword(Form):
     password = PasswordField(
         'Wachtwoord', validators=[
-            InputRequired(message='Geen wachtwoord opgegeven')])
+            InputRequired(message='Geen wachtwoord opgegeven'),
+            Length(message='Minumum wachtwoord length: %d' %
+                   MIN_PASSWORD_LENGTH, min=MIN_PASSWORD_LENGTH)]
+    )
     password_repeat = PasswordField(
         'Herhaal wachtwoord', validators=[
             InputRequired(message='Wachtwoorden komen niet overeen'),
-            EqualTo('password', message='Wachtwoorden komen niet overeen')])
+            EqualTo('password', message='Wachtwoorden komen niet overeen')]
+    )
