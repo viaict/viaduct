@@ -199,7 +199,7 @@ def edit_permissions(group_id, page_nr=1):
         except ValueError:
             continue
 
-    form.add_module_name.choices = [('', '')] + zip(modules, modules)
+    form.add_module_name.choices = [('', '')] + list(zip(modules, modules))
 
     if form.validate_on_submit():
         for form_entry, permission in zip(form.permissions, permissions):
