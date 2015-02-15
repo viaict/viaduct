@@ -8,6 +8,10 @@ from sqlalchemy import or_
 
 from viaduct import application, db
 
+from viaduct.forms import CourseForm
+from viaduct.helpers import flash_form_errors
+from viaduct.forms import EducationForm
+
 from viaduct.models.examination import Examination
 from viaduct.models.course import Course
 from viaduct.models.education import Education
@@ -264,15 +268,22 @@ def add_course():
         session['prev'] = 'examination.add_course'
         return abort(403)
 
-    if request.method == 'POST':
-        course = request.form.get("course", None)
-        discription = request.form.get("discription", None)
-        new_course = Course(course, discription)
-        db.session.add(new_course)
-        db.session.commit()
-        return redirect('../examination/add')
+    form = CourseForm(request.form)
 
-    return render_template('examination/course.htm', title='Tentamens')
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            course = form.title.data
+            description = form.description.data
+            new_course = Course(course, description)
+            db.session.add(new_course)
+            db.session.commit()
+            return redirect(url_for('examination.upload_file'))
+        else:
+            flash_form_errors(form)
+
+    return render_template('examination/course.htm',
+                           title='Tentamens',
+                           form=form)
 
 
 @blueprint.route('/education/add/', methods=['GET', 'POST'])
@@ -281,15 +292,28 @@ def add_education():
         session['prev'] = 'examination.add_education'
         return abort(403)
 
+    form = EducationForm(request.form)
+
     if request.method == 'POST':
-        education = request.form.get("education", None)
-        new_education = Education(1, education)
+        if form.validate_on_submit():
+            title = form.title.data
+            education = Education.query.filter(Education.name == title).first()
+            if not education:
+                new_education = Education(1, title)
 
-        db.session.add(new_education)
-        db.session.commit()
-        return redirect('../examination/add')
+                db.session.add(new_education)
+                db.session.commit()
+                flash('Studie succesvol toegevoegd', 'success')
+            else:
+                flash('%s: bestaat al in de database' % title, 'danger')
+            return redirect(url_for('examination.upload_file'))
 
-    return render_template('examination/education.htm', title='Tentamens')
+        else:
+            flash_form_errors(form)
+
+    return render_template('examination/education.htm',
+                           title='Tentamens',
+                           form=form)
 
 
 def get_education_id(education):

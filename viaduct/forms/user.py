@@ -34,28 +34,27 @@ class SignUpForm(Form):
     email = StringField('E-mailadres', validators=[
         InputRequired(message='Geen e-mailadres opgegeven'),
         Email(message='Ongelding e-mailadres opgegeven')])
-    password = PasswordField('Wachtwoord',
-                             validators=[InputRequired(message='Geen '
-                                                       'wachtwoord opgegeven')]
-                             )
-    repeat_password = PasswordField('Herhaal wachtwoord',
-                                    validators=[InputRequired(message='Wacht'
-                                                              'woorden komen '
-                                                              'niet overeen'),
-                                                EqualTo('password',
-                                                        message='Wachtwoorden '
-                                                                'komen niet '
-                                                                'overeen')])
-    first_name = StringField('Voornaam',
-                             validators=[InputRequired(message='Geen voornaam '
-                                                       'opgegeven')])
-    last_name = StringField('Achternaam',
-                            validators=[InputRequired(message='Geen achternaam'
-                                                      ' opgegeven')])
-    student_id = StringField('Studentnummer',
-                             validators=[InputRequired(message='Geen '
-                                                       'studentnummer '
-                                                       'opgegeven')])
+    password = PasswordField(
+        'Wachtwoord', validators=[
+            InputRequired(message='Geen wachtwoord opgegeven')]
+    )
+    repeat_password = PasswordField(
+        'Herhaal wachtwoord', validators=[
+            InputRequired(message='Wacht woorden komen niet overeen'),
+            EqualTo('password', message='Wachtwoorden komen niet overeen')]
+    )
+    first_name = StringField(
+        'Voornaam', validators=[
+            InputRequired(message='Geen voornaam opgegeven')]
+    )
+    last_name = StringField(
+        'Achternaam', validators=[
+            InputRequired(message='Geen achternaam opgegeven')]
+    )
+    student_id = StringField(
+        'Studentnummer', validators=[
+            InputRequired(message='Geen studentnummer opgegeven')]
+    )
     education_id = SelectField('Opleiding', coerce=int)
     avatar = FileField('Avatar')
 
@@ -68,27 +67,32 @@ class SignUpForm(Form):
 class EditUserForm(Form):
     """ Edit a user as administrator """
     id = IntegerField('ID')
-    email = StringField('E-mailadres',
-                        validators=[InputRequired(message='Geen e-mailadres '
-                                                  'opgegeven'),
-                                    Email(message='Ongeldig e-mailadres '
-                                          'opgegeven')])
+    email = StringField(
+        'E-mailadres', validators=[
+            InputRequired(message='Geen e-mailadres opgegeven'),
+            Email(message='Ongeldig e-mailadres opgegeven')]
+    )
     password = PasswordField('Wachtwoord')
-    repeat_password = PasswordField('Herhaal wachtwoord')
-    first_name = StringField('Voornaam',
-                             validators=[InputRequired(message='Geen voornaam '
-                                                       'opgegeven')])
-    last_name = StringField('Achternaam',
-                            validators=[InputRequired(message='Geen achternaam'
-                                                      ' opgegeven')])
+    repeat_password = PasswordField(
+        'Herhaal wachtwoord', validators=[
+            EqualTo('password', message='Wachtwoorden komen niet overeen')]
+    )
+    first_name = StringField(
+        'Voornaam', validators=[
+            InputRequired(message='Geen voornaam opgegeven')]
+    )
+    last_name = StringField(
+        'Achternaam', validators=[
+            InputRequired(message='Geen achternaam opgegeven')]
+    )
     has_payed = BooleanField('Heeft betaald')
     honorary_member = BooleanField('Erelid')
     locale = SelectField('Taal', choices=list(LANGUAGES.items()))
     favourer = BooleanField('Begunstiger')
-    student_id = StringField('Studentnummer',
-                             validators=[InputRequired(message='Geen '
-                                                       'studentnummer '
-                                                       'opgegeven')])
+    student_id = StringField(
+        'Studentnummer', validators=[
+            InputRequired(message='Geen studentnummer opgegeven')]
+    )
     education_id = SelectField('Opleiding', coerce=int)
     avatar = FileField('Avatar')
     birth_date = DateField('Geboortedatum')
@@ -108,23 +112,22 @@ class EditUserForm(Form):
 class EditUserInfoForm(Form):
     """ Edit your own user information """
     id = IntegerField('ID')
-    email = StringField('E-mailadres',
-                        validators=[InputRequired(message='Geen e-mailadres '
-                                                  'opgegeven'),
-                                    Email(message='Ongeldig e-mailadres '
-                                          'opgegeven')])
+    email = StringField(
+        'E-mailadres', validators=[
+            InputRequired(message='Geen e-mailadres opgegeven'),
+            Email(message='Ongeldig e-mailadres opgegeven')])
     password = PasswordField('Wachtwoord')
     repeat_password = PasswordField('Herhaal wachtwoord')
-    first_name = StringField('Voornaam',
-                             validators=[InputRequired(message='Geen voornaam '
-                                                       'opgegeven')])
-    last_name = StringField('Achternaam',
-                            validators=[InputRequired(message='Geen achternaam'
-                                                      ' opgegeven')])
-    student_id = StringField('Studentnummer',
-                             validators=[InputRequired(message='Geen '
-                                                       'studentnummer '
-                                                       'opgegeven')])
+    first_name = StringField(
+        'Voornaam', validators=[
+            InputRequired(message='Geen voornaam opgegeven')])
+    last_name = StringField(
+        'Achternaam', validators=[
+            InputRequired(message='Geen achternaam opgegeven')])
+    student_id = StringField(
+        'Studentnummer', validators=[
+            InputRequired(message='Geen studentnummer opgegeven')])
+
     locale = SelectField('Taal', choices=list(LANGUAGES.items()))
     education_id = SelectField('Opleiding', coerce=int)
     avatar = FileField('Avatar')
@@ -143,40 +146,30 @@ class EditUserInfoForm(Form):
 
 
 class SignInForm(Form):
-    email = StringField('E-mailadres',
-                        validators=[InputRequired(message='Geen e-mailadres '
-                                                  'opgegeven'),
-                                    Email(message='Ongeldig e-mailadres '
-                                          'opgegeven')])
-    password = PasswordField('Wachtwoord',
-                             validators=[InputRequired(message='Geen '
-                                                       'wachtwoord opgegeven')]
-                             )
-    remember_me = BooleanField('Onthouden', default=False)
+    email = StringField(
+        'E-mailadres', validators=[
+            InputRequired(message='Geen e-mailadres opgegeven'),
+            Email(message='Ongeldig e-mailadres opgegeven')])
+    password = PasswordField(
+        'Wachtwoord', validators=[
+            InputRequired(message='Geen wachtwoord opgegeven')])
 
 
 class RequestPassword(Form):
-    email = StringField('E-mailadres',
-                        validators=[InputRequired(message='Geen e-mailadres '
-                                                  'opgegeven'),
-                                    Email(message='Ongeldig e-mailadres '
-                                          'opgegeven')])
-    student_id = StringField('Studentnummer',
-                             validators=[InputRequired(message='Geen '
-                                                       'studentnummer '
-                                                       'opgegeven')])
+    email = StringField(
+        'E-mailadres', validators=[
+            InputRequired(message='Geen e-mailadres opgegeven'),
+            Email(message='Ongeldig e-mailadres opgegeven')])
+    student_id = StringField(
+        'Studentnummer', validators=[
+            InputRequired(message='Geen studentnummer opgegeven')])
 
 
 class ResetPassword(Form):
-    password = PasswordField('Wachtwoord',
-                             validators=[InputRequired(message='Geen '
-                                                       'wachtwoord opgegeven')]
-                             )
-    password_repeat = PasswordField('Herhaal wachtwoord',
-                                    validators=[InputRequired(message='Wacht'
-                                                              'woorden komen '
-                                                              'niet overeen'),
-                                                EqualTo('password',
-                                                        message='Wachtwoorden '
-                                                                'komen niet '
-                                                                'overeen')])
+    password = PasswordField(
+        'Wachtwoord', validators=[
+            InputRequired(message='Geen wachtwoord opgegeven')])
+    password_repeat = PasswordField(
+        'Herhaal wachtwoord', validators=[
+            InputRequired(message='Wachtwoorden komen niet overeen'),
+            EqualTo('password', message='Wachtwoorden komen niet overeen')])
