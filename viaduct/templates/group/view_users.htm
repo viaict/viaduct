@@ -1,5 +1,13 @@
 {% extends "content.htm" %}
 
+{% block includes %}
+    <script>
+        var get_group_users = "{{ url_for('group.get_group_users', group_id=group.id) }}"
+        var delete_group_users = "{{ url_for('group.delete_group_users', group_id=group.id) }}"
+    </script>
+    <script src="{{static_url("/static/js/group/view_users.js")}}"></script>
+{% endblock %}
+
 {%block content %}
 <h1>{{ group.name }} gebruikers</h1>
 <div class="row">
@@ -33,23 +41,4 @@
         </div>
     </div>
 </div>
-<script>
-    $(document).ready(function() {
-        var table = $('#datatable').DataTable(_.defaults({
-            "ajax": {
-                "url": "{{ url_for('group.get_group_users', group_id=group.id) }}",
-                "type": "get"
-            }
-        }, utils.datatables.defaults));
-
-        utils.datatables.enable_select($('#datatable tbody'));
-
-        utils.datatables.action_by_url(
-            $('#delete'),
-            table,
-            "{{ url_for('group.delete_group_users', group_id=group.id) }}",
-            "delete"
-        );
-    });
-</script>
 {% endblock %}
