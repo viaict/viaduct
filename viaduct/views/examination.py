@@ -118,6 +118,7 @@ def upload_file():
             answer_path = upload_file_real(answers)
             if answer_path is False:
                 flash('Geen antwoorden geupload', 'danger')
+                answer_path = 1
             elif answer_path is None:
                 flash('Fout formaat antwoord', 'danger')
                 error = True
