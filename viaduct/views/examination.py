@@ -8,6 +8,10 @@ from sqlalchemy import or_
 
 from viaduct import application, db
 
+from viaduct.forms import CourseForm
+from viaduct.helpers import flash_form_errors
+from viaduct.forms import EducationForm
+
 from viaduct.models.examination import Examination
 from viaduct.models.course import Course
 from viaduct.models.education import Education
@@ -44,6 +48,44 @@ def create_unique_file(filename):
     return temp_filename
 
 
+def get_education_id(education):
+    education_object = db.session.query(Education)\
+        .filter(Education.name == education).first()
+
+    if not education_object:
+        return None
+    return education_object[0].id
+
+
+def get_course_id(course):
+    course_object = db.session.query(Course).filter(Course.name == course)\
+        .first()
+
+    if not course_object:
+        return None
+    return course_object.id
+
+
+def upload_file_real(file, old_path='1'):
+    if file and (file.filename is not ''):
+        if allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            filename = create_unique_file(filename)
+
+            if old_path != '1':
+                os.remove(os.path.join(UPLOAD_FOLDER, old_path))
+
+            file.save(os.path.join(UPLOAD_FOLDER, filename))
+
+            return filename
+        else:
+            print('Wrong file!')
+            return None
+    else:
+        print('No file uploaded')
+        return False
+
+
 @blueprint.route('/examination/add/', methods=['GET', 'POST'])
 def upload_file():
     if not GroupPermissionAPI.can_write('examination'):
@@ -54,8 +96,8 @@ def upload_file():
     educations = Education.query.order_by(Education.name).all()
 
     if request.method == 'POST':
-        file = request.files['file']
-        answers = request.files['answers']
+        file = request.files.get('file', None)
+        answers = request.files.get('answers', None)
         title = request.form.get("title", None)
         course_id = request.form.get("course", None)
         education_id = request.form.get("education", None)
@@ -66,14 +108,18 @@ def upload_file():
             flash('Geen titel opgegeven', 'danger')
             error = True
 
+        print(answers)
         filename = upload_file_real(file)
         if file:
             if not filename:
                 flash('Fout formaat tentamen', 'danger')
                 error = True
+
             answer_path = upload_file_real(answers)
-            if not answer_path:
-                flash('Fout formaat antwoorden', 'danger')
+            if answer_path is False:
+                flash('Geen antwoorden geupload', 'danger')
+            elif answer_path is None:
+                flash('Fout formaat antwoord', 'danger')
                 error = True
         else:
             flash('Geen tentamen opgegeven', 'danger')
@@ -264,15 +310,22 @@ def add_course():
         session['prev'] = 'examination.add_course'
         return abort(403)
 
-    if request.method == 'POST':
-        course = request.form.get("course", None)
-        discription = request.form.get("discription", None)
-        new_course = Course(course, discription)
-        db.session.add(new_course)
-        db.session.commit()
-        return redirect('../examination/add')
+    form = CourseForm(request.form)
 
-    return render_template('examination/course.htm', title='Tentamens')
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            course = form.title.data
+            description = form.description.data
+            new_course = Course(course, description)
+            db.session.add(new_course)
+            db.session.commit()
+            return redirect(url_for('examination.upload_file'))
+        else:
+            flash_form_errors(form)
+
+    return render_template('examination/course.htm',
+                           title='Tentamens',
+                           form=form)
 
 
 @blueprint.route('/education/add/', methods=['GET', 'POST'])
@@ -281,48 +334,25 @@ def add_education():
         session['prev'] = 'examination.add_education'
         return abort(403)
 
+    form = EducationForm(request.form)
+
     if request.method == 'POST':
-        education = request.form.get("education", None)
-        new_education = Education(1, education)
+        if form.validate_on_submit():
+            title = form.title.data
+            education = Education.query.filter(Education.name == title).first()
+            if not education:
+                new_education = Education(1, title)
 
-        db.session.add(new_education)
-        db.session.commit()
-        return redirect('../examination/add')
+                db.session.add(new_education)
+                db.session.commit()
+                flash('Studie succesvol toegevoegd', 'success')
+            else:
+                flash('%s: bestaat al in de database' % title, 'danger')
+            return redirect(url_for('examination.upload_file'))
 
-    return render_template('examination/education.htm', title='Tentamens')
-
-
-def get_education_id(education):
-    education_object = db.session.query(Education)\
-        .filter(Education.name == education).first()
-
-    if not education_object:
-        return None
-    return education_object[0].id
-
-
-def get_course_id(course):
-    course_object = db.session.query(Course).filter(Course.name == course)\
-        .first()
-
-    if not course_object:
-        return None
-    return course_object.id
-
-
-def upload_file_real(file, old_path='1'):
-    if file:
-        if allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            filename = create_unique_file(filename)
-
-            if old_path != '1':
-                os.remove(os.path.join(UPLOAD_FOLDER, old_path))
-
-            file.save(os.path.join(UPLOAD_FOLDER, filename))
-
-            return filename
         else:
-            return None
-    else:
-        return False
+            flash_form_errors(form)
+
+    return render_template('examination/education.htm',
+                           title='Tentamens',
+                           form=form)

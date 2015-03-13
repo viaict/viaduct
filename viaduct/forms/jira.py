@@ -18,7 +18,7 @@ class CreateIssueForm(Form):
     )
     description = TextAreaField(
         'Beschrijving',
-        validators=[InputRequired(message='Geen voornaam opgegeven')]
+        validators=[InputRequired(message='Geen omschrijving opgegeven')]
     )
 
     def reset(self):

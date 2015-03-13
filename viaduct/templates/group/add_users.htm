@@ -1,5 +1,14 @@
 {% from "macros/pagination.htm" import render_pagination %}
 
+{% block includes %}
+    <script>
+        var get_users = "{{ url_for('user.get_users') }}"
+        var group_api_add_users  = "{{ url_for('group.group_api_add_users', group_id=group.id) }}"
+        var group_view_users = "{{url_for('group.view_users', group_id=group.id) }}"
+    </script>
+    <script src="{{static_url("/static/js/group/add_users.js")}}"></script>
+{% endblock %}
+
 {% extends "content.htm" %}
 
 {% block content %}
@@ -42,23 +51,5 @@
         </div>
 	</div>
 </div>
-<script>
-    $(document).ready(function() {
-        var table = $('#datatable').DataTable(_.defaults({
-            "ajax": {
-                "url": "{{ url_for('user.get_users') }}",
-                "type": "get"
-            }
-        }, utils.datatables.defaults));
-
-        // Enable the toggle on rows
-        utils.datatables.enable_select(table);
-
-        utils.datatables.action_by_url($('#add_users'), table,
-            "{{ url_for('group.group_api_add_users', group_id=group.id) }}",
-            "put", "{{url_for('group.view_users', group_id=group.id) }}"
-        );
-        });
-</script>
 {% endblock %}
 

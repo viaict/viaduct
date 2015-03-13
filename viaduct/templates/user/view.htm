@@ -1,5 +1,13 @@
 {% extends 'content.htm' %}
 
+{% block includes %}
+    <script>
+        var get_users = "{{ url_for('user.get_users') }}"
+        var delete_users = "{{url_for('user.api_delete_user')}}"
+    </script>
+    <script src="{{static_url("/static/js/user/view.js")}}"></script>
+{% endblock %}
+
 {% block content %}
 <h1>Gebruiker overzicht</h1>
 <div class='row'>
@@ -46,23 +54,4 @@
         </div>
 	</div>
 </div>
-<script>
-    $(document).ready(function() {
-        var table = $('#datatable').DataTable(_.defaults({
-            "ajax": {
-                "url": "{{ url_for('user.get_users') }}",
-                "type": "get"
-            }
-        }, utils.datatables.defaults));
-
-        /* Enable user profile selection */
-        $('#datatable').on('click', 'tr', function () {
-            window.open("/users/view/" + table.row(this).data()[0]);
-        });
-
-        utils.datatables.action_by_url( $('#delete'), table,
-                                       '/users/delete_users/', "delete"
-        );
-    });
-</script>
 {% endblock %}

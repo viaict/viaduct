@@ -21,8 +21,8 @@
 		<table class="table table-bordered table-striped">
 			<thead>
 				<tr>
+					<th>Groep</th>
 					<th>Permission</th>
-					<th></th>
 				</tr>
 			</thead>
 
@@ -47,7 +47,7 @@
 
 {% if not new_page %}
     <form action='{{ url_for('page.delete', path=page.path) }}' method='post'>
-        <button class="btn btn-danger" type='submit'>Remove page</button>
+        <button class="btn btn-danger pull-right" type='submit'>Remove page</button>
     </form>
 {% endif %}
 
