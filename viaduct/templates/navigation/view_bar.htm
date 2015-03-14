@@ -47,7 +47,7 @@
                                         {% set grandChildren = NavigationAPI.remove_unauthorized(grandChildren) %}
 
                                              <li {% if grandChildren %} class="dropdown-submenu" {% endif %}>
-                                                <a {% if child.external %}target="_blank"{% endif %} href="{% if child.external %}https://{% endif %}{{ child.url }}" {% if grandChildren %} class="dropdown-toggle" data-toggle="dropdown" {% endif %} >
+                                                <a {% if child.external %}target="_blank"{% endif %} href="{% if child.external %}https://{% endif %}{{ child.url }}" {% if grandChildren %} class="dropdown-toggle" {% endif %} >
                                                 {% if child.subtitle %}
                                                     <small class="pull-right"> {{ child.subtitle|truncate(40)  }}</small>
                                                 {% endif %}
