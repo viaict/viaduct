@@ -27,22 +27,28 @@ class CustomForm(db.Model, BaseEntity):
         OrderedDict([('user_id', {
             'label': 'Gebruiker ID',
             'export': lambda r: r.owner_id,
+            'on_by_default': False,
         }), ('user_email', {
             'label': 'Gebruiker email',
             'export': lambda r: r.owner.email,
+            'on_by_default': True,
         }), ('user_name', {
             'label': 'Gebruiker naam',
             'export': lambda r: '%s %s' % (r.owner.first_name,
                                            r.owner.last_name),
+            'on_by_default': True,
         }), ('date', {
             'label': 'Inschrijfdatum',
             'export': lambda r: r.created,
+            'on_by_default': False,
         }), ('has_payed', {
             'label': 'Heeft betaald',
             'export': lambda r: r.has_payed,
+            'on_by_default': True,
         }), ('form', {
             'label': 'Form resultaat',
             'export': export_form_data,
+            'on_by_default': False,
         })])
 
     def __init__(self, owner_id=None, name="", origin="", html="",

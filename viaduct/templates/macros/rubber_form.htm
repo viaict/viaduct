@@ -1,7 +1,8 @@
-{% macro checkbox(name, label) %}
+{% macro checkbox(name, label, checked) %}
     <div class='checkbox'>
         <label>
-            <input type='checkbox' name='{{ name }}' /> {{ label }}
+            <input type='checkbox' name='{{ name }}'
+                {% if checked %}checked='checked'{% endif %} /> {{ label }}
         </label>
     </div>
 {% endmacro %}
