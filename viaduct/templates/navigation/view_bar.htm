@@ -52,6 +52,9 @@
                                                     <small class="pull-right"> {{ child.subtitle|truncate(40)  }}</small>
                                                 {% endif %}
                                                 {{ child.title }}
+                                                {% if child.subtitle %}
+                                                    <small class="invisible"> {{ child.subtitle|truncate(40)  }}</small>
+                                                {% endif %}
                                                 </a>
                                                 <ul class="dropdown-menu">
                                                     {% for grandChild in grandChildren %}
