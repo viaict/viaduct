@@ -1,5 +1,5 @@
-# Version.
-2.0.1.1
+# Version 2.0.1.1
+Versioning works as follows: vSYSTEM.FEATURE.IMPROVEMENT.BUG-/HOTFIX
 
 #Viaduct (Opensourced, yeah)
 ## Tutorial
