@@ -76,7 +76,7 @@
                          <a data-toggle="dropdown" href="#">
                             <img class="hidden-xs img-rounded" src="/static/img/user.png" alt="..." id="loginImage">
                           </a>
-                          <div class="dropdown-menu" role="menu" id="loginContainer">
+                          <div class="dropdown-menu" id="loginContainer">
                             <form method="post" name="sign-in" id="sign-in-menu" action="{{ url_for('user.sign_in') }}">
                             {{ login_form.csrf_token }}
                             {{ render_field(login_form.email) }}
@@ -93,7 +93,7 @@
                           <a data-toggle="dropdown" href="#">
                             <img class="hidden-xs img-rounded" src="{{ UserAPI.avatar( current_user ) }}" alt="..." id="loginImage" >
                           </a>
-                          <div class="dropdown-menu" role="menu" id="loginContainer">
+                          <div class="dropdown-menu" id="loginContainer">
                             <img src="{{ UserAPI.avatar( current_user ) }}" alt="..." id="userImage" class="img-rounded hidden-xs">
                             <div id="userInformation">
                                 <p>{{ current_user.name }}</p>
