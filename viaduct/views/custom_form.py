@@ -22,7 +22,6 @@ blueprint = Blueprint('custom_form', __name__, url_prefix='/forms')
 @blueprint.route('/page', methods=['GET', 'POST'])
 @blueprint.route('/page/', methods=['GET', 'POST'])
 def view():
-
     page = request.args.get('page_nr', '')
 
     if not page:
