@@ -47,11 +47,14 @@
                                         {% set grandChildren = NavigationAPI.remove_unauthorized(grandChildren) %}
 
                                              <li {% if grandChildren %} class="dropdown-submenu" {% endif %}>
-                                                <a {% if child.external %}target="_blank"{% endif %} href="{% if child.external %}https://{% endif %}{{ child.url }}" {% if grandChildren %} class="dropdown-toggle" data-toggle="dropdown" {% endif %} >
+                                                <a {% if child.external %}target="_blank"{% endif %} href="{% if child.external %}https://{% endif %}{{ child.url }}" {% if grandChildren %} class="dropdown-toggle" {% endif %} >
                                                 {% if child.subtitle %}
                                                     <small class="pull-right"> {{ child.subtitle|truncate(40)  }}</small>
                                                 {% endif %}
                                                 {{ child.title }}
+                                                {% if child.subtitle %}
+                                                    <small class="invisible"> {{ child.subtitle|truncate(40)  }}</small>
+                                                {% endif %}
                                                 </a>
                                                 <ul class="dropdown-menu">
                                                     {% for grandChild in grandChildren %}
@@ -73,7 +76,7 @@
                          <a data-toggle="dropdown" href="#">
                             <img class="hidden-xs img-rounded" src="/static/img/user.png" alt="..." id="loginImage">
                           </a>
-                          <div class="dropdown-menu" role="menu" id="loginContainer">
+                          <div class="dropdown-menu" id="loginContainer">
                             <form method="post" name="sign-in" id="sign-in-menu" action="{{ url_for('user.sign_in') }}">
                             {{ login_form.csrf_token }}
                             {{ render_field(login_form.email) }}
@@ -90,7 +93,7 @@
                           <a data-toggle="dropdown" href="#">
                             <img class="hidden-xs img-rounded" src="{{ UserAPI.avatar( current_user ) }}" alt="..." id="loginImage" >
                           </a>
-                          <div class="dropdown-menu" role="menu" id="loginContainer">
+                          <div class="dropdown-menu" id="loginContainer">
                             <img src="{{ UserAPI.avatar( current_user ) }}" alt="..." id="userImage" class="img-rounded hidden-xs">
                             <div id="userInformation">
                                 <p>{{ current_user.name }}</p>

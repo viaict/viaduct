@@ -82,7 +82,8 @@
 
 <form method='post' action='{{ url_for('custom_form.export', form_id=custom_form.id) }}'>
     {% for name in xps.keys() %}
-        {{ rubber.checkbox(name, xps[name]['label']) }}
+        {{ rubber.checkbox(name, xps[name]['label'],
+                           xps[name]['on_by_default']) }}
     {% endfor %}
     {{ rubber.button(type='submit', text='Exporteren') }}
 </form>
