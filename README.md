@@ -51,7 +51,7 @@ Build dependencies are for ruby and npm:
     - `(sudo) npm install -g grunt-cli`
     - `npm install`
 
-Get a live database of the via server by asking the coordinator.
+* Get a live database of the via server by asking the coordinator.
 Use it by database by installing mysql and running:
     - `(sudo) mysql -u root -p < mysqlinit.sql`
     - `(sudo) mysql -u root -p < database.sql`
