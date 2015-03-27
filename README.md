@@ -19,6 +19,7 @@ Set up the awesome hooks:
 ```bash
 cd .git/hooks
 ln -s ../../secrets/post-* .
+cd ../..
 .git/hooks/post-merge
 ```
 
