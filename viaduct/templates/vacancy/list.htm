@@ -12,7 +12,7 @@
             <a class="btn btn-primary" href="{{ url_for('contact.edit') }}">Nieuw contact</a>
         {% endif %}
         {% if GroupPermissionAPI.can_write('company') %}
-            <a class="btn btn-primary" href="{{ url_for('company.edit') }}">Nieuw bedrijf</a>
+            <a class="btn btn-primary" href="{{ url_for('company.create') }}">Nieuw bedrijf</a>
         {% endif %}
         {% if GroupPermissionAPI.can_write('vacancy') %}
             <a class="btn btn-primary" href="{{ url_for('vacancy.edit') }}">Nieuwe vacature</a>

@@ -1,6 +1,9 @@
 {% from "macros/form.htm" import render_field, render_select, render_textarea%}
 
 {% extends "content.htm" %}
+{% block includes %}
+	<script src="{{static_url("/static/js/jira/create_issue.js")}}"></script>
+{% endblock %}
 
 {% block content %}
 <form action="" method="post" name="sign_up" class="form-horizontal" enctype="multipart/form-data">
@@ -14,7 +17,7 @@
 
 		<div class="control-group">
 			<div class="controls">
-				<button type="submit" class="btn btn-primary">Submit!</button>
+				<button type="submit" id="myButton" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off">Submit!</button>
 			</div>
             <br/>
 		</div>
