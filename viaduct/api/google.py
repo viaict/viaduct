@@ -15,7 +15,7 @@ service_email = application.config['GOOGLE_SERVICE_EMAIL']
 private_key = application.config['GOOGLE_API_KEY']
 
 
-def build_service():
+def build_service(service_type, api_version, scope):
     try:
         f = open(private_key, "rb")
         key = f.read()
@@ -24,24 +24,35 @@ def build_service():
         credentials = SignedJwtAssertionCredentials(
             service_email,
             key,
-            scope="https://www.googleapis.com/auth/calendar",
-            sub='bestuur@via.uvastudent.org'
+            scope=scope,
+            sub='bestuur@via.uvastudent.org'  # "Log in" as the admin account
         )
 
         # Create an authorized http instance
         http = httplib2.Http()
         http = credentials.authorize(http)
 
-        return build("calendar", "v3", http=http)
+        return build(service_type, api_version, http=http)
     except Exception:
         traceback.print_exc()
         return None
 
 
+def build_calendar_service():
+    return build_service('calendar', 'v3',
+                         'https://www.googleapis.com/auth/calendar')
+
+
+def build_groups_service():
+    return build_service('admin', 'directory_v1',
+                         ('https://www.googleapis.com'
+                          '/auth/admin.directory.group'))
+
+
 # Provide a calendar_id
 def insert_activity(title="", description='', location="VIA kamer", start="",
                     end=""):
-    service = build_service()
+    service = build_calendar_service()
 
     if service:
         # Event to insert
@@ -66,7 +77,7 @@ def insert_activity(title="", description='', location="VIA kamer", start="",
 
 def update_activity(event_id, title="", description='', location="VIA Kamer",
                     start="", end=""):
-    service = build_service()
+    service = build_calendar_service()
 
     if service:
         # Event to update
@@ -89,7 +100,7 @@ def update_activity(event_id, title="", description='', location="VIA Kamer",
 
 # Delete an event
 def delete_activity(event_id):
-    service = build_service()
+    service = build_calendar_service()
 
     if service:
         try:
@@ -100,3 +111,11 @@ def delete_activity(event_id):
             traceback.print_exc()
             flash('Er ging iets mis met het verwijderen van het event uit de'
                   'Google Calender, het kan zijn dat ie al verwijderd was')
+
+
+def get_groups():
+    service = build_groups_service()
+
+
+def get_group_users():
+    service = build_groups_service()
