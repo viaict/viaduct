@@ -6,7 +6,6 @@ import traceback
 
 # google calendar Settings > via_events > id
 via_calendar_id = "bka8j77cis5ffr2pokn5ef5cso@group.calendar.google.com"
-via_lezingen_id = "dp1qibentsgl50vj6lt31ekk3g@group.calendar.google.com"
 
 # Google API service account email
 service_email = ('614222921385-1lrc4bkrq51mb4ra4dl8g2f1hi8232e2'
@@ -51,17 +50,6 @@ def insert_activity(title, description, location, start, end):
     )
 
 
-# Helper method to insert a via_lezing
-def insert_lecture(title, description, location, start, end):
-    return insert_event(
-        title,
-        location,
-        start,
-        end,
-        via_lezingen_id
-    )
-
-
 # Provide a calendar_id
 def insert_event(title="", description='', location="VIA kamer", start="",
                  end="", calendar_id=None):
@@ -96,17 +84,6 @@ def update_activity(event_id, title, description, location, start, end):
     )
 
 
-def update_lecture(event_id, title, location, start, end):
-    return update_event(
-        event_id,
-        title,
-        location,
-        start,
-        end,
-        via_lezingen_id
-    )
-
-
 def update_event(event_id, title="", description='', location="VIA Kamer",
                  start="", end="", calendar_id=None):
     service = build_service()
@@ -131,10 +108,6 @@ def update_event(event_id, title="", description='', location="VIA Kamer",
 
 def delete_activity(event_id):
     return delete_event(event_id, via_calendar_id)
-
-
-def delete_lecture(event_id):
-    return delete_event(event_id, via_lezingen_id)
 
 
 # Delete an event
