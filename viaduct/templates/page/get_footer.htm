@@ -1,24 +1,13 @@
-{{ Markup(markdown(footer_revision.content, enable_attributes=False, safe_mode=safe_mode, extensions=['toc'])) }}
-
-{% if (page and current_user and (UserAPI.can_write(page) or
-    GroupPermissionAPI.can_write('page'))) or (not page and
-    GroupPermissionAPI.can_write('page')) %}
-    <div class="btn-group pull-right" style="margin-top: 15px;">
-        {% if exists %}
-        <a class="btn btn-default"
-            href="{{url_for('page.get_page_history',
-            path=footer.path)}}" ><i class="glyphicon glyphicon-time"></i> Bekijk geschiedenis
-        </a>
-        <a class="btn btn-warning"
-            href="{{url_for('page.edit_page', path=footer.path)}}" >
-            <i class="glyphicon glyphicon-pencil"></i> Bewerk footer
-        </a>
-        {% else %}
-        <a class="btn btn-warning"
-            href="{{url_for('page.edit_page', path=footer.path)}}" >
-            <i class="glyphicon glyphicon-pencil"></i> Creëer footer
-        </a>
-        {% endif %}
-    </div>
-{% endif %}
-
+<br />
+<div class="row">
+   <div class="col-md-12"  style="overflow:hidden;">
+                <div id="carousel">
+                    {% for company in CompanyAPI.get_carousel() %}
+                    <div class="col-md-2 logo_wrapper"><a href="{{company.website}}"><img class="logo_img" src="/static/files/{{company.logo_path}}" alt="{{company.name}}" /></a>
+                        <a href="{{company.website}}"><span>{{company.name}}</span></a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+</div>
+<a href="http://true.nl"><img src="/static/files/truelogo.png" style="float:right; padding-bottom: 15px;"></a>
