@@ -10,7 +10,7 @@
 
 {% if activity.id: %}
 <form method="post" class="pull-right" action="{{ url_for('activity.remove_activity', activity_id=activity.id) }}">
-<button class="confirmation btn btn-danger btn-xs" type="submit"> {{ _("Verwijder activiteit") }}</button>
+<button class="confirmation btn btn-danger btn-xs" type="submit"> {{ _("Delete activity") }}</button>
 </form>
 {% endif %}
 
@@ -21,10 +21,10 @@
     {{ form.csrf_token }}
 
     {{ render_select(form.form_id) }}
-    <small>{{ _("Je moet de pagina opnieuw laden voor resultaat") }}</small>
+    <small>{{ _("You have to reload the page for the result") }}</small>
 
     <a class="show-window btn btn-success" target="_blank" href="http://{{ request.host }}/forms/create/">
-      {{ _("Formulier aanmaken") }}
+      {{ _("Create form") }}
     </a>
 
         {{ render_field(form.name) }}
