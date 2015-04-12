@@ -3,13 +3,12 @@
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-04-12 18:27+0200\n"
-"PO-Revision-Date: 2015-04-12 18:27+0200\n"
+"POT-Creation-Date: 2015-04-12 22:13+0200\n"
+"PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -18,191 +17,193 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: viaduct/templates/activity/create.htm:13
-msgid "Verwijder activiteit"
-msgstr ""
-
-#: viaduct/templates/activity/create.htm:24
-msgid "Je moet de pagina opnieuw laden voor resultaat"
-msgstr ""
-
-#: viaduct/templates/activity/create.htm:27
-msgid "Formulier aanmaken"
-msgstr ""
-
-#: viaduct/templates/activity/view_single.htm:63
-msgid "Deelnemers van deze activiteit"
-msgstr ""
-
-#: viaduct/templates/examination/admin.htm:7
-#: viaduct/templates/examination/view.htm:6
-msgid "Examinations"
-msgstr ""
-
-#: viaduct/templates/examination/admin.htm:16
-#: viaduct/templates/examination/view.htm:17
-msgid "Search"
-msgstr ""
-
-#: viaduct/templates/examination/admin.htm:24
-msgid "New Examination"
-msgstr ""
-
-#: viaduct/templates/examination/admin.htm:30
-#: viaduct/templates/examination/edit.htm:14
-#: viaduct/templates/examination/upload.htm:18
-#: viaduct/templates/examination/view.htm:43
-msgid "Course"
-msgstr ""
-
-#: viaduct/templates/examination/admin.htm:31
-#: viaduct/templates/examination/edit.htm:51
-#: viaduct/templates/examination/upload.htm:50
-#: viaduct/templates/examination/view.htm:44
-msgid "Examination"
-msgstr ""
-
-#: viaduct/templates/examination/admin.htm:32
-#: viaduct/templates/examination/edit.htm:32
-#: viaduct/templates/examination/upload.htm:34
-#: viaduct/templates/examination/view.htm:42
-msgid "Education"
-msgstr ""
-
-#: viaduct/templates/examination/admin.htm:33
-#: viaduct/templates/examination/edit.htm:5
-#: viaduct/templates/examination/view.htm:47
-msgid "Edit"
-msgstr ""
-
-#: viaduct/templates/examination/course.htm:10
-msgid "New course"
-msgstr ""
-
 #: viaduct/templates/examination/course.htm:19
 #: viaduct/templates/examination/education.htm:18
 msgid "Add"
-msgstr ""
+msgstr "Add"
 
-#: viaduct/templates/examination/course.htm:23
-#: viaduct/templates/examination/education.htm:22
-msgid "Back"
-msgstr ""
-
-#: viaduct/templates/examination/edit.htm:9
-#: viaduct/templates/examination/upload.htm:13
-msgid "Title"
-msgstr ""
-
-#: viaduct/templates/examination/edit.htm:27
-#: viaduct/templates/examination/edit.htm:46
-#: viaduct/templates/examination/upload.htm:29
-#: viaduct/templates/examination/upload.htm:45
-msgid "New"
-msgstr ""
-
-#: viaduct/templates/examination/edit.htm:52
-#: viaduct/templates/examination/edit.htm:58
-msgid "Current"
-msgstr ""
+#: viaduct/views/examination.py:326 viaduct/views/examination.py:357
+msgid "Already exists in the database"
+msgstr "Already exists in the database"
 
 #: viaduct/templates/examination/edit.htm:57
 #: viaduct/templates/examination/upload.htm:55
 #: viaduct/templates/examination/view.htm:45
 #: viaduct/templates/examination/view.htm:66
 msgid "Answers"
-msgstr ""
+msgstr "Answers"
 
-#: viaduct/templates/examination/edit.htm:62
-msgid "Submit"
-msgstr ""
+#: viaduct/templates/examination/course.htm:23
+#: viaduct/templates/examination/education.htm:22
+msgid "Back"
+msgstr "Back"
 
-#: viaduct/templates/examination/education.htm:10
-msgid "New education"
-msgstr ""
-
-#: viaduct/templates/examination/upload.htm:7
-msgid "Upload new examination"
-msgstr ""
-
-#: viaduct/templates/examination/view.htm:35
-msgid "New examination"
-msgstr ""
-
-#: viaduct/views/examination.py:107 viaduct/views/examination.py:266
-msgid "No title given."
-msgstr ""
-
-#: viaduct/views/examination.py:114 viaduct/views/examination.py:278
-msgid "Wrong format examination."
-msgstr ""
-
-#: viaduct/views/examination.py:119
-msgid "No answers uploaded."
-msgstr ""
-
-#: viaduct/views/examination.py:122 viaduct/views/examination.py:287
-msgid "Wrong format answers."
-msgstr ""
-
-#: viaduct/views/examination.py:125
-msgid "No examination uploaded."
-msgstr ""
-
-#: viaduct/views/examination.py:131 viaduct/views/examination.py:142
-#: viaduct/views/examination.py:145 viaduct/views/examination.py:170
-#: viaduct/views/examination.py:188 viaduct/views/examination.py:194
-#: viaduct/views/examination.py:215 viaduct/views/examination.py:232
-#: viaduct/views/examination.py:246 viaduct/views/examination.py:303
-#: viaduct/views/examination.py:333 viaduct/views/examination.py:364
-msgid "Tentamens"
-msgstr ""
-
-#: viaduct/views/examination.py:138
-msgid "Examination succesfully uploaded."
-msgstr ""
-
-#: viaduct/views/examination.py:180
-msgid "File does not exist, examination deleted."
-msgstr ""
-
-#: viaduct/views/examination.py:184
-msgid "Examination succesfully deleted."
-msgstr ""
-
-#: viaduct/views/examination.py:226
-msgid "Examination successfully deleted."
-msgstr ""
-
-#: viaduct/views/examination.py:228
-msgid "Examination could not be found."
-msgstr ""
-
-#: viaduct/views/examination.py:268
-msgid "No education given."
-msgstr ""
-
-#: viaduct/views/examination.py:281
-msgid "Old examination preserved."
-msgstr ""
-
-#: viaduct/views/examination.py:290
-msgid "Old answers preserved."
-msgstr ""
-
-#: viaduct/views/examination.py:293
-msgid "Examination succesfully changed."
-msgstr ""
+#: viaduct/templates/examination/admin.htm:30
+#: viaduct/templates/examination/edit.htm:14
+#: viaduct/templates/examination/upload.htm:18
+#: viaduct/templates/examination/view.htm:43
+msgid "Course"
+msgstr "Course"
 
 #: viaduct/views/examination.py:323
 msgid "Course succesfully added."
-msgstr ""
+msgstr "Course succesfully added."
 
-#: viaduct/views/examination.py:326 viaduct/views/examination.py:357
-msgid "Already exists in the database"
-msgstr ""
+#: viaduct/templates/activity/create.htm:27
+msgid "Create form"
+msgstr "Create form"
+
+#: viaduct/templates/examination/edit.htm:52
+#: viaduct/templates/examination/edit.htm:58
+msgid "Current"
+msgstr "Current"
+
+#: viaduct/templates/activity/create.htm:13
+msgid "Delete activity"
+msgstr "Delete activity"
+
+#: viaduct/templates/examination/admin.htm:33
+#: viaduct/templates/examination/edit.htm:5
+#: viaduct/templates/examination/view.htm:47
+msgid "Edit"
+msgstr "Edit"
+
+#: viaduct/templates/examination/admin.htm:32
+#: viaduct/templates/examination/edit.htm:32
+#: viaduct/templates/examination/upload.htm:34
+#: viaduct/templates/examination/view.htm:42
+msgid "Education"
+msgstr "Education"
 
 #: viaduct/views/examination.py:354
 msgid "Education succesfully added."
-msgstr ""
+msgstr "Education succesfully added."
+
+#: viaduct/templates/examination/admin.htm:31
+#: viaduct/templates/examination/edit.htm:51
+#: viaduct/templates/examination/upload.htm:50
+#: viaduct/templates/examination/view.htm:44
+msgid "Examination"
+msgstr "Examination"
+
+#: viaduct/views/examination.py:228
+msgid "Examination could not be found."
+msgstr "Examination could not be found."
+
+#: viaduct/views/examination.py:293
+msgid "Examination succesfully changed."
+msgstr "Examination succesfully changed."
+
+#: viaduct/views/examination.py:184 viaduct/views/examination.py:226
+msgid "Examination successfully deleted."
+msgstr "Examination successfully deleted."
+
+#: viaduct/views/examination.py:138
+msgid "Examination successfully uploaded."
+msgstr "Examination successfully uploaded."
+
+#: viaduct/templates/examination/admin.htm:7
+#: viaduct/templates/examination/view.htm:6 viaduct/views/examination.py:131
+#: viaduct/views/examination.py:142 viaduct/views/examination.py:145
+#: viaduct/views/examination.py:170 viaduct/views/examination.py:188
+#: viaduct/views/examination.py:194 viaduct/views/examination.py:215
+#: viaduct/views/examination.py:232 viaduct/views/examination.py:246
+#: viaduct/views/examination.py:303 viaduct/views/examination.py:333
+#: viaduct/views/examination.py:365
+msgid "Examinations"
+msgstr "Examinations"
+
+#: viaduct/views/examination.py:180
+msgid "File does not exist, examination deleted."
+msgstr "File does not exist, examination deleted."
+
+#: viaduct/templates/examination/edit.htm:27
+#: viaduct/templates/examination/edit.htm:46
+#: viaduct/templates/examination/upload.htm:29
+#: viaduct/templates/examination/upload.htm:45
+msgid "New"
+msgstr "New"
+
+#: viaduct/templates/examination/admin.htm:24
+msgid "New Examination"
+msgstr "New Examination"
+
+#: viaduct/templates/examination/course.htm:10
+msgid "New course"
+msgstr "New course"
+
+#: viaduct/templates/examination/education.htm:10
+msgid "New education"
+msgstr "New education"
+
+#: viaduct/templates/examination/upload.htm:7
+#: viaduct/templates/examination/view.htm:35
+msgid "New examination"
+msgstr "New examination"
+
+#: viaduct/views/examination.py:119
+msgid "No answers uploaded."
+msgstr "No answers uploaded."
+
+#: viaduct/views/examination.py:268
+msgid "No education given."
+msgstr "No education given."
+
+#: viaduct/views/examination.py:125
+msgid "No examination uploaded."
+msgstr "No examination uploaded."
+
+#: viaduct/views/examination.py:107 viaduct/views/examination.py:266
+msgid "No title given."
+msgstr "No title given."
+
+#: viaduct/views/examination.py:290
+msgid "Old answers preserved."
+msgstr "Old answers preserved."
+
+#: viaduct/views/examination.py:281
+msgid "Old examination preserved."
+msgstr "Old examination preserved."
+
+#: viaduct/templates/activity/view_single.htm:63
+msgid "Participants of this activity"
+msgstr "Participants of this activity"
+
+#: viaduct/templates/examination/admin.htm:16
+#: viaduct/templates/examination/view.htm:17
+msgid "Search"
+msgstr "Search"
+
+#: viaduct/templates/examination/edit.htm:62
+msgid "Submit"
+msgstr "Submit"
+
+#: viaduct/templates/examination/edit.htm:9
+#: viaduct/templates/examination/upload.htm:13
+msgid "Title"
+msgstr "Title"
+
+#: viaduct/views/examination.py:122 viaduct/views/examination.py:287
+msgid "Wrong format answers."
+msgstr "Wrong format answers."
+
+#: viaduct/views/examination.py:114 viaduct/views/examination.py:278
+msgid "Wrong format examination."
+msgstr "Wrong format examination."
+
+#: viaduct/templates/activity/create.htm:24
+msgid "You have to reload the page for the result"
+msgstr "You have to reload the page for the result"
+
+#~ msgid "Verwijder activiteit"
+#~ msgstr ""
+
+#~ msgid "Je moet de pagina opnieuw laden voor resultaat"
+#~ msgstr ""
+
+#~ msgid "Formulier aanmaken"
+#~ msgstr ""
+
+#~ msgid "Deelnemers van deze activiteit"
+#~ msgstr ""
 
