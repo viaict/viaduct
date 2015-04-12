@@ -4,18 +4,18 @@
 
 {% block page %}
     <fieldset>
-        <legend>Upload een nieuw tentamen</legend>
+        <legend>{{_('Upload new examination')}}</legend>
 
         {{message}}
 
         <form action="" method=post enctype=multipart/form-data>
             <div class='form-group'>
-                Titel
+                {{_('Title')}}
                 <input type='text' name='title' placeholder='25 oktober 2011' class='form-control' />
             </div>
 
             <div class='form-group'>
-                Vak
+                {{_('Course')}}
                 <select name='course' class='form-control'>
                     {% for course in courses %}
                         <option value='{{ course.id }}'>{{ course.name }}</option>
@@ -24,11 +24,14 @@
             </div>
 
             <div class='form-group'>
-                <a href="{{ url_for('examination.add_course') }}" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> <strong>nieuw</strong></a>
+                <a href="{{ url_for('examination.add_course') }}" class="btn btn-default">
+                    <i class="glyphicon glyphicon-pencil"></i>
+                    <strong> {{_('New')}}</strong>
+                </a>
             </div>
 
             <div class='form-group'>
-                Studie
+                {{_('Education')}}
                 <select name='education' class='form-control'>
                     {% for education in educations %}
                         <option value="{{ education.id }}">{{ education.name }}</option>
@@ -37,16 +40,19 @@
             </div>
 
             <div class='form-group'>
-                <a href="{{ url_for('examination.add_education') }}" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> <strong>nieuw</strong></a>
+                <a href="{{ url_for('examination.add_education') }}" class="btn btn-default">
+                    <i class="glyphicon glyphicon-pencil"></i>
+                    <strong>{{_('New')}}</strong>
+                </a>
             </div>
 
             <div class='form-group'>
-                Tentamen
+                {{_('Examination')}}
                 <input type='file' name='file' class='form-control'>
             </div>
 
             <div class='form-group'>
-                Antwoorden
+                {{_('Answers')}}
                 <input type='file' name='answers' class='form-control'>
             </div>
 
