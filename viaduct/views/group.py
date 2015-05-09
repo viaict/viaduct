@@ -113,7 +113,7 @@ def view_users(group_id):
 
 @blueprint.route('/groups/<int:group_id>/get_users/', methods=['GET'])
 def get_group_users(group_id):
-    if not(GroupPermissionAPI.can_write('group')):
+    if not(GroupPermissionAPI.can_read('group')):
         return abort(403)
 
     group = Group.query.filter(Group.id == group_id).first()
