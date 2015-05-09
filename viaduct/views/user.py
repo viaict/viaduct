@@ -259,7 +259,7 @@ def sign_in():
         # Notify the login manager that the user has been signed in.
         login_user(user)
 
-        flash('You\'ve been signed in successfully.', 'success')
+        flash('Hey %s, je bent ingelogd!' % (current_user.first_name), 'success')
 
         referer = request.headers.get('Referer')
         denied = re.match(r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),
@@ -284,7 +284,7 @@ def sign_out():
     # Notify the login manager that the user has been signed out.
     logout_user()
 
-    flash('You\'ve been signed out.', 'success')
+    flash('Je bent uitgelogd.', 'success')
 
     referer = request.headers.get('Referer')
     if referer:
