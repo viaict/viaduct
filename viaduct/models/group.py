@@ -19,8 +19,11 @@ class Group(db.Model, BaseEntity):
                             backref=db.backref('groups', lazy='dynamic'),
                             lazy='dynamic')
 
-    def __init__(self, name):
+    maillist = db.Column(db.String(100), unique=True)
+
+    def __init__(self, name, maillist):
         self.name = name
+        self.maillist = maillist
 
     def has_user(self, user):
         if not user:

@@ -1,5 +1,6 @@
 import viaduct.api.google as google
 from pprint import pprint
+from viaduct.models import Group
 
 service = google.build_groups_service()
 pprint(dir(service))
@@ -19,8 +20,16 @@ try:
     """
     members_api = service.members()
     maillist = 'ict@' + domain
-    pprint(members_api.list(groupKey=maillist).execute())
-    members_api.delete(groupKey=maillist, memberKey='batman@bitchimfamo.us').execute()
-    pprint(members_api.list(groupKey='ict@via.uvastudent.org').execute())
+    list_members = members_api.list(groupKey=maillist).execute()
+    # members_api.delete(groupKey=maillist, memberKey='batman@bitchimfamo.us').execute()
+    # pprint(members_api.list(groupKey='ict@via.uvastudent.org').execute())
 except Exception as e:
     print(e)
+else:
+    list_emails = set([u['email'] for u in list_members['members']])
+    group_members = Group.query.filter_by(name='ICT').first().users.all()
+    group_emails = set([u.email for u in group_members])
+    pprint(list_emails)
+    pprint(group_emails)
+    only_in_list = list_emails - group_emails
+    only_in_group = group_emails - list_emails

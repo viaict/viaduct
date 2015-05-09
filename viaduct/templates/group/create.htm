@@ -1,23 +1,15 @@
 {% extends "content.htm" %}
 
 {% block content %}
+{% from "macros/form.htm" import render_field, render_submit %}
 <form action="" method="post" name="add" class="form-horizontal">
 	<fieldset>
-		<legend>Add group</legend>
+        <legend> {{ title }} </legend>
+        {{ form.csrf_token }}
+        {{ render_field(form.name) }}
+        {{ render_field(form.maillist) }}
+        {{ render_submit('Sla op') }}
 
-		<div class="control-group">
-			<label for="name" class="control-label">Group name</label>
-
-			<div class="controls">
-				<input type="text" placeholder="Group name" name="name" />
-			</div>
-		</div>
-
-		<div class="control-group">
-			<div class="controls">
-				<button type="submit" class="btn btn-success">Add group</button>
-			</div>
-		</div>
 	</fieldset>
 </form>
 {% endblock %}
