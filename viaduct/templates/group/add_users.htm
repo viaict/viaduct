@@ -1,55 +1,55 @@
 {% from "macros/pagination.htm" import render_pagination %}
 
+{% block includes %}
+    <script>
+        var get_users = "{{ url_for('user.get_users') }}"
+        var group_api_add_users  = "{{ url_for('group.group_api_add_users', group_id=group.id) }}"
+        var group_view_users = "{{url_for('group.view_users', group_id=group.id) }}"
+    </script>
+    <script src="{{static_url("/static/js/group/add_users.js")}}"></script>
+{% endblock %}
+
 {% extends "content.htm" %}
 
 {% block content %}
-<div class="row">
-	<div class="col-md-12">
-		<form method="get" action="" enctype=multipart/form-data class="form-inline" >
-			<input name="search" id="search" class="col-md-5" type="text" placeholder="Zoeken" value="{{search}}"></input>
-			<button type="submit" class="btn btn-primary"> <i class="glyphicon glyphicon-search" id="submit"></i></button>
-		</form>
+<h1>Gebruiker toevoegen aan {{ group.name }}</h1>
+<div class='row'>
+	<div class='col-md-12'>
+        <table id="datatable" class='table table-striped'>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>E-mail adres</th>
+                    <th>Voornaam</th>
+                    <th>Achternaam</th>
+                    <th>Student ID</th>
+                    <th>Studie</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>ID</th>
+                    <th>E-mail adres</th>
+                    <th>Voornaam</th>
+                    <th>Achternaam</th>
+                    <th>Student ID</th>
+                    <th>Studie</th>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class='btn-group'>
+            <a href='#' id='add_users' class='btn btn-success'>
+                <i class='glyphicon glyphicon-plus'></i> Add
+            </a>
+            <a href='{{ url_for('user.sign_up') }}' id="add-users" class='btn btn-success'>
+                <i class='glyphicon glyphicon-user'></i> Gebruiker aanmaken
+            </a>
+            <a href='{{ url_for('group.view_users', group_id=group.id) }}' class='btn btn-primary'>
+                <i class='glyphicon glyphicon-arrow-left'></i> Terug
+            </a>
+        </div>
 	</div>
 </div>
-<form action="" method="post" name="add_user" class="form-horizontal">
-	<fieldset>
-		<legend>Add to group</legend>
-
-		<table class="table table-bordered table-striped">
-			<thead>
-				<tr>
-					<th>E-mail address</th>
-					<th>First name(s)</th>
-					<th>Last name</th>
-				</tr>
-			</thead>
-
-			<tbody>
-				{% for user in users.items %}
-					<tr>
-						<td>
-							<label class="checkbox">
-								<input type=checkbox name="select" value="{{ user.id }}" />
-								{{ user.email }}
-							</label>
-						</td>
-
-						<td>{{ user.first_name }}</td>
-						<td>{{ user.last_name }}</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-
-		<div class="btn-toolbar">
-			<div class="btn-group">
-				<button type="submit" class="btn btn-success">Add</button>
-				<a href="{{ url_for('group.view_users', group_id=group.id) }}" class="btn btn-default">Back</a>
-			</div>
-
-			{{ render_pagination(users, 'group.add_users', group_id=group.id) }}
-		</div>
-	</fieldset>
-</form>
 {% endblock %}
 

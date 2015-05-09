@@ -2,6 +2,8 @@ function get_global_file_names() {
     var start = ['jquery.js',
         'bootstrap.min.js',
         'jquery-ui-1.10.4.custom.min.js',
+        'jquery.dataTables.min.js',
+        'dataTables.bootstrap.js'
     ];
 
     start.push('*');
@@ -54,6 +56,7 @@ module.exports = function(grunt) {
                     src: ['**/*.js'],
                     dest: 'dist/js/concat',
                     ext: '.js',
+                    extDot: 'last',
                 }],
             },
 

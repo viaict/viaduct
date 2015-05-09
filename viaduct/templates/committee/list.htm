@@ -1,0 +1,18 @@
+{% extends 'content.htm' %}
+
+{% block content %}
+<h2>Commissies</h2>
+
+<p>
+<div class="panel panel-default">
+    <ul class="list-group">
+        {% for rev in revisions %}
+            <a href='/{{ rev.page.path }}' class="list-group-item">{{ rev.title }}</a>
+        {% endfor %}
+    </ul>
+</div>
+    <ul>
+    </ul>
+</p>
+
+{% endblock %}

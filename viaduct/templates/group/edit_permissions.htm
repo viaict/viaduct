@@ -13,15 +13,14 @@
 	{% endif %}
 
 	<table class='table'>
-	<thead>
-		<th>Modulenaam</th><th>Permissie</th>
-	</thead>
-	<tbody>
-
+        <thead>
+            <th>Modulenaam</th><th>Permissie</th>
+        </thead>
+        <tbody>
 			{% for permission, form_entry in permissions: %}
 			<tr>
 				<td>
-					{{ permission.module_name }}
+                    <label> {{ permission.module_name }} </label>
 				</td>
 				<td>
 					{% if can_write %}
@@ -52,6 +51,12 @@
 	{% endif %}
 	</fieldset>
 </form>
+<script>
+    $(document).ready(function() {
+        $("select").select2();
+        $("select").addClass('form-control');
+    });
+</script>
 
 
 {% endblock %}

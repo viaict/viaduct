@@ -6,7 +6,7 @@ import dateutil.parser
 # please some one check out what is happening
 import viaduct.api.calendar.google as google
 
-from flask import flash, redirect, render_template, request, url_for, abort
+from flask import flash, redirect, render_template, request, url_for, abort, jsonify
 from flask import Blueprint
 from flask.ext.login import current_user
 
@@ -21,6 +21,8 @@ from viaduct.models.mollie import Transaction
 from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.mollie import MollieAPI
 from viaduct.models.education import Education
+
+from viaduct.utilities.serialize_sqla import serialize_sqla
 
 blueprint = Blueprint('activity', __name__, url_prefix='/activities')
 
@@ -43,15 +45,17 @@ def view(archive="", page=1):
         activities = Activity.query \
             .filter(Activity.end_time < datetime.datetime.today()) \
             .order_by(Activity.start_time.desc())
+        title = "activiteiten archief - pagina " + str(page)
     else:
         activities = Activity.query \
             .filter(Activity.end_time >
                     (datetime.datetime.now() - datetime.timedelta(hours=12))) \
             .order_by(Activity.start_time.asc())
+        title = "activiteiten - page " + str(page)
 
     return render_template('activity/view.htm',
                            activities=activities.paginate(page, 10, False),
-                           archive=archive)
+                           archive=archive, title=title)
 
 
 @blueprint.route('/remove/<int:activity_id>/', methods=['POST'])
@@ -130,7 +134,8 @@ def get_activity(activity_id=0):
                         "inschrijvingen" % activity.num_attendants
 
     return render_template('activity/view_single.htm', activity=activity,
-                           form=form, login_form=get_login_form())
+                           form=form, login_form=get_login_form(),
+                           title=activity.name)
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
@@ -187,8 +192,8 @@ def create(activity_id=None):
                     os.remove(os.path.join('viaduct/static/activity_pictures',
                                            activity.picture))
                 except OSError:
-                    print('Trying to remove %s, but it does not exist.' %
-                          (activity.picture))
+                    print(('Trying to remove %s, but it does not exist.' %
+                          (activity.picture)))
 
         elif activity.picture:
             picture = activity.picture
@@ -213,16 +218,17 @@ def create(activity_id=None):
             activity.picture = picture
             activity.owner_id = owner_id
 
-            if activity.id:
-                flash('You\'ve created an activity successfully.', 'success')
+            if activity.id and activity.google_event_id:
+                flash('De activiteit is aangepast', 'success')
 
                 google.update_activity(activity.google_event_id, name,
-                                       location, start.isoformat(),
-                                       end.isoformat())
+                                       description, location,
+                                       start.isoformat(), end.isoformat())
             else:
-                flash('You\'ve updated an activity successfully.', 'success')
+                flash('De activiteit is aangemaakt', 'success')
 
-                google_activity = google.insert_activity(name, location,
+                google_activity = google.insert_activity(name, description,
+                                                         location,
                                                          start.isoformat(),
                                                          end.isoformat())
 
@@ -237,8 +243,10 @@ def create(activity_id=None):
     else:
         flash_form_errors(form)
 
-    return render_template('activity/create.htm', activity=activity, form=form)
+    title = "edit " + str(activity.name)
 
+    return render_template('activity/create.htm', activity=activity, form=form,
+                           title=title)
 
 @blueprint.route('/transaction/<int:result_id>/', methods=['GET', 'POST'])
 def create_mollie_transaction(result_id):
@@ -247,8 +255,10 @@ def create_mollie_transaction(result_id):
     transaction = Transaction.query\
         .filter(Transaction.form_result_id == form_result.id)\
         .filter(Transaction.status == 'open').first()
-    if not transaction:
+    if not transaction or not transaction.mollie_id:
         description = form_result.form.transaction_description
+        description = "VIA transaction: " + description
+        print(description)
         amount = form_result.form.price
         user = form_result.owner
         payment_url, transaction = MollieAPI.create_transaction(
@@ -265,3 +275,10 @@ def create_mollie_transaction(result_id):
             return render_template('mollie/success.htm', message=message)
 
     return False
+
+
+@blueprint.route('/export/', methods=['GET'])
+def export_activities():
+    activities = Activity.query.filter(Activity.end_time > (datetime.datetime.now() - datetime.timedelta(hours=12))).order_by(Activity.start_time.asc()).all()
+    return jsonify(data=serialize_sqla(activities))
+    # return 'hello'

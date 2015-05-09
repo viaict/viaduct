@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="row">
-            {% for revision in data %}
+            {% for revision in revisions %}
                 {% if revision.test == "laatste_bestuursblog" %}
                     <div class="col-sm-7 newsrole">
                 {% else %}
@@ -14,12 +14,18 @@
                         {% if revision.activity %}
                             {{ revision.activity | safe }}
                         {% else %}
-                        <div class="page-header">
-                            <h1>{{ revision.title }}</h1>
-                        </div>
-                        <p>{{ revision.content | markdown(revision.filter_html) }}</p>
+                            <div class="page-header">
+                                <h1>{{ revision.title }}</h1>
+                            </div>
+                            <p>{{ revision.content | markdown(revision.filter_html) }}</p>
                         {% endif %}
                     </div>
+                    {% if revision.test == "laatste_bestuursblog" %}
+                        <span class="pull-right"><a href="/laatste_bestuursblog">Lees al het nieuws!</a></span>
+                        {% if GroupPermissionAPI.can_write('page') %}
+                            <span class="pull-left"><a href="{{ url_for('page.edit_page', path=revision.page.path) }}">Bewerken</a></span>
+                        {% endif %}
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>

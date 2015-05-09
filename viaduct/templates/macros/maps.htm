@@ -4,27 +4,19 @@
 		#map-canvas { width:100%; height: {{ height }}px; }
 	</style>
 
-	<script	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCtbv4xNquOEZhyX_Szi5wNme7n49zaiw4&sensor=true">
-	</script>
-
 	<script>
-	var latlong = new google.maps.LatLng(0, 0);
 
 		function initialize() {
-			var mapOptions = {
-				center: latlong,
-				zoom: 14,
-				mapTypeId: google.maps.MapTypeId.ROADMAP
-			};
-
-			var map = new google.maps.Map(document.getElementById("map-canvas"),
-					mapOptions);
-
-			var marker = new google.maps.Marker({
-				position: latlong,
-				map: map,
-				title:"{{ address }}"
-			});
+			var map = '<iframe \
+						width="100%" \
+						height="100%" \
+						frameborder="0" \
+						style="border:0" \
+						src="https://www.google.com/maps/embed/v1/place?\
+								key=AIzaSyClLAdwgczJlNTe_myO9bh_CLhGSwTuKXo\
+								&zoom=14\
+								&q={{ address }}"></iframe>'
+			document.getElementById("map-canvas").innerHTML = map
 		}
 
 		$(function() {
@@ -32,16 +24,7 @@
 
 			$("#acc").click(function() {
 				if (!loaded) {
-					$.get("http://maps.googleapis.com/maps/api/geocode/json?address={{ address }}&sensor=false",
-						function(data) {
-							if (! data.results)
-								data = JSON.parse(data);
-
-							loc = data.results[0].geometry.location;
-							latlong = new google.maps.LatLng(loc.lat, loc.lng);
-							initialize();
-						}
-					);
+					initialize();
 					loaded = true;
 				}
 			});

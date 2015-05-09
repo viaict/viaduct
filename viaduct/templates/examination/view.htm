@@ -10,9 +10,20 @@
             <form method='get' action='{{ url_for('examination.view_examination') }}' enctype=multipart/form-data class='form-horizontal' >
                 <div class='form-group'>
                     <div class='col-md-8'>
-                        <input name='search' id='search' class='form-control' type='text' placeholder='Zoek op titel, vak of opleiding' value='{{search}}' onkeypress='searchKeyPress(event);' />
+                        <div class="input-group">
+                            <input
+                                name='search' id='search'
+                                class='form-control' type='text'
+                                placeholder='Zoek op titel, vak of opleiding'
+                                value='{{search}}'
+                                onkeypress='searchKeyPress(event);' />
+                            <span class="input-group-btn">
+                            <button type='submit' class='btn btn-primary'>
+                                <i class='glyphicon glyphicon-search' id='submit'></i>
+                            </button>
+                            </span>
+                        </div>
                     </div>
-                    <button type='submit' class='btn btn-primary'><i class='glyphicon glyphicon-search' id='submit'></i></button>
                 </div>
             </form>
         </div>
@@ -26,6 +37,7 @@
                 <th>Opleiding</th>
                 <th>Vak</th>
                 <th>Tentamen</th>
+                <th>Antwoorden</th>
                 {% if GroupPermissionAPI.can_write('examination') %}
                     <th>Edit</th>
                 {% endif %}
@@ -42,13 +54,18 @@
                         <a href='/examination?search={{ (examination.course.name) }}'>{{ examination.course.name }}</a>
                     </td>
                     <td>
-                        <a href='{{ path + examination.path }}' target='_blank'><i class='glyphicon glyphicon-cloud-download'></i> {{ examination.title }}</a>{% if not examination.answer_path == '1' %}
-                        / <a href='{{ path + examination.answer_path }}' role='button' data-toggle='modal' style='cursor: pointer;'> <i class='glyphicon glyphicon-file'></i> antwoorden</a>
+                        <a href='{{ path + examination.path }}' target='_blank'><i class='glyphicon glyphicon-cloud-download'></i> {{ examination.title }}</a>
+                    </td>
+                    <td>
+                        {% if not examination.answer_path == '1' %}
+                            <a href='{{ path + examination.answer_path }}'><i class='glyphicon glyphicon-file'></i>Antwoorden</a>
+                        {% else %}
+                            N/A
                         {% endif %}
                     </td>
                     {% if GroupPermissionAPI.can_write('examination') %}
                         <td>
-                            <a href='edit?edit={{ (examination.id) }}'><i class='glyphicon glyphicon-pencil'></i></a>
+                            <a href='{{ url_for('examination.edit', exam_id=examination.id) }}'><i class='glyphicon glyphicon-pencil'></i></a>
                             <a onclick='confirmation({{examination.id}})' role='button' data-toggle='modal' style='cursor: pointer;'><i class='glyphicon glyphicon-remove'></i></a>
                         </td>
                     {% endif %}

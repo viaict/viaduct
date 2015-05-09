@@ -1,0 +1,21 @@
+{% from 'macros/form.htm' import render_field, render_select, render_checkbox, render_button %}
+{% extends 'content.htm' %}
+
+{% block includes %}
+<script src="{{ static_url('/static/js/committee/edit.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<form method='post'>
+    {{ form.csrf_token }}
+
+    {{ render_field(form.title) }}
+    {{ render_field(form.description) }}
+    {{ render_select(form.group_id) }}
+    {{ render_select(form.coordinator_id) }}
+    {{ render_checkbox(form.interim) }}
+    {{ render_field(form.comment) }}
+
+    {{ render_button(form.save_page) }}
+</form>
+{% endblock %}

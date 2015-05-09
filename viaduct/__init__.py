@@ -5,9 +5,17 @@ from flask.ext.babel import Babel
 from flask.ext.login import LoginManager, current_user
 from flask.ext.sqlalchemy import SQLAlchemy
 from config import LANGUAGES
-from viaduct.utilities import import_module
+from viaduct.utilities import import_module, serialize_sqla
 from markdown import markdown
 import datetime
+import json
+
+
+version = 'v2.0.2.1'
+
+
+def static_url(url):
+    return url + '?v=' + version
 
 
 def is_module(path):
@@ -37,17 +45,9 @@ def register_views(application, path, extension=''):
             blueprint = getattr(import_module(module_name), 'blueprint', None)
 
             if blueprint:
-                print('{0} has been imported.'.format(module_name))
+                print(('{0} has been imported.'.format(module_name)))
                 application.register_blueprint(blueprint)
 
-
-def model_to_dict(self):
-    result = {}
-
-    for column in self.__table__.columns:
-        result[column.name] = getattr(self, column.name)
-
-    return result
 
 # Set up the application and load the configuration file.
 application = Flask(__name__)
@@ -63,7 +63,7 @@ def get_locale():
     if current_user and current_user.locale is not None and \
             not current_user.is_anonymous():
         return current_user.locale
-    return request.accept_languages.best_match(LANGUAGES.keys())
+    return request.accept_languages.best_match(list(LANGUAGES.keys()))
 
 # Set up the login manager, which is used to store the details related to the
 # authentication system.
@@ -73,10 +73,11 @@ login_manager.login_view = 'user.sign_in'
 
 # Set up the database.
 db = SQLAlchemy(application)
-db.Model.to_dict = model_to_dict
 
 from viaduct.api.user import UserAPI
+from viaduct.api.company import CompanyAPI
 from viaduct.api.group import GroupPermissionAPI
+from viaduct.helpers.thumb import thumb
 
 # Set jinja global variables
 application.jinja_env.globals.update(enumerate=enumerate)
@@ -84,11 +85,20 @@ application.jinja_env.globals.update(render_template=render_template)
 application.jinja_env.globals.update(markdown=markdown)
 application.jinja_env.globals.update(Markup=Markup)
 application.jinja_env.globals.update(UserAPI=UserAPI)
+application.jinja_env.globals.update(CompanyAPI=CompanyAPI)
 application.jinja_env.globals.update(GroupPermissionAPI=GroupPermissionAPI)
 application.jinja_env.globals.update(datetime=datetime)
+application.jinja_env.globals.update(json=json)
+application.jinja_env.globals.update(serialize_sqla=serialize_sqla)
+application.jinja_env.globals.update(len=len)
+application.jinja_env.globals.update(thumb=thumb)
+application.jinja_env.globals.update(isinstance=isinstance)
+application.jinja_env.globals.update(list=list)
+
+application.jinja_env.globals.update(static_url=static_url)
 
 # Register the blueprints.
-import api  # noqa
+from . import api  # noqa
 
 path = os.path.dirname(os.path.abspath(__file__))
 

@@ -36,7 +36,7 @@ $(document).ready(function() {
 		// Validate required input fields
 		custom_form.find('.control-group').each(function() {
 			if ($(this).attr('req') == 'true')
-				if ($(this).find('input').val() == '') {
+				if ($(this).find('input').val() === '') {
 					validated = false;
 					$(this).find('input').css('border-color', 'red');
 				}
@@ -56,8 +56,10 @@ $(document).ready(function() {
 						flash(msg_success, "success");
 					else if (result == "edit")
 						flash("Je formulier is aangepast", "alert");
+                    else if (result == 'reserve')
+                        flash('Je staat op de reserve lijst', 'success');
 					else
-						flash("Er is iets misgegaan bij het invullen :(", "error");
+						flash("Er is iets misgegaan bij het invullen :(", "danger");
 				}
 			);
 		}

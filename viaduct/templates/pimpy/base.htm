@@ -15,4 +15,36 @@
         {% block sidebar %}{% endblock %}
         {% block content %}{% endblock %}
     </div>
+
+<link rel='stylesheet prefetch' href='{{static_url("/static/css/font-awesome.min.css")}}'>
+<div id="inbox">
+    <div class="fab btn-group show-on-hover dropup">
+        <div data-toggle="tooltip" data-placement="left" style="margin-left: 42px;">
+            <button type="button" class="btn btn-danger btn-io dropdown-toggle" style="cursor: default" data-toggle="dropdown">
+                <span class="fa-stack fa-2x">
+                    <i class="fa fa-circle fa-stack-2x fab-backdrop"></i>
+                    <i class="fa fa-plus fa-stack-1x fa-inverse fab-primary"></i>
+                    <i class="fa fa-pencil fa-stack-1x fa-inverse fab-secondary"></i>
+                </span>
+            </button>
+        </div>
+        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+            <li><a href="{{ url_for('pimpy.add_minute', group_id=group_id) }}" data-toggle="tooltip" data-placement="left" title="Nieuwe notulen"><i class="fa fa-file-o"></i></a></li>
+            <li><a href="{{ url_for('pimpy.add_task', group_id=group_id) }}" data-toggle="tooltip" data-placement="left" title="Nieuwe taak"><i class="fa fa-check-square-o"></i></a></li>
+        </ul>
+</div>
+</div>
+
+<script>
+
+// Inbox style
+$('.fab').hover(function () {
+    $(this).toggleClass('active');
+});
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
+
 {% endblock %}
+

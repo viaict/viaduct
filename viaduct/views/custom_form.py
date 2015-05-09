@@ -1,5 +1,5 @@
 from flask import flash, redirect, render_template, request, url_for, abort
-from flask import Blueprint
+from flask import Blueprint, Response
 from flask.ext.login import current_user
 
 from viaduct import db
@@ -12,6 +12,9 @@ from viaduct.api.group import GroupPermissionAPI
 
 from sqlalchemy import desc
 
+import io
+import csv
+
 blueprint = Blueprint('custom_form', __name__, url_prefix='/forms')
 
 
@@ -19,7 +22,6 @@ blueprint = Blueprint('custom_form', __name__, url_prefix='/forms')
 @blueprint.route('/page', methods=['GET', 'POST'])
 @blueprint.route('/page/', methods=['GET', 'POST'])
 def view():
-
     page = request.args.get('page_nr', '')
 
     if not page:
@@ -67,25 +69,12 @@ def view_single(form_id=None):
     entries = CustomFormResult.query\
         .filter(CustomFormResult.form_id == form_id).order_by("created")
 
-    from urllib import unquote_plus
-    from urlparse import parse_qs
+    from urllib.parse import unquote_plus
+    from urllib.parse import parse_qs
 
     for entry in entries:
         # Hide form entries from non existing users
         data = parse_qs(entry.data)
-
-        # Create defenition list of custom form fields
-        html = '<dl>'
-
-        for key in data:
-            html += "<dt>%s" % key.replace('[]', '')
-
-            if type(data[key]) is list:
-                html += "<dd>%s" % ', '.join(data[key])
-            else:
-                html += "<dd>%s" % unquote_plus(data[key])
-
-        html += '</dl>'
 
         # Add the entry date
         time = entry.created.strftime("%Y-%m-%d %H:%I") if \
@@ -95,8 +84,7 @@ def view_single(form_id=None):
         results.append({
             'id': entry.id,
             'owner': entry.owner,
-            'form_entry': html,
-            'class': 'class="is_reserve"' if entry.is_reserve else '',
+            'data': data,
             'has_payed': entry.has_payed,
             'time': time
         })
@@ -104,7 +92,44 @@ def view_single(form_id=None):
     custom_form.results = results
 
     return render_template('custom_form/view_results.htm',
-                           custom_form=custom_form)
+                           custom_form=custom_form,
+                           xps=CustomForm.exports,
+                           unquote_plus=unquote_plus)
+
+
+@blueprint.route('/export/<int:form_id>/', methods=['POST'])
+def export(form_id):
+    xp = CustomForm.exports
+    xp_names = list(xp.keys())
+    names = list(request.form.keys())
+    labels = []
+    for name in xp_names:
+        if name not in names:
+            continue
+
+        labels.append(xp[name]['label'])
+
+    str_io = io.StringIO()
+    wrt = csv.writer(str_io)
+    wrt.writerow(labels)
+
+    form = CustomForm.query.get(form_id)
+    for r in form.custom_form_results:
+        data = []
+
+        for name in xp_names:
+            if name not in names:
+                continue
+
+            export = xp[name]['export']
+            data.append(export(r))
+
+        wrt.writerow(data)
+
+    def generate():
+        yield str_io.getvalue()
+
+    return Response(generate(), mimetype='text/csv')
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
@@ -232,12 +257,9 @@ def submit(form_id=None):
             # Check if number attendants allows another registration
             if num_attendants >= custom_form.max_attendants:
                 # Create "Reserve" signup
-                result = CustomFormResult(user.id, form_id,
-                                          request.form['data'], True)
                 response = "reserve"
-            else:
-                result = CustomFormResult(user.id, form_id,
-                                          request.form['data'])
+            result = CustomFormResult(user.id, form_id,
+                                      request.form['data'])
 
         db.session.add(user)
         db.session.commit()

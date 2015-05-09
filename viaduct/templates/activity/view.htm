@@ -21,7 +21,7 @@
 			<div class="row">
 				<div class="col-md-4 image">
 					{% if activity.picture %}
-						<img src="/static/activity_pictures/{{ activity.picture }}">
+                    <img src="{{ thumb('/static/activity_pictures/' + activity.picture, (220, 220)) }}">
 					{% else %}
 						<img src="/static/img/via_thumbnail.png">
 					{% endif %}
@@ -32,17 +32,20 @@
 							{{activity.name}}
 					</h1>
 
+
 					<dl class="time dl-horizontal">
-						<dt><i class="glyphicon glyphicon-compass"></i></dt>
+						<dt><i class="glyphicon glyphicon-home"></i></dt>
 						<dd>{{ activity.location}}</dd>
 						<dt><i class="glyphicon glyphicon-calendar"></i></dt>
-						<dd>{{ activity.get_time() }}</dd>
+						<dd>{{ activity.get_time() }} </dd>
+                        <dd><small>{{ activity.till_now() }}</small></dd>
 					</dl>
+
 					<h2>
 						{% if activity.price != "gratis" %}
-							<i class="glyphicon glyphicon-euro"></i>
+                            &euro;
 						{% endif %}
-							{{ activity.price}}
+						{{ activity.price}}
 					</h2>
 
 				</div>

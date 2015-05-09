@@ -1,18 +1,32 @@
-{% from "macros/pagination.htm" import render_pagination %}
+{% from "macros/form.htm" import render_field %}
 
 {% extends "base.htm" %}
 
 {%block page %}
-    <fieldset>
-        <legend>Nieuw vak</legend>
+<div class="row">
+    <div class="col-md-6">
         <form action="" method=post enctype=multipart/form-data>
-            Titel <br/>
-            <input type=text name=course> <br />
-            Beschrijving <br/>
-            <input type=text name=discription> <br />
-             <input type=submit value=Toevoegen!>
-             <a href="../examination/add"> Terug naar tentamens </a>
+            <fieldset>
+                <legend>Nieuw vak</legend>
+
+                {{ form.csrf_token }}
+                {{ render_field(form.title) }}
+                {{ render_field(form.description) }}
+
+                <div class="control-group">
+                    <div class="controls btn-group">
+                        <button type="submit" class="btn btn-success">
+                            <i class= "glyphicon glyphicon-ok"></i>  Toevoegen
+                        </button>
+                        <a href="{{url_for('examination.upload_file')}}"
+                            class='btn btn-primary'>
+                            <i class="glyphicon glyphicon-arrow-left"></i> Terug
+                        </a>
+                    </div>
+                </div>
+            </fieldset>
         </form>
-    </fieldset>
+    </div>
+</div>
 {% endblock %}
 

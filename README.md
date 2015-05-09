@@ -1,26 +1,47 @@
-# Version.
-1.3.1
+# Version 2.0.2.1
+Versioning works as follows: vSYSTEM.FEATURE.IMPROVEMENT.BUG-/HOTFIX
 
 #Viaduct (Opensourced, yeah)
 ## Tutorial
 See [tutorial](TUTORIAL.md).
 
 ## Setup:
-OS Packages: Python, SQLite, pip, virtualenv, mysql.
+OS Packages: python3, sqlite, pip, virtualenv, mysql-server, git-flow,
+python3-dev, libffi-dev
 Install with your favorite packagemanager.
+
+Get the secret via config files with secrets for the server:
+```bash
+git submodule init
+git submodule update
+```
+Set up the awesome hooks:
+```bash
+cd .git/hooks
+ln -s ../../secrets/post-* .
+cd ../..
+.git/hooks/post-merge
+```
+
+Setup git-flow:
+```bash
+git flow init
+```
+The first one is master, the second develop after that just keep hitting return.
+
+Before installing the Python dependencies, you have to install libjpeg-dev:
+
+    sudo apt-get install libjpeg-dev
 
 Python dependencies are in `requirements.txt`. Install through pip. Usage of virtual environments is recommended:
 
-	virtualenv venv/
+	virtualenv venv/ -p /usr/bin/python3
 	. venv/bin/activate
 	pip install -r requirements.txt
-
-A `config.py` file is needed to run the site. Modify `local_config.py` with your settings and rename the file.
 
 Build dependencies are for ruby and npm:
 * Install Ruby gems
     - Install Ruby
-    - `cp def_config.rb config.rb`
     - `gem install bundler`
     - `bundle install` (if that does not work try this:
       http://guides.rubygems.org/faqs/#user-install)
@@ -30,11 +51,9 @@ Build dependencies are for ruby and npm:
     - `(sudo) npm install -g grunt-cli`
     - `npm install`
 
-Create a temporary database with:
+* Get a live database of the via server by asking the coordinator.
+Use it by database by installing mysql and running:
     - `(sudo) mysql -u root -p < mysqlinit.sql`
-	- `python create_db.py`
-
-Using a live database by installing mysql and running:
     - `(sudo) mysql -u root -p < database.sql`
 
 Run site with:
@@ -42,6 +61,28 @@ Run site with:
     `./watch.sh`
 
 For troubleshooting tips, see bottom of document.
+
+##Changes in the database
+To make changing the database easy you can use the models to update the actual
+database. There are two times you want to do this. The first one is just for
+testing your changes locally.
+If this is the case use these commands to upgrade your actual database.
+This will create a new migration script:
+```bash
+python manage.py db migrate --message 'revision message'`.
+```
+After this script is done you can view it to check if nothing weird is
+going to happen when you execute it. To execute it run:
+```bash
+python manage.py db upgrade
+```
+If this causes errors, something is wrong. Quite possibly the state of the
+database, if you can't fix it yourself ask for help.
+If not, you now have an up to date database.
+
+Once you want to push your changes to develop, there is one important thing that
+you have to do. I will type this in a minute.
+
 
 ##Language
 All code shall be written in **English**, translations should be added through

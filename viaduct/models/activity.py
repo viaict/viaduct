@@ -1,6 +1,7 @@
 from viaduct import db
 import datetime
 from viaduct.models import BaseEntity
+from babel.dates import format_timedelta
 
 
 # Model to support Facebook/Google API integration
@@ -22,7 +23,7 @@ class Activity(db.Model, BaseEntity):
     updated_time = db.Column(db.DateTime, default=datetime.datetime.now())
     form_id = db.Column(db.Integer, db.ForeignKey('custom_form.id'))
 
-    google_event_id = db.Column(db.Integer)
+    google_event_id = db.Column(db.String(64))
     owner = db.relationship('User', backref=db.backref('activities',
                                                        lazy='dynamic'))
 
@@ -49,13 +50,28 @@ class Activity(db.Model, BaseEntity):
         self.form_id = form_id
 
     def get_time(self):
+        today = datetime.datetime.now()
         if self.start_time.month == self.end_time.month and \
                 self.start_time.day == self.end_time.day:
-            return self.start_time.strftime("%A %d %b, %H:%M - ") + \
-                self.end_time.strftime("%H:%M")
+            if self.start_time.year == today.year:
+                return self.start_time.strftime("%A %d %b, %H:%M - ") + \
+                    self.end_time.strftime("%H:%M")
+            else:
+                return self.start_time.strftime("%A %d %b %Y, %H:%M - ") + \
+                    self.end_time.strftime("%H:%M")
         else:
-            return self.start_time.strftime("%a. %d %b (%H:%M) - ") + \
-                self.end_time.strftime("%a. %d %b (%H:%M)")
+            if self.start_time.year == today.year:
+                return self.start_time.strftime("%a. %d %b (%H:%M) - ") + \
+                    self.end_time.strftime("%a. %d %b (%H:%M)")
+            else:
+                return self.start_time.strftime("%a. %d %b %Y (%H:%M) - ") + \
+                    self.end_time.strftime("%a. %d %b %Y (%H:%M)")
+
+    def is_in_future(self):
+        return datetime.datetime.now() < self.start_time
+
+    def is_in_past(self):
+        return datetime.datetime.now() >= self.end_time
 
     def get_short_description(self, characters):
         if (len(self.description) > characters):
@@ -66,6 +82,35 @@ class Activity(db.Model, BaseEntity):
 
         return self.description
 
+    def get_timedelta_to_start(self):
+        return datetime.datetime.now() - self.start_time
+
+    def get_timedelta_to_start_formatted(self, locale="nl_NL"):
+        """
+        Returns over 1 dag
+        """
+        return format_timedelta(self.get_timedelta_to_start(), locale=locale)
+
+    def get_timedelta_from_end(self):
+        return datetime.datetime.now() - self.end_time
+
+    def get_timedelta_from_end_formatted(self, locale='nl_NL'):
+        return format_timedelta(self.get_timedelta_from_end(), locale=locale)
+
+    def get_timedelta_to_end(self):
+        return self.end_time - datetime.datetime.now()
+
+    def get_timedelta_to_end_formatted(self, locale='nl_NL'):
+        return format_timedelta(self.get_timedelta_to_end(), locale=locale)
+
     def format_form_time(self, time):
         return time.strftime("%Y-%m-%d %H:%M")
-        return time.strftime("%d-%m-%Y %H:%M")
+
+    def till_now(self):
+        if self.is_in_future():
+            return 'over %s' % (self.get_timedelta_to_start_formatted())
+
+        if self.is_in_past():
+            return '%s geleden' % (self.get_timedelta_from_end_formatted())
+
+        return 'nog %s' % (self.get_timedelta_to_end_formatted())

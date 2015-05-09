@@ -36,7 +36,13 @@ $(document).ready(function() {
         location.hash = '{{ tag }}'
         var s = document.getElementById('{{tag}}')
         s.className += ' selected_line'
+
+        setTimeout(function() {
+            var y = $(window).scrollTop();  //your current y position on the page
+            $(window).scrollTop(y-150);
+        }, 200);
 });
 </script>
     {% endif %}
 {% endblock %}
+

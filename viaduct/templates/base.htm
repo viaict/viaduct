@@ -10,10 +10,19 @@
 
         <link href="/static/img/via.png" rel="image_src" />
 
-        <link href="/static/css/custom.css" rel="stylesheet" />
+        <link href="{{static_url("/static/css/custom.css")}}" rel="stylesheet" />
+        <link href="{{static_url("/static/css/navigation.css")}}" rel="stylesheet" />
 
 
-        <script src="/static/js/global.js"></script>
+        <script src="{{static_url("/static/js/global.js")}}"></script>
+
+        <script>var viaduct = {};</script>
+
+        {% if data %}
+            <script>
+                viaduct = {{json.dumps(serialize_sqla(data))|safe}};
+            </script>
+        {% endif %}
 
         {% block includes %}
         {% endblock %}
@@ -26,7 +35,7 @@
         {{ UserAPI.get_membership_warning() | safe }}
         {{ NavigationAPI.get_navigation_bar()|safe }}
         <div class="container">
-            <p class="text-right">
+            <p class="text-right report-bug">
                 <a href="{{ url_for('jira.create_issue') }}">Report a bug!</a>
             </p>
             <div class="row">

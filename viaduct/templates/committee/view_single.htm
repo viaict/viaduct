@@ -1,0 +1,27 @@
+{% set User = context['User'] %}
+
+{% extends 'page/view_super.htm' %}
+
+{% block page_title %}Commissie - {{ revision.title }}{% endblock %}
+
+{% block page_content %}
+<p>
+    Coördinator: {% if revision.interim %}positie vacant{% else %}{{ revision.coordinator.name }}{% endif %}
+    {% if revision.interim %}<br />Interim-coördinator: {{ revision.coordinator.name }}{% endif %}
+</p>
+
+<hr />
+
+{{ revision.description | markdown }}
+
+<hr />
+
+<p>
+    Commissieleden:
+    <ul>
+        {% for member in revision.group.users.order_by(User.first_name, User.last_name).all() %}
+        <li><a href="{{ url_for('user.view_single', user_id=member.id) }}">{{member.name}}</a></li>
+        {% endfor %}
+    </ul>
+</p>
+{% endblock %}

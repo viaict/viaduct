@@ -6,6 +6,7 @@ client_secrets.json
 *.bak
 *.pyc
 *.jpg
+*.jpeg
 *.gif
 *.png
 *.pdf
@@ -25,10 +26,10 @@ viaduct/static/files/*
 viaduct/static/css/*
 viaduct/static/js
 venv/*
+venv3
 .vimrc
 
 .sass-cache/
-Gemfile.lock
 node_modules/
 dist/
 

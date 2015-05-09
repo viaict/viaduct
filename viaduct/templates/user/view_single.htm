@@ -1,7 +1,8 @@
 {% extends "content.htm" %}
 
 {% block includes %}
-    <link href="/static/css/user.profile.css" rel="stylesheet"></link>
+    <link href="{{static_url("/static/css/user.profile.css")}}" rel="stylesheet"></link>
+    <script src="{{static_url("/static/js/user/view_single.js")}}"></script>
 {% endblock %}
 
 {%block content %}
@@ -21,7 +22,7 @@
                 </div>
                 <div class="col-md-6 no-pad">
                     <div class="user-image">
-                        <img src="{{ user.avatar }}&s=341" class="img-responsive thumbnail">
+                        <img src="{{ user.avatar }}" class="img-responsive thumbnail">
                     </div>
                 </div>
             </div>
@@ -113,27 +114,4 @@
         </div>
     </div>
 </div>
-
-
-<style>
-
-</style>
-
-<script>
-$(document).ready(function() {
-    var $btnSets = $('#responsive'),
-    $btnLinks = $btnSets.find('a');
-
-    $btnLinks.click(function(e) {
-        e.preventDefault();
-        $(this).siblings('a.active').removeClass("active");
-        $(this).addClass("active");
-        var index = $(this).index();
-        $("div.user-menu>div.user-menu-content").removeClass("active");
-        $("div.user-menu>div.user-menu-content").eq(index).addClass("active");
-    });
-});
-
-</script>
-
 {% endblock %}

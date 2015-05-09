@@ -110,24 +110,21 @@ class NavigationAPI:
                         .order_by("activity_start_time").all()
 
                     for activity in activities:
-                        entry_title = '%s %s' % (activity.start_time
-                                                 .strftime('%Y-%m-%d'),
-                                                 activity.name)
                         entry.activities.append(
-                            NavigationEntry(entry, entry_title,
+                            NavigationEntry(entry, activity.name,
                                             '/activities/' + str(activity.id),
-                                            False, False, 0))
-
+                                            False, False, 0,
+                                            activity.till_now()))
         return entries
 
     @staticmethod
     def can_view(entry):
         '''
         Check whether the current user can view the entry, so if not it can be
-        removed from the navigation.
+        removed from the navigation. Note: Currently only working with pages.
         '''
-        blueprints = [(name, b.url_prefix) for name, b in
-                      application.blueprints.iteritems()]
+        # blueprints = [(name, b.url_prefix) for name, b in
+        #               application.blueprints.items()]
 
         if entry.external or entry.activity_list:
             return True
@@ -139,12 +136,20 @@ class NavigationAPI:
         else:
             path = url[:-1]
 
-        for blueprint, url_prefix in blueprints:
-            if not url_prefix:
-                continue
 
-            if url_prefix == url:
-                return GroupPermissionAPI.can_read(blueprint)
+        # for blueprint, url_prefix in blueprints:
+        #     if not url_prefix:
+        #         continue
+
+        #     if url_prefix == url:
+        #         return GroupPermissionAPI.can_read(blueprint)
+
+        if path[-1:] == '/':
+            path = path[1:] 
+        if path[:-1] == '/':
+            path = path[:1]
+        
+        path = path[1:]
 
         page = Page.query.filter_by(path=path).first()
         if not page:
@@ -177,3 +182,16 @@ class NavigationAPI:
         backtrack.reverse()
         return render_template('navigation/view_backtrack.htm',
                                backtrack=backtrack)
+
+    @staticmethod
+    def alphabeticalize(parent_entry):
+        entries = NavigationEntry.query\
+            .filter(NavigationEntry.parent_id == parent_entry.id)\
+            .order_by(NavigationEntry.title)\
+            .all()
+
+        position = 1
+
+        for entry in entries:
+            entry.position = position
+            position += 1

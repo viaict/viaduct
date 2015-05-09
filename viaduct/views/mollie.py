@@ -1,4 +1,5 @@
 from flask import Blueprint, abort, render_template, request
+from viaduct import application
 from viaduct.api.mollie import MollieAPI
 from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.custom_form import CustomFormAPI
@@ -12,10 +13,11 @@ blueprint = Blueprint('mollie', __name__, url_prefix='/mollie')
 def mollie_check(trans_id=0):
     if ('id' not in request.form) and (not trans_id):
         return render_template('mollie/success.htm', message='no ids given')
-
-    mollie_id = 0
-    if 'id' in request.form:
+    if trans_id:
+        mollie_id = MollieAPI.get_other_id(trans_id=trans_id)
+    elif 'id' in request.form:
         mollie_id = request.form['id']
+        trans_id = MollieAPI.get_other_id(mollie_id=mollie_id)
 
     success, message = MollieAPI.check_transaction(transaction_id=trans_id,
                                                    mollie_id=mollie_id)
@@ -24,11 +26,15 @@ def mollie_check(trans_id=0):
     return render_template('mollie/success.htm', message=message)
 
 
-@blueprint.route('/webhook', methods=['POST'])
+@blueprint.route('/webhook/', methods=['GET', 'POST'])
 def webhook():
+    if 'id' not in request.form:
+        return ''
     mollie_id = request.form['id']
     success, message = MollieAPI.check_transaction(mollie_id=mollie_id)
-    return render_template('mollie/success.htm', message=message)
+    trans_id = MollieAPI.get_other_id(mollie_id=mollie_id)
+    CustomFormAPI.update_payment(trans_id, success)
+    return ''
 
 
 @blueprint.route('/')
@@ -58,6 +64,8 @@ def view_all_remote_transactions():
     test = application.config.get('MOLLIE_TEST_MODE', False)
     key = application.config.get('MOLLIE_TEST_KEY', False)
     if payments:
-        return render_template('mollie/view.htm', payments=payments)
+        return render_template('mollie/view.htm', payments=payments,
+                               test=test, key=key, message=message)
     else:
-        return render_template('mollie/success.htm', message=message)
+        return render_template('mollie/success.htm', message=message,
+                               test=test, key=key)

@@ -4,24 +4,30 @@
 
 {% block content %}
 <form action="" method="post" name="sign_up" class="form-horizontal" enctype="multipart/form-data">
-	<fieldset>
-		<legend>Registreren</legend>
+    <fieldset>
+        <legend>Registreren</legend>
 
-		{{ form.csrf_token }}
-		{{ render_field(form.email) }}
-		{{ render_field(form.password) }}
-		{{ render_field(form.repeat_password) }}
-		{{ render_field(form.first_name) }}
-		{{ render_field(form.last_name) }}
-		{{ render_field(form.student_id) }}
-		{{ render_field(form.education_id) }}
-		{{ render_field(form.avatar) }}
+        {{ form.csrf_token }}
+        {{ render_field(form.email) }}
+        {{ render_field(form.password) }}
+        {{ render_field(form.repeat_password) }}
+        {{ render_field(form.first_name) }}
+        {{ render_field(form.last_name) }}
 
-		<div class="control-group">
-			<div class="controls">
-				<button type="submit" class="btn btn-success">Registreren</button>
-			</div>
-		</div>
-	</fieldset>
+        {{ render_field(form.birth_date) }}
+
+        {{ render_field(form.student_id) }}
+        {{ render_field(form.education_id) }}
+
+        {{ render_field(form.study_start) }}
+
+        {{ render_field(form.avatar) }}
+
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn btn-success">Registreren</button>
+            </div>
+        </div>
+    </fieldset>
 </form>
 {% endblock %}

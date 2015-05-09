@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from flask import flash, render_template, request, redirect, url_for
+from flask import abort, flash, render_template, request, redirect, url_for
 from flask import Blueprint
+
+from flask.ext.login import current_user
 
 from viaduct.helpers import flash_form_errors
 from viaduct.forms.jira import CreateIssueForm
@@ -11,6 +13,9 @@ blueprint = Blueprint('jira', __name__)
 
 @blueprint.route('/create-issue/', methods=['GET', 'POST'])
 def create_issue():
+
+    if not current_user or not current_user.has_payed:
+        abort(403)
 
     form = CreateIssueForm(request.form)
 

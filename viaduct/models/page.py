@@ -14,6 +14,10 @@ class Page(db.Model, BaseEntity):
 
     type = db.Column(db.String(256))
 
+    navigation_entry_id = db.Column(db.Integer,
+                                    db.ForeignKey('nagivation_entry.id'))
+    navigation_entry = db.relationship('NavigationEntry', backref='page')
+
     def __init__(self, path, type='page'):
         self.path = path.rstrip('/')
         self.type = type
@@ -78,6 +82,9 @@ class SuperRevision(db.Model, BaseEntity):
     NOTE: I am not able to get a relationship to work with page here, so you
     will have to implement that yourself."""
     __abstract__ = True
+
+    # Things needed in template context.
+    context = {}
 
     title = db.Column(db.String(128))
     comment = db.Column(db.String(1024))

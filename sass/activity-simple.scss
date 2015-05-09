@@ -1,0 +1,10 @@
+.activity-simple-description {
+	width:calc(100% - 80px);
+	float:right;
+}
+
+.activity-simple:after {
+	display: table;
+	content: "";
+	clear:both;
+}

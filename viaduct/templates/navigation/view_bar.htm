@@ -35,14 +35,36 @@
                                         {{ entry.title }}
                                     </a>
 
-                                    <ul class="dropdown-menu">
+                                    <ul class="dropdown-menu
+                                        {% if entry.activities %}
+                                            dropdown-menu-activity
+
+                                        {% endif %}
+                                        "
+                                        >
                                         {% for child in children %}
-                                            <li>
-                                                <a {% if child.external %}target="_blank"{% endif %}
-                                                href="{% if child.external %}https://{% endif %}{{ child.url }}">
-                                                    {{ child.title }}
+                                        {% set grandChildren = NavigationAPI.order_entries(child.children).all() if not entry.activities %}
+                                        {% set grandChildren = NavigationAPI.remove_unauthorized(grandChildren) %}
+
+                                             <li {% if grandChildren %} class="dropdown-submenu" {% endif %}>
+                                                <a {% if child.external %}target="_blank"{% endif %} href="{% if child.external %}https://{% endif %}{{ child.url }}" {% if grandChildren %} class="dropdown-toggle" {% endif %} >
+                                                {% if child.subtitle %}
+                                                    <small class="pull-right"> {{ child.subtitle|truncate(40)  }}</small>
+                                                {% endif %}
+                                                {{ child.title }}
+                                                {% if child.subtitle %}
+                                                    <small class="invisible"> {{ child.subtitle|truncate(40)  }}</small>
+                                                {% endif %}
                                                 </a>
+                                                <ul class="dropdown-menu">
+                                                    {% for grandChild in grandChildren %}
+                                                     <li><a href="{% if grandChild.external %}https://{% endif %}{{ grandChild.url }}">
+                                                        <span>{{ grandChild.title }}</span>
+                                                    </li></a>
+                                                    {% endfor %}
+                                                </ul>
                                             </li>
+                                        </li>
                                         {% endfor %}
                                     </ul>
                                 </li>
@@ -54,12 +76,11 @@
                          <a data-toggle="dropdown" href="#">
                             <img class="hidden-xs img-rounded" src="/static/img/user.png" alt="..." id="loginImage">
                           </a>
-                          <div class="dropdown-menu" role="menu" id="loginContainer">
+                          <div class="dropdown-menu" id="loginContainer">
                             <form method="post" name="sign-in" id="sign-in-menu" action="{{ url_for('user.sign_in') }}">
                             {{ login_form.csrf_token }}
                             {{ render_field(login_form.email) }}
                             {{ render_field(login_form.password) }}
-                            {{ render_checkbox(login_form.remember_me) }}
 
                             {{ render_submit('Log in') }}
                             <ul class='list-unstyled' id='dropmenu-list'>
@@ -72,7 +93,7 @@
                           <a data-toggle="dropdown" href="#">
                             <img class="hidden-xs img-rounded" src="{{ UserAPI.avatar( current_user ) }}" alt="..." id="loginImage" >
                           </a>
-                          <div class="dropdown-menu" role="menu" id="loginContainer">
+                          <div class="dropdown-menu" id="loginContainer">
                             <img src="{{ UserAPI.avatar( current_user ) }}" alt="..." id="userImage" class="img-rounded hidden-xs">
                             <div id="userInformation">
                                 <p>{{ current_user.name }}</p>
@@ -80,7 +101,7 @@
                                 <p><a href="{{ url_for('user.view_single', user_id=current_user.id) }}">Profiel weergeven</a></p>
                             </div>
                             <div id="logoutButtonContainer">
-                                <a href="{{ url_for('user.sign_out') }}"> <button class="btn btn-primary fullWidth" >uitloggen</button></a>
+                                <a href="{{ url_for('user.sign_out') }}"> <button class="btn btn-primary fullWidth" >Uitloggen</button></a>
                             </div>
                           </div>
                            {% endif %}
@@ -93,7 +114,6 @@
                             {{ login_form.csrf_token }}
                             {{ render_field(login_form.email) }}
                             {{ render_field(login_form.password) }}
-                            {{ render_checkbox(login_form.remember_me) }}
 
                             {{ render_submit('Log in') }}
                             <ul class='list-unstyled' id='dropmenu-list'>
@@ -125,3 +145,4 @@
         </div>
     </nav>
     </header>
+

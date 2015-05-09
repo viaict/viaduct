@@ -1,0 +1,50 @@
+{% extends 'content.htm' %}
+
+{% block includes %}
+    <script src='/static/js/elections/nominate.js'></script>
+{% endblock %}
+
+{% block content %}
+    <h1>Docent van het jaar IW</h1>
+
+    <h2>Nomineren</h2>
+    <p>
+        Nomineer hier je <strong>vier</strong> favoriete docenten voor de
+        verkiezingen van docent van IW van het jaar.
+    </p>
+
+    <form method='post'>
+        <div class='form-group'>
+            <label for='nominee_name'>Naam</label>
+            <input class='form-control' id='nominee_select' name='nominee' autocomplete='off' />
+        </div>
+        <button type='submit' class='btn btn-primary' autocomplete='off'>Nomineer</button>
+    </form>
+
+    <h3>Huidige nominaties</h3>
+    <p>De volgende docenten heb jij genomineerd:</p>
+
+    <table class='table'>
+        {% for nomination in nominations %}
+            {% if nomination.nominee.valid != none %}
+                {% if nomination.nominee.valid %}{% set tr_class = 'success' %}
+                {% else %}{% set tr_class = 'danger' %}{% endif %}
+            {% else %}
+                {% set tr_class = 'warning' %}
+            {% endif %}
+
+            <tr class='{{ tr_class }}' data-nomination-id='{{ nomination.id }}'>
+                <td>{{ nomination.nominee.name }}</td>
+                <td class='text-right'>
+                    {% if tr_class == 'success' %}Goedgekeurd
+                    {% elif tr_class == 'danger' %}Afgekeurd
+                    {% elif tr_class == 'warning' %}Niet gekeurd
+                    {% else %}Ik weet niet wat je aan het doen bent, maar het slaat helemaal nergens op.{% endif %}
+                </td>
+                <td class='text-right'>
+                    <a href='#' class='remove btn btn-danger'><i class='fa fa-remove'></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

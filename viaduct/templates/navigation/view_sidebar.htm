@@ -1,30 +1,30 @@
 {% if current != None %}
 
-<div class="col-sm-2 col-md-2">
+<div class="col-sm-2 col-md-2 side-menu">
     <div class="panel-group" id="accordion">
         <div class="panel panel-default">
         	{% for i, page in enumerate(pages) %}
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a {% if page.external %}target="_blank"{% endif %} href="{% if page.url == current.url %}#{% else %}{% if page.external %}http://{% endif %}{{ page.url }}{% endif %}">{{ page.title }}</a>
-                    </h4>
-                </div>
-                {% set children = page.activities if page.activities else page.children %}
+                <a {% if page.external %}target="_blank"{% endif %} href="{% if page.url == current.url %}#{% else %}{% if page.external %}http://{% endif %}{{ page.url }}{% endif %}">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                           {{ page.title }}
+                        </h4>
+                    </div>
+                </a>
+                {% set children = page.activities if page.activities else page.get_children() %}
 				{% set children = NavigationAPI.remove_unauthorized(children) %}
 
 				{% if children and page.url == current.url %}
                     <div id="{{i}}" class="panel-collapse">
-                        <div class="panel-body">
-                            <table class="table">
-                            	{% for child in children %}
-	                                <tr>
-	                                    <td>
-	                                        <span></span><a {% if child.external %}target="_blank"{% endif %} href="{% if child.external %}http://{% endif %}{{ child.url }}">{{ child.title }}</a>
-	                                    </td>
-	                                </tr>
-	                            {% endfor %}
-                            </table>
-                        </div>
+                        {% for child in children %}
+                        <a {% if child.external %}target="_blank"{% endif %} href="{% if child.external %}http://{% endif %}{{ child.url }}">
+                            <div class="panel-heading sub-panel-heading">
+                                <h4 class="panel-title sub-panel-title">
+                                    {{ child.title }}
+                                </h4>
+                            </div>
+                        </a>
+                        {% endfor %}
                     </div>
                 {% endif %}
             {% endfor %}

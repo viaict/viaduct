@@ -74,6 +74,7 @@ def update_task_status():
     list_items = query.all()
     for task in list_items:
         task.update_status(new_status)
+    db.session.commit()
     return jsonify(status=task.get_status_color())
 
 
@@ -184,7 +185,7 @@ def add_minute(group_id='all'):
                 for remove in removes:
                     remove.update_status(5)
                 db.session.commit()
-                flash('De notulen is verwerkt!', 'success')
+                flash('De notulen zijn verwerkt!', 'success')
 
                 return render_template('pimpy/view_parsed_tasks.htm',
                                        tasks=tasks, dones=dones,
