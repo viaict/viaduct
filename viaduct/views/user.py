@@ -43,9 +43,18 @@ def load_user(user_id):
 
 @blueprint.route('/users/view/<int:user_id>', methods=['GET'])
 def view_single(user_id=None):
-    if not GroupPermissionAPI.can_read('user') and\
-            (not current_user or current_user.id != user_id):
+    
+    can_read = False
+    can_write = False
+
+    if not current_user or not current_user.has_payed:
         return abort(403)
+    elif GroupPermissionAPI.can_read('user'): 
+        can_read = True
+    elif current_user.id == user_id:
+        can_write = True
+        can_read = True
+
 
     if not user_id:
         return abort(404)
@@ -79,7 +88,9 @@ def view_single(user_id=None):
 
     return render_template('user/view_single.htm', user=user,
                            new_activities=new_activities,
-                           old_activities=old_activities)
+                           old_activities=old_activities,
+                           can_read=can_read,
+                           can_write=can_write)
 
 
 @blueprint.route('/users/remove_avatar/<int:user_id>', methods=['GET'])
