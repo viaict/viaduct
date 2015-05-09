@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for,\
     abort, flash
 
-from sqlalchemy import or_, and_
+from sqlalchemy import or_, and_, func
 
 from datetime import datetime
 
@@ -22,6 +22,12 @@ def view_list(page_nr=1):
     if not GroupPermissionAPI.can_read('vacancy'):
         return abort(403)
 
+    # Order the vacancies in such a way that vacancies that are new
+    # or almost expired, end up on top.
+    order = func.abs(
+        (100 * (func.datediff(Vacancy.start_date, func.current_date()) /
+                func.datediff(Vacancy.start_date, Vacancy.end_date))) - 50)
+
     if request.args.get('search') is not None:
         search = request.args.get('search')
 
@@ -30,7 +36,7 @@ def view_list(page_nr=1):
                    Company.name.like('%' + search + '%'),
                    Vacancy.workload.like('%' + search + '%'),
                    Vacancy.contract_of_service.like('%' + search + '%'))).\
-            order_by(Vacancy.title).order_by(Company.rank)
+            order_by(order.desc())
 
         if not GroupPermissionAPI.can_write('vacancy'):
             vacancies = vacancies.filter(and_(Vacancy.start_date <
@@ -50,13 +56,14 @@ def view_list(page_nr=1):
                                title="Vacatures")
 
     if not GroupPermissionAPI.can_write('vacancy'):
-        vacancies = Vacancy.query.filter(and_(Vacancy.start_date <
-                                         datetime.utcnow(), Vacancy.end_date >
-                                         datetime.utcnow())).paginate(page_nr,
-                                                                      15, True)
+        vacancies = Vacancy.query.order_by(
+            order.desc()).filter(and_(Vacancy.start_date <
+                                 datetime.utcnow(), Vacancy.end_date >
+                                 datetime.utcnow())).paginate(page_nr,
+                                                              15, True)
     else:
         vacancies = Vacancy.query.join(Company).filter().\
-            order_by(Vacancy.title).order_by(Company.rank)
+            order_by(order.desc())
 
         for i, vacancy in enumerate(vacancies):
             if (vacancy.start_date < datetime.date(datetime.utcnow()) and
