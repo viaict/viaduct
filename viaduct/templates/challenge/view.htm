@@ -19,13 +19,13 @@
 			{{ render_field(form.answer) }}
 			{{ render_select(form.parent_id) }}
 
-			{% if GroupPermissionAPI.can_write('challenge') %}
+			{% if ModuleAPI.can_write('challenge') %}
 				{{ render_button(form.submit) }}
 			{% endif %}
 		</fieldset>
 	</form>
 
-	{% if challenge.id and GroupPermissionAPI.can_write('challenge') %}
+	{% if challenge.id and ModuleAPI.can_write('challenge') %}
 		<form action="{{ url_for('challenge.delete', challenge_id=challenge.id) }}" method="post">
 			<fieldset>
 				<button class="btn btn-danger" type="submit">Verwijderen</button>

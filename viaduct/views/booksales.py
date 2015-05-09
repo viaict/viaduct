@@ -3,7 +3,7 @@ from flask import flash, render_template, request
 
 from viaduct.models.booksales import Book, Sale
 
-from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.module import ModuleAPI
 from viaduct.api.booksales import BookSalesAPI
 
 from viaduct.forms.booksales import AddBookForm, AddSaleForm
@@ -13,7 +13,7 @@ blueprint = Blueprint('booksales', __name__, url_prefix='/booksales')
 
 @blueprint.route('/')
 def view():
-    if not GroupPermissionAPI.can_read('booksales'):
+    if not ModuleAPI.can_read('booksales'):
         return abort(403)
 
     return render_template('booksales/view.htm', books=Book.query.all(),
@@ -22,7 +22,7 @@ def view():
 
 @blueprint.route('/sales/')
 def view_sales():
-    if not GroupPermissionAPI.can_read('booksales'):
+    if not ModuleAPI.can_read('booksales'):
         return abort(403)
 
     return render_template('booksales/sales.htm', sales=Sale.query.all(),
@@ -31,7 +31,7 @@ def view_sales():
 
 @blueprint.route('/add_sale/', methods=['GET', 'POST'])
 def add_sale():
-    if not GroupPermissionAPI.can_write('booksales'):
+    if not ModuleAPI.can_write('booksales'):
         return abort(403)
 
     form = AddSaleForm(request.form)
@@ -54,7 +54,7 @@ def add_sale():
 @blueprint.route('/edit_book/', methods=['GET', 'POST'])
 @blueprint.route('/edit_book/<book_id>', methods=['GET', 'POST'])
 def edit_book(book_id=-1):
-    if not GroupPermissionAPI.can_write('booksales'):
+    if not ModuleAPI.can_write('booksales'):
         return abort(403)
 
     book = Book.query.filter(Book.id == book_id).first()

@@ -1,7 +1,7 @@
 from flask import Blueprint, abort, render_template, request
 from viaduct import application
 from viaduct.api.mollie import MollieAPI
-from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.module import ModuleAPI
 from viaduct.api.custom_form import CustomFormAPI
 
 blueprint = Blueprint('mollie', __name__, url_prefix='/mollie')
@@ -39,7 +39,7 @@ def webhook():
 @blueprint.route('/')
 @blueprint.route('/view/')
 def view_all_transactions():
-    if not GroupPermissionAPI.can_read('mollie'):
+    if not ModuleAPI.can_read('mollie'):
         return abort(403)
     payments, message = MollieAPI.get_all_transactions()
     print(payments)

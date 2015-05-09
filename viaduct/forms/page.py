@@ -14,7 +14,7 @@ class EditGroupPagePermissionEntry(UnsafeForm):
 
 class SuperPageForm(Form):
     """TODO"""
-    needs_payed = BooleanField('Betaling vereist')
+    needs_payed = BooleanField('Alleen zichtbaar voor leden')
 
     title = StringField('Titel', [InputRequired()])
     comment = StringField('Reden van wijziging', [Optional()])

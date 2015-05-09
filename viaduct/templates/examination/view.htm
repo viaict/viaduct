@@ -28,7 +28,7 @@
             </form>
         </div>
     </div>
-    {% if GroupPermissionAPI.can_write('examination') %}
+    {% if ModuleAPI.can_write('examination') %}
         <p><a href='add' class='btn btn-default'><i class='glyphicon glyphicon-pencil'></i> <strong>Nieuw tentamen</strong></a></p>
     {% endif %}
     <table class='table table-bordered table-striped'>
@@ -38,7 +38,7 @@
                 <th>Vak</th>
                 <th>Tentamen</th>
                 <th>Antwoorden</th>
-                {% if GroupPermissionAPI.can_write('examination') %}
+                {% if ModuleAPI.can_write('examination') %}
                     <th>Edit</th>
                 {% endif %}
             </tr>
@@ -63,7 +63,7 @@
                             N/A
                         {% endif %}
                     </td>
-                    {% if GroupPermissionAPI.can_write('examination') %}
+                    {% if ModuleAPI.can_write('examination') %}
                         <td>
                             <a href='{{ url_for('examination.edit', exam_id=examination.id) }}'><i class='glyphicon glyphicon-pencil'></i></a>
                             <a onclick='confirmation({{examination.id}})' role='button' data-toggle='modal' style='cursor: pointer;'><i class='glyphicon glyphicon-remove'></i></a>

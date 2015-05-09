@@ -17,13 +17,13 @@
 			{{ render_field(form.email) }}
 			{{ render_field(form.phone_nr) }}
 
-			{% if GroupPermissionAPI.can_write('location') %}
+			{% if ModuleAPI.can_write('location') %}
 				{{ render_button(form.submit) }}
 			{% endif %}
 		</fieldset>
 	</form>
 
-	{% if location.id and GroupPermissionAPI.can_write('location') %}
+	{% if location.id and ModuleAPI.can_write('location') %}
 		<form action="{{ url_for('location.delete', location_id=location.id) }}" method="post">
 			<fieldset>
 				<button class="btn btn-danger" type="submit">Verwijderen</button>

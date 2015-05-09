@@ -8,7 +8,7 @@ import re
 
 from fuzzywuzzy.process import extractOne
 
-from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.module import ModuleAPI
 from viaduct.api.user import UserAPI
 from viaduct.models import Group, User
 from viaduct.models import Minute, Task
@@ -25,7 +25,7 @@ class PimpyAPI:
         Return succes (boolean, message (string). Message is the new minute.id
         if succes is true, otherwise it contains an error message.
         """
-        if not GroupPermissionAPI.can_write('pimpy'):
+        if not ModuleAPI.can_write('pimpy'):
             abort(403)
 
         try:
@@ -49,7 +49,7 @@ class PimpyAPI:
         Return succes (boolean), message (string). Message is the new task.id
         if succes is true, otherwise it contains an error message.
         """
-        if not GroupPermissionAPI.can_write('pimpy'):
+        if not ModuleAPI.can_write('pimpy'):
             abort(403)
 
         if group_id == 'all':
@@ -99,7 +99,7 @@ class PimpyAPI:
 
         In case of succes the task is edited in the database.
         """
-        if not GroupPermissionAPI.can_write('pimpy'):
+        if not ModuleAPI.can_write('pimpy'):
             abort(403)
 
         if task_id == -1:
@@ -264,7 +264,7 @@ class PimpyAPI:
         where group_id is the group's id
         and comma_sep is a string with comma seperated users.
         """
-        if not GroupPermissionAPI.can_read('pimpy'):
+        if not ModuleAPI.can_read('pimpy'):
             abort(403)
 
         group = Group.query.filter(Group.id == group_id).first()
@@ -312,7 +312,7 @@ class PimpyAPI:
 
     @staticmethod
     def get_navigation_menu(group_id, personal, type):
-        if not GroupPermissionAPI.can_read('pimpy'):
+        if not ModuleAPI.can_read('pimpy'):
             abort(403)
         if not current_user:
             flash('Huidige gebruiker niet gevonden!', 'danger')
@@ -353,7 +353,7 @@ class PimpyAPI:
         No internal permission system made yet.
         Do not make routes to this module yet.
         """
-        if not GroupPermissionAPI.can_read('pimpy'):
+        if not ModuleAPI.can_read('pimpy'):
             abort(403)
         if not current_user:
             flash('Huidige gebruiker niet gevonden.', 'danger')
@@ -386,7 +386,7 @@ class PimpyAPI:
 
     @staticmethod
     def get_tasks(group_id, personal):
-        if not GroupPermissionAPI.can_read('pimpy'):
+        if not ModuleAPI.can_read('pimpy'):
             abort(403)
         if not current_user:
             flash('Huidige gebruiker niet gevonden', 'danger')
@@ -429,7 +429,7 @@ class PimpyAPI:
         """
         Load all minutes in the given group
         """
-        if not GroupPermissionAPI.can_read('pimpy'):
+        if not ModuleAPI.can_read('pimpy'):
             abort(403)
         if not current_user:
             flash('Huidige gebruiker niet gevonden', 'danger')
@@ -459,7 +459,7 @@ class PimpyAPI:
         """
         Load (and thus view) specifically one minute
         """
-        if not GroupPermissionAPI.can_read('pimpy'):
+        if not ModuleAPI.can_read('pimpy'):
             abort(403)
         if not current_user:
             flash('Huidige gebruiker niet gevonden', 'danger')

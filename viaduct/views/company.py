@@ -10,7 +10,7 @@ from viaduct.models.company import Company
 from viaduct.models.location import Location
 from viaduct.models.contact import Contact
 from viaduct.forms import CompanyForm, NewCompanyForm
-from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.module import ModuleAPI
 from viaduct.api.file import FileAPI
 
 
@@ -24,7 +24,7 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page>/', methods=['GET', 'POST'])
 def view_list(page=1):
-    if not GroupPermissionAPI.can_read('company'):
+    if not ModuleAPI.can_read('company'):
         return abort(403)
 
     if request.args.get('search') is not None:
@@ -35,7 +35,7 @@ def view_list(page=1):
                         Location.city.like('%' + search + '%')))\
             .order_by(Company.name).order_by(Company.rank)
 
-        if not GroupPermissionAPI.can_write('company'):
+        if not ModuleAPI.can_write('company'):
             companies = companies\
                 .filter(and_(Company.contract_start_date < datetime.utcnow(),
                              Company.contract_end_date > datetime.utcnow()))\
@@ -53,7 +53,7 @@ def view_list(page=1):
         return render_template('company/list.htm', companies=companies,
                                search=search, path=FILE_FOLDER)
 
-    if not GroupPermissionAPI.can_write('company'):
+    if not ModuleAPI.can_write('company'):
         companies = Company.query\
             .filter(and_(Company.contract_start_date < datetime.utcnow(),
                          Company.contract_end_date > datetime.utcnow()))\
@@ -83,7 +83,7 @@ def edit(company_id=None):
     FRONTEND
     Create, view or edit a company.
     '''
-    if not GroupPermissionAPI.can_read('company'):
+    if not ModuleAPI.can_read('company'):
         return abort(403)
 
     # Select company.
@@ -116,7 +116,7 @@ def view(company_id=None):
     FRONTEND
     view a company.
     '''
-    if not GroupPermissionAPI.can_read('company'):
+    if not ModuleAPI.can_read('company'):
         return abort(403)
 
     # Select company.
@@ -137,7 +137,7 @@ def update(company_id=None):
     BACKEND
     Create, view or edit a company.
     '''
-    if not GroupPermissionAPI.can_write('company'):
+    if not ModuleAPI.can_write('company'):
         return abort(403)
 
     # Select company.
@@ -206,7 +206,7 @@ def delete(company_id):
     Delete a company.
     '''
     print('POST request received')
-    if not GroupPermissionAPI.can_write('company'):
+    if not ModuleAPI.can_write('company'):
         return abort(403)
 
     company = Company.query.get(company_id)
@@ -223,7 +223,7 @@ def delete(company_id):
 @blueprint.route('/create_new/', methods=['GET'])
 @blueprint.route('/edit_new/<int:company_id>/', methods=['GET'])
 def create(company_id=None):
-    if not GroupPermissionAPI.can_read('company'):
+    if not ModuleAPI.can_read('company'):
         return abort(403)
 
     # Select company.
@@ -278,7 +278,7 @@ def update_new(company_id=None):
     BACKEND
     Create, view or edit a company.
     '''
-    if not GroupPermissionAPI.can_write('company'):
+    if not ModuleAPI.can_write('company'):
         return abort(403)
 
     # Select company.

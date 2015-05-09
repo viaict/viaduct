@@ -5,14 +5,14 @@ from viaduct import db
 from viaduct.models.location import Location
 from viaduct.utilities import serialize_sqla, validate_form
 from viaduct.forms import LocationForm
-from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.module import ModuleAPI
 
 blueprint = Blueprint('location', __name__, url_prefix='/locations')
 
 
 @blueprint.route('/<int:location_id>/contacts/', methods=['GET'])
 def get_contacts(location_id):
-    if not GroupPermissionAPI.can_read('contacts'):
+    if not ModuleAPI.can_read('contacts'):
         return jsonify(error='Geen toestemming cotactpersonen te lezen')
 
     location = Location.query.get(location_id)
@@ -22,7 +22,7 @@ def get_contacts(location_id):
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page>/', methods=['GET', 'POST'])
 def list(page=1):
-    if not GroupPermissionAPI.can_read('location'):
+    if not ModuleAPI.can_read('location'):
         return abort(403)
 
     locations = Location.query.paginate(page, 15, False)
@@ -36,7 +36,7 @@ def view(location_id=None):
     FRONTEND
     Create, view or edit a location.
     '''
-    if not GroupPermissionAPI.can_read('location'):
+    if not ModuleAPI.can_read('location'):
         return abort(403)
 
     # Select location..
@@ -56,7 +56,7 @@ def update(location_id=None):
     BACKEND
     Create or edit a location.
     '''
-    if not GroupPermissionAPI.can_write('location'):
+    if not ModuleAPI.can_write('location'):
         return abort(403)
 
     # Select location.
@@ -89,7 +89,7 @@ def delete(location_id):
     BACKEND
     Delete a location.
     '''
-    if not GroupPermissionAPI.can_write('location'):
+    if not ModuleAPI.can_write('location'):
         return abort(403)
 
     location = Location.query.get(location_id)

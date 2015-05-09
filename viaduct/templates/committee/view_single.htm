@@ -12,7 +12,7 @@
 
 <hr />
 
-{{ revision.description | markdown }}
+{{ revision.description | strip_tags('script', 'link', 'style', 'video', 'audio') | markdown }}
 
 <hr />
 

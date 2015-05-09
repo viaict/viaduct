@@ -18,7 +18,7 @@ from viaduct.forms.activity import ActivityForm, CreateForm
 from viaduct.models.activity import Activity
 from viaduct.models.custom_form import CustomForm, CustomFormResult
 from viaduct.models.mollie import Transaction
-from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.module import ModuleAPI
 from viaduct.api.mollie import MollieAPI
 from viaduct.models.education import Education
 
@@ -38,7 +38,7 @@ def allowed_file(filename):
 @blueprint.route('/page/<int:page>/', methods=['GET', 'POST'])
 @blueprint.route('/<string:archive>/page/<int:page>/', methods=['GET', 'POST'])
 def view(archive="", page=1):
-    if not GroupPermissionAPI.can_read('activity'):
+    if not ModuleAPI.can_read('activity'):
         return abort(403)
 
     if archive == "archive":
@@ -60,7 +60,7 @@ def view(archive="", page=1):
 
 @blueprint.route('/remove/<int:activity_id>/', methods=['POST'])
 def remove_activity(activity_id=0):
-    if not GroupPermissionAPI.can_write('activity'):
+    if not ModuleAPI.can_write('activity'):
         return abort(403)
 
     # Get activity
@@ -78,7 +78,7 @@ def remove_activity(activity_id=0):
 
 @blueprint.route('/<int:activity_id>/', methods=['GET', 'POST'])
 def get_activity(activity_id=0):
-    if not GroupPermissionAPI.can_read('activity'):
+    if not ModuleAPI.can_read('activity'):
         return abort(403)
 
     activity = Activity.query.get(activity_id)
@@ -142,7 +142,7 @@ def get_activity(activity_id=0):
 @blueprint.route('/edit/<int:activity_id>/', methods=['GET', 'POST'])
 def create(activity_id=None):
     # Need to be logged in + actie group or admin etc.
-    if not GroupPermissionAPI.can_write('activity'):
+    if not ModuleAPI.can_write('activity'):
         return abort(403)
 
     if activity_id:

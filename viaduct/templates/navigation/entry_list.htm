@@ -5,7 +5,7 @@
 			</span>	
 			{{ entry.title }}
 
-		{% if GroupPermissionAPI.can_write('navigation') %}		
+		{% if ModuleAPI.can_write('navigation') %}		
 			<a class="btn btn-success pull-right" href="{{ url_for('navigation.edit', parent_id=entry.id) }}">
 				<i class="glyphicon glyphicon-plus"></i>
 			</a>

@@ -10,7 +10,7 @@ from flask.ext.login import current_user
 from viaduct import application, db
 from viaduct.helpers import flash_form_errors
 
-from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.module import ModuleAPI
 
 from viaduct.models import Group, GroupPermission, User
 from viaduct.forms.group import EditGroupPermissionForm, ViewGroupForm
@@ -21,7 +21,7 @@ blueprint = Blueprint('group', __name__)
 @blueprint.route('/groups/', methods=['GET', 'POST'])
 @blueprint.route('/groups/<int:page_nr>/', methods=['GET', 'POST'])
 def view(page_nr=1):
-    if not(GroupPermissionAPI.can_read('group')):
+    if not(ModuleAPI.can_read('group')):
         return abort(403)
 
     form = ViewGroupForm(request.form)
@@ -29,7 +29,7 @@ def view(page_nr=1):
 
     if form.validate_on_submit():
         if form.delete_group.data:
-            if GroupPermissionAPI.can_write('group'):
+            if ModuleAPI.can_write('group'):
                 group_ids = []
 
                 for group, form_entry in zip(pagination.items, form.entries):
@@ -65,7 +65,7 @@ def view(page_nr=1):
 
 @blueprint.route('/groups/create/', methods=['GET', 'POST'])
 def create():
-    if not(GroupPermissionAPI.can_write('group')):
+    if not(ModuleAPI.can_write('group')):
         return abort(403)
 
     if request.method == 'POST':
@@ -95,7 +95,7 @@ def create():
 
 @blueprint.route('/groups/<int:group_id>/users/', methods=['GET', 'POST'])
 def view_users(group_id):
-    if not(GroupPermissionAPI.can_read('group')):
+    if not(ModuleAPI.can_read('group')):
         return abort(403)
 
     group = Group.query.filter(Group.id == group_id).first()
@@ -115,7 +115,6 @@ def view_users(group_id):
 def get_group_users(group_id):
     if not(GroupPermissionAPI.can_read('group')):
         return abort(403)
-
     group = Group.query.filter(Group.id == group_id).first()
     if not group:
         flash('There is no such group.')
@@ -132,7 +131,7 @@ def get_group_users(group_id):
 
 @blueprint.route('/groups/<int:group_id>/delete_users/', methods=['DELETE'])
 def delete_group_users(group_id):
-    if not(GroupPermissionAPI.can_write('group')):
+    if not(ModuleAPI.can_write('group')):
         return abort(403)
 
     group = Group.query.filter(Group.id == group_id).first()
@@ -156,7 +155,7 @@ def delete_group_users(group_id):
 
 @blueprint.route('/groups/<int:group_id>/users/add/', methods=['GET', 'POST'])
 def add_users(group_id, page_nr=1):
-    if not(GroupPermissionAPI.can_write('group')):
+    if not(ModuleAPI.can_write('group')):
         return abort(403)
 
     group = Group.query.filter(Group.id == group_id).first()
@@ -174,7 +173,7 @@ def add_users(group_id, page_nr=1):
 @blueprint.route('/groups/edit-permissions/<int:group_id>/<int:page_nr>/',
                  methods=['GET', 'POST'])
 def edit_permissions(group_id, page_nr=1):
-    if not(GroupPermissionAPI.can_read('group')):
+    if not(ModuleAPI.can_read('group')):
         return abort(403)
 
     group = Group.query.filter(Group.id == group_id).first()
@@ -238,14 +237,14 @@ def edit_permissions(group_id, page_nr=1):
             form.permissions.append_entry(data)
 
     return render_template('group/edit_permissions.htm', form=form,
-                           can_write=GroupPermissionAPI.can_write('group'),
+                           can_write=ModuleAPI.can_write('group'),
                            group_name=group.name, title='Module permissions',
                            permissions=zip(permissions, form.permissions))
 
 
 @blueprint.route('/api/group/users/<int:group_id>/', methods=['GET'])
 def group_api_get_users(group_id):
-    if not(GroupPermissionAPI.can_read('group')):
+    if not(ModuleAPI.can_read('group')):
         return abort(403)
     group = Group.query.get(group_id)
     users = group.users.order_by(User.first_name, User.last_name).all()
@@ -256,7 +255,7 @@ def group_api_get_users(group_id):
 
 @blueprint.route('/groups/<int:group_id>/users/add_users/', methods=['PUT'])
 def group_api_add_users(group_id):
-    if not(GroupPermissionAPI.can_write('group')):
+    if not(ModuleAPI.can_write('group')):
         return abort(403)
     group = Group.query.get(group_id)
 

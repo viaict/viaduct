@@ -3,13 +3,12 @@ from flask import render_template, request
 import datetime
 import re
 
-from viaduct import db, application
+from viaduct import db
 from viaduct.helpers import get_login_form
 from viaduct.models.activity import Activity
 from viaduct.models.navigation import NavigationEntry
 from viaduct.models.page import Page
-from viaduct.api.group import GroupPermissionAPI
-from viaduct.api.user import UserAPI
+from viaduct.api.page import PageAPI
 
 
 class NavigationAPI:
@@ -123,9 +122,6 @@ class NavigationAPI:
         Check whether the current user can view the entry, so if not it can be
         removed from the navigation. Note: Currently only working with pages.
         '''
-        # blueprints = [(name, b.url_prefix) for name, b in
-        #               application.blueprints.items()]
-
         if entry.external or entry.activity_list:
             return True
 
@@ -136,26 +132,18 @@ class NavigationAPI:
         else:
             path = url[:-1]
 
-
-        # for blueprint, url_prefix in blueprints:
-        #     if not url_prefix:
-        #         continue
-
-        #     if url_prefix == url:
-        #         return GroupPermissionAPI.can_read(blueprint)
-
         if path[-1:] == '/':
-            path = path[1:] 
+            path = path[1:]
         if path[:-1] == '/':
             path = path[:1]
-        
+
         path = path[1:]
 
         page = Page.query.filter_by(path=path).first()
         if not page:
             return True
 
-        return UserAPI.can_read(page)
+        return PageAPI.can_read(page)
 
     @staticmethod
     def remove_unauthorized(entries):
