@@ -62,6 +62,28 @@ Run site with:
 
 For troubleshooting tips, see bottom of document.
 
+##Changes in the database
+To make changing the database easy you can use the models to update the actual
+database. There are two times you want to do this. The first one is just for
+testing your changes locally.
+If this is the case use these commands to upgrade your actual database.
+This will create a new migration script:
+```bash
+python manage.py db migrate --message 'revision message'`.
+```
+After this script is done you can view it to check if nothing weird is
+going to happen when you execute it. To execute it run:
+```bash
+python manage.py db upgrade
+```
+If this causes errors, something is wrong. Quite possibly the state of the
+database, if you can't fix it yourself ask for help.
+If not, you now have an up to date database.
+
+Once you want to push your changes to develop, there is one important thing that
+you have to do. I will type this in a minute.
+
+
 ##Language
 All code shall be written in **English**, translations should be added through
 Babel. After writing code with **English** strings, add their **Dutch**
