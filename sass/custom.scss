@@ -61,10 +61,18 @@ label.checkbox {
 }
 
 /* Page design */
-.page-header {
-    margin: 10px 0 20px;
-    border: 0px;
+/* Filter groups in edit page */
+.panel-heading div {
+    margin-top: -18px;
+    font-size: 15px;
 }
+.panel-heading div span{
+    margin-left:5px;
+}
+.panel-body{
+    /*display: none;*/
+}
+/* End filter groups in edit page */
 
 p.report-bug{
     position: absolute;
