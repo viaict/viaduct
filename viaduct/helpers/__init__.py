@@ -77,6 +77,17 @@ def markdown_filter(data, filter_html=True):
                            extensions=markdown_extensions))
 
 
+@application.template_filter('strip_tags')
+def strip_tags_filter(data, *args):
+    for tag in args:
+        # Source: http://stackoverflow.com/a/6445849/849956
+        data = re.sub(
+            r'<%s(?:\s[^>]*)?(>(?:.(?!/%s>))*</%s>|/>)' % (tag, tag, tag), '',
+            data, flags=re.S)
+
+    return data
+
+
 @application.template_filter('markup')
 def markup_filter(data):
     return Markup(data)

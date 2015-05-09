@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block page_content %}
-    <p>{{ revision.content | markdown(revision.filter_html) }}</p>
+    <p>{{ revision.content | strip_tags('script', 'link', 'style', 'video', 'audio') | markdown(revision.filter_html) }}</p>
 
 	{% if revision.custom_form %}
         <hr />
