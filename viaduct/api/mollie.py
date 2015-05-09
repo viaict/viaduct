@@ -47,7 +47,8 @@ class MollieAPI:
                 'metadata': {
                     'transaction_id': transaction.id,
                     'first_name': form_result.owner.first_name,
-                    'last_name': form_result.owner.last_name
+                    'last_name': form_result.owner.last_name,
+                    'form_name': form_result.form.name
                 }
             })
 
@@ -107,9 +108,29 @@ class MollieAPI:
             return False, 'API call failed: ' + e.message
 
     @staticmethod
-    def get_all_transactions():
-        transactions = Transaction.query.all()
-        return transactions, 'test'
+    def get_transactions(page=0):
+        try:
+            payments = MOLLIE.payments.all(offset=page*20, count=20)[0]
+        except mollie_error.Error as e:
+            return False, 'Api call failed: ' + e.message
+
+        for payment in payments['data']:
+            transaction = Transaction.query.\
+                filter(Transaction.mollie_id == payment['id']).first()
+            if not isinstance(payment['metadata'], dict):
+                payment['metadata'] = {}
+            if 'first_name' not in payment['metadata']:
+                if transaction:
+                    payment['metadata']['first_name'] =\
+                        transaction.form_result.owner.first_name
+                    payment['metadata']['last_name'] =\
+                        transaction.form_result.owner.last_name
+            if 'form_name' not in payment['metadata']:
+                if transaction:
+                    payment['metadata']['form_name'] =\
+                        transaction.form_result.form.name
+
+        return payments, 'success'
 
     @staticmethod
     def get_all_remote_transactions():
