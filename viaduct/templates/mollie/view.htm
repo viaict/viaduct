@@ -10,22 +10,32 @@
 {% endif %}
 <table class="table">
 <tr>
-<td>id
-<td>mollie_id
-<td>user
-<td>amount
-<td>status
-<td>
-{% for transaction in transactions: %}
+<td>Mollie_ID
+<td>Form name
+<td>User
+<td>Description
+<td>Amount
+<td>Status
+<td>Date
+<td>Recheck
+{% for payment in payments.data: %}
 <tr>
-    <td>{{ payment['metadata']['transaction_id'] }}</td>
     <td>{{ payment['id'] }}</td>
-    <td>{{ payment['metadata']['first_name'] }} {{ payment['metadata']['last_name'] }}</td>
+    <td>{{ payment['metadata']['form_name'] }}</td>
+    <td>{{ payment['metadata']['first_name']}} {{ payment['metadata']['last_name'] }}</td>
+    <td>{{ payment['description'] }}</td>
     <td>{{ payment['amount'] }}</td>
     <td>{{ payment['status'] }}</td>
-<td><a href="{{ config.MOLLIE_REDIRECT_URL }}{{ payment['metadata']['transaction_id'] }}" class="btn btn-default">check status</a>
+    <td>{{ payment['createdDatetime'] }}</td>
+<td><a href="{{ url_for('mollie.mollie_check', mollie_id=payment['id']) }}" class="btn btn-default">check status</a>
 </tr>
 {% endfor %}
 </table>
+<div class="btn-group">
+    {% if page > 0 %}
+    <a class="btn btn-default" href="{{ url_for('mollie.view_all_transactions', page=page-1) }}">Previous</a>
+    {% endif %}
+    <a class="btn btn-default" href="{{ url_for('mollie.view_all_transactions', page=page+1) }}">Next</a>
+</div>
 </div>
 {% endblock %}
