@@ -133,7 +133,7 @@ def edit_committee(committee=''):
         coordinator_id = int(data['coordinator_id'])
         
         # Add coordinator to BC
-
+           
         bc_group = Group.query.filter(Group.name == "BC").first()
         if bc_group is not None:    
             new_coordinator = User.query.filter(User.id == coordinator_id).first()
