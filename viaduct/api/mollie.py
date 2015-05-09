@@ -22,7 +22,7 @@ class MollieAPI:
     @staticmethod
     def create_transaction(amount, description, user=current_user,
                            form_result=None):
-        # Only create a new transaction is there is a related form result
+        # Only create a new transaction if there is a related form result
         if form_result:
             transaction = Transaction()
             transaction.form_result = form_result
