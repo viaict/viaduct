@@ -10,7 +10,7 @@ from flask import abort
 from viaduct import db
 from viaduct.forms import PageForm, HistoryPageForm
 from viaduct.models import Group, Page, PageRevision, PagePermission, \
-    CustomForm
+    CustomForm, Redirect
 from viaduct.api.module import ModuleAPI
 from viaduct.api.page import PageAPI
 
@@ -23,6 +23,11 @@ def get_page(path=''):
     page = Page.get_by_path(path)
 
     if not page:
+        # Try if this might be a redirect.
+        redirection = Redirect.query.filter(Redirect.fro == path).first()
+        if redirection:
+            return redirect(redirection.to)
+
         return abort(404)
 
     if not PageAPI.can_read(page):
