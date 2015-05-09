@@ -80,8 +80,8 @@ If this causes errors, something is wrong. Quite possibly the state of the
 database, if you can't fix it yourself ask for help.
 If not, you now have an up to date database.
 
-Once you want to push your changes to develop, there is one important thing that
-you have to do. I will type this in a minute.
+Once you want to push your changes to develop, this is a bit harder to do
+cleanly. Ask for help here, because it differs from time to time what to do.
 
 
 ##Language
