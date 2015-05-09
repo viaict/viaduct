@@ -15,6 +15,9 @@ utils.datatables.defaults = {
                 "visible": false,
                 "searchable": false
             }],
+            "order": [
+                [ 1, "asc"]
+            ]
 };
 
 utils.datatables.enable_select = function ($selector) {

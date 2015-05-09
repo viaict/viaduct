@@ -185,7 +185,7 @@ def add_minute(group_id='all'):
                 for remove in removes:
                     remove.update_status(5)
                 db.session.commit()
-                flash('De notulen is verwerkt!', 'success')
+                flash('De notulen zijn verwerkt!', 'success')
 
                 return render_template('pimpy/view_parsed_tasks.htm',
                                        tasks=tasks, dones=dones,
