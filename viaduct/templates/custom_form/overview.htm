@@ -19,7 +19,7 @@
 <tr>
 	<td>{{ form.name }}
 	<td>
-		{% if GroupPermissionAPI.can_write('custom_form') %}
+		{% if ModuleAPI.can_write('custom_form') %}
 				<a href="/forms/edit/{{ form.id }}" class="btn btn-xs btn-warning pull-right">
 					<i class="glyphicon glyphicon-pencil"></i>
 					Aanpassen
@@ -39,7 +39,7 @@
 
 <h1>Formulieren overzicht
 
-	{% if GroupPermissionAPI.can_write('custom_form') %}
+	{% if ModuleAPI.can_write('custom_form') %}
 		<a href="/forms/create/" class="btn btn-success pull-right">
 			<i class="glyphicon glyphicon-plus"></i>
 			Nieuw formulier
@@ -61,7 +61,7 @@
 <tr>
 	<td>{{ form.name }}
 	<td>
-		{% if GroupPermissionAPI.can_write('custom_form') %}
+		{% if ModuleAPI.can_write('custom_form') %}
 				<a href="/forms/edit/{{ form.id }}" class="btn btn-xs btn-warning pull-right">
 					<i class="glyphicon glyphicon-pencil"></i>
 					Aanpassen

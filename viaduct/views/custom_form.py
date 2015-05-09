@@ -8,7 +8,7 @@ from viaduct.forms.custom_form import CreateForm
 from viaduct.models.user import User
 from viaduct.models.custom_form import CustomForm, CustomFormResult, \
     CustomFormFollower
-from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.module import ModuleAPI
 
 from sqlalchemy import desc
 
@@ -29,7 +29,7 @@ def view():
     else:
         page = int(page)
 
-    if not GroupPermissionAPI.can_write('custom_form'):
+    if not ModuleAPI.can_write('custom_form'):
         return abort(403)
 
     custom_forms = CustomForm.query.order_by(desc("id"))
@@ -57,7 +57,7 @@ def view():
 
 @blueprint.route('/view/<int:form_id>', methods=['GET', 'POST'])
 def view_single(form_id=None):
-    if not GroupPermissionAPI.can_write('custom_form'):
+    if not ModuleAPI.can_write('custom_form'):
         return abort(403)
 
     custom_form = CustomForm.query.get(form_id)
@@ -135,7 +135,7 @@ def export(form_id):
 @blueprint.route('/create/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<int:form_id>', methods=['GET', 'POST'])
 def create(form_id=None):
-    if not GroupPermissionAPI.can_write('custom_form'):
+    if not ModuleAPI.can_write('custom_form'):
         return abort(403)
 
     if form_id:
@@ -176,7 +176,7 @@ def create(form_id=None):
 def remove_response(submit_id=None):
     response = "success"
 
-    if not GroupPermissionAPI.can_read('custom_form'):
+    if not ModuleAPI.can_read('custom_form'):
         return abort(403)
 
     # Test if user already signed up
@@ -196,7 +196,7 @@ def remove_response(submit_id=None):
 @blueprint.route('/submit/<int:form_id>', methods=['POST'])
 def submit(form_id=None):
     # TODO make sure custom_form rights are set on server
-    if not GroupPermissionAPI.can_read('custom_form'):
+    if not ModuleAPI.can_read('custom_form'):
         return abort(403)
 
     response = "success"
@@ -272,7 +272,7 @@ def submit(form_id=None):
 
 @blueprint.route('/follow/<int:form_id>', methods=['GET', 'POST'])
 def follow(form_id=None):
-    if not GroupPermissionAPI.can_write('custom_form'):
+    if not ModuleAPI.can_write('custom_form'):
         return abort(403)
 
     # Logged in user
@@ -301,7 +301,7 @@ def follow(form_id=None):
 def has_payed(submit_id=None):
     response = "success"
 
-    if not GroupPermissionAPI.can_write('custom_form'):
+    if not ModuleAPI.can_write('custom_form'):
         return abort(403)
 
     # Logged in user

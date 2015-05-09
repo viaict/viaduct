@@ -3,7 +3,7 @@
 {% extends 'content.htm' %}
 
 {% block content %}
-	{% if GroupPermissionAPI.can_write('contact') %}
+	{% if ModuleAPI.can_write('contact') %}
 		<p><a class="btn btn-default" href="{{ url_for('contact.edit') }}">Nieuwe contactpersoon</a></p>
 	{% endif %}
 

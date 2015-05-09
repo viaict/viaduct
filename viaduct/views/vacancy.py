@@ -10,7 +10,7 @@ from viaduct.helpers import flash_form_errors
 from viaduct.models.vacancy import Vacancy
 from viaduct.models.company import Company
 from viaduct.forms import VacancyForm
-from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.module import ModuleAPI
 
 blueprint = Blueprint('vacancy', __name__, url_prefix='/vacancies')
 FILE_FOLDER = application.config['FILE_DIR']
@@ -19,7 +19,7 @@ FILE_FOLDER = application.config['FILE_DIR']
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
 def view_list(page_nr=1):
-    if not GroupPermissionAPI.can_read('vacancy'):
+    if not ModuleAPI.can_read('vacancy'):
         return abort(403)
 
     # Order the vacancies in such a way that vacancies that are new
@@ -38,7 +38,7 @@ def view_list(page_nr=1):
                    Vacancy.contract_of_service.like('%' + search + '%'))).\
             order_by(order.desc())
 
-        if not GroupPermissionAPI.can_write('vacancy'):
+        if not ModuleAPI.can_write('vacancy'):
             vacancies = vacancies.filter(and_(Vacancy.start_date <
                                          datetime.utcnow(), Vacancy.end_date >
                                          datetime.utcnow())).paginate(page_nr,
@@ -55,7 +55,7 @@ def view_list(page_nr=1):
                                search=search, path=FILE_FOLDER,
                                title="Vacatures")
 
-    if not GroupPermissionAPI.can_write('vacancy'):
+    if not ModuleAPI.can_write('vacancy'):
         vacancies = Vacancy.query.order_by(
             order.desc()).filter(and_(Vacancy.start_date <
                                  datetime.utcnow(), Vacancy.end_date >
@@ -83,7 +83,7 @@ def edit(vacancy_id=None):
     FRONTEND
     Create, view or edit a vacancy.
     '''
-    if not GroupPermissionAPI.can_read('vacancy'):
+    if not ModuleAPI.can_read('vacancy'):
         return abort(403)
 
     # Select vacancy.
@@ -109,7 +109,7 @@ def update(vacancy_id=None):
     BACKEND
     Create, view or edit a vacancy.
     '''
-    if not GroupPermissionAPI.can_write('vacancy'):
+    if not ModuleAPI.can_write('vacancy'):
         return abort(403)
 
     # Select vacancy.
@@ -171,7 +171,7 @@ def delete(vacancy_id):
     BACKEND
     Delete a vacancy.
     '''
-    if not GroupPermissionAPI.can_write('vacancy'):
+    if not ModuleAPI.can_write('vacancy'):
         return abort(403)
 
     vacancy = Vacancy.query.get(vacancy_id)

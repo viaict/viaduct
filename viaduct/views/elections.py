@@ -7,7 +7,7 @@ from datetime import date
 
 from viaduct import db
 from viaduct.models import Nominee, Nomination, Vote
-from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.module import ModuleAPI
 
 from config import ELECTIONS_NOMINATE_START, ELECTIONS_VOTE_START, \
     ELECTIONS_VOTE_END
@@ -165,7 +165,7 @@ def admin_main():
 
 @blueprint.route('/admin/nomineren/', methods=['GET'])
 def admin_nominate():
-    if not GroupPermissionAPI.can_write('elections'):
+    if not ModuleAPI.can_write('elections'):
         return abort(403)
 
     nominees = Nominee.query.order_by(Nominee.name)
@@ -185,7 +185,7 @@ def admin_nominate():
 
 @blueprint.route('/admin/nomineren/', methods=['POST'])
 def validate_nominate():
-    if not GroupPermissionAPI.can_write('elections'):
+    if not ModuleAPI.can_write('elections'):
         return jsonify(error='Hey, dit mag jij helemaal niet doen!'), 500
 
     nominee = Nominee.query.get(request.form.get('id'))
@@ -199,7 +199,7 @@ def validate_nominate():
 
 @blueprint.route('/admin/stemmen/', methods=['GET'])
 def admin_vote():
-    if not GroupPermissionAPI.can_write('elections'):
+    if not ModuleAPI.can_write('elections'):
         return abort(403)
 
     rp = db.engine.execute('SELECT a.*, (SELECT COUNT(*) FROM dvhj_vote b '

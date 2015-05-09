@@ -19,7 +19,7 @@
 {% block content %}
 
 <div class="page-header">
-    {% if GroupPermissionAPI.can_write('activity') %}
+    {% if ModuleAPI.can_write('activity') %}
     <a href="/activities/edit/{{ activity.id }}" class="btn btn-warning pull-right">
         <i class="glyphicon glyphicon-pencil"></i>
         Aanpassen

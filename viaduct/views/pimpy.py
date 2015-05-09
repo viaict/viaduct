@@ -6,7 +6,7 @@ from flask.ext.login import current_user
 
 from viaduct.forms.pimpy import AddTaskForm, AddMinuteForm
 from viaduct.api.pimpy import PimpyAPI
-from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.module import ModuleAPI
 from viaduct.models.pimpy import Task
 from viaduct.models.group import Group
 
@@ -23,7 +23,7 @@ def view_task_archive(group_id='all'):
     No internal permission system made yet.
     Do not make routes to this module yet.
     """
-    if not GroupPermissionAPI.can_read('pimpy'):
+    if not ModuleAPI.can_read('pimpy'):
         return abort(403)
     return PimpyAPI.get_all_tasks(group_id)
 
@@ -31,7 +31,7 @@ def view_task_archive(group_id='all'):
 @blueprint.route('/minutes/', methods=['GET', 'POST'])
 @blueprint.route('/minutes/<group_id>', methods=['GET', 'POST'])
 def view_minutes(group_id='all'):
-    if not GroupPermissionAPI.can_read('pimpy'):
+    if not ModuleAPI.can_read('pimpy'):
         return abort(403)
     return PimpyAPI.get_minutes(group_id)
 
@@ -39,7 +39,7 @@ def view_minutes(group_id='all'):
 @blueprint.route('/minutes/<group_id>/<minute_id>/')
 @blueprint.route('/minutes/<group_id>/<minute_id>/<line_number>')
 def view_minute(group_id='all', minute_id=0, line_number=-1):
-    if not GroupPermissionAPI.can_read('pimpy'):
+    if not ModuleAPI.can_read('pimpy'):
         return abort(403)
     return PimpyAPI.get_minute(group_id, minute_id, line_number)
 
@@ -47,7 +47,7 @@ def view_minute(group_id='all', minute_id=0, line_number=-1):
 @blueprint.route('/tasks/', methods=['GET', 'POST'])
 @blueprint.route('/tasks/<group_id>/', methods=['GET', 'POST'])
 def view_tasks(group_id='all'):
-    if not GroupPermissionAPI.can_read('pimpy'):
+    if not ModuleAPI.can_read('pimpy'):
         return abort(403)
     return PimpyAPI.get_tasks(group_id, False)
 
@@ -56,7 +56,7 @@ def view_tasks(group_id='all'):
 @blueprint.route('/tasks/me/', methods=['GET', 'POST'])
 @blueprint.route('/tasks/me/<group_id>/', methods=['GET', 'POST'])
 def view_tasks_personal(group_id='all'):
-    if not GroupPermissionAPI.can_read('pimpy'):
+    if not ModuleAPI.can_read('pimpy'):
         return abort(403)
     return PimpyAPI.get_tasks(group_id, True)
 
@@ -64,7 +64,7 @@ def view_tasks_personal(group_id='all'):
 @blueprint.route('/tasks/update_status/', methods=['GET', 'POST'])
 @blueprint.route('/tasks/me/update_status/', methods=['GET', 'POST'])
 def update_task_status():
-    if not GroupPermissionAPI.can_write('pimpy'):
+    if not ModuleAPI.can_write('pimpy'):
         return abort(403)
     task_id = request.args.get('task_id', 0, type=int)
     new_status = request.args.get('new_status', 0, type=int)
@@ -80,7 +80,7 @@ def update_task_status():
 
 @blueprint.route('/tasks/add/<string:group_id>', methods=['GET', 'POST'])
 def add_task(group_id='all'):
-    if not GroupPermissionAPI.can_write('pimpy'):
+    if not ModuleAPI.can_write('pimpy'):
         return abort(403)
     if group_id == '':
         group_id = 'all'
@@ -126,7 +126,7 @@ def add_task(group_id='all'):
 @blueprint.route('/tasks/edit/', methods=['POST'])
 @blueprint.route('/tasks/edit/<string:task_id>', methods=['POST'])
 def edit_task(task_id=-1):
-    if not GroupPermissionAPI.can_write('pimpy'):
+    if not ModuleAPI.can_write('pimpy'):
         return abort(403)
     if task_id is '' or task_id is -1:
         flash('Taak niet gespecificeerd.')
@@ -152,7 +152,7 @@ def edit_task(task_id=-1):
 
 @blueprint.route('/minutes/add/<string:group_id>', methods=['GET', 'POST'])
 def add_minute(group_id='all'):
-    if not GroupPermissionAPI.can_write('pimpy'):
+    if not ModuleAPI.can_write('pimpy'):
         return abort(403)
     if group_id == '':
         group_id = 'all'

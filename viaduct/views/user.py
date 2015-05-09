@@ -26,7 +26,7 @@ from viaduct.models.group import Group
 from viaduct.models.request_ticket import Password_ticket
 from viaduct.forms.user import EditUserForm, EditUserInfoForm
 from viaduct.models.education import Education
-from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.module import ModuleAPI
 from viaduct.api import UserAPI
 
 blueprint = Blueprint('user', __name__)
@@ -49,7 +49,7 @@ def view_single(user_id=None):
 
     if not current_user or not current_user.has_payed:
         return abort(403)
-    elif GroupPermissionAPI.can_read('user'): 
+    elif ModuleAPI.can_read('user'): 
         can_read = True
     elif current_user.id == user_id:
         can_write = True
@@ -96,7 +96,7 @@ def view_single(user_id=None):
 @blueprint.route('/users/remove_avatar/<int:user_id>', methods=['GET'])
 def remove_avatar(user_id=None):
     user = User.query.get(user_id)
-    if not GroupPermissionAPI.can_write('user') and\
+    if not ModuleAPI.can_write('user') and\
             (not current_user or current_user.id != user_id):
         return abort(403)
     UserAPI.remove_avatar(user)
@@ -106,7 +106,7 @@ def remove_avatar(user_id=None):
 @blueprint.route('/users/create/', methods=['GET', 'POST'])
 @blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
 def edit(user_id=None):
-    if not GroupPermissionAPI.can_write('user') and\
+    if not ModuleAPI.can_write('user') and\
             (not current_user or current_user.id != user_id):
         return abort(403)
 
@@ -118,7 +118,7 @@ def edit(user_id=None):
 
     user.avatar = UserAPI.has_avatar(user_id)
 
-    if GroupPermissionAPI.can_write('user'):
+    if ModuleAPI.can_write('user'):
         form = EditUserForm(request.form, user)
         isAdmin = True
     else:
@@ -153,7 +153,7 @@ def edit(user_id=None):
         user.first_name = form.first_name.data
         user.last_name = form.last_name.data
         user.locale = form.locale.data
-        if GroupPermissionAPI.can_write('user'):
+        if ModuleAPI.can_write('user'):
             user.has_payed = form.has_payed.data
             user.honorary_member = form.honorary_member.data
             user.favourer = form.favourer.data
@@ -416,14 +416,14 @@ def create_hash(bits=96):
 
 @blueprint.route('/users/', methods=['GET', 'POST'])
 def view():
-    if not GroupPermissionAPI.can_read('user'):
+    if not ModuleAPI.can_read('user'):
         return abort(403)
     return render_template('user/view.htm')
 
 
 @blueprint.route('/users/export', methods=['GET'])
 def user_export():
-    if not GroupPermissionAPI.can_read('user'):
+    if not ModuleAPI.can_read('user'):
         return abort(403)
 
     users = User.query.all()
@@ -440,7 +440,7 @@ def user_export():
 ###
 @blueprint.route('/users/get_users/', methods=['GET'])
 def get_users():
-    if not GroupPermissionAPI.can_read('user'):
+    if not ModuleAPI.can_read('user'):
         return abort(403)
 
     users = User.query.all()
@@ -468,7 +468,7 @@ def get_users():
 # Not used at the moment due to integrity problems in the database
 @blueprint.route('/users/delete_users/', methods=['DELETE'])
 def api_delete_user():
-    if not GroupPermissionAPI.can_write('user'):
+    if not ModuleAPI.can_write('user'):
         return abort(403)
 
     user_ids = request.json['selected_ids']

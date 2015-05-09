@@ -3,7 +3,7 @@
 {% extends 'content.htm' %}
 
 {% block content %}
-	{% if GroupPermissionAPI.can_write('location') %}
+	{% if ModuleAPI.can_write('location') %}
 		<p><a class="btn btn-default" href="{{ url_for('location.view') }}">Nieuwe locatie</a></p>
 	{% endif %}
 
