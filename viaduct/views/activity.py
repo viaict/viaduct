@@ -6,7 +6,7 @@ import dateutil.parser
 # please some one check out what is happening
 import viaduct.api.google as google
 
-from flask import flash, redirect, render_template, request, url_for, abort
+from flask import flash, redirect, render_template, request, url_for, abort, jsonify
 from flask import Blueprint
 from flask.ext.login import current_user
 
@@ -21,6 +21,8 @@ from viaduct.models.mollie import Transaction
 from viaduct.api.group import GroupPermissionAPI
 from viaduct.api.mollie import MollieAPI
 from viaduct.models.education import Education
+
+from viaduct.utilities.serialize_sqla import serialize_sqla
 
 blueprint = Blueprint('activity', __name__, url_prefix='/activities')
 
@@ -246,7 +248,6 @@ def create(activity_id=None):
     return render_template('activity/create.htm', activity=activity, form=form,
                            title=title)
 
-
 @blueprint.route('/transaction/<int:result_id>/', methods=['GET', 'POST'])
 def create_mollie_transaction(result_id):
     form_result = CustomFormResult.query.filter(
@@ -274,3 +275,10 @@ def create_mollie_transaction(result_id):
             return render_template('mollie/success.htm', message=message)
 
     return False
+
+
+@blueprint.route('/export/', methods=['GET'])
+def export_activities():
+    activities = Activity.query.filter(Activity.end_time > (datetime.datetime.now() - datetime.timedelta(hours=12))).order_by(Activity.start_time.asc()).all()
+    return jsonify(data=serialize_sqla(activities))
+    # return 'hello'
