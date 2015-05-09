@@ -13,6 +13,7 @@ def mollie_check(mollie_id=0):
     if not mollie_id:
         return render_template('mollie/success.htm', message='no ids given')
     trans_id = MollieAPI.get_other_id(mollie_id=mollie_id)
+    print(trans_id)
     if not trans_id:
         return render_template('mollie/success.htm',
                                message='Transaction is not in the database')

@@ -147,10 +147,12 @@ class MollieAPI:
         if trans_id:
             trans = Transaction.query.\
                 filter(Transaction.id == trans_id).first()
-            return trans.mollie_id
+            if trans:
+                return trans.mollie_id
 
         if mollie_id:
             trans = Transaction.query.\
                 filter(Transaction.mollie_id == mollie_id).first()
-            return trans.id
+            if trans:
+                return trans.id
         return None
