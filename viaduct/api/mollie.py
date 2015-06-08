@@ -36,7 +36,7 @@ class MollieAPI:
         db.session.commit()
 
         # Add transaction costs
-        amount += 1.20
+        amount += 0.50
 
         # Create the mollie payment
         try:
