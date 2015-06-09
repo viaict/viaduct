@@ -11,6 +11,7 @@ from viaduct.models.custom_form import CustomForm, CustomFormResult, \
 from viaduct.api.group import GroupPermissionAPI
 
 from sqlalchemy import desc
+from urllib.parse import parse_qsl
 
 import io
 import csv
@@ -99,32 +100,48 @@ def view_single(form_id=None):
 
 @blueprint.route('/export/<int:form_id>/', methods=['POST'])
 def export(form_id):
+
+    # Create the headers
     xp = CustomForm.exports
     xp_names = list(xp.keys())
     names = list(request.form.keys())
-    labels = []
-    for name in xp_names:
-        if name not in names:
-            continue
-
-        labels.append(xp[name]['label'])
-
-    str_io = io.StringIO()
-    wrt = csv.writer(str_io)
-    wrt.writerow(labels)
 
     form = CustomForm.query.get(form_id)
+
+    # First create a list of key based dictionaries to gather
+    # all the different keys in the form
+    csv_rows = []
     for r in form.custom_form_results:
-        data = []
+
+        data = {}
 
         for name in xp_names:
             if name not in names:
                 continue
 
-            export = xp[name]['export']
-            data.append(export(r))
+            # Split the custom part of the form in different columns
+            if name is 'form':
+                # Data from the custom form is saved in querystring format
+                export = xp[name]['export'](r)
+                qs_dict = dict(parse_qsl(export, keep_blank_values=True))
+                data.update(qs_dict)
+                continue
+            else:
+                export = xp[name]['export']
+                data.update({name: export(r)})
 
-        wrt.writerow(data)
+        csv_rows.append(data)
+
+    # Calculate all the labels in the csv_rows
+    label_set = set()
+    for i in csv_rows:
+        label_set.update(list(i.keys()))
+
+    # Write all the values to the io field
+    str_io = io.StringIO()
+    wrt = csv.DictWriter(str_io, fieldnames=label_set)
+    wrt.writeheader()
+    wrt.writerows(csv_rows)
 
     def generate():
         yield str_io.getvalue()
