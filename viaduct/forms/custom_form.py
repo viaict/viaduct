@@ -15,6 +15,6 @@ class CreateForm(Form):
     last_name = StringField('Achternaam', validators=[InputRequired()])
     student_id = StringField('Student ID', validators=[InputRequired()])
     price = DecimalField('Prijs', places=2, validators=[InputRequired()])
-    education_id = SelectField('Education', coerce=int)
+    education_id = SelectField('Opleiding', coerce=int)
     submit = SubmitField('Opslaan')
     transaction_description = StringField('Beschrijving van de transactie')

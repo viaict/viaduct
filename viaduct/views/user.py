@@ -51,7 +51,8 @@ def view_single(user_id=None):
         return abort(403)
     elif ModuleAPI.can_read('user'): 
         can_read = True
-    elif current_user.id == user_id:
+    
+    if current_user.id == user_id:
         can_write = True
         can_read = True
 
