@@ -148,7 +148,7 @@ def edit_page(path=''):
             db.session.add(permission_entry)
             db.session.commit()
 
-        flash('The page has been saved.', 'success')
+        flash('De pagina is opgeslagen!.', 'success')
 
         # redirect newly created page
         return redirect(url_for('page.get_page', path=path))
@@ -167,6 +167,14 @@ def edit_page(path=''):
             else:
                 form.permissions.append_entry({})
 
+        # Give the user feedback on his actions.
+        if data['title'] is "":
+            flash('Geen titel gegeven.', 'danger')
+        if data['content'] is "":
+            flash('Geen inhoud gegeven.', 'danger')
+        if data['comment'] is "":
+            flash('Geen commentaar gegeven.', 'warning')
+
     return render_template('page/edit_page.htm', page=page, form=form,
                            path=path, groups=zip(groups, form.permissions))
 
@@ -177,8 +185,9 @@ def delete(path):
         return abort(403)
 
     if PageAPI.remove_page(path):
-        flash('The page has been removed.', 'success')
+        flash('De pagina is verwijderd.', 'success')
     else:
-        flash('The page you are trying to remove does not exist.', 'danger')
+        flash('De pagina die je probeert te verwijderen bestaat niet.',
+              'danger')
 
     return redirect(url_for('home.home'))
