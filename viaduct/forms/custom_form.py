@@ -18,3 +18,4 @@ class CreateForm(Form):
     education_id = SelectField('Opleiding', coerce=int)
     submit = SubmitField('Opslaan')
     transaction_description = StringField('Beschrijving van de transactie')
+    terms = StringField('Voorwaarden')

@@ -116,8 +116,16 @@
                                         <p>Sommige velden (zoals shirt-maat of dieet) proberen we op te slaan, zodat je het de volgende keer niet nog eens moet invullen.</p>
                                         {{ activity.form.html | safe }}
                                     </div>
-                            </div>
-
+                                </div>
+                                <div class="row">
+                                    {% if activity.form.terms: %}
+                                        <div class="col-md-7">
+                                            <label>Voorwaarden:</label>
+                                            {{ activity.form.terms }}
+                                            <p>Door je aan te melden bij deze activiteit ga je akkoord met de bovenstaande voorwaarden.</p>
+                                        </div>
+                                    {% endif %}
+                                </div>
                             <button id="custom_form" class="btn btn-success">Verzend formulier</button>
                         </form>
 

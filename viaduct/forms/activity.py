@@ -23,7 +23,7 @@ class CreateForm(Form):
 
 class ActivityForm(Form):
     email = StringField('E-mail address', validators=[InputRequired(),
-                                                       Email()])
+                                                      Email()])
     first_name = StringField('Voornaam', validators=[InputRequired()])
     last_name = StringField('Achternaam', validators=[InputRequired()])
     student_id = StringField('Student ID', validators=[InputRequired()])
