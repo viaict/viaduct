@@ -33,7 +33,8 @@ def view(redirect_id=None):
         old_redirection = Redirect.query.filter(Redirect.fro == fro).first()
 
         if old_redirection and old_redirection.id != redirect_id:
-            flash('A redirect from that path is already defined.', 'danger')
+            flash('Er is al een omleiding vanaf dat pad gedefiniëerd.',
+                  'danger')
         else:
             if redirection:
                 redirection.fro = fro
@@ -44,7 +45,7 @@ def view(redirect_id=None):
             db.session.add(redirection)
             db.session.commit()
 
-            flash('The redirect has been saved succesfully.')
+            flash('De omleiding is succesvol opgeslagen.')
 
             return redirect(url_for('redirect.view',
                                     redirect_id=redirection.id))
@@ -69,6 +70,6 @@ def delete(redirect_id):
     db.session.delete(redirection)
     db.session.commit()
 
-    flash('The redirect has been deleted succesfully.')
+    flash('De omleiding is succesvol verwijderd.')
 
     return redirect(url_for('redirect.view'))
