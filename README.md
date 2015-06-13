@@ -1,4 +1,4 @@
-# Version 2.0.2.3
+# Version 2.1.0.0
 Versioning works as follows: vSYSTEM.FEATURE.IMPROVEMENT.BUG-/HOTFIX
 
 #Viaduct (Opensourced, yeah)
@@ -61,6 +61,28 @@ Run site with:
     `./watch.sh`
 
 For troubleshooting tips, see bottom of document.
+
+##Changes in the database
+To make changing the database easy you can use the models to update the actual
+database. There are two times you want to do this. The first one is just for
+testing your changes locally.
+If this is the case use these commands to upgrade your actual database.
+This will create a new migration script:
+```bash
+python manage.py db migrate --message 'revision message'`.
+```
+After this script is done you can view it to check if nothing weird is
+going to happen when you execute it. To execute it run:
+```bash
+python manage.py db upgrade
+```
+If this causes errors, something is wrong. Quite possibly the state of the
+database, if you can't fix it yourself ask for help.
+If not, you now have an up to date database.
+
+Once you want to push your changes to develop, this is a bit harder to do
+cleanly. Ask for help here, because it differs from time to time what to do.
+
 
 ##Language
 All code shall be written in **English**, translations should be added through

@@ -1,0 +1,11 @@
+13-06-2015 v2.1.0.0:
+* Add NEWS file
+* Show loading status in PimPy (fixes VIA-45)
+* Backlink to activity on mollie payment success page
+* Mark all tasks with the same ID in PimPy (fixes VIA-202)
+* Add a module that allows users to create custom url-redirects
+* "Positie vacant" on committee pages is now much more prominent
+* Course description is not required anymore
+* Added help pages to modules
+* Added optional terms to custom forms
+* Make adding courses and educations dynamic while uploading examinations

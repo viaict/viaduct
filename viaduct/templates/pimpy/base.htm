@@ -2,6 +2,10 @@
 
 {% extends "content.htm" %}
 
+{% block includes %}
+    <script src='{{ static_url('/static/js/pimpy/pimpy.js') }}'></script>
+{% endblock %}
+
 {% block sublogo %}
 
 <a href="{{url_for('pimpy.view_tasks')}}">
@@ -29,7 +33,7 @@
             </button>
         </div>
         <ul class="dropdown-menu dropdown-menu-right" role="menu">
-            <li><a href="{{ url_for('pimpy.add_minute', group_id=group_id) }}" data-toggle="tooltip" data-placement="left" title="Nieuwe notule"><i class="fa fa-file-o"></i></a></li>
+            <li><a href="{{ url_for('pimpy.add_minute', group_id=group_id) }}" data-toggle="tooltip" data-placement="left" title="Nieuwe notulen"><i class="fa fa-file-o"></i></a></li>
             <li><a href="{{ url_for('pimpy.add_task', group_id=group_id) }}" data-toggle="tooltip" data-placement="left" title="Nieuwe taak"><i class="fa fa-check-square-o"></i></a></li>
         </ul>
 </div>
@@ -37,7 +41,7 @@
 
 <script>
 
-// Inbox style 
+// Inbox style
 $('.fab').hover(function () {
     $(this).toggleClass('active');
 });

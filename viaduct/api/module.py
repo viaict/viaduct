@@ -4,7 +4,7 @@ from viaduct.api.user import UserAPI
 from viaduct.models.permission import GroupPermission
 
 
-class GroupPermissionAPI:
+class ModuleAPI:
 
     @staticmethod
     def can_read(module_name, needs_payed=False):
@@ -14,7 +14,7 @@ class GroupPermissionAPI:
         """
         if needs_payed and (not current_user or not current_user.has_payed):
             return False
-        return GroupPermissionAPI\
+        return ModuleAPI\
             .get_highest_permission_for_module(module_name) >= 1
 
     @staticmethod
@@ -24,7 +24,7 @@ class GroupPermissionAPI:
         """
         if needs_payed and (not current_user or not current_user.has_payed):
             return False
-        return GroupPermissionAPI\
+        return ModuleAPI\
             .get_highest_permission_for_module(module_name) >= 2
 
     @staticmethod

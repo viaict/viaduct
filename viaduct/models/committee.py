@@ -48,3 +48,4 @@ class CommitteeRevision(SuperRevision):
 
     def get_comparable(self):
         return self.description
+

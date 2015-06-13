@@ -11,7 +11,7 @@ import datetime
 import json
 
 
-version = 'v2.0.2.3'
+version = 'v2.1.0.0'
 
 
 def static_url(url):
@@ -76,7 +76,8 @@ db = SQLAlchemy(application)
 
 from viaduct.api.user import UserAPI
 from viaduct.api.company import CompanyAPI
-from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.guide import GuideAPI
+from viaduct.api.module import ModuleAPI
 from viaduct.helpers.thumb import thumb
 
 # Set jinja global variables
@@ -86,7 +87,8 @@ application.jinja_env.globals.update(markdown=markdown)
 application.jinja_env.globals.update(Markup=Markup)
 application.jinja_env.globals.update(UserAPI=UserAPI)
 application.jinja_env.globals.update(CompanyAPI=CompanyAPI)
-application.jinja_env.globals.update(GroupPermissionAPI=GroupPermissionAPI)
+application.jinja_env.globals.update(GuideAPI=GuideAPI)
+application.jinja_env.globals.update(ModuleAPI=ModuleAPI)
 application.jinja_env.globals.update(datetime=datetime)
 application.jinja_env.globals.update(json=json)
 application.jinja_env.globals.update(serialize_sqla=serialize_sqla)

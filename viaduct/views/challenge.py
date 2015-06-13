@@ -7,7 +7,7 @@ from flask.ext.login import current_user
 from viaduct import application
 from viaduct.models.challenge import Challenge
 from viaduct.forms import ChallengeForm
-from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.module import ModuleAPI
 from viaduct.api.challenge import ChallengeAPI
 
 blueprint = Blueprint('challenge', __name__, url_prefix='/challenge')
@@ -20,7 +20,7 @@ blueprint = Blueprint('challenge', __name__, url_prefix='/challenge')
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/dashboard/', methods=['GET', 'POST'])
 def view_list(page=1):
-    if not GroupPermissionAPI.can_read('challenge'):
+    if not ModuleAPI.can_read('challenge'):
         return abort(403)
 
     if current_user.id == 0:
@@ -48,7 +48,7 @@ def view_list(page=1):
 # API's
 @blueprint.route('/api/fetch_all_challenges', methods=['GET', 'POST'])
 def fetch_all():
-    if not GroupPermissionAPI.can_write('challenge'):
+    if not ModuleAPI.can_write('challenge'):
         abort(403)
 
     challenges = ChallengeAPI.fetch_all_challenges()
@@ -59,7 +59,7 @@ def fetch_all():
 
 @blueprint.route('/api/get_ranking', methods=['GET', 'POST'])
 def get_ranking():
-    if not GroupPermissionAPI.can_read('challenge'):
+    if not ModuleAPI.can_read('challenge'):
         abort(403)
 
     ranking = ChallengeAPI.get_ranking()
@@ -70,7 +70,7 @@ def get_ranking():
 @blueprint.route('/api/fetch_challenge', methods=['GET', 'POST'])
 @blueprint.route('/api/fetch_challenge/', methods=['GET', 'POST'])
 def fetch_question():
-    if not GroupPermissionAPI.can_write('challenge'):
+    if not ModuleAPI.can_write('challenge'):
         abort(403)
 
     # Gather all arguments
@@ -86,7 +86,7 @@ def fetch_question():
 
 @blueprint.route('/api/create_challenge', methods=['GET', 'POST'])
 def create_challenge(challenge_id=None):
-    if not GroupPermissionAPI.can_write('challenge'):
+    if not ModuleAPI.can_write('challenge'):
         abort(403)
 
     # Gather all arguments
@@ -148,7 +148,7 @@ def create_challenge(challenge_id=None):
 
 @blueprint.route('/api/new_submission', methods=['GET', 'POST'])
 def new_submission(challenge_id=None):
-    if not GroupPermissionAPI.can_read('challenge'):
+    if not ModuleAPI.can_read('challenge'):
         abort(403)
 
     if request.args.get('challenge_id'):
@@ -176,7 +176,7 @@ def new_submission(challenge_id=None):
 
 @blueprint.route('/api/get_points', methods=['GET', 'POST'])
 def get_points(user_id=None):
-    if not GroupPermissionAPI.can_read('challenge'):
+    if not ModuleAPI.can_read('challenge'):
         abort(403)
 
     if request.args.get('user_id'):

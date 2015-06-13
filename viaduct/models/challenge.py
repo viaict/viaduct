@@ -19,7 +19,7 @@ class Challenge(db.Model, BaseEntity):
     hint = db.Column(db.String(1024))
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)
-    parent_id = db.Column(db.Integer, db.ForeignKey('challenge.id'))
+    parent_id = db.Column(db.Integer)
     weight = db.Column(db.Integer)
     answer = db.Column(db.Text())
     type = db.Column(db.Enum('Text', 'Image', 'Custom'))

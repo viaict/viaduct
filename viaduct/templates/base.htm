@@ -35,8 +35,13 @@
         {{ UserAPI.get_membership_warning() | safe }}
         {{ NavigationAPI.get_navigation_bar()|safe }}
         <div class="container">
-            <p class="text-right report-bug">
-                <a href="{{ url_for('jira.create_issue') }}">Report a bug!</a>
+            <p class="text-right guide" style="margin-top: -20px">
+                <!-- Guide menu trigger -->
+                <a data-icon="glyphicon-picture" class="btn btn-sm" data-toggle="modal" data-target="#moduleGuide">
+                  help?
+                </a>
+                |
+                <a href="{{ url_for('jira.create_issue') }}"  class="btn btn-sm"> Report a bug!</a>
             </p>
             <div class="row">
                 <div class="col-sm-12" id="messages">
@@ -48,5 +53,28 @@
             {% endblock %}
             {{ PageAPI.get_footer()|safe }}
         </div>
+        <!-- Start guide modal -->
+        {% set user_guide = GuideAPI.get_current_user_guide() %}
+        {% set admin_guide = GuideAPI.get_current_admin_guide() %}
+        <div class="modal fade" id="moduleGuide" tabindex="-1" role="dialog" aria-labelledby="guide" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> 
+                <b>{{ user_guide.title | markdown }}</b>
+              </div>
+              <div class="modal-body">
+                    {{ user_guide.content | markdown }}
+              </div>
+              <div class="modal-header">
+                <b>{{ admin_guide.title | markdown }}</b>
+              </div>
+              <div class="modal-body">
+                    {{ admin_guide.content | markdown }}
+              </div>  
+            </div>
+          </div>
+        </div>
+        <!-- End guide modal -->
     </body>
 </html>
