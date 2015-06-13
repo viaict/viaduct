@@ -1,5 +1,5 @@
 from flask.ext.login import current_user
-from flask import abort
+from flask import abort, url_for
 from viaduct.models.mollie import Transaction
 
 
@@ -9,8 +9,6 @@ import mollie.api.error as mollie_error
 from mollie.api.client import Client
 
 MOLLIE = Client()
-MOLLIE_URL = application.config['MOLLIE_URL']
-MOLLIE_REDIRECT_URL = application.config['MOLLIE_REDIRECT_URL']
 MOLLIE_TEST_MODE = application.config.get('MOLLIE_TEST_MODE', False)
 if MOLLIE_TEST_MODE:
     MOLLIE.set_api_key(application.config['MOLLIE_TEST_KEY'])
@@ -43,7 +41,7 @@ class MollieAPI:
             payment = MOLLIE.payments.create({
                 'amount': amount,
                 'description': description,
-                'redirectUrl': MOLLIE_REDIRECT_URL,
+                'redirectUrl': url_for('mollie.check'),
                 'metadata': {
                     'transaction_id': transaction.id,
                     'first_name': form_result.owner.first_name,

@@ -3,10 +3,9 @@
 {% block content %}
 <div class="mainblock">
     <h1>Welkom terug</h1>
-    {% if test: %}
-    <h2>Test mode enabled</h2>
-    <h3>{{ key }}</h3>
-    {% endif %}
     <p>{{ message }}</p>
+    {% if link: %}
+    <a href="{{ link }}">Terug naar de activiteit.</a>
+    {% endif %}
 </div>
 {% endblock %}
