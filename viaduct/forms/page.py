@@ -16,14 +16,16 @@ class SuperPageForm(Form):
     """TODO"""
     needs_payed = BooleanField('Alleen zichtbaar voor leden')
 
-    title = StringField('Titel', [InputRequired()])
+    title = StringField('Titel',
+                        [InputRequired(message='Geen titel opgegeven')])
     comment = StringField('Reden van wijziging', [Optional()])
 
     save_page = SubmitField('Opslaan')
 
 
 class PageForm(SuperPageForm):
-    content = TextAreaField('Inhoud', [InputRequired()])
+    content = TextAreaField('Inhoud',
+                            [InputRequired(message='Geen inhoud opgegeven')])
     filter_html = BooleanField('Sta HTML tags toe')
     custom_form_id = SelectField('Formulier', coerce=int)
     permissions = FieldList(FormField(EditGroupPagePermissionEntry))

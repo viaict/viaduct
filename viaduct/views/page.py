@@ -9,6 +9,7 @@ from flask import abort
 
 from viaduct import db
 from viaduct.forms import PageForm, HistoryPageForm
+from viaduct.helpers import flash_form_errors
 from viaduct.models import Group, Page, PageRevision, PagePermission, \
     CustomForm, Redirect
 from viaduct.api.module import ModuleAPI
@@ -153,6 +154,7 @@ def edit_page(path=''):
         # redirect newly created page
         return redirect(url_for('page.get_page', path=path))
     else:
+        flash_form_errors(form)
         for group in groups:
             permission = None
             if page:
@@ -166,14 +168,6 @@ def edit_page(path=''):
                     .append_entry({'select': permission.permission})
             else:
                 form.permissions.append_entry({})
-
-        # Give the user feedback on his actions.
-        if data['title'] is "":
-            flash('Geen titel gegeven.', 'danger')
-        if data['content'] is "":
-            flash('Geen inhoud gegeven.', 'danger')
-        if data['comment'] is "":
-            flash('Geen commentaar gegeven.', 'warning')
 
     return render_template('page/edit_page.htm', page=page, form=form,
                            path=path, groups=zip(groups, form.permissions))
