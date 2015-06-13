@@ -25,73 +25,11 @@ $(document).ready(function() {
                                 'width': $(this).css('width')});
             $read_more_div.addClass('readmore');
 
-            // var $read_more_link = $('<a>Meer lezen</a>');
-            // $read_more_link.attr('href', '#');
-            // $read_more_link.on('click', function() {
-            //     console.log('test');
-            //     $main_block.toggleClass("mainpage_scroll");
-            //     // if (Math.floor($main_block.height()) == desired_height) {
-            //     //     $main_block.animate({'height': sprintf('%dpx',
-            //     //                         actual_height + 20),
-            //     //                         'overflow': 'visible'});
-            //     //     $(this).text('Minder lezen');
-            //     // }
-            //     // else {
-            //     //     $main_block.animate({'overflow': 'hidden',
-            //     //                     'height': sprintf('%dpx', desired_height)});
-            //     //     $(this).text('Meer lezen');
-            //     // }
-
-            //     return false;
-            // });
-
             $read_more_div.append($read_more_link);
 
             $(this).prepend($read_more_div);
         }
     });
-
-    /* PimPy functions */
-
-    /* updates the task status */
-    $('.pimpy_status').click(function() {
-        var task_id = $(this).data('task-id');
-        var status = $(this).data('status-id');
-        $.getJSON('/pimpy/tasks/update_status', {
-            task_id: task_id,
-            new_status: status
-        }, function(data) {
-            $('#pimpy_task'+task_id).attr('class', 'btn dropdown-toggle ' + data.status);
-            $('#pimpy_task_row_'+task_id).attr('class', 'pimpy_status_' + data.status);
-        });
-    });
-
-    /* Editable Setting */
-    $.fn.editable.defaults.mode = 'inline';
-    /* Makes tasks content editable */
-    $('.pimpy_editable').editable();
-    $('.pimpy_editable_toggle').click(function() {
-        $('.pimpy_editable').editable('toggleDisabled');
-    });
-    $('.pimpy_editable_date').editable({
-        format: 'yyyy-mm-dd',
-        viewformat: 'dd/mm/yyyy',
-        datepicker: {
-            weekStart: 1
-        }
-    });
-    $('.pimpy_editable').editable('toggleDisabled');
-
-    $(".btn-filter").on("click",function(){
-      var classes = this.attributes['data-hide'].value;
-      console.log()
-      if ($(this).hasClass('active')) {
-        $("tr.pimpy_status_"+classes).hide()
-      } else {
-        $("tr.pimpy_status_"+classes).show()
-      }
-    });
-
 
     /* sponsor carousel */
     $(function() {
@@ -121,22 +59,24 @@ $(document).ready(function() {
         }).trigger('resize.example');*/
     });
 
+    /* This is done like this because these entries are added to the page
+     * dynamically. Otherwise, we would have to assign this event every time
+     * an entry is added to the page. */
+
     $(document).on('click', '.hide_nav_entry', function(e){
         console.log("test");
         $(this).hide();
         $(this).siblings(".show_nav_entry").show();
         $(this).parent().children().find(".nav_entry").fadeOut( "normal", function() {
-    // Animation complete.
-  });
+            // Animation complete.
+        });
     });
 
     $(document).on('click', '.show_nav_entry', function(e){
         $(this).hide();
         $(this).siblings(".hide_nav_entry").show();
         $(this).parent().children().find(".nav_entry").fadeIn( "normal", function() {
-    // Animation complete.
-  });
+            // Animation complete.
+        });
     });
-
-
 });

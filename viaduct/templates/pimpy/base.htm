@@ -2,6 +2,10 @@
 
 {% extends "content.htm" %}
 
+{% block includes %}
+    <script src='{{ static_url('/static/js/pimpy/pimpy.js') }}'></script>
+{% endblock %}
+
 {% block sublogo %}
 
 <a href="{{url_for('pimpy.view_tasks')}}">
