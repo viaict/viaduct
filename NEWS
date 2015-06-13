@@ -1,4 +1,5 @@
 xx-xx-2015 vx.x.x.x:
 * Add NEWS file
-* Show loading status in PimPy
+* Show loading status in PimPy (fixes VIA-45)
 * Backlink to activity on mollie payment success page
+* Mark all tasks with the same ID in PimPy (fixes VIA-202)
