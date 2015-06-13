@@ -6,7 +6,7 @@
 
 {% block page_content %}
 <p>
-    Coördinator: {% if revision.interim %}positie vacant{% else %}{{ revision.coordinator.name }}{% endif %}
+    Coördinator: {% if revision.interim %}<span class='coordinator_vacant'>positie vacant</span>{% else %}{{ revision.coordinator.name }}{% endif %}
     {% if revision.interim %}<br />Interim-coördinator: {{ revision.coordinator.name }}{% endif %}
 </p>
 
