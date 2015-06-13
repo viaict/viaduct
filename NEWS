@@ -5,3 +5,4 @@ xx-xx-2015 vx.x.x.x:
 * Mark all tasks with the same ID in PimPy (fixes VIA-202)
 * Add a module that allows users to create custom url-redirects
 * "Positie vacant" on committee pages is now much more prominent
+* Course description is not required anymore
