@@ -6,3 +6,5 @@ xx-xx-2015 vx.x.x.x:
 * Add a module that allows users to create custom url-redirects
 * "Positie vacant" on committee pages is now much more prominent
 * Course description is not required anymore
+* Added help pages to modules
+* Added optional terms to custom forms
