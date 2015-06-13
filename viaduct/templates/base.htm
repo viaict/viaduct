@@ -36,7 +36,7 @@
         {{ NavigationAPI.get_navigation_bar()|safe }}
         <div class="container">
             <p class="text-right guide" style="margin-top: -20px">
-                <!-- Button trigger modal -->
+                <!-- Guide menu trigger -->
                 <a data-icon="glyphicon-picture" class="btn btn-sm" data-toggle="modal" data-target="#moduleGuide">
                   help?
                 </a>
@@ -53,7 +53,7 @@
             {% endblock %}
             {{ PageAPI.get_footer()|safe }}
         </div>
-        <!-- Modal -->
+        <!-- Start guide modal -->
         {% set user_guide = GuideAPI.get_current_user_guide() %}
         {% set admin_guide = GuideAPI.get_current_admin_guide() %}
         <div class="modal fade" id="moduleGuide" tabindex="-1" role="dialog" aria-labelledby="guide" aria-hidden="true">
@@ -75,5 +75,6 @@
             </div>
           </div>
         </div>
+        <!-- End guide modal -->
     </body>
 </html>
