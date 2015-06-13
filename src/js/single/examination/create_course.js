@@ -1,6 +1,8 @@
 $(function () {
     'use strict';
 
+    // TODO: Make this pretty, not two identical functions.
+
     var $new_course_btn = $('.new-course-btn');
     var $new_course_name = $('.new-course-name');
 
@@ -46,6 +48,59 @@ $(function () {
                 flash(message, 'danger');
             }).always(function () {
                 $new_course_btn.button('reset');
+            });
+    });
+
+    var $new_education_btn = $('.new-education-btn');
+    var $new_education_name = $('.new-education-name');
+    var $new_education_degree = $('.new-education-degree');
+
+    var $educations = $('.educations');
+
+    $new_education_btn.click(function (e) {
+        e.preventDefault();
+
+        $new_education_btn.button('loading');
+
+        var education_name = $new_education_name.val();
+        var education_degree_id = $new_education_degree.val();
+
+        $.post('/examination/api/education/',
+            {education_name: education_name, degree_id: education_degree_id},
+            function (data) {
+                $new_education_name.val('');
+                $new_education_degree.find('option:selected').prop('selected',
+                    false);
+
+                var education_id = data.education_id;
+                var educations = data.educations;
+
+                $educations.empty();
+
+                _.forEach(educations, function (education) {
+                    var $option = $('<option></option>');
+                    $option.val(education.id);
+                    $option.text(education.name);
+
+                    if (education.id == education_id) {
+                        $option.prop('selected', true);
+                    }
+
+                    $educations.append($option);
+                });
+
+                clearflash();
+                flash('Opleiding succesvol toegevoegd', 'success');
+            }).fail(function (resp) {
+                var message = 'Er is iets misgegaan, =(';
+                if (resp.responseJSON) {
+                    message = resp.responseJSON.error;
+                }
+
+                clearflash();
+                flash(message, 'danger');
+            }).always(function () {
+                $new_education_btn.button('reset');
             });
     });
 });

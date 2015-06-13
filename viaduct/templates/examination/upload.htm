@@ -35,7 +35,7 @@
 
             <div class='form-group'>
                 Studie
-                <select name='education' class='form-control'>
+                <select name='education' class='form-control educations'>
                     {% for education in educations %}
                         <option value="{{ education.id }}">{{ education.name }}</option>
                     {% endfor %}
@@ -43,7 +43,14 @@
             </div>
 
             <div class='form-group'>
-                <a href="{{ url_for('examination.add_education') }}" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> <strong>nieuw</strong></a>
+                <strong>Nieuwe opleiding</strong>
+                <input class='new-education-name inline-field form-control' type='text' />
+                <select class='new-education-degree inline-field form-control'>
+                    {% for degree in degrees %}
+                        <option value='{{ degree.id }}'>{{ degree.name }}</option>
+                    {% endfor %}
+                </select>
+                <button class='new-education-btn btn btn-default' data-loading-text='BITTE WARTEN!'>Toevoegen</button>
             </div>
 
             <div class='form-group'>

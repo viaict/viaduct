@@ -16,6 +16,7 @@ from viaduct.utilities import serialize_sqla
 from viaduct.models.examination import Examination
 from viaduct.models.course import Course
 from viaduct.models.education import Education
+from viaduct.models.degree import Degree
 
 from viaduct.api.module import ModuleAPI
 
@@ -95,6 +96,7 @@ def upload_file():
 
     courses = Course.query.order_by(Course.name).all()
     educations = Education.query.order_by(Education.name).all()
+    degrees = Degree.query.order_by(Degree.name).all()
 
     if request.method == 'POST':
         file = request.files.get('file', None)
@@ -130,7 +132,7 @@ def upload_file():
         if error:
             return render_template('examination/upload.htm', courses=courses,
                                    educations=educations, message='',
-                                   title='Tentamens')
+                                   title='Tentamens', degrees=degrees)
 
         exam = Examination(filename, title, course_id, education_id,
                            answers=answer_path)
@@ -141,10 +143,11 @@ def upload_file():
 
         return render_template('examination/upload.htm', courses=courses,
                                educations=educations, message='',
-                               title='Tentamens')
+                               title='Tentamens', degrees=degrees)
 
     return render_template('examination/upload.htm', courses=courses,
-                           educations=educations, title='Tentamens')
+                           educations=educations, title='Tentamens',
+                           degrees=degrees)
 
 
 @blueprint.route('/examination/', methods=['GET', 'POST'])
@@ -377,3 +380,26 @@ def examination_api_course_add():
     courses = Course.query.order_by(Course.name).all()
 
     return jsonify(course_id=course.id, courses=serialize_sqla(courses))
+
+
+@blueprint.route('/examination/api/education/', methods=['POST'])
+def examination_api_education_add():
+    if not ModuleAPI.can_write('examination'):
+        return abort(403)
+
+    education_name = request.form.get('education_name', '')
+    degree_id = request.form.get('degree_id', '')
+
+    if education_name == '':
+        return jsonify(error='Geen opleidingnaam opgegeven'), 500
+    if degree_id == '':
+        return jsonify(error='Geen opleidinggraad opgegeven'), 500
+
+    education = Education(degree_id, education_name)
+    db.session.add(education)
+    db.session.commit()
+
+    educations = Education.query.order_by(Education.name).all()
+
+    return jsonify(education_id=education.id,
+                   educations=serialize_sqla(educations))
