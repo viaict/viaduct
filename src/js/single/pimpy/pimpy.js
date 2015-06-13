@@ -9,27 +9,27 @@ $(function () {
     $('.pimpy_status').click(function () {
         var $this = $(this);
 
-        var $task_btn = $this.parents('div.btn-group').children('.pimpy_task');
-        $task_btn.button('loading');
-
-        var $task_row = $this.parents('tr');
-
         var task_id = $this.data('task-id');
         var status = $this.data('status-id');
+
+        var $task_rows = $('.pimpy_task_row[data-task-id=' + task_id + ']');
+        var $task_btns = $('.pimpy_task', $task_rows);
+
+        $task_btns.button('loading');
 
         $.getJSON('/pimpy/tasks/update_status', {
             task_id: task_id,
             new_status: status
         }, function (data) {
-            $task_btn.removeClass(btn_stati);
-            $task_row.removeClass(btn_stati);
+            $task_btns.removeClass(btn_stati);
+            $task_rows.removeClass(btn_stati);
 
-            $task_btn.addClass(data.status);
-            $task_row.addClass('pimpy_status_' + data.status);
+            $task_btns.addClass(data.status);
+            $task_rows.addClass('pimpy_status_' + data.status);
         }).fail(function () {
             flash('Er ging iets mis, =(', 'danger');
         }).always(function () {
-            $task_btn.button('reset');
+            $task_btns.button('reset');
         });
     });
 
