@@ -113,7 +113,8 @@ def get_activity(activity_id=0):
             if form_result:
                 activity.form_data = form_result.data.replace('"', "'")
                 if not form_result.has_payed:
-                    if form_result.form.price > 1.20:
+                    # There is 50 cents administration fee
+                    if form_result.form.price - 0.5 > 0:
                         activity.form.show_pay_button = True
                         activity.form.id = form_result.id
 
