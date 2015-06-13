@@ -1,19 +1,35 @@
 $(function () {
     'use strict';
 
+    var btn_stati = 'btn-info btn-warning btn-success btn-danger';
+
     /* updates the task status */
+    $('.pimpy_task').attr('data-loading-text', 'BITTE WARTEN!');
+
     $('.pimpy_status').click(function () {
-        var task_id = $(this).data('task-id');
-        var status = $(this).data('status-id');
+        var $this = $(this);
+
+        var $task_btn = $this.parents('div.btn-group').children('.pimpy_task');
+        $task_btn.button('loading');
+
+        var $task_row = $this.parents('tr');
+
+        var task_id = $this.data('task-id');
+        var status = $this.data('status-id');
 
         $.getJSON('/pimpy/tasks/update_status', {
             task_id: task_id,
             new_status: status
         }, function (data) {
-            $('#pimpy_task' + task_id).attr('class',
-                'btn dropdown-toggle ' + data.status);
-            $('#pimpy_task_row_' + task_id).attr('class',
-                'pimpy_status_' + data.status);
+            $task_btn.removeClass(btn_stati);
+            $task_row.removeClass(btn_stati);
+
+            $task_btn.addClass(data.status);
+            $task_row.addClass('pimpy_status_' + data.status);
+        }).fail(function () {
+            flash('Er ging iets mis, =(', 'danger');
+        }).always(function () {
+            $task_btn.button('reset');
         });
     });
 
