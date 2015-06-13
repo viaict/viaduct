@@ -5,11 +5,9 @@
 {% block includes %}
     <script src={{static_url("/static/js/custom_form_submission.js")}}></script>
 {% endblock %}
-
 {% block page_content %}
     <p>{{ revision.content | strip_tags('script', 'link', 'style', 'video', 'audio') | markdown(revision.filter_html) }}</p>
-
-	{% if revision.custom_form %}
+    {% if revision.custom_form %}
         <hr />
         <div>
             {% if current_user and current_user.id %}

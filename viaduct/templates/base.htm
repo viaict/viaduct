@@ -35,6 +35,10 @@
         {{ UserAPI.get_membership_warning() | safe }}
         {{ NavigationAPI.get_navigation_bar()|safe }}
         <div class="container">
+            <p class="text-right guide">
+                <a href="#">Guide!</a>
+                {{ GuideAPI.get_current_guide() }}
+            </p>          
             <p class="text-right report-bug">
                 <a href="{{ url_for('jira.create_issue') }}">Report a bug!</a>
             </p>
