@@ -18,7 +18,7 @@ class CustomForm(db.Model, BaseEntity):
     html = db.Column(db.UnicodeText())
     msg_success = db.Column(db.String(2048))
     max_attendants = db.Column(db.Integer)
-    price = db.Column(db.Float)
+    price = db.Column(db.Float, default=0)
     owner = db.relationship('User', backref=db.backref('custom_forms',
                                                        lazy='dynamic'))
     transaction_description = db.Column(db.String(256))
