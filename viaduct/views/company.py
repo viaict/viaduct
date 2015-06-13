@@ -172,9 +172,8 @@ def update(company_id=None):
         error_found = True
     if request.files['file']:
         logo = FileAPI.upload(request.files['file'])
-        company.logo_path = logo.name
-        print((vars(logo)))
-        pass
+        if logo is not None:
+            company.logo_path = logo.name
 
     if error_found:
         return redirect(url_for('company.view', company_id=company_id))
