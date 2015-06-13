@@ -150,6 +150,7 @@ def edit_task(task_id=-1):
         return message
 
 
+@blueprint.route('/minutes/add/', methods=['GET', 'POST'])
 @blueprint.route('/minutes/add/<string:group_id>', methods=['GET', 'POST'])
 def add_minute(group_id='all'):
     if not ModuleAPI.can_write('pimpy'):
