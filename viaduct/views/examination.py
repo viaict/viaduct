@@ -1,7 +1,7 @@
 import os
 from flask import Blueprint
 from flask import abort, flash, session, redirect, render_template, request, \
-    url_for
+    url_for, jsonify
 from flask.ext.login import login_required
 
 from sqlalchemy import or_
@@ -11,6 +11,7 @@ from viaduct import application, db
 from viaduct.forms import CourseForm
 from viaduct.helpers import flash_form_errors
 from viaduct.forms import EducationForm
+from viaduct.utilities import serialize_sqla
 
 from viaduct.models.examination import Examination
 from viaduct.models.course import Course
@@ -357,3 +358,22 @@ def add_education():
     return render_template('examination/education.htm',
                            title='Tentamens',
                            form=form)
+
+
+@blueprint.route('/examination/api/course/', methods=['POST'])
+def examination_api_course_add():
+    if not ModuleAPI.can_write('examination'):
+        return abort(403)
+
+    course_name = request.form.get('course_name', '')
+
+    if course_name == '':
+        return jsonify(error='Geen vaknaam opgegeven'), 500
+
+    course = Course(course_name, '')
+    db.session.add(course)
+    db.session.commit()
+
+    courses = Course.query.order_by(Course.name).all()
+
+    return jsonify(course_id=course.id, courses=serialize_sqla(courses))
