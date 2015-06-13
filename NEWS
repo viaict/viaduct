@@ -8,3 +8,4 @@ xx-xx-2015 vx.x.x.x:
 * Course description is not required anymore
 * Added help pages to modules
 * Added optional terms to custom forms
+* Make adding courses and educations dynamic while uploading examinations
