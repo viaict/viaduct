@@ -3,11 +3,11 @@
 
 {% block content %}
 
-<h1>Redirect</h1>
-<p>Create redirects from URLs to different URLs.</p>
+<h1>Omleiding</h1>
+<p>Creëer omleidingen van URLs, naar URLs.</p>
 
 {% if can_write %}
-    <h2>{% if redirection %}Edit{% else %}New{% endif %} redirect</h2>
+    <h2>{% if redirection %}Bewerk{% else %}Nieuwe{% endif %} omleiding</h2>
     <form method='post' class='form-inline'>
         {{ form.csrf_token }}
 
@@ -17,17 +17,17 @@
         {{ render_button(form.submit, 'btn btn-primary') }}
 
         {% if redirection %}
-            <a href='{{ url_for('redirect.view') }}' class='btn btn-default'>New</a>
+            <a href='{{ url_for('redirect.view') }}' class='btn btn-default'>Nieuw</a>
         {% endif %}
     </form>
 {% endif %}
 
-<h2>Existing redirects</h2>
+<h2>Bestaande omleidingen</h2>
 <table class='table table-condensed'>
     <thead>
-        <th>Fro</th>
-        <th>To</th>
-        <th>Actions</th>
+        <th>Van</th>
+        <th>Naar</th>
+        <th>Acties</th>
     </thead>
 
     <tbody>

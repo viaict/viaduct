@@ -5,8 +5,8 @@ from wtforms.validators import InputRequired
 
 class RedirectForm(Form):
     fro = StringField(
-        'Fro', validators=[InputRequired(message='Fro path required')])
+        'Van', validators=[InputRequired(message='Van pad vereist')])
     to = StringField(
-        'To', validators=[InputRequired(message='To path required')])
+        'Naar', validators=[InputRequired(message='Naar pad vereist')])
 
-    submit = SubmitField('Save')
+    submit = SubmitField('Opslaan')
