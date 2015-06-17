@@ -39,8 +39,10 @@ def mollie_check(trans_id=0, mollie_id=0):
                            link=link)
 
 
-@blueprint.route('/webhook/', methods=['POST'])
+@blueprint.route('/webhook/', methods=['GET', 'POST'])
 def webhook():
+    if request.method == 'GET':
+        return ''
     if 'id' not in request.form:
         return ''
     mollie_id = request.form['id']
