@@ -13,7 +13,10 @@ blueprint = Blueprint('mollie', __name__, url_prefix='/mollie')
 @blueprint.route('/check/<mollie_id>', methods=['GET', 'POST'])
 def mollie_check(mollie_id=0):
     if not mollie_id:
-        return render_template('mollie/success.htm', message='no ids given')
+        if 'id' not in request.form:
+            return render_template('mollie/success.htm', message='no id given')
+        else:
+            mollie_id = request.form['id']
     trans_id = MollieAPI.get_other_id(mollie_id=mollie_id)
     print(trans_id)
     if not trans_id:
