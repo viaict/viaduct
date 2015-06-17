@@ -38,6 +38,7 @@ class MollieAPI:
 
         # Create the mollie payment
         try:
+            print(url_for('mollie.mollie_check'))
             payment = MOLLIE.payments.create({
                 'amount': amount,
                 'description': description,
