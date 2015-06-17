@@ -41,7 +41,7 @@ class MollieAPI:
             payment = MOLLIE.payments.create({
                 'amount': amount,
                 'description': description,
-                'redirectUrl': url_for('mollie.check'),
+                'redirectUrl': url_for('mollie.mollie_check'),
                 'metadata': {
                     'transaction_id': transaction.id,
                     'first_name': form_result.owner.first_name,
