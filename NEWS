@@ -1,3 +1,6 @@
+17-06-2015 v2.1.0.1:
+* Fix iDeal
+
 13-06-2015 v2.1.0.0:
 * Add NEWS file
 * Show loading status in PimPy (fixes VIA-45)

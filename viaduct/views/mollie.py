@@ -10,17 +10,20 @@ blueprint = Blueprint('mollie', __name__, url_prefix='/mollie')
 
 
 @blueprint.route('/check')
-@blueprint.route('/check/<mollie_id>', methods=['GET', 'POST'])
-def mollie_check(mollie_id=0):
-    if not mollie_id:
-        return render_template('mollie/success.htm', message='no ids given')
-    trans_id = MollieAPI.get_other_id(mollie_id=mollie_id)
-    print(trans_id)
+@blueprint.route('/check/<trans_id>', methods=['GET', 'POST'])
+def mollie_check(trans_id=0, mollie_id=0):
     if not trans_id:
-        return render_template('mollie/success.htm',
-                               message='Transaction is not in the database')
+        if 'id' not in request.form:
+            return render_template('mollie/success.htm', message='no id given')
+        else:
+            mollie_id = request.form['id']
+            trans_id = MollieAPI.get_other_id(mollie_id=mollie_id)
+
     transaction = Transaction.query.\
         filter(Transaction.id == trans_id).first()
+    if not transaction:
+        return render_template('mollie/success.htm',
+                               message='unknown transaction')
     form_id = transaction.form_result.form.id
     activity = Activity.query.\
         filter(Activity.form_id == form_id).first()
