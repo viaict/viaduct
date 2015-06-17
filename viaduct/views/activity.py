@@ -269,7 +269,7 @@ def create_mollie_transaction(result_id):
         else:
             return render_template('mollie/success.htm', message=transaction)
     else:
-        payment_url, message = MollieAPI.get_payment_url(transaction.mollie_id)
+        payment_url, message = MollieAPI.get_payment_url(mollie_id=transaction.mollie_id)
         if payment_url:
             return redirect(payment_url)
         else:
