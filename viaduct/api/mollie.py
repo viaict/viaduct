@@ -38,11 +38,10 @@ class MollieAPI:
 
         # Create the mollie payment
         try:
-            print(url_for('mollie.mollie_check', _external=True))
             payment = MOLLIE.payments.create({
                 'amount': amount,
                 'description': description,
-                'redirectUrl': url_for('mollie.mollie_check'),
+                'redirectUrl': url_for('mollie.mollie_check', _external=True),
                 'metadata': {
                     'transaction_id': transaction.id,
                     'first_name': form_result.owner.first_name,
