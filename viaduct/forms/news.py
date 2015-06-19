@@ -1,12 +1,13 @@
-from wtforms import TextAreaField, DateField
+from flask_wtf import Form
+from wtforms import TextField, TextAreaField, DateField
 from wtforms.validators import InputRequired
+from flask.ext.babel import _
 
 from datetime import date, timedelta
 
-from viaduct.forms.page import SuperPageForm
 
-
-class NewsForm(SuperPageForm):
-    content = TextAreaField('Inhoud', validators=[InputRequired()])
-    end_time = DateField('Archiefdatum', validators=[InputRequired()],
-                         default=date.today() + timedelta(days=1))
+class NewsForm(Form):
+    title = TextField(_('Title'), validators=[InputRequired()])
+    content = TextAreaField(_('Content'), validators=[InputRequired()])
+    end_time = DateField(_('Archive date'),
+                         default=str(date.today() + timedelta(days=31)))

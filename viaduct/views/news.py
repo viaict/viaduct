@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import date
 
 from flask import Blueprint, abort, render_template, request, flash, redirect,\
     url_for
@@ -7,87 +7,80 @@ from flask.ext.login import current_user
 from viaduct import db
 from viaduct.api import ModuleAPI
 from viaduct.forms import NewsForm
-from viaduct.models import NewsRevision, Page
+from viaduct.models import News
 from viaduct.helpers import flash_form_errors
 
-blueprint = Blueprint('news', __name__)
+blueprint = Blueprint('news', __name__, url_prefix='/news')
 
 
-@blueprint.route('/news/', methods=['GET'])
-@blueprint.route('/news/page/<int:page_nr>/', methods=['GET'])
+@blueprint.route('/', methods=['GET'])
+@blueprint.route('/<int:page_nr>/', methods=['GET'])
 def list(page_nr=1):
     if not ModuleAPI.can_read('news'):
         return abort(403)
 
-    archive = int(request.args.get('archive', 0))
+    items = News.query.filter(db.or_(News.end_time >= date.today(),
+                                     News.end_time == None))  # noqa
 
-    itemsub = db.session.query(db.func.max(NewsRevision.id)
-                               .label('max_id'))\
-        .group_by(NewsRevision.instance_id).subquery()
-
-    items = NewsRevision.query\
-        .join(itemsub, NewsRevision.id == itemsub.c.max_id)
-
-    if archive:
-        items = items.filter(db.or_(NewsRevision.end_time < date.today(),
-                                    NewsRevision.end_time != None))  # noqa
-    else:
-        items = items.filter(db.or_(NewsRevision.end_time >= date.today(),
-                                    NewsRevision.end_time == None))  # noqa
-
-    items = items.paginate(page_nr, 20)
-
-    return render_template('news/list.htm', items=items, archive=archive)
+    return render_template('news/list.htm',
+                           items=items.paginate(page_nr, 10, False),
+                           archive=False)
 
 
-@blueprint.route('/create/news/', methods=['GET', 'POST'])
-@blueprint.route('/edit/news/<int:instance_id>/', methods=['GET', 'POST'])
-def edit(instance_id=None):
+@blueprint.route('/archive/', methods=['GET'])
+@blueprint.route('/archive/<int:page_nr>/', methods=['GET'])
+def archive(page_nr=1):
+    if not ModuleAPI.can_read('news'):
+        return abort(403)
+
+    items = News.query.filter(db.and_(News.end_time < date.today(),
+                                     News.end_time != None))  # noqa
+
+    return render_template('news/list.htm',
+                           items=items.paginate(page_nr, 10, False),
+                           archive=True)
+
+
+@blueprint.route('/create/', methods=['GET', 'POST'])
+@blueprint.route('/edit/<int:news_id>/', methods=['GET', 'POST'])
+def edit(news_id=None):
     if not ModuleAPI.can_write('news'):
         return abort(403)
 
-    data = request.form
-    if instance_id:
-        revision = NewsRevision.get_latest(instance_id)
-
-        if not revision:
+    if news_id:
+        news_item = News.query.get(news_id)
+        if not news_item:
             return abort(404)
-
-        page = revision.page
-
-        revision.needs_payed = page.needs_payed
-
-        form = NewsForm(data, revision)
     else:
-        instance_id = NewsRevision.get_new_id()
-        form = NewsForm()
-        page = None
+        news_item = News()
 
-    if form.validate_on_submit():
-        if not page:
-            page = Page('news/%d/' % (instance_id), 'news')
+    form = NewsForm(request.form, news_item)
 
-        page.needs_payed = 'needs_payed' in data
+    if request.method == 'POST':
+        if form.validate_on_submit():
 
-        db.session.add(page)
-        db.session.commit()
+            form.populate_obj(news_item)
+            news_item.user_id = current_user.id
 
-        end_time = datetime.strptime(data['end_time'], '%Y-%m-%d').date()
-        new_revision = NewsRevision(page, data['title'].strip(),
-                                    data['comment'].strip(), instance_id,
-                                    data['content'].strip(), current_user.id,
-                                    end_time)
+            db.session.add(news_item)
+            db.session.commit()
 
-        db.session.add(new_revision)
-        db.session.commit()
+            flash('Nieuwsitem opgeslagen.', 'success')
 
-        flash('Nieuwsitem opgeslagen.', 'success')
+            return redirect(url_for('news.list'))
 
-        return redirect(url_for('page.get_page', path=page.path))
+        else:
+            flash_form_errors(form)
 
-    else:
-        flash_form_errors(form)
+    return render_template('news/edit.htm', form=form, news_id=news_id)
 
-    form.comment.data = ''
 
-    return render_template('news/edit.htm', page=page, form=form)
+@blueprint.route('/view/', methods=['GET'])
+@blueprint.route('/view/<int:news_id>/', methods=['GET'])
+def view(news_id=None):
+    if not ModuleAPI.can_write('news'):
+        return abort(403)
+
+    news = News.query.get(news_id) or abort(404)
+
+    return render_template('news/view_single.htm', news=news)

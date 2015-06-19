@@ -13,7 +13,7 @@
             {% if archive %}
                 <a href='{{ url_for('news.list') }}' class='btn btn-default'>Toon actueel nieuws</a>
             {% else %}
-                <a href='{{ url_for('news.list', archive=1) }}' class='btn btn-default'>Toon nieuws in het archief</a>
+                <a href='{{ url_for('news.archive') }}' class='btn btn-default'>Toon archief</a>
             {% endif %}
         </div>
     </div>
@@ -38,7 +38,7 @@
             </div>
             <div class='row'>
                 <div class='col-md-12 read'>
-                    <a href='{{ url_for('page.get_page', path=item.page.path) }}' class='pull-right'>Meer lezen</a>
+                    <a href='{{ url_for('news.view', news_id=item.id) }}' class='pull-right'>Meer lezen</a>
                 </div>
             </div>
         </div>
@@ -46,9 +46,9 @@
 </div>
 
 {% if archive %}
-    {{ render_pagination(items, 'news.list', archive=1) }}
-{% else %}
     {{ render_pagination(items, 'news.list') }}
+{% else %}
+    {{ render_pagination(items, 'news.archive') }}
 {% endif %}
 
 {% endblock %}
