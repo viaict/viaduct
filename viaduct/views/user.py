@@ -43,15 +43,17 @@ def load_user(user_id):
 
 @blueprint.route('/users/view/<int:user_id>', methods=['GET'])
 def view_single(user_id=None):
-    
+
     can_read = False
     can_write = False
 
     if not current_user or not current_user.has_payed:
         return abort(403)
-    elif ModuleAPI.can_read('user'): 
+    if ModuleAPI.can_read('user'):
         can_read = True
-    
+    if ModuleAPI.can_write('user'):
+        can_write = True
+
     if current_user.id == user_id:
         can_write = True
         can_read = True
