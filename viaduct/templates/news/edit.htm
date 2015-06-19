@@ -4,20 +4,19 @@
 
 {% block content %}
 
-<h1>Nieuwsartikel {% if page.id %}bewerken{% else %}aanmaken{% endif %}</h1>
+<h1>
+    {% if news_id %}{{ _('Edit') }}{% else %}{{ _('Create')}}{%endif%} {{_('newsitem')}}</h1>
 
 <form method='post'>
-    {{ form.csrf_token }}
+    <fieldset>
+        {{ form.csrf_token }}
 
-    {{ render_field(form.title) }}
+        {{ render_field(form.title) }}
+        {{ render_field(form.content) }}
+        {{ render_datefield_picker(form.end_time) }}
 
-    {{ render_field(form.content) }}
-    {{ render_datefield_picker(form.end_time) }}
-
-    {{ render_field(form.comment) }}
-    {{ render_checkbox(form.needs_payed) }}
-
-    {{ render_submit('Opslaan') }}
+        {{ render_submit(_('Save')) }}
+    </fieldset>
 </form>
 
 {% endblock %}
