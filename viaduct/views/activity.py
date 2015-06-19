@@ -6,7 +6,7 @@ import dateutil.parser
 # please some one check out what is happening
 import viaduct.api.calendar.google as google
 
-from flask import flash, redirect, render_template, request, url_for, abort
+from flask import flash, redirect, render_template, request, url_for, abort, jsonify
 from flask import Blueprint
 from flask.ext.login import current_user
 
@@ -18,9 +18,11 @@ from viaduct.forms.activity import ActivityForm, CreateForm
 from viaduct.models.activity import Activity
 from viaduct.models.custom_form import CustomForm, CustomFormResult
 from viaduct.models.mollie import Transaction
-from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.module import ModuleAPI
 from viaduct.api.mollie import MollieAPI
 from viaduct.models.education import Education
+
+from viaduct.utilities.serialize_sqla import serialize_sqla
 
 blueprint = Blueprint('activity', __name__, url_prefix='/activities')
 
@@ -36,7 +38,7 @@ def allowed_file(filename):
 @blueprint.route('/page/<int:page>/', methods=['GET', 'POST'])
 @blueprint.route('/<string:archive>/page/<int:page>/', methods=['GET', 'POST'])
 def view(archive="", page=1):
-    if not GroupPermissionAPI.can_read('activity'):
+    if not ModuleAPI.can_read('activity'):
         return abort(403)
 
     if archive == "archive":
@@ -58,7 +60,7 @@ def view(archive="", page=1):
 
 @blueprint.route('/remove/<int:activity_id>/', methods=['POST'])
 def remove_activity(activity_id=0):
-    if not GroupPermissionAPI.can_write('activity'):
+    if not ModuleAPI.can_write('activity'):
         return abort(403)
 
     # Get activity
@@ -76,7 +78,7 @@ def remove_activity(activity_id=0):
 
 @blueprint.route('/<int:activity_id>/', methods=['GET', 'POST'])
 def get_activity(activity_id=0):
-    if not GroupPermissionAPI.can_read('activity'):
+    if not ModuleAPI.can_read('activity'):
         return abort(403)
 
     activity = Activity.query.get(activity_id)
@@ -111,7 +113,8 @@ def get_activity(activity_id=0):
             if form_result:
                 activity.form_data = form_result.data.replace('"', "'")
                 if not form_result.has_payed:
-                    if form_result.form.price > 1.20:
+                    # There is 50 cents administration fee
+                    if form_result.form.price - 0.5 > 0:
                         activity.form.show_pay_button = True
                         activity.form.id = form_result.id
 
@@ -140,7 +143,7 @@ def get_activity(activity_id=0):
 @blueprint.route('/edit/<int:activity_id>/', methods=['GET', 'POST'])
 def create(activity_id=None):
     # Need to be logged in + actie group or admin etc.
-    if not GroupPermissionAPI.can_write('activity'):
+    if not ModuleAPI.can_write('activity'):
         return abort(403)
 
     if activity_id:
@@ -246,7 +249,6 @@ def create(activity_id=None):
     return render_template('activity/create.htm', activity=activity, form=form,
                            title=title)
 
-
 @blueprint.route('/transaction/<int:result_id>/', methods=['GET', 'POST'])
 def create_mollie_transaction(result_id):
     form_result = CustomFormResult.query.filter(
@@ -267,10 +269,17 @@ def create_mollie_transaction(result_id):
         else:
             return render_template('mollie/success.htm', message=transaction)
     else:
-        payment_url, message = MollieAPI.get_payment_url(transaction.mollie_id)
+        payment_url, message = MollieAPI.get_payment_url(mollie_id=transaction.mollie_id)
         if payment_url:
             return redirect(payment_url)
         else:
             return render_template('mollie/success.htm', message=message)
 
     return False
+
+
+@blueprint.route('/export/', methods=['GET'])
+def export_activities():
+    activities = Activity.query.filter(Activity.end_time > (datetime.datetime.now() - datetime.timedelta(hours=12))).order_by(Activity.start_time.asc()).all()
+    return jsonify(data=serialize_sqla(activities))
+    # return 'hello'

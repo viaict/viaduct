@@ -5,8 +5,8 @@
 	</div>
 {% endmacro %}
 
-{% macro render_button(field) %}
-    {{ field(class='btn btn-default') }}
+{% macro render_button(field, cls='btn btn-default') %}
+    {{ field(class=cls) }}
 {% endmacro %}
 
 {% macro render_submit(text) %}

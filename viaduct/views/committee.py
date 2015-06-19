@@ -5,7 +5,7 @@ from flask.ext.login import current_user
 from viaduct import db
 from viaduct.models import CommitteeRevision, Page, Group, User, \
     NavigationEntry, PagePermission
-from viaduct.api import GroupPermissionAPI, NavigationAPI
+from viaduct.api import ModuleAPI, NavigationAPI
 from viaduct.forms import CommitteeForm
 from viaduct.helpers import flash_form_errors
 import viaduct.api.committee as CommitteeAPI
@@ -21,7 +21,7 @@ def list():
 
 @blueprint.route('/edit/commissie/<string:committee>', methods=['GET', 'POST'])
 def edit_committee(committee=''):
-    if not GroupPermissionAPI.can_write('committee'):
+    if not ModuleAPI.can_write('committee'):
         return abort(403)
 
     path = 'commissie/' + committee
@@ -131,6 +131,13 @@ def edit_committee(committee=''):
 
         group_id = int(data['group_id'])
         coordinator_id = int(data['coordinator_id'])
+        
+        # Add coordinator to BC
+           
+        bc_group = Group.query.filter(Group.name == "BC").first()
+        if bc_group is not None:    
+            new_coordinator = User.query.filter(User.id == coordinator_id).first()
+            bc_group.add_user(new_coordinator)
 
         new_revision = CommitteeRevision(
             page, committee_title, data['comment'].strip(),

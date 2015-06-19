@@ -22,7 +22,7 @@
                     </div>
                     {% if revision.test == "laatste_bestuursblog" %}
                         <span class="pull-right"><a href="/laatste_bestuursblog">Lees al het nieuws!</a></span>
-                        {% if GroupPermissionAPI.can_write('page') %}
+                        {% if ModuleAPI.can_write('page') %}
                             <span class="pull-left"><a href="{{ url_for('page.edit_page', path=revision.page.path) }}">Bewerken</a></span>
                         {% endif %}
                     {% endif %}

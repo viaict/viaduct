@@ -59,7 +59,7 @@ def page_not_found(e):
 def flash_form_errors(form):
     for field, errors in list(form.errors.items()):
         for error in errors:
-            flash('%s: %s' % (field, error), 'danger')
+            flash('%s' % error, 'danger')
 
 
 def get_login_form():
@@ -75,6 +75,17 @@ def markdown_filter(data, filter_html=True):
 
     return Markup(markdown(data, safe_mode=safe_mode, enable_attributes=False,
                            extensions=markdown_extensions))
+
+
+@application.template_filter('strip_tags')
+def strip_tags_filter(data, *args):
+    for tag in args:
+        # Source: http://stackoverflow.com/a/6445849/849956
+        data = re.sub(
+            r'<%s(?:\s[^>]*)?(>(?:.(?!/%s>))*</%s>|/>)' % (tag, tag, tag), '',
+            data, flags=re.S)
+
+    return data
 
 
 @application.template_filter('markup')

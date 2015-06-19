@@ -6,7 +6,7 @@ from viaduct.models.contact import Contact
 from viaduct.models.location import Location
 from viaduct.utilities import validate_form
 from viaduct.forms import ContactForm
-from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.module import ModuleAPI
 
 blueprint = Blueprint('contact', __name__, url_prefix='/contacts')
 
@@ -17,7 +17,7 @@ def list(page=1):
     '''
     Show a paginated list of contacts.
     '''
-    if not GroupPermissionAPI.can_read('contact'):
+    if not ModuleAPI.can_read('contact'):
         return abort(403)
 
     contacts = Contact.query.paginate(page, 15, False)
@@ -30,7 +30,7 @@ def edit(contact_id=None):
     '''
     Create or edit a contact, frontend.
     '''
-    if not GroupPermissionAPI.can_read('contact'):
+    if not ModuleAPI.can_read('contact'):
         return abort(403)
 
     if contact_id:
@@ -53,7 +53,7 @@ def update(contact_id=None):
     '''
     Create or edit a contact, backend.
     '''
-    if not GroupPermissionAPI.can_write('contact'):
+    if not ModuleAPI.can_write('contact'):
         return abort(403)
 
     if contact_id:
@@ -83,7 +83,7 @@ def delete(contact_id):
     '''
     Delete a contact.
     '''
-    if not GroupPermissionAPI.can_write('contact'):
+    if not ModuleAPI.can_write('contact'):
         return abort(403)
 
     contact = Contact.query.get(contact_id)

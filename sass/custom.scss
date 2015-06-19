@@ -61,10 +61,18 @@ label.checkbox {
 }
 
 /* Page design */
-.page-header {
-    margin: 10px 0 20px;
-    border: 0px;
+/* Filter groups in edit page */
+.panel-heading div {
+    margin-top: -18px;
+    font-size: 15px;
 }
+.panel-heading div span{
+    margin-left:5px;
+}
+.panel-body{
+    /*display: none;*/
+}
+/* End filter groups in edit page */
 
 p.report-bug{
     position: absolute;
@@ -146,7 +154,35 @@ p.report-bug{
     border-radius: 3px;
 }
 
-
+#carousel div {
+    text-align: center;
+    width: 200px;
+    height: 165px;
+    padding: 0 20px;
+    float: left;
+    position: relative;
+}
+#carousel div img {
+    border: none;
+    width: 100%;
+    height: auto;
+}
+#carousel div span {
+    display: none;
+}
+#carousel div:hover span,
+#carousel div.hover span {
+    background-color: #333;
+    color: #fff;
+    display: inline-block;
+    width: 100px;
+    padding: 2px 0;
+    margin: 0 0 0 -50px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    border-radius: 3px;
+}
 
 /* Activity-block (activities) */
 
@@ -1159,6 +1195,7 @@ p{line-height: 25px;}
     position: fixed;
     bottom: 0;
     right: 0px;
+    z-index: 1000;
 }
 
 .fa-plus:before{
@@ -1167,4 +1204,14 @@ p{line-height: 25px;}
 
 .fa-check-square-o:before {
     margin-left: 2px;
+}
+
+.coordinator_vacant {
+    font-size: 20pt;
+    font-weight: bold;
+}
+
+.inline-field {
+    width: auto;
+    display: inline;
 }

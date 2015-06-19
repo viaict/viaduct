@@ -75,15 +75,8 @@ class EditUserForm(Form):
             InputRequired(message='Geen e-mailadres opgegeven'),
             Email(message='Ongeldig e-mailadres opgegeven')]
     )
-    password = PasswordField(
-        'Wachtwoord', validators=[
-            Length(message='Minumum wachtwoord length: %d' %
-                   MIN_PASSWORD_LENGTH, min=MIN_PASSWORD_LENGTH)]
-        )
-    repeat_password = PasswordField(
-        'Herhaal wachtwoord', validators=[
-            EqualTo('password', message='Wachtwoorden komen niet overeen')]
-    )
+    password = PasswordField('Wachtwoord')
+    repeat_password = PasswordField('Herhaal wachtwoord')
     first_name = StringField(
         'Voornaam', validators=[
             InputRequired(message='Geen voornaam opgegeven')]

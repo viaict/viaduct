@@ -23,8 +23,8 @@ class CreateForm(Form):
 
 class ActivityForm(Form):
     email = StringField('E-mail address', validators=[InputRequired(),
-                                                       Email()])
-    first_name = StringField('First name', validators=[InputRequired()])
-    last_name = StringField('Last name', validators=[InputRequired()])
+                                                      Email()])
+    first_name = StringField('Voornaam', validators=[InputRequired()])
+    last_name = StringField('Achternaam', validators=[InputRequired()])
     student_id = StringField('Student ID', validators=[InputRequired()])
-    education_id = SelectField('Education', coerce=int)
+    education_id = SelectField('Opleiding', coerce=int)

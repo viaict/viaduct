@@ -6,7 +6,7 @@ from viaduct.helpers import flash_form_errors
 from viaduct.models.navigation import NavigationEntry
 from viaduct.forms import NavigationEntryForm
 from viaduct.api.navigation import NavigationAPI
-from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.module import ModuleAPI
 from viaduct.api.page import PageAPI
 from viaduct.models.page import Page
 
@@ -18,7 +18,7 @@ blueprint = Blueprint('navigation', __name__, url_prefix='/navigation')
 
 @blueprint.route('/edit/')
 def edit_back():
-    if not GroupPermissionAPI.can_read('navigation'):
+    if not ModuleAPI.can_read('navigation'):
         return abort(403)
 
     return redirect(url_for('navigation.view'))
@@ -26,7 +26,7 @@ def edit_back():
 
 @blueprint.route('/')
 def view():
-    if not GroupPermissionAPI.can_read('navigation'):
+    if not ModuleAPI.can_read('navigation'):
         return abort(403)
 
     entries = NavigationAPI.get_entries()
@@ -38,7 +38,7 @@ def view():
 @blueprint.route('/create/<int:parent_id>/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<int:entry_id>/', methods=['GET', 'POST'])
 def edit(entry_id=None, parent_id=None):
-    if not GroupPermissionAPI.can_read('navigation'):
+    if not ModuleAPI.can_read('navigation'):
         return abort(403)
 
     if entry_id:
@@ -136,10 +136,10 @@ def edit(entry_id=None, parent_id=None):
 @blueprint.route('/delete/<int:entry_id>/', methods=['GET'])
 @blueprint.route('/delete/<int:entry_id>/<int:inc_page>', methods=['GET'])
 def delete(entry_id, inc_page=0):
-    if not GroupPermissionAPI.can_write('navigation'):
+    if not ModuleAPI.can_write('navigation'):
         return abort(403)
 
-    if inc_page and not GroupPermissionAPI.can_write('page'):
+    if inc_page and not ModuleAPI.can_write('page'):
         return abort(403)
 
     entry = db.session.query(NavigationEntry).filter_by(id=entry_id).first()
@@ -173,7 +173,7 @@ def delete(entry_id, inc_page=0):
 
 @blueprint.route('/navigation/reorder', methods=['POST'])
 def reorder():
-    if not GroupPermissionAPI.can_write('navigation'):
+    if not ModuleAPI.can_write('navigation'):
         return abort(403)
 
     entries = json.loads(request.form['entries'])

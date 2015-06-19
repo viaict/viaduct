@@ -47,6 +47,8 @@ MOLLIE_KEY = ''
 MOLLIE_REDIRECT_URL = ''
 MOLLIE_TEST_MODE = True
 
+MIN_PASSWORD_LENGTH = 0
+
 LANGUAGES = {
     'en': 'English',
     'nl': 'Nederlands'

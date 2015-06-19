@@ -1,7 +1,7 @@
 import os
 from flask import Blueprint
 from flask import abort, flash, session, redirect, render_template, request, \
-    url_for
+    url_for, jsonify
 from flask.ext.login import login_required
 from flask.ext.babel import _
 
@@ -12,12 +12,14 @@ from viaduct import application, db
 from viaduct.forms import CourseForm
 from viaduct.helpers import flash_form_errors
 from viaduct.forms import EducationForm
+from viaduct.utilities import serialize_sqla
 
 from viaduct.models.examination import Examination
 from viaduct.models.course import Course
 from viaduct.models.education import Education
+from viaduct.models.degree import Degree
 
-from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.module import ModuleAPI
 
 from werkzeug import secure_filename
 
@@ -87,12 +89,13 @@ def upload_file_real(file, old_path='1'):
 
 @blueprint.route('/examination/add/', methods=['GET', 'POST'])
 def upload_file():
-    if not GroupPermissionAPI.can_write('examination'):
+    if not ModuleAPI.can_write('examination'):
         session['prev'] = 'examination.upload_file'
         return abort(403)
 
     courses = Course.query.order_by(Course.name).all()
     educations = Education.query.order_by(Education.name).all()
+    degrees = Degree.query.order_by(Degree.name).all()
 
     if request.method == 'POST':
         file = request.files.get('file', None)
@@ -126,9 +129,9 @@ def upload_file():
             error = True
 
         if error:
-            return render_template(
-                'examination/upload.htm', courses=courses,
-                educations=educations, title=_('Examinations'))
+            return render_template('examination/upload.htm', courses=courses,
+                                   educations=educations, message='',
+                                   title=_('Examinations'), degrees=degrees)
 
         exam = Examination(filename, title, course_id, education_id,
                            answers=answer_path)
@@ -137,19 +140,20 @@ def upload_file():
 
         flash(_('Examination successfully uploaded.'), 'success')
 
-        return render_template(
-            'examination/upload.htm', courses=courses,
-            educations=educations, title=_('Examinations'))
+        return render_template('examination/upload.htm', courses=courses,
+                               educations=educations, message='',
+                               title=_('Examinations'), degrees=degrees)
 
     return render_template('examination/upload.htm', courses=courses,
-                           educations=educations, title=_('Examinations'))
+                           educations=educations, title=_('Examinations'),
+                           degrees=degrees)
 
 
 @blueprint.route('/examination/', methods=['GET', 'POST'])
 @blueprint.route('/examination/<int:page_nr>/', methods=['GET', 'POST'])
 @login_required
 def view_examination(page_nr=1):
-    if not GroupPermissionAPI.can_read('examination', False):
+    if not ModuleAPI.can_read('examination', False):
         session['prev'] = 'examination.view_examination'
         return abort(403)
 
@@ -197,7 +201,7 @@ def view_examination(page_nr=1):
 @blueprint.route('/examination/admin/', methods=['GET', 'POST'])
 @blueprint.route('/examination/admin/<int:page_nr>/', methods=['GET', 'POST'])
 def examination_admin(page_nr=1):
-    if not GroupPermissionAPI.can_write('examination', False):
+    if not ModuleAPI.can_write('examination', False):
         session['prev'] = 'examination.examination_admin'
         return abort(403)
 
@@ -249,7 +253,7 @@ def examination_admin(page_nr=1):
 @blueprint.route('/examination/edit/<int:exam_id>/', methods=['GET', 'POST'])
 @login_required
 def edit(exam_id):
-    if not GroupPermissionAPI.can_write('examination', True):
+    if not ModuleAPI.can_write('examination', True):
         session['prev'] = 'examination.edit_examination'
         return abort(403)
 
@@ -305,7 +309,7 @@ def edit(exam_id):
 
 @blueprint.route('/course/add/', methods=['GET', 'POST'])
 def add_course():
-    if not GroupPermissionAPI.can_write('examination'):
+    if not ModuleAPI.can_write('examination'):
         session['prev'] = 'examination.add_course'
         return abort(403)
 
@@ -336,7 +340,7 @@ def add_course():
 
 @blueprint.route('/education/add/', methods=['GET', 'POST'])
 def add_education():
-    if not GroupPermissionAPI.can_write('examination'):
+    if not ModuleAPI.can_write('examination'):
         session['prev'] = 'examination.add_education'
         return abort(403)
 
@@ -361,5 +365,48 @@ def add_education():
         else:
             flash_form_errors(form)
 
-    return render_template(
-        'examination/education.htm', title=_('Examinations'), form=form)
+    return render_template('examination/education.htm',
+                           title=_('Examinations'),
+                           form=form)
+
+
+@blueprint.route('/examination/api/course/', methods=['POST'])
+def examination_api_course_add():
+    if not ModuleAPI.can_write('examination'):
+        return abort(403)
+
+    course_name = request.form.get('course_name', '')
+
+    if course_name == '':
+        return jsonify(error='Geen vaknaam opgegeven'), 500
+
+    course = Course(course_name, '')
+    db.session.add(course)
+    db.session.commit()
+
+    courses = Course.query.order_by(Course.name).all()
+
+    return jsonify(course_id=course.id, courses=serialize_sqla(courses))
+
+
+@blueprint.route('/examination/api/education/', methods=['POST'])
+def examination_api_education_add():
+    if not ModuleAPI.can_write('examination'):
+        return abort(403)
+
+    education_name = request.form.get('education_name', '')
+    degree_id = request.form.get('degree_id', '')
+
+    if education_name == '':
+        return jsonify(error='Geen opleidingnaam opgegeven'), 500
+    if degree_id == '':
+        return jsonify(error='Geen opleidinggraad opgegeven'), 500
+
+    education = Education(degree_id, education_name)
+    db.session.add(education)
+    db.session.commit()
+
+    educations = Education.query.order_by(Education.name).all()
+
+    return jsonify(education_id=education.id,
+                   educations=serialize_sqla(educations))

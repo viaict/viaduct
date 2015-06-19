@@ -2,6 +2,10 @@
 
 {% extends "base.htm" %}
 
+{% block includes %}
+<script src="{{ static_url('/static/js/examination/create_course.js') }}"></script>
+{% endblock %}
+
 {% block page %}
     <fieldset>
         <legend>{{_('New examination')}}</legend>
@@ -16,7 +20,7 @@
 
             <div class='form-group'>
                 {{_('Course')}}
-                <select name='course' class='form-control'>
+                <select name='course' class='form-control courses'>
                     {% for course in courses %}
                         <option value='{{ course.id }}'>{{ course.name }}</option>
                     {% endfor %}
@@ -24,15 +28,14 @@
             </div>
 
             <div class='form-group'>
-                <a href="{{ url_for('examination.add_course') }}" class="btn btn-default">
-                    <i class="glyphicon glyphicon-pencil"></i>
-                    <strong> {{_('New')}}</strong>
-                </a>
+                <strong>{{_('New course')}}</strong>
+                <input class='new-course-name inline-field form-control' type='text' />
+                <button class='new-course-btn btn btn-default' data-loading-text='BITTE WARTEN!'>Toevoegen</button>
             </div>
 
             <div class='form-group'>
-                {{_('Education')}}
-                <select name='education' class='form-control'>
+                Studie
+                <select name='education' class='form-control educations'>
                     {% for education in educations %}
                         <option value="{{ education.id }}">{{ education.name }}</option>
                     {% endfor %}
@@ -40,10 +43,14 @@
             </div>
 
             <div class='form-group'>
-                <a href="{{ url_for('examination.add_education') }}" class="btn btn-default">
-                    <i class="glyphicon glyphicon-pencil"></i>
-                    <strong>{{_('New')}}</strong>
-                </a>
+                <strong>{{_('New education') }}</strong>
+                <input class='new-education-name inline-field form-control' type='text' />
+                <select class='new-education-degree inline-field form-control'>
+                    {% for degree in degrees %}
+                        <option value='{{ degree.id }}'>{{ degree.name }}</option>
+                    {% endfor %}
+                </select>
+                <button class='new-education-btn btn btn-default' data-loading-text='BITTE WARTEN!'>Toevoegen</button>
             </div>
 
             <div class='form-group'>
