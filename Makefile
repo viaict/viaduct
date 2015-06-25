@@ -5,20 +5,20 @@ pybabel=venv/bin/pybabel
 
 
 # Compile the translations .po files to .mo files usable by flask.
-.PHONY: compile
-babel_compile: update
+.PHONY: babel_compile
+babel_compile: babel_update
 	python ${pybabel} compile -d ${i18n}
 
 
 # Merge the new messages.pot with the existing translations.
-.PHONY: update
-babel_update: extract
+.PHONY: babel_update
+babel_update: babel_extract
 	python ${pybabel} update -i ${messages} -d ${i18n}
 	make clean
 
 
 # Extract all the marked strings from the repository.
-.PHONY: extract
+.PHONY: babel_extract
 babel_extract:
 	python ${pybabel} extract -F ${cfg} --sort-output -k lazy_gettext -o ${messages} .
 
