@@ -26,8 +26,8 @@ babel_extract:
 # DO NOT USE ON EXISTING BABEL INSTALLATION
 # .PHONY: init
 # init: extract
-	# python ${pybabel} init -i messages.pot -d translations -l en
-	# python ${pybabel} init -i messages.pot -d translations -l nl
+	# python ${pybabel} init -i ${messages} -d ${i18n} -l en
+	# python ${pybabel} init -i ${messages} -d ${i18n} -l nl
 	# make clean
 
 
