@@ -59,9 +59,18 @@ class CreateForm(Form):
 
 
 class ActivityForm(Form):
-    email = StringField('E-mail address', validators=[InputRequired(),
-                                                      Email()])
-    first_name = StringField('Voornaam', validators=[InputRequired()])
-    last_name = StringField('Achternaam', validators=[InputRequired()])
-    student_id = StringField('Student ID', validators=[InputRequired()])
-    education_id = SelectField('Opleiding', coerce=int)
+    email = StringField(
+        _('E-mail address'), validators=[
+            InputRequired(_('E-mail address') + " " + _('required')),
+            Email(_('Invalid e-mail address'))])
+    first_name = StringField(
+        _('First name'), validators=[
+            InputRequired(_('First name') + " " + _('required'))])
+    last_name = StringField(
+        _('Last name'), validators=[
+            InputRequired(_('Last name') + " " + _('required'))])
+    student_id = StringField(
+        _('Student ID'), validators=[
+            InputRequired(_('Student ID') + " " + _('required'))])
+    education_id = SelectField(
+        _('Education'), coerce=int)
