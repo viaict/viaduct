@@ -1,14 +1,15 @@
 import os
 import datetime
-import dateutil.parser
 
 # this is now uncommented for breaking activity for some reason
 # please some one check out what is happening
 import viaduct.api.calendar.google as google
 
-from flask import flash, redirect, render_template, request, url_for, abort, jsonify
+from flask import flash, redirect, render_template, request, url_for, abort,\
+    jsonify
 from flask import Blueprint
 from flask.ext.login import current_user
+from flask.ext.babel import _  # gettext
 
 from werkzeug import secure_filename
 
@@ -35,26 +36,26 @@ def allowed_file(filename):
 # Overview of activities
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<string:archive>/', methods=['GET', 'POST'])
-@blueprint.route('/page/<int:page>/', methods=['GET', 'POST'])
-@blueprint.route('/<string:archive>/page/<int:page>/', methods=['GET', 'POST'])
-def view(archive="", page=1):
+@blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
+@blueprint.route('/<string:archive>/<int:page_nr>/', methods=['GET', 'POST'])
+def view(archive=None, page_nr=1):
     if not ModuleAPI.can_read('activity'):
         return abort(403)
 
     if archive == "archive":
-        activities = Activity.query \
-            .filter(Activity.end_time < datetime.datetime.today()) \
-            .order_by(Activity.start_time.desc())
-        title = "activiteiten archief - pagina " + str(page)
+        activities = Activity.query.filter(
+            Activity.end_time < datetime.datetime.today()).order_by(
+                Activity.start_time.desc())
+        title = _('Activity archive') + " - " + _('page') + " " + str(page_nr)
     else:
-        activities = Activity.query \
-            .filter(Activity.end_time >
-                    (datetime.datetime.now() - datetime.timedelta(hours=12))) \
+        activities = Activity.query.filter(
+            Activity.end_time > (
+                datetime.datetime.now() - datetime.timedelta(hours=12))) \
             .order_by(Activity.start_time.asc())
-        title = "activiteiten - page " + str(page)
+        title = _('Activities') + ' - ' + _('page') + ' ' + str(page_nr)
 
     return render_template('activity/view.htm',
-                           activities=activities.paginate(page, 10, False),
+                           activities=activities.paginate(page_nr, 10, False),
                            archive=archive, title=title)
 
 
@@ -76,7 +77,7 @@ def remove_activity(activity_id=0):
     return redirect(url_for('activity.view'))
 
 
-@blueprint.route('/<int:activity_id>/', methods=['GET', 'POST'])
+@blueprint.route('/view/<int:activity_id>/', methods=['GET', 'POST'])
 def get_activity(activity_id=0):
     if not ModuleAPI.can_read('activity'):
         return abort(403)
@@ -90,8 +91,7 @@ def get_activity(activity_id=0):
 
     # Add education for activity form
     educations = Education.query.all()
-    form.education_id.choices = \
-        [(e.id, e.name) for e in educations]
+    form.education_id.choices = [(e.id, e.name) for e in educations]
 
     # Check if there is a custom_form for this activity
     if activity.form_id:
@@ -119,20 +119,21 @@ def get_activity(activity_id=0):
                         activity.form.id = form_result.id
 
                 if form_result.has_payed:
-                    activity.info = "Je hebt je al ingeschreven en betaald!"\
-                        " je kunt wel je inschrijving aanpassen door opniew "\
-                        "het formulier in te vullen en te verzenden."
+                    activity.info = _("Your registration has been completed")\
+                        + _("You can edit your registration by resubmitting"
+                            "the form.")
                 else:
-                    activity.info = "Je hebt je al ingeschreven! Je moet nog "\
-                        "wel betalen!"
+                    activity.info = _("You have successfully registered"
+                                      ", payment is still required!")
             else:
                 if activity.num_attendants >= activity.form.max_attendants:
-                    activity.info = "De activiteit zit vol qua "\
-                        "inschrijvingen, als je je nu inschrijft kom je op "\
-                        "de reserve lijst!"
+                    activity.info = _("The activity has reached its maximum "
+                                      "number of registrations. You have been "
+                                      "placed on the reserves list.")
                 else:
-                    activity.info = "Er zijn op het moment %s "\
-                        "inschrijvingen" % activity.num_attendants
+                    activity.info = _("The number of registrations at this "
+                                      "moment is") + ": " +\
+                        str(activity.num_attendants)
 
     return render_template('activity/view_single.htm', activity=activity,
                            form=form, login_form=get_login_form(),
@@ -151,8 +152,11 @@ def create(activity_id=None):
 
         if not activity:
             abort(404)
+
+        title = _("Edit") + " " + str(activity.name)
     else:
         activity = Activity()
+        title = _('Create activity')
 
     form = CreateForm(request.form, activity)
 
@@ -161,77 +165,62 @@ def create(activity_id=None):
         [(c.id, c.name) for c in CustomForm.query.order_by('name')]
 
     # Set default to "No form"
-    form.form_id.choices.insert(0, (0, 'Geen formulier'))
+    form.form_id.choices.insert(0, (0, _('No form')))
 
     if request.method == 'POST':
-        valid_form = True
+        if form.validate_on_submit():
 
-        owner_id = current_user.id
+            form.populate_obj(activity)
 
-        name = form.name.data
-        description = form.description.data
+            file = request.files['picture']
 
-        start_date = form.start_date.data
-        end_date = form.end_date.data
+            if file and allowed_file(file.filename):
+                picture = secure_filename(file.filename)
+                file.save(os.path.join('viaduct/static/activity_pictures',
+                                       picture))
 
-        start = dateutil.parser.parse(start_date, dayfirst=True)
-        end = dateutil.parser.parse(end_date, dayfirst=True)
+                # Remove old picture
+                if activity.picture:
+                    try:
+                        os.remove(os.path.join(
+                            'viaduct/static/activity_pictures',
+                            activity.picture))
+                    except OSError:
+                        print(_('Cannot delete image, image does not exist') +
+                              ": " + str(activity.picture))
 
-        location = form.location.data
-        price = form.price.data
+            elif activity.picture:
+                picture = activity.picture
+            else:
+                picture = None
 
-        file = request.files['picture']
+            venue = 1  # Facebook ID location, not used yet  # noqa
 
-        if file and allowed_file(file.filename):
-            picture = secure_filename(file.filename)
-            file.save(os.path.join('viaduct/static/activity_pictures',
-                                   picture))
+            # Set a custom_form if it actually exists
+            if form.form_id and form.form_id.data > 0:
+                activity.form_id = form.form_id.data
+            else:
+                activity.form_id = None
 
-            # Remove old picture
-            if activity.picture:
-                try:
-                    os.remove(os.path.join('viaduct/static/activity_pictures',
-                                           activity.picture))
-                except OSError:
-                    print(('Trying to remove %s, but it does not exist.' %
-                          (activity.picture)))
-
-        elif activity.picture:
-            picture = activity.picture
-        else:
-            picture = None
-
-        venue = 1  # Facebook ID location, not used yet  # noqa
-
-        # Set a custom_form if it actually exists
-        if form.form_id and form.form_id.data > 0:
-            activity.form_id = form.form_id.data
-        else:
-            activity.form_id = None
-
-        if valid_form:
-            activity.name = name
-            activity.description = description
-            activity.start_time = start
-            activity.end_time = end
-            activity.location = location
-            activity.price = price
             activity.picture = picture
-            activity.owner_id = owner_id
+            activity.owner_id = current_user.id
 
             if activity.id and activity.google_event_id:
-                flash('De activiteit is aangepast', 'success')
+                flash(_('The activity has been edited.'), 'success')
 
-                google.update_activity(activity.google_event_id, name,
-                                       description, location,
-                                       start.isoformat(), end.isoformat())
+                google.update_activity(activity.google_event_id,
+                                       form.nl_name.data,
+                                       form.nl_description.data,
+                                       form.location.data,
+                                       form.start_time.data.isoformat(),
+                                       form.end_time.data.isoformat())
             else:
-                flash('De activiteit is aangemaakt', 'success')
+                flash(_('The activity has been created.'), 'success')
 
-                google_activity = google.insert_activity(name, description,
-                                                         location,
-                                                         start.isoformat(),
-                                                         end.isoformat())
+                google_activity = google.insert_activity(
+                    form.nl_name.data, form.nl_description.data,
+                    form.location.data, form.start_time.data.isoformat(),
+                    form.end_time.data.isoformat())
 
                 if google_activity:
                     activity.google_event_id = google_activity['id']
@@ -241,13 +230,12 @@ def create(activity_id=None):
 
             return redirect(url_for('activity.get_activity',
                                     activity_id=activity.id))
-    else:
-        flash_form_errors(form)
-
-    title = "edit " + str(activity.name)
+        else:
+            flash_form_errors(form)
 
     return render_template('activity/create.htm', activity=activity, form=form,
                            title=title)
+
 
 @blueprint.route('/transaction/<int:result_id>/', methods=['GET', 'POST'])
 def create_mollie_transaction(result_id):
@@ -269,7 +257,8 @@ def create_mollie_transaction(result_id):
         else:
             return render_template('mollie/success.htm', message=transaction)
     else:
-        payment_url, message = MollieAPI.get_payment_url(mollie_id=transaction.mollie_id)
+        payment_url, message = MollieAPI.get_payment_url(
+            mollie_id=transaction.mollie_id)
         if payment_url:
             return redirect(payment_url)
         else:
@@ -280,6 +269,8 @@ def create_mollie_transaction(result_id):
 
 @blueprint.route('/export/', methods=['GET'])
 def export_activities():
-    activities = Activity.query.filter(Activity.end_time > (datetime.datetime.now() - datetime.timedelta(hours=12))).order_by(Activity.start_time.asc()).all()
+    activities = Activity.query.filter(
+        Activity.end_time >
+        (datetime.datetime.now() - datetime.timedelta(hours=12))
+    ).order_by(Activity.start_time.asc()).all()
     return jsonify(data=serialize_sqla(activities))
-    # return 'hello'
