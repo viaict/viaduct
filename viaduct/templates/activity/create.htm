@@ -1,74 +1,83 @@
-{% from "macros/form.htm" import render_field, render_select %}
+{% from "macros/form.htm" import render_field, render_select, render_datetimefield_picker %}
 
 {% extends "content.htm" %}
-
-{% block includes %}
-    <script src={{static_url("/static/js/form.date.helper.js")}}></script>
-{% endblock %}
-
 {% block content %}
 
-{% if activity.id: %}
-<form method="post" class="pull-right" action="{{ url_for('activity.remove_activity', activity_id=activity.id) }}">
-<button class="confirmation btn btn-danger btn-xs" type="submit"> {{ _("Delete activity") }}</button>
-</form>
-{% endif %}
+    {% if activity.id: %}
+        <form method="post" class="pull-right"
+            action="{{ url_for('activity.remove_activity', activity_id=activity.id) }}">
+            <button class="confirmation btn btn-danger btn-xs" type="submit">
+                {{ _("Delete activity") }}
+            </button>
+        </form>
+    {% endif %}
 
+    <h1>{{_('Activity')}}</h1>
 
-<h1>Activiteit</h1>
+    <form method="post" enctype="multipart/form-data">
 
-<form method="post" enctype="multipart/form-data">
-    {{ form.csrf_token }}
+        <div class='row'>
+            <div class='col-md-12'>
+                {{ form.csrf_token }}
+                {{ render_select(form.form_id) }}
 
-    {{ render_select(form.form_id) }}
-    <small>{{ _("You have to reload the page for the result") }}</small>
+                <a class="show-window btn btn-xs btn-success" target="_blank"
+                    href="{{ url_for('custom_form.create')}}">
+                    {{ _("Create form") }}
+                </a>
+                <small>
+                    {{ _("You have to reload the page for the result") }}
+                </small>
 
-    <a class="show-window btn btn-success" target="_blank" href="http://{{ request.host }}/forms/create/">
-      {{ _("Create form") }}
-    </a>
-
-        {{ render_field(form.name) }}
-        {{ render_field(form.description) }}
-
-        <div class="control-group">
-            <div class="controls">
-                <div class="alert alert-info">
-                    <b>Tip</b>
-                    Selecteer een datum en tijd door op de klok te klikken
-                </div>
             </div>
         </div>
 
-        <div class="control-group">
-            <label class="control-label">
-                Start datum + tijd
-            </label>
+        <br/>
 
-            <div class="controls form-inline">
-                <div id="datetime_start" class="input-append date">
-                    <div class="controls form-inline">
-                        <input data-format="yyyy-MM-dd hh:mm" class="form-control" name='start_date' id='start_date' type="text" value="{{ activity.format_form_time(form.start_time.data) }}"></input>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel with-nav-tabs panel-default">
+                    <div class="panel-heading">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#lang_dutch">
+                                    {{_('Dutch details') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#lang_english">
+                                    {{ _('English details') }}
+                                </a>
+                            </li>
+                        </ul>
                     </div>
-                    <span class="add-on" id="datetime_start_picker">
-                        <i data-time-icon="glyphicon glyphicon-time" style="opacity:0;" data-date-icon="glyphicon glyphicon-calendar"></i>
-                    </span>
+                    <div class="panel-body">
+                        <div class="tab-content">
+                            <div id="lang_dutch" class="tab-pane fade in active">
+                                {{ render_field(form.nl_name) }}
+                                {{ render_field(form.nl_description) }}
+                            </div>
+                            <div id="lang_english" class="tab-pane fade">
+                                {{ render_field(form.en_name) }}
+                                {{ render_field(form.en_description) }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="control-group">
-            <label class="control-label">
-                Eind datum + tijd
-            </label>
+        <div class="alert alert-info">
+            <b>{{_('Tip')}}</b>
+            {{_('Select a time and date by clicking on the clock')}}
+        </div>
 
-            <div class="controls form-inline">
-                <div id="datetime_end" class="input-append date" >
-                    <input data-format="yyyy-MM-dd hh:mm" class="form-control" type="text" name='end_date' id='end_date' value="{{ activity.format_form_time(form.end_time.data) }}"></input>
-                    <span class="add-on">
-                        <i data-time-icon="glyphicon glyphicon-time" style="opacity:0" id="datetime_end_picker" data-date-icon="glyphicon glyphicon-calendar">
-                        </i>
-                    </span>
-                </div>
+        <div class='row'>
+            <div class='col-md-6'>
+                {{ render_datetimefield_picker(form.start_time) }}
+            </div>
+            <div class='col-md-6'>
+                {{ render_datetimefield_picker(form.end_time) }}
             </div>
         </div>
 
@@ -76,42 +85,18 @@
         {{ render_field(form.price) }}
 
         {% if form.data.picture %}
-            <p>Huidig plaatje:<br>
-            <img src="/static/activity_pictures/{{ form.data.picture }}" style="height:200px;width:auto;">
+            <p>{{_('Current image')}}:<br>
+                <img src="/static/activity_pictures/{{ form.data.picture }}"
+                style="height:200px;width:auto;"/>
+            </p>
         {% endif %}
 
         {{ render_field(form.picture) }}
 
-    <div class="control-group">
-        <div class="controls">
-            <button type="submit" class="btn btn-primary">Opslaan</button>
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn btn-primary">{{_('Save')}}</button>
+            </div>
         </div>
-    </div>
-</form>
-
-<script>
-$(function() {
-    $('#datetime_start').datetimepicker({
-        language: 'en',
-    });
-});
-
-$(function() {
-    $('#datetime_end').datetimepicker({
-        language: 'en',
-    });
-});
-
-/* Ugly hack to open the datetime picker */
-$(document).on("click", "#start_date" , function(e){
-    $("#datetime_start_picker").click();
-});
-
-/* Ugly hack to open the datetime picker */
-$(document).on("click", "#end_date" , function(e){
-    $("#datetime_end_picker").click();
-});
-
-</script>
-
+    </form>
 {% endblock %}
