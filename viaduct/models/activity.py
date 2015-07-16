@@ -46,6 +46,9 @@ class Activity(db.Model, BaseEntity):
 
         self.owner_id = owner_id
 
+        # Name and description is set to None during initialisation of the
+        # object, when the data is loading through SQLAlchemy, the name and
+        # description are set. For more info see set_activity_locale().
         self.name = None
         self.nl_name = nl_name
         self.en_name = en_name
@@ -97,6 +100,9 @@ class Activity(db.Model, BaseEntity):
         return datetime.now() >= self.end_time
 
     def get_short_description(self, characters):
+        """
+        Get a description cut a number of characters, with suffixed dots.
+        """
         if (len(self.description) > characters):
             short_description = self.description[:characters].strip()
             words = short_description.split(' ')[:-1]
@@ -149,7 +155,9 @@ def set_activity_locale(activity, context):
     the database, but before is used in all other code.
 
     Use the locale of the current user/client to determine which language to
-    display on the whole website.
+    display on the whole website. If the users locale is unavailable, select
+    the alternative language, suffixing the title of the activity with the
+    displayed language.
     """
     locale = get_locale()
     nl_available = activity.nl_name and activity.nl_description
