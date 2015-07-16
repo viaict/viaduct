@@ -28,7 +28,7 @@ blueprint = Blueprint('activity', __name__, url_prefix='/activities')
 
 
 def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1] in \
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in \
         set(['png', 'jpg', 'gif', 'jpeg'])
 
 
