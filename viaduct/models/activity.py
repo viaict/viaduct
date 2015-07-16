@@ -72,15 +72,20 @@ class Activity(db.Model, BaseEntity):
         if self.start_time.month == self.end_time.month and \
                 self.start_time.day == self.end_time.day:
             if self.start_time.year == today.year:
-                return self.start_time.strftime("%A %d %b, %H:%M - ") + \
-                    self.end_time.strftime("%H:%M")
+                return format_datetime(self.start_time, 'EEEE d MMM, H:mm - ',
+                                       locale=get_locale()).capitalize() + \
+                    format_datetime(self.end_time, 'H:mm', locale=get_locale())
             else:
-                return self.start_time.strftime("%A %d %b %Y, %H:%M - ") + \
-                    self.end_time.strftime("%H:%M")
+                return format_datetime(self.start_time,
+                                       'EEEE d MMM YYYY, H:mm - ',
+                                       locale=get_locale()).capitalize() + \
+                    format_datetime(self.end_time, 'H:mm', locale=get_locale())
         else:
             if self.start_time.year == today.year:
-                return self.start_time.strftime("%a. %d %b (%H:%M) - ") + \
-                    self.end_time.strftime("%a. %d %b (%H:%M)")
+                return format_datetime(self.start_time, 'EEE d MMM (H:mm) - ',
+                                       locale=get_locale()).capitalize() + \
+                    format_datetime(self.end_time, 'EEE d MMM (H:mm)',
+                                    locale=get_locale()).capitalize()
             else:
                 return self.start_time.strftime("%a. %d %b %Y (%H:%M) - ") + \
                     self.end_time.strftime("%a. %d %b %Y (%H:%M)")
