@@ -1,22 +1,24 @@
-{% from 'macros/form.htm' import render_field, render_datefield_picker, render_checkbox, render_submit %}
+{% from 'macros/form.htm' import render_field, render_datefield_picker, render_submit %}
 
 {% extends 'content.htm' %}
-
 {% block content %}
+    <h1>
+        {% if news_id %}
+            {{ _('Edit') }}
+        {% else %}
+            {{ _('Create')}}
+        {% endif %}
+        {{_('newsitem')}}
+    </h1>
 
-<h1>
-    {% if news_id %}{{ _('Edit') }}{% else %}{{ _('Create')}}{%endif%} {{_('newsitem')}}</h1>
-
-<form method='post'>
-    <fieldset>
-        {{ form.csrf_token }}
-
-        {{ render_field(form.title) }}
-        {{ render_field(form.content) }}
-        {{ render_datefield_picker(form.end_time) }}
-
-        {{ render_submit(_('Save')) }}
-    </fieldset>
-</form>
-
+    <form method='post'>
+        <fieldset>
+            {{ form.csrf_token }}
+            {{ render_field(form.title) }}
+            {{ render_field(form.content) }}
+            {{ render_datefield_picker(form.publish_date) }}
+            {{ render_datefield_picker(form.archive_date) }}
+            {{ render_submit(_('Save')) }}
+        </fieldset>
+    </form>
 {% endblock %}
