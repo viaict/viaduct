@@ -22,10 +22,12 @@
             <div class='col-md-6'>
                 Geschreven door: <em>{{ news.user.name }}</em>
             </div>
-            <div class='col-md-6 text-right'>
-                {% if (news.modified - news.created) >= datetime.timedelta(0, 1) %}
+            {% if (news.modified - news.created) >= datetime.timedelta(0, 1) %}
+                <div class='col-md-6'>
                     Laatst bewerkt op: <em>{{ news.created.strftime('%Y-%m-%d') }}</em> om <em>{{ news.created.strftime('%H:%M') }}</em><br />
-                {% endif %}
+                </div>
+            {% endif %}
+            <div class='col-md-6'>
                 Gepubliceerd op: <em>{{ news.created.strftime('%Y-%m-%d') }}</em> om <em>{{ news.created.strftime('%H:%M') }}</em>
             </div>
         </div>
