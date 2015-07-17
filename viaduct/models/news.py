@@ -1,3 +1,4 @@
+from datetime import date
 from viaduct import db
 from viaduct.models import BaseEntity
 
@@ -11,14 +12,17 @@ class News(db.Model, BaseEntity):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User', backref=db.backref('news', lazy='dynamic'))
 
-    end_time = db.Column(db.Date)
+    publish_date = db.Column(db.Date)
+    archive_date = db.Column(db.Date)
 
-    def __init__(self, title='', content='', user_id=None, end_time=None):
+    def __init__(self, title='', content='', user_id=None,
+                 archive_date=None, publish_date=date.today()):
 
         self.title = title
         self.content = content
         self.user_id = user_id
-        self.end_time = end_time
+        self.archive_date = archive_date
+        self.publish_date = publish_date
 
     def get_short_content(self, characters):
         """ Get a shortened version of the total post """
