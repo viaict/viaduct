@@ -84,6 +84,10 @@ def view(news_id=None):
     if not ModuleAPI.can_write('news'):
         return abort(403)
 
+    if not news_id:
+        flash(_('This post does not exist'), 'danger')
+        return redirect(url_for('news.list'))
+
     news = News.query.get(news_id) or abort(404)
 
     return render_template('news/view_single.htm', news=news)
