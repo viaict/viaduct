@@ -3,6 +3,7 @@ from datetime import date
 from flask import Blueprint, abort, render_template, request, flash, redirect,\
     url_for
 from flask.ext.login import current_user
+from flask.ext.babel import _  # gettext
 
 from viaduct import db
 from viaduct.api import ModuleAPI
@@ -59,15 +60,17 @@ def edit(news_id=None):
     if request.method == 'POST':
         if form.validate_on_submit():
 
+            # fill the news_item with the form entries.
             form.populate_obj(news_item)
             news_item.user_id = current_user.id
 
             db.session.add(news_item)
             db.session.commit()
 
-            flash('Nieuwsitem opgeslagen.', 'success')
+            news_id = news_item.id
+            flash(_('News item saved'), 'success')
 
-            return redirect(url_for('news.list'))
+            return redirect(url_for('news.view', news_id=news_id))
 
         else:
             flash_form_errors(form)
