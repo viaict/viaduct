@@ -91,3 +91,23 @@ def view(news_id=None):
     news = News.query.get(news_id) or abort(404)
 
     return render_template('news/view_single.htm', news=news)
+
+
+@blueprint.route('/delete/', methods=['GET'])
+@blueprint.route('/delete/<int:news_id>/', methods=['GET'])
+def delete(news_id=None):
+    if not ModuleAPI.can_write('news'):
+        return abort(403)
+
+    if not news_id:
+        flash(_('This news item does not exist'), 'danger')
+        return redirect(url_for('news.list'))
+
+    news = News.query.get(news_id) or abort(404)
+
+    db.session.delete(news)
+    db.session.commit()
+
+    flash(_('News item succesfully deleted'), 'success')
+
+    return redirect(url_for('news.list'))
