@@ -5,6 +5,8 @@ from flask import Blueprint, abort, render_template, request, flash, redirect,\
 from flask.ext.login import current_user
 from flask.ext.babel import _  # gettext
 
+from sqlalchemy import desc
+
 from viaduct import db
 from viaduct.api import ModuleAPI
 from viaduct.forms import NewsForm
@@ -20,8 +22,11 @@ def list(page_nr=1):
     if not ModuleAPI.can_read('news'):
         return abort(403)
 
-    items = News.query.filter(db.or_(News.end_time >= date.today(),
-                                     News.end_time == None))  # noqa
+    items = News.query.filter(
+        db.and_(
+            db.or_(
+                News.archive_date >= date.today(), News.archive_date == None),
+            News.publish_date >= date.today())).order_by(desc(News.created))  # noqa
 
     return render_template('news/list.htm',
                            items=items.paginate(page_nr, 10, False),
@@ -34,8 +39,8 @@ def archive(page_nr=1):
     if not ModuleAPI.can_read('news'):
         return abort(403)
 
-    items = News.query.filter(db.and_(News.end_time < date.today(),
-                                     News.end_time != None))  # noqa
+    items = News.query.filter(db.and_(News.archive_date < date.today(),
+                                     News.archive_date != None))  # noqa
 
     return render_template('news/list.htm',
                            items=items.paginate(page_nr, 10, False),
@@ -81,11 +86,11 @@ def edit(news_id=None):
 @blueprint.route('/view/', methods=['GET'])
 @blueprint.route('/view/<int:news_id>/', methods=['GET'])
 def view(news_id=None):
-    if not ModuleAPI.can_write('news'):
+    if not ModuleAPI.can_read('news'):
         return abort(403)
 
     if not news_id:
-        flash(_('This post does not exist'), 'danger')
+        flash(_('This news item does not exist'), 'danger')
         return redirect(url_for('news.list'))
 
     news = News.query.get(news_id) or abort(404)
