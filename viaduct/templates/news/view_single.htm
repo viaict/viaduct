@@ -1,30 +1,37 @@
 {% extends 'content.htm' %}
-
 {% block page %}
     <div class='col-md-8 col-md-offset-2 well'>
         <div class='page-header'>
             {% if ModuleAPI.can_write('news') %}
                 <div class='btn-group pull-right'>
-                    <a class='btn btn-warning' href='
+                    <a class='btn btn-warning btn-xs' href='
                         {{ url_for('news.edit', news_id=news.id) }}'>
-                        <i class='glyphicon glyphicon-pencil'></i> Bewerk bericht
+                        <i class='fa fa-edit'></i> {{ _('Edit news item') }}
+                    </a>
+                    <a class='btn btn-danger btn-xs' href='
+                        {{ url_for('news.delete', news_id=news.id) }}'>
+                        <i class='fa fa-remove'></i> {{ _('Delete news item') }}
                     </a>
                 </div>
             {% endif %}
 
             <h1>{{ news.title }}</h1>
         </div>
+
+        <div class='row'>
+            <div class='col-md-6'>
+                Geschreven door: <em>{{ news.user.name }}</em>
+            </div>
+            <div class='col-md-6 text-right'>
+                {% if (news.modified - news.created) >= datetime.timedelta(0, 1) %}
+                    Laatst bewerkt op: <em>{{ news.created.strftime('%Y-%m-%d') }}</em> om <em>{{ news.created.strftime('%H:%M') }}</em><br />
+                {% endif %}
+                Gepubliceerd op: <em>{{ news.created.strftime('%Y-%m-%d') }}</em> om <em>{{ news.created.strftime('%H:%M') }}</em>
+            </div>
+        </div>
+        <hr>
         <div class='row'>
             <div class='col-md-12 content'>{{ news.content | markdown }}</div>
-        </div>
-        <div class='row'>
-            <div class='col-md-6 author'>Geschreven door <em>{{ news.user.name }}</em></div>
-            <div class='col-md-6 last-edited text-right'>
-                {% if (news.modified - news.created) >= datetime.timedelta(0, 1) %}
-                    Laatst bewerkt op <em>{{ news.created.strftime('%Y-%m-%d') }}</em> om <em>{{ news.created.strftime('%H:%M') }}</em><br />
-                {% endif %}
-                Gepubliceerd op <em>{{ news.created.strftime('%Y-%m-%d') }}</em> om <em>{{ news.created.strftime('%H:%M') }}</em>
-            </div>
         </div>
     </div>
 {% endblock %}
