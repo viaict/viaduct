@@ -25,7 +25,7 @@ def home():
                 .order_by(Activity.start_time.asc())
             revision.activity = \
                 render_template('activity/view_simple.htm',
-                                activities=activities .paginate(1, 12, False))
+                                activities=activities.paginate(1, 4, False))
 
             revisions.append(revision)
 
