@@ -1,9 +1,7 @@
 from flask_wtf import Form
-from wtforms import StringField, TextAreaField, DateTimeField, IntegerField, \
+from wtforms import StringField, TextAreaField, IntegerField, \
     SelectField, BooleanField
 from wtforms.validators import InputRequired, Optional
-
-import datetime
 
 from viaduct.models.pimpy import Task
 from viaduct import application
@@ -15,8 +13,6 @@ DATE_FORMAT = application.config['DATE_FORMAT']
 class AddTaskForm(Form):
     name = StringField('Name', validators=[InputRequired()])
     content = TextAreaField('Content', validators=[Optional()])
-    deadline = DateTimeField('Deadline', format=DATE_FORMAT,
-                             default=datetime.date.today())
     # timestamp
     line = IntegerField(
         'Line', default=-1,
@@ -52,8 +48,6 @@ class AddTaskForm(Form):
 class EditTaskForm(Form):
     name = StringField('Name', validators=[InputRequired()])
     content = TextAreaField('Content', validators=[Optional()])
-    deadline = DateTimeField('Deadline',
-                             format=DATE_FORMAT, default=datetime.date.today())
     # timestamp
     line = IntegerField('Line', default=-1,
                         description='Fill in -1 if this is '
@@ -83,8 +77,6 @@ class AddMinuteForm(Form):
     content = TextAreaField('Content', validators=[InputRequired()])
     group = SelectField('Group', validators=[InputRequired()])
     # FIXME: datetime is now printed badly in the actual form!!! :( :(
-    date = DateTimeField('Deadline', format=DATE_FORMAT,
-                         default=datetime.date.today())
     parse_tasks = BooleanField('Parse', default=True)
 
     def load_groups(self, groups, default=-1):

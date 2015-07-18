@@ -78,6 +78,7 @@ def update_task_status():
     return jsonify(status=task.get_status_color())
 
 
+@blueprint.route('/tasks/add/', methods=['GET', 'POST'])
 @blueprint.route('/tasks/add/<string:group_id>', methods=['GET', 'POST'])
 def add_task(group_id='all'):
     if not ModuleAPI.can_write('pimpy'):
@@ -87,8 +88,6 @@ def add_task(group_id='all'):
 
     form = AddTaskForm(request.form, default=group_id)
     if request.method == 'POST':
-        # FIXME: deadline is also messed up, and I do not know why
-
         # FIXME: validate does not seem to work :(, so we are doin' it
         # manually now
         message = ""
@@ -104,7 +103,7 @@ def add_task(group_id='all'):
         if result:
             result, message = PimpyAPI.commit_task_to_db(
                 form.name.data, form.content.data,
-                request.form['deadline'], form.group.data,
+                form.group.data,
                 form.users.data, form.line.data, -1, form.status.data)
 
         if result:
@@ -143,9 +142,6 @@ def edit_task(task_id=-1):
         elif name == "users":
             result, message = PimpyAPI.update_users(task_id,
                                                     request.form['value'])
-        elif name == "deadline":
-            result, message = PimpyAPI.update_deadline(task_id,
-                                                       request.form['value'])
 
         return message
 
