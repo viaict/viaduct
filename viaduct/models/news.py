@@ -2,6 +2,7 @@ from datetime import date
 from flask import url_for
 from viaduct import db
 from viaduct.models import BaseEntity
+from flask.ext.babel import lazy_gettext as _
 
 
 class News(db.Model, BaseEntity):
@@ -35,6 +36,6 @@ class News(db.Model, BaseEntity):
 
             return ' '.join(words) + '<br/><small><a href="' +\
                 url_for('news.view', news_id=self.id) +\
-                '">(Read more...)</a></small>'
+                '">(' + _('Read more') + '...)</a></small>'
 
         return self.content
