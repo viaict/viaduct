@@ -26,7 +26,6 @@ class Task(db.Model, BaseEntity):
 
     title = db.Column(db.Text)
     content = db.Column(db.Text)
-    deadline = db.Column(db.DateTime)
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow())
     line = db.Column(db.Integer)
 
@@ -50,11 +49,10 @@ class Task(db.Model, BaseEntity):
         "btn-info", "btn-warning", "btn-success",
         "btn-danger", "btn-success", "btn-inverse"]
 
-    def __init__(self, title, content, deadline, group_id, users,
+    def __init__(self, title, content, group_id, users,
                  minute_id, line, status):
         self.title = title
         self.content = content
-        self.deadline = deadline
         self.group_id = group_id
         self.line = line
         self.users = users
@@ -86,8 +84,8 @@ class Task(db.Model, BaseEntity):
 
     @staticmethod
     def get_status_meanings():
-        statusi = [0 for i in range(len(Task.status_meanings)-2)]
-        for i in range(0, len(Task.status_meanings)-2):
+        statusi = [0 for i in range(len(Task.status_meanings) - 2)]
+        for i in range(0, len(Task.status_meanings) - 2):
             statusi[i] = [Task.status_meanings[i], Task.status_colors[i], i]
         return statusi
 
