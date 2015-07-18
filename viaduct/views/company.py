@@ -16,9 +16,7 @@ from viaduct.api.file import FileAPI
 
 blueprint = Blueprint('company', __name__, url_prefix='/companies')
 
-UPLOAD_FOLDER = application.config['UPLOAD_DIR']
 FILE_FOLDER = application.config['FILE_DIR']
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 
 @blueprint.route('/', methods=['GET', 'POST'])

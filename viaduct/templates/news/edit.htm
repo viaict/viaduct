@@ -1,23 +1,29 @@
-{% from 'macros/form.htm' import render_field, render_datefield_picker, render_checkbox, render_submit %}
+{% from 'macros/form.htm' import render_field, render_datefield_picker, render_submit %}
 
 {% extends 'content.htm' %}
 
+{% block includes %}
+     <script src="{{static_url("/static/js/news/single.js")}}"></script>
+{% endblock %}
+
 {% block content %}
+    <h1>
+        {% if news_id %}
+            {{ _('Edit') }}
+        {% else %}
+            {{ _('Create')}}
+        {% endif %}
+        {{_('newsitem')}}
+    </h1>
 
-<h1>Nieuwsartikel {% if page.id %}bewerken{% else %}aanmaken{% endif %}</h1>
-
-<form method='post'>
-    {{ form.csrf_token }}
-
-    {{ render_field(form.title) }}
-
-    {{ render_field(form.content) }}
-    {{ render_datefield_picker(form.end_time) }}
-
-    {{ render_field(form.comment) }}
-    {{ render_checkbox(form.needs_payed) }}
-
-    {{ render_submit('Opslaan') }}
-</form>
-
+    <form method='post' id='create_news'>
+        <fieldset>
+            {{ form.csrf_token }}
+            {{ render_field(form.title) }}
+            {{ render_field(form.content) }}
+            {{ render_datefield_picker(form.publish_date) }}
+            {{ render_datefield_picker(form.archive_date) }}
+            {{ render_submit(_('Save')) }}
+        </fieldset>
+    </form>
 {% endblock %}

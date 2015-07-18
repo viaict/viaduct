@@ -1,34 +1,40 @@
 {% extends 'base.htm' %}
 
 {% block page %}
-<div class="row">
-    <div class="col-sm-12">
-        <div class="row">
-            {% for revision in revisions %}
-                {% if revision.test == "laatste_bestuursblog" %}
-                    <div class="col-sm-7 newsrole">
-                {% else %}
-                    <div class="col-sm-5">
-                {% endif %}
-                    <div class="mainblock scroll">
-                        {% if revision.activity %}
-                            {{ revision.activity | safe }}
-                        {% else %}
-                            <div class="page-header">
-                                <h1>{{ revision.title }}</h1>
-                            </div>
-                            <p>{{ revision.content | markdown(revision.filter_html) }}</p>
-                        {% endif %}
+    <div class="row">
+        <div class="col-md-7 newsrole">
+            <div class='row'>
+                <div id='news-items' class='col-md-12'>
+                    <div class="page-header">
+                        <h1>{{ _('Latest news') }}</h1>
                     </div>
-                    {% if revision.test == "laatste_bestuursblog" %}
-                        <span class="pull-right"><a href="/laatste_bestuursblog">Lees al het nieuws!</a></span>
-                        {% if ModuleAPI.can_write('page') %}
-                            <span class="pull-left"><a href="{{ url_for('page.edit_page', path=revision.page.path) }}">Bewerken</a></span>
-                        {% endif %}
-                    {% endif %}
+                    {% for item in news %}
+                        <div class='row'>
+                            <div class='col-md-12'>
+                                <blockquote class='title'>
+                                    <a href='{{ url_for('news.view', news_id=item.id) }}'>
+                                        <h3>{{ item.title }}</h3>
+                                    </a>
+                                    <footer> {{ item.user.name }} </footer>
+                                    {{ item.get_short_content(300) | markdown }}
+                                </blockquote>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
-            {% endfor %}
+            </div>
         </div>
-    </div>
-</div>
+        {% for revision in revisions %}
+            <div class="col-md-5">
+                {% if revision.activity %}
+                    {{ revision.activity | safe }}
+                {% else %}
+                    <div class="page-header">
+                        <h1>{{ revision.title }}</h1>
+                    </div>
+                    <p>{{ revision.content | markdown(revision.filter_html) }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div> {# /.row #}
 {% endblock %}

@@ -5,7 +5,7 @@
 </div>
 
 <div class="activity-simple-list">
-    {% for activity in activities.items[:4] %}
+    {% for activity in activities.items %}
         <div class="activity-simple">
             <div class="activity-simple-image">
                 {% if activity.picture %}
@@ -39,5 +39,5 @@
 
 <div class="activity-simple-list">
     {{_('Do you have an idea for an activity?')}}<br>
-    {{_('Send an e-mail to the')}}<a href="mailto:actie@svia.nl">{{_('Activitycommittee')}}</a>.
+    {{_('Send an e-mail to the')}} <a href="mailto:actie@svia.nl">{{_('Activitycommittee')}}</a>.
 </div>
