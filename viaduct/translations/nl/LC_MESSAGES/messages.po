@@ -68,7 +68,7 @@ msgstr "Terug"
 
 #: viaduct/views/lang.py:35
 msgid "Bilingualism is not fully implemented yet!"
-msgstr "Tweetaligheid is not niet volledig ondersteund!"
+msgstr "Tweetaligheid is nog niet volledig ondersteund!"
 
 #: viaduct/templates/activity/view_single.htm:114
 msgid "By registering you agree with the terms above."
