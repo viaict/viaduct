@@ -1,36 +1,40 @@
+from datetime import date
+from flask import url_for
 from viaduct import db
-from viaduct.models.page import IdRevision
+from viaduct.models import BaseEntity
 
 
-class NewsRevision(IdRevision):
-    __tablename__ = 'news_revision'
+class News(db.Model, BaseEntity):
+    __tablename__ = 'news'
 
+    title = db.Column(db.Text)
     content = db.Column(db.Text)
-    end_time = db.Column(db.Date)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship('User', backref=db.backref('news_revisions',
-                                                      lazy='dynamic'))
+    user = db.relationship('User', backref=db.backref('news', lazy='dynamic'))
 
-    page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
-    page = db.relationship('Page', backref=db.backref('news_revisions',
-                                                      lazy='dynamic'))
+    publish_date = db.Column(db.Date)
+    archive_date = db.Column(db.Date)
 
-    def __init__(self, page=None, title='', comment='', instance_id=None,
-                 content='', user_id=None, end_time=None):
-        super(NewsRevision, self).__init__(title, comment, instance_id)
+    def __init__(self, title='', content='', user_id=None,
+                 archive_date=None, publish_date=date.today()):
 
-        self.page = page
-
-        self.user_id = user_id
+        self.title = title
         self.content = content
-        self.end_time = end_time
+        self.user_id = user_id
+        self.archive_date = archive_date
+        self.publish_date = publish_date
 
     def get_short_content(self, characters):
+        """ Get a shortened version of the total post """
         if len(self.content) > characters:
             short_content = self.content[:characters].strip()
+
+            # Remove the last word
             words = short_content.split(' ')[:-1]
 
-            return ' '.join(words) + '...'
+            return ' '.join(words) + '<br/><small><a href="' +\
+                url_for('news.view', news_id=self.id) +\
+                '">(Read more...)</a></small>'
 
         return self.content

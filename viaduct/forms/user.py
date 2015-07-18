@@ -99,7 +99,8 @@ class EditUserForm(Form):
     avatar = FileField('Avatar', validators=[Optional()])
     birth_date = DateField('Geboortedatum')
     study_start = DateField('Begin studie')
-
+    receive_information = BooleanField('Wil je informatie van bedrijven\
+        ontvangen?')
     def validate_password(form, field):
         """Providing a password is only required when creating a new user."""
         if form.id.data == 0 and len(field.data) == 0:
