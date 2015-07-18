@@ -5,7 +5,7 @@ from wtforms import StringField, PasswordField, BooleanField, \
     SelectField, IntegerField, FileField
 from wtforms.widgets import TextInput
 from wtforms.validators import InputRequired, Email, EqualTo, ValidationError,\
-    Length
+    Length, Optional
 from config import LANGUAGES, MIN_PASSWORD_LENGTH
 
 import dateutil
@@ -59,7 +59,9 @@ class SignUpForm(Form):
             InputRequired(message='Geen studentnummer opgegeven')]
     )
     education_id = SelectField('Opleiding', coerce=int)
-    avatar = FileField('Avatar')
+    avatar = FileField('Avatar', validators=[Optional()])
+    receive_information = BooleanField('Wil je informatie van bedrijven\
+        ontvangen?')
 
     birth_date = DateField('Geboortedatum', validators=[
         InputRequired(message='Geen geboortedatum opgegeven')])
@@ -94,7 +96,7 @@ class EditUserForm(Form):
             InputRequired(message='Geen studentnummer opgegeven')]
     )
     education_id = SelectField('Opleiding', coerce=int)
-    avatar = FileField('Avatar')
+    avatar = FileField('Avatar', validators=[Optional()])
     birth_date = DateField('Geboortedatum')
     study_start = DateField('Begin studie')
 
@@ -137,9 +139,11 @@ class EditUserInfoForm(Form):
 
     locale = SelectField('Taal', choices=list(LANGUAGES.items()))
     education_id = SelectField('Opleiding', coerce=int)
-    avatar = FileField('Avatar')
+    avatar = FileField('Avatar', validators=[Optional()])
     birth_date = DateField('Geboortedatum')
     study_start = DateField('Begin studie')
+    receive_information = BooleanField('Wil je informatie van bedrijven\
+        ontvangen?')
 
     def validate_password(form, field):
         """Providing a password is only required when creating a new user."""
