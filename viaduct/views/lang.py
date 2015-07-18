@@ -32,4 +32,5 @@ def set_lang(lang=None):
         db.session.commit()
         refresh()
         flash(_('Language changed to') + ': ' + LANGUAGES[lang], 'success')
+        flash(_('Bilingualism is not fully implemented yet!'), 'info')
         return redirect(redirect_url())
