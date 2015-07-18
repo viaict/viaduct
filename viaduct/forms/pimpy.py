@@ -1,7 +1,9 @@
 from flask_wtf import Form
-from wtforms import StringField, TextAreaField, IntegerField, \
+from wtforms import StringField, TextAreaField, DateTimeField, IntegerField, \
     SelectField, BooleanField
 from wtforms.validators import InputRequired, Optional
+
+import datetime
 
 from viaduct.models.pimpy import Task
 from viaduct import application
@@ -77,6 +79,8 @@ class AddMinuteForm(Form):
     content = TextAreaField('Content', validators=[InputRequired()])
     group = SelectField('Group', validators=[InputRequired()])
     # FIXME: datetime is now printed badly in the actual form!!! :( :(
+    date = DateTimeField('Date', format=DATE_FORMAT,
+                         default=datetime.date.today())
     parse_tasks = BooleanField('Parse', default=True)
 
     def load_groups(self, groups, default=-1):

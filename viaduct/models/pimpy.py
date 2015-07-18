@@ -133,8 +133,8 @@ class Minute(db.Model, BaseEntity):
     def get_content_numbered(self):
         s = ''
         for i, line in enumerate(self.content.split('\n')):
-            s += '<a id="%dln%d" class="pimpy_minute_line"/>%s</a>' % \
-                (self.id, i, line[:-1])
+            s += '<a id="%dln%d" class="pimpy_minute_line"/><div class="pimpy_line_number"> %d </div> %s &zwnj; </a>' % \
+                (self.id, i, i, line[:-1])
         return s
 
     def get_group(self):
