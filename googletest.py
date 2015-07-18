@@ -1,35 +1,6 @@
 import viaduct.api.google as google
 from pprint import pprint
-from viaduct.models import Group
 
 service = google.build_groups_service()
-pprint(dir(service))
 groups_api = service.groups()
-
-domain = 'via.uvastudent.org'
-
-try:
-    pprint(dir(groups_api))
-    group = None
-    """
-    for g in groups_api.list(domain=domain).execute()['groups']:
-        if g['email'] == 'ict@via.uvastudent.org':
-            group = g
-
-    pprint(groups_api.get(groupKey=group['id']).execute())
-    """
-    members_api = service.members()
-    maillist = 'ict@' + domain
-    list_members = members_api.list(groupKey=maillist).execute()
-    # members_api.delete(groupKey=maillist, memberKey='batman@bitchimfamo.us').execute()
-    # pprint(members_api.list(groupKey='ict@via.uvastudent.org').execute())
-except Exception as e:
-    print(e)
-else:
-    list_emails = set([u['email'] for u in list_members['members']])
-    group_members = Group.query.filter_by(name='ICT').first().users.all()
-    group_emails = set([u.email for u in group_members])
-    pprint(list_emails)
-    pprint(group_emails)
-    only_in_list = list_emails - group_emails
-    only_in_group = group_emails - list_emails
+pprint(google.create_group('ICT testmail list', 'icttest'))

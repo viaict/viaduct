@@ -1,5 +1,6 @@
 from viaduct import db
 from viaduct.models import BaseEntity
+from viaduct.api import google
 
 user_group = db.Table(
     'user_group',
@@ -45,3 +46,11 @@ class Group(db.Model, BaseEntity):
     def get_users(self):
         # FIXME: backwards compatibility.
         return self.users
+
+    def remove_members_from_maillist(self):
+        for users in self.users:
+            google.remove_email_from_group(users.email, self.maillist)
+
+    def add_members_to_maillist(self):
+        for users in self.users:
+            google.add_email_to_group_if_not_exists(users.email, self.maillist)

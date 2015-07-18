@@ -1,5 +1,6 @@
 import httplib2
 from apiclient.discovery import build
+from apiclient.errors import HttpError
 from oauth2client.client import SignedJwtAssertionCredentials
 from viaduct import application
 import traceback
@@ -13,6 +14,8 @@ service_email = application.config['GOOGLE_SERVICE_EMAIL']
 
 # name of the private key file
 private_key = application.config['GOOGLE_API_KEY']
+
+domain = 'via.uvastudent.org'
 
 
 def build_service(service_type, api_version, scope):
@@ -47,6 +50,14 @@ def build_groups_service():
     return build_service('admin', 'directory_v1',
                          ('https://www.googleapis.com'
                           '/auth/admin.directory.group'))
+
+
+def get_group_api():
+    return build_groups_service().groups()
+
+
+def get_group_members_api():
+    return build_groups_service().members()
 
 
 # Provide a calendar_id
@@ -114,8 +125,53 @@ def delete_activity(event_id):
 
 
 def get_groups():
-    service = build_groups_service()
+    api = get_group_api()
+    return api.list(domain=domain).execute()['groups']
 
 
-def get_group_users():
-    service = build_groups_service()
+def get_group_by_name(listname):
+    api = get_group_api()
+    return api.get(groupKey=listname + '@' + domain).execute()
+
+
+def get_group_id_by_name(listname):
+    group = get_group_by_name(listname)
+    if group is None:
+        return None
+    return group['id']
+
+
+def get_group_members(listname):
+    api = get_group_members_api()
+    return api.list(groupKey=listname + '@' + domain).execute()
+
+
+def create_group(groupname, listname):
+    api = get_group_api()
+    email = listname + '@' + domain
+    api.insert(body={'email': email, 'name': groupname}).execute()
+
+
+def create_group_if_not_exists(groupname, listname):
+    try:
+        create_group(groupname, listname)
+    except HttpError as e:
+        if e.resp.status != 409:
+            # Something else went wrong than the list already existing
+            raise(e)
+
+
+def add_email_to_group(email, listname):
+    api = get_group_members_api()
+    list_id = listname + '@' + domain
+    api.insert(groupKey=list_id,
+               body={'email': email, 'role': 'MEMBER'}).execute()
+
+
+def add_email_to_group_if_not_exists(email, listname):
+    try:
+        add_email_to_group(email, listname)
+    except HttpError as e:
+        if e.resp.status != 409:
+            # Something else went wrong than the list already existing
+            raise(e)

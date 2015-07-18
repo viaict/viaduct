@@ -11,6 +11,7 @@ from viaduct import application, db
 from viaduct.helpers import flash_form_errors
 
 from viaduct.api.module import ModuleAPI
+from viaduct.api import google
 
 from viaduct.models import Group, GroupPermission, User
 from viaduct.forms.group import EditGroupPermissionForm, ViewGroupForm, \
@@ -73,7 +74,7 @@ def create():
 
     if form.validate_on_submit():
         name = request.form['name'].strip()
-        email = request.form['email'].strip()
+        maillist = request.form['maillist'].strip()
         valid_form = True
 
         if Group.query.filter(Group.name == name).count() > 0:
@@ -81,7 +82,7 @@ def create():
             valid_form = False
 
         if valid_form:
-            group = Group(name, email)
+            group = Group(name, maillist.lower)
 
             db.session.add(group)
             db.session.commit()
@@ -96,7 +97,7 @@ def create():
 
 @blueprint.route('/groups/<int:group_id>/edit/', methods=['GET', 'POST'])
 def edit(group_id):
-    if not(GroupPermissionAPI.can_write('group')):
+    if not(ModuleAPI.can_write('group')):
         return abort(403)
 
     group = Group.by_id(group_id)
@@ -107,7 +108,7 @@ def edit(group_id):
 
         if form.validate_on_submit():
             name = form.data['name'].strip()
-            maillist = form.data['maillist'].strip()
+            maillist = form.data['maillist'].strip().lower()
             valid_form = True
 
             group_with_same_name = Group.query.\
@@ -121,6 +122,9 @@ def edit(group_id):
                 group.maillist = maillist
 
                 db.session.commit()
+                google.create_group_if_not_exists(name, maillist)
+                print(google.get_group_by_name(maillist))
+                group.add_members_to_maillist()
 
                 flash('De groep is aangepast.', 'success')
 
