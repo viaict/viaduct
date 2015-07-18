@@ -2,16 +2,16 @@
 
 {%block page %}
     <fieldset>
-        <legend>Bewerk {{examination.title}}</legend>
+        <legend>{{_('Edit')}} '{{examination.title}}'</legend>
 
         <form method=post enctype=multipart/form-data>
             <div class='form-group'>
-                Titel
+                {{_('Title')}}
                 <input type=text name=title value="{{examination.title}}" class='form-control'>
             </div>
 
             <div class='form-group'>
-                Vak
+                {{_('Course')}}
                 <select name=course class='form-control'>
                     {% for course in courses %}
                         <option value="{{ course.id }}" {% if course.id == examination.course_id %}selected="selected"{% endif %}>
@@ -22,14 +22,18 @@
             </div>
 
             <div class='form-group'>
-                <a href="/course/add" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> <strong>nieuw</strong></a>
+                <a href="/course/add" class="btn btn-default">
+                    <i class="glyphicon glyphicon-pencil"></i>
+                    <strong>{{_('New')}}</strong>
+                </a>
             </div>
 
             <div class='form-group'>
-                Studie
+                {{_('Education')}}
                 <select name=education class='form-control'>
                     {% for education in educations %}
-                        <option value="{{ education.id }}" {% if education.id == examination.education_id %}selected="selected"{% endif %}>
+                    <option value="{{ education.id }}"
+                    {% if education.id == examination.education_id %}selected="selected"{% endif %}>
                             {{education.name}}
                         </option>
                     {% endfor %}
@@ -37,22 +41,25 @@
             </div>
 
             <div class='form-group'>
-                <a href="/education/add" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> <strong>nieuw</strong></a>
+                <a href="/education/add" class="btn btn-default">
+                    <i class="glyphicon glyphicon-pencil"></i>
+                    <strong>{{_('New')}}</strong>
+                </a>
             </div>
 
             <div class='form-group'>
-                <label>Tentamen</label>
-                (huidig: {{ examination.path }})
+                <label>{{_('Examination')}}</label>
+                ({{_('Current')}}: {{ examination.path }})
                 <input type=file name=file class='form-control' />
             </div>
 
             <div class='form-group'>
-                <label>Antwoorden</label>
-                (huidig: {{ examination.answer_path }})
+                <label>{{_('Answers')}}</label>
+                ({{_('Current')}}: {{ examination.answer_path }})
                 <input type=file name=answers class='form-control' />
             </div>
 
-            <input type=submit value=Upload class='btn btn-primary' />
+            <input type=submit value={{_('Submit')}} class='btn btn-primary' />
         </form>
     </fieldset>
 {% endblock %}

@@ -2,8 +2,6 @@
 @import 'bootstrap';
 @import 'font-awesome-compass';
 @import 'font-awesome';
-@import 'timepicker';
-@import 'datepicker';
 @import 'bootstrap-editable';
 @import 'css/select2';
 @import 'css/select2-bootstrap';
@@ -1207,4 +1205,14 @@ p{line-height: 25px;}
 .inline-field {
     width: auto;
     display: inline;
+}
+
+.panel.with-nav-tabs .panel-heading{
+    padding: 5px 5px 0 5px;
+}
+.panel.with-nav-tabs .nav-tabs{
+    border-bottom: none;
+}
+.panel.with-nav-tabs .nav-justified{
+    margin-bottom: -1px;
 }

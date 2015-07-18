@@ -62,10 +62,16 @@ babel = Babel(application)
 @babel.localeselector
 def get_locale():
     # if a user is logged in, use the locale from the user settings
-    if current_user and current_user.locale is not None and \
-            not current_user.is_anonymous():
+    if current_user and not current_user.is_anonymous() \
+            and current_user.locale is not None:
         return current_user.locale
-    return request.accept_languages.best_match(list(LANGUAGES.keys()))
+
+    # Try to look-up an cookie set for language
+    lang = request.cookies.get('lang')
+    if lang and lang in LANGUAGES.keys():
+        return lang
+    else:
+        return request.accept_languages.best_match(list(LANGUAGES.keys()))
 
 # Set up the login manager, which is used to store the details related to the
 # authentication system.
@@ -124,6 +130,7 @@ application.jinja_env.globals.update(isinstance=isinstance)
 application.jinja_env.globals.update(list=list)
 
 application.jinja_env.globals.update(static_url=static_url)
+application.jinja_env.globals.update(get_locale=get_locale)
 
 # Register the blueprints.
 from . import api  # noqa
