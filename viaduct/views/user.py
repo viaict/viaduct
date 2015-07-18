@@ -107,8 +107,12 @@ def remove_avatar(user_id=None):
     return redirect(url_for('user.view_single', user_id=user_id))
 
 
+@blueprint.route('/users/create/', methods=['GET', 'POST'])
 @blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
 def edit(user_id=None):
+    """
+    Create user for admins and edit for admins and users
+    """
     if not ModuleAPI.can_write('user') and\
             (not current_user or current_user.id != user_id):
         return abort(403)
