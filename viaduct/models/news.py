@@ -1,4 +1,5 @@
 from datetime import date
+from flask import url_for
 from viaduct import db
 from viaduct.models import BaseEntity
 
@@ -32,6 +33,8 @@ class News(db.Model, BaseEntity):
             # Remove the last word
             words = short_content.split(' ')[:-1]
 
-            return ' '.join(words) + '...'
+            return ' '.join(words) + '<br/><small><a href="' +\
+                url_for('news.view', news_id=self.id) +\
+                '">(Read more...)</a></small>'
 
         return self.content
