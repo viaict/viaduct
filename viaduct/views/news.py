@@ -26,7 +26,7 @@ def list(page_nr=1):
         db.and_(
             db.or_(
                 News.archive_date >= date.today(), News.archive_date == None),
-            News.publish_date >= date.today())).order_by(desc(News.created))  # noqa
+            News.publish_date <= date.today())).order_by(desc(News.created))  # noqa
 
     return render_template('news/list.htm',
                            items=items.paginate(page_nr, 10, False),

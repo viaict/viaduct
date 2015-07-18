@@ -56,7 +56,7 @@ def home():
         db.and_(
             db.or_(
                 News.archive_date >= date.today(), News.archive_date == None),
-            News.publish_date >= date.today())).order_by(desc(News.created))\
+            News.publish_date <= date.today())).order_by(desc(News.created))\
         .limit(8).all()  # noqa
 
     print(news)
