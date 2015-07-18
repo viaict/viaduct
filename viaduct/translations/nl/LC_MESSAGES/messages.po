@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-07-18 17:33+0200\n"
+"POT-Creation-Date: 2015-07-18 18:13+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 0.2\n"
+"Generated-By: Babel 1.3\n"
 
 #: viaduct/views/activity.py:55
 msgid "Activities"
@@ -55,11 +55,11 @@ msgstr "Antwoorden"
 
 #: viaduct/forms/news.py:20
 msgid "Archive date"
-msgstr ""
+msgstr "Archiveer datum"
 
 #: viaduct/forms/news.py:32
 msgid "Archive date needs to be after the publish date."
-msgstr ""
+msgstr "Archiveer datum moet na de publiceer datum zijn."
 
 #: viaduct/templates/examination/course.htm:23
 #: viaduct/templates/examination/education.htm:22
@@ -87,7 +87,7 @@ msgstr "Contact gegevens"
 
 #: viaduct/forms/news.py:14 viaduct/forms/news.py:15
 msgid "Content"
-msgstr ""
+msgstr "Inhoud"
 
 #: viaduct/templates/examination/admin.htm:30
 #: viaduct/templates/examination/edit.htm:14
@@ -101,9 +101,8 @@ msgid "Course succesfully added."
 msgstr "Vak succesvol toegevoegd."
 
 #: viaduct/templates/news/edit.htm:14
-#, fuzzy
 msgid "Create"
-msgstr "Gratis"
+msgstr "Aanmaken"
 
 #: viaduct/views/activity.py:159
 msgid "Create activity"
@@ -132,7 +131,7 @@ msgstr "Activiteit verwijderen"
 
 #: viaduct/templates/news/view_single.htm:21
 msgid "Delete news item"
-msgstr ""
+msgstr "Verwijder nieuwsbericht"
 
 #: viaduct/templates/activity/view_simple.htm:41
 msgid "Do you have an idea for an activity?"
@@ -172,7 +171,7 @@ msgstr "Aanpassen"
 
 #: viaduct/templates/news/view_single.htm:17
 msgid "Edit news item"
-msgstr ""
+msgstr "Nieuwsbericht aanpassen"
 
 #: viaduct/forms/activity.py:76 viaduct/templates/examination/admin.htm:32
 #: viaduct/templates/examination/edit.htm:32
@@ -283,9 +282,8 @@ msgid "Last name"
 msgstr "Achternaam"
 
 #: viaduct/templates/home/home.htm:9
-#, fuzzy
 msgid "Latest news"
-msgstr "Achternaam"
+msgstr "Laatste nieuws"
 
 #: viaduct/forms/activity.py:21 viaduct/templates/activity/view_single.htm:38
 msgid "Location"
@@ -321,16 +319,15 @@ msgstr "Nieuw tentamen"
 
 #: viaduct/templates/news/view_single.htm:6
 msgid "News"
-msgstr ""
+msgstr "Niews"
 
 #: viaduct/views/news.py:76
 msgid "News item saved"
-msgstr ""
+msgstr "Niewsbericht opgeslagen."
 
 #: viaduct/views/news.py:116
-#, fuzzy
 msgid "News item succesfully deleted"
-msgstr "Tentamen succesvol verwijderd."
+msgstr "Niewsbericht succesvol verwijderd."
 
 #: viaduct/templates/macros/pagination.htm:22
 #: viaduct/templates/macros/pagination.htm:24
@@ -388,7 +385,7 @@ msgstr "Publiek"
 
 #: viaduct/forms/news.py:17 viaduct/forms/news.py:18
 msgid "Publish date"
-msgstr ""
+msgstr "Publiceer datum"
 
 #: viaduct/templates/activity/view_single.htm:135
 msgid "Register"
@@ -489,7 +486,7 @@ msgstr "Deze gegevens worden opgehaald uit je account."
 
 #: viaduct/views/news.py:93 viaduct/views/news.py:108
 msgid "This news item does not exist"
-msgstr ""
+msgstr "Dit nieuwsbericht bestaat niet."
 
 #: viaduct/templates/activity/create.htm:71
 msgid "Tip"
@@ -503,7 +500,7 @@ msgstr "Titel"
 
 #: viaduct/views/athenaeum.py:12
 msgid "Using the bookstore requires an account."
-msgstr ""
+msgstr "Voor het gebruik van de boekenwinkel is een account vereist."
 
 #: viaduct/forms/activity.py:27
 msgid "Venue"
@@ -543,7 +540,6 @@ msgstr "geleden"
 
 #: viaduct/templates/activity/view.htm:52
 #: viaduct/templates/activity/view_single.htm:157
-#, fuzzy
 msgid "free"
 msgstr "Gratis"
 
@@ -552,13 +548,12 @@ msgid "in"
 msgstr "over"
 
 #: viaduct/forms/news.py:12 viaduct/forms/news.py:15 viaduct/forms/news.py:18
-#, fuzzy
 msgid "is required"
-msgstr "vereist"
+msgstr "is vereist"
 
 #: viaduct/templates/news/edit.htm:16
 msgid "newsitem"
-msgstr ""
+msgstr "Nieuwsbericht"
 
 #: viaduct/views/activity.py:49 viaduct/views/activity.py:55
 msgid "page"
@@ -573,7 +568,3 @@ msgstr "vereist"
 #: viaduct/models/activity.py:148
 msgid "still"
 msgstr "nog"
-
-#~ msgid "Participants of this activity"
-#~ msgstr "Deelnemers aan deze activiteit"
-
