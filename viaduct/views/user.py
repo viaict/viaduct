@@ -107,7 +107,6 @@ def remove_avatar(user_id=None):
     return redirect(url_for('user.view_single', user_id=user_id))
 
 
-@blueprint.route('/users/create/', methods=['GET', 'POST'])
 @blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
 def edit(user_id=None):
     if not ModuleAPI.can_write('user') and\
@@ -165,6 +164,7 @@ def edit(user_id=None):
         user.education_id = form.education_id.data
         user.birth_date = form.birth_date.data
         user.study_start = form.study_start.data
+        user.receive_information = form.receive_information.data
 
         if form.password.data != '':
             user.password = bcrypt.hashpw(form.password.data, bcrypt.gensalt())
@@ -181,8 +181,8 @@ def edit(user_id=None):
         if avatar:
             UserAPI.upload(avatar, user.id)
 
-        flash('The user has been %s successfully.' %
-              ('edited' if user_id else 'created'), 'success')
+        flash('Je hebt je profiel succesvol %s.' %
+              ('aangepast' if user_id else 'aangemaakt'), 'success')
 
         return redirect(url_for('user.view_single', user_id=user.id))
     else:
@@ -217,7 +217,7 @@ def sign_up():
                     bcrypt.gensalt()), form.first_name.data,
                     form.last_name.data, form.student_id.data,
                     form.education_id.data, form.birth_date.data,
-                    form.study_start.data)
+                    form.study_start.data, form.receive_information.data)
 
         exists = User.query.filter(User.email == user.email)
 
@@ -236,7 +236,8 @@ def sign_up():
             if avatar:
                 UserAPI.upload(avatar, user.id)
 
-            flash('You\'ve signed up successfully.', 'success')
+            flash('Welkom %s! Je profiel is succesvol aangemaakt en je bent nu \
+                ingelogd!' % (current_user.first_name), 'success')
 
         login_user(user)
 
@@ -267,7 +268,7 @@ def sign_in():
 
         submitted_hash = bcrypt.hashpw(form.password.data, user.password)
         if submitted_hash != user.password:
-            flash('The credentials that have been specified are invalid.',
+            flash('De gegevens die je hebt ingevoerd zijn onjuist.',
                   'danger')
             return redirect(url_for('user.sign_in'))
 
