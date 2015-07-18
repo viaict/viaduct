@@ -3,7 +3,7 @@ cfg = babel.cfg
 messages = messages.pot
 pybabel=venv/bin/pybabel
 
-
+# TODO make this better
 # Compile the translations .po files to .mo files usable by flask.
 .PHONY: babel_compile
 babel_compile: babel_update
