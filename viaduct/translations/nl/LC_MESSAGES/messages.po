@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
+"Project-Id-Version: 2.1.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
 "POT-Creation-Date: 2015-07-18 18:55+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
