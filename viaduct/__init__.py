@@ -3,7 +3,9 @@ import os
 from flask import Flask, request, Markup, render_template
 from flask.ext.babel import Babel
 from flask.ext.login import LoginManager, current_user
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy as BaseSQLAlchemy, Model, \
+    _BoundDeclarativeMeta, _QueryProperty, declarative_base
+from sqlalchemy import MetaData
 from config import LANGUAGES
 from viaduct.utilities import import_module, serialize_sqla
 from markdown import markdown
@@ -11,7 +13,7 @@ import datetime
 import json
 
 
-version = 'v2.0.2.1'
+version = 'v2.1.0.3'
 
 
 def static_url(url):
@@ -72,11 +74,36 @@ login_manager.init_app(application)
 login_manager.login_view = 'user.sign_in'
 
 # Set up the database.
+constraint_naming_convention = {
+    "ix": 'ix_%(column_0_label)s',
+    "uq": "uq_%(table_name)s_%(column_0_name)s",
+    "ck": "ck_%(table_name)s_%(constraint_name)s",
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+    "pk": "pk_%(table_name)s"
+}
+
+
+class SQLAlchemy(BaseSQLAlchemy):
+    """ Custom SQLAlchemy object that uses naming conventions.
+    https://stackoverflow.com/questions/29153930/
+
+    With Flask-SQLAlchemy 2.1 this can be done better, but it is not released
+    yet. And 2.0 caused issues because of autoflush so those should be fixed.
+    """
+    def make_declarative_base(self):
+        metadata = MetaData(naming_convention=constraint_naming_convention)
+
+        base = declarative_base(metadata=metadata, cls=Model, name='Model',
+                                metaclass=_BoundDeclarativeMeta)
+        base.query = _QueryProperty(self)
+        return base
+
 db = SQLAlchemy(application)
 
 from viaduct.api.user import UserAPI
 from viaduct.api.company import CompanyAPI
-from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.guide import GuideAPI
+from viaduct.api.module import ModuleAPI
 from viaduct.helpers.thumb import thumb
 
 # Set jinja global variables
@@ -86,7 +113,8 @@ application.jinja_env.globals.update(markdown=markdown)
 application.jinja_env.globals.update(Markup=Markup)
 application.jinja_env.globals.update(UserAPI=UserAPI)
 application.jinja_env.globals.update(CompanyAPI=CompanyAPI)
-application.jinja_env.globals.update(GroupPermissionAPI=GroupPermissionAPI)
+application.jinja_env.globals.update(GuideAPI=GuideAPI)
+application.jinja_env.globals.update(ModuleAPI=ModuleAPI)
 application.jinja_env.globals.update(datetime=datetime)
 application.jinja_env.globals.update(json=json)
 application.jinja_env.globals.update(serialize_sqla=serialize_sqla)

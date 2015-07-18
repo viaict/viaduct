@@ -20,7 +20,7 @@ class FileAPI:
 
         # Check if the file is allowed.
         if '.' not in filename or \
-                not filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS:
+                not filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS:
             flash('Bestandstype is niet toegestaan.', 'danger')
             return
 

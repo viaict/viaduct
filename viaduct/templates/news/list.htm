@@ -7,7 +7,7 @@
 <div class='row'>
     <div class='col-md-12'>
         <div class='btn-group'>
-            {% if GroupPermissionAPI.can_write('news') %}
+            {% if ModuleAPI.can_write('news') %}
                 <a href='{{ url_for('news.edit') }}' class='btn btn-success'>Nieuw</a>
             {% endif %}
             {% if archive %}

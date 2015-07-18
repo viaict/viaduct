@@ -5,7 +5,7 @@ from flask import Blueprint, abort, render_template, request, flash, redirect,\
 from flask.ext.login import current_user
 
 from viaduct import db
-from viaduct.api import GroupPermissionAPI
+from viaduct.api import ModuleAPI
 from viaduct.forms import NewsForm
 from viaduct.models import NewsRevision, Page
 from viaduct.helpers import flash_form_errors
@@ -16,7 +16,7 @@ blueprint = Blueprint('news', __name__)
 @blueprint.route('/news/', methods=['GET'])
 @blueprint.route('/news/page/<int:page_nr>/', methods=['GET'])
 def list(page_nr=1):
-    if not GroupPermissionAPI.can_read('news'):
+    if not ModuleAPI.can_read('news'):
         return abort(403)
 
     archive = int(request.args.get('archive', 0))
@@ -43,7 +43,7 @@ def list(page_nr=1):
 @blueprint.route('/create/news/', methods=['GET', 'POST'])
 @blueprint.route('/edit/news/<int:instance_id>/', methods=['GET', 'POST'])
 def edit(instance_id=None):
-    if not GroupPermissionAPI.can_write('news'):
+    if not ModuleAPI.can_write('news'):
         return abort(403)
 
     data = request.form

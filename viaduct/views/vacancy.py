@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for,\
     abort, flash
 
-from sqlalchemy import or_, and_
+from sqlalchemy import or_, and_, func
 
 from datetime import datetime
 
@@ -10,7 +10,7 @@ from viaduct.helpers import flash_form_errors
 from viaduct.models.vacancy import Vacancy
 from viaduct.models.company import Company
 from viaduct.forms import VacancyForm
-from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.module import ModuleAPI
 
 blueprint = Blueprint('vacancy', __name__, url_prefix='/vacancies')
 FILE_FOLDER = application.config['FILE_DIR']
@@ -19,8 +19,14 @@ FILE_FOLDER = application.config['FILE_DIR']
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
 def view_list(page_nr=1):
-    if not GroupPermissionAPI.can_read('vacancy'):
+    if not ModuleAPI.can_read('vacancy'):
         return abort(403)
+
+    # Order the vacancies in such a way that vacancies that are new
+    # or almost expired, end up on top.
+    order = func.abs(
+        (100 * (func.datediff(Vacancy.start_date, func.current_date()) /
+                func.datediff(Vacancy.start_date, Vacancy.end_date))) - 50)
 
     if request.args.get('search') is not None:
         search = request.args.get('search')
@@ -30,9 +36,9 @@ def view_list(page_nr=1):
                    Company.name.like('%' + search + '%'),
                    Vacancy.workload.like('%' + search + '%'),
                    Vacancy.contract_of_service.like('%' + search + '%'))).\
-            order_by(Vacancy.title).order_by(Company.rank)
+            order_by(order.desc())
 
-        if not GroupPermissionAPI.can_write('vacancy'):
+        if not ModuleAPI.can_write('vacancy'):
             vacancies = vacancies.filter(and_(Vacancy.start_date <
                                          datetime.utcnow(), Vacancy.end_date >
                                          datetime.utcnow())).paginate(page_nr,
@@ -49,14 +55,15 @@ def view_list(page_nr=1):
                                search=search, path=FILE_FOLDER,
                                title="Vacatures")
 
-    if not GroupPermissionAPI.can_write('vacancy'):
-        vacancies = Vacancy.query.filter(and_(Vacancy.start_date <
-                                         datetime.utcnow(), Vacancy.end_date >
-                                         datetime.utcnow())).paginate(page_nr,
-                                                                      15, True)
+    if not ModuleAPI.can_write('vacancy'):
+        vacancies = Vacancy.query.order_by(
+            order.desc()).filter(and_(Vacancy.start_date <
+                                 datetime.utcnow(), Vacancy.end_date >
+                                 datetime.utcnow())).paginate(page_nr,
+                                                              15, True)
     else:
         vacancies = Vacancy.query.join(Company).filter().\
-            order_by(Vacancy.title).order_by(Company.rank)
+            order_by(order.desc())
 
         for i, vacancy in enumerate(vacancies):
             if (vacancy.start_date < datetime.date(datetime.utcnow()) and
@@ -76,7 +83,7 @@ def edit(vacancy_id=None):
     FRONTEND
     Create, view or edit a vacancy.
     '''
-    if not GroupPermissionAPI.can_read('vacancy'):
+    if not ModuleAPI.can_read('vacancy'):
         return abort(403)
 
     # Select vacancy.
@@ -102,7 +109,7 @@ def update(vacancy_id=None):
     BACKEND
     Create, view or edit a vacancy.
     '''
-    if not GroupPermissionAPI.can_write('vacancy'):
+    if not ModuleAPI.can_write('vacancy'):
         return abort(403)
 
     # Select vacancy.
@@ -164,7 +171,7 @@ def delete(vacancy_id):
     BACKEND
     Delete a vacancy.
     '''
-    if not GroupPermissionAPI.can_write('vacancy'):
+    if not ModuleAPI.can_write('vacancy'):
         return abort(403)
 
     vacancy = Vacancy.query.get(vacancy_id)

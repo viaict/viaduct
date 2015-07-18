@@ -25,7 +25,7 @@ the permissions:
 	@blueprint.route('/minutes/', methods=['GET', 'POST'])
 	@blueprint.route('/minutes/<group_id>', methods=['GET', 'POST'])
 	def view_minutes(group_id='all'):
-		if not GroupPermissionAPI.can_read('pimpy'):
+		if not ModuleAPI.can_read('pimpy'):
 			return abort(403)
 		return PimpyAPI.get_minutes(group_id)
 
@@ -44,7 +44,7 @@ can easily render the data. Views does not have to do this itself, it can also
 make use of an api (in case the required data is also used elsewhere).
 
 Our current system works in such a manner that the permissions are checked in
-all view functions. This is what the GroupPermissionAPI does. Our example
+all view functions. This is what the ModuleAPI does. Our example
 function uses the PimpyAPI to render a page. An example of how a template can be
 called:
 

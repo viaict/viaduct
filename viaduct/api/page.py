@@ -1,5 +1,5 @@
 from flask.ext.login import current_user
-from viaduct.models.page import Page, PageRevision
+from viaduct.models.page import Page, PageRevision, PagePermission
 
 from viaduct import db
 
@@ -36,3 +36,15 @@ class PageAPI:
 
         return render_template('page/get_footer.htm', footer_revision=revision,
                                footer=footer, exists=exists)
+
+    @staticmethod
+    def can_read(page):
+        if page.needs_payed and (not current_user or
+                                 not current_user.has_payed):
+            return False
+
+        return PagePermission.get_user_rights(current_user, page.id) > 0
+
+    @staticmethod
+    def can_write(page):
+        return PagePermission.get_user_rights(current_user, page.id) > 1

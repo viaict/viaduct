@@ -9,10 +9,10 @@ from flask import abort
 
 from viaduct import db
 from viaduct.forms import PageForm, HistoryPageForm
+from viaduct.helpers import flash_form_errors
 from viaduct.models import Group, Page, PageRevision, PagePermission, \
-    CustomForm
-from viaduct.api.group import GroupPermissionAPI
-from viaduct.api.user import UserAPI
+    CustomForm, Redirect
+from viaduct.api.module import ModuleAPI
 from viaduct.api.page import PageAPI
 
 blueprint = Blueprint('page', __name__)
@@ -24,9 +24,14 @@ def get_page(path=''):
     page = Page.get_by_path(path)
 
     if not page:
+        # Try if this might be a redirect.
+        redirection = Redirect.query.filter(Redirect.fro == path).first()
+        if redirection:
+            return redirect(redirection.to)
+
         return abort(404)
 
-    if not UserAPI.can_read(page):
+    if not PageAPI.can_read(page):
         return abort(403)
 
     revision = page.get_latest_revision()
@@ -48,7 +53,7 @@ def get_page_history(path=''):
     if not page:
         return abort(404)
 
-    if not UserAPI.can_write(page):
+    if not PageAPI.can_write(page):
         return abort(403)
 
     revisions = page.revision_cls.get_query()\
@@ -80,7 +85,7 @@ def get_page_history(path=''):
 
 @blueprint.route('/edit/<path:path>', methods=['GET', 'POST'])
 def edit_page(path=''):
-    if not GroupPermissionAPI.can_write('page'):
+    if not ModuleAPI.can_write('page'):
         return abort(403)
 
     page = Page.get_by_path(path)
@@ -144,11 +149,12 @@ def edit_page(path=''):
             db.session.add(permission_entry)
             db.session.commit()
 
-        flash('The page has been saved.', 'success')
+        flash('De pagina is opgeslagen!.', 'success')
 
         # redirect newly created page
         return redirect(url_for('page.get_page', path=path))
     else:
+        flash_form_errors(form)
         for group in groups:
             permission = None
             if page:
@@ -169,12 +175,13 @@ def edit_page(path=''):
 
 @blueprint.route('/remove/<path:path>/', methods=['POST'])
 def delete(path):
-    if not GroupPermissionAPI.can_write('page'):
+    if not ModuleAPI.can_write('page'):
         return abort(403)
 
     if PageAPI.remove_page(path):
-        flash('The page has been removed.', 'success')
+        flash('De pagina is verwijderd.', 'success')
     else:
-        flash('The page you are trying to remove does not exist.', 'danger')
+        flash('De pagina die je probeert te verwijderen bestaat niet.',
+              'danger')
 
     return redirect(url_for('home.home'))

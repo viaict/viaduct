@@ -1,5 +1,5 @@
 from flask.ext.login import current_user
-from flask import abort
+from flask import abort, url_for
 from viaduct.models.mollie import Transaction
 
 
@@ -9,8 +9,6 @@ import mollie.api.error as mollie_error
 from mollie.api.client import Client
 
 MOLLIE = Client()
-MOLLIE_URL = application.config['MOLLIE_URL']
-MOLLIE_REDIRECT_URL = application.config['MOLLIE_REDIRECT_URL']
 MOLLIE_TEST_MODE = application.config.get('MOLLIE_TEST_MODE', False)
 if MOLLIE_TEST_MODE:
     MOLLIE.set_api_key(application.config['MOLLIE_TEST_KEY'])
@@ -24,7 +22,7 @@ class MollieAPI:
     @staticmethod
     def create_transaction(amount, description, user=current_user,
                            form_result=None):
-        # Only create a new transaction is there is a related form result
+        # Only create a new transaction if there is a related form result
         if form_result:
             transaction = Transaction()
             transaction.form_result = form_result
@@ -36,18 +34,21 @@ class MollieAPI:
         db.session.commit()
 
         # Add transaction costs
-        amount += 1.20
+        amount += 0.50
 
         # Create the mollie payment
         try:
             payment = MOLLIE.payments.create({
                 'amount': amount,
                 'description': description,
-                'redirectUrl': MOLLIE_REDIRECT_URL,
+                'redirectUrl': url_for('mollie.mollie_check',
+                                       trans_id=transaction.id,
+                                       _external=True),
                 'metadata': {
                     'transaction_id': transaction.id,
                     'first_name': form_result.owner.first_name,
-                    'last_name': form_result.owner.last_name
+                    'last_name': form_result.owner.last_name,
+                    'form_name': form_result.form.name
                 }
             })
 
@@ -107,7 +108,32 @@ class MollieAPI:
             return False, 'API call failed: ' + e.message
 
     @staticmethod
-    def get_all_transactions():
+    def get_transactions(page=0):
+        try:
+            payments = MOLLIE.payments.all(offset=page*20, count=20)[0]
+        except mollie_error.Error as e:
+            return False, 'Api call failed: ' + e.message
+
+        for payment in payments['data']:
+            transaction = Transaction.query.\
+                filter(Transaction.mollie_id == payment['id']).first()
+            if not isinstance(payment['metadata'], dict):
+                payment['metadata'] = {}
+            if 'first_name' not in payment['metadata']:
+                if transaction:
+                    payment['metadata']['first_name'] =\
+                        transaction.form_result.owner.first_name
+                    payment['metadata']['last_name'] =\
+                        transaction.form_result.owner.last_name
+            if 'form_name' not in payment['metadata']:
+                if transaction:
+                    payment['metadata']['form_name'] =\
+                        transaction.form_result.form.name
+
+        return payments, 'success'
+
+    @staticmethod
+    def get_all_remote_transactions():
         try:
             payments = MOLLIE.payments.all()
             return payments, 'Success'
@@ -121,10 +147,12 @@ class MollieAPI:
         if trans_id:
             trans = Transaction.query.\
                 filter(Transaction.id == trans_id).first()
-            return trans.mollie_id
+            if trans:
+                return trans.mollie_id
 
         if mollie_id:
             trans = Transaction.query.\
                 filter(Transaction.mollie_id == mollie_id).first()
-            return trans.id
+            if trans:
+                return trans.id
         return None

@@ -1,13 +1,13 @@
 from flask import abort
 from viaduct.models.booksales import Book, Sale
 from viaduct import db
-from viaduct.api.group import GroupPermissionAPI
+from viaduct.api.module import ModuleAPI
 
 
 class BookSalesAPI:
     @staticmethod
     def commit_sale_to_db(books, student_number, payment):
-        if not GroupPermissionAPI.can_write('booksales'):
+        if not ModuleAPI.can_write('booksales'):
             abort(403)
 
         price = 0
@@ -35,7 +35,7 @@ class BookSalesAPI:
         In case of succes the book is entered into the database
         """
 
-        if not GroupPermissionAPI.can_write('booksales'):
+        if not ModuleAPI.can_write('booksales'):
             abort(403)
 
         if book_id == -1:
@@ -55,7 +55,7 @@ class BookSalesAPI:
         return True, book.id
 
     def edit_book(book_id, title, price, isbn, stock):
-        if not GroupPermissionAPI.can_write('booksales'):
+        if not ModuleAPI.can_write('booksales'):
             abort(403)
 
         book = Book.query.filter(Book.id == book_id).first()
