@@ -42,7 +42,7 @@ class PimpyAPI:
         return True, minute.id
 
     @staticmethod
-    def commit_task_to_db(name, content, deadline, group_id, filled_in_users,
+    def commit_task_to_db(name, content, group_id, filled_in_users,
                           line, minute_id, status):
         """
         Enter task into the database.
@@ -63,13 +63,6 @@ class PimpyAPI:
         if not users:
             return False, message
 
-        try:
-            deadline = datetime.datetime.strptime(deadline, DATE_FORMAT)
-        except:
-            if deadline != "":
-                return False, "De deadline kon niet worden verwerkt."
-            deadline = None
-
         if minute_id <= 0:
             minute_id = 1
 
@@ -83,7 +76,7 @@ class PimpyAPI:
         if task:
             return False, "Deze taak bestaat al in de database"
         else:
-            task = Task(name, content, deadline, group_id,
+            task = Task(name, content, group_id,
                         users, minute_id, line, status)
 
         db.session.add(task)
@@ -91,7 +84,7 @@ class PimpyAPI:
         return True, task.id
 
     @staticmethod
-    def edit_task(task_id, name, content, deadline, group_id,
+    def edit_task(task_id, name, content, group_id,
                   filled_in_users, line):
         """
         Returns succes (boolean), message (string). Message is irrelevant if
@@ -116,14 +109,6 @@ class PimpyAPI:
             task.title = name
         if content:
             task.content = content
-        if deadline:
-            try:
-                deadline = datetime.datetime.strptime(deadline, DATE_FORMAT)
-            except:
-                if deadline != "":
-                    return False, "De deadline kon niet worden verwerkt."
-                deadline = None
-            task.deadline = deadline
         if group_id:
             task.group_id = group_id
         if line:
@@ -507,22 +492,5 @@ class PimpyAPI:
         if not users:
             return False, message
         task.users = users
-        db.session.commit()
-        return True, "De taak is succesvol aangepast."
-
-    @staticmethod
-    def update_date(task_id, date):
-        """
-        Update the date of the task with the given id
-        """
-        try:
-            date = datetime.datetime.strptime(date, DATE_FORMAT)
-        except:
-            if date != "":
-                return False, "Kon de datum niet verwerken."
-            date = None
-
-        task = Task.query.filter(Task.id == task_id).first()
-        task.deadline = date
         db.session.commit()
         return True, "De taak is succesvol aangepast."
