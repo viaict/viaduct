@@ -26,10 +26,22 @@ def list(page_nr=1):
         db.and_(
             db.or_(
                 News.archive_date >= date.today(), News.archive_date == None),
-            News.publish_date >= date.today())).order_by(desc(News.created))  # noqa
+            News.publish_date <= date.today()))\
+        .order_by(desc(News.publish_date))  # noqa
 
     return render_template('news/list.htm',
                            items=items.paginate(page_nr, 10, False),
+                           archive=False)
+
+
+@blueprint.route('/all/', methods=['GET'])
+@blueprint.route('/all/<int:page_nr>/', methods=['GET'])
+def all(page_nr=1):
+    if not ModuleAPI.can_read('news'):
+        return abort(403)
+
+    return render_template('news/list.htm',
+                           items=News.query.paginate(page_nr, 10, False),
                            archive=False)
 
 
@@ -67,7 +79,10 @@ def edit(news_id=None):
 
             # fill the news_item with the form entries.
             form.populate_obj(news_item)
-            news_item.user_id = current_user.id
+
+            # Only set writer if post is brand new
+            if not news_item.id:
+                news_item.user_id = current_user.id
 
             db.session.add(news_item)
             db.session.commit()
