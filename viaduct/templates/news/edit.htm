@@ -1,6 +1,11 @@
 {% from 'macros/form.htm' import render_field, render_datefield_picker, render_submit %}
 
 {% extends 'content.htm' %}
+
+{% block includes %}
+     <script src="{{static_url("/static/js/news/single.js")}}"></script>
+{% endblock %}
+
 {% block content %}
     <h1>
         {% if news_id %}
@@ -11,7 +16,7 @@
         {{_('newsitem')}}
     </h1>
 
-    <form method='post'>
+    <form method='post' id='create_news'>
         <fieldset>
             {{ form.csrf_token }}
             {{ render_field(form.title) }}
