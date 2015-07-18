@@ -1,42 +1,43 @@
-<div class="page-header"><a style="color: #333;" href="/activities"><h1>Activiteitenoverzicht</h1></a></div>
-
-<div class="activity-simple-list">
-{% for activity in activities.items[:4] %}
-<div class="activity-simple">
-	<div class="activity-simple-image">
-		{% if activity.picture %}
-        <img src="{{ thumb('/static/activity_pictures/' +  activity.picture, (70, 70)) }}">
-		{% else %}
-		<img src="/static/img/via_thumbnail.png">
-		{% endif %}
-	</div>
-	<div class="activity-simple-description">
-		<h4>
-			<small class="pull-right">
-	            {{ activity.till_now() }}
-	        </small>
-			<a href="{{ url_for('activity.get_activity', activity_id=activity.id)}}">
-				{{ activity.name }}
-			</a>
-	        
-		</h4>
-
-		<div>
-			<i class="glyphicon glyphicon-calendar"></i>
-			{{ activity.get_time() }}
-			<br>
-
-			<i class="glyphicon glyphicon-home"></i>
-			{{ activity.location }}
-		</div>
-	</div>
-
-</div>
-
-{% endfor %}
+<div class="page-header">
+    <a style="color: #333;" href="/activities">
+        <h1>{{_('Activity overview')}}</h1>
+    </a>
 </div>
 
 <div class="activity-simple-list">
-Heb je een idee voor een activiteit?<br>
-Stuur een mailtje naar de <a href="mailto:actie@svia.nl">actiecommissie</a>.
+    {% for activity in activities.items %}
+        <div class="activity-simple">
+            <div class="activity-simple-image">
+                {% if activity.picture %}
+                    <img src="{{ thumb('/static/activity_pictures/' +  activity.picture, (70, 70)) }}">
+                {% else %}
+                    <img src="/static/img/via_thumbnail.png">
+                {% endif %}
+            </div>
+            <div class="activity-simple-description">
+                <h4>
+                    <small class="pull-right">
+                        {{ activity.till_now() }}
+                    </small>
+                    <a href="{{ url_for('activity.get_activity', activity_id=activity.id)}}">
+                        {{ activity.name }}
+                    </a>
+
+                </h4>
+                <div>
+                    <i class="glyphicon glyphicon-calendar"></i>
+                    {{ activity.get_time() }}
+                    <br>
+
+                    <i class="glyphicon glyphicon-home"></i>
+                    {{ activity.location }}
+                </div>
+            </div> {# activity-simple-description #}
+        </div> {# activity-simple #}
+    {% endfor %}
+</div> {# activity-simple-list #}
+
+<div class="activity-simple-list">
+    {{_('Do you have an idea for an activity?')}}<br>
+    {{_('Send an e-mail to the')}} <a href="mailto:actie@svia.nl">{{_('Activitycommittee')}}</a>.
 </div>

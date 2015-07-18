@@ -1,3 +1,13 @@
+18-07-2015 v2.2.0.0:
+* Added: A new news system for the homepage
+* Added: Support for bilingual activities and examination
+* Fixed: Uppercase extension on uploading files
+* Added: Automatic database migrations
+* Removed: Deadline from pimpy, useless feature.
+* Added: Opt-in for company information on registration
+* Fixed: Styling of pimpy minutes and registration checkboxes
+* Fixed: Internal server error on minutes add
+
 17-06-2015 v2.1.0.1:
 * Fix iDeal
 

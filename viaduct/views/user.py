@@ -43,24 +43,25 @@ def load_user(user_id):
 
 @blueprint.route('/users/view/<int:user_id>', methods=['GET'])
 def view_single(user_id=None):
+    if not user_id:
+        return redirect('user.view')
 
     can_read = False
     can_write = False
 
-    if not current_user or not current_user.has_payed:
+    if not current_user:
         return abort(403)
+    if current_user.id != user_id and not current_user.has_payed:
+        return abort(403)
+    if current_user.id == user_id:
+        can_write = True
+        can_read = True
     if ModuleAPI.can_read('user'):
         can_read = True
     if ModuleAPI.can_write('user'):
         can_write = True
-
-    if current_user.id == user_id:
-        can_write = True
         can_read = True
 
-
-    if not user_id:
-        return abort(404)
     user = User.query.get(user_id)
     if not user:
         return abort(404)
@@ -109,6 +110,9 @@ def remove_avatar(user_id=None):
 @blueprint.route('/users/create/', methods=['GET', 'POST'])
 @blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
 def edit(user_id=None):
+    """
+    Create user for admins and edit for admins and users
+    """
     if not ModuleAPI.can_write('user') and\
             (not current_user or current_user.id != user_id):
         return abort(403)
@@ -164,6 +168,7 @@ def edit(user_id=None):
         user.education_id = form.education_id.data
         user.birth_date = form.birth_date.data
         user.study_start = form.study_start.data
+        user.receive_information = form.receive_information.data
 
         if form.password.data != '':
             user.password = bcrypt.hashpw(form.password.data, bcrypt.gensalt())
@@ -180,8 +185,8 @@ def edit(user_id=None):
         if avatar:
             UserAPI.upload(avatar, user.id)
 
-        flash('The user has been %s successfully.' %
-              ('edited' if user_id else 'created'), 'success')
+        flash('Je hebt je profiel succesvol %s.' %
+              ('aangepast' if user_id else 'aangemaakt'), 'success')
 
         return redirect(url_for('user.view_single', user_id=user.id))
     else:
@@ -216,7 +221,7 @@ def sign_up():
                     bcrypt.gensalt()), form.first_name.data,
                     form.last_name.data, form.student_id.data,
                     form.education_id.data, form.birth_date.data,
-                    form.study_start.data)
+                    form.study_start.data, form.receive_information.data)
 
         exists = User.query.filter(User.email == user.email)
 
@@ -235,7 +240,8 @@ def sign_up():
             if avatar:
                 UserAPI.upload(avatar, user.id)
 
-            flash('You\'ve signed up successfully.', 'success')
+            flash('Welkom %s! Je profiel is succesvol aangemaakt en je bent nu \
+                ingelogd!' % (current_user.first_name), 'success')
 
         login_user(user)
 
@@ -266,7 +272,7 @@ def sign_in():
 
         submitted_hash = bcrypt.hashpw(form.password.data, user.password)
         if submitted_hash != user.password:
-            flash('The credentials that have been specified are invalid.',
+            flash('De gegevens die je hebt ingevoerd zijn onjuist.',
                   'danger')
             return redirect(url_for('user.sign_in'))
 

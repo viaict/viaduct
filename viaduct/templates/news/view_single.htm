@@ -1,18 +1,48 @@
-{% extends 'page/view_super.htm' %}
-
-{% block page_title %}{{ revision.title }}{% endblock %}
-
-{% block page_content %}
+{% extends 'content.htm' %}
+{% block page %}
     <div class='row'>
-        <div class='col-md-12 content'>{{ revision.content | markdown }}</div>
-    </div>
-    <div class='row'>
-        <div class='col-md-6 author'>Geschreven door <em>{{ revision.user.name }}</em></div>
-        <div class='col-md-6 last-edited text-right'>
-            {% if (revision.created - page.created) >= datetime.timedelta(0, 1) %}
-                Laatst bewerkt op <em>{{ revision.created.strftime('%Y-%m-%d') }}</em> om <em>{{ revision.created.strftime('%H:%M') }}</em><br />
-            {% endif %}
-            Gepubliceerd op <em>{{ page.created.strftime('%Y-%m-%d') }}</em> om <em>{{ page.created.strftime('%H:%M') }}</em>
+        <div class='col-md-9 col-md-offset-1'>
+            <p>
+                <a href="{{ url_for('news.list') }}">{{ _('News') }}</a>
+                <i class='fa fa-chevron-right'></i>
+                <a href="{{ url_for('news.view', news_id=news.id) }}">{{ news.title }}</a>
+            </p>
+        </div>
+        <div class='col-md-9 col-md-offset-1 well'>
+            <div class='page-header'>
+                {% if ModuleAPI.can_write('news') %}
+                    <div class='btn-group pull-right'>
+                        <a class='btn btn-warning btn-xs' href='
+                            {{ url_for('news.edit', news_id=news.id) }}'>
+                            <i class='fa fa-edit'></i> {{ _('Edit news item') }}
+                        </a>
+                        <a class='btn btn-danger btn-xs' href='
+                            {{ url_for('news.delete', news_id=news.id) }}'>
+                            <i class='fa fa-remove'></i> {{ _('Delete news item') }}
+                        </a>
+                    </div>
+                {% endif %}
+
+                <h1>{{ news.title }}</h1>
+            </div>
+
+            <div class='row'>
+                <div class='col-md-6'>
+                    Geschreven door: <em>{{ news.user.name }}</em>
+                </div>
+                {% if (news.modified - news.created) >= datetime.timedelta(0, 1) %}
+                    <div class='col-md-6'>
+                        Laatst bewerkt op: <em>{{ news.created.strftime('%Y-%m-%d') }}</em> om <em>{{ news.created.strftime('%H:%M') }}</em><br />
+                    </div>
+                {% endif %}
+                <div class='col-md-6'>
+                    Gepubliceerd op: <em>{{ news.created.strftime('%Y-%m-%d') }}</em> om <em>{{ news.created.strftime('%H:%M') }}</em>
+                </div>
+            </div>
+            <hr>
+            <div class='row'>
+                <div class='col-md-12 content'>{{ news.content | markdown }}</div>
+            </div>
         </div>
     </div>
 {% endblock %}

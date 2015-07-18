@@ -3,46 +3,63 @@
 
 {%block content %}
     <div class="col-md-8">
-        {% for group_header in list_items: %}
-            <h1>{{ group_header }}</h1>
+
+
+    {% for group_header in list_items: %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ group_header }}</h3>
+        </div>  
+        <ul class="list-group">
             {% for list_item in list_items[group_header] %}
                 {% if list_item.id > 0 %}
-                    <div class="btn-group">
-                        <button class="btn btn-default" data-toggle="collapse"
-                                data-target='#{{ list_item.get_name() }}'>{{ list_item.get_title() }} </button>
-                        <button class="btn btn-default" data-toggle="collapse"
-                                data-target='#{{ list_item.get_name()}}'>
-                            Geupload op: {{ list_item.timestamp.strftime('%Y-%m-%d') }}</button>
-                    </div>
-                    <div id='{{ list_item.get_name() }}'
-                        {% if line_number != -1 %}
-                            class="collapse in"
-                        {% else %}
-                            class="collapse"
-                        {% endif %}
-                        >
-                        <div class="well" style="white-space: pre-wrap;"> -->
-                            {{ list_item.get_content_numbered() | markup }}
+                    <li class="list-group-item">
+                        <div class="row toggle" id="dropdown-detail-1" data-toggle="#{{ list_item.get_name() }}">
+                            <div class="col-xs-10">
+                                {{ list_item.get_title() }}
+                            </div>
+                            <div class="col-xs-2"><i class="fa fa-chevron-down pull-right"></i></div>
                         </div>
-                    </div>
+                        <div class="pimpy_minute_toggle" id="{{ list_item.get_name() }}">
+                            <div class="pimpy_minute_styled">
+                                {{ list_item.get_content_numbered() | markdown }}
+                            </div>
+                        </div>
+                    </li>
                 {% endif %}
             {% endfor %}
-        {% endfor %}
+        </ul>
+    </div>
+    {% endfor %}
+
+
     </div>
 
-    {% if line_number != -1 %}
-<script>
-$(document).ready(function() {
-        location.hash = '{{ tag }}'
-        var s = document.getElementById('{{tag}}')
-        s.className += ' selected_line'
 
-        setTimeout(function() {
-            var y = $(window).scrollTop();  //your current y position on the page
-            $(window).scrollTop(y-150);
-        }, 200);
-});
-</script>
+
+    <script>
+        $('[class^=pimpy_minute_toggle]').hide();
+        $('.toggle').click(function() {
+            $input = $( this );
+            $target = $($input.attr('data-toggle'));
+            $target.slideToggle();
+        });
+    </script>
+    {% if line_number != -1 %}
+        <script>
+        $(document).ready(function() {
+            location.hash = '{{ tag }}'
+            $("#{{tag}}").addClass('selected_line');
+            $("#{{tag}}").closest(".pimpy_minute_toggle").slideToggle();
+
+            setTimeout(function() {
+                $('html, body').animate({
+                    scrollTop: $("#{{tag}}").offset().top - ($(window).height()/2)
+                }, 1000);
+            }, 500);
+
+        });
+        </script>
     {% endif %}
 {% endblock %}
 

@@ -9,7 +9,7 @@ class User(db.Model, BaseEntity):
     __tablename__ = 'user'
 
     prints = ('id', 'email', 'password', 'first_name', 'last_name',
-              'student_id')
+              'student_id', 'receive_information')
 
     email = db.Column(db.String(200), unique=True)
     password = db.Column(db.String(60))
@@ -32,13 +32,14 @@ class User(db.Model, BaseEntity):
     payed_date = db.Column(db.DateTime)
     birth_date = db.Column(db.Date)
     study_start = db.Column(db.Date)
+    receive_information = db.Column(db.Boolean, default=False)
 
     education = db.relationship(Education,
                                 backref=db.backref('user', lazy='dynamic'))
 
     def __init__(self, email=None, password=None, first_name=None,
                  last_name=None, student_id=None, education_id=None,
-                 birth_date=None, study_start=None):
+                 birth_date=None, study_start=None, receive_information=None):
         if not email:
             self.id = 0
 
@@ -51,6 +52,7 @@ class User(db.Model, BaseEntity):
 
         self.birth_date = birth_date
         self.study_start = study_start
+        self.receive_information = receive_information
 
     def __setattr__(self, name, value):
         """ if has_payed is set to true, we want to store the date that

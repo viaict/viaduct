@@ -1,66 +1,67 @@
-{% from "macros/activity_pagination.htm" import render_activity_pagination %}
+{% from "macros/pagination.htm" import render_pagination %}
 
 {% extends "content.htm" %}
-
 {% block content %}
+    <div class="btn-group">
+        {% if ModuleAPI.can_write('activity') %}
+            <a href="/activities/create/"
+                class="btn btn-success">{{_('New activity')}}</a>
+        {% endif %}
 
-<div class="btn-group">
-	{% if ModuleAPI.can_write('activity') %}
-		<a href="/activities/create/" class="btn btn-success">Nieuwe activiteit</a>
-	{% endif %}
+        {% if archive == 'archive' %}
+            <a href="{{ url_for('activity.view') }}" class="btn btn-info">
+                {{_('Show upcoming activities')}}
+            </a>
+        {% else %}
+            <a href="{{ url_for('activity.view', archive='archive') }}"
+                class="btn btn-default">
+                {{_('Show activities in the archive')}}
+            </a>
+        {% endif %}
+    </div>
 
-	<a href="/activities/" class="btn btn-info">Toon aankomende activiteiten</a>
-	<a href="/activities/archive/" class="btn btn-default">Toon activiteiten in het archief</a>
-</div>
+    <div class="activity">
+        {% for activity in activities.items %}
 
-<div class="activity">
-	{% for activity in activities.items %}
+            <a href="{{ url_for('activity.get_activity', activity_id=activity.id)}}">
+                <div class="activity-block">
+                    <div class="row">
+                        <div class="col-md-4 image">
+                            {% if activity.picture %}
+                                <img src="{{ thumb('/static/activity_pictures/' + activity.picture, (220, 220)) }}">
+                            {% else %}
+                                <img src="/static/img/via_thumbnail.png">
+                            {% endif %}
+                        </div>
 
-	<a href="{{ url_for('activity.get_activity', activity_id=activity.id)}}">
-		<div class="activity-block">
-			<div class="row">
-				<div class="col-md-4 image">
-					{% if activity.picture %}
-                    <img src="{{ thumb('/static/activity_pictures/' + activity.picture, (220, 220)) }}">
-					{% else %}
-						<img src="/static/img/via_thumbnail.png">
-					{% endif %}
-				</div>
+                        <div class="col-md-8">
+                            <h1>{{activity.name}}</h1>
 
-				<div class="col-md-8">
-					<h1>
-							{{activity.name}}
-					</h1>
+                            <dl class="time dl-horizontal">
+                                <dt><i class="glyphicon glyphicon-home"></i></dt>
+                                <dd>{{ activity.location}}</dd>
+                                <dt><i class="glyphicon glyphicon-calendar"></i></dt>
+                                <dd>{{ activity.get_time() }} </dd>
+                                <dd><small>{{ activity.till_now() }}</small></dd>
+                            </dl>
 
+                            <h2>
+                                {% if activity.price.lower() != "gratis" and activity.price.lower() != "free" %}
+                                    &euro; {{ activity.price}}
+                                {% else %}
+                                    {{ _('free') }}
+                                {% endif %}
+                            </h2>
 
-					<dl class="time dl-horizontal">
-						<dt><i class="glyphicon glyphicon-home"></i></dt>
-						<dd>{{ activity.location}}</dd>
-						<dt><i class="glyphicon glyphicon-calendar"></i></dt>
-						<dd>{{ activity.get_time() }} </dd>
-                        <dd><small>{{ activity.till_now() }}</small></dd>
-					</dl>
-
-					<h2>
-						{% if activity.price != "gratis" %}
-                            &euro;
-						{% endif %}
-						{{ activity.price}}
-					</h2>
-
-				</div>
-				<div class="col-md-8 short_content">
-					{{ activity.get_short_description(600) | markdown }}
-				</div>
-			</div>
-		</div>
-	</a>
-
-	{% endfor %}
-</div>
-
-<hr />
-
-{{ render_activity_pagination(activities, 'activity.view', archive) }}
+                        </div> {# col-md-8 #}
+                        <div class="col-md-8 short_content">
+                            {{ activity.get_short_description(600) | markdown }}
+                        </div>
+                    </div> {# /.row #}
+                </div> {# /.activity-blck #}
+            </a>
+        {% endfor %}
+    </div> {# activity #}
+    <hr />
+    {{ render_pagination(activities, 'activity.view', archive=archive) }}
 {% endblock %}
-

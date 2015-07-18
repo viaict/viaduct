@@ -1,16 +1,18 @@
+from datetime import date, datetime
+from flask import Blueprint, render_template, abort
+from sqlalchemy import desc
+
+from viaduct import db
+from viaduct.models import News
 from viaduct.models.page import Page, PageRevision
 from viaduct.models.activity import Activity
-from flask import Blueprint, render_template
-from flask import abort
-import datetime
 
 blueprint = Blueprint('home', __name__)
 
 
 @blueprint.route('/', methods=['GET'])
 def home():
-    data = ['laatste_bestuursblog',
-            'activities',
+    data = ['activities',
             'contact']
 
     pages = []
@@ -21,11 +23,11 @@ def home():
             revision = PageRevision(None, None, None, None, None)
 
             activities = Activity.query \
-                .filter(Activity.end_time > datetime.datetime.now()) \
+                .filter(Activity.end_time > datetime.now()) \
                 .order_by(Activity.start_time.asc())
             revision.activity = \
                 render_template('activity/view_simple.htm',
-                                activities=activities .paginate(1, 12, False))
+                                activities=activities.paginate(1, 4, False))
 
             revisions.append(revision)
 
@@ -50,5 +52,14 @@ def home():
 
         revisions.append(revision)
 
+    news = News.query.filter(
+        db.and_(
+            db.or_(
+                News.archive_date >= date.today(), News.archive_date == None),
+            News.publish_date >= date.today())).order_by(desc(News.created))\
+        .limit(8).all()  # noqa
+
+    print(news)
+
     return render_template('home/home.htm', revisions=revisions,
-                           title='Homepage')
+                           title='Homepage', news=news)

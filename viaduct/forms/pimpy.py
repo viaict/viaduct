@@ -15,8 +15,6 @@ DATE_FORMAT = application.config['DATE_FORMAT']
 class AddTaskForm(Form):
     name = StringField('Name', validators=[InputRequired()])
     content = TextAreaField('Content', validators=[Optional()])
-    deadline = DateTimeField('Deadline', format=DATE_FORMAT,
-                             default=datetime.date.today())
     # timestamp
     line = IntegerField(
         'Line', default=-1,
@@ -52,8 +50,6 @@ class AddTaskForm(Form):
 class EditTaskForm(Form):
     name = StringField('Name', validators=[InputRequired()])
     content = TextAreaField('Content', validators=[Optional()])
-    deadline = DateTimeField('Deadline',
-                             format=DATE_FORMAT, default=datetime.date.today())
     # timestamp
     line = IntegerField('Line', default=-1,
                         description='Fill in -1 if this is '
@@ -83,7 +79,7 @@ class AddMinuteForm(Form):
     content = TextAreaField('Content', validators=[InputRequired()])
     group = SelectField('Group', validators=[InputRequired()])
     # FIXME: datetime is now printed badly in the actual form!!! :( :(
-    date = DateTimeField('Deadline', format=DATE_FORMAT,
+    date = DateTimeField('Date', format=DATE_FORMAT,
                          default=datetime.date.today())
     parse_tasks = BooleanField('Parse', default=True)
 

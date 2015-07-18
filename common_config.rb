@@ -1,3 +1,5 @@
+gem 'bootstrap-sass', '=3.2.0.2'
+gem 'font-awesome-sass', '=4.2.0'
 require 'bootstrap-sass'
 require 'font-awesome-sass'
 
