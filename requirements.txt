@@ -15,7 +15,7 @@ Flask-Script==2.0.5
 Flask-SQLAlchemy==1.0
 Flask-WTF==0.10.3
 fuzzywuzzy==0.4.0
-git+git://github.com/google/google-api-python-client@master#egg=google-api-python-client
+google-api-python-client==1.4.1
 httplib2==0.9.1
 itsdangerous==0.24
 Jinja2==2.7.3
@@ -23,7 +23,7 @@ Mako==1.0.1
 Markdown==2.5.2
 MarkupSafe==0.23
 git+git://github.com/JelteF/mollie-api-python@master#egg=mollie-api-client
-oauth2client==1.4.7
+oauth2client==1.4.12
 Pillow==2.7.0
 py-bcrypt==0.4
 pyasn1==0.1.7
