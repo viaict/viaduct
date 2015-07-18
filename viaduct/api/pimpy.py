@@ -169,7 +169,7 @@ class PimpyAPI:
                     continue
 
                 try:
-                    task = Task(title, "", None, group_id, users,
+                    task = Task(title, "", group_id, users,
                                 minute_id, i, 0)
                 except:
                     print("wasnt given the right input to create a task")
@@ -196,7 +196,7 @@ class PimpyAPI:
 
                 for user in users:
                     try:
-                        task = Task(title, "", None, group_id, [user],
+                        task = Task(title, "", group_id, [user],
                                     minute_id, i, 0)
                     except:
                         print("wasnt given the right input to create a task")

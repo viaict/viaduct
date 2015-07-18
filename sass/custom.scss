@@ -428,8 +428,18 @@ p.report-bug{
     text-overflow: ellipsis;
 }
 
+.pimpy_line_number {   
+    width: 6%;
+    float: left;
+    padding-top: 8px;
+    font-size: 10px;
+    font-style: oblique;
+}
 
-
+.pimpy_minute_styled {
+    padding: 10px;
+    font-family: sans-serif;
+}
 
 
 /* User Pages */
@@ -595,12 +605,16 @@ div.sortable {
 }
 
 a.pimpy_minute_line{
-    display:block;
-    color: black; text-decoration: none;
+    display: block;
+    color: black;
+    padding: 2px 0px;
+    text-decoration: none;
+    border-bottom: 1px solid #efecec;
 }
 
 a.selected_line{
-    background-color:rgba(0, 0, 255, .2);
+  background-color: rgba(194, 194, 194, 0.25);
+  border-left: 5px solid rgb(119, 119, 119);
 }
 
 /* new css */
