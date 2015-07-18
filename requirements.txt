@@ -1,6 +1,6 @@
 alembic==0.7.5.post2
 aniso8601==0.92
-git+https://github.com/MaicoTimmerman/babel@master
+git+https://github.com/MaicoTimmerman/babel@via
 cffi==0.8.6
 cryptography==0.7.1
 enum34==1.0.4
