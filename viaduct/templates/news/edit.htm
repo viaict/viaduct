@@ -3,7 +3,7 @@
 {% extends 'content.htm' %}
 
 {% block includes %}
-     <script src="{{static_url("/static/js/news/single.js")}}"></script>
+    <script src="{{static_url("/static/js/news/single.js")}}"></script>
 {% endblock %}
 
 {% block content %}
@@ -49,8 +49,14 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class='col-md-6'>
                     {{ render_datefield_picker(form.publish_date) }}
+                </div>
+                <div class='col-md-6'>
                     {{ render_datefield_picker(form.archive_date) }}
+                </div>
+                <div class='col-md-12'>
                     {{ render_submit(_('Save')) }}
                 </div>
             </div>
