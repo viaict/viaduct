@@ -52,31 +52,31 @@ class News(db.Model, BaseEntity):
 
 
 @event.listens_for(News, 'load')
-def set_activity_locale(activity, context):
+def set_news_locale(news, context):
     """
-    This function is called after an Activity model is filled with data from
+    This function is called after an News model is filled with data from
     the database, but before is used in all other code.
 
     Use the locale of the current user/client to determine which language to
     display on the whole website. If the users locale is unavailable, select
-    the alternative language, suffixing the title of the activity with the
+    the alternative language, suffixing the title of the news with the
     displayed language.
     """
     locale = get_locale()
-    nl_available = activity.nl_title and activity.nl_content
-    en_available = activity.en_title and activity.en_content
+    nl_available = news.nl_title and news.nl_content
+    en_available = news.en_title and news.en_content
     if locale == 'nl' and nl_available:
-        activity.title = activity.nl_title
-        activity.content = activity.nl_content
+        news.title = news.nl_title
+        news.content = news.nl_content
     elif locale == 'en' and en_available:
-        activity.title = activity.en_title
-        activity.content = activity.en_content
+        news.title = news.en_title
+        news.content = news.en_content
     elif nl_available:
-        activity.title = activity.nl_title + " (" + _('Dutch') + ")"
-        activity.content = activity.nl_content
+        news.title = news.nl_title + " (" + _('Dutch') + ")"
+        news.content = news.nl_content
     elif en_available:
-        activity.title = activity.en_title + " (" + _('English') + ")"
-        activity.content = activity.en_content
+        news.title = news.en_title + " (" + _('English') + ")"
+        news.content = news.en_content
     else:
-        activity.title = 'N/A'
-        activity.content = 'N/A'
+        news.title = 'N/A'
+        news.content = 'N/A'
