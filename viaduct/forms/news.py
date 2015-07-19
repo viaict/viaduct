@@ -1,7 +1,7 @@
 from flask_wtf import Form
 from wtforms import TextField, TextAreaField, DateField
 from wtforms.validators import InputRequired, Optional
-from flask.ext.babel import _
+from flask.ext.babel import lazy_gettext as _
 
 from datetime import date, timedelta
 
