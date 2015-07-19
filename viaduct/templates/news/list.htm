@@ -9,7 +9,7 @@
             <div class='btn-group'>
                 {% if ModuleAPI.can_write('news') %}
                     <a href='{{ url_for('news.edit') }}' class='btn btn-success'>
-                        {{ _('New news item') }}
+                        {{ _('Create news item') }}
                     </a>
                     <a href='{{ url_for('news.all') }}' class='btn btn-primary'>
                         {{ _('Show all news items') }}
