@@ -11,8 +11,8 @@ from viaduct.models import BaseEntity
 class News(db.Model, BaseEntity):
     __tablename__ = 'news'
 
-    nl_title = db.Column(db.Text)
-    en_title = db.Column(db.Text)
+    nl_title = db.Column(db.String(256))
+    en_title = db.Column(db.String(256))
     nl_content = db.Column(db.Text)
     en_content = db.Column(db.Text)
 
