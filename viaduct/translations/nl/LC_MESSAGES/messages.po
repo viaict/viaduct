@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  2.1.0.3\n"
+"Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2015-07-18 23:47+0200\n"
+"POT-Creation-Date: 2015-07-19 15:05+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -53,11 +53,11 @@ msgstr "Bestaat al in de database."
 msgid "Answers"
 msgstr "Antwoorden"
 
-#: viaduct/forms/news.py:20
+#: viaduct/forms/news.py:19
 msgid "Archive date"
 msgstr "Archiveer datum"
 
-#: viaduct/forms/news.py:32
+#: viaduct/forms/news.py:33
 msgid "Archive date needs to be after the publish date."
 msgstr "Archiveer datum moet na de publiceer datum zijn."
 
@@ -89,10 +89,6 @@ msgstr "Klik om uit te klappen"
 msgid "Contact details"
 msgstr "Contact gegevens"
 
-#: viaduct/forms/news.py:14 viaduct/forms/news.py:15
-msgid "Content"
-msgstr "Inhoud"
-
 #: viaduct/templates/examination/admin.htm:30
 #: viaduct/templates/examination/edit.htm:14
 #: viaduct/templates/examination/upload.htm:22
@@ -115,6 +111,10 @@ msgstr "Activiteit aanmaken"
 #: viaduct/templates/activity/create.htm:26
 msgid "Create form"
 msgstr "Formulier aanmaken"
+
+#: viaduct/templates/news/list.htm:12
+msgid "Create news item"
+msgstr "Nieuwsberich aanmaken"
 
 #: viaduct/templates/examination/edit.htm:52
 #: viaduct/templates/examination/edit.htm:58
@@ -141,15 +141,19 @@ msgstr "Verwijder nieuwsbericht"
 msgid "Do you have an idea for an activity?"
 msgstr "Heb je een idee voor een activiteit?"
 
-#: viaduct/models/activity.py:172
+#: viaduct/models/activity.py:172 viaduct/models/news.py:75
 msgid "Dutch"
 msgstr "Nederlands"
+
+#: viaduct/forms/news.py:11
+msgid "Dutch content"
+msgstr "Nederlandse inhoud"
 
 #: viaduct/forms/activity.py:10
 msgid "Dutch description"
 msgstr "Nederlandse beschrijving"
 
-#: viaduct/templates/activity/create.htm:44
+#: viaduct/templates/activity/create.htm:44 viaduct/templates/news/edit.htm:29
 msgid "Dutch details"
 msgstr "Nederlandse gegevens"
 
@@ -160,6 +164,14 @@ msgstr "Nederlandse naam"
 #: viaduct/forms/activity.py:51
 msgid "Dutch name requires Dutch description and vice versa"
 msgstr "Nederlandse naam vereist Nederlandse beschrijving en vica versa."
+
+#: viaduct/forms/news.py:10
+msgid "Dutch title"
+msgstr "Nederlandse titel"
+
+#: viaduct/forms/news.py:50
+msgid "Dutch title requires Dutch content and vice versa"
+msgstr "Nederlandse titel vereist Nederlandse inhoud en vica versa."
 
 #: viaduct/forms/activity.py:63 viaduct/forms/activity.py:64
 msgid "E-mail address"
@@ -187,6 +199,10 @@ msgstr "Opleiding"
 msgid "Education succesfully added."
 msgstr "Opleiding succesvol toegevoegd."
 
+#: viaduct/forms/news.py:44
+msgid "Either Dutch or English content required"
+msgstr "Een Nederlandse of Engelse inhoud is vereist."
+
 #: viaduct/forms/activity.py:45
 msgid "Either Dutch or English description required"
 msgstr "Een Nederlandse of Engelse beschrijving is vereist."
@@ -195,19 +211,27 @@ msgstr "Een Nederlandse of Engelse beschrijving is vereist."
 msgid "Either Dutch or English name required"
 msgstr "Een Nederlandse of Engelse naam is vereist."
 
+#: viaduct/forms/news.py:40
+msgid "Either Dutch or English title required"
+msgstr "Een Nederlandse of Engelse titel is vereist."
+
 #: viaduct/forms/activity.py:19
 msgid "End time"
-msgstr "Eind tijd"
+msgstr "Eindtijd"
 
-#: viaduct/models/activity.py:175
+#: viaduct/models/activity.py:175 viaduct/models/news.py:78
 msgid "English"
 msgstr "Engels"
+
+#: viaduct/forms/news.py:13
+msgid "English content"
+msgstr "Engelse inhoud"
 
 #: viaduct/forms/activity.py:12
 msgid "English description"
 msgstr "Engelse beschrijving"
 
-#: viaduct/templates/activity/create.htm:49
+#: viaduct/templates/activity/create.htm:49 viaduct/templates/news/edit.htm:34
 msgid "English details"
 msgstr "Engelse gegevens"
 
@@ -218,6 +242,14 @@ msgstr "Engelse naam"
 #: viaduct/forms/activity.py:55
 msgid "English name requires English description and vice versa"
 msgstr "Engelse naam vereist Engelse beschrijving en vica versa."
+
+#: viaduct/forms/news.py:12
+msgid "English title"
+msgstr "Engelse titel"
+
+#: viaduct/forms/news.py:54
+msgid "English title requires English content and vice versa"
+msgstr "Engelse titel vereist Engelse inhoud en vica versa."
 
 #: viaduct/templates/examination/admin.htm:31
 #: viaduct/templates/examination/edit.htm:51
@@ -325,21 +357,17 @@ msgstr "Nieuwe opleiding"
 msgid "New examination"
 msgstr "Nieuw tentamen"
 
-#: viaduct/templates/news/list.htm:12
-msgid "New news item"
-msgstr "Nieuw nieuwsbericht"
-
 #: viaduct/templates/news/view_single.htm:6
 msgid "News"
 msgstr "Niews"
 
 #: viaduct/views/news.py:91
 msgid "News item saved"
-msgstr "Niewsbericht opgeslagen."
+msgstr "Niewsbericht opgeslagen"
 
 #: viaduct/views/news.py:131
 msgid "News item succesfully deleted"
-msgstr "Niewsbericht succesvol verwijderd."
+msgstr "Niewsbericht succesvol verwijderd"
 
 #: viaduct/templates/macros/pagination.htm:22
 #: viaduct/templates/macros/pagination.htm:24
@@ -395,7 +423,7 @@ msgstr "Privacy"
 msgid "Public"
 msgstr "Publiek"
 
-#: viaduct/forms/news.py:17 viaduct/forms/news.py:18
+#: viaduct/forms/news.py:16 viaduct/forms/news.py:17
 msgid "Publish date"
 msgstr "Publiceer datum"
 
@@ -403,7 +431,7 @@ msgstr "Publiceer datum"
 msgid "Published at"
 msgstr "Gepubliceerd op"
 
-#: viaduct/models/news.py:39
+#: viaduct/models/news.py:49
 msgid "Read more"
 msgstr "Meer lezen"
 
@@ -419,7 +447,7 @@ msgstr "Registreer voor deze activiteit"
 msgid "Reset password"
 msgstr "Reset wachtwoord"
 
-#: viaduct/templates/activity/create.htm:98 viaduct/templates/news/edit.htm:26
+#: viaduct/templates/activity/create.htm:98 viaduct/templates/news/edit.htm:54
 msgid "Save"
 msgstr "Opslaan"
 
@@ -470,7 +498,7 @@ msgstr ""
 
 #: viaduct/forms/activity.py:15 viaduct/forms/activity.py:16
 msgid "Start time"
-msgstr "Start tijd"
+msgstr "Starttijd"
 
 #: viaduct/forms/activity.py:73 viaduct/forms/activity.py:74
 msgid "Student ID"
@@ -516,7 +544,6 @@ msgstr "Dit nieuwsbericht bestaat niet."
 msgid "Tip"
 msgstr "Tip"
 
-#: viaduct/forms/news.py:11 viaduct/forms/news.py:12
 #: viaduct/templates/examination/edit.htm:9
 #: viaduct/templates/examination/upload.htm:17
 msgid "Title"
@@ -573,19 +600,19 @@ msgstr "om"
 #: viaduct/templates/activity/view.htm:52
 #: viaduct/templates/activity/view_single.htm:157
 msgid "free"
-msgstr "Gratis"
+msgstr "gratis"
 
 #: viaduct/models/activity.py:143
 msgid "in"
 msgstr "over"
 
-#: viaduct/forms/news.py:12 viaduct/forms/news.py:15 viaduct/forms/news.py:18
+#: viaduct/forms/news.py:17
 msgid "is required"
 msgstr "is vereist"
 
 #: viaduct/templates/news/edit.htm:16
-msgid "newsitem"
-msgstr "Nieuwsbericht"
+msgid "news item"
+msgstr "nieuwsbericht"
 
 #: viaduct/views/activity.py:49 viaduct/views/activity.py:55
 msgid "page"
@@ -600,4 +627,10 @@ msgstr "vereist"
 #: viaduct/models/activity.py:148
 msgid "still"
 msgstr "nog"
+
+#~ msgid "Content"
+#~ msgstr "Inhoud"
+
+#~ msgid "New news item"
+#~ msgstr "Nieuw nieuwsbericht"
 
