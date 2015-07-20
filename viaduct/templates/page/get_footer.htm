@@ -1,13 +1,24 @@
 <br />
 <div class="row">
-   <div class="col-md-12"  style="overflow:hidden;">
-                <div id="carousel">
-                    {% for company in CompanyAPI.get_carousel() %}
-                    <div class="col-md-2 logo_wrapper"><a href="{{company.website}}"><img class="logo_img" src="/static/files/{{company.logo_path}}" alt="{{company.name}}" /></a>
-                        <a href="{{company.website}}"><span>{{company.name}}</span></a>
-                    </div>
-                    {% endfor %}
+    <div class="col-md-12"  style="overflow:hidden;">
+        <div id="carousel">
+            {% for company in CompanyAPI.get_carousel() %}
+                <div class="col-md-2 logo_wrapper">
+                    <a href="{{company.website}}">
+                        <img class="logo_img" src="/static/files/{{company.logo_path}}" alt="{{company.name}}" />
+                    </a>
+                    <a href="{{company.website}}">
+                        <span>{{company.name}}</span>
+                    </a>
                 </div>
-            </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
-<a href="http://true.nl"><img src="/static/files/truelogo.png" style="float:right; padding-bottom: 15px;"></a>
+<div class='row'>
+    <div class='col-md-12'>
+        <a href="http://true.nl" class='pull-right'>
+            <img src="/static/files/truelogo.png">
+        </a>
+    </div>
+</div>
