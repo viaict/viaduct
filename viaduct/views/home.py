@@ -1,5 +1,6 @@
 from datetime import date, datetime
 from flask import Blueprint, render_template, abort
+from flask.ext.babel import _
 from sqlalchemy import desc
 
 from viaduct import db
@@ -20,7 +21,7 @@ def home():
 
     for path in data:
         if path == 'activities':
-            revision = PageRevision(None, None, None, None, None)
+            revision = PageRevision(None, None, None, None, None, None, None)
 
             activities = Activity.query \
                 .filter(Activity.end_time > datetime.now()) \
@@ -37,9 +38,9 @@ def home():
         pages.append(page)
 
         if not page:
-            revision = PageRevision(None, None, None, None, None)
-            revision.title = 'Not found!'
-            revision.content = 'Page not found'
+            revision = PageRevision(None, None, None, None, None, None, None)
+            revision.title = _('Not found!')
+            revision.content = _('Page not found')
 
             revisions.append(revision)
 
@@ -59,7 +60,5 @@ def home():
             News.publish_date <= date.today()))\
         .order_by(desc(News.publish_date)).limit(8).all()  # noqa
 
-    print(news)
-
     return render_template('home/home.htm', revisions=revisions,
-                           title='Homepage', news=news)
+                           title='Homepage', news=news), 403
