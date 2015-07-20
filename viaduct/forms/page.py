@@ -5,36 +5,65 @@ from wtforms import BooleanField, StringField, TextAreaField, FieldList, \
 from wtforms.validators import InputRequired, Regexp, Optional
 
 from wtforms import Form as UnsafeForm
+from flask.ext.babel import lazy_gettext as _
 
 
 class EditGroupPagePermissionEntry(UnsafeForm):
-    select = SelectField(None, coerce=int, choices=[(0, 'Geen'), (1, 'Lees'),
-                                                    (2, 'Lees/Schrijf')])
+    select = SelectField(None, coerce=int, choices=[
+        (0, _('Geen')), (1, _('Read')), (2, _('Read/Write'))])
 
 
 class SuperPageForm(Form):
     """TODO"""
-    needs_payed = BooleanField('Alleen zichtbaar voor leden')
+    nl_title = StringField(_('Dutch title'))
+    en_title = StringField(_('English title'))
 
-    title = StringField('Titel',
-                        [InputRequired(message='Geen titel opgegeven')])
-    comment = StringField('Reden van wijziging', [Optional()])
-
-    save_page = SubmitField('Opslaan')
+    comment = StringField(_('Comment for change'), [Optional()])
+    needs_payed = BooleanField(_('Visible for members only'))
 
 
 class PageForm(SuperPageForm):
-    content = TextAreaField('Inhoud',
-                            [InputRequired(message='Geen inhoud opgegeven')])
-    filter_html = BooleanField('Sta HTML tags toe')
-    custom_form_id = SelectField('Formulier', coerce=int)
+    nl_content = TextAreaField(_('Dutch content'))
+    en_content = TextAreaField(_('English content'))
+    filter_html = BooleanField(_('Do not filter HTML tags'))
+    custom_form_id = SelectField(_('Custom form'), coerce=int)
     permissions = FieldList(FormField(EditGroupPagePermissionEntry))
+
+    def validate(self):
+
+        # Validate all other fields with default validators
+        if not Form.validate(self):
+            return False
+        result = True
+
+        # Test if either english or dutch is entered
+        result = True
+        if not (self.nl_title.data or self.en_title.data):
+            self.nl_title.errors.append(
+                _('Either Dutch or English title required'))
+            result = False
+        if not (self.nl_content.data or self.en_content.data):
+            self.nl_content.errors.append(
+                _('Either Dutch or English content required'))
+            result = False
+
+        # XOR the results to test if both of a language was given
+        if bool(self.nl_title.data) != bool(self.nl_content.data):
+            self.nl_title.errors.append(
+                _('Dutch title requires Dutch content and vice versa'))
+            result = False
+        if bool(self.en_title.data) != bool(self.en_content.data):
+            self.en_title.errors.append(
+                _('English title requires English content and vice versa'))
+            result = False
+
+        return result
 
 
 class HistoryPageForm(Form):
-    previous = RadioField('Previous', coerce=int)
-    current = RadioField('Current', coerce=int)
-    compare = SubmitField('Compare')
+    previous = RadioField(_('Previous'), coerce=int)
+    current = RadioField(_('Current'), coerce=int)
+    compare = SubmitField(_('Compare'))
 
 
 class ChangePathForm(Form):
