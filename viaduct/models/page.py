@@ -1,9 +1,8 @@
 import sys
-
-from viaduct import db
-from viaduct.models import BaseEntity, Group
-
 from sqlalchemy import event
+from flask.ext.babel import lazy_gettext as _
+from viaduct import db, get_locale
+from viaduct.models import BaseEntity, Group
 
 
 class Page(db.Model, BaseEntity):
@@ -86,13 +85,16 @@ class SuperRevision(db.Model, BaseEntity):
     # Things needed in template context.
     context = {}
 
-    title = db.Column(db.String(128))
+    nl_title = db.Column(db.String(128))
+    en_title = db.Column(db.String(128))
     comment = db.Column(db.String(1024))
 
-    def __init__(self, title, comment):
+    def __init__(self, nl_title, en_title, comment):
         """Any necessary initialization. Don't forget to call
         `super().__init__(title, comment)`!"""
-        self.title = title
+        self.title = None
+        self.nl_title = nl_title
+        self.en_title = en_title
         self.comment = comment
 
     def get_comparable(self):
@@ -108,7 +110,8 @@ class PageRevision(SuperRevision):
     __tablename__ = 'page_revision'
 
     filter_html = db.Column(db.Boolean)
-    content = db.Column(db.Text)
+    nl_content = db.Column(db.Text)
+    en_content = db.Column(db.Text)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User', backref=db.backref('page_edits',
@@ -124,19 +127,52 @@ class PageRevision(SuperRevision):
                                                       lazy='dynamic',
                                                       cascade='all,delete'))
 
-    def __init__(self, page, title, comment, user, content,
-                 filter_html=True, custom_form_id=None):
-        super(PageRevision, self).__init__(title, comment)
+    def __init__(self, page, nl_title, en_title, comment, user, nl_content,
+                 en_content, filter_html=True, custom_form_id=None):
+        super(PageRevision, self).__init__(nl_title, en_title, comment)
 
         self.page = page
 
         self.filter_html = filter_html
         self.custom_form_id = custom_form_id
-        self.content = content
+        self.content = None
+        self.nl_content = nl_content
+        self.en_content = en_content
         self.user_id = user.id if user else None
 
     def get_comparable(self):
         return self.content
+
+
+@event.listens_for(PageRevision, 'load')
+def set_page_revision_locale(page_rev, context):
+    """
+    This function is called after an PageRevision model is filled with data
+    from the database, but before is used in all other code.
+
+    Use the locale of the current user/client to determine which language to
+    display on the whole website. If the users locale is unavailable, select
+    the alternative language, suffixing the title of the activity with the
+    displayed language.
+    """
+    locale = get_locale()
+    nl_available = page_rev.nl_title and page_rev.nl_content
+    en_available = page_rev.en_title and page_rev.en_content
+    if locale == 'nl' and nl_available:
+        page_rev.title = page_rev.nl_title
+        page_rev.content = page_rev.nl_content
+    elif locale == 'en' and en_available:
+        page_rev.title = page_rev.en_title
+        page_rev.content = page_rev.en_content
+    elif nl_available:
+        page_rev.title = page_rev.nl_title + " (" + _('Dutch') + ")"
+        page_rev.content = page_rev.nl_content
+    elif en_available:
+        page_rev.title = page_rev.en_title + " (" + _('English') + ")"
+        page_rev.content = page_rev.en_content
+    else:
+        page_rev.title = 'N/A'
+        page_rev.content = 'N/A'
 
 
 class PagePermission(db.Model):
