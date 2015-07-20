@@ -104,34 +104,6 @@ class SuperRevision(db.Model, BaseEntity):
         return cls.query.order_by(cls.id.desc())
 
 
-class IdRevision(SuperRevision):
-    """Class that page types can inherit from to let their pages to work with
-    id's instead of paths."""
-    __abstract__ = True
-
-    instance_id = db.Column(db.Integer)
-
-    def __init__(self, title, comment, instance_id):
-        """Initialization. Don't forget to call
-        `super().__init__(title, comment, instance_id)`."""
-        super(IdRevision, self).__init__(title, comment)
-
-        self.instance_id = instance_id
-
-    def get_path(self):
-        return '/%s/%d/' % (self.page.type, self.instance_id)
-
-    @classmethod
-    def get_new_id(cls):
-        first = cls.get_query().first()
-
-        return first.instance_id + 1 if first else 1
-
-    @classmethod
-    def get_latest(cls, instance_id):
-        return cls.get_query().filter(cls.instance_id == instance_id).first()
-
-
 class PageRevision(SuperRevision):
     __tablename__ = 'page_revision'
 
@@ -211,3 +183,32 @@ class PagePermission(db.Model):
                         rights = permissions.permission
 
         return rights
+
+
+# This class is not used at all in viaduct
+# class IdRevision(SuperRevision):
+#     """Class that page types can inherit from to let their pages to work with
+#     id's instead of paths."""
+#     __abstract__ = True
+#
+#     instance_id = db.Column(db.Integer)
+#
+#     def __init__(self, title, comment, instance_id):
+#         """Initialization. Don't forget to call
+#         `super().__init__(title, comment, instance_id)`."""
+#         super(IdRevision, self).__init__(title, comment)
+#
+#         self.instance_id = instance_id
+#
+#     def get_path(self):
+#         return '/%s/%d/' % (self.page.type, self.instance_id)
+#
+#     @classmethod
+#     def get_new_id(cls):
+#         first = cls.get_query().first()
+#
+#         return first.instance_id + 1 if first else 1
+#
+#     @classmethod
+#     def get_latest(cls, instance_id):
+#         return cls.get_query().filter(cls.instance_id == instance_id).first()
