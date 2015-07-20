@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
-
-import difflib
-
-from flask import Blueprint
-from flask import flash, redirect, render_template, request, url_for
+from flask import Blueprint, flash, redirect, render_template, request,\
+    url_for, abort
 from flask.ext.login import current_user
-from flask import abort
+from flask.ext.babel import _  # gettext
 
 from viaduct import db
 from viaduct.forms import PageForm, HistoryPageForm
 from viaduct.helpers import flash_form_errors
+from viaduct.helpers.htmldiff import htmldiff
 from viaduct.models import Group, Page, PageRevision, PagePermission, \
     CustomForm, Redirect
 from viaduct.api.module import ModuleAPI
@@ -72,9 +70,9 @@ def get_page_history(path=''):
         current_revision = page.revision_cls.get_query()\
             .filter(page.revision_cls.id == current).first()
 
-        diff = difflib.HtmlDiff()\
-            .make_table(previous_revision.get_comparable().splitlines(),
-                        current_revision.get_comparable().splitlines())
+        prev = previous_revision.get_comparable()
+        cur = current_revision.get_comparable()
+        diff = htmldiff(prev, cur)
 
         return render_template('page/compare_page_history.htm', diff=diff)
 

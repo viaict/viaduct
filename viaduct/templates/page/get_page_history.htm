@@ -1,43 +1,43 @@
-{% from "macros/flash.htm" import render_flash %}
 {% from "macros/form.htm" import render_button %}
 
 {% extends "content.htm" %}
 
-{% block content %}
-<form action="" method="post" name="history">
-	<fieldset>
-		<legend>Page History</legend>
+{% block page %}
+    <h1>Page History</h1>
+    <form action="" method="post" name="history">
+        <fieldset>
+            {{ form.csrf_token }}
 
-		{{ form.csrf_token }}
+            <div class='table-responsive'>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>{{_('Comment')}}</th>
+                            <th>{{_('User')}}</th>
+                            <th>{{_('Previous')}}</th>
+                            <th>{{_('Current')}}</th>
+                            <th>{{_('Timestamp')}}</th>
+                        </tr>
+                    </thead>
 
-		<table class="table table-bordered table-striped">
-			<thead>
-				<tr>
-					<th>ID</th>
-					<th>Comment</th>
-					<th>User</th>
-					<th>Previous</th>
-					<th>Current</th>
-                    <th>Timestamp</th>
-				</tr>
-			</thead>
+                    <tbody>
+                        {% for revision, previous, current in revisions %}
+                            <tr>
+                                <td>{{ revision.id }}</td>
+                                <td>{{ revision.comment }}</td>
+                                <td>{{ revision.user.first_name }} {{ revision.user.last_name }}</td>
+                                <td>{{ previous }}</td>
+                                <td>{{ current }}</td>
+                                <td>{{ revision.created }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
 
-			<tbody>
-				{% for revision, previous, current in revisions %}
-					<tr>
-						<td>{{ revision.id }}</td>
-						<td>{{ revision.comment }}</td>
-						<td>{{ revision.user.first_name }} {{ revision.user.last_name }}</td>
-						<td>{{ previous }}</td>
-						<td>{{ current }}</td>
-						<td>{{ revision.created }}</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-
-		{{ render_button(form.compare) }}
-	</fieldset>
-</form>
+            {{ render_button(form.compare) }}
+        </fieldset>
+    </form>
 {% endblock %}
 
