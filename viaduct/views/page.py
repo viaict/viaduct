@@ -87,8 +87,8 @@ def edit_page(path=''):
         return abort(403)
 
     page = Page.get_by_path(path)
+    form = request.form
 
-    data = request.form
     if page:
         revision = page.get_latest_revision()
 
@@ -96,13 +96,15 @@ def edit_page(path=''):
         # the form.
         revision.needs_payed = revision.page.needs_payed
 
-        form = PageForm(data, revision)
+        form = PageForm(form, revision)
     else:
         form = PageForm()
 
     form.custom_form_id.choices = \
         [(c.id, c.name) for c in CustomForm.query.order_by('name')]
-    form.custom_form_id.choices.insert(0, (0, 'Geen formulier'))
+
+    # Set default to 'No form'
+    form.custom_form_id.choices.insert(0, (0, _('No form')))
 
     groups = Group.query.all()
 
@@ -113,19 +115,24 @@ def edit_page(path=''):
         if not page:
             page = Page(path)
 
-        page.needs_payed = 'needs_payed' in data
+        page.needs_payed = 'needs_payed' in form
 
         db.session.add(page)
         db.session.commit()
 
-        custom_form_id = int(data['custom_form_id'])
+        custom_form_id = int(form.custom_form_id.data)
         if not custom_form_id:
             custom_form_id = None
 
-        new_revision = PageRevision(page, data['title'].strip(),
-                                    data['comment'].strip(), current_user,
-                                    data['content'].strip(),
-                                    'filter_html' in data, custom_form_id)
+        new_revision = PageRevision(page,
+                                    form.nl_title.data.strip(),
+                                    form.en_title.data.strip(),
+                                    form.comment.data.strip(),
+                                    current_user,
+                                    form.nl_content.data.strip(),
+                                    form.en_content.data.strip(),
+                                    'filter_html' in form,
+                                    custom_form_id)
 
         db.session.add(new_revision)
         db.session.commit()
@@ -147,7 +154,7 @@ def edit_page(path=''):
             db.session.add(permission_entry)
             db.session.commit()
 
-        flash('De pagina is opgeslagen!.', 'success')
+        flash(_('The page has been saved'), 'success')
 
         # redirect newly created page
         return redirect(url_for('page.get_page', path=path))
@@ -177,9 +184,8 @@ def delete(path):
         return abort(403)
 
     if PageAPI.remove_page(path):
-        flash('De pagina is verwijderd.', 'success')
+        flash(_('The page has been deletd'), 'success')
     else:
-        flash('De pagina die je probeert te verwijderen bestaat niet.',
-              'danger')
+        flash(_('The page you tried to delete does not exist'), 'danger')
 
     return redirect(url_for('home.home'))
