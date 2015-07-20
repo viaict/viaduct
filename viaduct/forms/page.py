@@ -66,10 +66,11 @@ class HistoryPageForm(Form):
     compare = SubmitField(_('Compare'))
 
 
+# TODO: This is not used anywhere...
 class ChangePathForm(Form):
-    path = StringField('Path',
-                       [InputRequired(), Regexp(r'^ */?[\w-]+(/[\w-]+)*/? *$',
-                                                message='You suck at typing '
-                                                        'URL paths')])
+    path = StringField('Path', [InputRequired(),
+                                Regexp(r'^ */?[\w-]+(/[\w-]+)*/? *$',
+                                       message='You suck at typing '
+                                       'URL paths')])
     move_only_this = SubmitField('Only this page')
     move_children = SubmitField('This and its children ')
