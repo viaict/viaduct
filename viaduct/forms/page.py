@@ -10,7 +10,7 @@ from flask.ext.babel import lazy_gettext as _
 
 class EditGroupPagePermissionEntry(UnsafeForm):
     select = SelectField(None, coerce=int, choices=[
-        (0, _('Geen')), (1, _('Read')), (2, _('Read/Write'))])
+        (0, _('None')), (1, _('Read')), (2, _('Read/Write'))])
 
 
 class SuperPageForm(Form):
