@@ -32,7 +32,7 @@ class PageForm(SuperPageForm):
     def validate(self):
 
         # Validate all other fields with default validators
-        if not Form.validate(self):
+        if not SuperPageForm.validate(self):
             return False
         result = True
 
