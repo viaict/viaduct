@@ -1,6 +1,7 @@
 from flask import Blueprint, abort, request, flash, redirect, url_for, \
     render_template
 from flask.ext.login import current_user
+from flask.ext.babel import _  # gettext
 
 from viaduct import db
 from viaduct.models import CommitteeRevision, Page, Group, User, \
@@ -28,10 +29,10 @@ def edit_committee(committee=''):
 
     page = Page.get_by_path(path)
 
-    data = request.form
+    form = request.form
     if page:
         revision = page.get_latest_revision()
-        form = CommitteeForm(data, revision)
+        form = CommitteeForm(form, revision)
     else:
         revision = None
         form = CommitteeForm()
@@ -39,13 +40,13 @@ def edit_committee(committee=''):
     form.group_id.choices = [(group.id, group.name) for group in
                              Group.query.order_by(Group.name).all()]
 
-    if len(data) == 0:
+    if len(request.form) == 0:
         if revision:
             selected_group_id = revision.group_id
         else:
             selected_group_id = form.group_id.choices[0][0]
     else:
-        selected_group_id = int(data['group_id'])
+        selected_group_id = int(form.group_id.data)
 
     selected_group = Group.query.get(selected_group_id)
     form.coordinator_id.choices = [
@@ -53,7 +54,8 @@ def edit_committee(committee=''):
         selected_group.users.order_by(User.first_name, User.last_name).all()]
 
     if form.validate_on_submit():
-        committee_title = data['title'].strip()
+        committee_nl_title = form.nl_title.data.strip()
+        committee_en_title = form.en_title.data.strip()
 
         if not page:
             root_entry_url = url_for('committee.list').rstrip('/')
@@ -93,7 +95,7 @@ def edit_committee(committee=''):
                 entry_position = last_navigation_entry.position + 1
 
             navigation_entry = NavigationEntry(
-                root_entry, committee_title, '/' + path, False, False,
+                root_entry, committee_nl_title, '/' + path, False, False,
                 entry_position)
 
             db.session.add(navigation_entry)
@@ -124,30 +126,32 @@ def edit_committee(committee=''):
             # necessary.
             entry = NavigationEntry.query\
                 .filter(NavigationEntry.url == '/' + path).first()
-            if entry.title != committee_title:
-                entry.title = committee_title
+            if entry.title != committee_nl_title:
+                entry.title = committee_nl_title
                 db.session.add(entry)
                 db.session.commit()
 
-        group_id = int(data['group_id'])
-        coordinator_id = int(data['coordinator_id'])
-        
+        group_id = int(form.group_id.data)
+        coordinator_id = int(form.coordinator_id.data)
+
         # Add coordinator to BC
-           
+
         bc_group = Group.query.filter(Group.name == "BC").first()
-        if bc_group is not None:    
-            new_coordinator = User.query.filter(User.id == coordinator_id).first()
+        if bc_group is not None:
+            new_coordinator = User.query.filter(
+                User.id == coordinator_id).first()
             bc_group.add_user(new_coordinator)
 
         new_revision = CommitteeRevision(
-            page, committee_title, data['comment'].strip(),
-            current_user.id, data['description'].strip(), group_id,
-            coordinator_id, 'interim' in data)
+            page, committee_nl_title, committee_en_title,
+            form.comment.data.strip(), current_user.id,
+            form.nl_description.data.strip(), form.en_description.data.strip(),
+            group_id, coordinator_id, 'interim' in form)
 
         db.session.add(new_revision)
         db.session.commit()
 
-        flash('De commissie is opgeslagen.', 'success')
+        flash(_('The committe has been saved.'), 'success')
 
         return redirect(url_for('page.get_page', path=path))
     else:
