@@ -1,21 +1,71 @@
-{% from 'macros/form.htm' import render_field, render_select, render_checkbox, render_button %}
+{% from 'macros/form.htm' import render_field, render_select, render_checkbox, render_submit %}
 {% extends 'content.htm' %}
 
 {% block includes %}
-<script src="{{ static_url('/static/js/committee/edit.js') }}"></script>
+    <script src="{{ static_url('/static/js/committee/edit.js') }}"></script>
 {% endblock %}
 
 {% block content %}
-<form method='post'>
-    {{ form.csrf_token }}
-
-    {{ render_field(form.title) }}
-    {{ render_field(form.description) }}
-    {{ render_select(form.group_id) }}
-    {{ render_select(form.coordinator_id) }}
-    {{ render_checkbox(form.interim) }}
-    {{ render_field(form.comment) }}
-
-    {{ render_button(form.save_page) }}
-</form>
+    <div class='row'>
+        <div class='col-sm-12'>
+            <h1>
+                {% if news_id %}
+                    {{ _('Edit') }}
+                {% else %}
+                    {{ _('Create')}}
+                {% endif %}
+                {{ _('committee') }}
+            </h1>
+        </div>
+    </div>
+    <form method='post'>
+        <fieldset>
+            {{ form.csrf_token }}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel with-nav-tabs panel-default">
+                        <div class="panel-heading">
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a data-toggle="tab" href="#lang_dutch">
+                                        {{_('Dutch details') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-toggle="tab" href="#lang_english">
+                                        {{ _('English details') }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div id="lang_dutch" class="tab-pane fade in active">
+                                    {{ render_field(form.nl_title) }}
+                                    {{ render_field(form.nl_description) }}
+                                </div>
+                                <div id="lang_english" class="tab-pane fade">
+                                    {{ render_field(form.en_title) }}
+                                    {{ render_field(form.en_description) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-4'>
+                    {{ render_select(form.group_id) }}
+                </div>
+                <div class='col-md-4'>
+                    {{ render_select(form.coordinator_id) }}
+                </div>
+                <div class='col-md-4'>
+                    {{ render_checkbox(form.interim) }}
+                </div>
+                <div class='col-md-12'>
+                    {{ render_field(form.comment) }}
+                    {{ render_submit(_('Save')) }}
+                </div>
+            </div>
+        </fieldset>
+    </form>
 {% endblock %}
