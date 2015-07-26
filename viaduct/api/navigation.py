@@ -112,7 +112,8 @@ class NavigationAPI:
                         entry.activities.append(
                             NavigationEntry(
                                 entry,
-                                activity.name,
+                                activity.nl_name,
+                                activity.en_name,
                                 url_for(
                                     'activity.get_activity',
                                     activity_id=activity.id),
