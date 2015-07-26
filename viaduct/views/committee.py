@@ -135,7 +135,6 @@ def edit_committee(committee=''):
         coordinator_id = int(form.coordinator_id.data)
 
         # Add coordinator to BC
-
         bc_group = Group.query.filter(Group.name == "BC").first()
         if bc_group is not None:
             new_coordinator = User.query.filter(
@@ -146,7 +145,7 @@ def edit_committee(committee=''):
             page, committee_nl_title, committee_en_title,
             form.comment.data.strip(), current_user.id,
             form.nl_description.data.strip(), form.en_description.data.strip(),
-            group_id, coordinator_id, 'interim' in form)
+            group_id, coordinator_id, form.interim.data)
 
         db.session.add(new_revision)
         db.session.commit()
