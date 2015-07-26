@@ -8,16 +8,15 @@
 {% block content %}
     <div class='mainblock'>
         <div class='page-header'>
-            {% if ModuleAPI.can_write('page') and (not page.id or
-                    UserAPI.can_write(page)) %}
+            {% if ModuleAPI.can_write('page') and (not page.id or UserAPI.can_write(page)) %}
                 <div class='btn-group pull-right'>
                     {% if page.id %}
                         <a class='btn btn-default' href='{{ url_for('page.get_page_history', path=page.path) }}'>
-                            <i class='glyphicon glyphicon-time'></i> Bekijk geschiedenis
+                            <i class='glyphicon glyphicon-time'></i> {{_('Show history') }}
                         </a>
                     {% endif %}
                     <a class='btn btn-warning' href='{{ url_for('page.edit_page', path=page.path) }}'>
-                        <i class='glyphicon glyphicon-pencil'></i> Bewerk pagina
+                        <i class='glyphicon glyphicon-pencil'></i> {{_('Edit page')}}
                     </a>
                 </div>
             {% endif %}

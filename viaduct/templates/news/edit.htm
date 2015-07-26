@@ -3,7 +3,7 @@
 {% extends 'content.htm' %}
 
 {% block includes %}
-     <script src="{{static_url("/static/js/news/single.js")}}"></script>
+    <script src="{{static_url("/static/js/news/single.js")}}"></script>
 {% endblock %}
 
 {% block content %}
@@ -13,17 +13,53 @@
         {% else %}
             {{ _('Create')}}
         {% endif %}
-        {{_('newsitem')}}
+        {{_('news item')}}
     </h1>
 
     <form method='post' id='create_news'>
         <fieldset>
             {{ form.csrf_token }}
-            {{ render_field(form.title) }}
-            {{ render_field(form.content) }}
-            {{ render_datefield_picker(form.publish_date) }}
-            {{ render_datefield_picker(form.archive_date) }}
-            {{ render_submit(_('Save')) }}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel with-nav-tabs panel-default">
+                        <div class="panel-heading">
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a data-toggle="tab" href="#lang_dutch">
+                                        {{_('Dutch details') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-toggle="tab" href="#lang_english">
+                                        {{ _('English details') }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div id="lang_dutch" class="tab-pane fade in active">
+                                    {{ render_field(form.nl_title) }}
+                                    {{ render_field(form.nl_content) }}
+                                </div>
+                                <div id="lang_english" class="tab-pane fade">
+                                    {{ render_field(form.en_title) }}
+                                    {{ render_field(form.en_content) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-6'>
+                    {{ render_datefield_picker(form.publish_date) }}
+                </div>
+                <div class='col-md-6'>
+                    {{ render_datefield_picker(form.archive_date) }}
+                </div>
+                <div class='col-md-12'>
+                    {{ render_submit(_('Save')) }}
+                </div>
+            </div>
         </fieldset>
     </form>
 {% endblock %}

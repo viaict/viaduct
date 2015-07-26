@@ -17,7 +17,7 @@ class GuideAPI:
         user_guide = Page.get_by_path('guides/user/' + module_name)
 
         if not user_guide:
-            user_revision = PageRevision(None, None, None, None, None)
+            user_revision = PageRevision(None, None, None, None, None, None, None)
             user_revision.title = 'Er is geen user handleiding beschikbaar voor ' +\
                 module_name
 
@@ -44,7 +44,7 @@ class GuideAPI:
         admin_guide = Page.get_by_path('guides/admin/' + module_name)
 
         if not admin_guide or not ModuleAPI.can_write(module_name):
-            admin_revision = PageRevision(None, None, None, None, None)
+            admin_revision = PageRevision(None, None, None, None, None, None, None)
             if ModuleAPI.can_write(module_name):
                 admin_revision.title = 'Er is geen admin handleiding beschikbaar voor ' +\
                     module_name

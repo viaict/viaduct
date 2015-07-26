@@ -1,5 +1,7 @@
 from flask import json, make_response, Response, request
 from flask.views import MethodView
+from viaduct import application
+import re
 
 
 def unpack(value):
@@ -28,6 +30,16 @@ def output_json(data, code, headers):
     response.headers.extend(headers or {})
 
     return response
+
+
+def get_all_routes():
+    base_url_regex = r"^(/[^<>]*)(/<.*>)*/?"
+    rv = []
+    for route in application.url_map.iter_rules():
+        rv.append(
+            re.compile(base_url_regex).match(route.rule).group(1)
+            .rstrip('/'))
+    return set(rv)
 
 
 class Resource(MethodView):

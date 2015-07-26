@@ -1,40 +1,46 @@
-{% from "macros/form.htm" import render_field, render_checkbox, render_button %}
+{% from "macros/form.htm" import render_field, render_checkbox, render_submit %}
 
 {% extends "content.htm" %}
 
 {% block content %}
 
-	<form action="" method="post" name="edit_navigation_entry">
-		<fieldset>
-			<legend>
-				{% if entry %}
-					Navigatie item bewerken
-				{% else %}
-					Navigatie item aanmaken
-				{% endif %}
-			</legend>
+    <form action="" method="post" name="edit_navigation_entry">
+        <fieldset>
+            <legend>
+                {% if entry %}
+                    {{_('Create')}}
+                {% else %}
+                    {{_('Edit')}}
+                {% endif %}
+                {{_('Navigation entry')}}
+            </legend>
 
-			{{ form.csrf_token }}
+            {{ form.csrf_token }}
 
-			{{ render_field(form.title) }}
-			{{ render_field(form.url) }}
-			{{ render_checkbox(form.external) }}
-			{{ render_checkbox(form.activity_list) }}
+            {{ render_field(form.nl_title) }}
+            {{ render_field(form.en_title) }}
+            {{ render_field(form.url) }}
+            {{ render_checkbox(form.external) }}
+            {{ render_checkbox(form.activity_list) }}
 
-			<input type="hidden" name="parent_id" value="{{ request.args.get("parent_id") }}">
+            <input type="hidden" name="parent_id"
+            value="{{ request.args.get("parent_id") }}">
 
-			{{ render_button(form.submit)}}
-		</fieldset>
-	</form>
+            {{ render_submit(_('Submit'))}}
+        </fieldset>
+    </form>
 
-	{% if entry and entry.children.count() == 0 %}
+    {% if entry and entry.children.count() == 0 %}
         <a class="btn btn-danger" href="{{ url_for('navigation.delete',
-            entry_id=entry.id) }}">Verwijderen</a>
+            entry_id=entry.id) }}">
+            {{_('Delete')}}
+        </a>
         {% if not entry.external and not entry.activity_list %}
-        <a class="btn btn-danger" href="{{ url_for('navigation.delete',
-            entry_id=entry.id, inc_page=1) }}">Menu-item en pagina
-                verwijderen</a>
+            <a class="btn btn-danger"
+                href="{{ url_for('navigation.delete', entry_id=entry.id, inc_page=1) }}">
+                {{_('Delete menu item and pagina')}}
+            </a>
         {% endif %}
-	{% endif %}
+    {% endif %}
 
 {% endblock %}

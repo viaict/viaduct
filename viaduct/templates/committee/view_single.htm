@@ -1,27 +1,35 @@
 {% set User = context['User'] %}
-
 {% extends 'page/view_super.htm' %}
 
-{% block page_title %}Commissie - {{ revision.title }}{% endblock %}
+{% block page_title %}{{_('Committee')}} - {{ revision.title }}{% endblock %}
 
 {% block page_content %}
-<p>
-    Coördinator: {% if revision.interim %}<span class='coordinator_vacant'>positie vacant</span>{% else %}{{ revision.coordinator.name }}{% endif %}
-    {% if revision.interim %}<br />Interim-coördinator: {{ revision.coordinator.name }}{% endif %}
-</p>
-
-<hr />
-
-{{ revision.description | strip_tags('script', 'link', 'style', 'video', 'audio') | markdown }}
-
-<hr />
-
-<p>
-    Commissieleden:
-    <ul>
-        {% for member in revision.group.users.order_by(User.first_name, User.last_name).all() %}
-        <li><a href="{{ url_for('user.view_single', user_id=member.id) }}">{{member.name}}</a></li>
-        {% endfor %}
-    </ul>
-</p>
+    <p>
+        Coördinator:
+        {% if revision.interim %}
+            <a href="mailto:sollicitatie@svia.nl" class='btn btn-danger btn-xs'>
+                <i class="fa fa-envelope"></i> {{_('Position vacant')}}
+            </a>
+        {% else %}
+            {{ revision.coordinator.name }}
+        {% endif %}
+        {% if revision.interim %}
+            <br />{{_('Interim-coördinator')}}: {{ revision.coordinator.name }}
+        {% endif %}
+    </p>
+    <hr />
+    {{ revision.description | strip_tags('script', 'link', 'style', 'video', 'audio') | markdown }}
+    <hr />
+    <p>
+        {{_('Committee members')}}:
+        <ul>
+            {% for member in revision.group.users.order_by(User.first_name, User.last_name).all() %}
+                <li>
+                    <a href="{{ url_for('user.view_single', user_id=member.id) }}">
+                        {{member.name}}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </p>
 {% endblock %}
