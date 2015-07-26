@@ -1,8 +1,10 @@
 from flask import Blueprint, render_template, abort, request, flash, \
     redirect, url_for
+from flask.ext.babel import _
 
 from viaduct import db
 from viaduct.helpers import flash_form_errors
+from viaduct.helpers.resource import get_all_routes
 from viaduct.models.navigation import NavigationEntry
 from viaduct.forms import NavigationEntryForm
 from viaduct.api.navigation import NavigationAPI
@@ -42,85 +44,79 @@ def edit(entry_id=None, parent_id=None):
         return abort(403)
 
     if entry_id:
-        entry = db.session.query(NavigationEntry).filter_by(id=entry_id)\
-            .first()
+        entry = db.session.query(NavigationEntry)\
+            .filter_by(id=entry_id).first()
         if not entry:
             return abort(404)
     else:
         entry = None
-
     form = NavigationEntryForm(request.form, entry)
 
-    if form.is_submitted():
-        if form.validate_on_submit():
-            url = form.url.data
-            pattern = re.compile('^/')
-            if not pattern.match(url):
-                url = '/' + url
+    if parent_id:
+        parent = NavigationEntry.query.filter_by(id=parent_id).first()
+        if not parent:
+            flash(_('Cannot find parent navigation entry.'), 'danger')
+            return redirect(url_for('navigation.view'))
 
-            if entry:
-                flash('De navigatie link is opgeslagen.', 'success')
-                entry.title = form.title.data
-                entry.url = url
-                entry.external = form.external.data
-                entry.activity_list = form.activity_list.data
+    if form.validate_on_submit():
+        url = form.url.data
+        if not re.compile('^/').match(url):
+            url = '/' + url
+
+        if entry:
+            entry.nl_title = form.nl_title.data
+            entry.en_title = form.en_title.data
+            entry.url = url
+            entry.external = form.external.data
+            entry.activity_list = form.activity_list.data
+        else:
+            # If there is no parent position the new entry at the end of the
+            # top level entry.
+            if not parent_id:
+                parent = None
+
+                last_entry = db.session.query(NavigationEntry)\
+                    .filter_by(parent_id=None)\
+                    .order_by(NavigationEntry.position.desc()).first()
+
+                position = last_entry.position + 1
             else:
-                if not parent_id:
-                    parent = None
-
-                    last_entry = db.session.query(NavigationEntry)\
-                        .filter_by(parent_id=None)\
-                        .order_by(NavigationEntry.position.desc()).first()
-
+                last_entry = db.session.query(NavigationEntry)\
+                    .filter_by(parent_id=parent_id)\
+                    .order_by(NavigationEntry.position.desc()).first()
+                if last_entry:
                     position = last_entry.position + 1
                 else:
-                    parent = db.session.query(NavigationEntry) \
-                        .filter_by(id=parent_id).first()
+                    position = 0
 
-                    if not parent:
-                        flash('Deze navigatie parent bestaat niet.', 'danger')
-                        return redirect(url_for('navigation.edit'))
+            entry = NavigationEntry(parent,
+                                    form.nl_title.data,
+                                    form.en_title.data,
+                                    url,
+                                    form.external.data,
+                                    form.activity_list.data,
+                                    position)
 
-                    last_entry = db.session.query(NavigationEntry)\
-                        .filter_by(parent_id=parent.id)\
-                        .order_by(NavigationEntry.position.desc()).first()
-                    if last_entry:
-                        position = last_entry.position + 1
-                    else:
-                        position = 0
+        db.session.add(entry)
+        db.session.commit()
+        flash(_('The navigation entry has been saved.'), 'success')
 
-                entry = NavigationEntry(parent, form.title.data, url,
-                                        form.external.data,
-                                        form.activity_list.data, position)
-                flash('De navigatie link is aangemaakt.', 'success')
+        if not form.external.data:
 
-            db.session.add(entry)
-            db.session.commit()
+            # Check if the page exists, if not redirect to create it
+            path = form.url.data.lstrip('/')
+            page = Page.get_by_path(path)
+            if url.rstrip('/') in get_all_routes():
+                return redirect(url_for('navigation.view'))
+            if not page and form.url.data != '/':
+                flash(_('The link refers to a page that does not exist, please'
+                        'create the page!'), 'warning')
+                return redirect(url_for('page.edit_page', path=path))
 
-            if not form.external.data:
+        return redirect(url_for('navigation.view'))
 
-                # Check if the page exists, if not redirect to create it
-                path = form.url.data.lstrip('/')
-                page = Page.get_by_path(path)
-                if not page and form.url.data != '/':
-                    flash('De link verwijst naar een pagina die niet bestaat, '
-                          'maak deze aub aan!', 'alert')
-                    return redirect(url_for('page.edit_page', path=path))
-
-            return redirect(url_for('navigation.edit', entry_id=entry.id))
-
-        else:
-            known_error = False
-
-            if not form.title.data:
-                flash('Geen titel opgegeven.', 'danger')
-                known_error = True
-
-            if not form.url.data:
-                flash('Geen url opgegeven.', 'danger')
-                known_error = True
-            if not known_error:
-                flash_form_errors(form)
+    else:
+        flash_form_errors(form)
 
     parents = db.session.query(NavigationEntry).filter_by(parent_id=None)
 
@@ -140,6 +136,7 @@ def delete(entry_id, inc_page=0):
         return abort(403)
 
     if inc_page and not ModuleAPI.can_write('page'):
+        flash(_('You do not have rights to remove pages'))
         return abort(403)
 
     entry = db.session.query(NavigationEntry).filter_by(id=entry_id).first()
