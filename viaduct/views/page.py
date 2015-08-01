@@ -115,7 +115,7 @@ def edit_page(path=''):
         if not page:
             page = Page(path)
 
-        page.needs_payed = 'needs_payed' in form
+        page.needs_payed = form['needs_payed'].data
 
         db.session.add(page)
         db.session.commit()
