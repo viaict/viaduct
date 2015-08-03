@@ -13,7 +13,7 @@ import datetime
 import json
 
 
-version = 'v2.2.1.4'
+version = 'v2.2.1.5'
 
 
 def static_url(url):
@@ -62,16 +62,21 @@ babel = Babel(application)
 @babel.localeselector
 def get_locale():
     # if a user is logged in, use the locale from the user settings
+    rv = None
     if current_user and not current_user.is_anonymous() \
             and current_user.locale is not None:
-        return current_user.locale
+        rv = current_user.locale
 
     # Try to look-up an cookie set for language
     lang = request.cookies.get('lang')
     if lang and lang in LANGUAGES.keys():
-        return lang
+        rv = lang
     else:
-        return request.accept_languages.best_match(list(LANGUAGES.keys()))
+        rv = request.accept_languages.best_match(list(LANGUAGES.keys()))
+
+    if rv is None:
+        rv = 'nl'
+    return rv
 
 # Set up the login manager, which is used to store the details related to the
 # authentication system.
