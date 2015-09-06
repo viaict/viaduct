@@ -36,8 +36,9 @@ def allowed_file(filename):
 # Overview of activities
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<string:archive>/', methods=['GET', 'POST'])
-@blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
-@blueprint.route('/<string:archive>/<int:page_nr>/', methods=['GET', 'POST'])
+@blueprint.route('/list/<int:page_nr>/', methods=['GET', 'POST'])
+@blueprint.route('/list/<string:archive>/<int:page_nr>/',
+                 methods=['GET', 'POST'])
 def view(archive=None, page_nr=1):
     if not ModuleAPI.can_read('activity'):
         return abort(403)
@@ -77,7 +78,7 @@ def remove_activity(activity_id=0):
     return redirect(url_for('activity.view'))
 
 
-@blueprint.route('/view/<int:activity_id>/', methods=['GET', 'POST'])
+@blueprint.route('/<int:activity_id>/', methods=['GET', 'POST'])
 def get_activity(activity_id=0):
     if not ModuleAPI.can_read('activity'):
         return abort(403)
