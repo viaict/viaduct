@@ -25,6 +25,7 @@ def set_lang(lang=None):
         rv = make_response(redirect(redirect_url()))
         rv.set_cookie('lang', lang)
         refresh()
+        flash(_('Bilingualism is not fully implemented yet!'), 'info')
         return rv
     else:
         current_user.locale = lang
