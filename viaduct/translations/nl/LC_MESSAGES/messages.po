@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2015-10-10 18:32+0200\n"
+"POT-Creation-Date: 2015-10-10 18:46+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -755,6 +755,10 @@ msgstr "De pagina is opgeslagen."
 #: viaduct/views/page.py:189
 msgid "The page you tried to delete does not exist"
 msgstr "De pagina die je probeerde te verwijderen bestaat niet"
+
+#: viaduct/views/examination.py:383
+msgid "There is already a course with this name"
+msgstr "Er bestaat al een vak met deze naam"
 
 #: viaduct/templates/activity/view_single.htm:95
 msgid "These details are taken from your account."
