@@ -1,4 +1,4 @@
-# Version 2.2.2.2
+# Version 2.2.3.0
 Versioning works as follows: vSYSTEM.FEATURE.IMPROVEMENT.BUG-/HOTFIX
 
 #Viaduct (Opensourced, yeah)
@@ -14,13 +14,6 @@ Get the secret via config files with secrets for the server:
 ```bash
 git submodule init
 git submodule update
-```
-Set up the awesome hooks:
-```bash
-cd .git/hooks
-ln -s ../../secrets/post-* .
-cd ../..
-.git/hooks/post-merge
 ```
 
 Setup git-flow:
@@ -38,6 +31,14 @@ Python dependencies are in `requirements.txt`. Install through pip. Usage of vir
 	virtualenv venv/ -p /usr/bin/python3
 	. venv/bin/activate
 	pip install -r requirements.txt
+
+Set up the awesome hooks:
+```bash
+cd .git/hooks
+ln -s ../../secrets/post-* .
+cd ../..
+.git/hooks/post-merge
+```
 
 Build dependencies are for ruby and npm:
 * Install Ruby gems
@@ -104,7 +105,11 @@ translations:
 ```
 
 Edit the file `viaduct/translations/nl/LC_MESSAGES/message.po` and add the Dutch
-translations for the English strings. After that compile the strings to be used
+translations for the English strings. Especially look for lines marked "fuzzy",
+since they won't be compiled. If the translation is correct, remove the line
+marking "fuzzy" and continue.
+
+After that compile the strings to be used
 in the website.
 ```bash
 	python venv/bin/pybabel compile -d viaduct/translations

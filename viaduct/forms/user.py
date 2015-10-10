@@ -8,6 +8,8 @@ from wtforms.validators import InputRequired, Email, EqualTo, ValidationError,\
     Length, Optional
 from config import LANGUAGES, MIN_PASSWORD_LENGTH
 
+from flask.ext.babel import lazy_gettext as _  # noqa
+
 import dateutil
 
 
@@ -68,6 +70,13 @@ class SignUpForm(Form):
     study_start = DateField('Begin studie', validators=[
         InputRequired(message='Geen begin studie opgegeven')])
 
+    phone_nr = StringField(_('Phone'))
+
+    address = StringField(_('Address'))
+    zip = StringField(_('Zipcode'))
+    city = StringField(_('City'))
+    country = StringField(_('Country'), default='Nederland')
+
 
 class EditUserForm(Form):
     """ Edit a user as administrator """
@@ -101,6 +110,14 @@ class EditUserForm(Form):
     study_start = DateField('Begin studie')
     receive_information = BooleanField('Wil je informatie van bedrijven\
         ontvangen?')
+
+    phone_nr = StringField(_('Phone'))
+
+    address = StringField(_('Address'))
+    zip = StringField(_('Zipcode'))
+    city = StringField(_('City'))
+    country = StringField(_('Country'), default='Nederland')
+
     def validate_password(form, field):
         """Providing a password is only required when creating a new user."""
         if form.id.data == 0 and len(field.data) == 0:
@@ -145,6 +162,13 @@ class EditUserInfoForm(Form):
     study_start = DateField('Begin studie')
     receive_information = BooleanField('Wil je informatie van bedrijven\
         ontvangen?')
+
+    phone_nr = StringField(_('Phone'))
+
+    address = StringField(_('Address'))
+    zip = StringField(_('Zipcode'))
+    city = StringField(_('City'))
+    country = StringField(_('Country'), default='Nederland')
 
     def validate_password(form, field):
         """Providing a password is only required when creating a new user."""

@@ -23,10 +23,14 @@ def create_issue():
 
         # Use JiraAPI to do a POST request to https://viaduct.atlassian.net
         response = JiraAPI.create_issue(form)
-
+        
         if response:
             flash('Issue is geupload!', 'success')
-            return redirect(url_for('home.home'))
+            redir = request.args['redir']
+            if redir:
+                return redirect(redir)
+            else:
+                return redirect(urlfor('home'))
         else:
             flash('Er is iets mis gegaan', 'danger')
 

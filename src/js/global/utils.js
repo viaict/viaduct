@@ -40,8 +40,10 @@ utils.datatables.get_ids = function($selector, table) {
 utils.datatables.action_by_url = function(
     $selector, table, url, action, refer) {
     $selector.click(function () {
+        var action_repr = "delete";
+        if (action == "put") action_repr = "add";
         var json_data = utils.datatables.get_ids($selector, table);
-        if (confirm('Are you sure you want to ' + action + '?\n')) {
+        if (confirm('Are you sure you want to ' + action_repr + ' these?\n')) {
             $.ajax({
                 type: action,
                 url: url,

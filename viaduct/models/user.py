@@ -34,6 +34,11 @@ class User(db.Model, BaseEntity):
     study_start = db.Column(db.Date)
     receive_information = db.Column(db.Boolean, default=False)
 
+    address = db.Column(db.String(256))
+    zip = db.Column(db.String(8))
+    city = db.Column(db.String(256))
+    country = db.Column(db.String(256), default='Nederland')
+
     education = db.relationship(Education,
                                 backref=db.backref('user', lazy='dynamic'))
 
