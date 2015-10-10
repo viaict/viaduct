@@ -15,13 +15,6 @@ Get the secret via config files with secrets for the server:
 git submodule init
 git submodule update
 ```
-Set up the awesome hooks:
-```bash
-cd .git/hooks
-ln -s ../../secrets/post-* .
-cd ../..
-.git/hooks/post-merge
-```
 
 Setup git-flow:
 ```bash
@@ -38,6 +31,14 @@ Python dependencies are in `requirements.txt`. Install through pip. Usage of vir
 	virtualenv venv/ -p /usr/bin/python3
 	. venv/bin/activate
 	pip install -r requirements.txt
+
+Set up the awesome hooks:
+```bash
+cd .git/hooks
+ln -s ../../secrets/post-* .
+cd ../..
+.git/hooks/post-merge
+```
 
 Build dependencies are for ruby and npm:
 * Install Ruby gems
