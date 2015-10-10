@@ -35,12 +35,25 @@
         {{ NavigationAPI.get_navigation_bar()|safe }}
         <div class="container">
             <p class="text-right guide" style="margin-top: -20px">
+                <!-- Language switcher -->
+                {% if get_locale() == 'en' %}
+                    <a href='{{url_for('lang.set_lang', lang='en')}}' class='btn btn-sm text-muted'><i class="fa fa-language"></i> <u>English</u></a>
+                    |
+                    <a href='{{url_for('lang.set_lang', lang='nl')}}' class='btn btn-sm'><i class="fa fa-language"></i> Nederlands</a>
+                    |
+                {% endif %}
+                {% if get_locale() == 'nl' %}
+                    <a href='{{url_for('lang.set_lang', lang='en')}}' class='btn btn-sm'><i class="fa fa-language"></i> English</a>
+                    |
+                    <a href='{{url_for('lang.set_lang', lang='nl')}}' class='btn btn-sm text-muted'><i class="fa fa-language"></i> <u>Nederlands</u></a>
+                    |
+                {% endif %}
                 <!-- Guide menu trigger -->
                 <a data-icon="glyphicon-picture" class="btn btn-sm" data-toggle="modal" data-target="#moduleGuide">
-                  help?
+                    <i class="fa fa-question-circle"></i> Help
                 </a>
                 |
-                <a href="{{ url_for('jira.create_issue') }}"  class="btn btn-sm"> Report a bug!</a>
+                <a href="{{ url_for('jira.create_issue') }}"  class="btn btn-sm"> <i class="fa fa-bug"></i> Report a bug</a>
             </p>
             <div class="row">
                 <div class="col-sm-12" id="messages">
@@ -59,7 +72,7 @@
           <div class="modal-dialog modal-lg">
             <div class="modal-content">
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> 
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <b>{{ user_guide.title | markdown }}</b>
               </div>
               <div class="modal-body">
@@ -70,7 +83,7 @@
               </div>
               <div class="modal-body">
                     {{ admin_guide.content | markdown }}
-              </div>  
+              </div>
             </div>
           </div>
         </div>

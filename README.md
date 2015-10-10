@@ -1,4 +1,4 @@
-# Version 2.1.0.3
+# Version 2.2.2.1
 Versioning works as follows: vSYSTEM.FEATURE.IMPROVEMENT.BUG-/HOTFIX
 
 #Viaduct (Opensourced, yeah)
@@ -14,13 +14,6 @@ Get the secret via config files with secrets for the server:
 ```bash
 git submodule init
 git submodule update
-```
-Set up the awesome hooks:
-```bash
-cd .git/hooks
-ln -s ../../secrets/post-* .
-cd ../..
-.git/hooks/post-merge
 ```
 
 Setup git-flow:
@@ -38,6 +31,14 @@ Python dependencies are in `requirements.txt`. Install through pip. Usage of vir
 	virtualenv venv/ -p /usr/bin/python3
 	. venv/bin/activate
 	pip install -r requirements.txt
+
+Set up the awesome hooks:
+```bash
+cd .git/hooks
+ln -s ../../secrets/post-* .
+cd ../..
+.git/hooks/post-merge
+```
 
 Build dependencies are for ruby and npm:
 * Install Ruby gems
@@ -87,20 +88,28 @@ cleanly. Ask for help here, because it differs from time to time what to do.
 ##Language
 All code shall be written in **English**, translations should be added through
 Babel. After writing code with **English** strings, add their **Dutch**
-translations.
+translations. For compiling the strings there is a makefile to make things
+faster.
 
 Adding a language through Babel:
-    python babel_init.py [locale]
+```bash
+    python venv/bin/pybabel init -i messages.pot -d translations -l nl
+```
 
-Updating translation files after creating new pages:
-    python babel_update.py
-Then, update the **nl** language files for your new strings.
+For updating translation files after creating new pages, first extract the new
+translatable strings from the code. Merge the new extractions with the existing
+translations:
+```bash
+    python venv/bin/pybabel extract -F babel.cfg --sort-output -k lazy_gettext -o messages.pot .
+	python venv/bin/pybabel update -i messages.pot -d viaduct/translations
+```
 
-Compiling changed language files:
-    python babel_compile.py
-
-Note: lots of pages contain multiple languages, please update and create new
-according to this standard.
+Edit the file `viaduct/translations/nl/LC_MESSAGES/message.po` and add the Dutch
+translations for the English strings. After that compile the strings to be used
+in the website.
+```bash
+	python venv/bin/pybabel compile -d viaduct/translations
+```
 
 ##Documentation
 Documentation according to python's [Docstring Conventions](http://www.python.org/dev/peps/pep-0257/).

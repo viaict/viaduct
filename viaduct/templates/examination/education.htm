@@ -7,7 +7,7 @@
     <div class="col-md-6">
         <form action="" method=post enctype=multipart/form-data>
             <fieldset>
-                <legend>Nieuw studie</legend>
+                <legend> {{_('New education')}}</legend>
 
                 {{ form.csrf_token }}
                 {{ render_field(form.title) }}
@@ -15,11 +15,11 @@
                 <div class="control-group">
                     <div class="controls btn-group">
                         <button type="submit" class="btn btn-success">
-                            <i class= "glyphicon glyphicon-ok"></i>  Toevoegen
+                            <i class= "glyphicon glyphicon-ok"></i> {{_('Add')}}
                         </button>
                         <a href="{{url_for('examination.upload_file')}}"
                             class='btn btn-primary'>
-                            <i class="glyphicon glyphicon-arrow-left"></i> Terug
+                            <i class="glyphicon glyphicon-arrow-left"></i> {{_('Back')}}
                         </a>
                     </div>
                 </div>

@@ -7,6 +7,7 @@
 {% endblock %}
 {% block page_content %}
     <p>{{ revision.content | strip_tags('script', 'link', 'style', 'video', 'audio') | markdown(revision.filter_html) }}</p>
+
     {% if revision.custom_form %}
         <hr />
         <div>
@@ -15,18 +16,21 @@
                     var msg_success = '{{ revision.custom_form.msg_success }}';
                 </script>
 
-                <form id="custom" action="/forms/submit/{{ revision.custom_form.id }}" enctype="multipart/form-data">
-                    <h3>Vul a.u.b in :D</h3>
-                    <p>Sommige velden (zoals shirt-maat of dieet) proberen we op te slaan, zodat je het de volgende keer niet nog eens moet invullen.</p>
+                <form id="custom" action="{{ url_for('custom_form.submit', form_id=revision.custom_form.id)}}" enctype="multipart/form-data">
+                    <h3>{{_('Please fill in')}}</h3>
+                    <p>{{_('Some field (like shirt-size or diet) we try to save, so that you don\'t have to enter them the next time')}}</p>
                     {{ revision.custom_form.html | safe }}
 
-                    <button id="custom_form" class="btn btn-success">Verzend formulier</button>
+                    <button id="custom_form" class="btn btn-success">{{_('Send form')}}</button>
                 </form>
             {% else %}
-                <p>Je moet ingelogd zijn om je voor een activiteit in te schrijven.</p>
-                <p><a href="{{ url_for('user.sign_in') }}" class="btn btn-huge btn-success">Inloggen</a></p>
+                <p>{{_('You have to be logged in to fill in a form')}}</p>
+                <p>
+                    <a href="{{ url_for('user.sign_in') }}" class="btn btn-huge btn-success">
+                        {{_('Sign In')}}
+                    </a>
+                </p>
             {% endif %}
         </div>
     {% endif %}
-
 {% endblock %}

@@ -9,16 +9,19 @@
             <div class='btn-group'>
                 {% if ModuleAPI.can_write('news') %}
                     <a href='{{ url_for('news.edit') }}' class='btn btn-success'>
-                        {{ _('New') }}
+                        {{ _('Create news item') }}
+                    </a>
+                    <a href='{{ url_for('news.all') }}' class='btn btn-primary'>
+                        {{ _('Show all news items') }}
                     </a>
                 {% endif %}
                 {% if archive %}
                     <a href='{{ url_for('news.list') }}' class='btn btn-default'>
-                        {{ _('Show recent news') }}
+                        {{ _('Show recent news items') }}
                     </a>
                 {% else %}
                     <a href='{{ url_for('news.archive') }}' class='btn btn-default'>
-                        {{ _('Show archive') }}
+                        {{ _('Show news item archive') }}
                     </a>
                 {% endif %}
             </div>
@@ -33,8 +36,8 @@
                             </a>
                         </div>
                         <div class='col-md-4 text-right'>
-                            Laatste bewerking: <em>{{ item.created.strftime('%Y-%m-%d %H:%M') }}</em><br />
-                            Door: <em>{{ item.user.name }}</em>
+                            {{_('Published at')}}: <em>{{ item.publish_date.strftime('%Y-%m-%d') }}</em><br />
+                            {{_('Written by')}}: <em>{{ item.user.name }}</em>
                         </div>
                     </div>
                     <div class='row'>

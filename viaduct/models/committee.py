@@ -1,6 +1,10 @@
-from viaduct import db
+from sqlalchemy import event
+
+from viaduct import db, get_locale
 from viaduct.models.page import SuperRevision
 from viaduct.models import User
+
+from flask.ext.babel import lazy_gettext as _
 
 
 class CommitteeRevision(SuperRevision):
@@ -10,7 +14,8 @@ class CommitteeRevision(SuperRevision):
 
     context = {'User': User}
 
-    description = db.Column(db.Text)
+    nl_description = db.Column(db.Text)
+    en_description = db.Column(db.Text)
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
     coordinator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     interim = db.Column(db.Boolean)
@@ -33,15 +38,17 @@ class CommitteeRevision(SuperRevision):
     page = db.relationship(
         'Page', backref=db.backref('committee_revisions', lazy='dynamic'))
 
-    def __init__(self, page=None, title='', comment='', user_id=None,
-                 description='', group_id=None, coordinator_id=None,
-                 interim=None):
-        super(CommitteeRevision, self).__init__(title, comment)
+    def __init__(self, page=None, nl_title='', en_title='', comment='',
+                 user_id=None, nl_description='', en_description='',
+                 group_id=None, coordinator_id=None, interim=None):
+        super(CommitteeRevision, self).__init__(nl_title, en_title,  comment)
 
         self.page = page
         self.user_id = user_id
 
-        self.description = description
+        self.description = None
+        self.nl_description = nl_description
+        self.en_description = en_description
         self.group_id = group_id
         self.coordinator_id = coordinator_id
         self.interim = interim
@@ -49,3 +56,33 @@ class CommitteeRevision(SuperRevision):
     def get_comparable(self):
         return self.description
 
+
+@event.listens_for(CommitteeRevision, 'load')
+def set_committee_revision_locale(com_rev, context):
+    """
+    This function is called after an CommitteeRevision model is filled with
+    data from the database, but before is used in all other code.
+
+    Use the locale of the current user/client to determine which language to
+    display on the whole website. If the users locale is unavailable, select
+    the alternative language, suffixing the title of the activity with the
+    displayed language.
+    """
+    locale = get_locale()
+    nl_available = com_rev.nl_title and com_rev.nl_description
+    en_available = com_rev.en_title and com_rev.en_description
+    if locale == 'nl' and nl_available:
+        com_rev.title = com_rev.nl_title
+        com_rev.description = com_rev.nl_description
+    elif locale == 'en' and en_available:
+        com_rev.title = com_rev.en_title
+        com_rev.description = com_rev.en_description
+    elif nl_available:
+        com_rev.title = com_rev.nl_title + " (" + _('Dutch') + ")"
+        com_rev.description = com_rev.nl_description
+    elif en_available:
+        com_rev.title = com_rev.en_title + " (" + _('English') + ")"
+        com_rev.description = com_rev.en_description
+    else:
+        com_rev.title = 'N/A'
+        com_rev.description = 'N/A'

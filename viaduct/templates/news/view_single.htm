@@ -28,15 +28,15 @@
 
             <div class='row'>
                 <div class='col-md-6'>
-                    Geschreven door: <em>{{ news.user.name }}</em>
+                    {{_('Written by')}}: <em>{{ news.user.name }}</em>
                 </div>
                 {% if (news.modified - news.created) >= datetime.timedelta(0, 1) %}
                     <div class='col-md-6'>
-                        Laatst bewerkt op: <em>{{ news.created.strftime('%Y-%m-%d') }}</em> om <em>{{ news.created.strftime('%H:%M') }}</em><br />
+                        {{_('Last modified')}}: <em>{{ news.modified.strftime('%Y-%m-%d') }}</em> {{_('at')}} <em>{{ news.modified.strftime('%H:%M') }}</em><br />
                     </div>
                 {% endif %}
                 <div class='col-md-6'>
-                    Gepubliceerd op: <em>{{ news.created.strftime('%Y-%m-%d') }}</em> om <em>{{ news.created.strftime('%H:%M') }}</em>
+                    {{_('Published at')}}: <em>{{ news.publish_date.strftime('%Y-%m-%d') }}</em>
                 </div>
             </div>
             <hr>

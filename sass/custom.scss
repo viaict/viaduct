@@ -2,8 +2,6 @@
 @import 'bootstrap';
 @import 'font-awesome-compass';
 @import 'font-awesome';
-@import 'timepicker';
-@import 'datepicker';
 @import 'bootstrap-editable';
 @import 'css/select2';
 @import 'css/select2-bootstrap';
@@ -130,7 +128,6 @@ p.report-bug{
 #carousel div:before {
     content: '';
     display: inline-block;
-    height: 100%;
     vertical-align: middle;
 }
 #carousel img {
@@ -428,7 +425,7 @@ p.report-bug{
     text-overflow: ellipsis;
 }
 
-.pimpy_line_number {   
+.pimpy_line_number {
     width: 6%;
     float: left;
     padding-top: 8px;
@@ -1199,12 +1196,49 @@ p{line-height: 25px;}
     margin-left: 2px;
 }
 
-.coordinator_vacant {
-    font-size: 20pt;
-    font-weight: bold;
-}
-
 .inline-field {
     width: auto;
     display: inline;
+}
+
+.panel.with-nav-tabs .panel-heading{
+    padding: 5px 5px 0 5px;
+}
+.panel.with-nav-tabs .nav-tabs{
+    border-bottom: none;
+}
+.panel.with-nav-tabs .nav-justified{
+    margin-bottom: -1px;
+}
+
+.diff {
+    border: 1px solid #cccccc;
+    background: none repeat scroll 0 0 #f8f8f8;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.diff .control {
+    background-color: #eaf2f5;
+    color: #999999;
+}
+
+.diff .insert {
+    background-color: #ddffdd;
+    color: #000000;
+}
+
+.diff .insert .highlight {
+    background-color: #aaffaa;
+    color: #000000;
+}
+
+.diff .delete {
+    background-color: #ffdddd;
+    color: #000000;
+}
+
+.diff .delete .highlight {
+    background-color: #ffaaaa;
+    color: #000000;
 }

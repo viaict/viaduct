@@ -2,57 +2,24 @@
 
 {% extends "content.htm" %}
 
+{% block includes %}
+    <script>
+        var reorder_url = {{ url_for("navigation.reorder")}};
+        var flash_succes_msg = {{ _("The order has been saved successfully")}};
+    </script>
+    <script src="{{static_url("/static/js/navigation/view.js")}}"></script>
+{% endblock %}
+
 {% block content %}
 
-	<a class="btn btn-success pull-left" href="{{ url_for('navigation.edit') }}" style="margin-bottom: 15px;">
-		Nieuw item <i class="glyphicon glyphicon-plus"></i>
-	</a>
-	{% if nav_entries %}
-		<div id="outer" class="sortable col-md-6">
-			{% for entry in nav_entries %}
-				{{ render_entry_list(entry) }}
-			{% endfor %}
-		</div>
-	{% endif %}
-
-	<script>
-	$(function() {
-		$('.sortable').sortable({
-				connectWith: $('.sortable'),
-				handle: ".sortable_handler",
-				items: '> div[class!="leave-alone"]',
-				stop: function(event, ui) {
-					var list = crawl_entries($('#outer'));
-					$.post('{{ url_for("navigation.reorder") }}',
-							{entries: JSON.stringify(list)},
-							function(data) {
-								clearflash();
-								flash('De volgorde is succesvol opgeslagen',
-										'success', false);
-							}
-					);
-				}
-		});
-	});
-
-	function crawl_entries($list) {
-		var list = [];
-
-		$list.children('div').
-				each(function (index, element) {
-					var $element = $(element);
-					var $deeper_list = $element.children('div.sortable:first');
-					var children = crawl_entries($deeper_list);
-					var data = {
-						'id': $element.data('entry-id'),
-						'children': children
-					};
-					list.push(data);
-				}
-		);
-
-		return list;
-	}
-	</script>
-
+    <a class="btn btn-success pull-left" href="{{ url_for('navigation.edit') }}" style="margin-bottom: 15px;">
+        <i class="glyphicon glyphicon-plus"></i>{{_('New item')}}
+    </a>
+    {% if nav_entries %}
+        <div id="outer" class="sortable col-md-6">
+            {% for entry in nav_entries %}
+                {{ render_entry_list(entry) }}
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}

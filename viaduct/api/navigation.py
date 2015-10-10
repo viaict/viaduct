@@ -1,8 +1,8 @@
-from flask import render_template, request
 # -*- coding: utf-8 -*-
 import datetime
 import re
 
+from flask import render_template, request, url_for
 from viaduct import db
 from viaduct.helpers import get_login_form
 from viaduct.models.activity import Activity
@@ -110,10 +110,15 @@ class NavigationAPI:
 
                     for activity in activities:
                         entry.activities.append(
-                            NavigationEntry(entry, activity.name,
-                                            '/activities/' + str(activity.id),
-                                            False, False, 0,
-                                            activity.till_now()))
+                            NavigationEntry(
+                                entry,
+                                activity.nl_name,
+                                activity.en_name,
+                                url_for(
+                                    'activity.get_activity',
+                                    activity_id=activity.id),
+                                False, False, 0,
+                                activity.till_now()))
         return entries
 
     @staticmethod
