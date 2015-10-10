@@ -14,7 +14,7 @@ from flask import flash, redirect, render_template, request, url_for, abort,\
     session
 from flask import Blueprint
 from flask.ext.login import current_user, login_user, logout_user
-from flask.ext.babel import lazy_gettext as _
+from flask.ext.babel import lazy_gettext as _, gettext
 
 from viaduct import db, login_manager, application
 from viaduct.helpers import flash_form_errors
@@ -249,10 +249,11 @@ def sign_up():
         if avatar:
             UserAPI.upload(avatar, user.id)
 
-        flash('Welkom %s! Je profiel is succesvol aangemaakt en je bent nu \
-            ingelogd!' % (current_user.first_name), 'success')
-
         login_user(user)
+
+        flash(gettext('Welcome %(name)s! Your profile has been succesfully '
+                      'created and you have been logged in!',
+                      name=current_user.first_name), 'success')
 
         return redirect(url_for('home.home'))
     else:
@@ -288,8 +289,8 @@ def sign_in():
         # Notify the login manager that the user has been signed in.
         login_user(user)
 
-        flash('Hey %s, je bent ingelogd!' % (current_user.first_name),
-              'success')
+        flash(gettext('Hey %(name)s, you\'re now logged in!',
+                      name=current_user.first_name), 'success')
 
         referer = request.headers.get('Referer')
         denied = re.match(r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2015-10-10 17:59+0200\n"
+"POT-Creation-Date: 2015-10-10 18:32+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -403,6 +403,11 @@ msgstr "Groep"
 msgid "Group permissions"
 msgstr "Groep permissies"
 
+#: viaduct/views/user.py:292
+#, python-format
+msgid "Hey %(name)s, you're now logged in!"
+msgstr "Hey %(name)s, je bent ingelogged!"
+
 #: viaduct/forms/activity.py:26
 msgid "Image"
 msgstr "Plaatje"
@@ -796,6 +801,13 @@ msgstr "Alleen zichtbaar voor leden"
 msgid "We've encountered an internal server error"
 msgstr "We zijn een interne server fout tegen gekomen"
 
+#: viaduct/views/user.py:254
+#, python-format
+msgid ""
+"Welcome %(name)s! Your profile has been succesfully created and you have "
+"been logged in!"
+msgstr "Welkom %(name)s! Je profiel is aangemaakt en je bent ingelogged!"
+
 #: viaduct/templates/news/list.htm:40 viaduct/templates/news/view_single.htm:31
 msgid "Written by"
 msgstr "Geschreven door"
@@ -892,4 +904,7 @@ msgstr "nog"
 
 #~ msgid "Language changed to"
 #~ msgstr "Taal aangepast naar"
+
+#~ msgid ""
+#~ msgstr ""
 
