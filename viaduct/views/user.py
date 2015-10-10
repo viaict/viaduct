@@ -14,6 +14,7 @@ from flask import flash, redirect, render_template, request, url_for, abort,\
     session
 from flask import Blueprint
 from flask.ext.login import current_user, login_user, logout_user
+from flask.ext.babel import lazy_gettext as _
 
 from viaduct import db, login_manager, application
 from viaduct.helpers import flash_form_errors
@@ -219,8 +220,8 @@ def sign_up():
         query = User.query.filter(User.email == form.email.data)
 
         if query.count() > 0:
-            flash('Een gebruiker met dit email adres bestaat al / A user with '
-                  'the e-mail address specified does already exist.', 'danger')
+            flash(_('A user with the e-mail address specified already exists'),
+                  'danger')
             return render_template('user/sign_up.htm', form=form)
 
         user = User(form.email.data, bcrypt.hashpw(form.password.data,
@@ -234,25 +235,22 @@ def sign_up():
         user.city = form.city.data
         user.country = form.country.data
 
-        exists = User.query.filter(User.email == user.email)
+        db.session.add(user)
+        db.session.commit()
 
-        if exists:
-            db.session.add(user)
-            db.session.commit()
+        group = Group.query.filter(Group.name == 'all').first()
+        group.add_user(user)
 
-            group = Group.query.filter(Group.name == 'all').first()
-            group.add_user(user)
+        db.session.add(group)
+        db.session.commit()
 
-            db.session.add(group)
-            db.session.commit()
+        # Upload avatar
+        avatar = request.files['avatar']
+        if avatar:
+            UserAPI.upload(avatar, user.id)
 
-            # Upload avatar
-            avatar = request.files['avatar']
-            if avatar:
-                UserAPI.upload(avatar, user.id)
-
-            flash('Welkom %s! Je profiel is succesvol aangemaakt en je bent nu \
-                ingelogd!' % (current_user.first_name), 'success')
+        flash('Welkom %s! Je profiel is succesvol aangemaakt en je bent nu \
+            ingelogd!' % (current_user.first_name), 'success')
 
         login_user(user)
 
@@ -290,7 +288,8 @@ def sign_in():
         # Notify the login manager that the user has been signed in.
         login_user(user)
 
-        flash('Hey %s, je bent ingelogd!' % (current_user.first_name), 'success')
+        flash('Hey %s, je bent ingelogd!' % (current_user.first_name),
+              'success')
 
         referer = request.headers.get('Referer')
         denied = re.match(r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),

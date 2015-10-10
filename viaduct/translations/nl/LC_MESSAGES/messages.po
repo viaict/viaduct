@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2015-10-10 17:36+0200\n"
+"POT-Creation-Date: 2015-10-10 17:59+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
+
+#: viaduct/views/user.py:223
+msgid "A user with the e-mail address specified already exists"
+msgstr "Er bestaat al een gebruiker met dat emailadres"
 
 #: viaduct/views/activity.py:56
 msgid "Activities"
