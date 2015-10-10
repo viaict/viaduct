@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-10-10 16:11+0200\n"
+"POT-Creation-Date: 2015-10-10 17:36+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -42,6 +42,10 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
+#: viaduct/forms/user.py:75 viaduct/forms/user.py:116 viaduct/forms/user.py:168
+msgid "Address"
+msgstr ""
+
 #: viaduct/views/examination.py:330 viaduct/views/examination.py:361
 msgid "Already exists in the database"
 msgstr ""
@@ -66,7 +70,7 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: viaduct/views/lang.py:34
+#: viaduct/views/lang.py:28 viaduct/views/lang.py:35
 msgid "Bilingualism is not fully implemented yet!"
 msgstr ""
 
@@ -80,6 +84,10 @@ msgstr ""
 
 #: viaduct/views/navigation.py:58
 msgid "Cannot find parent navigation entry."
+msgstr ""
+
+#: viaduct/forms/user.py:77 viaduct/forms/user.py:118 viaduct/forms/user.py:170
+msgid "City"
 msgstr ""
 
 #: viaduct/templates/activity/view_single.htm:39
@@ -113,6 +121,10 @@ msgstr ""
 
 #: viaduct/templates/activity/view_single.htm:94
 msgid "Contact details"
+msgstr ""
+
+#: viaduct/forms/user.py:78 viaduct/forms/user.py:119 viaduct/forms/user.py:171
+msgid "Country"
 msgstr ""
 
 #: viaduct/templates/examination/admin.htm:30
@@ -526,6 +538,10 @@ msgstr ""
 msgid "Pay (+€0,50 transaction costs)"
 msgstr ""
 
+#: viaduct/forms/user.py:73 viaduct/forms/user.py:114 viaduct/forms/user.py:166
+msgid "Phone"
+msgstr ""
+
 #: viaduct/templates/page/view_single.htm:20
 msgid "Please fill in"
 msgstr ""
@@ -802,6 +818,10 @@ msgstr ""
 
 #: viaduct/views/activity.py:123
 msgid "Your registration has been completed"
+msgstr ""
+
+#: viaduct/forms/user.py:76 viaduct/forms/user.py:117 viaduct/forms/user.py:169
+msgid "Zipcode"
 msgstr ""
 
 #: viaduct/models/activity.py:146

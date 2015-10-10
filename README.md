@@ -105,7 +105,11 @@ translations:
 ```
 
 Edit the file `viaduct/translations/nl/LC_MESSAGES/message.po` and add the Dutch
-translations for the English strings. After that compile the strings to be used
+translations for the English strings. Especially look for lines marked "fuzzy",
+since they won't be compiled. If the translation is correct, remove the line
+marking "fuzzy" and continue.
+
+After that compile the strings to be used
 in the website.
 ```bash
 	python venv/bin/pybabel compile -d viaduct/translations

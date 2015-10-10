@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2015-10-10 16:11+0200\n"
+"POT-Creation-Date: 2015-10-10 17:36+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -42,6 +42,10 @@ msgstr "Activiteitencommissie"
 msgid "Add"
 msgstr "Toevoegen"
 
+#: viaduct/forms/user.py:75 viaduct/forms/user.py:116 viaduct/forms/user.py:168
+msgid "Address"
+msgstr "Adres"
+
 #: viaduct/views/examination.py:330 viaduct/views/examination.py:361
 msgid "Already exists in the database"
 msgstr "Bestaat al in de database."
@@ -66,7 +70,7 @@ msgstr "Archiveer datum moet na de publiceer datum zijn."
 msgid "Back"
 msgstr "Terug"
 
-#: viaduct/views/lang.py:34
+#: viaduct/views/lang.py:28 viaduct/views/lang.py:35
 msgid "Bilingualism is not fully implemented yet!"
 msgstr "Tweetaligheid is nog niet volledig ondersteund!"
 
@@ -83,6 +87,10 @@ msgstr "Kan het plaatje niet verwijderen, want het plaatje bestaat niet"
 #: viaduct/views/navigation.py:58
 msgid "Cannot find parent navigation entry."
 msgstr ""
+
+#: viaduct/forms/user.py:77 viaduct/forms/user.py:118 viaduct/forms/user.py:170
+msgid "City"
+msgstr "Plaats"
 
 #: viaduct/templates/activity/view_single.htm:39
 #: viaduct/templates/activity/view_single.htm:57
@@ -116,6 +124,10 @@ msgstr "Vergelijken"
 #: viaduct/templates/activity/view_single.htm:94
 msgid "Contact details"
 msgstr "Contact gegevens"
+
+#: viaduct/forms/user.py:78 viaduct/forms/user.py:119 viaduct/forms/user.py:171
+msgid "Country"
+msgstr "Land"
 
 #: viaduct/templates/examination/admin.htm:30
 #: viaduct/templates/examination/edit.htm:14
@@ -530,6 +542,10 @@ msgstr "Pagina niet gevonden"
 msgid "Pay (+€0,50 transaction costs)"
 msgstr "Betalen (+€0,50 transactiekosten)"
 
+#: viaduct/forms/user.py:73 viaduct/forms/user.py:114 viaduct/forms/user.py:166
+msgid "Phone"
+msgstr "Telefoonnummer"
+
 #: viaduct/templates/page/view_single.htm:20
 msgid "Please fill in"
 msgstr "Alstublief invullen"
@@ -815,6 +831,10 @@ msgstr "Je moet ingelogd zijn om je te registeren voor een activiteit."
 #: viaduct/views/activity.py:123
 msgid "Your registration has been completed"
 msgstr "Je inschrijving is voltooid"
+
+#: viaduct/forms/user.py:76 viaduct/forms/user.py:117 viaduct/forms/user.py:169
+msgid "Zipcode"
+msgstr "Postcode"
 
 #: viaduct/models/activity.py:146
 msgid "ago"

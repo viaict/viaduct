@@ -170,6 +170,12 @@ def edit(user_id=None):
         user.study_start = form.study_start.data
         user.receive_information = form.receive_information.data
 
+        user.phone_nr = form.phone_nr.data
+        user.address = form.address.data
+        user.zip = form.zip.data
+        user.city = form.city.data
+        user.country = form.country.data
+
         if form.password.data != '':
             user.password = bcrypt.hashpw(form.password.data, bcrypt.gensalt())
 
@@ -222,6 +228,11 @@ def sign_up():
                     form.last_name.data, form.student_id.data,
                     form.education_id.data, form.birth_date.data,
                     form.study_start.data, form.receive_information.data)
+        user.phone_nr = form.phone_nr.data
+        user.address = form.address.data
+        user.zip = form.zip.data
+        user.city = form.city.data
+        user.country = form.country.data
 
         exists = User.query.filter(User.email == user.email)
 
