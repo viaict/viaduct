@@ -148,7 +148,7 @@ msgstr "Formulier aanmaken"
 
 #: viaduct/templates/news/list.htm:12
 msgid "Create news item"
-msgstr "Nieuwsberich aanmaken"
+msgstr "Nieuwsbericht aanmaken"
 
 #: viaduct/forms/page.py:65 viaduct/templates/examination/edit.htm:52
 #: viaduct/templates/examination/edit.htm:58
