@@ -2,6 +2,13 @@
 
 {% extends "content.htm" %}
 
+{% block includes %}
+    <script>
+        var get_companies = "{{ url_for('company.get_companies') }}"
+    </script>
+    <script src="{{static_url("/static/js/company/view.js")}}"></script>
+{% endblock %}
+
 {% block content %}
 	<div class="col-md-12">
 	{% if ModuleAPI.can_write('location') %}
@@ -28,6 +35,30 @@
 			</form>
 		</div>
 	</div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table id="datatable" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Naam</th>
+                        <th>Website</th>
+                        <th>Locatie</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th></th>
+                        <th>Naam</th>
+                        <th>Website</th>
+                        <th>Locatie</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
 	<div class="row">
 		<div class="col-md-12">
 			<div class="row">

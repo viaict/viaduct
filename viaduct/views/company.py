@@ -1,5 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, request, \
     url_for, abort
+import json
 
 from sqlalchemy import or_, and_
 
@@ -17,6 +18,54 @@ from viaduct.api.file import FileAPI
 blueprint = Blueprint('company', __name__, url_prefix='/companies')
 
 FILE_FOLDER = application.config['FILE_DIR']
+
+
+@blueprint.route('/get_companies/', methods=['GET'])
+def get_companies():
+    if not ModuleAPI.can_read('company'):
+        return abort(403)
+
+    if not ModuleAPI.can_write('company'):
+        companies = Company.query\
+            .filter(and_(Company.contract_start_date < datetime.utcnow(),
+                         Company.contract_end_date > datetime.utcnow()))\
+            .order_by(Company.name).order_by(Company.rank).all()
+        for company in companies:
+            company.expired = False
+    else:
+        companies = Company.query.filter().order_by(Company.name)\
+            .order_by(Company.rank).all()
+        for company in companies:
+            if company.contract_start_date < datetime.date(datetime.utcnow()) \
+                    and company.contract_end_date < datetime.date(datetime
+                                                                  .utcnow()):
+                company.expired = True
+            else:
+                company.expired = False
+
+    company_list = []
+
+    for company in companies:
+        company_list.append(
+            {
+                "id": company.id,
+                "name": company.name,
+                "website": company.website,
+                "location": {
+                    "city": company.location.city,
+                    "address": company.location.address,
+                    "country": company.location.country
+                },
+                "expired": company.expired,
+                "logo": company.logo_path,
+                "view": url_for('company.view', company_id=company.id),
+                "contact": {
+                    "email": company.contact.email,
+                    "phone_nr": company.contact.phone_nr
+                },
+            })
+    print(json.dumps({"data": company_list}))
+    return json.dumps({"data": company_list})
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
