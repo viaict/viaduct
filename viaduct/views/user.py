@@ -161,8 +161,6 @@ def edit(user_id=None):
         if not user_id:
             user = User('_')
 
-        user.email = form.email.data.strip()
-
         try:
             user.update_email(form.email.data.strip())
         except HttpError as e:
@@ -180,9 +178,9 @@ def edit(user_id=None):
             user.honorary_member = form.honorary_member.data
             user.favourer = form.favourer.data
         user.student_id = form.student_id.data.strip()
-        user.education_id = form.education_id.data.strip()
+        user.education_id = form.education_id.data
         user.birth_date = form.birth_date.data
-        user.study_start = form.study_start.data.strip()
+        user.study_start = form.study_start.data
         user.receive_information = form.receive_information.data
 
         user.phone_nr = form.phone_nr.data.strip()
