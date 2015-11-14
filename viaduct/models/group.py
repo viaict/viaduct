@@ -41,10 +41,12 @@ class Group(db.Model, BaseEntity):
             return self
 
     def add_email_to_maillist(self, email):
-        google.add_email_to_group_if_not_exists(email, self.maillist)
+        if self.maillist:
+            google.add_email_to_group_if_not_exists(email, self.maillist)
 
     def remove_email_from_maillist(self, email):
-        google.remove_email_from_group(email, self.maillist)
+        if self.maillist:
+            google.remove_email_from_group(email, self.maillist)
 
     def delete_user(self, user):
         if self.has_user(user):
