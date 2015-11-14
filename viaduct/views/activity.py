@@ -149,6 +149,7 @@ def create(activity_id=None):
         return abort(403)
 
     if activity_id:
+        
         activity = Activity.query.get(activity_id)
 
         if not activity:
@@ -170,12 +171,14 @@ def create(activity_id=None):
 
     if request.method == 'POST':
         if form.validate_on_submit():
+            
+            picture = activity.picture
 
             form.populate_obj(activity)
 
             file = request.files['picture']
 
-            if file and allowed_file(file.filename):
+            if file.filename and allowed_file(file.filename):
                 picture = secure_filename(file.filename)
                 file.save(os.path.join('viaduct/static/activity_pictures',
                                        picture))
@@ -190,9 +193,7 @@ def create(activity_id=None):
                         print(_('Cannot delete image, image does not exist') +
                               ": " + str(activity.picture))
 
-            elif activity.picture:
-                picture = activity.picture
-            else:
+            elif not picture:
                 picture = None
 
             venue = 1  # Facebook ID location, not used yet  # noqa

@@ -7,7 +7,8 @@ from viaduct.models import BaseEntity
 task_user = db.Table(
     'pimpy_task_user',
     db.Column('id', db.Integer, primary_key=True),
-    db.Column('task_id', db.Integer, db.ForeignKey('pimpy_task.id')),
+    db.Column('task_id', db.Integer,
+              db.ForeignKey('pimpy_task.id', ondelete='cascade')),
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
 )
 
@@ -29,12 +30,14 @@ class Task(db.Model, BaseEntity):
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow())
     line = db.Column(db.Integer)
 
-    minute_id = db.Column(db.Integer, db.ForeignKey('pimpy_minute.id'))
+    minute_id = db.Column(db.Integer,
+                          db.ForeignKey('pimpy_minute.id', ondelete='cascade'))
+    minute = db.relationship('Minute',
+                             backref=db.backref('tasks', lazy='dynamic'))
 
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
-
-    group = db.relationship('Group', backref=db.backref('tasks',
-                            lazy='dynamic'))
+    group = db.relationship('Group',
+                            backref=db.backref('tasks', lazy='dynamic'))
 
     users = db.relationship('User', secondary=task_user,
                             backref=db.backref('tasks', lazy='dynamic'),
@@ -110,8 +113,6 @@ class Minute(db.Model, BaseEntity):
 
     # the date when the meeting took place
     minute_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
-
-    tasks = db.relationship('Task', backref='minute', lazy='dynamic')
 
     def __init__(self, content, group_id, minute_date):
         self.content = content

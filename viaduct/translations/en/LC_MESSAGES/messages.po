@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-07-21 11:57+0200\n"
+"POT-Creation-Date: 2015-10-10 18:46+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -17,7 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: viaduct/views/activity.py:55
+#: viaduct/views/user.py:223
+msgid "A user with the e-mail address specified already exists"
+msgstr ""
+
+#: viaduct/views/activity.py:56
 msgid "Activities"
 msgstr ""
 
@@ -25,7 +29,7 @@ msgstr ""
 msgid "Activity"
 msgstr ""
 
-#: viaduct/views/activity.py:49
+#: viaduct/views/activity.py:50
 msgid "Activity archive"
 msgstr ""
 
@@ -40,6 +44,10 @@ msgstr ""
 #: viaduct/templates/examination/course.htm:19
 #: viaduct/templates/examination/education.htm:18
 msgid "Add"
+msgstr ""
+
+#: viaduct/forms/user.py:75 viaduct/forms/user.py:116 viaduct/forms/user.py:168
+msgid "Address"
 msgstr ""
 
 #: viaduct/views/examination.py:330 viaduct/views/examination.py:361
@@ -66,7 +74,7 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: viaduct/views/lang.py:35
+#: viaduct/views/lang.py:28 viaduct/views/lang.py:35
 msgid "Bilingualism is not fully implemented yet!"
 msgstr ""
 
@@ -74,8 +82,16 @@ msgstr ""
 msgid "By registering you agree with the terms above."
 msgstr ""
 
-#: viaduct/views/activity.py:189
+#: viaduct/views/activity.py:193
 msgid "Cannot delete image, image does not exist"
+msgstr ""
+
+#: viaduct/views/navigation.py:58
+msgid "Cannot find parent navigation entry."
+msgstr ""
+
+#: viaduct/forms/user.py:77 viaduct/forms/user.py:118 viaduct/forms/user.py:170
+msgid "City"
 msgstr ""
 
 #: viaduct/templates/activity/view_single.htm:39
@@ -111,6 +127,10 @@ msgstr ""
 msgid "Contact details"
 msgstr ""
 
+#: viaduct/forms/user.py:78 viaduct/forms/user.py:119 viaduct/forms/user.py:171
+msgid "Country"
+msgstr ""
+
 #: viaduct/templates/examination/admin.htm:30
 #: viaduct/templates/examination/edit.htm:14
 #: viaduct/templates/examination/upload.htm:22
@@ -126,12 +146,13 @@ msgstr ""
 msgid "Coördinator"
 msgstr ""
 
-#: viaduct/templates/committee/edit.htm:15 viaduct/templates/news/edit.htm:14
+#: viaduct/templates/committee/edit.htm:15
+#: viaduct/templates/navigation/edit.htm:11 viaduct/templates/news/edit.htm:14
 #: viaduct/templates/page/edit_page.htm:15
 msgid "Create"
 msgstr ""
 
-#: viaduct/views/activity.py:159
+#: viaduct/views/activity.py:161
 msgid "Create activity"
 msgstr ""
 
@@ -157,8 +178,16 @@ msgstr ""
 msgid "Custom form"
 msgstr ""
 
+#: viaduct/templates/navigation/edit.htm:36
+msgid "Delete"
+msgstr ""
+
 #: viaduct/templates/activity/create.htm:10
 msgid "Delete activity"
+msgstr ""
+
+#: viaduct/templates/navigation/edit.htm:41
+msgid "Delete menu item and pagina"
 msgstr ""
 
 #: viaduct/templates/news/view_single.htm:21
@@ -204,6 +233,7 @@ msgstr ""
 msgid "Dutch name requires Dutch description and vice versa"
 msgstr ""
 
+#: viaduct/forms/navigation.py:8 viaduct/forms/navigation.py:9
 #: viaduct/forms/news.py:10 viaduct/forms/page.py:18
 msgid "Dutch title"
 msgstr ""
@@ -224,8 +254,9 @@ msgstr ""
 #: viaduct/templates/committee/edit.htm:13
 #: viaduct/templates/examination/admin.htm:33
 #: viaduct/templates/examination/edit.htm:5
-#: viaduct/templates/examination/view.htm:47 viaduct/templates/news/edit.htm:12
-#: viaduct/templates/page/edit_page.htm:13 viaduct/views/activity.py:156
+#: viaduct/templates/examination/view.htm:47
+#: viaduct/templates/navigation/edit.htm:13 viaduct/templates/news/edit.htm:12
+#: viaduct/templates/page/edit_page.htm:13 viaduct/views/activity.py:158
 msgid "Edit"
 msgstr ""
 
@@ -295,6 +326,7 @@ msgstr ""
 msgid "English name requires English description and vice versa"
 msgstr ""
 
+#: viaduct/forms/navigation.py:11 viaduct/forms/navigation.py:12
 #: viaduct/forms/news.py:12 viaduct/forms/page.py:19
 msgid "English title"
 msgstr ""
@@ -341,6 +373,10 @@ msgstr ""
 msgid "Examinations"
 msgstr ""
 
+#: viaduct/forms/navigation.py:18
+msgid "External link"
+msgstr ""
+
 #: viaduct/views/examination.py:184
 msgid "File does not exist, examination deleted."
 msgstr ""
@@ -365,6 +401,11 @@ msgstr ""
 msgid "Group permissions"
 msgstr ""
 
+#: viaduct/views/user.py:292
+#, python-format
+msgid "Hey %(name)s, you're now logged in!"
+msgstr ""
+
 #: viaduct/forms/activity.py:26
 msgid "Image"
 msgstr ""
@@ -379,10 +420,6 @@ msgstr ""
 
 #: viaduct/forms/activity.py:65
 msgid "Invalid e-mail address"
-msgstr ""
-
-#: viaduct/views/lang.py:34
-msgid "Language changed to"
 msgstr ""
 
 #: viaduct/views/lang.py:21
@@ -401,8 +438,20 @@ msgstr ""
 msgid "Latest news"
 msgstr ""
 
+#: viaduct/forms/navigation.py:17
+msgid "List"
+msgstr ""
+
+#: viaduct/forms/navigation.py:19
+msgid "List of activities"
+msgstr ""
+
 #: viaduct/forms/activity.py:21 viaduct/templates/activity/view_single.htm:38
 msgid "Location"
+msgstr ""
+
+#: viaduct/templates/navigation/edit.htm:15
+msgid "Navigation entry"
 msgstr ""
 
 #: viaduct/templates/examination/edit.htm:27
@@ -431,6 +480,10 @@ msgstr ""
 #: viaduct/templates/examination/upload.htm:11
 #: viaduct/templates/examination/view.htm:35
 msgid "New examination"
+msgstr ""
+
+#: viaduct/templates/navigation/view.htm:16
+msgid "New item"
 msgstr ""
 
 #: viaduct/templates/news/view_single.htm:6
@@ -462,7 +515,7 @@ msgstr ""
 msgid "No examination uploaded."
 msgstr ""
 
-#: viaduct/views/activity.py:168 viaduct/views/page.py:107
+#: viaduct/views/activity.py:170 viaduct/views/page.py:107
 msgid "No form"
 msgstr ""
 
@@ -492,6 +545,10 @@ msgstr ""
 
 #: viaduct/templates/activity/view_single.htm:90
 msgid "Pay (+€0,50 transaction costs)"
+msgstr ""
+
+#: viaduct/forms/user.py:73 viaduct/forms/user.py:114 viaduct/forms/user.py:166
+msgid "Phone"
 msgstr ""
 
 #: viaduct/templates/page/view_single.htm:20
@@ -629,6 +686,7 @@ msgid "Student ID"
 msgstr ""
 
 #: viaduct/templates/examination/edit.htm:62
+#: viaduct/templates/navigation/edit.htm:29
 msgid "Submit"
 msgstr ""
 
@@ -640,26 +698,38 @@ msgstr ""
 msgid "The Police has been notified."
 msgstr ""
 
-#: viaduct/views/activity.py:218
+#: viaduct/views/activity.py:220
 msgid "The activity has been created."
 msgstr ""
 
-#: viaduct/views/activity.py:209
+#: viaduct/views/activity.py:211
 msgid "The activity has been edited."
 msgstr ""
 
-#: viaduct/views/activity.py:130
+#: viaduct/views/activity.py:131
 msgid ""
 "The activity has reached its maximum number of registrations. You have "
 "been placed on the reserves list."
 msgstr ""
 
-#: viaduct/views/committee.py:154
+#: viaduct/views/committee.py:153
 msgid "The committe has been saved."
 msgstr ""
 
-#: viaduct/views/activity.py:134
+#: viaduct/views/navigation.py:112
+msgid "The link refers to a page that does not exist, pleasecreate the page!"
+msgstr ""
+
+#: viaduct/views/navigation.py:102
+msgid "The navigation entry has been saved."
+msgstr ""
+
+#: viaduct/views/activity.py:135
 msgid "The number of registrations at this moment is"
+msgstr ""
+
+#: viaduct/templates/navigation/view.htm:8
+msgid "The order has been saved successfully"
 msgstr ""
 
 #: viaduct/views/page.py:187
@@ -672,6 +742,10 @@ msgstr ""
 
 #: viaduct/views/page.py:189
 msgid "The page you tried to delete does not exist"
+msgstr ""
+
+#: viaduct/views/examination.py:383
+msgid "There is already a course with this name"
 msgstr ""
 
 #: viaduct/templates/activity/view_single.htm:95
@@ -719,6 +793,13 @@ msgstr ""
 msgid "We've encountered an internal server error"
 msgstr ""
 
+#: viaduct/views/user.py:254
+#, python-format
+msgid ""
+"Welcome %(name)s! Your profile has been succesfully created and you have "
+"been logged in!"
+msgstr ""
+
 #: viaduct/templates/news/list.htm:40 viaduct/templates/news/view_single.htm:31
 msgid "Written by"
 msgstr ""
@@ -731,11 +812,15 @@ msgstr ""
 msgid "Wrong format examination."
 msgstr ""
 
-#: viaduct/views/activity.py:123
+#: viaduct/views/activity.py:124
 msgid "You can edit your registration by resubmittingthe form."
 msgstr ""
 
-#: viaduct/views/activity.py:126
+#: viaduct/views/navigation.py:139
+msgid "You do not have rights to remove pages"
+msgstr ""
+
+#: viaduct/views/activity.py:127
 msgid "You have successfully registered, payment is still required!"
 msgstr ""
 
@@ -751,8 +836,12 @@ msgstr ""
 msgid "You must be logged-in to register for an activity."
 msgstr ""
 
-#: viaduct/views/activity.py:122
+#: viaduct/views/activity.py:123
 msgid "Your registration has been completed"
+msgstr ""
+
+#: viaduct/forms/user.py:76 viaduct/forms/user.py:117 viaduct/forms/user.py:169
+msgid "Zipcode"
 msgstr ""
 
 #: viaduct/models/activity.py:146
@@ -776,7 +865,7 @@ msgstr ""
 msgid "in"
 msgstr ""
 
-#: viaduct/forms/news.py:17
+#: viaduct/forms/navigation.py:15 viaduct/forms/news.py:17
 msgid "is required"
 msgstr ""
 
@@ -784,8 +873,8 @@ msgstr ""
 msgid "news item"
 msgstr ""
 
-#: viaduct/templates/page/edit_page.htm:17 viaduct/views/activity.py:49
-#: viaduct/views/activity.py:55
+#: viaduct/templates/page/edit_page.htm:17 viaduct/views/activity.py:50
+#: viaduct/views/activity.py:56
 msgid "page"
 msgstr ""
 
@@ -824,9 +913,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid ""
-#~ "Some field (like shirt-size or "
-#~ "diet) we try to save, so that "
-#~ "you don't have to ether them the"
-#~ " next time"
+#~ msgstr ""
+
+#~ msgid "Language changed to"
 #~ msgstr ""
 

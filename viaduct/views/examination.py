@@ -379,6 +379,9 @@ def examination_api_course_add():
 
     if course_name == '':
         return jsonify(error='Geen vaknaam opgegeven'), 500
+    if Course.query.filter(Course.name == course_name).first():
+        return jsonify(error=_('There is already a course with this name')), \
+            500
 
     course = Course(course_name, '')
     db.session.add(course)

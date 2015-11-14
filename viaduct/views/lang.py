@@ -25,12 +25,12 @@ def set_lang(lang=None):
         rv = make_response(redirect(redirect_url()))
         rv.set_cookie('lang', lang)
         refresh()
+        flash(_('Bilingualism is not fully implemented yet!'), 'info')
         return rv
     else:
         current_user.locale = lang
         db.session.add(current_user)
         db.session.commit()
         refresh()
-        flash(_('Language changed to') + ': ' + LANGUAGES[lang], 'success')
         flash(_('Bilingualism is not fully implemented yet!'), 'info')
         return redirect(redirect_url())
