@@ -11,9 +11,11 @@ from viaduct import application, db
 from viaduct.helpers import flash_form_errors
 
 from viaduct.api.module import ModuleAPI
+from viaduct.api import google
 
 from viaduct.models import Group, GroupPermission, User
-from viaduct.forms.group import EditGroupPermissionForm, ViewGroupForm
+from viaduct.forms.group import EditGroupPermissionForm, ViewGroupForm, \
+    EditGroup
 
 blueprint = Blueprint('group', __name__)
 
@@ -68,29 +70,68 @@ def create():
     if not(ModuleAPI.can_write('group')):
         return abort(403)
 
-    if request.method == 'POST':
+    form = EditGroup(request.form)
+
+    if form.validate_on_submit():
         name = request.form['name'].strip()
+        maillist = request.form['maillist'].strip()
         valid_form = True
 
-        if not name:
-            flash('No group name has been specified.', 'danger')
-            valid_form = False
-        elif Group.query.filter(Group.name == name).count() > 0:
-            flash('The group name that has been specified is in use already.',
-                  'danger')
+        if Group.query.filter(Group.name == name).count() > 0:
+            flash('The naam van de groep wordt al gebruikt', 'danger')
             valid_form = False
 
         if valid_form:
-            group = Group(name)
+            group = Group(name, maillist.lower)
 
             db.session.add(group)
             db.session.commit()
 
-            flash('The group has been created.', 'success')
+            flash('De groep is aangemaakt.', 'success')
 
             return redirect(url_for('group.view'))
 
-    return render_template('group/create.htm', title='Create group')
+    return render_template('group/create.htm', title='Maak groep',
+                           form=form)
+
+
+@blueprint.route('/groups/<int:group_id>/edit/', methods=['GET', 'POST'])
+def edit(group_id):
+    if not(ModuleAPI.can_write('group')):
+        return abort(403)
+
+    group = Group.by_id(group_id)
+
+    form = EditGroup(request.form, group)
+    if request.method == 'POST':
+        form = EditGroup(request.form)
+
+        if form.validate_on_submit():
+            name = form.data['name'].strip()
+            maillist = form.data['maillist'].strip().lower()
+            valid_form = True
+
+            group_with_same_name = Group.query.\
+                filter(Group.name == name, Group.id != group_id).first()
+            if group_with_same_name is not None:
+                flash('The naam van de groep wordt al gebruikt', 'danger')
+                valid_form = False
+
+            if valid_form:
+                group.name = name
+                group.maillist = maillist
+
+                db.session.commit()
+                google.create_group_if_not_exists(name, maillist)
+                print(google.get_group_by_name(maillist))
+                group.add_members_to_maillist()
+
+                flash('De groep is aangepast.', 'success')
+
+                return redirect(url_for('group.view'))
+
+    return render_template('group/create.htm', title='Pas groep aan',
+                           form=form)
 
 
 @blueprint.route('/groups/<int:group_id>/users/', methods=['GET', 'POST'])

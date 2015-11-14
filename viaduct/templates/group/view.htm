@@ -15,6 +15,7 @@
 					<th>Groep naam</th>
 					<th></th>
 					<th></th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -31,7 +32,11 @@
 
 						<td>
                             <a href="{{ url_for('group.edit_permissions', group_id=group.id) }}">
-                                <i class="glyphicon glyphicon-key"></i> Wijzig permissies</a>
+                                <i class="fa fa-key"></i> Wijzig permissies</a>
+						</td>
+						<td>
+                            <a href="{{ url_for('group.edit', group_id=group.id) }}">
+                                <i class="fa fa-pencil"></i> Wijzig naam en mail</a>
 						</td>
 					</tr>
 				{% endfor %}

@@ -29,6 +29,7 @@ from viaduct.forms.user import EditUserForm, EditUserInfoForm
 from viaduct.models.education import Education
 from viaduct.api.module import ModuleAPI
 from viaduct.api import UserAPI
+from viaduct.api.google import HttpError
 
 blueprint = Blueprint('user', __name__)
 
@@ -137,6 +138,10 @@ def edit(user_id=None):
     educations = Education.query.all()
     form.education_id.choices = [(e.id, e.name) for e in educations]
 
+    def edit_page():
+        return render_template('user/edit.htm', form=form, user=user,
+                               isAdmin=isAdmin)
+
     if form.validate_on_submit():
 
         # Only new users need a unique email.
@@ -147,8 +152,7 @@ def edit(user_id=None):
         if query.count() > 0:
             flash('Een gebruiker met dit email adres bestaat al / A user with '
                   'the e-mail address specified does already exist.', 'danger')
-            return render_template('user/edit.htm', form=form, user=user,
-                                   isAdmin=isAdmin)
+            return edit_page()
 
         # Because the user model is constructed to have an ID of 0 when it is
         # initialized without an email adress provided, reinitialize the user
@@ -157,25 +161,33 @@ def edit(user_id=None):
         if not user_id:
             user = User('_')
 
-        user.email = form.email.data
-        user.first_name = form.first_name.data
-        user.last_name = form.last_name.data
+        try:
+            user.update_email(form.email.data.strip())
+        except HttpError as e:
+            if e.resp.status == 404:
+                flash(_('According to Google this email does not exist. '
+                        'Please use an email that does.'), 'danger')
+                return edit_page()
+            raise(e)
+
+        user.first_name = form.first_name.data.strip()
+        user.last_name = form.last_name.data.strip()
         user.locale = form.locale.data
         if ModuleAPI.can_write('user'):
             user.has_payed = form.has_payed.data
             user.honorary_member = form.honorary_member.data
             user.favourer = form.favourer.data
-        user.student_id = form.student_id.data
+        user.student_id = form.student_id.data.strip()
         user.education_id = form.education_id.data
         user.birth_date = form.birth_date.data
         user.study_start = form.study_start.data
         user.receive_information = form.receive_information.data
 
-        user.phone_nr = form.phone_nr.data
-        user.address = form.address.data
-        user.zip = form.zip.data
-        user.city = form.city.data
-        user.country = form.country.data
+        user.phone_nr = form.phone_nr.data.strip()
+        user.address = form.address.data.strip()
+        user.zip = form.zip.data.strip()
+        user.city = form.city.data.strip()
+        user.country = form.country.data.strip()
 
         if form.password.data != '':
             user.password = bcrypt.hashpw(form.password.data, bcrypt.gensalt())
@@ -199,8 +211,7 @@ def edit(user_id=None):
     else:
         flash_form_errors(form)
 
-    return render_template('user/edit.htm', form=form, user=user,
-                           isAdmin=isAdmin)
+    return edit_page()
 
 
 @blueprint.route('/sign-up/', methods=['GET', 'POST'])
@@ -272,7 +283,7 @@ def sign_in():
     form = SignInForm(request.form)
 
     if form.validate_on_submit():
-        user = User.query.filter(User.email == form.email.data).first()
+        user = User.query.filter(User.email == form.email.data.strip()).first()
 
         if user is None:
             flash('It appears that account does not exist. Try again, or '

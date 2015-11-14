@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2015-10-10 18:46+0200\n"
+"POT-Creation-Date: 2015-11-14 16:19+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -17,9 +17,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: viaduct/views/user.py:223
+#: viaduct/views/user.py:236
 msgid "A user with the e-mail address specified already exists"
 msgstr "Er bestaat al een gebruiker met dat emailadres"
+
+#: viaduct/views/user.py:170
+msgid ""
+"According to Google this email does not exist. Please use an email that "
+"does."
+msgstr "Volgens Google bestaat deze email niet. Kies dus een bestaande email."
 
 #: viaduct/views/activity.py:56
 msgid "Activities"
@@ -90,7 +96,7 @@ msgstr "Kan het plaatje niet verwijderen, want het plaatje bestaat niet"
 
 #: viaduct/views/navigation.py:58
 msgid "Cannot find parent navigation entry."
-msgstr ""
+msgstr "Het bovenligende menu item kan niet gevonden worden."
 
 #: viaduct/forms/user.py:77 viaduct/forms/user.py:118 viaduct/forms/user.py:170
 msgid "City"
@@ -182,7 +188,7 @@ msgstr "Formulier"
 
 #: viaduct/templates/navigation/edit.htm:36
 msgid "Delete"
-msgstr ""
+msgstr "Verwijderen"
 
 #: viaduct/templates/activity/create.htm:10
 msgid "Delete activity"
@@ -190,7 +196,7 @@ msgstr "Activiteit verwijderen"
 
 #: viaduct/templates/navigation/edit.htm:41
 msgid "Delete menu item and pagina"
-msgstr ""
+msgstr "Verwijder menu item en pagina"
 
 #: viaduct/templates/news/view_single.htm:21
 msgid "Delete news item"
@@ -377,7 +383,7 @@ msgstr "Tentamens"
 
 #: viaduct/forms/navigation.py:18
 msgid "External link"
-msgstr ""
+msgstr "Externe link"
 
 #: viaduct/views/examination.py:184
 msgid "File does not exist, examination deleted."
@@ -403,7 +409,7 @@ msgstr "Groep"
 msgid "Group permissions"
 msgstr "Groep permissies"
 
-#: viaduct/views/user.py:292
+#: viaduct/views/user.py:305
 #, python-format
 msgid "Hey %(name)s, you're now logged in!"
 msgstr "Hey %(name)s, je bent ingelogged!"
@@ -442,10 +448,9 @@ msgstr "Laatste nieuws"
 
 #: viaduct/forms/navigation.py:17
 msgid "List"
-msgstr ""
+msgstr "Lijst"
 
 #: viaduct/forms/navigation.py:19
-#, fuzzy
 msgid "List of activities"
 msgstr "Activiteiten"
 
@@ -455,7 +460,7 @@ msgstr "Locatie"
 
 #: viaduct/templates/navigation/edit.htm:15
 msgid "Navigation entry"
-msgstr ""
+msgstr "Menu item"
 
 #: viaduct/templates/examination/edit.htm:27
 #: viaduct/templates/examination/edit.htm:46
@@ -486,9 +491,8 @@ msgid "New examination"
 msgstr "Nieuw tentamen"
 
 #: viaduct/templates/navigation/view.htm:16
-#, fuzzy
 msgid "New item"
-msgstr "nieuwsbericht"
+msgstr "Nieuw item"
 
 #: viaduct/templates/news/view_single.htm:6
 msgid "News"
@@ -728,21 +732,19 @@ msgstr "De commissie is aangemaakt."
 
 #: viaduct/views/navigation.py:112
 msgid "The link refers to a page that does not exist, pleasecreate the page!"
-msgstr ""
+msgstr "De link verwijst naar een pagina die niet bestaat, maak eerst deze pagina!"
 
 #: viaduct/views/navigation.py:102
-#, fuzzy
 msgid "The navigation entry has been saved."
-msgstr "De pagina is opgeslagen."
+msgstr "Het menu item is opgeslagen."
 
 #: viaduct/views/activity.py:135
 msgid "The number of registrations at this moment is"
 msgstr "Het aantal registraties op dit moment is"
 
 #: viaduct/templates/navigation/view.htm:8
-#, fuzzy
 msgid "The order has been saved successfully"
-msgstr "De pagina is opgeslagen."
+msgstr "De volgorde is opgeslagen."
 
 #: viaduct/views/page.py:187
 msgid "The page has been deletd"
@@ -805,7 +807,7 @@ msgstr "Alleen zichtbaar voor leden"
 msgid "We've encountered an internal server error"
 msgstr "We zijn een interne server fout tegen gekomen"
 
-#: viaduct/views/user.py:254
+#: viaduct/views/user.py:267
 #, python-format
 msgid ""
 "Welcome %(name)s! Your profile has been succesfully created and you have "
@@ -830,7 +832,7 @@ msgstr "Je kan je inschrijving aanpassen door opnieuw in te schrijven"
 
 #: viaduct/views/navigation.py:139
 msgid "You do not have rights to remove pages"
-msgstr ""
+msgstr "Je hebt geen rechten om pagina's te verwijderen"
 
 #: viaduct/views/activity.py:127
 msgid "You have successfully registered, payment is still required!"
