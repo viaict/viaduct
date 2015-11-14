@@ -39,3 +39,5 @@ gitlog.py
 
 viaduct/translations/*/LC_MESSAGES/messages.mo
 messages.pot
+
+src/js/global/jade.js

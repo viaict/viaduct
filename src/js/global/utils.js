@@ -35,7 +35,7 @@ utils.datatables.get_ids = function($selector, table) {
         selected_users += "- " + selected_rows.data()[i][1] + "\n";
     }
     return { "selected_ids" : selected_ids };
-}
+};
 
 utils.datatables.action_by_url = function(
     $selector, table, url, action, refer) {
@@ -61,4 +61,12 @@ utils.datatables.action_by_url = function(
             return;
         }
     });
+};
+
+// this needs a tbody as helper element when it is generating table rows
+utils.jadetpl = function jadetpl(tpl, params, helper) {
+    if (_.isUndefined(helper))
+        helper = $('<div>');
+    jade.render(helper[0], tpl, params);
+    return helper.children();
 };
