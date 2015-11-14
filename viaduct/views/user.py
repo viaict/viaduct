@@ -29,6 +29,7 @@ from viaduct.forms.user import EditUserForm, EditUserInfoForm
 from viaduct.models.education import Education
 from viaduct.api.module import ModuleAPI
 from viaduct.api import UserAPI
+from viaduct.api.google import HttpError
 
 blueprint = Blueprint('user', __name__)
 
@@ -137,6 +138,10 @@ def edit(user_id=None):
     educations = Education.query.all()
     form.education_id.choices = [(e.id, e.name) for e in educations]
 
+    def edit_page():
+        return render_template('user/edit.htm', form=form, user=user,
+                               isAdmin=isAdmin)
+
     if form.validate_on_submit():
 
         # Only new users need a unique email.
@@ -147,8 +152,7 @@ def edit(user_id=None):
         if query.count() > 0:
             flash('Een gebruiker met dit email adres bestaat al / A user with '
                   'the e-mail address specified does already exist.', 'danger')
-            return render_template('user/edit.htm', form=form, user=user,
-                                   isAdmin=isAdmin)
+            return edit_page()
 
         # Because the user model is constructed to have an ID of 0 when it is
         # initialized without an email adress provided, reinitialize the user
@@ -157,7 +161,15 @@ def edit(user_id=None):
         if not user_id:
             user = User('_')
 
-        user.email = form.email.data
+        try:
+            user.update_email(form.email.data)
+        except HttpError as e:
+            if e.resp.status == 404:
+                flash('Volgens Google bestaat deze email niet. Kies dus een '
+                      'bestaande email.', 'danger')
+                return edit_page()
+            raise(e)
+
         user.first_name = form.first_name.data
         user.last_name = form.last_name.data
         user.locale = form.locale.data
@@ -199,8 +211,7 @@ def edit(user_id=None):
     else:
         flash_form_errors(form)
 
-    return render_template('user/edit.htm', form=form, user=user,
-                           isAdmin=isAdmin)
+    return edit_page()
 
 
 @blueprint.route('/sign-up/', methods=['GET', 'POST'])

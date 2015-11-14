@@ -1,7 +1,7 @@
 from viaduct import db
 from viaduct.models.education import Education
 from datetime import datetime
-from viaduct.models import BaseEntity
+from viaduct.models import BaseEntity, Group
 from config import LANGUAGES
 
 
@@ -80,6 +80,22 @@ class User(db.Model, BaseEntity):
     def get_id(self):
         """Necessary for Flask-Login."""
         return str(self.id)
+
+    def update_email(self, new_email):
+        if self.email == new_email:
+            return
+
+        old_email = self.email
+
+        groups_with_email = self.groups.filter(
+            Group.maillist != None,
+            Group.maillist != '').all()  # noqa
+
+        for group in groups_with_email:
+            group.add_email_to_maillist(new_email)
+            group.remove_email_from_maillist(old_email)
+
+        self.email = new_email
 
     @property
     def name(self):
