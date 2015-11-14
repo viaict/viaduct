@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-11-14 16:07+0100\n"
+"POT-Creation-Date: 2015-11-14 16:19+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -19,6 +19,12 @@ msgstr ""
 
 #: viaduct/views/user.py:236
 msgid "A user with the e-mail address specified already exists"
+msgstr ""
+
+#: viaduct/views/user.py:170
+msgid ""
+"According to Google this email does not exist. Please use an email that "
+"does."
 msgstr ""
 
 #: viaduct/views/activity.py:56

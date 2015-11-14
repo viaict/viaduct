@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2015-11-14 16:07+0100\n"
+"POT-Creation-Date: 2015-11-14 16:19+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -20,6 +20,12 @@ msgstr ""
 #: viaduct/views/user.py:236
 msgid "A user with the e-mail address specified already exists"
 msgstr "Er bestaat al een gebruiker met dat emailadres"
+
+#: viaduct/views/user.py:170
+msgid ""
+"According to Google this email does not exist. Please use an email that "
+"does."
+msgstr "Volgens Google bestaat deze email niet. Kies dus een bestaande email."
 
 #: viaduct/views/activity.py:56
 msgid "Activities"

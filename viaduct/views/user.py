@@ -167,8 +167,8 @@ def edit(user_id=None):
             user.update_email(form.email.data.strip())
         except HttpError as e:
             if e.resp.status == 404:
-                flash('Volgens Google bestaat deze email niet. Kies dus een '
-                      'bestaande email.', 'danger')
+                flash(_('According to Google this email does not exist. '
+                        'Please use an email that does.'), 'danger')
                 return edit_page()
             raise(e)
 
