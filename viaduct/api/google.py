@@ -147,6 +147,8 @@ def get_group_members(listname):
 
 
 def create_group(groupname, listname):
+    if application.debug:
+        return
     api = get_group_api()
     email = listname + '@' + domain
     api.insert(body={'email': email, 'name': groupname}).execute()
@@ -162,6 +164,8 @@ def create_group_if_not_exists(groupname, listname):
 
 
 def add_email_to_group(email, listname):
+    if application.debug:
+        return
     api = get_group_members_api()
     list_id = listname + '@' + domain
     api.insert(groupKey=list_id,
@@ -178,6 +182,8 @@ def add_email_to_group_if_not_exists(email, listname):
 
 
 def remove_email_from_group(email, listname):
+    if application.debug:
+        return
     api = get_group_members_api()
     try:
         api.delete(groupKey=listname + '@' + domain, memberKey=email).execute()
