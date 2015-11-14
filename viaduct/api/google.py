@@ -175,3 +175,8 @@ def add_email_to_group_if_not_exists(email, listname):
         if e.resp.status != 409:
             # Something else went wrong than the list already existing
             raise(e)
+
+
+def remove_email_from_group(email, listname):
+    api = get_group_members_api()
+    api.delete(groupKey=listname + '@' + domain, memberKey=email).execute()
