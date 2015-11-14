@@ -8,8 +8,11 @@ PIDS[0]=$!
 grunt watch &
 PIDS[1]=$!
 
-python run.py
+python watch_jade.py &
 PIDS[2]=$!
+
+python run.py
+PIDS[3]=$!
 
 
 trap "kill ${PIDS[*]}" SIGINT
