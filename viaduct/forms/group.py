@@ -1,7 +1,9 @@
 from flask_wtf import Form
 
 from wtforms import BooleanField, FormField, FieldList, SubmitField, \
-    SelectField
+    SelectField, StringField
+
+from wtforms.validators import InputRequired
 
 from wtforms import Form as UnsafeForm
 
@@ -18,6 +20,12 @@ class ViewGroupForm(Form):
 class EditGroupPermissionEntry(UnsafeForm):
     select = SelectField(None, coerce=int, choices=[(0, "Geen"), (1, "Lees"),
                                                     (2, "Lees/Schrijf")])
+
+
+class EditGroup(Form):
+    name = StringField('Naam', validators=[
+        InputRequired(message='Geen naam opgegeven')])
+    maillist = StringField('Naam maillijst (zonder @svia.nl)')
 
 
 class EditGroupPermissionForm(Form):
