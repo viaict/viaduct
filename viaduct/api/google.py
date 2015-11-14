@@ -179,4 +179,9 @@ def add_email_to_group_if_not_exists(email, listname):
 
 def remove_email_from_group(email, listname):
     api = get_group_members_api()
-    api.delete(groupKey=listname + '@' + domain, memberKey=email).execute()
+    try:
+        api.delete(groupKey=listname + '@' + domain, memberKey=email).execute()
+    except HttpError as e:
+        if e.resp.status == 400:
+            return
+        raise(e)
