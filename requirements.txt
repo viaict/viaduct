@@ -1,6 +1,7 @@
 alembic==0.7.5.post2
 aniso8601==0.92
-git+https://github.com/MaicoTimmerman/babel@via
+argh==0.26.1
+-e git+https://github.com/MaicoTimmerman/babel@d97ddfe35ec8ef0855f859b493b3f537af061f7a#egg=Babel-origin_via
 cffi==0.8.6
 cryptography==0.7.1
 enum34==1.0.4
@@ -22,8 +23,9 @@ Jinja2==2.7.3
 Mako==1.0.1
 Markdown==2.5.2
 MarkupSafe==0.23
-git+git://github.com/JelteF/mollie-api-python@master#egg=mollie-api-client
+-e git://github.com/JelteF/mollie-api-python@dec672784ed35d8f010aba0a5e4b740b6e419aa7#egg=mollie_api_python-master
 oauth2client==1.4.12
+pathtools==0.1.2
 Pillow==2.7.0
 py-bcrypt==0.4
 pyasn1==0.1.7
@@ -34,6 +36,7 @@ PyMySQL==0.6.3
 pyOpenSSL==0.14
 python-dateutil==2.4.0
 pytz==2014.10
+PyYAML==3.11
 recaptcha-client==1.0.6
 requests==2.5.1
 rsa==3.1.4
@@ -44,5 +47,6 @@ SQLAlchemy==1.0.6
 Unidecode==0.4.17
 uritemplate==0.6
 validictory==0.9.3
+watchdog==0.8.3
 Werkzeug==0.9.6
 WTForms==2.0.1
