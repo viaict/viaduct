@@ -1,0 +1,36 @@
+div
+    div.col-md-6
+        a(href=view)
+            img.img-rounded(style="max-width: 250px; max-height: 100px;", src="/static/files/" + logo)
+        p
+            i.glyphicon.glyphicon-envelope
+            a(target="blank_", href="mailto:" + contact.email)= contact.email
+            br
+            i.glyphicon.glyphicon-globe
+            a(target="blank_", href=website)
+                = website
+            br
+            i.glyphicon.glyphicon-map-marker
+            a(target="blank_", href="https://maps.google.nl/maps?q=" + location.address + " " + location.city + " " + location.country)
+                = location.address + ", " + location.city + ", " + location.country
+            br
+            i.glyphicon.glyphicon-user
+            a(href="tel:" + contact.phone_nr)
+                = contact.phone_nr
+
+            br
+            br
+
+            if can_write
+                a.btn.btn-warning(href=edit)
+                    i.glyphicon.glyphicon-pencil bewerken
+                br
+                a.btn.btn-danger(
+                        href=remove,
+                        onclick="return confirm('Weet je zeker dat je "+ name +" wil verwijderen?')")
+                    i.glyphicon.glyphicon-pencil verwijderen
+    div.col-md-6
+        h3
+            = name
+        br
+        != markdown.toHTML(description)

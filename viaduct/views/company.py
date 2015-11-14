@@ -51,6 +51,7 @@ def get_companies():
                 "id": company.id,
                 "name": company.name,
                 "website": company.website,
+                "description": company.description,
                 "location": {
                     "city": company.location.city,
                     "address": company.location.address,
@@ -63,6 +64,9 @@ def get_companies():
                     "email": company.contact.email,
                     "phone_nr": company.contact.phone_nr
                 },
+                "can_write": ModuleAPI.can_write('company'),
+                "edit": url_for('company.edit', company_id=company.id),
+                "remove": url_for('company.delete', company_id=company.id),
             })
     print(json.dumps({"data": company_list}))
     return json.dumps({"data": company_list})
@@ -245,7 +249,7 @@ def update(company_id=None):
     return redirect(url_for('company.view', company_id=company_id))
 
 
-@blueprint.route('/delete/<int:company_id>/', methods=['POST'])
+@blueprint.route('/delete/<int:company_id>/', methods=['GET', 'POST'])
 def delete(company_id):
     '''
     BACKEND
@@ -263,7 +267,7 @@ def delete(company_id):
     db.session.commit()
     flash('Bedrijf verwijderd', 'success')
 
-    return redirect(url_for('company.list_view'))
+    return redirect(url_for('company.view_list'))
 
 
 @blueprint.route('/create_new/', methods=['GET'])

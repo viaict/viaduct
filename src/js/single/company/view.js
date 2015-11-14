@@ -1,9 +1,5 @@
 function format(d) {
-    return '<a href="'+ d.view +'">'+
-        '<img class="img-rounded" style="max-width:250px; max-height:100px;" '+
-        'src="/static/files/'+ d.logo +'"></img></a>' +
-        '<p><i class="glyphicon glyphicon-envelope"></i><a target="blank_" ' +
-        'href="mailto:'+ d.contact.email +'">'+ d.contact.email +'</a>';
+    return utils.jadetpl('company_list_datatable', d);
 }
 
 $(document).ready(function() {
