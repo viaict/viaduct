@@ -1,6 +1,6 @@
 alembic==0.7.5.post2
 aniso8601==0.92
-git+https://github.com/MaicoTimmerman/babel@via
+-e git+https://github.com/MaicoTimmerman/babel@d97ddfe35ec8ef0855f859b493b3f537af061f7a#egg=Babel-origin_via
 cffi==0.8.6
 cryptography==0.7.1
 enum34==1.0.4
@@ -22,7 +22,7 @@ Jinja2==2.7.3
 Mako==1.0.1
 Markdown==2.5.2
 MarkupSafe==0.23
-git+git://github.com/JelteF/mollie-api-python@master#egg=mollie-api-client
+-e git://github.com/JelteF/mollie-api-python@dec672784ed35d8f010aba0a5e4b740b6e419aa7#egg=mollie_api_python-master
 oauth2client==1.4.2
 Pillow==2.7.0
 py-bcrypt==0.4
