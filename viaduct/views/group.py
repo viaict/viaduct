@@ -123,7 +123,6 @@ def edit(group_id):
 
                 db.session.commit()
                 google.create_group_if_not_exists(name, maillist)
-                print(google.get_group_by_name(maillist))
                 group.add_members_to_maillist()
 
                 flash('De groep is aangepast.', 'success')
