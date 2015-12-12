@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2015-12-12 13:31+0100\n"
+"POT-Creation-Date: 2015-12-12 14:49+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -53,7 +53,7 @@ msgstr "Activiteitencommissie"
 msgid "Add"
 msgstr "Toevoegen"
 
-#: viaduct/forms/user.py:75 viaduct/forms/user.py:116 viaduct/forms/user.py:168
+#: viaduct/forms/user.py:59
 msgid "Address"
 msgstr "Adres"
 
@@ -89,6 +89,10 @@ msgstr "Terug"
 msgid "Bilingualism is not fully implemented yet!"
 msgstr "Tweetaligheid is nog niet volledig ondersteund!"
 
+#: viaduct/forms/user.py:89
+msgid "Birthdate"
+msgstr "Geboortedag"
+
 #: viaduct/templates/activity/view_single.htm:114
 msgid "By registering you agree with the terms above."
 msgstr ""
@@ -103,7 +107,7 @@ msgstr "Kan het plaatje niet verwijderen, want het plaatje bestaat niet"
 msgid "Cannot find parent navigation entry."
 msgstr "Het bovenligende menu item kan niet gevonden worden."
 
-#: viaduct/forms/user.py:77 viaduct/forms/user.py:118 viaduct/forms/user.py:170
+#: viaduct/forms/user.py:61
 msgid "City"
 msgstr "Plaats"
 
@@ -140,7 +144,7 @@ msgstr "Vergelijken"
 msgid "Contact details"
 msgstr "Contact gegevens"
 
-#: viaduct/forms/user.py:78 viaduct/forms/user.py:119 viaduct/forms/user.py:171
+#: viaduct/forms/user.py:62
 msgid "Country"
 msgstr "Land"
 
@@ -272,6 +276,7 @@ msgstr "Nederlandse naam vereist Nederlandse beschrijving en vica versa."
 msgid "E-mail address"
 msgstr "E-mailadres"
 
+#: viaduct/forms/user.py:37 viaduct/forms/user.py:130 viaduct/forms/user.py:139
 #: viaduct/templates/user/view.htm:19 viaduct/templates/user/view.htm:32
 msgid "E-mail adress"
 msgstr "E-mailadres"
@@ -419,8 +424,8 @@ msgstr "Gebruikers exporteren"
 msgid "External link"
 msgstr "Externe link"
 
-#: viaduct/templates/user/view.htm:26 viaduct/templates/user/view.htm:39
-#: viaduct/templates/user/view_single.htm:71
+#: viaduct/forms/user.py:87 viaduct/templates/user/view.htm:26
+#: viaduct/templates/user/view.htm:39 viaduct/templates/user/view_single.htm:71
 msgid "Favourer"
 msgstr "Begunstigde"
 
@@ -433,12 +438,18 @@ msgid "Filter groups"
 msgstr "Filter groepen"
 
 #: viaduct/forms/activity.py:67 viaduct/forms/activity.py:68
+#: viaduct/forms/user.py:41
 msgid "First name"
 msgstr "Voornaam"
 
 #: viaduct/templates/user/view.htm:20 viaduct/templates/user/view.htm:33
 msgid "Firstname"
 msgstr "Voornaam"
+
+#: viaduct/templates/user/sign_in.htm:19
+#, fuzzy
+msgid "Forgot password?"
+msgstr "Reset wachtwoord"
 
 #: viaduct/models/activity.py:40
 msgid "Free"
@@ -457,13 +468,17 @@ msgstr "Groep permissies"
 msgid "Groups"
 msgstr "Groepen"
 
+#: viaduct/forms/user.py:84
+msgid "Has payed"
+msgstr "Heeft betaald"
+
 #: viaduct/views/user.py:303
 #, python-format
 msgid "Hey %(name)s, you're now logged in!"
 msgstr "Hey %(name)s, je bent ingelogged!"
 
-#: viaduct/templates/user/view.htm:25 viaduct/templates/user/view.htm:38
-#: viaduct/templates/user/view_single.htm:70
+#: viaduct/forms/user.py:85 viaduct/templates/user/view.htm:25
+#: viaduct/templates/user/view.htm:38 viaduct/templates/user/view_single.htm:70
 msgid "Honorary member"
 msgstr "Erelid"
 
@@ -491,6 +506,14 @@ msgstr "Interim-coördinator"
 msgid "Invalid e-mail address"
 msgstr "Geen valide e-mailadres"
 
+#: viaduct/forms/user.py:39 viaduct/forms/user.py:132 viaduct/forms/user.py:141
+msgid "Invalid e-mail adress submitted"
+msgstr "Geen valide e-mailadres opgegeven"
+
+#: viaduct/forms/user.py:86
+msgid "Language"
+msgstr "Taal"
+
 #: viaduct/views/lang.py:21
 msgid "Language unsupported on this site"
 msgstr "Taal wordt niet ondersteund op deze website"
@@ -500,7 +523,8 @@ msgid "Last modified"
 msgstr "Laatste aanpassing"
 
 #: viaduct/forms/activity.py:70 viaduct/forms/activity.py:71
-#: viaduct/templates/user/view.htm:21 viaduct/templates/user/view.htm:34
+#: viaduct/forms/user.py:45 viaduct/templates/user/view.htm:21
+#: viaduct/templates/user/view.htm:34
 msgid "Last name"
 msgstr "Achternaam"
 
@@ -520,11 +544,20 @@ msgstr "Activiteiten"
 msgid "Location"
 msgstr "Locatie"
 
+#: viaduct/templates/user/sign_in.htm:6
+msgid "Log in"
+msgstr ""
+
 #: viaduct/templates/user/edit.htm:8 viaduct/templates/user/edit.htm:72
 #: viaduct/templates/user/view.htm:24 viaduct/templates/user/view.htm:37
 #: viaduct/templates/user/view_single.htm:69
 msgid "Member"
 msgstr "Lid"
+
+#: viaduct/forms/user.py:69 viaduct/forms/user.py:110 viaduct/forms/user.py:152
+#, python-format
+msgid "Minimal password length %d"
+msgstr "Minimum lengte van wachtwoord: "
 
 #: viaduct/templates/user/edit.htm:8 viaduct/templates/user/edit.htm:72
 #: viaduct/templates/user/view_single.htm:21
@@ -588,6 +621,14 @@ msgstr "Volgende"
 msgid "No answers uploaded."
 msgstr "Geen antwoorden geüpload."
 
+#: viaduct/forms/user.py:90
+msgid "No birthdate submitted"
+msgstr "Geen geboortedag opgegeven"
+
+#: viaduct/forms/user.py:38 viaduct/forms/user.py:131 viaduct/forms/user.py:140
+msgid "No e-mail adress submitted"
+msgstr "Geen valide e-mailadres"
+
 #: viaduct/views/examination.py:272
 msgid "No education given."
 msgstr "Geen opleiding opgegeven."
@@ -596,9 +637,33 @@ msgstr "Geen opleiding opgegeven."
 msgid "No examination uploaded."
 msgstr "Geen tentamen geüpload."
 
+#: viaduct/forms/user.py:42
+#, fuzzy
+msgid "No first name sunmitted"
+msgstr "Geen voornaam opgeveven"
+
 #: viaduct/views/activity.py:170 viaduct/views/page.py:107
 msgid "No form"
 msgstr "Geen formulier"
+
+#: viaduct/forms/user.py:46
+#, fuzzy
+msgid "No last name submitted"
+msgstr "Geen voornaam opgeveven"
+
+#: viaduct/forms/user.py:68 viaduct/forms/user.py:97 viaduct/forms/user.py:121
+#: viaduct/forms/user.py:135 viaduct/forms/user.py:151
+msgid "No password submitted"
+msgstr ""
+
+#: viaduct/forms/user.py:92
+msgid "No start study"
+msgstr ""
+
+#: viaduct/forms/user.py:50 viaduct/forms/user.py:144
+#, fuzzy
+msgid "No studentnumber submitted"
+msgstr "Studentennummer"
 
 #: viaduct/views/examination.py:110 viaduct/views/examination.py:270
 msgid "No title given."
@@ -624,6 +689,18 @@ msgstr "Oude tentamen behouden."
 msgid "Page not found"
 msgstr "Pagina niet gevonden"
 
+#: viaduct/forms/user.py:67 viaduct/forms/user.py:82 viaduct/forms/user.py:109
+#: viaduct/forms/user.py:134 viaduct/forms/user.py:150
+#, fuzzy
+msgid "Password"
+msgstr "Reset wachtwoord"
+
+#: viaduct/forms/user.py:74 viaduct/forms/user.py:75 viaduct/forms/user.py:102
+#: viaduct/forms/user.py:115 viaduct/forms/user.py:126
+#: viaduct/forms/user.py:157 viaduct/forms/user.py:158
+msgid "Passwords do not match"
+msgstr ""
+
 #: viaduct/templates/activity/view_single.htm:90
 msgid "Pay (+€0,50 transaction costs)"
 msgstr "Betalen (+€0,50 transactiekosten)"
@@ -632,7 +709,7 @@ msgstr "Betalen (+€0,50 transactiekosten)"
 msgid "Permission"
 msgstr "Rechten"
 
-#: viaduct/forms/user.py:73 viaduct/forms/user.py:114 viaduct/forms/user.py:166
+#: viaduct/forms/user.py:57
 msgid "Phone"
 msgstr "Telefoonnummer"
 
@@ -687,6 +764,10 @@ msgstr "Lees/Schrijf"
 msgid "Register"
 msgstr "Registreer"
 
+#: viaduct/templates/user/sign_in.htm:18
+msgid "Register account"
+msgstr ""
+
 #: viaduct/templates/activity/view_single.htm:56
 msgid "Register for this activity"
 msgstr "Registreer voor deze activiteit"
@@ -698,6 +779,12 @@ msgstr "Ingeschreven activiteiten"
 #: viaduct/templates/page/edit_page.htm:20
 msgid "Remove page"
 msgstr "Verwijder pagina"
+
+#: viaduct/forms/user.py:73 viaduct/forms/user.py:83 viaduct/forms/user.py:114
+#: viaduct/forms/user.py:156
+#, fuzzy
+msgid "Repeat password"
+msgstr "Reset wachtwoord"
 
 #: viaduct/templates/activity/view_single.htm:140
 msgid "Reset password"
@@ -775,6 +862,10 @@ msgstr ""
 "Sommige velden (zoals shirt-maat of dieet) proberen we op te slaan, zodat"
 " je het de volgende keer niet nog eens moet invullen."
 
+#: viaduct/forms/user.py:91
+msgid "Start study"
+msgstr ""
+
 #: viaduct/forms/activity.py:15 viaduct/forms/activity.py:16
 msgid "Start time"
 msgstr "Starttijd"
@@ -784,7 +875,12 @@ msgstr "Starttijd"
 msgid "Student ID"
 msgstr "Studentkaartnummer"
 
-#: viaduct/templates/user/view_single.htm:65
+#: viaduct/forms/user.py:49
+#, fuzzy
+msgid "Student number"
+msgstr "Studentennummer"
+
+#: viaduct/forms/user.py:143 viaduct/templates/user/view_single.htm:65
 msgid "Studentnumber"
 msgstr "Studentennummer"
 
@@ -951,6 +1047,10 @@ msgid ""
 "been logged in!"
 msgstr "Welkom %(name)s! Je profiel is aangemaakt en je bent ingelogd!"
 
+#: viaduct/forms/user.py:54
+msgid "Would you like to recieve information     from companies?"
+msgstr ""
+
 #: viaduct/templates/news/list.htm:40 viaduct/templates/news/view_single.htm:31
 msgid "Written by"
 msgstr "Geschreven door"
@@ -991,7 +1091,7 @@ msgstr "Je moet ingelogd zijn om je te registeren voor een activiteit."
 msgid "Your registration has been completed"
 msgstr "Je inschrijving is voltooid"
 
-#: viaduct/forms/user.py:76 viaduct/forms/user.py:117 viaduct/forms/user.py:169
+#: viaduct/forms/user.py:60
 msgid "Zipcode"
 msgstr "Postcode"
 
@@ -1049,5 +1149,11 @@ msgstr "nog"
 #~ msgstr "Taal aangepast naar"
 
 #~ msgid ""
+#~ msgstr ""
+
+#~ msgid "Lastname"
+#~ msgstr "Achternaam"
+
+#~ msgid "No lastname submitted"
 #~ msgstr ""
 
