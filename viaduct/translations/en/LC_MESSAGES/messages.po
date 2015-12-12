@@ -7,7 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+<<<<<<< HEAD
 "POT-Creation-Date: 2015-12-12 15:16+0100\n"
+=======
+"POT-Creation-Date: 2015-12-12 13:31+0100\n"
+>>>>>>> 84c78302c4c2125d20c8d20f84124794260bc6b9
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -27,7 +31,8 @@ msgid ""
 "does."
 msgstr ""
 
-#: viaduct/views/activity.py:56
+#: viaduct/templates/user/view_single.htm:33
+#: viaduct/templates/user/view_single.htm:76 viaduct/views/activity.py:56
 msgid "Activities"
 msgstr ""
 
@@ -77,6 +82,10 @@ msgstr ""
 
 #: viaduct/forms/news.py:33
 msgid "Archive date needs to be after the publish date."
+msgstr ""
+
+#: viaduct/templates/user/view_single.htm:85
+msgid "Attended activities"
 msgstr ""
 
 #: viaduct/templates/examination/course.htm:23
@@ -158,7 +167,8 @@ msgstr ""
 
 #: viaduct/templates/committee/edit.htm:15
 #: viaduct/templates/navigation/edit.htm:11 viaduct/templates/news/edit.htm:14
-#: viaduct/templates/page/edit_page.htm:15
+#: viaduct/templates/page/edit_page.htm:15 viaduct/templates/user/edit.htm:8
+#: viaduct/templates/user/edit.htm:72
 msgid "Create"
 msgstr ""
 
@@ -172,6 +182,10 @@ msgstr ""
 
 #: viaduct/templates/news/list.htm:12
 msgid "Create news item"
+msgstr ""
+
+#: viaduct/templates/user/view.htm:46
+msgid "Create user"
 msgstr ""
 
 #: viaduct/forms/page.py:65 viaduct/templates/examination/edit.htm:52
@@ -188,12 +202,16 @@ msgstr ""
 msgid "Custom form"
 msgstr ""
 
-#: viaduct/templates/navigation/edit.htm:36
+#: viaduct/templates/navigation/edit.htm:36 viaduct/templates/user/view.htm:49
 msgid "Delete"
 msgstr ""
 
 #: viaduct/templates/activity/create.htm:10
 msgid "Delete activity"
+msgstr ""
+
+#: viaduct/templates/user/edit.htm:57
+msgid "Delete avatar"
 msgstr ""
 
 #: viaduct/templates/navigation/edit.htm:41
@@ -260,6 +278,10 @@ msgstr ""
 msgid "E-mail address"
 msgstr ""
 
+#: viaduct/templates/user/view.htm:19 viaduct/templates/user/view.htm:32
+msgid "E-mail adress"
+msgstr ""
+
 #: viaduct/templates/activity/view_single.htm:24
 #: viaduct/templates/committee/edit.htm:13
 #: viaduct/templates/examination/admin.htm:33
@@ -276,6 +298,10 @@ msgstr ""
 
 #: viaduct/templates/page/view_super.htm:19
 msgid "Edit page"
+msgstr ""
+
+#: viaduct/templates/user/edit_permissions.htm:9
+msgid "Edit user permissions"
 msgstr ""
 
 #: viaduct/forms/activity.py:76 viaduct/templates/examination/admin.htm:32
@@ -303,6 +329,10 @@ msgstr ""
 #: viaduct/forms/committee.py:25 viaduct/forms/news.py:40
 #: viaduct/forms/page.py:43
 msgid "Either Dutch or English title required"
+msgstr ""
+
+#: viaduct/templates/user/view_single.htm:66
+msgid "Email"
 msgstr ""
 
 #: viaduct/forms/activity.py:19
@@ -383,11 +413,28 @@ msgstr ""
 msgid "Examinations"
 msgstr ""
 
+#: viaduct/templates/user/view_single.htm:114
+msgid "Exams"
+msgstr ""
+
+#: viaduct/templates/user/view.htm:52
+msgid "Export users"
+msgstr ""
+
 #: viaduct/forms/navigation.py:18
 msgid "External link"
 msgstr ""
 
+<<<<<<< HEAD
 #: viaduct/views/examination.py:186
+=======
+#: viaduct/templates/user/view.htm:26 viaduct/templates/user/view.htm:39
+#: viaduct/templates/user/view_single.htm:71
+msgid "Favourer"
+msgstr ""
+
+#: viaduct/views/examination.py:184
+>>>>>>> 84c78302c4c2125d20c8d20f84124794260bc6b9
 msgid "File does not exist, examination deleted."
 msgstr ""
 
@@ -397,6 +444,10 @@ msgstr ""
 
 #: viaduct/forms/activity.py:67 viaduct/forms/activity.py:68
 msgid "First name"
+msgstr ""
+
+#: viaduct/templates/user/view.htm:20 viaduct/templates/user/view.htm:33
+msgid "Firstname"
 msgstr ""
 
 #: viaduct/models/activity.py:40
@@ -411,13 +462,34 @@ msgstr ""
 msgid "Group permissions"
 msgstr ""
 
+<<<<<<< HEAD
+=======
+#: viaduct/templates/user/view_single.htm:37
+#: viaduct/templates/user/view_single.htm:95
+msgid "Groups"
+msgstr ""
+
+>>>>>>> 84c78302c4c2125d20c8d20f84124794260bc6b9
 #: viaduct/views/user.py:303
 #, python-format
 msgid "Hey %(name)s, you're now logged in!"
 msgstr ""
 
+#: viaduct/templates/user/view.htm:25 viaduct/templates/user/view.htm:38
+#: viaduct/templates/user/view_single.htm:70
+msgid "Honorary member"
+msgstr ""
+
+#: viaduct/templates/user/view.htm:18 viaduct/templates/user/view.htm:31
+msgid "ID"
+msgstr ""
+
 #: viaduct/forms/activity.py:26
 msgid "Image"
+msgstr ""
+
+#: viaduct/templates/user/view_single.htm:61
+msgid "Information"
 msgstr ""
 
 #: viaduct/forms/committee.py:12
@@ -441,6 +513,7 @@ msgid "Last modified"
 msgstr ""
 
 #: viaduct/forms/activity.py:70 viaduct/forms/activity.py:71
+#: viaduct/templates/user/view.htm:21 viaduct/templates/user/view.htm:34
 msgid "Last name"
 msgstr ""
 
@@ -458,6 +531,17 @@ msgstr ""
 
 #: viaduct/forms/activity.py:21 viaduct/templates/activity/view_single.htm:38
 msgid "Location"
+msgstr ""
+
+#: viaduct/templates/user/edit.htm:8 viaduct/templates/user/edit.htm:72
+#: viaduct/templates/user/view.htm:24 viaduct/templates/user/view.htm:37
+#: viaduct/templates/user/view_single.htm:69
+msgid "Member"
+msgstr ""
+
+#: viaduct/templates/user/edit.htm:8 viaduct/templates/user/edit.htm:72
+#: viaduct/templates/user/view_single.htm:21
+msgid "Modify"
 msgstr ""
 
 #: viaduct/templates/navigation/edit.htm:15
@@ -557,6 +641,10 @@ msgstr ""
 msgid "Pay (+€0,50 transaction costs)"
 msgstr ""
 
+#: viaduct/templates/user/edit_permissions.htm:16
+msgid "Permission"
+msgstr ""
+
 #: viaduct/forms/user.py:73 viaduct/forms/user.py:114 viaduct/forms/user.py:166
 msgid "Phone"
 msgstr ""
@@ -608,11 +696,16 @@ msgid "Read/Write"
 msgstr ""
 
 #: viaduct/templates/activity/view_single.htm:135
+#: viaduct/templates/user/sign_up.htm:8 viaduct/templates/user/sign_up.htm:47
 msgid "Register"
 msgstr ""
 
 #: viaduct/templates/activity/view_single.htm:56
 msgid "Register for this activity"
+msgstr ""
+
+#: viaduct/templates/user/view_single.htm:79
+msgid "Registered activities"
 msgstr ""
 
 #: viaduct/templates/page/edit_page.htm:20
@@ -636,6 +729,10 @@ msgstr ""
 
 #: viaduct/templates/activity/create.htm:72
 msgid "Select a time and date by clicking on the clock"
+msgstr ""
+
+#: viaduct/templates/user/request_password.htm:15
+msgid "Send"
 msgstr ""
 
 #: viaduct/templates/activity/view_simple.htm:42
@@ -692,7 +789,20 @@ msgid "Start time"
 msgstr ""
 
 #: viaduct/forms/activity.py:73 viaduct/forms/activity.py:74
+#: viaduct/templates/user/view.htm:22 viaduct/templates/user/view.htm:35
 msgid "Student ID"
+msgstr ""
+
+#: viaduct/templates/user/view_single.htm:65
+msgid "Studentnumber"
+msgstr ""
+
+#: viaduct/templates/user/view_single.htm:68
+msgid "Study"
+msgstr ""
+
+#: viaduct/templates/user/view.htm:23 viaduct/templates/user/view.htm:36
+msgid "Study course"
 msgstr ""
 
 #: viaduct/templates/examination/edit.htm:62
@@ -783,12 +893,32 @@ msgstr ""
 msgid "Unauthorized!"
 msgstr ""
 
+#: viaduct/templates/user/membership_warning.htm:4
+msgid ""
+"Unfortunately it is currently unclear to us if you are a member of "
+"<strong>via</strong>. This is probably due to not having paid your member"
+" contribution. You can pay for your contribution by oredering this along "
+"with your books, or you could pass the <strong>via</strong>-room by."
+msgstr ""
+
 #: viaduct/templates/page/get_page_history.htm:17
 msgid "User"
 msgstr ""
 
+#: viaduct/templates/user/view.htm:12
+msgid "User overview"
+msgstr ""
+
+#: viaduct/templates/user/view_single.htm:106
+msgid "User tips"
+msgstr ""
+
 #: viaduct/views/athenaeum.py:12
 msgid "Using the bookstore requires an account."
+msgstr ""
+
+#: viaduct/templates/user/view_single.htm:111
+msgid "Vancancies"
 msgstr ""
 
 #: viaduct/forms/activity.py:27
@@ -799,10 +929,23 @@ msgstr ""
 msgid "Visible for members only"
 msgstr ""
 
+#: viaduct/templates/user/membership_warning.htm:7
+msgid ""
+"We'd be delighted to help if you have any further questions. You can "
+"contact us by sending an e-mail to:<em>bestuur (at) svia (dot) nl</em>."
+msgstr ""
+
 #: viaduct/templates/page/500.htm:4
 msgid "We've encountered an internal server error"
 msgstr ""
 
+<<<<<<< HEAD
+=======
+#: viaduct/templates/user/membership_warning.htm:4
+msgid "Welcome"
+msgstr ""
+
+>>>>>>> 84c78302c4c2125d20c8d20f84124794260bc6b9
 #: viaduct/views/user.py:265
 #, python-format
 msgid ""

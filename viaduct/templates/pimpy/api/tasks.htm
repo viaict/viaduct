@@ -49,7 +49,7 @@
             <tr id="pimpy_task_row_{{ t.id }}" class='pimpy_task_row pimpy_status_{{ t.get_status_string() | replace(" ","_")}}' data-toggle="collapse" data-target='#{{ t.id }}_{{ tr.user.name | replace(" ","_") }}' data-task-id='{{ t.id }}'>
                 <td>
                     <div class="btn-group" style="margin-bottom: 8px;">
-                        <a id="pimpy_task{{ t.id }}" class="pimpy_task btn dropdown-toggle {{ t.get_status_color() }} " data-toggle="dropdown" href="#"> {{ t.get_task_id() }} </a>
+                        <a id="pimpy_task{{ t.id }}" class="pimpy_task btn dropdown-toggle {{ t.get_status_color() }} " data-toggle="dropdown" href="#"> {{ t.base32_id() }} </a>
                         <ul class="dropdown-menu">
                             {% for status_meaning in status_meanings: %}
                                 <li>

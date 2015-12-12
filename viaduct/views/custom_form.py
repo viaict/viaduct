@@ -30,7 +30,7 @@ def view():
     else:
         page = int(page)
 
-    if not ModuleAPI.can_write('custom_form'):
+    if not ModuleAPI.can_read('custom_form'):
         return abort(403)
 
     custom_forms = CustomForm.query.order_by(desc("id"))
@@ -58,7 +58,7 @@ def view():
 
 @blueprint.route('/view/<int:form_id>', methods=['GET', 'POST'])
 def view_single(form_id=None):
-    if not ModuleAPI.can_write('custom_form'):
+    if not ModuleAPI.can_read('custom_form'):
         return abort(403)
 
     custom_form = CustomForm.query.get(form_id)

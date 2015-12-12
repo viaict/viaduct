@@ -5,7 +5,7 @@
 {% block content %}
 <form action="" method="post" name="sign_up" class="form-horizontal" enctype="multipart/form-data">
     <fieldset>
-        <legend>Registreren</legend>
+        <legend>{{_('Register')}}</legend>
 
         {{ form.csrf_token }}
         {{ render_field(form.email) }}
@@ -44,7 +44,7 @@
 
         <div class="control-group">
             <div class="controls">
-                <button type="submit" class="btn btn-success">Registreren</button>
+                <button type="submit" class="btn btn-success">{{_('Register')}}</button>
             </div>
         </div>
     </fieldset>

@@ -6,9 +6,13 @@ Versioning works as follows: vSYSTEM.FEATURE.IMPROVEMENT.BUG-/HOTFIX
 See [tutorial](TUTORIAL.md).
 
 ## Setup:
-OS Packages: python3, sqlite, pip, virtualenv, mysql-server, git-flow,
-python3-dev, libffi-dev
-Install with your favorite packagemanager.
+Ubuntu install packages (other OS's should install similar stuff):
+```bash
+sudo apt-get install python3 sqlite python3-pip virtualenv mysql-server git-flow npm \
+nodejs libjpeg-dev libffi-dev
+ln -s /usr/bin/nodejs /usr/bin/node
+```
+
 
 Get the secret via config files with secrets for the server:
 ```bash
@@ -55,7 +59,7 @@ Build dependencies are for ruby and npm:
 * Get a live database of the via server by asking the coordinator.
 Use it by database by installing mysql and running:
     - `(sudo) mysql -u root -p < mysqlinit.sql`
-    - `(sudo) mysql -u root -p < database.sql`
+    - `(sudo) mysql -u viaduct -pviaduct < database.sql`
 
 Run site with:
 
