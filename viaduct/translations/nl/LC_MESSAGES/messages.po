@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2015-12-12 14:42+0100\n"
+"POT-Creation-Date: 2015-12-12 15:16+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -60,6 +60,10 @@ msgstr "Adres"
 msgid "Already exists in the database"
 msgstr "Bestaat al in de database."
 
+#: viaduct/views/activity.py:185
+msgid "An image with this name already exists."
+msgstr "Er bestaat al een plaatje met deze naam."
+
 #: viaduct/templates/examination/edit.htm:57
 #: viaduct/templates/examination/upload.htm:66
 #: viaduct/templates/examination/view.htm:45
@@ -90,7 +94,7 @@ msgstr ""
 "Door je aan te melden bij deze activiteit ga je akkoord met de "
 "bovenstaande voorwaarden."
 
-#: viaduct/views/activity.py:193
+#: viaduct/views/activity.py:198
 msgid "Cannot delete image, image does not exist"
 msgstr "Kan het plaatje niet verwijderen, want het plaatje bestaat niet"
 
@@ -710,11 +714,11 @@ msgstr "Voorwaarden"
 msgid "The Police has been notified."
 msgstr "De politie is gewaarschuwd."
 
-#: viaduct/views/activity.py:220
+#: viaduct/views/activity.py:225
 msgid "The activity has been created."
 msgstr "De activiteit is aangemaakt."
 
-#: viaduct/views/activity.py:211
+#: viaduct/views/activity.py:216
 msgid "The activity has been edited."
 msgstr "De activiteit is aangepast."
 

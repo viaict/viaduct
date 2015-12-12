@@ -180,6 +180,12 @@ def create(activity_id=None):
 
             if file.filename and allowed_file(file.filename):
                 picture = secure_filename(file.filename)
+
+                if not activity.picture and os.path.isfile(os.path.join('viaduct/static/activity_pictures', picture)):
+                    flash(_('An image with this name already exists.'), 'danger')
+                    return render_template('activity/create.htm', activity=activity, form=form,
+                           title=title)
+
                 file.save(os.path.join('viaduct/static/activity_pictures',
                                        picture))
 

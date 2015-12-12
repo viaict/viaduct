@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-12-12 14:42+0100\n"
+"POT-Creation-Date: 2015-12-12 15:16+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -60,6 +60,10 @@ msgstr ""
 msgid "Already exists in the database"
 msgstr ""
 
+#: viaduct/views/activity.py:185
+msgid "An image with this name already exists."
+msgstr ""
+
 #: viaduct/templates/examination/edit.htm:57
 #: viaduct/templates/examination/upload.htm:66
 #: viaduct/templates/examination/view.htm:45
@@ -88,7 +92,7 @@ msgstr ""
 msgid "By registering you agree with the terms above."
 msgstr ""
 
-#: viaduct/views/activity.py:193
+#: viaduct/views/activity.py:198
 msgid "Cannot delete image, image does not exist"
 msgstr ""
 
@@ -704,11 +708,11 @@ msgstr ""
 msgid "The Police has been notified."
 msgstr ""
 
-#: viaduct/views/activity.py:220
+#: viaduct/views/activity.py:225
 msgid "The activity has been created."
 msgstr ""
 
-#: viaduct/views/activity.py:211
+#: viaduct/views/activity.py:216
 msgid "The activity has been edited."
 msgstr ""
 
