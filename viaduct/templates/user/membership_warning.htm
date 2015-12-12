@@ -1,15 +1,10 @@
 <div id='membership_warning'>
     <div>
         <p>
-            Gegroet, {{ current_user.name }}! Helaas is het voor ons onduidelijk of
-            je lid van <strong>via</strong> bent. Dit komt waarschijnlijk omdat
-            je nog niet hebt betaald voor je lidmaatschap. Je kan je lidmaatschap
-            betalen door dit bij de boekenverkoop bij te bestellen of even langs
-            de <strong>via</strong>-kamer te komen.
+            {{_('Welcome')}}, {{ current_user.first_name }}! {{_('Unfortunately it is currently unclear to us if you are a member of <strong>via</strong>. This is probably due to not having paid your member contribution. You can pay for your contribution by oredering this along with your books, or you could pass the <strong>via</strong>-room by.')}}
         </p>
         <p>
-            Mocht je verdere vragen hebben, helpen wij je graag! Je kunt
-            ons bereiken door een e-mail te sturen naar <em>bestuur (at) svia (dot) nl</em>.
+            {{_('We\'d be delighted to help if you have any further questions. You can contact us by sending an e-mail to:<em>bestuur (at) svia (dot) nl</em>.')}}
         </p>
     </div>
 </div>

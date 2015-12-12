@@ -1,3 +1,12 @@
+12-12-2015 v2.4.0.0:
+* Use base32 encoding for PimPy
+* Fix some buttons without color
+* Fix some translations
+* Fix permissions for committee pages for BC
+* Fix activity image overwritten
+
+TODO: v2.3.0.0
+
 18-07-2015 v2.2.0.0:
 * Added: A new news system for the homepage
 * Added: Support for bilingual activities and examination

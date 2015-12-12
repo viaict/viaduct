@@ -1,6 +1,7 @@
 from viaduct import db
 import datetime
 from viaduct.models import BaseEntity
+import base32_crockford as b32
 
 
 # many to many relationship tables
@@ -62,8 +63,8 @@ class Task(db.Model, BaseEntity):
         self.minute_id = minute_id
         self.status = status
 
-    def get_task_id(self):
-        return self.id
+    def base32_id(self):
+        return b32.encode(self.id)
 
     def get_status_string(self):
         """

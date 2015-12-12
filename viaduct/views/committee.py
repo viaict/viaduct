@@ -74,7 +74,7 @@ def edit_committee(committee=''):
                     root_entry_position = last_root_entry.position + 1
 
                 root_entry = NavigationEntry(
-                    None, 'Commissies', root_entry_url, False,
+                    None, 'Commissies', 'Committees', root_entry_url, False,
                     False, root_entry_position)
 
                 db.session.add(root_entry)
@@ -95,8 +95,8 @@ def edit_committee(committee=''):
                 entry_position = last_navigation_entry.position + 1
 
             navigation_entry = NavigationEntry(
-                root_entry, committee_nl_title, '/' + path, False, False,
-                entry_position)
+                root_entry, committee_nl_title, committee_en_title, '/' + path,
+                False, False, entry_position)
 
             db.session.add(navigation_entry)
             db.session.commit()

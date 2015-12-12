@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2015-11-14 16:19+0100\n"
+"POT-Creation-Date: 2015-12-12 16:27+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -17,671 +17,593 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: viaduct/views/user.py:236
 msgid "A user with the e-mail address specified already exists"
 msgstr "Er bestaat al een gebruiker met dat emailadres"
 
-#: viaduct/views/user.py:170
 msgid ""
 "According to Google this email does not exist. Please use an email that "
 "does."
 msgstr "Volgens Google bestaat deze email niet. Kies dus een bestaande email."
 
-#: viaduct/views/activity.py:56
 msgid "Activities"
 msgstr "Activiteiten"
 
-#: viaduct/templates/activity/create.htm:15
 msgid "Activity"
 msgstr "Activiteit"
 
-#: viaduct/views/activity.py:50
 msgid "Activity archive"
 msgstr "Activiteiten archief"
 
-#: viaduct/templates/activity/view_simple.htm:3
 msgid "Activity overview"
 msgstr "Activiteitenoverzicht"
 
-#: viaduct/templates/activity/view_simple.htm:42
 msgid "Activitycommittee"
 msgstr "Activiteitencommissie"
 
-#: viaduct/templates/examination/course.htm:19
-#: viaduct/templates/examination/education.htm:18
 msgid "Add"
 msgstr "Toevoegen"
 
-#: viaduct/forms/user.py:75 viaduct/forms/user.py:116 viaduct/forms/user.py:168
 msgid "Address"
 msgstr "Adres"
 
-#: viaduct/views/examination.py:330 viaduct/views/examination.py:361
 msgid "Already exists in the database"
 msgstr "Bestaat al in de database."
 
-#: viaduct/templates/examination/edit.htm:57
-#: viaduct/templates/examination/upload.htm:62
-#: viaduct/templates/examination/view.htm:45
-#: viaduct/templates/examination/view.htm:66
+msgid "An image with this name already exists."
+msgstr "Er bestaat al een plaatje met deze naam."
+
 msgid "Answers"
 msgstr "Antwoorden"
 
-#: viaduct/forms/news.py:19
 msgid "Archive date"
 msgstr "Archiveer datum"
 
-#: viaduct/forms/news.py:33
 msgid "Archive date needs to be after the publish date."
 msgstr "Archiveer datum moet na de publiceer datum zijn."
 
-#: viaduct/templates/examination/course.htm:23
-#: viaduct/templates/examination/education.htm:22
+msgid "Attended activities"
+msgstr "Oude activiteiten"
+
+msgid ""
+"Attention: we now use a base32 encoding. Read this module's manual for "
+"more information."
+msgstr ""
+"Let op: we gebruiken nu een base32 encoding. Lees de handleiding van deze"
+" module voor meer informatie."
+
 msgid "Back"
 msgstr "Terug"
 
-#: viaduct/views/lang.py:28 viaduct/views/lang.py:35
 msgid "Bilingualism is not fully implemented yet!"
 msgstr "Tweetaligheid is nog niet volledig ondersteund!"
 
-#: viaduct/templates/activity/view_single.htm:114
+msgid "Birthdate"
+msgstr "Geboortedag"
+
 msgid "By registering you agree with the terms above."
 msgstr ""
 "Door je aan te melden bij deze activiteit ga je akkoord met de "
 "bovenstaande voorwaarden."
 
-#: viaduct/views/activity.py:193
 msgid "Cannot delete image, image does not exist"
 msgstr "Kan het plaatje niet verwijderen, want het plaatje bestaat niet"
 
-#: viaduct/views/navigation.py:58
 msgid "Cannot find parent navigation entry."
 msgstr "Het bovenligende menu item kan niet gevonden worden."
 
-#: viaduct/forms/user.py:77 viaduct/forms/user.py:118 viaduct/forms/user.py:170
 msgid "City"
 msgstr "Plaats"
 
-#: viaduct/templates/activity/view_single.htm:39
-#: viaduct/templates/activity/view_single.htm:57
 msgid "Click to expand"
 msgstr "Klik om uit te klappen"
 
-#: viaduct/templates/page/get_page_history.htm:16
 msgid "Comment"
 msgstr "Commentaar"
 
-#: viaduct/forms/page.py:21
 msgid "Comment for change"
 msgstr "Commentaar voor veranderingen"
 
-#: viaduct/templates/committee/view_single.htm:4
 msgid "Committee"
 msgstr "Commissie"
 
-#: viaduct/templates/committee/view_single.htm:24
 msgid "Committee members"
 msgstr "Commissieleden"
 
-#: viaduct/templates/committee/list.htm:4
 msgid "Committees"
 msgstr "Commissies"
 
-#: viaduct/forms/page.py:66
 msgid "Compare"
 msgstr "Vergelijken"
 
-#: viaduct/templates/activity/view_single.htm:94
 msgid "Contact details"
 msgstr "Contact gegevens"
 
-#: viaduct/forms/user.py:78 viaduct/forms/user.py:119 viaduct/forms/user.py:171
 msgid "Country"
 msgstr "Land"
 
-#: viaduct/templates/examination/admin.htm:30
-#: viaduct/templates/examination/edit.htm:14
-#: viaduct/templates/examination/upload.htm:22
-#: viaduct/templates/examination/view.htm:43
 msgid "Course"
 msgstr "Vak"
 
-#: viaduct/views/examination.py:327
 msgid "Course succesfully added."
 msgstr "Vak succesvol toegevoegd."
 
-#: viaduct/forms/committee.py:11
 msgid "Coördinator"
 msgstr "Coördinator"
 
-#: viaduct/templates/committee/edit.htm:15
-#: viaduct/templates/navigation/edit.htm:11 viaduct/templates/news/edit.htm:14
-#: viaduct/templates/page/edit_page.htm:15
 msgid "Create"
 msgstr "Aanmaken"
 
-#: viaduct/views/activity.py:161
 msgid "Create activity"
 msgstr "Activiteit aanmaken"
 
-#: viaduct/templates/activity/create.htm:26
 msgid "Create form"
 msgstr "Formulier aanmaken"
 
-#: viaduct/templates/news/list.htm:12
 msgid "Create news item"
 msgstr "Nieuwsbericht aanmaken"
 
-#: viaduct/forms/page.py:65 viaduct/templates/examination/edit.htm:52
-#: viaduct/templates/examination/edit.htm:58
-#: viaduct/templates/page/get_page_history.htm:19
+msgid "Create user"
+msgstr "Gebruiker aanmaken"
+
 msgid "Current"
 msgstr "Huidig"
 
-#: viaduct/templates/activity/create.htm:88
 msgid "Current image"
 msgstr "Huidige plaatje"
 
-#: viaduct/forms/activity.py:28 viaduct/forms/page.py:29
 msgid "Custom form"
 msgstr "Formulier"
 
-#: viaduct/templates/navigation/edit.htm:36
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: viaduct/templates/activity/create.htm:10
 msgid "Delete activity"
 msgstr "Activiteit verwijderen"
 
-#: viaduct/templates/navigation/edit.htm:41
+msgid "Delete avatar"
+msgstr "Verwijder avatar"
+
 msgid "Delete menu item and pagina"
 msgstr "Verwijder menu item en pagina"
 
-#: viaduct/templates/news/view_single.htm:21
 msgid "Delete news item"
 msgstr "Verwijder nieuwsbericht"
 
-#: viaduct/forms/committee.py:8 viaduct/forms/committee.py:9
 msgid "Description"
 msgstr "Beschrijving"
 
-#: viaduct/forms/page.py:28
 msgid "Do not filter HTML tags"
 msgstr "Geen HTML tags filteren"
 
-#: viaduct/templates/activity/view_simple.htm:41
 msgid "Do you have an idea for an activity?"
 msgstr "Heb je een idee voor een activiteit?"
 
-#: viaduct/models/activity.py:172 viaduct/models/committee.py:81
-#: viaduct/models/news.py:75 viaduct/models/page.py:168
 msgid "Dutch"
 msgstr "Nederlands"
 
-#: viaduct/forms/news.py:11 viaduct/forms/page.py:26
 msgid "Dutch content"
 msgstr "Nederlandse inhoud"
 
-#: viaduct/forms/activity.py:10
 msgid "Dutch description"
 msgstr "Nederlandse beschrijving"
 
-#: viaduct/templates/activity/create.htm:44
-#: viaduct/templates/committee/edit.htm:31 viaduct/templates/news/edit.htm:29
-#: viaduct/templates/page/edit_page.htm:37
 msgid "Dutch details"
 msgstr "Nederlandse gegevens"
 
-#: viaduct/forms/activity.py:9
 msgid "Dutch name"
 msgstr "Nederlandse naam"
 
-#: viaduct/forms/activity.py:51
 msgid "Dutch name requires Dutch description and vice versa"
 msgstr "Nederlandse naam vereist Nederlandse beschrijving en vica versa."
 
-#: viaduct/forms/navigation.py:8 viaduct/forms/navigation.py:9
-#: viaduct/forms/news.py:10 viaduct/forms/page.py:18
 msgid "Dutch title"
 msgstr "Nederlandse titel"
 
-#: viaduct/forms/news.py:50 viaduct/forms/page.py:53
 msgid "Dutch title requires Dutch content and vice versa"
 msgstr "Nederlandse titel vereist Nederlandse inhoud en vica versa."
 
-#: viaduct/forms/committee.py:35
 msgid "Dutch title requires Dutch description and vice versa"
 msgstr "Nederlandse naam vereist Nederlandse beschrijving en vica versa."
 
-#: viaduct/forms/activity.py:63 viaduct/forms/activity.py:64
 msgid "E-mail address"
 msgstr "E-mailadres"
 
-#: viaduct/templates/activity/view_single.htm:24
-#: viaduct/templates/committee/edit.htm:13
-#: viaduct/templates/examination/admin.htm:33
-#: viaduct/templates/examination/edit.htm:5
-#: viaduct/templates/examination/view.htm:47
-#: viaduct/templates/navigation/edit.htm:13 viaduct/templates/news/edit.htm:12
-#: viaduct/templates/page/edit_page.htm:13 viaduct/views/activity.py:158
+msgid "E-mail adress"
+msgstr "E-mailadres"
+
 msgid "Edit"
 msgstr "Aanpassen"
 
-#: viaduct/templates/news/view_single.htm:17
 msgid "Edit news item"
 msgstr "Nieuwsbericht aanpassen"
 
-#: viaduct/templates/page/view_super.htm:19
 msgid "Edit page"
 msgstr "Pagina aanpassen"
 
-#: viaduct/forms/activity.py:76 viaduct/templates/examination/admin.htm:32
-#: viaduct/templates/examination/edit.htm:32
-#: viaduct/templates/examination/view.htm:42
+msgid "Edit user permissions"
+msgstr "Wijzig gebruikersrechten"
+
 msgid "Education"
 msgstr "Opleiding"
 
-#: viaduct/views/examination.py:358
 msgid "Education succesfully added."
 msgstr "Opleiding succesvol toegevoegd."
 
-#: viaduct/forms/news.py:44 viaduct/forms/page.py:47
 msgid "Either Dutch or English content required"
 msgstr "Een Nederlandse of Engelse inhoud is vereist."
 
-#: viaduct/forms/activity.py:45 viaduct/forms/committee.py:29
 msgid "Either Dutch or English description required"
 msgstr "Een Nederlandse of Engelse beschrijving is vereist."
 
-#: viaduct/forms/activity.py:41
 msgid "Either Dutch or English name required"
 msgstr "Een Nederlandse of Engelse naam is vereist."
 
-#: viaduct/forms/committee.py:25 viaduct/forms/news.py:40
-#: viaduct/forms/page.py:43
 msgid "Either Dutch or English title required"
 msgstr "Een Nederlandse of Engelse titel is vereist."
 
-#: viaduct/forms/activity.py:19
+msgid "Email"
+msgstr "Email adres"
+
 msgid "End time"
 msgstr "Eindtijd"
 
-#: viaduct/models/activity.py:175 viaduct/models/committee.py:84
-#: viaduct/models/news.py:78 viaduct/models/page.py:171
 msgid "English"
 msgstr "Engels"
 
-#: viaduct/forms/news.py:13 viaduct/forms/page.py:27
 msgid "English content"
 msgstr "Engelse inhoud"
 
-#: viaduct/forms/activity.py:12
 msgid "English description"
 msgstr "Engelse beschrijving"
 
-#: viaduct/templates/activity/create.htm:49
-#: viaduct/templates/committee/edit.htm:36 viaduct/templates/news/edit.htm:34
-#: viaduct/templates/page/edit_page.htm:42
 msgid "English details"
 msgstr "Engelse gegevens"
 
-#: viaduct/forms/activity.py:11
 msgid "English name"
 msgstr "Engelse naam"
 
-#: viaduct/forms/activity.py:55
 msgid "English name requires English description and vice versa"
 msgstr "Engelse naam vereist Engelse beschrijving en vica versa."
 
-#: viaduct/forms/navigation.py:11 viaduct/forms/navigation.py:12
-#: viaduct/forms/news.py:12 viaduct/forms/page.py:19
 msgid "English title"
 msgstr "Engelse titel"
 
-#: viaduct/forms/news.py:54 viaduct/forms/page.py:57
 msgid "English title requires English content and vice versa"
 msgstr "Engelse titel vereist Engelse inhoud en vica versa."
 
-#: viaduct/forms/committee.py:39
 msgid "English title requires English description and vice versa"
 msgstr "Engelse naam vereist Engelse beschrijving en vica versa."
 
-#: viaduct/templates/examination/admin.htm:31
-#: viaduct/templates/examination/edit.htm:51
-#: viaduct/templates/examination/upload.htm:57
-#: viaduct/templates/examination/view.htm:44
 msgid "Examination"
 msgstr "Tentamen"
 
-#: viaduct/views/examination.py:232
 msgid "Examination could not be found."
 msgstr "Tentamen kan niet worden gevonden."
 
-#: viaduct/views/examination.py:297
 msgid "Examination succesfully changed."
 msgstr "Tentamen succesvol verandert."
 
-#: viaduct/views/examination.py:188 viaduct/views/examination.py:230
 msgid "Examination successfully deleted."
 msgstr "Tentamen succesvol verwijderd."
 
-#: viaduct/views/examination.py:141
 msgid "Examination successfully uploaded."
 msgstr "Tentamen successvol geüpload."
 
-#: viaduct/templates/examination/admin.htm:7
-#: viaduct/templates/examination/view.htm:6 viaduct/views/examination.py:134
-#: viaduct/views/examination.py:145 viaduct/views/examination.py:148
-#: viaduct/views/examination.py:174 viaduct/views/examination.py:192
-#: viaduct/views/examination.py:198 viaduct/views/examination.py:219
-#: viaduct/views/examination.py:236 viaduct/views/examination.py:250
-#: viaduct/views/examination.py:307 viaduct/views/examination.py:337
-#: viaduct/views/examination.py:369
 msgid "Examinations"
 msgstr "Tentamens"
 
-#: viaduct/forms/navigation.py:18
+msgid "Exams"
+msgstr "Tentamens"
+
+msgid "Export users"
+msgstr "Gebruikers exporteren"
+
 msgid "External link"
 msgstr "Externe link"
 
-#: viaduct/views/examination.py:184
+msgid "Favourer"
+msgstr "Begunstigde"
+
 msgid "File does not exist, examination deleted."
 msgstr "Bestand bestaat niet, tentamen verwijderd."
 
-#: viaduct/templates/page/edit_page.htm:78
 msgid "Filter groups"
 msgstr "Filter groepen"
 
-#: viaduct/forms/activity.py:67 viaduct/forms/activity.py:68
 msgid "First name"
 msgstr "Voornaam"
 
-#: viaduct/models/activity.py:40
+msgid "Firstname"
+msgstr "Voornaam"
+
+#, fuzzy
+msgid "Forgot password?"
+msgstr "Wachtwoord vergeten?"
+
 msgid "Free"
 msgstr "Gratis"
 
-#: viaduct/forms/committee.py:10
 msgid "Group"
 msgstr "Groep"
 
-#: viaduct/templates/page/edit_page.htm:75
 msgid "Group permissions"
 msgstr "Groep permissies"
 
-#: viaduct/views/user.py:305
+msgid "Groups"
+msgstr "Groepen"
+
+msgid "Has payed"
+msgstr "Heeft betaald"
+
 #, python-format
 msgid "Hey %(name)s, you're now logged in!"
-msgstr "Hey %(name)s, je bent ingelogged!"
+msgstr "Hey %(name)s, je bent ingelogd!"
 
-#: viaduct/forms/activity.py:26
+msgid "Honorary member"
+msgstr "Erelid"
+
+msgid "ID"
+msgstr "ID"
+
 msgid "Image"
 msgstr "Plaatje"
 
-#: viaduct/forms/committee.py:12
+msgid "Information"
+msgstr "Informatie"
+
 msgid "Interim coördinator"
 msgstr "Interim coördinator"
 
-#: viaduct/templates/committee/view_single.htm:17
 msgid "Interim-coördinator"
 msgstr "Interim-coördinator"
 
-#: viaduct/forms/activity.py:65
 msgid "Invalid e-mail address"
 msgstr "Geen valide e-mailadres"
 
-#: viaduct/views/lang.py:21
+msgid "Invalid e-mail adress submitted"
+msgstr "Geen valide e-mailadres opgegeven"
+
+msgid "Language"
+msgstr "Taal"
+
 msgid "Language unsupported on this site"
 msgstr "Taal wordt niet ondersteund op deze website"
 
-#: viaduct/templates/news/view_single.htm:35
 msgid "Last modified"
 msgstr "Laatste aanpassing"
 
-#: viaduct/forms/activity.py:70 viaduct/forms/activity.py:71
 msgid "Last name"
 msgstr "Achternaam"
 
-#: viaduct/templates/home/home.htm:9
 msgid "Latest news"
 msgstr "Laatste nieuws"
 
-#: viaduct/forms/navigation.py:17
 msgid "List"
 msgstr "Lijst"
 
-#: viaduct/forms/navigation.py:19
 msgid "List of activities"
 msgstr "Activiteiten"
 
-#: viaduct/forms/activity.py:21 viaduct/templates/activity/view_single.htm:38
 msgid "Location"
 msgstr "Locatie"
 
-#: viaduct/templates/navigation/edit.htm:15
+msgid "Log in"
+msgstr ""
+
+msgid "Member"
+msgstr "Lid"
+
+msgid "Minimal password length "
+msgstr "Minimum lengte van wachtwoord: "
+
+msgid "Modify"
+msgstr "Bewerken"
+
 msgid "Navigation entry"
 msgstr "Menu item"
 
-#: viaduct/templates/examination/edit.htm:27
-#: viaduct/templates/examination/edit.htm:46
 msgid "New"
 msgstr "Nieuw"
 
-#: viaduct/templates/examination/admin.htm:24
 msgid "New Examination"
 msgstr "Nieuw tentamen"
 
-#: viaduct/templates/activity/view.htm:8
 msgid "New activity"
 msgstr "Nieuwe activiteit"
 
-#: viaduct/templates/examination/course.htm:10
-#: viaduct/templates/examination/upload.htm:31
 msgid "New course"
 msgstr "Nieuw vak"
 
-#: viaduct/templates/examination/education.htm:10
-#: viaduct/templates/examination/upload.htm:46
 msgid "New education"
 msgstr "Nieuwe opleiding"
 
-#: viaduct/templates/examination/upload.htm:11
-#: viaduct/templates/examination/view.htm:35
 msgid "New examination"
 msgstr "Nieuw tentamen"
 
-#: viaduct/templates/navigation/view.htm:16
 msgid "New item"
 msgstr "Nieuw item"
 
-#: viaduct/templates/news/view_single.htm:6
 msgid "News"
 msgstr "Niews"
 
-#: viaduct/views/news.py:91
 msgid "News item saved"
 msgstr "Niewsbericht opgeslagen"
 
-#: viaduct/views/news.py:131
 msgid "News item succesfully deleted"
 msgstr "Niewsbericht succesvol verwijderd"
 
-#: viaduct/templates/macros/pagination.htm:22
-#: viaduct/templates/macros/pagination.htm:24
 msgid "Next"
 msgstr "Volgende"
 
-#: viaduct/views/examination.py:122
 msgid "No answers uploaded."
 msgstr "Geen antwoorden geüpload."
 
-#: viaduct/views/examination.py:272
+msgid "No birthdate submitted"
+msgstr "Geen geboortedag opgegeven"
+
+msgid "No e-mail adress submitted"
+msgstr "Geen valide e-mailadres opgegeven"
+
 msgid "No education given."
 msgstr "Geen opleiding opgegeven."
 
-#: viaduct/views/examination.py:128
 msgid "No examination uploaded."
 msgstr "Geen tentamen geüpload."
 
-#: viaduct/views/activity.py:170 viaduct/views/page.py:107
+msgid "No first name sunmitted"
+msgstr "Geen voornaam opgeveven"
+
 msgid "No form"
 msgstr "Geen formulier"
 
-#: viaduct/views/examination.py:110 viaduct/views/examination.py:270
+msgid "No last name submitted"
+msgstr "Geen achternaam opgeveven"
+
+msgid "No password submitted"
+msgstr "Geen wachtwoord opgegeven"
+
+msgid "No start study submitted"
+msgstr "Geen begin studie opgegeven"
+
+msgid "No studentnumber submitted"
+msgstr "Geen studenten ID opgegeven"
+
 msgid "No title given."
 msgstr "Geen titel opgegeven."
 
-#: viaduct/forms/page.py:13
 msgid "None"
 msgstr "Geen"
 
-#: viaduct/views/home.py:42
 msgid "Not found!"
 msgstr "Niet gevonden!"
 
-#: viaduct/views/examination.py:294
 msgid "Old answers preserved."
 msgstr "Oude antwoorden behouden."
 
-#: viaduct/views/examination.py:285
 msgid "Old examination preserved."
 msgstr "Oude tentamen behouden."
 
-#: viaduct/views/home.py:43
 msgid "Page not found"
 msgstr "Pagina niet gevonden"
 
-#: viaduct/templates/activity/view_single.htm:90
+msgid "Password"
+msgstr "Wachtwoord"
+
+msgid "Passwords do not match"
+msgstr "De opgegeven wachtwoorden komen niet overeen"
+
 msgid "Pay (+€0,50 transaction costs)"
 msgstr "Betalen (+€0,50 transactiekosten)"
 
-#: viaduct/forms/user.py:73 viaduct/forms/user.py:114 viaduct/forms/user.py:166
+msgid "Permission"
+msgstr "Rechten"
+
 msgid "Phone"
 msgstr "Telefoonnummer"
 
-#: viaduct/templates/page/view_single.htm:20
 msgid "Please fill in"
 msgstr "Alstublief invullen"
 
-#: viaduct/templates/committee/view_single.htm:11
 msgid "Position vacant"
 msgstr "Positie openstaand"
 
-#: viaduct/forms/page.py:64 viaduct/templates/macros/pagination.htm:4
-#: viaduct/templates/macros/pagination.htm:6
-#: viaduct/templates/page/get_page_history.htm:18
 msgid "Previous"
 msgstr "Vorige"
 
-#: viaduct/forms/activity.py:25 viaduct/templates/activity/view_single.htm:153
 msgid "Price"
 msgstr "Prijs"
 
-#: viaduct/forms/activity.py:24
 msgid "Privacy"
 msgstr "Privacy"
 
-#: viaduct/models/activity.py:39
 msgid "Public"
 msgstr "Publiek"
 
-#: viaduct/forms/news.py:16 viaduct/forms/news.py:17
 msgid "Publish date"
 msgstr "Publiceer datum"
 
-#: viaduct/templates/news/list.htm:39 viaduct/templates/news/view_single.htm:39
 msgid "Published at"
 msgstr "Gepubliceerd op"
 
-#: viaduct/forms/page.py:13
 msgid "Read"
 msgstr "Lees"
 
-#: viaduct/models/news.py:49
 msgid "Read more"
 msgstr "Meer lezen"
 
-#: viaduct/forms/page.py:13
 msgid "Read/Write"
 msgstr "Lees/Schrijf"
 
-#: viaduct/templates/activity/view_single.htm:135
 msgid "Register"
 msgstr "Registreer"
 
-#: viaduct/templates/activity/view_single.htm:56
+msgid "Register account"
+msgstr "Gebruiker aanmaken"
+
 msgid "Register for this activity"
 msgstr "Registreer voor deze activiteit"
 
-#: viaduct/templates/page/edit_page.htm:20
+msgid "Register new user"
+msgstr "Gebruiker aanmaken"
+
+msgid "Registered activities"
+msgstr "Ingeschreven activiteiten"
+
 msgid "Remove page"
 msgstr "Verwijder pagina"
 
-#: viaduct/templates/activity/view_single.htm:140
+msgid "Repeat password"
+msgstr "Herhaal wachtwoord"
+
 msgid "Reset password"
 msgstr "Reset wachtwoord"
 
-#: viaduct/templates/activity/create.htm:98
-#: viaduct/templates/committee/edit.htm:66 viaduct/templates/news/edit.htm:60
-#: viaduct/templates/page/edit_page.htm:100
 msgid "Save"
 msgstr "Opslaan"
 
-#: viaduct/templates/examination/admin.htm:16
-#: viaduct/templates/examination/view.htm:17
 msgid "Search"
 msgstr "Zoeken"
 
-#: viaduct/templates/activity/create.htm:72
 msgid "Select a time and date by clicking on the clock"
 msgstr "Selecteer een tijd en datum door op de klok te klikken"
 
-#: viaduct/templates/activity/view_simple.htm:42
+msgid "Send"
+msgstr "Verzend"
+
 msgid "Send an e-mail to the"
 msgstr "Verstuur een e-mail naar de"
 
-#: viaduct/templates/activity/view_single.htm:118
-#: viaduct/templates/page/view_single.htm:24
 msgid "Send form"
 msgstr "Verstuur formulier"
 
-#: viaduct/templates/activity/view.htm:18
 msgid "Show activities in the archive"
 msgstr "Toon activiteiten in het archief"
 
-#: viaduct/templates/news/list.htm:15
 msgid "Show all news items"
 msgstr "Toon alle nieuws berichten"
 
-#: viaduct/templates/page/view_super.htm:15
 msgid "Show history"
 msgstr "Toon historie"
 
-#: viaduct/templates/news/list.htm:24
 msgid "Show news item archive"
 msgstr "Toon niews berichten in het archief"
 
-#: viaduct/templates/news/list.htm:20
 msgid "Show recent news items"
 msgstr "Toon recente news berichten"
 
-#: viaduct/templates/activity/view.htm:13
 msgid "Show upcoming activities"
 msgstr "Toon aankomende activiteiten"
 
-#: viaduct/templates/page/view_single.htm:30
 msgid "Sign In"
 msgstr "Inloggen"
 
-#: viaduct/templates/activity/view_single.htm:104
 msgid ""
 "Some details like shirt size or diet we try to save, so you don't have to"
 " fill them in more then once."
 msgstr ""
 "Sommige velden (zoals shirt-maat of dieet) proberen we op te slaan, zodat"
-" jehet de volgende keer niet nog eens moet invullen."
+" je het de volgende keer niet nog eens moet invullen."
 
-#: viaduct/templates/page/view_single.htm:21
 msgid ""
 "Some field (like shirt-size or diet) we try to save, so that you don't "
 "have to enter them the next time"
@@ -689,36 +611,39 @@ msgstr ""
 "Sommige velden (zoals shirt-maat of dieet) proberen we op te slaan, zodat"
 " je het de volgende keer niet nog eens moet invullen."
 
-#: viaduct/forms/activity.py:15 viaduct/forms/activity.py:16
+msgid "Start study"
+msgstr "Begin studie"
+
 msgid "Start time"
 msgstr "Starttijd"
 
-#: viaduct/forms/activity.py:73 viaduct/forms/activity.py:74
 msgid "Student ID"
 msgstr "Studentkaartnummer"
 
-#: viaduct/templates/examination/edit.htm:62
-#: viaduct/templates/navigation/edit.htm:29
+msgid "Studentnumber"
+msgstr "Studenten ID"
+
+msgid "Study"
+msgstr "Studie"
+
+msgid "Study course"
+msgstr "Studie"
+
 msgid "Submit"
 msgstr "Opslaan"
 
-#: viaduct/templates/activity/view_single.htm:111
 msgid "Terms"
 msgstr "Voorwaarden"
 
-#: viaduct/templates/page/403.htm:5
 msgid "The Police has been notified."
 msgstr "De politie is gewaarschuwd."
 
-#: viaduct/views/activity.py:220
 msgid "The activity has been created."
 msgstr "De activiteit is aangemaakt."
 
-#: viaduct/views/activity.py:211
 msgid "The activity has been edited."
 msgstr "De activiteit is aangepast."
 
-#: viaduct/views/activity.py:131
 msgid ""
 "The activity has reached its maximum number of registrations. You have "
 "been placed on the reserves list."
@@ -726,179 +651,167 @@ msgstr ""
 "De activiteit heeft het maximum aantal inschrijvingen bereikt. Je bent "
 "geplaatst op de reserve lijst."
 
-#: viaduct/views/committee.py:153
 msgid "The committe has been saved."
 msgstr "De commissie is aangemaakt."
 
-#: viaduct/views/navigation.py:112
 msgid "The link refers to a page that does not exist, pleasecreate the page!"
 msgstr "De link verwijst naar een pagina die niet bestaat, maak eerst deze pagina!"
 
-#: viaduct/views/navigation.py:102
 msgid "The navigation entry has been saved."
 msgstr "Het menu item is opgeslagen."
 
-#: viaduct/views/activity.py:135
 msgid "The number of registrations at this moment is"
 msgstr "Het aantal registraties op dit moment is"
 
-#: viaduct/templates/navigation/view.htm:8
 msgid "The order has been saved successfully"
 msgstr "De volgorde is opgeslagen."
 
-#: viaduct/views/page.py:187
 msgid "The page has been deletd"
 msgstr "De pagina is verwijderd."
 
-#: viaduct/views/page.py:157
 msgid "The page has been saved"
 msgstr "De pagina is opgeslagen."
 
-#: viaduct/views/page.py:189
 msgid "The page you tried to delete does not exist"
 msgstr "De pagina die je probeerde te verwijderen bestaat niet"
 
-#: viaduct/views/examination.py:383
 msgid "There is already a course with this name"
 msgstr "Er bestaat al een vak met deze naam"
 
-#: viaduct/templates/activity/view_single.htm:95
 msgid "These details are taken from your account."
 msgstr "Deze gegevens worden opgehaald uit je account."
 
-#: viaduct/views/news.py:108 viaduct/views/news.py:123
 msgid "This news item does not exist"
 msgstr "Dit nieuwsbericht bestaat niet."
 
-#: viaduct/templates/page/get_page_history.htm:20
 msgid "Timestamp"
 msgstr "Tijdstip"
 
-#: viaduct/templates/activity/create.htm:71
 msgid "Tip"
 msgstr "Tip"
 
-#: viaduct/templates/examination/edit.htm:9
-#: viaduct/templates/examination/upload.htm:17
 msgid "Title"
 msgstr "Titel"
 
-#: viaduct/templates/page/403.htm:4
 msgid "Unauthorized!"
 msgstr "Ongeautoriseerd!"
 
-#: viaduct/templates/page/get_page_history.htm:17
+msgid ""
+"Unfortunately it is currently unclear to us if you are a member of "
+"<strong>via</strong>. This is probably due to not having paid your member"
+" contribution. You can pay for your contribution by oredering this along "
+"with your books, or you could pass the <strong>via</strong>-room by."
+msgstr ""
+"Helaas is het voor ons onduidelijk of je lid van <strong>via</strong> "
+"bent. Dit komt waarschijnlijk omdat je nog niet hebt betaald voor je "
+"lidmaatschap. Je kan je lidmaatschap betalen door dit bij de "
+"boekenverkoop bij te bestellen of even langs de "
+"<strong>via</strong>-kamer te komen."
+
 msgid "User"
 msgstr "Gebruiker"
 
-#: viaduct/views/athenaeum.py:12
+msgid "User overview"
+msgstr "Gebruikersoverzicht"
+
+msgid "User tips"
+msgstr "Gebruikerstips"
+
 msgid "Using the bookstore requires an account."
 msgstr "Voor het gebruik van de boekenwinkel is een account vereist."
 
-#: viaduct/forms/activity.py:27
+msgid "Vancancies"
+msgstr "Vacatures"
+
 msgid "Venue"
 msgstr "Oort"
 
-#: viaduct/forms/page.py:22
 msgid "Visible for members only"
 msgstr "Alleen zichtbaar voor leden"
 
-#: viaduct/templates/page/500.htm:4
+msgid ""
+"We'd be delighted to help if you have any further questions. You can "
+"contact us by sending an e-mail to:<em>bestuur (at) svia (dot) nl</em>."
+msgstr ""
+"Mocht je verdere vragen hebben, dan helpen wij je graag! Je kunt ons "
+"bereiken door een e-mail te sturen naar: <em>bestuur (at) svia (dot) "
+"nl</em>."
+
 msgid "We've encountered an internal server error"
 msgstr "We zijn een interne server fout tegen gekomen"
 
-#: viaduct/views/user.py:267
+msgid "Welcome"
+msgstr "Gegroet"
+
 #, python-format
 msgid ""
 "Welcome %(name)s! Your profile has been succesfully created and you have "
 "been logged in!"
-msgstr "Welkom %(name)s! Je profiel is aangemaakt en je bent ingelogged!"
+msgstr "Welkom %(name)s! Je profiel is aangemaakt en je bent ingelogd!"
 
-#: viaduct/templates/news/list.htm:40 viaduct/templates/news/view_single.htm:31
+msgid "Would you like to recieve information from companies?"
+msgstr "Wil je informatie van bedrijven ontvangen?"
+
 msgid "Written by"
 msgstr "Geschreven door"
 
-#: viaduct/views/examination.py:125 viaduct/views/examination.py:291
 msgid "Wrong format answers."
 msgstr "Fout formaat antwoorden."
 
-#: viaduct/views/examination.py:117 viaduct/views/examination.py:282
 msgid "Wrong format examination."
 msgstr "Fout formaat tentamen."
 
-#: viaduct/views/activity.py:124
 msgid "You can edit your registration by resubmittingthe form."
 msgstr "Je kan je inschrijving aanpassen door opnieuw in te schrijven"
 
-#: viaduct/views/navigation.py:139
 msgid "You do not have rights to remove pages"
 msgstr "Je hebt geen rechten om pagina's te verwijderen"
 
-#: viaduct/views/activity.py:127
 msgid "You have successfully registered, payment is still required!"
 msgstr "Je hebt jezelf inschreven, je moet nog wel betalen!"
 
-#: viaduct/templates/page/view_single.htm:27
 msgid "You have to be logged in to fill in a form"
 msgstr "Je moet ingelogd zijn om een formulier in te vullen."
 
-#: viaduct/templates/activity/create.htm:29
 msgid "You have to reload the page for the result"
 msgstr "Herlaad de pagina voor het resultaat"
 
-#: viaduct/templates/activity/view_single.htm:122
 msgid "You must be logged-in to register for an activity."
 msgstr "Je moet ingelogd zijn om je te registeren voor een activiteit."
 
-#: viaduct/views/activity.py:123
 msgid "Your registration has been completed"
 msgstr "Je inschrijving is voltooid"
 
-#: viaduct/forms/user.py:76 viaduct/forms/user.py:117 viaduct/forms/user.py:169
 msgid "Zipcode"
 msgstr "Postcode"
 
-#: viaduct/models/activity.py:146
 msgid "ago"
 msgstr "geleden"
 
-#: viaduct/templates/news/view_single.htm:35
 msgid "at"
 msgstr "om"
 
-#: viaduct/templates/committee/edit.htm:17
 msgid "committee"
 msgstr "commissie"
 
-#: viaduct/templates/activity/view.htm:52
-#: viaduct/templates/activity/view_single.htm:157
 msgid "free"
 msgstr "gratis"
 
-#: viaduct/models/activity.py:143
 msgid "in"
 msgstr "over"
 
-#: viaduct/forms/navigation.py:15 viaduct/forms/news.py:17
 msgid "is required"
 msgstr "is vereist"
 
-#: viaduct/templates/news/edit.htm:16
 msgid "news item"
 msgstr "nieuwsbericht"
 
-#: viaduct/templates/page/edit_page.htm:17 viaduct/views/activity.py:50
-#: viaduct/views/activity.py:56
 msgid "page"
 msgstr "pagina"
 
-#: viaduct/forms/activity.py:16 viaduct/forms/activity.py:64
-#: viaduct/forms/activity.py:68 viaduct/forms/activity.py:71
-#: viaduct/forms/activity.py:74
 msgid "required"
 msgstr "vereist"
 
-#: viaduct/models/activity.py:148
 msgid "still"
 msgstr "nog"
 
@@ -913,4 +826,19 @@ msgstr "nog"
 
 #~ msgid ""
 #~ msgstr ""
+
+#~ msgid "Lastname"
+#~ msgstr "Achternaam"
+
+#~ msgid "No lastname submitted"
+#~ msgstr ""
+
+#~ msgid "Student number"
+#~ msgstr "Studenten ID"
+
+#~ msgid "No student number submitted"
+#~ msgstr "Geen studenten ID opgegeven"
+
+#~ msgid "Minimal password length %d"
+#~ msgstr "Minimum lengte van wachtwoord: %d"
 

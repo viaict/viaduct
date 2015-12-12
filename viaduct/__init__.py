@@ -13,7 +13,7 @@ import datetime
 import json
 
 
-version = 'v2.3.0.1'
+version = 'v2.4.0.0'
 
 
 def static_url(url):

@@ -131,7 +131,9 @@ def upload_file():
         if error:
             return render_template('examination/upload.htm', courses=courses,
                                    educations=educations, message='',
-                                   title=_('Examinations'), degrees=degrees)
+                                   title=_('Examinations'), degrees=degrees,
+                                   exam_title=title, course_id=int(course_id),
+                                   education_id=int(education_id))
 
         exam = Examination(filename, title, course_id, education_id,
                            answers=answer_path)

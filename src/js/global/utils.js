@@ -17,7 +17,13 @@ utils.datatables.defaults = {
             }],
             "order": [
                 [ 1, "asc"]
-            ]
+            ],
+            "initComplete": function() {
+                var api = this.api();
+                api.$('td.search').click( function() {
+                    api.search( this.innerHTML ).draw();
+                });
+            }
 };
 
 utils.datatables.enable_select = function ($selector) {

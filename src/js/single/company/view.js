@@ -1,4 +1,5 @@
-function format(d) {
+function format(d, table) {
+    d.table = table;
     return utils.jadetpl('company_list_datatable', d);
 }
 
@@ -19,7 +20,7 @@ $(document).ready(function() {
                 "data": "website"
             },
             {
-                "className": "details-control",
+                "className": "search",
                 "data": "location.city"
             }
         ]
@@ -34,7 +35,7 @@ $(document).ready(function() {
             tr.removeClass('shown');
         }
         else {
-            row.child(format(row.data())).show();
+            row.child(format(row.data(), table)).show();
             tr.addClass('shown');
         }
     });
