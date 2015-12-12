@@ -46,13 +46,12 @@ class BaseUserForm(Form):
             InputRequired(message=_('No last name submitted'))]
     )
     student_id = StringField(
-        _('Student number'), validators=[
+        _('Student ID'), validators=[
             InputRequired(message=_('No studentnumber submitted'))]
     )
     education_id = SelectField('Opleiding', coerce=int)
     avatar = FileField('Avatar', validators=[Optional()])
-    receive_information = BooleanField(_('Would you like to recieve information\
-     from companies?'))
+    receive_information = BooleanField(_('Would you like to recieve information from companies?'))
 
     phone_nr = StringField(_('Phone'))
 
@@ -66,14 +65,18 @@ class SignUpForm(BaseUserForm):
     password = PasswordField(
         _('Password'), validators=[
             InputRequired(message=_('No password submitted')),
-            Length(message=_('Minimal password length %d') %
-                   MIN_PASSWORD_LENGTH, min=MIN_PASSWORD_LENGTH)]
+            Length(message=(_('Minimal password length ')+str(MIN_PASSWORD_LENGTH)),
+            min=MIN_PASSWORD_LENGTH)]
     )
     repeat_password = PasswordField(
         _('Repeat password'), validators=[
             InputRequired(message=_('Passwords do not match')),
             EqualTo('password', message=_('Passwords do not match'))]
     )
+    birth_date = DateField(_('Birthdate'), validators=[
+        InputRequired(message=_('No birthdate submitted'))])
+    study_start = DateField(_('Start study'), validators=[
+         InputRequired(message=_('No start study submitted'))])
 
 
 class EditUserForm(BaseUserForm):
@@ -89,7 +92,7 @@ class EditUserForm(BaseUserForm):
     birth_date = DateField(_('Birthdate'), validators=[
         InputRequired(message=_('No birthdate submitted'))])
     study_start = DateField(_('Start study'), validators=[
-         InputRequired(message=_('No start study'))])
+         InputRequired(message=_('No start study submitted'))])
 
     def validate_password(form, field):
         """Providing a password is only required when creating a new user."""
@@ -107,8 +110,8 @@ class EditUserInfoForm(BaseUserForm):
     id = IntegerField('ID')
     password = PasswordField(
         _('Password'), validators=[
-            Length(message=_('Minimal password length %d') %
-                   MIN_PASSWORD_LENGTH, min=MIN_PASSWORD_LENGTH)]
+            Length(message=(_('Minimal password length ')+str(MIN_PASSWORD_LENGTH)),
+            min=MIN_PASSWORD_LENGTH)]
         )
     repeat_password = PasswordField(
         _('Repeat password'), validators=[
@@ -140,7 +143,7 @@ class RequestPassword(Form):
         InputRequired(message=_('No e-mail adress submitted')),
         Email(message=_('Invalid e-mail adress submitted'))])
     student_id = StringField(
-        _('Studentnumber'), validators=[
+        _('Student ID'), validators=[
             InputRequired(message=_('No studentnumber submitted'))]
     )
 
@@ -149,8 +152,8 @@ class ResetPassword(Form):
     password = PasswordField(
         _('Password'), validators=[
             InputRequired(message=_('No password submitted')),
-            Length(message=_('Minimal password length %d') %
-                   MIN_PASSWORD_LENGTH, min=MIN_PASSWORD_LENGTH)]
+            Length(message=(_('Minimal password length ')+ str(MIN_PASSWORD_LENGTH)),
+            min=MIN_PASSWORD_LENGTH)]
     )
     password_repeat = PasswordField(
         _('Repeat password'), validators=[
