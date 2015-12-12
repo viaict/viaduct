@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-12-12 16:04+0100\n"
+"POT-Creation-Date: 2015-12-12 16:22+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -82,6 +82,12 @@ msgstr ""
 
 #: viaduct/templates/user/view_single.htm:85
 msgid "Attended activities"
+msgstr ""
+
+#: viaduct/templates/pimpy/add_minute.htm:12
+msgid ""
+"Attention: we now use a base32 encoding. Read this module's manual for "
+"more information."
 msgstr ""
 
 #: viaduct/templates/examination/course.htm:23
@@ -533,12 +539,6 @@ msgstr ""
 
 #: viaduct/templates/home/home.htm:9
 msgid "Latest news"
-msgstr ""
-
-#: viaduct/templates/pimpy/add_minute.htm:12
-msgid ""
-"Let op: we gebruiken nu een base32 encoding. Zie de handleiding van deze "
-"module voor meer informatie."
 msgstr ""
 
 #: viaduct/forms/navigation.py:17
@@ -1181,5 +1181,11 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Minimal password length %d"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Let op: we gebruiken nu een base32"
+#~ " encoding. Zie de handleiding van "
+#~ "deze module voor meer informatie."
 #~ msgstr ""
 
