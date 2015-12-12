@@ -1,3 +1,9 @@
+xx-xx-xxxx vx.x.x.x:
+* Use base32 encoding for PimPy
+* Fix some buttons without color
+* Fix some translations
+* Fix permissions for committee pages for BC
+
 18-07-2015 v2.2.0.0:
 * Added: A new news system for the homepage
 * Added: Support for bilingual activities and examination
