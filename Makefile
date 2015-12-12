@@ -20,7 +20,7 @@ babel_update: babel_extract
 # Extract all the marked strings from the repository.
 .PHONY: babel_extract
 babel_extract:
-	python ${pybabel} extract -F ${cfg} --sort-output -k lazy_gettext -o ${messages} .
+	python ${pybabel} extract -F ${cfg} --sort-output --no-location -k lazy_gettext -o ${messages} .
 
 
 # DO NOT USE ON EXISTING BABEL INSTALLATION
