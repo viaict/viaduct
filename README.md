@@ -9,6 +9,13 @@ See [tutorial](TUTORIAL.md).
 OS Packages: python3, sqlite, pip, virtualenv, mysql-server, git-flow,
 python3-dev, libffi-dev
 Install with your favorite packagemanager.
+Ubuntu install packages:
+```bash
+sudo apt-get install python3 sqlite python3-pip virtualenv mysql-server git-flow npm \
+nodejs libjpeg-dev
+ln -s /usr/bin/nodejs /usr/bin/node
+```
+
 
 Get the secret via config files with secrets for the server:
 ```bash
