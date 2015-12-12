@@ -5,6 +5,7 @@ from flask.ext.login import current_user
 from unidecode import unidecode
 import datetime
 import re
+import base32_crockford as b32
 
 from fuzzywuzzy.process import extractOne
 
@@ -207,7 +208,9 @@ class PimpyAPI:
         matches = regex.findall(content)
         for match in matches:
             done_ids = match.split(",")
-            for done_id in done_ids:
+
+            for b32_id in done_ids:
+                done_id = b32.decode(b32_id.strip())
                 try:
                     done_task = Task.query.filter(Task.id == done_id).first()
                 except:
@@ -221,13 +224,15 @@ class PimpyAPI:
         matches = regex.findall(content)
         for match in matches:
             remove_ids = match.split(",")
-            for remove_id in remove_ids:
+
+            for b32_id in remove_ids:
+                remove_id = b32.decode(b32_id.strip())
                 try:
                     remove_task = Task.query\
                         .filter(Task.id == remove_id).first()
                 except:
                     print("could not find the given task")
-                    flash("Kan REMOVE niet vinden, id: " + done_id, "danger")
+                    flash("Kan REMOVE niet vinden, id: " + remove_id, "danger")
                     continue
                 if remove_task is not None:
                     removes_found.append(remove_task)

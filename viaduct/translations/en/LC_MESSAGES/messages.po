@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-12-12 15:27+0100\n"
+"POT-Creation-Date: 2015-12-12 16:04+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -57,12 +57,16 @@ msgstr ""
 msgid "Address"
 msgstr ""
 
-#: viaduct/views/examination.py:330 viaduct/views/examination.py:361
+#: viaduct/views/examination.py:332 viaduct/views/examination.py:363
 msgid "Already exists in the database"
 msgstr ""
 
+#: viaduct/views/activity.py:185
+msgid "An image with this name already exists."
+msgstr ""
+
 #: viaduct/templates/examination/edit.htm:57
-#: viaduct/templates/examination/upload.htm:62
+#: viaduct/templates/examination/upload.htm:66
 #: viaduct/templates/examination/view.htm:45
 #: viaduct/templates/examination/view.htm:66
 msgid "Answers"
@@ -97,7 +101,7 @@ msgstr ""
 msgid "By registering you agree with the terms above."
 msgstr ""
 
-#: viaduct/views/activity.py:193
+#: viaduct/views/activity.py:199
 msgid "Cannot delete image, image does not exist"
 msgstr ""
 
@@ -153,7 +157,7 @@ msgstr ""
 msgid "Course"
 msgstr ""
 
-#: viaduct/views/examination.py:327
+#: viaduct/views/examination.py:329
 msgid "Course succesfully added."
 msgstr ""
 
@@ -307,7 +311,7 @@ msgstr ""
 msgid "Education"
 msgstr ""
 
-#: viaduct/views/examination.py:358
+#: viaduct/views/examination.py:360
 msgid "Education succesfully added."
 msgstr "."
 
@@ -378,35 +382,35 @@ msgstr ""
 
 #: viaduct/templates/examination/admin.htm:31
 #: viaduct/templates/examination/edit.htm:51
-#: viaduct/templates/examination/upload.htm:57
+#: viaduct/templates/examination/upload.htm:61
 #: viaduct/templates/examination/view.htm:44
 msgid "Examination"
 msgstr ""
 
-#: viaduct/views/examination.py:232
+#: viaduct/views/examination.py:234
 msgid "Examination could not be found."
 msgstr ""
 
-#: viaduct/views/examination.py:297
+#: viaduct/views/examination.py:299
 msgid "Examination succesfully changed."
 msgstr ""
 
-#: viaduct/views/examination.py:188 viaduct/views/examination.py:230
+#: viaduct/views/examination.py:190 viaduct/views/examination.py:232
 msgid "Examination successfully deleted."
 msgstr ""
 
-#: viaduct/views/examination.py:141
+#: viaduct/views/examination.py:143
 msgid "Examination successfully uploaded."
 msgstr ""
 
 #: viaduct/templates/examination/admin.htm:7
 #: viaduct/templates/examination/view.htm:6 viaduct/views/examination.py:134
-#: viaduct/views/examination.py:145 viaduct/views/examination.py:148
-#: viaduct/views/examination.py:174 viaduct/views/examination.py:192
-#: viaduct/views/examination.py:198 viaduct/views/examination.py:219
-#: viaduct/views/examination.py:236 viaduct/views/examination.py:250
-#: viaduct/views/examination.py:307 viaduct/views/examination.py:337
-#: viaduct/views/examination.py:369
+#: viaduct/views/examination.py:147 viaduct/views/examination.py:150
+#: viaduct/views/examination.py:176 viaduct/views/examination.py:194
+#: viaduct/views/examination.py:200 viaduct/views/examination.py:221
+#: viaduct/views/examination.py:238 viaduct/views/examination.py:252
+#: viaduct/views/examination.py:309 viaduct/views/examination.py:339
+#: viaduct/views/examination.py:371
 msgid "Examinations"
 msgstr ""
 
@@ -427,7 +431,7 @@ msgstr ""
 msgid "Favourer"
 msgstr ""
 
-#: viaduct/views/examination.py:184
+#: viaduct/views/examination.py:186
 msgid "File does not exist, examination deleted."
 msgstr ""
 
@@ -531,6 +535,12 @@ msgstr ""
 msgid "Latest news"
 msgstr ""
 
+#: viaduct/templates/pimpy/add_minute.htm:12
+msgid ""
+"Let op: we gebruiken nu een base32 encoding. Zie de handleiding van deze "
+"module voor meer informatie."
+msgstr ""
+
 #: viaduct/forms/navigation.py:17
 msgid "List"
 msgstr ""
@@ -580,12 +590,12 @@ msgid "New activity"
 msgstr ""
 
 #: viaduct/templates/examination/course.htm:10
-#: viaduct/templates/examination/upload.htm:31
+#: viaduct/templates/examination/upload.htm:33
 msgid "New course"
 msgstr ""
 
 #: viaduct/templates/examination/education.htm:10
-#: viaduct/templates/examination/upload.htm:46
+#: viaduct/templates/examination/upload.htm:50
 msgid "New education"
 msgstr ""
 
@@ -627,7 +637,7 @@ msgstr ""
 msgid "No e-mail adress submitted"
 msgstr ""
 
-#: viaduct/views/examination.py:272
+#: viaduct/views/examination.py:274
 msgid "No education given."
 msgstr ""
 
@@ -660,7 +670,7 @@ msgstr ""
 msgid "No studentnumber submitted"
 msgstr ""
 
-#: viaduct/views/examination.py:110 viaduct/views/examination.py:270
+#: viaduct/views/examination.py:110 viaduct/views/examination.py:272
 msgid "No title given."
 msgstr ""
 
@@ -672,11 +682,11 @@ msgstr ""
 msgid "Not found!"
 msgstr ""
 
-#: viaduct/views/examination.py:294
+#: viaduct/views/examination.py:296
 msgid "Old answers preserved."
 msgstr ""
 
-#: viaduct/views/examination.py:285
+#: viaduct/views/examination.py:287
 msgid "Old examination preserved."
 msgstr ""
 
@@ -895,11 +905,11 @@ msgstr ""
 msgid "The Police has been notified."
 msgstr ""
 
-#: viaduct/views/activity.py:220
+#: viaduct/views/activity.py:226
 msgid "The activity has been created."
 msgstr ""
 
-#: viaduct/views/activity.py:211
+#: viaduct/views/activity.py:217
 msgid "The activity has been edited."
 msgstr ""
 
@@ -941,7 +951,7 @@ msgstr ""
 msgid "The page you tried to delete does not exist"
 msgstr ""
 
-#: viaduct/views/examination.py:383
+#: viaduct/views/examination.py:385
 msgid "There is already a course with this name"
 msgstr ""
 
@@ -1035,11 +1045,11 @@ msgstr ""
 msgid "Written by"
 msgstr ""
 
-#: viaduct/views/examination.py:125 viaduct/views/examination.py:291
+#: viaduct/views/examination.py:125 viaduct/views/examination.py:293
 msgid "Wrong format answers."
 msgstr ""
 
-#: viaduct/views/examination.py:117 viaduct/views/examination.py:282
+#: viaduct/views/examination.py:117 viaduct/views/examination.py:284
 msgid "Wrong format examination."
 msgstr ""
 
