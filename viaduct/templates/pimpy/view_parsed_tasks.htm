@@ -123,7 +123,7 @@
             <tr class='pimpy_status_{{ list_item.get_status_string() | replace(" ","_")}}' data-toggle="collapse" data-target='#{{ list_item.id }}_{{ user_header | replace(" ","_") }}'>
                 <td>
                     <div class="btn-group" style="margin-bottom: 8px;">
-                        <a id="pimpy_task{{ list_item.id }}" class="btn dropdown-toggle {{ list_item.get_status_color() }} " data-toggle="dropdown" href="#"> {{ list_item.base32_id() }} </a>
+                        <a id="pimpy_task{{ list_item.id }}" class="btn btn-danger dropdown-toggle {{ list_item.get_status_color() }} " data-toggle="dropdown" href="#"> {{ list_item.base32_id() }} </a>
                         <ul class="dropdown-menu">
                             {% for status_meaning in list_item.get_status_meanings(): %}
                                 <li>
