@@ -180,7 +180,7 @@ class NavigationAPI:
     def alphabeticalize(parent_entry):
         entries = NavigationEntry.query\
             .filter(NavigationEntry.parent_id == parent_entry.id)\
-            .order_by(NavigationEntry.title)\
+            .order_by(NavigationEntry.nl_title)\
             .all()
 
         position = 1
