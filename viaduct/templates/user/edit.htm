@@ -5,7 +5,7 @@
 {% block content %}
 <form action="" method="post" name="sign_up" class="form-horizontal" enctype="multipart/form-data" >
     <fieldset>
-        <legend>{% if user.id %}Bewerk{% else %}Maak{% endif %} lid</legend>
+        <legend>{% if user.id %}{{_('Modify')}} {% else %}{{_('Create')}}{% endif %}{{_('Member')}}</legend>
 
         {{ form.csrf_token }}
         {{ render_field(form.email) }}
@@ -54,7 +54,7 @@
         {% if user.avatar %}
         <div class="control-groep">
             <div class="controls">
-                <a href='/users/remove_avatar/{{ user.id }}' class='btn btn-danger'>Verwijder avatar</a>
+                <a href='/users/remove_avatar/{{ user.id }}' class='btn btn-danger'>{{_('Delete avatar')}}</a>
             </div>
         </div>
         {% endif %}
@@ -69,7 +69,7 @@
 
         <div class="control-group">
             <div class="controls">
-                <button type="submit" class="btn btn-success">{% if user.id %}Bewerk{% else %}Maak{% endif %} lid</button>
+                <button type="submit" class="btn btn-success">{% if user.id %}{{_('Modify')}} {% else %}{{_('Create')}}{% endif %} {{_('Member')}}</button>
             </div>
         </div>
     </fieldset>
