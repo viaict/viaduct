@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2015-11-14 16:19+0100\n"
+"POT-Creation-Date: 2015-12-12 14:42+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: viaduct/views/user.py:236
+#: viaduct/views/user.py:234
 msgid "A user with the e-mail address specified already exists"
 msgstr "Er bestaat al een gebruiker met dat emailadres"
 
-#: viaduct/views/user.py:170
+#: viaduct/views/user.py:168
 msgid ""
 "According to Google this email does not exist. Please use an email that "
 "does."
@@ -56,12 +56,12 @@ msgstr "Toevoegen"
 msgid "Address"
 msgstr "Adres"
 
-#: viaduct/views/examination.py:330 viaduct/views/examination.py:361
+#: viaduct/views/examination.py:332 viaduct/views/examination.py:363
 msgid "Already exists in the database"
 msgstr "Bestaat al in de database."
 
 #: viaduct/templates/examination/edit.htm:57
-#: viaduct/templates/examination/upload.htm:62
+#: viaduct/templates/examination/upload.htm:66
 #: viaduct/templates/examination/view.htm:45
 #: viaduct/templates/examination/view.htm:66
 msgid "Answers"
@@ -146,7 +146,7 @@ msgstr "Land"
 msgid "Course"
 msgstr "Vak"
 
-#: viaduct/views/examination.py:327
+#: viaduct/views/examination.py:329
 msgid "Course succesfully added."
 msgstr "Vak succesvol toegevoegd."
 
@@ -282,7 +282,7 @@ msgstr "Pagina aanpassen"
 msgid "Education"
 msgstr "Opleiding"
 
-#: viaduct/views/examination.py:358
+#: viaduct/views/examination.py:360
 msgid "Education succesfully added."
 msgstr "Opleiding succesvol toegevoegd."
 
@@ -349,35 +349,35 @@ msgstr "Engelse naam vereist Engelse beschrijving en vica versa."
 
 #: viaduct/templates/examination/admin.htm:31
 #: viaduct/templates/examination/edit.htm:51
-#: viaduct/templates/examination/upload.htm:57
+#: viaduct/templates/examination/upload.htm:61
 #: viaduct/templates/examination/view.htm:44
 msgid "Examination"
 msgstr "Tentamen"
 
-#: viaduct/views/examination.py:232
+#: viaduct/views/examination.py:234
 msgid "Examination could not be found."
 msgstr "Tentamen kan niet worden gevonden."
 
-#: viaduct/views/examination.py:297
+#: viaduct/views/examination.py:299
 msgid "Examination succesfully changed."
 msgstr "Tentamen succesvol verandert."
 
-#: viaduct/views/examination.py:188 viaduct/views/examination.py:230
+#: viaduct/views/examination.py:190 viaduct/views/examination.py:232
 msgid "Examination successfully deleted."
 msgstr "Tentamen succesvol verwijderd."
 
-#: viaduct/views/examination.py:141
+#: viaduct/views/examination.py:143
 msgid "Examination successfully uploaded."
 msgstr "Tentamen successvol geüpload."
 
 #: viaduct/templates/examination/admin.htm:7
 #: viaduct/templates/examination/view.htm:6 viaduct/views/examination.py:134
-#: viaduct/views/examination.py:145 viaduct/views/examination.py:148
-#: viaduct/views/examination.py:174 viaduct/views/examination.py:192
-#: viaduct/views/examination.py:198 viaduct/views/examination.py:219
-#: viaduct/views/examination.py:236 viaduct/views/examination.py:250
-#: viaduct/views/examination.py:307 viaduct/views/examination.py:337
-#: viaduct/views/examination.py:369
+#: viaduct/views/examination.py:147 viaduct/views/examination.py:150
+#: viaduct/views/examination.py:176 viaduct/views/examination.py:194
+#: viaduct/views/examination.py:200 viaduct/views/examination.py:221
+#: viaduct/views/examination.py:238 viaduct/views/examination.py:252
+#: viaduct/views/examination.py:309 viaduct/views/examination.py:339
+#: viaduct/views/examination.py:371
 msgid "Examinations"
 msgstr "Tentamens"
 
@@ -385,7 +385,7 @@ msgstr "Tentamens"
 msgid "External link"
 msgstr "Externe link"
 
-#: viaduct/views/examination.py:184
+#: viaduct/views/examination.py:186
 msgid "File does not exist, examination deleted."
 msgstr "Bestand bestaat niet, tentamen verwijderd."
 
@@ -409,10 +409,10 @@ msgstr "Groep"
 msgid "Group permissions"
 msgstr "Groep permissies"
 
-#: viaduct/views/user.py:305
+#: viaduct/views/user.py:303
 #, python-format
 msgid "Hey %(name)s, you're now logged in!"
-msgstr "Hey %(name)s, je bent ingelogged!"
+msgstr "Hey %(name)s, je bent ingelogd!"
 
 #: viaduct/forms/activity.py:26
 msgid "Image"
@@ -476,12 +476,12 @@ msgid "New activity"
 msgstr "Nieuwe activiteit"
 
 #: viaduct/templates/examination/course.htm:10
-#: viaduct/templates/examination/upload.htm:31
+#: viaduct/templates/examination/upload.htm:33
 msgid "New course"
 msgstr "Nieuw vak"
 
 #: viaduct/templates/examination/education.htm:10
-#: viaduct/templates/examination/upload.htm:46
+#: viaduct/templates/examination/upload.htm:50
 msgid "New education"
 msgstr "Nieuwe opleiding"
 
@@ -515,7 +515,7 @@ msgstr "Volgende"
 msgid "No answers uploaded."
 msgstr "Geen antwoorden geüpload."
 
-#: viaduct/views/examination.py:272
+#: viaduct/views/examination.py:274
 msgid "No education given."
 msgstr "Geen opleiding opgegeven."
 
@@ -527,7 +527,7 @@ msgstr "Geen tentamen geüpload."
 msgid "No form"
 msgstr "Geen formulier"
 
-#: viaduct/views/examination.py:110 viaduct/views/examination.py:270
+#: viaduct/views/examination.py:110 viaduct/views/examination.py:272
 msgid "No title given."
 msgstr "Geen titel opgegeven."
 
@@ -539,11 +539,11 @@ msgstr "Geen"
 msgid "Not found!"
 msgstr "Niet gevonden!"
 
-#: viaduct/views/examination.py:294
+#: viaduct/views/examination.py:296
 msgid "Old answers preserved."
 msgstr "Oude antwoorden behouden."
 
-#: viaduct/views/examination.py:285
+#: viaduct/views/examination.py:287
 msgid "Old examination preserved."
 msgstr "Oude tentamen behouden."
 
@@ -679,7 +679,7 @@ msgid ""
 " fill them in more then once."
 msgstr ""
 "Sommige velden (zoals shirt-maat of dieet) proberen we op te slaan, zodat"
-" jehet de volgende keer niet nog eens moet invullen."
+" je het de volgende keer niet nog eens moet invullen."
 
 #: viaduct/templates/page/view_single.htm:21
 msgid ""
@@ -758,7 +758,7 @@ msgstr "De pagina is opgeslagen."
 msgid "The page you tried to delete does not exist"
 msgstr "De pagina die je probeerde te verwijderen bestaat niet"
 
-#: viaduct/views/examination.py:383
+#: viaduct/views/examination.py:385
 msgid "There is already a course with this name"
 msgstr "Er bestaat al een vak met deze naam"
 
@@ -807,7 +807,7 @@ msgstr "Alleen zichtbaar voor leden"
 msgid "We've encountered an internal server error"
 msgstr "We zijn een interne server fout tegen gekomen"
 
-#: viaduct/views/user.py:267
+#: viaduct/views/user.py:265
 #, python-format
 msgid ""
 "Welcome %(name)s! Your profile has been succesfully created and you have "
@@ -818,11 +818,11 @@ msgstr "Welkom %(name)s! Je profiel is aangemaakt en je bent ingelogged!"
 msgid "Written by"
 msgstr "Geschreven door"
 
-#: viaduct/views/examination.py:125 viaduct/views/examination.py:291
+#: viaduct/views/examination.py:125 viaduct/views/examination.py:293
 msgid "Wrong format answers."
 msgstr "Fout formaat antwoorden."
 
-#: viaduct/views/examination.py:117 viaduct/views/examination.py:282
+#: viaduct/views/examination.py:117 viaduct/views/examination.py:284
 msgid "Wrong format examination."
 msgstr "Fout formaat tentamen."
 
