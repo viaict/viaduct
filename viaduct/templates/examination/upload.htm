@@ -37,8 +37,6 @@
 
             <div class='form-group'>
                 Studie
-
-                {{ education_id }}
                 <select name='education' class='form-control educations'>
                     {% for education in educations %}
                         <option value='{{ education.id }}' {% if education.id == education_id %}selected{% endif %}>
