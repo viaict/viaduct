@@ -11,7 +11,7 @@ PIDS[1]=$!
 python watch_jade.py &
 PIDS[2]=$!
 
-python run.py
+python run.py &
 PIDS[3]=$!
 
 
