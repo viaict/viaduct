@@ -11,7 +11,7 @@ python3-dev, libffi-dev
 Install with your favorite packagemanager.
 Ubuntu install packages:
 ```bash
-sudo apt-get install python3 sqlite pip3 virtualenv mysql-server git-flow npm \
+sudo apt-get install python3 sqlite python3-pip virtualenv mysql-server git-flow npm \
 nodejs libjpeg-dev
 ln -s /usr/bin/nodejs /usr/bin/node
 ```
