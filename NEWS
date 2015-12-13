@@ -1,18 +1,24 @@
+13-12-2015 v2.4.1.0:
+* Update: Calendar id's for new VIA Events
+
 12-12-2015 v2.4.0.0:
 * Use base32 encoding for PimPy
-* Fix some buttons without color
-* Fix some translations
-* Fix permissions for committee pages for BC
-* Fix activity image overwritten
+* Fixed: some buttons without color
+* Fixed: some translations
+* Fixed: permissions for committee pages for BC
+* Fixed: activity image overwritten
 
-TODO: v2.3.0.0
+14-11-2015 v2.3.0.0:
+* Added: Link to automatically sync Google groups with pimpy groups
+* Update: Datatables use for company page
+
 
 18-07-2015 v2.2.0.0:
 * Added: A new news system for the homepage
 * Added: Support for bilingual activities and examination
 * Fixed: Uppercase extension on uploading files
 * Added: Automatic database migrations
-* Removed: Deadline from pimpy, useless feature.
+* Removed: Deadline from pimpy, useless feature
 * Added: Opt-in for company information on registration
 * Fixed: Styling of pimpy minutes and registration checkboxes
 * Fixed: Internal server error on minutes add
