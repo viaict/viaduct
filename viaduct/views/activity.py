@@ -96,9 +96,6 @@ def get_activity(activity_id=0):
 
     # Check if there is a custom_form for this activity
     if activity.form_id:
-        # Add the form
-        activity.form = CustomForm.query.get(activity.form_id)
-
         # Count current attendants for "reserved" message
         entries = CustomFormResult.query.filter(CustomFormResult.form_id ==
                                                 activity.form_id)
