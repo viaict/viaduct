@@ -64,6 +64,13 @@ class BaseUserForm(Form):
     city = StringField(_('City'))
     country = StringField(_('Country'), default='Nederland')
 
+    birth_date = DateField(_('Birthdate'), validators=[
+        InputRequired(message=_('No birthdate submitted'))])
+    study_start = DateField(_('Start study'), validators=[
+         InputRequired(message=_('No start study submitted'))])
+    locale = SelectField(_('Language'),
+                         choices=list(application.config['LANGUAGES'].items()))
+
 
 class SignUpForm(BaseUserForm):
     password = PasswordField(
@@ -91,14 +98,7 @@ class EditUserForm(BaseUserForm):
     repeat_password = PasswordField(_('Repeat password'))
     has_payed = BooleanField(_('Has payed'))
     honorary_member = BooleanField(_('Honorary member'))
-    locale = SelectField(_('Language'),
-                         choices=list(application.config['LANGUAGES'].items()))
     favourer = BooleanField(_('Favourer'))
-
-    birth_date = DateField(_('Birthdate'), validators=[
-        InputRequired(message=_('No birthdate submitted'))])
-    study_start = DateField(_('Start study'), validators=[
-         InputRequired(message=_('No start study submitted'))])
 
     def validate_password(form, field):
         """Providing a password is only required when creating a new user."""
