@@ -1,16 +1,19 @@
 # coding=utf-8
 
+from viaduct import application
+
 from flask_wtf import Form
 from wtforms import StringField, PasswordField, BooleanField, \
     SelectField, IntegerField, FileField
 from wtforms.widgets import TextInput
 from wtforms.validators import InputRequired, Email, EqualTo, ValidationError,\
     Length, Optional
-from config import LANGUAGES, MIN_PASSWORD_LENGTH
 
 from flask.ext.babel import lazy_gettext as _  # noqa
 
 import dateutil
+
+_min_password_length = application.config['MIN_PASSWORD_LENGTH']
 
 
 class DateField(StringField):
@@ -51,7 +54,8 @@ class BaseUserForm(Form):
     )
     education_id = SelectField('Opleiding', coerce=int)
     avatar = FileField('Avatar', validators=[Optional()])
-    receive_information = BooleanField(_('Would you like to recieve information from companies?'))
+    receive_information = BooleanField(_('Would you like to recieve '
+                                         'information from companies?'))
 
     phone_nr = StringField(_('Phone'))
 
@@ -60,13 +64,21 @@ class BaseUserForm(Form):
     city = StringField(_('City'))
     country = StringField(_('Country'), default='Nederland')
 
+    birth_date = DateField(_('Birthdate'), validators=[
+        InputRequired(message=_('No birthdate submitted'))])
+    study_start = DateField(_('Start study'), validators=[
+         InputRequired(message=_('No start study submitted'))])
+    locale = SelectField(_('Language'),
+                         choices=list(application.config['LANGUAGES'].items()))
+
 
 class SignUpForm(BaseUserForm):
     password = PasswordField(
         _('Password'), validators=[
             InputRequired(message=_('No password submitted')),
-            Length(message=(_('Minimal password length ')+str(MIN_PASSWORD_LENGTH)),
-            min=MIN_PASSWORD_LENGTH)]
+            Length(message=(_('Minimal password length ') +
+                            str(_min_password_length)),
+                   min=_min_password_length)]
     )
     repeat_password = PasswordField(
         _('Repeat password'), validators=[
@@ -86,13 +98,7 @@ class EditUserForm(BaseUserForm):
     repeat_password = PasswordField(_('Repeat password'))
     has_payed = BooleanField(_('Has payed'))
     honorary_member = BooleanField(_('Honorary member'))
-    locale = SelectField(_('Language'), choices=list(LANGUAGES.items()))
     favourer = BooleanField(_('Favourer'))
-
-    birth_date = DateField(_('Birthdate'), validators=[
-        InputRequired(message=_('No birthdate submitted'))])
-    study_start = DateField(_('Start study'), validators=[
-         InputRequired(message=_('No start study submitted'))])
 
     def validate_password(form, field):
         """Providing a password is only required when creating a new user."""
@@ -110,8 +116,9 @@ class EditUserInfoForm(BaseUserForm):
     id = IntegerField('ID')
     password = PasswordField(
         _('Password'), validators=[
-            Length(message=(_('Minimal password length ')+str(MIN_PASSWORD_LENGTH)),
-            min=MIN_PASSWORD_LENGTH)]
+            Length(message=(_('Minimal password length ') +
+                            str(_min_password_length)),
+                   min=_min_password_length)]
         )
     repeat_password = PasswordField(
         _('Repeat password'), validators=[
@@ -152,8 +159,9 @@ class ResetPassword(Form):
     password = PasswordField(
         _('Password'), validators=[
             InputRequired(message=_('No password submitted')),
-            Length(message=(_('Minimal password length ')+ str(MIN_PASSWORD_LENGTH)),
-            min=MIN_PASSWORD_LENGTH)]
+            Length(message=(_('Minimal password length ') +
+                            str(_min_password_length)),
+                   min=_min_password_length)]
     )
     password_repeat = PasswordField(
         _('Repeat password'), validators=[

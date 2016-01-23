@@ -1,4 +1,4 @@
-# Version 2.4.1.1
+# Version 2.4.2.0
 Versioning works as follows: vSYSTEM.FEATURE.IMPROVEMENT.BUG-/HOTFIX
 
 #Viaduct (Opensourced, yeah)
@@ -18,6 +18,7 @@ Get the secret via config files with secrets for the server:
 ```bash
 git submodule init
 git submodule update
+ln -s secrets/local.py config.py
 ```
 
 Setup git-flow:

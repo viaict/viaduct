@@ -23,6 +23,8 @@ from viaduct.api.module import ModuleAPI
 
 from werkzeug import secure_filename
 
+from fuzzywuzzy import fuzz
+
 blueprint = Blueprint('examination', __name__)
 
 UPLOAD_FOLDER = application.config['EXAMINATION_UPLOAD_FOLDER']
@@ -166,14 +168,26 @@ def view_examination(page_nr=1):
     if request.args.get('search'):
         search = request.args.get('search')
 
+        exams = db.session.query(Examination.id, 
+                                 Examination.title, 
+                                 Course.name, 
+                                 Education.name.label("program") ).join(Course).join(Education).all()
+
+        exam_matches = []
+
+        for exam in exams:
+            if fuzz.partial_ratio(search, exam.title) > 75 or\
+                    fuzz.partial_ratio(search, exam.name) > 75 or\
+                    fuzz.partial_ratio(search, exam.program) > 75:
+                exam_matches.append(exam.id)
+        
         examinations = Examination.query.join(Course).join(Education)\
-            .filter(or_(Examination.title.like('%' + search + '%'),
-                        Course.name.like('%' + search + '%'),
-                        Education.name.like('%' + search + '%')))\
-            .order_by(Course.name).paginate(page_nr, 15, True)
+                .filter(Examination.id.in_(exam_matches))\
+                .order_by(Course.name).paginate(page_nr, 15, True)
+
         return render_template('examination/view.htm', path=path,
-                               examinations=examinations, search=search,
-                               title=_('Examinations'))
+                                   examinations=examinations, search=search,
+                                   title=_('Examinations'))
 
     if request.args.get('delete'):
         exam_id = request.args.get('delete')

@@ -2,7 +2,8 @@
 from functools import wraps
 from sqlalchemy import or_
 from flask import request, Blueprint, jsonify
-from config import POS_API_KEY
+
+from viaduct import application
 from viaduct.api.user import UserAPI
 from viaduct.models.user import User
 
@@ -18,7 +19,7 @@ def requires_pos_api_key(func):
         if not auth:
             return jsonify(errors='Authorization key missing'), 401
 
-        if auth and auth == POS_API_KEY:
+        if auth and auth == application.config['POS_API_KEY']:
             # if auth and auth is 'A':
             return func(*args, **kwargs)
         else:

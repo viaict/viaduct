@@ -96,9 +96,6 @@ def get_activity(activity_id=0):
 
     # Check if there is a custom_form for this activity
     if activity.form_id:
-        # Add the form
-        activity.form = CustomForm.query.get(activity.form_id)
-
         # Count current attendants for "reserved" message
         entries = CustomFormResult.query.filter(CustomFormResult.form_id ==
                                                 activity.form_id)
@@ -116,8 +113,8 @@ def get_activity(activity_id=0):
                 if not form_result.has_payed:
                     # There is 50 cents administration fee
                     if form_result.form.price - 0.5 > 0:
-                        activity.form.show_pay_button = True
-                        activity.form.id = form_result.id
+                        form.show_pay_button = True
+                        form.form_result = form_result
 
                 if form_result.has_payed:
                     activity.info = _("Your registration has been completed")\
@@ -149,7 +146,7 @@ def create(activity_id=None):
         return abort(403)
 
     if activity_id:
-        
+
         activity = Activity.query.get(activity_id)
 
         if not activity:
@@ -171,7 +168,7 @@ def create(activity_id=None):
 
     if request.method == 'POST':
         if form.validate_on_submit():
-            
+
             picture = activity.picture
 
             form.populate_obj(activity)

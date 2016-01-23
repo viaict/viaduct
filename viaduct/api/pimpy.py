@@ -5,7 +5,7 @@ from flask.ext.login import current_user
 from unidecode import unidecode
 import datetime
 import re
-import base32_crockford as b32
+import baas32 as b32
 
 from fuzzywuzzy.process import extractOne
 
@@ -207,7 +207,7 @@ class PimpyAPI:
         regex = re.compile("\s*(?:DONE) ([^\n\r]*)")
         matches = regex.findall(content)
         for match in matches:
-            done_ids = match.split(",")
+            done_ids = filter(None, match.split(","))
 
             for b32_id in done_ids:
                 done_id = b32.decode(b32_id.strip())
@@ -223,7 +223,7 @@ class PimpyAPI:
         regex = re.compile("\s*(?:REMOVE) ([^\n\r]*)")
         matches = regex.findall(content)
         for match in matches:
-            remove_ids = match.split(",")
+            remove_ids = filter(None, match.split(","))
 
             for b32_id in remove_ids:
                 remove_id = b32.decode(b32_id.strip())

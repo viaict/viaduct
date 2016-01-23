@@ -216,7 +216,7 @@ def remove_response(submit_id=None):
 @blueprint.route('/submit/<int:form_id>', methods=['POST'])
 def submit(form_id=None):
     # TODO make sure custom_form rights are set on server
-    if not ModuleAPI.can_read('custom_form'):
+    if not ModuleAPI.can_read('activity'):
         return abort(403)
 
     response = "success"

@@ -1,7 +1,7 @@
 from viaduct import db
 import datetime
 from viaduct.models import BaseEntity
-import base32_crockford as b32
+import baas32 as b32
 
 
 # many to many relationship tables

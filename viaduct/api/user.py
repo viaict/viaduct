@@ -53,7 +53,7 @@ class UserAPI:
                 return(path)
 
         # Set default values gravatar
-        email = user.email
+        email = user.email or ''
         default = 'identicon'
         size = 100
 
