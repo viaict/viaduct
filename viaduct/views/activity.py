@@ -113,8 +113,8 @@ def get_activity(activity_id=0):
                 if not form_result.has_payed:
                     # There is 50 cents administration fee
                     if form_result.form.price - 0.5 > 0:
-                        activity.form.show_pay_button = True
-                        activity.form.id = form_result.id
+                        form.show_pay_button = True
+                        form.form_result = form_result
 
                 if form_result.has_payed:
                     activity.info = _("Your registration has been completed")\
