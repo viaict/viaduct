@@ -6,7 +6,6 @@ from flask.ext.login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy as BaseSQLAlchemy, Model, \
     _BoundDeclarativeMeta, _QueryProperty, declarative_base
 from sqlalchemy import MetaData
-from config import LANGUAGES
 from viaduct.utilities import import_module, serialize_sqla
 from markdown import markdown
 import datetime
@@ -53,7 +52,7 @@ def register_views(application, path, extension=''):
 
 # Set up the application and load the configuration file.
 application = Flask(__name__)
-application.config.from_object('config')
+application.config.from_object('config.Config')
 
 # Set up Flask Babel, which is used for internationalisation support.
 babel = Babel(application)
@@ -61,6 +60,7 @@ babel = Babel(application)
 
 @babel.localeselector
 def get_locale():
+    languages = application.config['LANGUAGES'].keys()
     # if a user is logged in, use the locale from the user settings
     if current_user and not current_user.is_anonymous() \
             and current_user.locale is not None:
@@ -68,11 +68,11 @@ def get_locale():
 
     # Try to look-up an cookie set for language
     lang = request.cookies.get('lang')
-    if lang and lang in LANGUAGES.keys():
+    if lang and lang in languages:
         return lang
     else:
         return request.accept_languages.best_match(
-            list(LANGUAGES.keys()), default='nl')
+            list(languages), default='nl')
 
 
 # Set up the login manager, which is used to store the details related to the
