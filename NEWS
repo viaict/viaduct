@@ -1,4 +1,6 @@
-23-01-2016 vx.x.x.0:
+xx-01-2016 vx.x.x.0:
+
+23-01-2016 v2.4.2.0:
 * Changed base32 implementation to `baas32`
 * Fixed: Allow changing custom form input for users that have not paid for the
     form
