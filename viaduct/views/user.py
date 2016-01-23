@@ -31,6 +31,8 @@ from viaduct.api.module import ModuleAPI
 from viaduct.api import UserAPI
 from viaduct.api.google import HttpError
 
+import viaduct.api.copernica as copernica
+
 blueprint = Blueprint('user', __name__)
 
 
@@ -206,6 +208,19 @@ def edit(user_id=None):
 
         flash('Je hebt je profiel succesvol %s.' %
               ('aangepast' if user_id else 'aangemaakt'), 'success')
+
+        # Sending user profiles to the Copernica software
+        info = "Ja" if user.receive_information else "Nee"
+        ingeschreven = "Ja" if user.has_payed else "Nee"
+        vvv = "Ja" if user.favourer else "Nee"
+
+        if user_id:
+            if ModuleAPI.can_write('user'):
+                copernica.updateUser(user_id, user.email, user.first_name, user.last_name, user.education.name, Lid=ingeschreven, VVV=vvv, Bedrijfsinformatie=info)
+            else:
+                copernica.updateUser(user_id, user.email, user.first_name, user.last_name, user.education.name, Bedrijfsinformatie=info)
+        else:
+            copernica.newUser(user.email, user.first_name, user.last_name, user.education.name, Lid=ingeschreven, VVV=vvv, Bedrijfsinformatie=info)
 
         return redirect(url_for('user.view_single', user_id=user.id))
     else:
