@@ -149,7 +149,7 @@ def create(activity_id=None):
         return abort(403)
 
     if activity_id:
-        
+
         activity = Activity.query.get(activity_id)
 
         if not activity:
@@ -171,7 +171,7 @@ def create(activity_id=None):
 
     if request.method == 'POST':
         if form.validate_on_submit():
-            
+
             picture = activity.picture
 
             form.populate_obj(activity)
