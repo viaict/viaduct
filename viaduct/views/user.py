@@ -163,6 +163,9 @@ def edit(user_id=None):
         if not user_id:
             user = User('_')
 
+        group = Group.query.filter(Group.name == 'all').first()
+        group.add_user(user)
+
         try:
             user.update_email(form.email.data.strip())
         except HttpError as e:
@@ -195,10 +198,6 @@ def edit(user_id=None):
             user.password = bcrypt.hashpw(form.password.data, bcrypt.gensalt())
 
         db.session.add(user)
-
-        group = Group.query.filter(Group.name == 'all').first()
-        group.add_user(user)
-
         db.session.add(group)
         db.session.commit()
 
@@ -211,16 +210,18 @@ def edit(user_id=None):
 
         # Sending user profiles to the Copernica software
         info = "Ja" if user.receive_information else "Nee"
-        ingeschreven = "Ja" if user.has_payed else "Nee"
+        ingeschreven = "Ja" if user.has_payed or user.favourer else "Nee"
         vvv = "Ja" if user.favourer else "Nee"
-
+        gb = user.birth_date.strftime('%Y-%m-%d')
+        lid = "Ja" if user.has_payed else "Nee"
+ 
         if user_id:
             if ModuleAPI.can_write('user'):
-                copernica.updateUser(user_id, user.email, user.first_name, user.last_name, user.education.name, Lid=ingeschreven, VVV=vvv, Bedrijfsinformatie=info)
+                copernica.updateUser(user_id, user.email, user.first_name, user.last_name, user.education.name, user.student_id, Lid=lid, VVV=vvv, Bedrijfsinformatie=info, Geboortedatum=gb, Ingeschreven=ingeschreven)
             else:
-                copernica.updateUser(user_id, user.email, user.first_name, user.last_name, user.education.name, Bedrijfsinformatie=info)
+                copernica.updateUser(user_id, user.email, user.first_name, user.last_name, user.education.name, user.student_id, Bedrijfsinformatie=info, Geboortedatum=gb, Ingeschreven=ingeschreven)
         else:
-            copernica.newUser(user.email, user.first_name, user.last_name, user.education.name, Lid=ingeschreven, VVV=vvv, Bedrijfsinformatie=info)
+            copernica.newUser(user.email, user.first_name, user.last_name, user.education.name, user.id, user.student_id, Lid=lid, VVV=vvv, Bedrijfsinformatie=info, Geboortedatum=gb, Ingeschreven=ingeschreven)
 
         return redirect(url_for('user.view_single', user_id=user.id))
     else:
@@ -276,6 +277,10 @@ def sign_up():
             UserAPI.upload(avatar, user.id)
 
         login_user(user)
+
+        gb = user.birth_date.strftime('%Y-%m-%d')
+        info = "Ja" if user.receive_information else "Nee"
+        copernica.newUser(user.email, user.first_name, user.last_name, user.education.name, user.id, user.student_id, Bedrijfsinformatie=info, Geboortedatum=gb)
 
         flash(gettext('Welcome %(name)s! Your profile has been succesfully '
                       'created and you have been logged in!',

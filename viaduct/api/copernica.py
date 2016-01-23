@@ -90,7 +90,7 @@ def viaIDtoCopernicaID(id):
     return uID
 
 
-def newUser(mail, first, last, study, websiteID, *args, **kwargs):
+def newUser(mail, first, last, study, websiteID, studentnr, *args, **kwargs):
     if (viaIDtoCopernicaID(websiteID) != -1):
         return updateUser(websiteID, mail, first, last, study, args, kwargs)
     url = "https://api.copernica.com/database/" + database_id + "/profiles?access_token=" + token
@@ -100,32 +100,37 @@ def newUser(mail, first, last, study, websiteID, *args, **kwargs):
         "Achternaam": last,
         "Studie" : study,
         "WebsiteID": websiteID,
-        "Ingeschreven": kwargs['Ingeschreven'] if 'Ingeschreven' in kwargs else "Ja",
+        "Studienummer" : studentnr,
+        "Ingeschreven": kwargs['Ingeschreven'] if 'Ingeschreven' in kwargs else "Nee",
         "Lid": kwargs['Lid'] if 'Lid' in kwargs else "Nee",
         "VVV": kwargs['VVV'] if 'VVV' in kwargs else "Nee",
         "Bedrijfsinformatie": kwargs['Bedrijfsinformatie'] if 'Bedrijfsinformatie' in kwargs else "Nee",
+        "Geboortedatum": kwargs['Geboortedatum'] if 'Geboortedatum' in kwargs else "0000-00-00",
     }
     print("Data to send to Copernica:")
     print(data)
-    # requests.post(url, data)
+    requests.post(url, data)
 
-def updateUser(websiteID, mail, first, last, study, *args, **kwargs):
+def updateUser(websiteID, mail, first, last, study, studentnr, *args, **kwargs):
     id = viaIDtoCopernicaID(websiteID)
     if(id == -1):
-        return
+        print ("User bestaat nog niet")
+        return newUser(mail, first, last, study, websiteID, args, kwargs)
     url = "https://api.copernica.com/database/" + database_id + "/profiles?fields[]=ID%3D%3D" + str(id) + "&access_token=" + token
     data = {
         "Emailadres" : mail,
         "Voornaam": first,
         "Achternaam": last,
         "Studie" : study,
+        "Studienummer" : studentnr,
         "Ingeschreven": kwargs['Ingeschreven'] if 'Ingeschreven' in kwargs else "Ja",
         "Lid": kwargs['Lid'] if 'Lid' in kwargs else "Nee",
         "VVV": kwargs['VVV'] if 'VVV' in kwargs else "Nee",
         "Bedrijfsinformatie": kwargs['Bedrijfsinformatie'] if 'Bedrijfsinformatie' in kwargs else "Nee",
+        "Geboortedatum": kwargs['Geboortedatum'] if 'Geboortedatum' in kwargs else "0000-00-00",
     }
 
     print("Data to send to Copernica:")
     print(data)
 
-    # requests.put(url, data)
+    requests.put(url, data)
