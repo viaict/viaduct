@@ -10,6 +10,8 @@ from viaduct.api.module import ModuleAPI
 from viaduct.models.pimpy import Task
 from viaduct.models.group import Group
 
+from viaduct.api import copernica
+
 
 blueprint = Blueprint('pimpy', __name__, url_prefix='/pimpy')
 
@@ -74,6 +76,8 @@ def update_task_status():
     list_items = query.all()
     for task in list_items:
         task.update_status(new_status)
+        for user in task.users:
+            copernica.updateActiepunt(user.id, task.base32_id(), task.title, task.get_status_string())
     db.session.commit()
     return jsonify(status=task.get_status_color())
 
@@ -179,9 +183,19 @@ def add_minute(group_id='all'):
                     db.session.add(task)
                 for done in dones:
                     done.update_status(4)
+                    for user in done.users:
+                        copernica.updateActiepunt(user.id, done.base32_id(), done.title, done.get_status_string())
                 for remove in removes:
                     remove.update_status(5)
+                    for user in remove.users:
+                        copernica.updateActiepunt(user.id, remove.base32_id(), remove.title, remove.get_status_string())
                 db.session.commit()
+
+                # Sync tasks to Copernica
+                for task in tasks:
+                    for user in task.users:
+                        copernica.addActiepunt(user.id, task.base32_id(), task.group.name, task.title, task.get_status_string())
+
                 flash('De notulen zijn verwerkt!', 'success')
 
                 return render_template('pimpy/view_parsed_tasks.htm',

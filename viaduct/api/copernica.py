@@ -67,12 +67,13 @@ def addActiepunt(websiteID, aID, groep, punt, status):
     url = "https://api.copernica.com/profile/" + str(id) + "/subprofiles/" + actiepunt + "?access_token=" + token
     requests.post(url, data)
 
-def actiepuntStatus(websiteID, aID, status):
+def updateActiepunt(websiteID, aID, punt, status):
     id = viaIDtoCopernicaID(websiteID)
     if(id == -1):
         return
     data = {
-        "Status" : status
+        "Status" : status,
+        "Actiepunt" : punt,
     }
     url = "https://api.copernica.com/profile/" + str(id) + "/subprofiles/" + actiepunt + "?fields[]=aID%3D%3D" + str(aID) + "&access_token=" + token
     r = requests.get(url)

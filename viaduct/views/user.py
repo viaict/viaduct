@@ -29,9 +29,8 @@ from viaduct.forms.user import EditUserForm, EditUserInfoForm
 from viaduct.models.education import Education
 from viaduct.api.module import ModuleAPI
 from viaduct.api import UserAPI
+from viaduct.api import copernica
 from viaduct.api.google import HttpError
-
-import viaduct.api.copernica as copernica
 
 blueprint = Blueprint('user', __name__)
 
