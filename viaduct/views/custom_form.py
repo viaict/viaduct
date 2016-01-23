@@ -5,12 +5,12 @@ from flask.ext.login import current_user
 from viaduct import db
 from viaduct.helpers import flash_form_errors
 from viaduct.forms.custom_form import CreateForm
+from viaduct.models import Activity
 from viaduct.models.user import User
 from viaduct.models.custom_form import CustomForm, CustomFormResult, \
     CustomFormFollower
 from viaduct.api.module import ModuleAPI
 
-from sqlalchemy import desc
 from urllib.parse import parse_qsl
 
 import io
@@ -20,40 +20,60 @@ blueprint = Blueprint('custom_form', __name__, url_prefix='/forms')
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
-@blueprint.route('/page', methods=['GET', 'POST'])
-@blueprint.route('/page/', methods=['GET', 'POST'])
-def view():
-    page = request.args.get('page_nr', '')
-
-    if not page:
-        page = 1
-    else:
-        page = int(page)
-
+@blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
+def view(page_nr=1):
     if not ModuleAPI.can_read('custom_form'):
         return abort(403)
 
-    custom_forms = CustomForm.query.order_by(desc("id"))
+    followed_forms = (
+        CustomForm.query
+        .outerjoin(Activity,
+                   CustomForm.id == Activity.form_id)
+        .filter(
+            CustomFormFollower.query
+            .filter(CustomForm.id == CustomFormFollower.form_id,
+                    CustomFormFollower.owner_id == current_user.id)
+            .exists(),
+            db.or_(CustomForm.archived == False,
+                   CustomForm.archived == None),
+            db.or_(Activity.id == None,
+                   db.and_(Activity.id != None,
+                           db.func.now() < Activity.end_time)))
+        .order_by(CustomForm.modified.desc())
+        .all())  # noqa
 
-    if current_user and current_user.id > 0:
-        follows = CustomFormFollower.query\
-            .filter(CustomFormFollower.owner_id == current_user.id).all()
+    active_forms = (
+        CustomForm.query
+        .outerjoin(Activity,
+                   CustomForm.id == Activity.form_id)
+        .filter(
+            db.not_(CustomFormFollower.query
+                    .filter(CustomForm.id == CustomFormFollower.form_id,
+                            CustomFormFollower.owner_id == current_user.id)
+                    .exists()),
+            db.or_(CustomForm.archived == False,
+                   CustomForm.archived == None),
+            db.or_(Activity.id == None,
+                   db.and_(Activity.id != None,
+                           db.func.now() < Activity.end_time)))
+        .order_by(CustomForm.modified.desc())
+        .all())  # noqa
 
-        ids = []
+    archived_paginate = (
+        CustomForm.query
+        .outerjoin(Activity,
+                   CustomForm.id == Activity.form_id)
+        .filter(
+            db.or_(CustomForm.archived == True,
+                   db.and_(Activity.id != None,
+                           db.func.now() >= Activity.end_time)))
+        .order_by(CustomForm.modified.desc())
+        .paginate(page_nr, 10))  # noqa
 
-        for follow in follows:
-            ids.append(follow.form_id)
-
-        followed_forms = CustomForm.query.filter(CustomForm.id.in_(ids)).all()
-    else:
-        followed_forms = []
-        ids = []
-
-    # TODO Custom forms for specific groups (i.e coordinator can only see own
-    # forms)
     return render_template('custom_form/overview.htm',
-                           custom_forms=custom_forms.paginate(page, 20, False),
-                           followed_forms=followed_forms, followed_ids=ids)
+                           followed_forms=followed_forms,
+                           active_forms=active_forms,
+                           archived_paginate=archived_paginate)
 
 
 @blueprint.route('/view/<int:form_id>', methods=['GET', 'POST'])

@@ -540,9 +540,17 @@ div.sortable {
 }
 
 /* Form overview rues. */
-.view-results {
+.new-form {
     display: block;
-    width: 145px;
+}
+
+.view-results {
+    display: inline-block;
+    width: 100px;
+}
+
+.form-buttons {
+    text-align: right;
 }
 
 #athenaeum {

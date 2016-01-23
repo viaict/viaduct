@@ -1,5 +1,5 @@
 from viaduct import db
-from viaduct.models import BaseEntity
+from viaduct.models import BaseEntity, Activity
 
 from collections import OrderedDict
 
@@ -23,6 +23,8 @@ class CustomForm(db.Model, BaseEntity):
                                                        lazy='dynamic'))
     terms = db.Column(db.String(4096))
     transaction_description = db.Column(db.String(256))
+
+    archived = db.Column(db.Boolean)
 
     exports = \
         OrderedDict([('user_id', {
@@ -61,6 +63,15 @@ class CustomForm(db.Model, BaseEntity):
         self.msg_success = msg_success
         self.max_attendants = max_attendants
         self.terms = terms
+        self.archived = False
+
+    def has_activity(self):
+        return (self.activities.count() > 0)
+
+    def get_closest_activity(self):
+        return (self.activities
+                .order_by(Activity.modified.desc())
+                .first())
 
 
 class CustomFormResult(db.Model, BaseEntity):
