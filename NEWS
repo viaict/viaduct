@@ -1,5 +1,12 @@
-xx-xx-2016 vx.x.x.x:
+23-01-2016 vx.x.x.0:
 * Changed base32 implementation to `baas32`
+* Fixed: Allow changing custom form input for users that have not paid for the
+    form
+* Fixed: Autofill custom forms again
+* Fixed: Editing of users for non admin users
+* Use new method of managing the viaduct configuration so not everything is
+    secret.
+
 
 13-12-2015 v2.4.1.0:
 * Update: Calendar id's for new VIA Events
