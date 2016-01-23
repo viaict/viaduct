@@ -341,6 +341,50 @@ def follow(form_id, page_nr=1):
     return redirect(url_for('custom_form.view', page_nr=page_nr))
 
 
+@blueprint.route('/archive/<int:form_id>/', methods=['GET', 'POST'])
+@blueprint.route('/archive/<int:form_id>/<int:page_nr>/',
+                 methods=['GET', 'POST'])
+def archive(form_id, page_nr=1):
+    if not ModuleAPI.can_write('custom_form'):
+        return abort(403)
+
+    if not current_user or current_user.id <= 0:
+        return abort(403)
+
+    form = CustomForm.query.get(form_id)
+    if not form:
+        return abort(404)
+
+    form.archived = True
+    db.session.commit()
+
+    flash('Formulier gearchiveerd', 'success')
+
+    return redirect(url_for('custom_form.view', page_nr=page_nr))
+
+
+@blueprint.route('/unarchive/<int:form_id>/', methods=['GET', 'POST'])
+@blueprint.route('/unarchive/<int:form_id>/<int:page_nr>/',
+                 methods=['GET', 'POST'])
+def unarchive(form_id, page_nr=1):
+    if not ModuleAPI.can_write('custom_form'):
+        return abort(403)
+
+    if not current_user or current_user.id <= 0:
+        return abort(403)
+
+    form = CustomForm.query.get(form_id)
+    if not form:
+        return abort(404)
+
+    form.archived = False
+    db.session.commit()
+
+    flash('Formulier gede-archiveerd', 'success')
+
+    return redirect(url_for('custom_form.view', page_nr=page_nr))
+
+
 @blueprint.route('/has_payed/<int:submit_id>', methods=['POST'])
 def has_payed(submit_id=None):
     response = "success"
