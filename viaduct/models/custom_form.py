@@ -104,11 +104,13 @@ class CustomFormResult(db.Model, BaseEntity):
 class CustomFormFollower(db.Model, BaseEntity):
     __tablename__ = 'custom_form_follower'
 
+    prints = ('owner_id', 'form_id')
+
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     form_id = db.Column(db.Integer)
 
-    owner = db.relationship('User', backref=db.backref('custom_form_follower',
-                                                       lazy='dynamic'))
+    owner = db.relationship(
+        'User', backref=db.backref('custom_forms_following', lazy='dynamic'))
 
     def __init__(self, owner_id=None, form_id=None):
         self.owner_id = owner_id

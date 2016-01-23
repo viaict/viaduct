@@ -73,7 +73,8 @@ def view(page_nr=1):
     return render_template('custom_form/overview.htm',
                            followed_forms=followed_forms,
                            active_forms=active_forms,
-                           archived_paginate=archived_paginate)
+                           archived_paginate=archived_paginate,
+                           page_nr=page_nr)
 
 
 @blueprint.route('/view/<int:form_id>', methods=['GET', 'POST'])
@@ -310,8 +311,10 @@ def submit(form_id=None):
     return response
 
 
-@blueprint.route('/follow/<int:form_id>', methods=['GET', 'POST'])
-def follow(form_id=None):
+@blueprint.route('/follow/<int:form_id>/', methods=['GET', 'POST'])
+@blueprint.route('/follow/<int:form_id>/<int:page_nr>/',
+                 methods=['GET', 'POST'])
+def follow(form_id, page_nr=1):
     if not ModuleAPI.can_write('custom_form'):
         return abort(403)
 
@@ -321,20 +324,21 @@ def follow(form_id=None):
         return abort(403)
 
     # Unfollow if re-submitted
-    follows = CustomFormFollower.query\
-        .filter(CustomFormFollower.form_id == form_id).first()
+    follows = (current_user.custom_forms_following
+               .filter(CustomFormFollower.form_id == form_id)
+               .first())
 
     if follows:
-        response = "removed"
+        flash('Formulier ontvolgd', 'success')
         db.session.delete(follows)
     else:
-        response = "added"
+        flash('Formulier gevolgd', 'success')
         result = CustomFormFollower(current_user.id, form_id)
         db.session.add(result)
 
     db.session.commit()
 
-    return response
+    return redirect(url_for('custom_form.view', page_nr=page_nr))
 
 
 @blueprint.route('/has_payed/<int:submit_id>', methods=['POST'])

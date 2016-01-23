@@ -2,7 +2,6 @@
 
 {% extends "content.htm" %}
 {% block includes %}
-    <script src={{static_url("/static/js/form.follower.js")}}></script>
 {% endblock %}
 
 {%block content %}
@@ -47,16 +46,16 @@ Hier is het overzicht van alle gemaakte formulieren. Je kunt formulieren volgen 
 
     <td class="form-buttons">
 		{% if ModuleAPI.can_write('custom_form') %}
-				<a href="/forms/edit/{{ form.id }}" class="btn btn-xs btn-warning">
+				<a href="{{ url_for('custom_form.create', form_id=form.id) }}" class="btn btn-xs btn-warning">
 					<i class="glyphicon glyphicon-pencil"></i>
 					Aanpassen
 				</a>
 
-				<a href="/forms/follow/{{ form.id }}" class="follow btn btn-xs btn-danger">
+				<a href="{{ url_for('custom_form.follow', form_id=form.id, page_nr=page_nr) }}" class="follow btn btn-xs btn-danger">
 					Niet meer volgen
 				</a>
 
-				<a href="/forms/view/{{ form.id }}" class="view-results btn btn-xs btn-primary">
+				<a href="{{ url_for('custom_form.view_single', form_id=form.id) }}" class="view-results btn btn-xs btn-primary">
 					<span class="badge badge-inverse">{{ form.custom_form_results.count() }}</span> bekijken
 				</a>
 		{% endif %}
@@ -96,16 +95,16 @@ Hier is het overzicht van alle gemaakte formulieren. Je kunt formulieren volgen 
 
 	<td class="form-buttons">
 		{% if ModuleAPI.can_write('custom_form') %}
-				<a href="/forms/edit/{{ form.id }}" class="btn btn-xs btn-warning">
+				<a href="{{ url_for('custom_form.create', form_id=form.id) }}" class="btn btn-xs btn-warning">
 					<i class="glyphicon glyphicon-pencil"></i>
 					Aanpassen
 				</a>
 
-				<a href="/forms/follow/{{ form.id }}" class="follow btn btn-xs btn-success">
+				<a href="{{ url_for('custom_form.follow', form_id=form.id, page_nr=page_nr) }}" class="follow btn btn-xs btn-success">
 					Formulier volgen
 				</a>
 
-				<a href="/forms/view/{{ form.id }}" class="view-results btn btn-xs btn-primary">
+				<a href="{{ url_for('custom_form.view_single', form_id=form.id) }}" class="view-results btn btn-xs btn-primary">
 					<span class="badge badge-inverse">{{ form.custom_form_results.count() }}</span> bekijken
 				</a>
 
@@ -145,7 +144,7 @@ Hier is het overzicht van alle gemaakte formulieren. Je kunt formulieren volgen 
 
 	<td class="form-buttons">
 		{% if ModuleAPI.can_write('custom_form') %}
-				<a href="/forms/view/{{ form.id }}" class="view-results btn btn-xs btn-primary">
+				<a href="{{ url_for('custom_form.view_single', form_id=form.id) }}" class="view-results btn btn-xs btn-primary">
 					<span class="badge badge-inverse">{{ form.custom_form_results.count() }}</span> bekijken
 				</a>
 
