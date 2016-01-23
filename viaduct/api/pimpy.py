@@ -5,7 +5,7 @@ from flask.ext.login import current_user
 from unidecode import unidecode
 import datetime
 import re
-import base32_crockford as b32
+import baas32 as b32
 
 from fuzzywuzzy.process import extractOne
 

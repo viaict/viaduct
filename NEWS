@@ -1,3 +1,6 @@
+xx-xx-2016 vx.x.x.x:
+* Changed base32 implementation to `baas32`
+
 13-12-2015 v2.4.1.0:
 * Update: Calendar id's for new VIA Events
 
