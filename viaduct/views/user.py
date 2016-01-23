@@ -46,7 +46,7 @@ def load_user(user_id):
 @blueprint.route('/users/view/<int:user_id>', methods=['GET'])
 def view_single(user_id=None):
     if not user_id:
-        return redirect('user.view')
+        return redirect(url_for('user.view'))
 
     can_read = False
     can_write = False
