@@ -2,92 +2,175 @@
 
 {% extends "content.htm" %}
 {% block includes %}
-    <script src={{static_url("/static/js/form.follower.js")}}></script>
 {% endblock %}
 
 {%block content %}
 
-<h1>Formulieren die je volgt</h1>
+<p>
+{% if ModuleAPI.can_write('custom_form') %}
+    &nbsp;<a href="/forms/create/" class="new-form btn btn-success pull-right">
+        <i class="glyphicon glyphicon-plus"></i>
+        Nieuw formulier
+    </a>
+{% endif %}
+
+Hier is het overzicht van alle gemaakte formulieren. Je kunt formulieren volgen om ze hier bovenaan de pagina te tonen voor makkelijkere toegang.
+</p>
+
+<h3>Gevolgde formulieren</h3>
+
+{% if not followed_forms %}
+
+<p>Er zijn geen actieve formulieren die je volgt.</p>
+
+{% else %}
 
 <table class="table" id="follow_table">
 <thead>
 <tr>
-	<th>Formulier naam<th>
+	<th>Naam</th>
+    <th>Einddatum activiteit</th>
 	<th></th>
+</tr>
+</thead>
 
+<tbody>
 {% for form in followed_forms %}
 <tr>
-	<td>{{ form.name }}
-	<td>
+    <td>{{ form.name }}</td>
+
+    <td>
+        {% if form.has_activity() %}{{ form.get_closest_activity().end_time.strftime(app_config['DT_FORMAT']) }}
+        {% else %}Geen activiteit{% endif %}
+    </td>
+
+    <td class="form-buttons">
 		{% if ModuleAPI.can_write('custom_form') %}
-				<a href="/forms/edit/{{ form.id }}" class="btn btn-xs btn-warning pull-right">
-					<i class="glyphicon glyphicon-pencil"></i>
-					Aanpassen
-				</a>
+        <a href="{{ url_for('custom_form.view_single', form_id=form.id) }}" class="view-results btn btn-xs btn-primary">
+            <span class="badge badge-inverse">{{ form.custom_form_results.count() }}</span> bekijken
+        </a>
 
-				<a href="/forms/follow/{{ form.id }}" class="follow btn btn-xs btn-danger pull-right">
-					Niet meer volgen
-				</a>
+        <a href="{{ url_for('custom_form.follow', form_id=form.id, page_nr=page_nr) }}" class="follow btn btn-xs btn-danger">
+            Ontvolgen
+        </a>
 
-				<a href="/forms/view/{{ form.id }}" class="btn btn-xs btn-primary pull-right">
-					Inzendingen bekijken <span class="badge badge-inverse">{{ form.custom_form_results.count() }}</span>
-				</a>
+        <a href="{{ url_for('custom_form.create', form_id=form.id) }}" class="btn btn-xs btn-warning">
+            <i class="glyphicon glyphicon-pencil"></i>
+            Aanpassen
+        </a>
+
+        <a href="{{ url_for('custom_form.archive', form_id=form.id, page_nr=page_nr) }}" class="btn btn-xs btn-danger">
+            Archiveren
+        </a>
 		{% endif %}
+    </td>
+</tr>
 {% endfor %}
+</tbody>
 </table>
-<hr>
 
-<h1>Formulieren overzicht
+{%endif%}
 
-	{% if ModuleAPI.can_write('custom_form') %}
-		<a href="/forms/create/" class="btn btn-success pull-right">
-			<i class="glyphicon glyphicon-plus"></i>
-			Nieuw formulier
-		</a>
-	{% endif %}
-</h1>
+<h3>Actieve formulieren</h3>
 
-<p>Hier is het overzicht van alle gemaakte formulieren. Je kunt formulieren volgen om ze hier bovenaan de pagina te tonen voor makkelijkere toegang.
+{% if not active_forms %}
+<p>Er zijn geen actieve formulier die je niet volgt.</p>
 
-<hr>
+{%else%}
 
 <table class="table">
 <thead>
 <tr>
-	<th>Formulier naam<th>
+	<th>Naam</th>
+    <th>Einddatum activiteit</th>
 	<th></th>
+</tr>
+</thead>
 
-{% for form in custom_forms.items %}
+<tbody>
+{% for form in active_forms %}
 <tr>
-	<td>{{ form.name }}
-	<td>
+    <td>{{ form.name }}</td>
+
+    <td>
+        {% if form.has_activity() %}{{ form.get_closest_activity().end_time.strftime(app_config['DT_FORMAT']) }}
+        {% else %}Geen activiteit{% endif %}
+    </td>
+
+	<td class="form-buttons">
 		{% if ModuleAPI.can_write('custom_form') %}
-				<a href="/forms/edit/{{ form.id }}" class="btn btn-xs btn-warning pull-right">
-					<i class="glyphicon glyphicon-pencil"></i>
-					Aanpassen
-				</a>
+        <a href="{{ url_for('custom_form.view_single', form_id=form.id) }}" class="view-results btn btn-xs btn-primary">
+            <span class="badge badge-inverse">{{ form.custom_form_results.count() }}</span> bekijken
+        </a>
 
-				{% if form.id in followed_ids %}
-				<a href="/forms/follow/{{ form.id }}" class="follow btn btn-xs btn-danger pull-right">
-					Niet meer volgen
-				</a>
-				{% else %}
-				<a href="/forms/follow/{{ form.id }}" class="follow btn btn-xs btn-success pull-right">
-					Formulier volgen
-				</a>
-				{% endif %}
+        <a href="{{ url_for('custom_form.follow', form_id=form.id, page_nr=page_nr) }}" class="follow btn btn-xs btn-success">
+            Volgen
+        </a>
 
-				<a href="/forms/view/{{ form.id }}" class="btn btn-xs btn-primary pull-right">
-					Inzendingen bekijken<span class="badge badge-inverse">{{ form.custom_form_results.count() }}</span>
-				</a>
+        <a href="{{ url_for('custom_form.create', form_id=form.id) }}" class="btn btn-xs btn-warning">
+            <i class="glyphicon glyphicon-pencil"></i>
+            Aanpassen
+        </a>
 
+        <a href="{{ url_for('custom_form.archive', form_id=form.id, page_nr=page_nr) }}" class="btn btn-xs btn-danger">
+            Archiveren
+        </a>
 		{% endif %}
+    </td>
+</tr>
 {% endfor %}
-
+</tbody>
 </table>
-<hr>
+{%endif%}
 
+<h3>Gearchiveerde formulieren</h3>
 
+{% if not archived_paginate.items %}
+<p>Er zijn geen gearchiveerde formulier.</p>
 
-	{{ render_pagination(custom_forms, 'custom_form.view') }}
+{%else%}
+
+<table class="table">
+<thead>
+<tr>
+	<th>Naam</th>
+    <th>Einddatum activiteit</th>
+	<th></th>
+</tr>
+</thead>
+
+<tbody>
+{% for form in archived_paginate.items %}
+<tr>
+    <td>{{ form.name }}</td>
+
+    <td>
+        {% if form.has_activity() %}{{ form.get_closest_activity().end_time.strftime(app_config['DT_FORMAT']) }}
+        {% else %}Geen activiteit{% endif %}
+    </td>
+
+	<td class="form-buttons">
+		{% if ModuleAPI.can_write('custom_form') %}
+        <a href="{{ url_for('custom_form.view_single', form_id=form.id) }}" class="view-results btn btn-xs btn-primary">
+            <span class="badge badge-inverse">{{ form.custom_form_results.count() }}</span> bekijken
+        </a>
+
+        {%if form.archived %}
+        <a href="{{ url_for('custom_form.unarchive', form_id=form.id, page_nr=page_nr) }}" class="btn btn-xs btn-warning">
+            De-archiveren
+        </a>
+        {%else%}
+        <a href="{{ url_for('custom_form.archive', form_id=form.id, page_nr=page_nr) }}" class="btn btn-xs btn-danger">
+            Archiveren
+        </a>
+        {%endif%}
+		{% endif %}
+    </td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+{{ render_pagination(archived_paginate, 'custom_form.view') }}
+{%endif%}
 {% endblock %}

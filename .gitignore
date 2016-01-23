@@ -28,6 +28,7 @@ viaduct/static/js
 venv/*
 venv3
 .vimrc
+.ackrc
 
 .sass-cache/
 node_modules/

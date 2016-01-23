@@ -35,6 +35,9 @@ class Activity(db.Model, BaseEntity):
     owner = db.relationship('User',
                             backref=db.backref('activities', lazy='dynamic'))
 
+    form = db.relationship(
+        'CustomForm', backref=db.backref('activities', lazy='dynamic'))
+
     def __init__(self, owner_id=None, en_name="", en_description="",
                  nl_name="", nl_description="", start_time=None,
                  end_time=None,

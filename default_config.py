@@ -25,6 +25,7 @@ class DefaultConfig:
 
     # One date format string to rule them all (use this in strftime)
     DATE_FORMAT = "%Y-%m-%d"
+    DT_FORMAT = "%Y-%m-%d %H:%M"
     MIN_PASSWORD_LENGTH = 6
 
     LANGUAGES = {
