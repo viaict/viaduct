@@ -9,6 +9,7 @@ xx-01-2016 vx.x.x.0:
 * Fixed: Editing of users for non admin users
 * Use new method of managing the viaduct configuration so not everything is
     secret.
+* Added Copernica Integration to viaduct
 
 
 13-12-2015 v2.4.1.0:
