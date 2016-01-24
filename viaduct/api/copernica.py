@@ -1,5 +1,5 @@
 from viaduct import application
-import requests, json
+import requests, json, threading
 
 token = application.config['COPERNICA_API_KEY']
 database_id = application.config['COPERNICA_DATABASE_ID']
@@ -15,6 +15,7 @@ def subscribeNewsletter(userID):
         'Ingeschreven':'Ja'
     }
     requests.post(url, data)
+    # subprocess.Popen(["venv/bin/python", "scripts/copernica_sender.py", "post", url, json.dumps(data)])
 
 def unsubscribeNewsletter(userID):
     id = viaIDtoCopernicaID(userID)
@@ -25,8 +26,12 @@ def unsubscribeNewsletter(userID):
         "Ingeschreven" : "Nee"
     }
     requests.post(url, data)
+    # subprocess.Popen(["venv/bin/python", "scripts/copernica_sender.py", "post", url, json.dumps(data)])
 
 def addActivity(websiteID, name, eventID, amount=0, payed=False):
+    threading.Thread(target=addActivity_thread, args=(websiteID, name, eventID, amount, payed)).start()
+
+def addActivity_thread(websiteID, name, eventID, amount=0, payed=False):
     id = viaIDtoCopernicaID(websiteID)
     if(id == -1):
         return
@@ -38,8 +43,12 @@ def addActivity(websiteID, name, eventID, amount=0, payed=False):
         "WebsiteID" : eventID
     }
     requests.post(url, data)
+    # subprocess.Popen(["venv/bin/python", "scripts/copernica_sender.py", "post", url, json.dumps(data)])
 
 def payedActivity(userID, eventID, payed):
+    threading.Thread(target=payedActivity_thread, args=(userID, eventID, payed)).start()
+
+def payedActivity_thread(userID, eventID, payed):
     id = viaIDtoCopernicaID(userID)
     if(id == -1):
         return
@@ -52,9 +61,13 @@ def payedActivity(userID, eventID, payed):
     r = requests.get(url)
     for event in r.json()['data']:
         url = "https://api.copernica.com/subprofile/" + event['ID'] + "/fields?access_token=" + token
+        # subprocess.Popen(["venv/bin/python", "scripts/copernica_sender.py", "post", url, json.dumps(data)])
         requests.post(url, data)
 
 def addActiepunt(websiteID, aID, groep, punt, status):
+    threading.Thread(target=addActiepunt_thread, args=(websiteID, aID, groep, punt, status)).start()
+
+def addActiepunt_thread(websiteID, aID, groep, punt, status):
     id = viaIDtoCopernicaID(websiteID)
     if (id == -1): 
         return
@@ -68,6 +81,9 @@ def addActiepunt(websiteID, aID, groep, punt, status):
     requests.post(url, data)
 
 def updateActiepunt(websiteID, aID, punt, status):
+    threading.Thread(target=updateActiepunt_thread, args=(websiteID, aID, punt, status)).start()
+
+def updateActiepunt_thread(websiteID, aID, punt, status):
     id = viaIDtoCopernicaID(websiteID)
     if(id == -1):
         return
@@ -80,6 +96,7 @@ def updateActiepunt(websiteID, aID, punt, status):
     for punt in r.json()['data']:
         url = "https://api.copernica.com/subprofile/" + punt['ID'] + "/fields?access_token=" + token
         requests.post(url, data)
+        # subprocess.Popen(["venv/bin/python", "scripts/copernica_sender.py", "post", url, json.dumps(data)])
 
 def viaIDtoCopernicaID(id):
     uID = -1
@@ -90,8 +107,10 @@ def viaIDtoCopernicaID(id):
         uID = r.json()['data'][0]['ID']
     return uID
 
-
 def newUser(mail, first, last, study, websiteID, studentnr, *args, **kwargs):
+    threading.Thread(target=newUser_thread, args=(mail, first, last, study, websiteID, studentnr), kwargs=kwargs).start()
+
+def newUser_thread(mail, first, last, study, websiteID, studentnr, *args, **kwargs):
     if (viaIDtoCopernicaID(websiteID) != -1):
         return updateUser(websiteID, mail, first, last, study, args, kwargs)
     url = "https://api.copernica.com/database/" + database_id + "/profiles?access_token=" + token
@@ -108,11 +127,15 @@ def newUser(mail, first, last, study, websiteID, studentnr, *args, **kwargs):
         "Bedrijfsinformatie": kwargs['Bedrijfsinformatie'] if 'Bedrijfsinformatie' in kwargs else "Nee",
         "Geboortedatum": kwargs['Geboortedatum'] if 'Geboortedatum' in kwargs else "0000-00-00",
     }
-    print("Data to send to Copernica:")
-    print(data)
+    # print("Data to send to Copernica:")
+    # print(data)
     requests.post(url, data)
+    # subprocess.Popen(["venv/bin/python", "scripts/copernica_sender.py", "post", url, json.dumps(data)])
 
 def updateUser(websiteID, mail, first, last, study, studentnr, *args, **kwargs):
+    threading.Thread(target=updateUser_thread, args=(websiteID, mail, first, last, study, studentnr), kwargs=kwargs).start()
+
+def updateUser_thread(websiteID, mail, first, last, study, studentnr, *args, **kwargs):
     id = viaIDtoCopernicaID(websiteID)
     if(id == -1):
         print ("User bestaat nog niet")
@@ -130,8 +153,5 @@ def updateUser(websiteID, mail, first, last, study, studentnr, *args, **kwargs):
         "Bedrijfsinformatie": kwargs['Bedrijfsinformatie'] if 'Bedrijfsinformatie' in kwargs else "Nee",
         "Geboortedatum": kwargs['Geboortedatum'] if 'Geboortedatum' in kwargs else "0000-00-00",
     }
-
-    print("Data to send to Copernica:")
-    print(data)
-
     requests.put(url, data)
+    # subprocess.Popen(["venv/bin/python", "scripts/copernica_sender.py", "put", url, json.dumps(data)])
