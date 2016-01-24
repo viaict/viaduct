@@ -5,11 +5,13 @@ from flask.ext.login import current_user
 from viaduct import db
 from viaduct.helpers import flash_form_errors
 from viaduct.forms.custom_form import CreateForm
+from viaduct.models import Activity
 from viaduct.models.user import User
 from viaduct.models.custom_form import CustomForm, CustomFormResult, \
     CustomFormFollower
 from viaduct.api.module import ModuleAPI
 
+from viaduct.api import copernica
 from sqlalchemy import desc
 from urllib.parse import parse_qsl
 
@@ -20,40 +22,61 @@ blueprint = Blueprint('custom_form', __name__, url_prefix='/forms')
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
-@blueprint.route('/page', methods=['GET', 'POST'])
-@blueprint.route('/page/', methods=['GET', 'POST'])
-def view():
-    page = request.args.get('page_nr', '')
-
-    if not page:
-        page = 1
-    else:
-        page = int(page)
-
+@blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
+def view(page_nr=1):
     if not ModuleAPI.can_read('custom_form'):
         return abort(403)
 
-    custom_forms = CustomForm.query.order_by(desc("id"))
+    followed_forms = (
+        CustomForm.query
+        .outerjoin(Activity,
+                   CustomForm.id == Activity.form_id)
+        .filter(
+            CustomFormFollower.query
+            .filter(CustomForm.id == CustomFormFollower.form_id,
+                    CustomFormFollower.owner_id == current_user.id)
+            .exists(),
+            db.or_(CustomForm.archived == False,
+                   CustomForm.archived == None),
+            db.or_(Activity.id == None,
+                   db.and_(Activity.id != None,
+                           db.func.now() < Activity.end_time)))
+        .order_by(CustomForm.modified.desc())
+        .all())  # noqa
 
-    if current_user and current_user.id > 0:
-        follows = CustomFormFollower.query\
-            .filter(CustomFormFollower.owner_id == current_user.id).all()
+    active_forms = (
+        CustomForm.query
+        .outerjoin(Activity,
+                   CustomForm.id == Activity.form_id)
+        .filter(
+            db.not_(CustomFormFollower.query
+                    .filter(CustomForm.id == CustomFormFollower.form_id,
+                            CustomFormFollower.owner_id == current_user.id)
+                    .exists()),
+            db.or_(CustomForm.archived == False,
+                   CustomForm.archived == None),
+            db.or_(Activity.id == None,
+                   db.and_(Activity.id != None,
+                           db.func.now() < Activity.end_time)))
+        .order_by(CustomForm.modified.desc())
+        .all())  # noqa
 
-        ids = []
+    archived_paginate = (
+        CustomForm.query
+        .outerjoin(Activity,
+                   CustomForm.id == Activity.form_id)
+        .filter(
+            db.or_(CustomForm.archived == True,
+                   db.and_(Activity.id != None,
+                           db.func.now() >= Activity.end_time)))
+        .order_by(CustomForm.modified.desc())
+        .paginate(page_nr, 10))  # noqa
 
-        for follow in follows:
-            ids.append(follow.form_id)
-
-        followed_forms = CustomForm.query.filter(CustomForm.id.in_(ids)).all()
-    else:
-        followed_forms = []
-        ids = []
-
-    # TODO Custom forms for specific groups (i.e coordinator can only see own
-    # forms)
     return render_template('custom_form/overview.htm',
-                           custom_forms=custom_forms.paginate(page, 20, False),
-                           followed_forms=followed_forms, followed_ids=ids)
+                           followed_forms=followed_forms,
+                           active_forms=active_forms,
+                           archived_paginate=archived_paginate,
+                           page_nr=page_nr)
 
 
 @blueprint.route('/view/<int:form_id>', methods=['GET', 'POST'])
@@ -157,7 +180,7 @@ def create(form_id=None):
 
     if form_id:
         custom_form = CustomForm.query.get(form_id)
-
+        prev_max = custom_form.max_attendants
         if not custom_form:
             abort(404)
     else:
@@ -179,8 +202,29 @@ def create(form_id=None):
 
         if not form_id:
             flash('You\'ve created a form successfully.', 'success')
+
         else:
             flash('You\'ve updated a form successfully.', 'success')
+            cur_max = int(custom_form.max_attendants)
+            # print("Current maximum: " + cur_max)
+            # print("Previous maximum: " + prev_max)
+            # print("Current submissions: " + len(all_sub))
+            if cur_max > prev_max:
+                all_sub = CustomFormResult.query.filter(
+                    CustomFormResult.form_id == form_id
+                ).all()
+                if prev_max < len(all_sub):
+                    for x in range(prev_max, max(cur_max, len(all_sub) - 1)):
+                        sub = all_sub[x]
+                        copernica.reserveActivity(sub.owner_id, sub.form_id, False)
+            elif cur_max < prev_max:
+                all_sub = CustomFormResult.query.filter(
+                    CustomFormResult.form_id == form_id
+                ).all()
+                if cur_max < len(all_sub):
+                    for x in range(cur_max, max(prev_max, len(all_sub) - 1)):
+                        sub = all_sub[x]
+                        copernica.reserveActivity(sub.owner_id, sub.form_id, True)
 
         db.session.add(custom_form)
         db.session.commit()
@@ -207,8 +251,19 @@ def remove_response(submit_id=None):
     if not submission:
         abort(404)
 
+    form_id = submission.form_id
+    max_attendants = submission.form.max_attendants
+        
     db.session.delete(submission)
     db.session.commit()
+
+    all_sub = CustomFormResult.query.filter(
+        CustomFormResult.form_id == form_id
+    ).all()
+
+    if max_attendants <= len(all_sub):
+        from_list = all_sub[max_attendants - 1]
+        copernica.reserveActivity(from_list.owner_id, from_list.form_id, False)
 
     return response
 
@@ -274,12 +329,16 @@ def submit(form_id=None):
                 .filter(CustomFormResult.form_id == form_id)
             num_attendants = entries.count()
 
+            result = CustomFormResult(user.id, form_id,
+                                      request.form['data'])
+
             # Check if number attendants allows another registration
             if num_attendants >= custom_form.max_attendants:
                 # Create "Reserve" signup
                 response = "reserve"
-            result = CustomFormResult(user.id, form_id,
-                                      request.form['data'])
+            else:
+                copernica.addActivity(user.id, custom_form.name, form_id, custom_form.price, result.has_payed)
+            
 
         db.session.add(user)
         db.session.commit()
@@ -290,8 +349,10 @@ def submit(form_id=None):
     return response
 
 
-@blueprint.route('/follow/<int:form_id>', methods=['GET', 'POST'])
-def follow(form_id=None):
+@blueprint.route('/follow/<int:form_id>/', methods=['GET', 'POST'])
+@blueprint.route('/follow/<int:form_id>/<int:page_nr>/',
+                 methods=['GET', 'POST'])
+def follow(form_id, page_nr=1):
     if not ModuleAPI.can_write('custom_form'):
         return abort(403)
 
@@ -301,20 +362,65 @@ def follow(form_id=None):
         return abort(403)
 
     # Unfollow if re-submitted
-    follows = CustomFormFollower.query\
-        .filter(CustomFormFollower.form_id == form_id).first()
+    follows = (current_user.custom_forms_following
+               .filter(CustomFormFollower.form_id == form_id)
+               .first())
 
     if follows:
-        response = "removed"
+        flash('Formulier ontvolgd', 'success')
         db.session.delete(follows)
     else:
-        response = "added"
+        flash('Formulier gevolgd', 'success')
         result = CustomFormFollower(current_user.id, form_id)
         db.session.add(result)
 
     db.session.commit()
 
-    return response
+    return redirect(url_for('custom_form.view', page_nr=page_nr))
+
+
+@blueprint.route('/archive/<int:form_id>/', methods=['GET', 'POST'])
+@blueprint.route('/archive/<int:form_id>/<int:page_nr>/',
+                 methods=['GET', 'POST'])
+def archive(form_id, page_nr=1):
+    if not ModuleAPI.can_write('custom_form'):
+        return abort(403)
+
+    if not current_user or current_user.id <= 0:
+        return abort(403)
+
+    form = CustomForm.query.get(form_id)
+    if not form:
+        return abort(404)
+
+    form.archived = True
+    db.session.commit()
+
+    flash('Formulier gearchiveerd', 'success')
+
+    return redirect(url_for('custom_form.view', page_nr=page_nr))
+
+
+@blueprint.route('/unarchive/<int:form_id>/', methods=['GET', 'POST'])
+@blueprint.route('/unarchive/<int:form_id>/<int:page_nr>/',
+                 methods=['GET', 'POST'])
+def unarchive(form_id, page_nr=1):
+    if not ModuleAPI.can_write('custom_form'):
+        return abort(403)
+
+    if not current_user or current_user.id <= 0:
+        return abort(403)
+
+    form = CustomForm.query.get(form_id)
+    if not form:
+        return abort(404)
+
+    form.archived = False
+    db.session.commit()
+
+    flash('Formulier gede-archiveerd', 'success')
+
+    return redirect(url_for('custom_form.view', page_nr=page_nr))
 
 
 @blueprint.route('/has_payed/<int:submit_id>', methods=['POST'])
@@ -345,5 +451,7 @@ def has_payed(submit_id=None):
 
     db.session.add(submission)
     db.session.commit()
+
+    copernica.payedActivity(submission.owner_id, submission.form_id, submission.has_payed)
 
     return response

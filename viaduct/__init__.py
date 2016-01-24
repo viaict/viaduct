@@ -12,7 +12,7 @@ import datetime
 import json
 
 
-version = 'v2.4.2.0'
+version = 'v2.5.0.0'
 
 
 def static_url(url):
@@ -133,6 +133,8 @@ application.jinja_env.globals.update(list=list)
 
 application.jinja_env.globals.update(static_url=static_url)
 application.jinja_env.globals.update(get_locale=get_locale)
+
+application.jinja_env.globals.update(app_config=application.config)
 
 # Register the blueprints.
 from . import api  # noqa
