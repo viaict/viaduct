@@ -1,10 +1,13 @@
 import httplib2
+import base64
+import traceback
 from apiclient.discovery import build
 from apiclient.errors import HttpError
 from oauth2client.client import SignedJwtAssertionCredentials
 from viaduct import application
-import traceback
-from flask import flash
+from flask import flash, render_template
+from email.mime.text import MIMEText
+from apiclient import errors
 
 # google calendar Settings > via_events > id
 calendar_id = application.config['GOOGLE_CALENDAR_ID']
@@ -50,6 +53,11 @@ def build_groups_service():
     return build_service('admin', 'directory_v1',
                          ('https://www.googleapis.com'
                           '/auth/admin.directory.group'))
+
+
+def build_gmail_service():
+    return build_service('gmail', 'v1',
+                         'https://www.googleapis.com/auth/gmail.send')
 
 
 def get_group_api():
@@ -191,3 +199,32 @@ def remove_email_from_group(email, listname):
         if e.resp.status == 400:
             return
         raise(e)
+
+
+def send_email(to, subject, email_template,
+               sender='bestuur@via.uvastudent.org', **kwargs):
+    """ Send an e-mail from the via-gmail
+
+    Args:
+    sender: Email address of the sender.
+    to: Email address of the receiver.
+    subject: The subject of the email message.
+    content: The text of the email message.
+    """
+    service = build_gmail_service()
+    user_id = 'bestuur@via.uvastudent.org'
+
+    msg = MIMEText(render_template(email_template, **kwargs), 'html')
+    msg['to'] = to
+    msg['from'] = sender
+    msg['subject'] = subject
+
+    body = {'raw': base64.urlsafe_b64encode(msg.as_bytes()).decode()}
+
+    try:
+        email = (service.users().messages().send(userId=user_id, body=body)
+                 .execute())
+        print('Sent e-mailmessage Id: %s' % email['id'])
+        return email
+    except errors.HttpError:
+        flash('Er is iets mis gegaan met het versturen van de e-mail')
