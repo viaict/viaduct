@@ -28,10 +28,10 @@ def unsubscribeNewsletter(userID):
     requests.post(url, data)
     # subprocess.Popen(["venv/bin/python", "scripts/copernica_sender.py", "post", url, json.dumps(data)])
 
-def addActivity(websiteID, name, eventID, amount=0, payed=False):
+def addActivity(websiteID, name, eventID, amount=0, payed=False, reserve=False):
     threading.Thread(target=addActivity_thread, args=(websiteID, name, eventID, amount, payed)).start()
 
-def addActivity_thread(websiteID, name, eventID, amount=0, payed=False):
+def addActivity_thread(websiteID, name, eventID, amount=0, payed=False, reserve=False):
     id = viaIDtoCopernicaID(websiteID)
     if(id == -1):
         return
@@ -39,11 +39,30 @@ def addActivity_thread(websiteID, name, eventID, amount=0, payed=False):
     data = {
         "Naam" : name, 
         "Betaald" : "Ja" if (payed or amount == 0) else "Nee",
+        "Reserve" : "Ja" if reserve else "Nee",
         "Bedrag": amount,
         "WebsiteID" : eventID
     }
     requests.post(url, data)
     # subprocess.Popen(["venv/bin/python", "scripts/copernica_sender.py", "post", url, json.dumps(data)])
+
+def reserveActivity(userID, eventID, reserve):
+    threading.Thread(target=reserveActivity_thread, args=(userID, eventID, reserve)).start()
+
+def reserveActivity_thread(userID, eventID, reserve):
+    id = viaIDtoCopernicaID(userID)
+    if(id == -1):
+        return
+    url = "https://api.copernica.com/profile/" + str(id) + "/subprofiles/" + activiteit + "?fields[]=WebsiteID%3D%3D"  + str(eventID) + "&access_token=" + token
+    
+    data = {
+        "Reserve" : "Ja" if reserve else "Nee"
+    }
+
+    r = requests.get(url)
+    for event in r.json()['data']:
+        url = "https://api.copernica.com/subprofile/" + event['ID'] + "/fields?access_token=" + token
+        requests.post(url, data)
 
 def payedActivity(userID, eventID, payed):
     threading.Thread(target=payedActivity_thread, args=(userID, eventID, payed)).start()

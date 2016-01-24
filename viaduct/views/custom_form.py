@@ -11,6 +11,8 @@ from viaduct.models.custom_form import CustomForm, CustomFormResult, \
     CustomFormFollower
 from viaduct.api.module import ModuleAPI
 
+from viaduct.api import copernica
+from sqlalchemy import desc
 from urllib.parse import parse_qsl
 
 import io
@@ -178,7 +180,7 @@ def create(form_id=None):
 
     if form_id:
         custom_form = CustomForm.query.get(form_id)
-
+        prev_max = custom_form.max_attendants
         if not custom_form:
             abort(404)
     else:
@@ -200,8 +202,29 @@ def create(form_id=None):
 
         if not form_id:
             flash('You\'ve created a form successfully.', 'success')
+
         else:
             flash('You\'ve updated a form successfully.', 'success')
+            cur_max = int(custom_form.max_attendants)
+            # print("Current maximum: " + cur_max)
+            # print("Previous maximum: " + prev_max)
+            # print("Current submissions: " + len(all_sub))
+            if cur_max > prev_max:
+                all_sub = CustomFormResult.query.filter(
+                    CustomFormResult.form_id == form_id
+                ).all()
+                if prev_max < len(all_sub):
+                    for x in range(prev_max, max(cur_max, len(all_sub) - 1)):
+                        sub = all_sub[x]
+                        copernica.reserveActivity(sub.owner_id, sub.form_id, False)
+            elif cur_max < prev_max:
+                all_sub = CustomFormResult.query.filter(
+                    CustomFormResult.form_id == form_id
+                ).all()
+                if cur_max < len(all_sub):
+                    for x in range(cur_max, max(prev_max, len(all_sub) - 1)):
+                        sub = all_sub[x]
+                        copernica.reserveActivity(sub.owner_id, sub.form_id, True)
 
         db.session.add(custom_form)
         db.session.commit()
@@ -228,8 +251,19 @@ def remove_response(submit_id=None):
     if not submission:
         abort(404)
 
+    form_id = submission.form_id
+    max_attendants = submission.form.max_attendants
+        
     db.session.delete(submission)
     db.session.commit()
+
+    all_sub = CustomFormResult.query.filter(
+        CustomFormResult.form_id == form_id
+    ).all()
+
+    if max_attendants <= len(all_sub):
+        from_list = all_sub[max_attendants - 1]
+        copernica.reserveActivity(from_list.owner_id, from_list.form_id, False)
 
     return response
 
@@ -295,12 +329,16 @@ def submit(form_id=None):
                 .filter(CustomFormResult.form_id == form_id)
             num_attendants = entries.count()
 
+            result = CustomFormResult(user.id, form_id,
+                                      request.form['data'])
+
             # Check if number attendants allows another registration
             if num_attendants >= custom_form.max_attendants:
                 # Create "Reserve" signup
                 response = "reserve"
-            result = CustomFormResult(user.id, form_id,
-                                      request.form['data'])
+            else:
+                copernica.addActivity(user.id, custom_form.name, form_id, custom_form.price, result.has_payed)
+            
 
         db.session.add(user)
         db.session.commit()
@@ -413,5 +451,7 @@ def has_payed(submit_id=None):
 
     db.session.add(submission)
     db.session.commit()
+
+    copernica.payedActivity(submission.owner_id, submission.form_id, submission.has_payed)
 
     return response
