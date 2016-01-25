@@ -84,10 +84,10 @@ def view_single(user_id=None):
     user.activities_amount = activities.count()
 
     new_activities = activities\
-        .filter(Activity.end_time > datetime.datetime.today()).distinct()\
+        .filter(Activity.end_time > datetime.today()).distinct()\
         .order_by(Activity.start_time)
     old_activities = activities\
-        .filter(Activity.end_time < datetime.datetime.today()).distinct()\
+        .filter(Activity.end_time < datetime.today()).distinct()\
         .order_by(Activity.start_time.desc())
 
     return render_template('user/view_single.htm', user=user,
