@@ -41,10 +41,12 @@ class User(db.Model, BaseEntity):
 
     education = db.relationship(Education,
                                 backref=db.backref('user', lazy='dynamic'))
+    copernica_id = db.Column(db.Integer(), default=0, unique=True)
 
     def __init__(self, email=None, password=None, first_name=None,
                  last_name=None, student_id=None, education_id=None,
-                 birth_date=None, study_start=None, receive_information=None):
+                 birth_date=None, study_start=None, receive_information=None,
+                 copernica_id=None):
         if not email:
             self.id = 0
 
@@ -58,6 +60,7 @@ class User(db.Model, BaseEntity):
         self.birth_date = birth_date
         self.study_start = study_start
         self.receive_information = receive_information
+        self.copernica_id = copernica_id
 
     def __setattr__(self, name, value):
         """ if has_payed is set to true, we want to store the date that

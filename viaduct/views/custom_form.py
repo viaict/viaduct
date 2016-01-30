@@ -12,7 +12,6 @@ from viaduct.models.custom_form import CustomForm, CustomFormResult, \
 from viaduct.api.module import ModuleAPI
 
 from viaduct.api import copernica
-from sqlalchemy import desc
 from urllib.parse import parse_qsl
 
 import io
@@ -216,7 +215,10 @@ def create(form_id=None):
                 if prev_max < len(all_sub):
                     for x in range(prev_max, max(cur_max, len(all_sub) - 1)):
                         sub = all_sub[x]
-                        copernica.reserveActivity(sub.owner_id, sub.form_id, False)
+                        copernica.update_subprofile(
+                            copernica.SUBPROFILE_ACTIVITY,
+                            sub.owner.copernica_id, sub.form_id,
+                            {"Reserve": "Nee"})
             elif cur_max < prev_max:
                 all_sub = CustomFormResult.query.filter(
                     CustomFormResult.form_id == form_id
@@ -224,7 +226,10 @@ def create(form_id=None):
                 if cur_max < len(all_sub):
                     for x in range(cur_max, max(prev_max, len(all_sub) - 1)):
                         sub = all_sub[x]
-                        copernica.reserveActivity(sub.owner_id, sub.form_id, True)
+                        copernica.update_subprofile(
+                            copernica.SUBPROFILE_ACTIVITY,
+                            sub.owner.copernica_id, sub.form_id,
+                            {"Reserve": "Ja"})
 
         db.session.add(custom_form)
         db.session.commit()
@@ -253,7 +258,7 @@ def remove_response(submit_id=None):
 
     form_id = submission.form_id
     max_attendants = submission.form.max_attendants
-        
+
     db.session.delete(submission)
     db.session.commit()
 
@@ -263,7 +268,10 @@ def remove_response(submit_id=None):
 
     if max_attendants <= len(all_sub):
         from_list = all_sub[max_attendants - 1]
-        copernica.reserveActivity(from_list.owner_id, from_list.form_id, False)
+        copernica.update_subprofile(copernica.SUBPROFILE_ACTIVITY,
+                                    from_list.owner.copernica_id,
+                                    from_list.form_id,
+                                    {"Reserve": "Nee"})
 
     return response
 
@@ -336,9 +344,18 @@ def submit(form_id=None):
             if num_attendants >= custom_form.max_attendants:
                 # Create "Reserve" signup
                 response = "reserve"
-            else:
-                copernica.addActivity(user.id, custom_form.name, form_id, custom_form.price, result.has_payed)
-            
+
+        data = {
+            "Naam": custom_form.name,
+            "Betaald": "Ja" if (result.has_payed or
+                                custom_form.price == 0) else "Nee",
+            "Reserve": "Ja" if (num_attendants >=
+                                custom_form.max_attendants) else "Nee",
+            "Bedrag": custom_form.price,
+            "viaductID": form_id
+        }
+
+        copernica.add_subprofile(copernica.SUBPROFILE_TASK, user.id, data)
 
         db.session.add(user)
         db.session.commit()
@@ -452,6 +469,9 @@ def has_payed(submit_id=None):
     db.session.add(submission)
     db.session.commit()
 
-    copernica.payedActivity(submission.owner_id, submission.form_id, submission.has_payed)
+    copernica.update_subprofile(copernica.SUBPROFILE_ACTIVITY,
+                                submission.owner,
+                                {"Betaald": ("Ja" if submission.has_payed
+                                             else "Nee")})
 
     return response
