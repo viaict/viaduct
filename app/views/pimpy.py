@@ -77,8 +77,10 @@ def update_task_status():
     for task in list_items:
         task.update_status(new_status)
         for user in task.users:
-            copernica.updateActiepunt(user.id, task.base32_id(), task.title,
-                                      task.get_status_string())
+            copernica.update_subprofile(copernica.SUBPROFILE_TASK,
+                                        user.copernica_id,
+                                        task.base32_id(),
+                                        {"Status": task.get_status_string()})
     db.session.commit()
     return jsonify(status=task.get_status_color())
 
@@ -185,23 +187,30 @@ def add_minute(group_id='all'):
                 for done in dones:
                     done.update_status(4)
                     for user in done.users:
-                        copernica.updateActiepunt(
-                            user.id, done.base32_id(), done.title,
-                            done.get_status_string())
+                        copernica.update_subprofile(
+                            copernica.SUBPROFILE_TASK, user.copernica_id,
+                            done.base32_id(),
+                            {"Status": done.get_status_string()})
                 for remove in removes:
                     remove.update_status(5)
                     for user in remove.users:
-                        copernica.updateActiepunt(
-                            user.id, remove.base32_id(), remove.title,
-                            remove.get_status_string())
+                        copernica.update_subprofile(
+                            copernica.SUBPROFILE_TASK, user.copernica_id,
+                            remove.base32_id(),
+                            {"Status": remove.get_status_string()})
                 db.session.commit()
 
                 # Sync tasks to Copernica
                 for task in tasks:
+                    data = {
+                        "Groep": task.group.name,
+                        "viaductID": task.base32_id(),
+                        "Actiepunt": task.title,
+                        "Status": task.get_status_string()
+                    }
                     for user in task.users:
-                        copernica.addActiepunt(
-                            user.id, task.base32_id(), task.group.name,
-                            task.title, task.get_status_string())
+                        copernica.add_subprofile(copernica.SUBPROFILE_TASK,
+                                                 user.copernica_id, data)
 
                 flash('De notulen zijn verwerkt!', 'success')
 

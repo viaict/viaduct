@@ -88,10 +88,15 @@ class PimpyAPI:
         db.session.commit()
 
         # Add task to Copernica
+        data = {
+            "Groep": task.group.name,
+            "viaductID": task.base32_id(),
+            "Actiepunt": task.title,
+            "Status": task.get_status_string()
+        }
         for user in users:
-            copernica.addActiepunt(user.id, task.base32_id(), task.group.name,
-                                   task.title, task.get_status_string())
-
+            copernica.add_subprofile(copernica.SUBPROFILE_TASK,
+                                     user.copernica_id, data)
         return True, task.id
 
     @staticmethod
@@ -134,8 +139,10 @@ class PimpyAPI:
         db.session.commit()
 
         for user in users:
-            copernica.actiepuntStatus(user.id, task.base32_id(),
-                                      task.get_status_string)
+            copernica.update_subprofile(copernica.SUBPROFILE_TASK,
+                                        user.copernica_id,
+                                        task.base32_id(),
+                                        {"Status": task.get_status_string()})
 
         return True, "Taak bewerkt."
 
@@ -522,8 +529,10 @@ class PimpyAPI:
         task.title = title
         db.session.commit()
         for user in task.users:
-            copernica.updateActiepunt(user.id, task.base32_id(),
-                                      task.title, task.get_status_string())
+            copernica.update_subprofile(copernica.SUBPROFILE_TASK,
+                                        user.copernica_id,
+                                        task.base32_id(),
+                                        {"Actiepunt": title})
         return True, "De taak is succesvol aangepast."
 
     @staticmethod
@@ -540,13 +549,20 @@ class PimpyAPI:
         # Sync to Copernica
         for user in old_users:
             if user not in users:
-                copernica.updateActiepunt(user.id, task.base32_id(),
-                                          task.title, "Removed")
+                copernica.update_subprofile(copernica.SUBPROFILE_TASK,
+                                            user.copernica_id,
+                                            task.base32_id(),
+                                            {"Status": "Removed"})
         for user in users:
             if user not in old_users:
-                copernica.addActiepunt(user.id, task.base32_id(),
-                                       task.group.name, task.title,
-                                       task.get_status_string())
+                data = {
+                    "Groep": task.group.name,
+                    "viaductID": task.base32_id(),
+                    "Actiepunt": task.title,
+                    "Status": task.get_status_string()
+                }
+                copernica.add_subprofile(copernica.SUBPROFILE_TASK,
+                                         user.copernica_id, data)
 
         task.users = users
         db.session.commit()
