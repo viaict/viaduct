@@ -14,7 +14,7 @@ from viaduct.helpers import flash_form_errors
 from viaduct.forms import EducationForm
 from viaduct.utilities import serialize_sqla
 
-from viaduct.models.examination import Examination
+from viaduct.models.examination import Examination, test_types
 from viaduct.models.course import Course
 from viaduct.models.education import Education
 from viaduct.models.degree import Degree
@@ -105,6 +105,8 @@ def upload_file():
         title = request.form.get("title", None)
         course_id = request.form.get("course", None)
         education_id = request.form.get("education", None)
+        test_type = request.form.get("test_type", None)
+
 
         error = False
 
@@ -112,7 +114,6 @@ def upload_file():
             flash(_('No title given.'), 'danger')
             error = True
 
-        print(answers)
         filename = upload_file_real(file)
         if file:
             if not filename:
@@ -135,10 +136,12 @@ def upload_file():
                                    educations=educations, message='',
                                    title=_('Examinations'), degrees=degrees,
                                    exam_title=title, course_id=int(course_id),
-                                   education_id=int(education_id))
+                                   test_type=test_type,
+                                   education_id=int(education_id),
+                                   test_types=test_types)
 
         exam = Examination(filename, title, course_id, education_id,
-                           answers=answer_path)
+                           answers=answer_path, test_type=test_type)
         db.session.add(exam)
         db.session.commit()
 
@@ -146,11 +149,12 @@ def upload_file():
 
         return render_template('examination/upload.htm', courses=courses,
                                educations=educations, message='',
-                               title=_('Examinations'), degrees=degrees)
+                               title=_('Examinations'), degrees=degrees,
+                               test_types=test_types)
 
     return render_template('examination/upload.htm', courses=courses,
                            educations=educations, title=_('Examinations'),
-                           degrees=degrees)
+                           degrees=degrees, test_types=test_types)
 
 
 @blueprint.route('/examination/', methods=['GET', 'POST'])
@@ -168,10 +172,10 @@ def view_examination(page_nr=1):
     if request.args.get('search'):
         search = request.args.get('search')
 
-        exams = db.session.query(Examination.id, 
-                                 Examination.title, 
-                                 Course.name, 
-                                 Education.name.label("program") ).join(Course).join(Education).all()
+        exams = db.session.query(Examination.id,
+                                 Examination.title,
+                                 Course.name,
+                                 Education.name.label("program")).join(Course).join(Education).all()
 
         exam_matches = []
 
@@ -180,14 +184,14 @@ def view_examination(page_nr=1):
                     fuzz.partial_ratio(search, exam.name) > 75 or\
                     fuzz.partial_ratio(search, exam.program) > 75:
                 exam_matches.append(exam.id)
-        
+
         examinations = Examination.query.join(Course).join(Education)\
                 .filter(Examination.id.in_(exam_matches))\
                 .order_by(Course.name).paginate(page_nr, 15, True)
 
         return render_template('examination/view.htm', path=path,
                                    examinations=examinations, search=search,
-                                   title=_('Examinations'))
+                                   title=_('Examinations'), test_types=test_types)
 
     if request.args.get('delete'):
         exam_id = request.args.get('delete')
@@ -205,13 +209,13 @@ def view_examination(page_nr=1):
         examinations = Examination.query.paginate(page_nr, 15, False)
         return render_template('examination/admin.htm', path=path,
                                examinations=examinations, search="",
-                               title=_('Examinations'))
+                               title=_('Examinations'), test_types=test_types)
 
     examinations = Examination.query.join(Course)\
         .order_by(Course.name).paginate(page_nr, 15, True)
     return render_template('examination/view.htm', path=path,
                            examinations=examinations, search="",
-                           title=_('Examinations'))
+                           title=_('Examinations'), test_types=test_types)
 
 
 @blueprint.route('/examination/admin/', methods=['GET', 'POST'])
@@ -281,6 +285,7 @@ def edit(exam_id):
         title = request.form.get("title", None)
         course_id = request.form.get("course", None)
         education_id = request.form.get("education", None)
+        test_type = request.form.get("test_type", None)
 
         if not title:
             flash(_('No title given.'), 'danger')
@@ -290,6 +295,7 @@ def edit(exam_id):
             exam.title = title
             exam.course_id = course_id
             exam.education_id = education_id
+            exam.test_type = test_type
 
             new_path = upload_file_real(file, exam.path)
             if new_path:
@@ -320,7 +326,8 @@ def edit(exam_id):
 
     return render_template(
         'examination/edit.htm', path=path, examination=exam,
-        title=_('Examinations'), courses=courses, educations=educations)
+        title=_('Examinations'), courses=courses, educations=educations,
+        test_types=test_types)
 
 
 @blueprint.route('/course/add/', methods=['GET', 'POST'])

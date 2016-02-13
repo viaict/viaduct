@@ -41,7 +41,8 @@
             <tr>
                 <th>{{ _('Education') }}</th>
                 <th>{{ _('Course') }}</th>
-                <th>{{ _('Examination') }}</th>
+                <th>{{ _('Examination')}}</th>
+                <th>{{ _('Date') }}</th>
                 <th>{{ _('Answers') }}</th>
                 {% if ModuleAPI.can_write('examination') %}
                 <th>{{ _('Edit') }}</th>
@@ -57,6 +58,9 @@
                     </td>
                     <td>
                         <a href='/examination?search={{ (examination.course.name) }}'>{{ examination.course.name }}</a>
+                    </td>
+                    <td>
+                        {{ test_types[examination.test_type] }}
                     </td>
                     <td>
                         <a href='{{ path + examination.path }}' target='_blank'><i class='glyphicon glyphicon-cloud-download'></i> {{ examination.title }}</a>

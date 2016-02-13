@@ -92,8 +92,8 @@ class User(db.Model, BaseEntity):
             Group.maillist != '').all()  # noqa
 
         for group in groups_with_email:
-            group.add_email_to_maillist(new_email)
             group.remove_email_from_maillist(old_email)
+            group.add_email_to_maillist(new_email)
 
         self.email = new_email
 

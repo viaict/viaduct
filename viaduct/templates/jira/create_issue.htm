@@ -1,4 +1,4 @@
-{% from "macros/form.htm" import render_field, render_select, render_textarea%}
+{% from "macros/form.htm" import render_field, render_select, render_textarea, render_submit%}
 
 {% extends "content.htm" %}
 {% block includes %}
@@ -6,21 +6,18 @@
 {% endblock %}
 
 {% block content %}
-<form action="" method="post" name="sign_up" class="form-horizontal" enctype="multipart/form-data">
-	<div class='col-md-6'>
-		<legend>Issue rapporteren</legend>
+<form id="report_form" action="" method="post" name="sign_up" class="form" enctype="multipart/form-data">
+    <div class='row'>
+        <div class='col-md-6'>
+            <legend>{{ _('Report bug') }}</legend>
 
-		{{ form.csrf_token }}
-		{{ render_field(form.summary) }}
-		{{ render_select(form.issue_type) }}
-		{{ render_textarea(form.description) }}
+            {{ form.csrf_token }}
+            {{ render_field(form.summary) }}
+            {{ render_select(form.issue_type) }}
+            {{ render_textarea(form.description) }}
+            {{ render_submit(_("Submit!")) }}
+        </div>
 
-		<div class="control-group">
-			<div class="controls">
-				<button type="submit" id="myButton" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off">Submit!</button>
-			</div>
-            <br/>
-		</div>
 	</div>
 </form>
 {% endblock %}

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-12-12 16:27+0100\n"
+"POT-Creation-Date: 2016-02-13 15:07+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -78,6 +78,9 @@ msgstr ""
 msgid "Birthdate"
 msgstr ""
 
+msgid "Bug type"
+msgstr ""
+
 msgid "By registering you agree with the terms above."
 msgstr ""
 
@@ -85,6 +88,9 @@ msgid "Cannot delete image, image does not exist"
 msgstr ""
 
 msgid "Cannot find parent navigation entry."
+msgstr ""
+
+msgid "Change password"
 msgstr ""
 
 msgid "City"
@@ -148,6 +154,9 @@ msgid "Current image"
 msgstr ""
 
 msgid "Custom form"
+msgstr ""
+
+msgid "Date"
 msgstr ""
 
 msgid "Delete"
@@ -243,6 +252,9 @@ msgstr ""
 msgid "End time"
 msgstr ""
 
+msgid "End-Term"
+msgstr ""
+
 msgid "English"
 msgstr ""
 
@@ -274,6 +286,9 @@ msgid "Examination"
 msgstr ""
 
 msgid "Examination could not be found."
+msgstr ""
+
+msgid "Examination kind"
 msgstr ""
 
 msgid "Examination succesfully changed."
@@ -379,6 +394,9 @@ msgstr ""
 msgid "List of activities"
 msgstr ""
 
+msgid "Loading..."
+msgstr ""
+
 msgid "Location"
 msgstr ""
 
@@ -386,6 +404,9 @@ msgid "Log in"
 msgstr ""
 
 msgid "Member"
+msgstr ""
+
+msgid "Mid-Term"
 msgstr ""
 
 msgid "Minimal password length "
@@ -436,6 +457,9 @@ msgstr ""
 msgid "No birthdate submitted"
 msgstr ""
 
+msgid "No description supplied"
+msgstr ""
+
 msgid "No e-mail adress submitted"
 msgstr ""
 
@@ -451,6 +475,9 @@ msgstr ""
 msgid "No form"
 msgstr ""
 
+msgid "No issue type supplied"
+msgstr ""
+
 msgid "No last name submitted"
 msgstr ""
 
@@ -461,6 +488,9 @@ msgid "No start study submitted"
 msgstr ""
 
 msgid "No studentnumber submitted"
+msgstr ""
+
+msgid "No title entered"
 msgstr ""
 
 msgid "No title given."
@@ -550,10 +580,19 @@ msgstr ""
 msgid "Repeat password"
 msgstr ""
 
+msgid "Report bug"
+msgstr ""
+
 msgid "Reset password"
 msgstr ""
 
+msgid "Retake"
+msgstr ""
+
 msgid "Save"
+msgstr ""
+
+msgid "Save password"
 msgstr ""
 
 msgid "Search"
@@ -602,6 +641,9 @@ msgid ""
 "have to enter them the next time"
 msgstr ""
 
+msgid "Something went wrong."
+msgstr ""
+
 msgid "Start study"
 msgstr ""
 
@@ -623,6 +665,9 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
+msgid "Submit!"
+msgstr ""
+
 msgid "Terms"
 msgstr ""
 
@@ -638,6 +683,9 @@ msgstr ""
 msgid ""
 "The activity has reached its maximum number of registrations. You have "
 "been placed on the reserves list."
+msgstr ""
+
+msgid "The bug has been reported!"
 msgstr ""
 
 msgid "The committe has been saved."
@@ -690,6 +738,9 @@ msgid ""
 "<strong>via</strong>. This is probably due to not having paid your member"
 " contribution. You can pay for your contribution by oredering this along "
 "with your books, or you could pass the <strong>via</strong>-room by."
+msgstr ""
+
+msgid "Unknown"
 msgstr ""
 
 msgid "User"
@@ -848,5 +899,11 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Minimal password length %d"
+#~ msgstr ""
+
+#~ msgid "Title"
+#~ msgstr ""
+
+#~ msgid "Kind"
 #~ msgstr ""
 

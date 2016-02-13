@@ -1,5 +1,5 @@
 $(function() {
-      $('#myButton').on('click', function () {
-        var $btn = $(this).button('loading')
-      });
+    $('#report_form button[type=submit]').on('click', function (e) {
+        $(this).button('loading');
+    });
 });

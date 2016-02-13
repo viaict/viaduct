@@ -6,7 +6,7 @@
 
         <form method=post enctype=multipart/form-data>
             <div class='form-group'>
-                {{_('Title')}}
+                {{_('Date')}}
                 <input type=text name=title value="{{examination.title}}" class='form-control'>
             </div>
 
@@ -20,7 +20,16 @@
                     {% endfor %}
                 </select>
             </div>
-
+            <div class='form-group'>
+                {{_('Examination kind')}}
+                <select name='test_type' class='form-control examination kind'>
+                    {% for type in test_types.values() %}
+                        <option value="{{ type }}" {% if type == examination.test_type %}selected="selected"{% endif %}>
+                            {{type}}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
             <div class='form-group'>
                 <a href="/course/add" class="btn btn-default">
                     <i class="glyphicon glyphicon-pencil"></i>

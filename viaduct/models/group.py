@@ -46,7 +46,7 @@ class Group(db.Model, BaseEntity):
 
     def remove_email_from_maillist(self, email):
         if self.maillist:
-            google.remove_email_from_group(email, self.maillist)
+            google.remove_email_from_group_if_exists(email, self.maillist)
 
     def delete_user(self, user):
         if self.has_user(user):
