@@ -37,7 +37,7 @@
                 <td>
                     {% if result.owner.id %}
                     <a href="{{ url_for('user.view_single', user_id=result.owner.id) }}">
-                        {{ result.owner.first_name[:1] }}. {{ result.owner.last_name }}
+                        {{ result.owner.name }}
                     </a>
                     {% else %}
                         Verwijderde account
