@@ -2,7 +2,7 @@ alembic==0.7.5.post2
 aniso8601==0.92
 argh==0.26.1
 -e git+https://github.com/MaicoTimmerman/babel@d97ddfe35ec8ef0855f859b493b3f537af061f7a#egg=Babel-origin_via
-baas32==0.3.1
+baas32==0.3.2
 cffi==0.8.6
 cryptography==0.7.1
 enum34==1.0.4
