@@ -1,6 +1,7 @@
 xx-01-2016 vx.x.x.0:
 * Update: Removed separate gmail for password requests, now using google apps
 * Update baas32 to fix parsing PimPy tasks
+* Added the ability to disable users
 
 23-01-2016 v2.4.2.0:
 * Changed base32 implementation to `baas32`
