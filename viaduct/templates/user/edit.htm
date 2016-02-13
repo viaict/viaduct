@@ -47,9 +47,10 @@
         <div class='row'>&nbsp;</div>
 
         {% if isAdmin %}
-            {{render_field(form.has_payed) }}
-            {{render_field(form.honorary_member) }}
-            {{render_field(form.favourer) }}
+            {{render_checkbox(form.has_payed) }}
+            {{render_checkbox(form.honorary_member) }}
+            {{render_checkbox(form.favourer) }}
+            {{render_checkbox(form.disabled) }}
         {% endif %}
         {% if user.avatar %}
         <div class="control-groep">

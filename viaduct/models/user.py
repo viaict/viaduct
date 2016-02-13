@@ -33,7 +33,7 @@ class User(db.Model, BaseEntity):
     birth_date = db.Column(db.Date)
     study_start = db.Column(db.Date)
     receive_information = db.Column(db.Boolean, default=False)
-
+    disabled = db.Column(db.Boolean, default=False)
     address = db.Column(db.String(256))
     zip = db.Column(db.String(8))
     city = db.Column(db.String(256))
@@ -68,11 +68,11 @@ class User(db.Model, BaseEntity):
 
     def is_authenticated(self):
         """Necessary."""
-        return self.id != 0
+        return self.id != 0 and not self.disabled
 
     def is_active(self):
         """Necessary."""
-        return self.id != 0
+        return self.id != 0 and not self.disabled
 
     def is_anonymous(self):
         return self.id == 0
@@ -92,8 +92,8 @@ class User(db.Model, BaseEntity):
             Group.maillist != '').all()  # noqa
 
         for group in groups_with_email:
-            group.add_email_to_maillist(new_email)
             group.remove_email_from_maillist(old_email)
+            group.add_email_to_maillist(new_email)
 
         self.email = new_email
 

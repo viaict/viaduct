@@ -1,11 +1,19 @@
 import datetime
 
+from flask.ext.babel import lazy_gettext as _
+
 from viaduct import db
 
 from viaduct.models.course import Course
 from viaduct.models.education import Education
 from viaduct.models.user import User
 from viaduct.models import BaseEntity
+
+
+test_types = {'Mid-Term': _('Mid-Term'),
+              'End-Term': _('End-Term'),
+              'Retake': _('Retake'),
+              'Unknown': _('Unknown')}
 
 
 class Examination(db.Model, BaseEntity):
@@ -20,7 +28,8 @@ class Examination(db.Model, BaseEntity):
                           db.ForeignKey('course.id'))
     education_id = db.Column(db.Integer,
                              db.ForeignKey('education.id'))
-
+    test_type = db.Column(db.Enum(*test_types.keys()),
+                          nullable=False, server_default='Unknown')
     user = db.relationship(User,
                            backref=db.backref('examinations', lazy='dynamic'))
     course = db.relationship(Course,
@@ -31,10 +40,11 @@ class Examination(db.Model, BaseEntity):
                                                    lazy='dynamic'))
 
     def __init__(self, path, title, course_id, education_id,
-                 timestamp=datetime.datetime.utcnow(), answers=''):
+                 timestamp=datetime.datetime.utcnow(), answers='',  test_type='Unknown'):
         self.timestamp = timestamp
         self.path = path
         self.title = title
         self.course_id = course_id
         self.education_id = education_id
         self.answer_path = answers
+        self.test_type = test_type

@@ -1,4 +1,5 @@
 {% from "macros/pagination.htm" import render_pagination %}
+{% from "macros/form.htm" import render_select %}
 
 {% extends "base.htm" %}
 
@@ -14,8 +15,8 @@
 
         <form action="" method=post enctype=multipart/form-data>
             <div class='form-group'>
-                {{_('Title')}}
-                <input type='text' name='title' placeholder='25 oktober 2011' class='form-control' value='{{exam_title}}' />
+                {{_('Date')}}
+                <input type='text' name='title' placeholder='DD-MM-YY' class='form-control' value='{{exam_title}}' />
             </div>
 
             <div class='form-group'>
@@ -28,7 +29,16 @@
                     {% endfor %}
                 </select>
             </div>
-
+            <div class='form-group'>
+                {{_('Examination kind')}}
+                <select name='test_type' class='form-control examination kind'>
+                    {% for type in test_types.values() %}
+                        <option value="{{ type }}" {% if type == test_type %}selected="selected"{% endif %}>
+                            {{type}}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
             <div class='form-group'>
                 <strong>{{_('New course')}}</strong>
                 <input class='new-course-name inline-field form-control' type='text' />
@@ -49,11 +59,13 @@
             <div class='form-group'>
                 <strong>{{_('New education') }}</strong>
                 <input class='new-education-name inline-field form-control' type='text' />
-                <select class='new-education-degree inline-field form-control'>
+                <!-- Hidden because only one option? Hidden because maybe would not work when removed -->
+                <select class='new-education-degree inline-field form-control hidden'>
                     {% for degree in degrees %}
                         <option value='{{ degree.id }}'>{{ degree.name }}</option>
                     {% endfor %}
                 </select>
+
                 <button class='new-education-btn btn btn-default' data-loading-text='BITTE WARTEN!'>Toevoegen</button>
             </div>
 

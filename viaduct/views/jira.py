@@ -8,6 +8,8 @@ from viaduct.helpers import flash_form_errors
 from viaduct.forms.jira import CreateIssueForm
 from viaduct.api.jira import JiraAPI
 
+from flask.ext.babel import lazy_gettext as _
+
 blueprint = Blueprint('jira', __name__)
 
 
@@ -23,16 +25,16 @@ def create_issue():
 
         # Use JiraAPI to do a POST request to https://viaduct.atlassian.net
         response = JiraAPI.create_issue(form)
-        
+
         if response:
-            flash('Issue is geupload!', 'success')
+            flash(_('The bug has been reported!'), 'success')
             redir = request.args['redir']
             if redir:
                 return redirect(redir)
             else:
-                return redirect(urlfor('home'))
+                return redirect(url_for('home'))
         else:
-            flash('Er is iets mis gegaan', 'danger')
+            flash(_('Something went wrong.'), 'danger')
 
     else:
         flash_form_errors(form)

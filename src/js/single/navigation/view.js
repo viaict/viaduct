@@ -6,7 +6,7 @@ $(function() {
         stop: function(event, ui) {
             var list = crawl_entries($('#outer'));
             $.post(
-                '{{ url_for("navigation.reorder") }}',
+                Flask.url_for("navigation.reorder"),
                 {entries: JSON.stringify(list)},
                 function(data) {
                     clearflash();

@@ -10,9 +10,10 @@ from viaduct.utilities import import_module, serialize_sqla
 from markdown import markdown
 import datetime
 import json
+from flask_jsglue import JSGlue
 
 
-version = 'v2.5.0.1'
+version = 'v2.5.1.0'
 
 
 def static_url(url):
@@ -52,6 +53,7 @@ def register_views(application, path, extension=''):
 
 # Set up the application and load the configuration file.
 application = Flask(__name__)
+js_glue = JSGlue(application)
 application.config.from_object('config.Config')
 
 # Set up Flask Babel, which is used for internationalisation support.

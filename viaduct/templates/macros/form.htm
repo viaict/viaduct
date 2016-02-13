@@ -10,7 +10,8 @@
 {% endmacro %}
 
 {% macro render_submit(text) %}
-    <button class='btn btn-primary' type='submit'>{{ text }}</button>
+<button class='btn btn-primary' data-loading-text={{_('Loading...')}}
+    type='submit'>{{ text }}</button>
 {% endmacro %}
 
 {% macro render_checkbox(field) %}
