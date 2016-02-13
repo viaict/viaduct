@@ -61,4 +61,4 @@ def home():
         .order_by(desc(News.publish_date)).limit(8).all()  # noqa
 
     return render_template('home/home.htm', revisions=revisions,
-                           title='Homepage', news=news), 403
+                           title='Homepage', news=news)
