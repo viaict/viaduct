@@ -8,6 +8,8 @@ $(function () {
 
     var $courses = $('.courses');
 
+    $("select").select2();
+
     $new_course_btn.click(function (e) {
         e.preventDefault();
 

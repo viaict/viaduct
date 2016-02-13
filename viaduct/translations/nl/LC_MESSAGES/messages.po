@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2015-12-12 16:27+0100\n"
+"POT-Creation-Date: 2016-02-13 14:44+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -91,6 +91,10 @@ msgstr "Kan het plaatje niet verwijderen, want het plaatje bestaat niet"
 msgid "Cannot find parent navigation entry."
 msgstr "Het bovenligende menu item kan niet gevonden worden."
 
+#, fuzzy
+msgid "Change password"
+msgstr "Reset wachtwoord"
+
 msgid "City"
 msgstr "Plaats"
 
@@ -153,6 +157,9 @@ msgstr "Huidige plaatje"
 
 msgid "Custom form"
 msgstr "Formulier"
+
+msgid "Date"
+msgstr "Datum"
 
 msgid "Delete"
 msgstr "Verwijderen"
@@ -247,6 +254,9 @@ msgstr "Email adres"
 msgid "End time"
 msgstr "Eindtijd"
 
+msgid "End-Term"
+msgstr "Eindtentamen"
+
 msgid "English"
 msgstr "Engels"
 
@@ -279,6 +289,10 @@ msgstr "Tentamen"
 
 msgid "Examination could not be found."
 msgstr "Tentamen kan niet worden gevonden."
+
+#, fuzzy
+msgid "Examination kind"
+msgstr "Tentamen"
 
 msgid "Examination succesfully changed."
 msgstr "Tentamen succesvol verandert."
@@ -392,6 +406,9 @@ msgstr ""
 
 msgid "Member"
 msgstr "Lid"
+
+msgid "Mid-Term"
+msgstr "Deeltentamen"
 
 msgid "Minimal password length "
 msgstr "Minimum lengte van wachtwoord: "
@@ -558,8 +575,15 @@ msgstr "Herhaal wachtwoord"
 msgid "Reset password"
 msgstr "Reset wachtwoord"
 
+msgid "Retake"
+msgstr "Herkansing"
+
 msgid "Save"
 msgstr "Opslaan"
+
+#, fuzzy
+msgid "Save password"
+msgstr "Reset wachtwoord"
 
 msgid "Search"
 msgstr "Zoeken"
@@ -690,9 +714,6 @@ msgstr "Tijdstip"
 msgid "Tip"
 msgstr "Tip"
 
-msgid "Title"
-msgstr "Titel"
-
 msgid "Unauthorized!"
 msgstr "Ongeautoriseerd!"
 
@@ -707,6 +728,9 @@ msgstr ""
 "lidmaatschap. Je kan je lidmaatschap betalen door dit bij de "
 "boekenverkoop bij te bestellen of even langs de "
 "<strong>via</strong>-kamer te komen."
+
+msgid "Unknown"
+msgstr "Onbekend"
 
 msgid "User"
 msgstr "Gebruiker"
@@ -841,4 +865,10 @@ msgstr "nog"
 
 #~ msgid "Minimal password length %d"
 #~ msgstr "Minimum lengte van wachtwoord: %d"
+
+#~ msgid "Title"
+#~ msgstr "Titel"
+
+#~ msgid "Kind"
+#~ msgstr "over"
 
