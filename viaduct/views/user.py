@@ -178,6 +178,7 @@ def edit(user_id=None):
             user.has_payed = form.has_payed.data
             user.honorary_member = form.honorary_member.data
             user.favourer = form.favourer.data
+            user.disabled = form.disabled.data
         user.student_id = form.student_id.data.strip()
         user.education_id = form.education_id.data
         user.birth_date = form.birth_date.data
@@ -315,9 +316,12 @@ def sign_in():
 
         # Notify the login manager that the user has been signed in.
         login_user(user)
-
-        flash(gettext('Hey %(name)s, you\'re now logged in!',
-                      name=current_user.first_name), 'success')
+        if user.disabled:
+            flash('Your account has been disabled, you are not allowed to log in',
+                  'danger')
+        else:
+            flash(gettext('Hey %(name)s, you\'re now logged in!',
+                          name=current_user.first_name), 'success')
 
         referer = request.headers.get('Referer')
         denied = re.match(r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),
@@ -482,7 +486,9 @@ def get_users():
              "<i class='glyphicon glyphicon-ok'></i>"
                 if user.honorary_member else "",
              "<i class='glyphicon glyphicon-ok'></i>"
-                if user.favourer else ""
+                if user.favourer else "",
+             "<i class='glyphicon glyphicon-ok'></i>"
+                if user.disabled else ""
              ])
     return json.dumps({"data": user_list})
 

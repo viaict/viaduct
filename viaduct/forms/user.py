@@ -99,6 +99,7 @@ class EditUserForm(BaseUserForm):
     has_payed = BooleanField(_('Has payed'))
     honorary_member = BooleanField(_('Honorary member'))
     favourer = BooleanField(_('Favourer'))
+    disabled = BooleanField(_('Disabled'))
 
     def validate_password(form, field):
         """Providing a password is only required when creating a new user."""
