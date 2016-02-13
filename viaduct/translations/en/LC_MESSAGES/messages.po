@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-02-13 14:44+0100\n"
+"POT-Creation-Date: 2016-02-13 15:07+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -76,6 +76,9 @@ msgid "Bilingualism is not fully implemented yet!"
 msgstr ""
 
 msgid "Birthdate"
+msgstr ""
+
+msgid "Bug type"
 msgstr ""
 
 msgid "By registering you agree with the terms above."
@@ -391,6 +394,9 @@ msgstr ""
 msgid "List of activities"
 msgstr ""
 
+msgid "Loading..."
+msgstr ""
+
 msgid "Location"
 msgstr ""
 
@@ -451,6 +457,9 @@ msgstr ""
 msgid "No birthdate submitted"
 msgstr ""
 
+msgid "No description supplied"
+msgstr ""
+
 msgid "No e-mail adress submitted"
 msgstr ""
 
@@ -466,6 +475,9 @@ msgstr ""
 msgid "No form"
 msgstr ""
 
+msgid "No issue type supplied"
+msgstr ""
+
 msgid "No last name submitted"
 msgstr ""
 
@@ -476,6 +488,9 @@ msgid "No start study submitted"
 msgstr ""
 
 msgid "No studentnumber submitted"
+msgstr ""
+
+msgid "No title entered"
 msgstr ""
 
 msgid "No title given."
@@ -565,6 +580,9 @@ msgstr ""
 msgid "Repeat password"
 msgstr ""
 
+msgid "Report bug"
+msgstr ""
+
 msgid "Reset password"
 msgstr ""
 
@@ -623,6 +641,9 @@ msgid ""
 "have to enter them the next time"
 msgstr ""
 
+msgid "Something went wrong."
+msgstr ""
+
 msgid "Start study"
 msgstr ""
 
@@ -644,6 +665,9 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
+msgid "Submit!"
+msgstr ""
+
 msgid "Terms"
 msgstr ""
 
@@ -659,6 +683,9 @@ msgstr ""
 msgid ""
 "The activity has reached its maximum number of registrations. You have "
 "been placed on the reserves list."
+msgstr ""
+
+msgid "The bug has been reported!"
 msgstr ""
 
 msgid "The committe has been saved."
@@ -698,6 +725,9 @@ msgid "Timestamp"
 msgstr ""
 
 msgid "Tip"
+msgstr ""
+
+msgid "Title"
 msgstr ""
 
 msgid "Unauthorized!"

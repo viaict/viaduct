@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-02-13 14:44+0100\n"
+"POT-Creation-Date: 2016-02-13 15:07+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -80,6 +80,9 @@ msgstr "Tweetaligheid is nog niet volledig ondersteund!"
 msgid "Birthdate"
 msgstr "Geboortedag"
 
+msgid "Bug type"
+msgstr "Bug soort"
+
 msgid "By registering you agree with the terms above."
 msgstr ""
 "Door je aan te melden bij deze activiteit ga je akkoord met de "
@@ -91,9 +94,8 @@ msgstr "Kan het plaatje niet verwijderen, want het plaatje bestaat niet"
 msgid "Cannot find parent navigation entry."
 msgstr "Het bovenligende menu item kan niet gevonden worden."
 
-#, fuzzy
 msgid "Change password"
-msgstr "Reset wachtwoord"
+msgstr "Verander wachtwoord"
 
 msgid "City"
 msgstr "Plaats"
@@ -290,9 +292,8 @@ msgstr "Tentamen"
 msgid "Examination could not be found."
 msgstr "Tentamen kan niet worden gevonden."
 
-#, fuzzy
 msgid "Examination kind"
-msgstr "Tentamen"
+msgstr "Tentamen soort"
 
 msgid "Examination succesfully changed."
 msgstr "Tentamen succesvol verandert."
@@ -330,7 +331,6 @@ msgstr "Voornaam"
 msgid "Firstname"
 msgstr "Voornaam"
 
-#, fuzzy
 msgid "Forgot password?"
 msgstr "Wachtwoord vergeten?"
 
@@ -398,11 +398,14 @@ msgstr "Lijst"
 msgid "List of activities"
 msgstr "Activiteiten"
 
+msgid "Loading..."
+msgstr "Bezig..."
+
 msgid "Location"
 msgstr "Locatie"
 
 msgid "Log in"
-msgstr ""
+msgstr "Log in"
 
 msgid "Member"
 msgstr "Lid"
@@ -458,6 +461,9 @@ msgstr "Geen antwoorden geüpload."
 msgid "No birthdate submitted"
 msgstr "Geen geboortedag opgegeven"
 
+msgid "No description supplied"
+msgstr "Geen omschrijving opgegeven"
+
 msgid "No e-mail adress submitted"
 msgstr "Geen valide e-mailadres opgegeven"
 
@@ -473,6 +479,9 @@ msgstr "Geen voornaam opgeveven"
 msgid "No form"
 msgstr "Geen formulier"
 
+msgid "No issue type supplied"
+msgstr "Geen bug soort opgegeven"
+
 msgid "No last name submitted"
 msgstr "Geen achternaam opgeveven"
 
@@ -484,6 +493,9 @@ msgstr "Geen begin studie opgegeven"
 
 msgid "No studentnumber submitted"
 msgstr "Geen studenten ID opgegeven"
+
+msgid "No title entered"
+msgstr "Geen titel opgegeven."
 
 msgid "No title given."
 msgstr "Geen titel opgegeven."
@@ -572,6 +584,9 @@ msgstr "Verwijder pagina"
 msgid "Repeat password"
 msgstr "Herhaal wachtwoord"
 
+msgid "Report bug"
+msgstr "Verstuur een bug report"
+
 msgid "Reset password"
 msgstr "Reset wachtwoord"
 
@@ -581,9 +596,8 @@ msgstr "Herkansing"
 msgid "Save"
 msgstr "Opslaan"
 
-#, fuzzy
 msgid "Save password"
-msgstr "Reset wachtwoord"
+msgstr "Wachtwoord opslaan"
 
 msgid "Search"
 msgstr "Zoeken"
@@ -635,6 +649,9 @@ msgstr ""
 "Sommige velden (zoals shirt-maat of dieet) proberen we op te slaan, zodat"
 " je het de volgende keer niet nog eens moet invullen."
 
+msgid "Something went wrong."
+msgstr "Er is its mis gegaan"
+
 msgid "Start study"
 msgstr "Begin studie"
 
@@ -656,6 +673,9 @@ msgstr "Studie"
 msgid "Submit"
 msgstr "Opslaan"
 
+msgid "Submit!"
+msgstr "Versturen!"
+
 msgid "Terms"
 msgstr "Voorwaarden"
 
@@ -674,6 +694,9 @@ msgid ""
 msgstr ""
 "De activiteit heeft het maximum aantal inschrijvingen bereikt. Je bent "
 "geplaatst op de reserve lijst."
+
+msgid "The bug has been reported!"
+msgstr "De bug report is verstuurd"
 
 msgid "The committe has been saved."
 msgstr "De commissie is aangemaakt."
@@ -713,6 +736,9 @@ msgstr "Tijdstip"
 
 msgid "Tip"
 msgstr "Tip"
+
+msgid "Title"
+msgstr "Titel"
 
 msgid "Unauthorized!"
 msgstr "Ongeautoriseerd!"
