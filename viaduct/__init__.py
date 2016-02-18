@@ -13,7 +13,7 @@ import json
 from flask_jsglue import JSGlue
 
 
-version = 'v2.5.1.0'
+version = 'v2.5.1.1'
 
 
 def static_url(url):

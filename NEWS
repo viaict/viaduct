@@ -1,4 +1,6 @@
 xx-xx-2016 vx.x.x.0:
+18-02-2016 v2.5.1.0:
+* Disable bugreports because of spammers
 
 13-02-2016 v2.5.1.0:
 * Update: Removed separate gmail for password requests, now using google apps
