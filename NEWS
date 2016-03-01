@@ -1,4 +1,7 @@
-xx-01-2016 vx.x.x.0:
+XX-03-2016 vx.x.x.x:
+* Users removed from groups are automatically added to the activeAllumniList
+
+13-02-2016 v2.4.3.0:
 * Update: Removed separate gmail for password requests, now using google apps
 * Update baas32 to fix parsing PimPy tasks
 * Added the ability to disable users
