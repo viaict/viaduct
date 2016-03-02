@@ -1,3 +1,6 @@
+# To prevent circular dependencies with page and committee,
+# CommitteeRevison must be imported inside functions
+import viaduct
 from viaduct import db
 from viaduct.models import BaseEntity
 from viaduct.api import google
@@ -26,6 +29,11 @@ class Group(db.Model, BaseEntity):
         self.name = name
         self.maillist = maillist
 
+    def is_committee(self, id):
+        from viaduct.models.committee import CommitteeRevision
+        u = db.session.query(CommitteeRevision).filter(CommitteeRevision.group_id == id)
+        return db.session.query(u.exists()).first()[0]
+
     def has_user(self, user):
         if not user:
             return False
@@ -37,7 +45,6 @@ class Group(db.Model, BaseEntity):
         if not self.has_user(user):
             self.add_email_to_maillist(user.email)
             self.users.append(user)
-
             return self
 
     def add_email_to_maillist(self, email):
@@ -51,7 +58,8 @@ class Group(db.Model, BaseEntity):
     def delete_user(self, user):
         if self.has_user(user):
             self.remove_email_from_maillist(user.email)
-            google.add_email_to_group_if_not_exists(user.email, "aal")
+            if self.is_committee(self.id):
+                google.add_email_to_group_if_not_exists(user.email, "aal")
             self.users.remove(user)
 
     def get_users(self):
