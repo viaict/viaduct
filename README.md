@@ -1,4 +1,4 @@
-# Version 2.5.0.1
+# Version 2.5.1.1
 Versioning works as follows: vSYSTEM.FEATURE.IMPROVEMENT.BUG-/HOTFIX
 
 #Viaduct (Opensourced, yeah)
@@ -31,10 +31,12 @@ Before installing the Python dependencies, you have to install libjpeg-dev:
 
     sudo apt-get install libjpeg-dev
 
-Python dependencies are in `requirements.txt`. Install through pip. Usage of virtual environments is recommended:
+Python dependencies are in `requirements.txt`. Install through pip (yes two
+installs are necessary). Usage of virtual environments is recommended:
 
 	virtualenv venv/ -p /usr/bin/python3
 	. venv/bin/activate
+	pip install -r requirements.txt
 	pip install -r requirements.txt
 
 Set up the awesome hooks:

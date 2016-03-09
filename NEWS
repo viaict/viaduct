@@ -1,10 +1,24 @@
+<<<<<<< HEAD
 XX-03-2016 vx.x.x.x:
 * Users removed from groups are automatically added to the activeAllumniList
 
 13-02-2016 v2.4.3.0:
+=======
+xx-xx-2016 vx.x.x.0:
+18-02-2016 v2.5.1.0:
+* Disable bugreports because of spammers
+
+13-02-2016 v2.5.1.0:
+>>>>>>> 42ccb4a99cba5edfc571e7aff0ed75282cc16932
 * Update: Removed separate gmail for password requests, now using google apps
 * Update baas32 to fix parsing PimPy tasks
 * Added the ability to disable users
+* Added types of exams to examinationts (retake, final, etc.)
+* Removed 403 status code for the homepage
+* Fixed bug that removed people from mailing lists when they changed their
+    email
+* Fix reordering of navigation entries.
+
 
 23-01-2016 v2.4.2.0:
 * Changed base32 implementation to `baas32`
