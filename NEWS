@@ -6,7 +6,6 @@ XX-03-2016 vx.x.x.x:
 * Make exam search case insensitive
 * Add captcha to bug report and enable it again
 * Start with adding Search Engine Optimazation
-* Fix empty exam types
 * Made searching in examnation page case-insensitive
 * Fixed labels in sign-up form
 * Fixed blank test type in examination page
