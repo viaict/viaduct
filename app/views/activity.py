@@ -14,7 +14,7 @@ from flask.ext.babel import _  # gettext
 from werkzeug import secure_filename
 
 from app import db
-from app.helpers import flash_form_errors, get_login_form
+from app.utils import flash_form_errors
 from app.forms.activity import ActivityForm, CreateForm
 from app.models.activity import Activity
 from app.models.custom_form import CustomForm, CustomFormResult
@@ -22,8 +22,9 @@ from app.models.mollie import Transaction
 from app.api.module import ModuleAPI
 from app.api.mollie import MollieAPI
 from app.models.education import Education
+from app.forms import SignInForm
 
-from app.utilities.serialize_sqla import serialize_sqla
+from app.utils.serialize_sqla import serialize_sqla
 
 blueprint = Blueprint('activity', __name__, url_prefix='/activities')
 
@@ -134,7 +135,7 @@ def get_activity(activity_id=0):
                         str(activity.num_attendants)
 
     return render_template('activity/view_single.htm', activity=activity,
-                           form=form, login_form=get_login_form(),
+                           form=form, login_form=SignInForm(),
                            title=activity.name)
 
 

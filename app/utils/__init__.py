@@ -8,8 +8,10 @@ from markdown import markdown
 from .resource import Resource  # noqa
 
 from app import app, login_manager
-from app.forms import SignInForm
-from app.models import Page
+
+from .module import import_module  # noqa
+from .serialize_sqla import serialize_sqla  # noqa
+from .validate_form import validate_form  # noqa
 
 markdown_extensions = [
     'toc'
@@ -48,6 +50,10 @@ def internal_server_error(e):
 
 @app.errorhandler(404)
 def page_not_found(e):
+    # Move this outside this function when the errorhandler is not in utils
+    # anymore
+    from app.models import Page
+
     # Search for file extension.
     if re.match(r'(?:.*)\.[a-zA-Z]{3,}$', request.path):
         return '', 404
@@ -60,10 +66,6 @@ def flash_form_errors(form):
     for field, errors in list(form.errors.items()):
         for error in errors:
             flash('%s' % error, 'danger')
-
-
-def get_login_form():
-    return SignInForm()
 
 
 @app.template_filter('markdown')

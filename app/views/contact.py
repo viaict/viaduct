@@ -4,7 +4,7 @@ from flask import Blueprint, flash, redirect, render_template, request, \
 from app import db
 from app.models.contact import Contact
 from app.models.location import Location
-from app.utilities import validate_form
+from app.utils import validate_form
 from app.forms import ContactForm
 from app.api.module import ModuleAPI
 

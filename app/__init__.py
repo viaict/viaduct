@@ -6,7 +6,6 @@ from flask.ext.login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy as BaseSQLAlchemy, Model, \
     _BoundDeclarativeMeta, _QueryProperty, declarative_base
 from sqlalchemy import MetaData
-from app.utilities import import_module, serialize_sqla
 from markdown import markdown
 import datetime
 import json
@@ -110,11 +109,12 @@ class SQLAlchemy(BaseSQLAlchemy):
 
 db = SQLAlchemy(app)
 
+from app.utils import import_module, serialize_sqla
+from app.utils.thumb import thumb
 from app.api.user import UserAPI
 from app.api.company import CompanyAPI
 from app.api.guide import GuideAPI
 from app.api.module import ModuleAPI
-from app.helpers.thumb import thumb
 
 # Set jinja global variables
 app.jinja_env.globals.update(enumerate=enumerate)

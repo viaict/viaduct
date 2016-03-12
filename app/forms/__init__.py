@@ -3,7 +3,7 @@ import os
 from flask.ext.wtf import Form
 
 from app import app
-from app.utilities import import_module
+from app.utils import import_module
 
 
 def register_forms(path):
