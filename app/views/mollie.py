@@ -2,8 +2,7 @@ from flask import Blueprint, abort, render_template, request, url_for
 from app import app
 from app.api.mollie import MollieAPI
 from app.api.module import ModuleAPI
-from app.api.custom_form import CustomFormAPI
-from app.models.mollie import Transaction
+from app.models import Transaction, CustomForm
 from app.models.activity import Activity
 
 blueprint = Blueprint('mollie', __name__, url_prefix='/mollie')
@@ -33,7 +32,7 @@ def mollie_check(trans_id=0, mollie_id=0):
         link = False
     success, message = MollieAPI.check_transaction(transaction_id=trans_id,
                                                    mollie_id=mollie_id)
-    CustomFormAPI.update_payment(trans_id, success)
+    CustomForm.update_payment(trans_id, success)
     return render_template('mollie/success.htm',
                            message=message,
                            link=link)
@@ -48,7 +47,7 @@ def webhook():
     mollie_id = request.form['id']
     success, message = MollieAPI.check_transaction(mollie_id=mollie_id)
     trans_id = MollieAPI.get_other_id(mollie_id=mollie_id)
-    CustomFormAPI.update_payment(trans_id, success)
+    CustomForm.update_payment(trans_id, success)
     return ''
 
 

@@ -27,10 +27,6 @@ git flow init
 ```
 The first one is master, the second develop after that just keep hitting return.
 
-Before installing the Python dependencies, you have to install libjpeg-dev:
-
-    sudo apt-get install libjpeg-dev
-
 Python dependencies are in `requirements.txt`. Install through pip (yes two
 installs are necessary). Usage of virtual environments is recommended:
 

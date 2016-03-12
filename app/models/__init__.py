@@ -5,6 +5,7 @@ from .course import Course  # noqa
 from .degree import Degree  # noqa
 from .education import Education  # noqa
 from .group import Group, user_group  # noqa
+from .mollie import Transaction  # noqa
 from .navigation import NavigationEntry  # noqa
 from .permission import GroupPermission  # noqa
 from .pimpy import Minute, Task  # noqa

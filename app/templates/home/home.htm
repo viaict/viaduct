@@ -15,7 +15,7 @@
                                     <a href='{{ url_for('news.view', news_id=item.id) }}'>
                                         <h3>{{ item.title }}</h3>
                                     </a>
-                                    <footer> {{ item.user.name }} </footer>
+                                    <footer>{{ item.publish_date }} - {{ item.user.name }} </footer>
                                     {{ item.get_short_content(300) | markdown }}
                                 </blockquote>
                             </div>
