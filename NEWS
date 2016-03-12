@@ -10,6 +10,9 @@ XX-03-2016 vx.x.x.x:
 * Made searching in examnation page case-insensitive
 * Fixed labels in sign-up form
 * Fixed blank test type in examination page
+* Jumbotron added on the homepage (large banner with some info)
+* Homepage is now somewhat cleaner (lots of lines and stuff removed)
+* Added 'dotdotdot' jquery library. Automatically works on the class 'dotdotdot'
 
 18-02-2016 v2.5.1.1:
 * Disable bugreports because of spammers
