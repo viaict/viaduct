@@ -14,7 +14,7 @@ $(function () {
         get_entries($slct, $btn_reload, $spn_refresh, $spn_loading);
 
         $btn_reload.click(function () {
-            $slct.attr('value', $slct.val());
+            $slct.data('value', $slct.val());
             get_entries($slct, $btn_reload, $spn_refresh, $spn_loading);
         });
     });
@@ -24,7 +24,7 @@ $(function () {
         $refr.hide();
         $load.show();
 
-        var current = parseInt($slct.attr('value'));
+        var current = parseInt($slct.data('value'));
 
         $slct.empty();
 

@@ -1,4 +1,5 @@
 {% from "macros/form.htm" import render_field, render_select, render_datetimefield_picker %}
+{% from "macros/custom_form.htm" import custom_form_select %}
 
 {% extends "content.htm" %}
 
@@ -24,23 +25,7 @@
 
         <div class='row'>
             <div class='col-md-12'>
-                <div class='custom-form-field input-group'>
-                    <select class='form-control' name='form_id' value='{{activity.form_id}}'>
-                    </select>
-                    <span class='input-group-btn'>
-                        <button class='form-reload btn btn-default' type='button'>
-                            <span class='refresh'>{{_('Refresh')}}</span>
-                            <span class='loading'>
-                                <i class='fa fa-cog fa-spin'></i>
-                            </span>
-                        </button>
-                    </span>
-                </div>
-
-                <a class="show-window btn btn-xs btn-success" target="_blank"
-                    href="{{ url_for('custom_form.create')}}">
-                    {{ _("Create form") }}
-                </a>
+                {{ custom_form_select('form_id', activity.form_id) }}
             </div>
         </div>
 

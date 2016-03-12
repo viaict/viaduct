@@ -38,3 +38,26 @@
 </div>
 </div>
 {% endmacro %}
+
+{% macro custom_form_select(name, value=None, id=None) %}
+    {% if id == None %}
+        {% set id = name %}
+    {% endif %}
+
+    <div class='custom-form-field input-group'>
+        <select class='form-control' name='{{name}}' id='{{id}}' data-value='{{value}}'>
+        </select>
+        <span class='input-group-btn'>
+            <button class='form-reload btn btn-default' type='button'>
+                <span class='refresh'>{{_('Refresh')}}</span>
+                <span class='loading'>
+                    <i class='fa fa-cog fa-spin'></i>
+                </span>
+            </button>
+        </span>
+    </div>
+
+    <a class="show-window btn btn-xs btn-success" target="_blank" href="{{ url_for('custom_form.create')}}">
+        {{ _("Create form") }}
+    </a>
+{% endmacro %}
