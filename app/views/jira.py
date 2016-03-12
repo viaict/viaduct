@@ -4,7 +4,7 @@ from flask import Blueprint
 
 from flask.ext.login import current_user
 
-from app.helpers import flash_form_errors
+from app.utils import flash_form_errors
 from app.forms.jira import CreateIssueForm
 from app.api.jira import JiraAPI
 
@@ -25,16 +25,16 @@ def create_issue():
 
         # Use JiraAPI to do a POST request to https://viaduct.atlassian.net
         response = JiraAPI.create_issue(form)
-
+        print(response, bool(response))
         if response:
-            flash(_('The bug has been reported!'), 'success')
-            redir = request.args['redir']
+            flash('The bug has been reported!', 'success')
+            redir = request.args.get('redir')
             if redir:
                 return redirect(redir)
             else:
-                return redirect(url_for('home'))
+                return redirect(url_for('home.home'))
         else:
-            flash(_('Something went wrong.'), 'danger')
+            flash(_('Something went wrong.'), 'danger'), 500
 
     else:
         flash_form_errors(form)

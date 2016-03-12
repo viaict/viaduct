@@ -1,5 +1,5 @@
 from app import db
-from app.models import BaseEntity, Activity
+from app.models import BaseEntity, Activity, Transaction
 
 from collections import OrderedDict
 
@@ -72,6 +72,14 @@ class CustomForm(db.Model, BaseEntity):
         return (self.activities
                 .order_by(Activity.modified.desc())
                 .first())
+
+    def update_payment(transaction_id, payed):
+        transaction = (Transaction.query
+                       .filter(Transaction.id == transaction_id)
+                       .first())
+        if transaction.form_result:
+            transaction.form_result.has_payed = payed
+            db.session.commit()
 
 
 class CustomFormResult(db.Model, BaseEntity):

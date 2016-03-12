@@ -10,6 +10,7 @@ from wtforms.validators import InputRequired, Email, EqualTo, ValidationError,\
     Length, Optional
 
 from flask.ext.babel import lazy_gettext as _  # noqa
+from flask.ext.wtf.recaptcha import RecaptchaField
 
 import dateutil
 
@@ -67,7 +68,7 @@ class BaseUserForm(Form):
     birth_date = DateField(_('Birthdate'), validators=[
         InputRequired(message=_('No birthdate submitted'))])
     study_start = DateField(_('Start study'), validators=[
-         InputRequired(message=_('No start study submitted'))])
+        InputRequired(message=_('No start study submitted'))])
     locale = SelectField(_('Language'),
                          choices=list(app.config['LANGUAGES'].items()))
 
@@ -88,7 +89,8 @@ class SignUpForm(BaseUserForm):
     birth_date = DateField(_('Birthdate'), validators=[
         InputRequired(message=_('No birthdate submitted'))])
     study_start = DateField(_('Start study'), validators=[
-         InputRequired(message=_('No start study submitted'))])
+        InputRequired(message=_('No start study submitted'))])
+    recaptcha = RecaptchaField()
 
 
 class EditUserForm(BaseUserForm):
@@ -120,7 +122,7 @@ class EditUserInfoForm(BaseUserForm):
             Length(message=(_('Minimal password length ') +
                             str(_min_password_length)),
                    min=_min_password_length)]
-        )
+    )
     repeat_password = PasswordField(
         _('Repeat password'), validators=[
             EqualTo('password', message=_('Passwords do not match'))]

@@ -3,8 +3,8 @@ import validictory
 from flask import request
 
 from app import app, db
-from app.helpers import Resource
-from app.helpers.api import make_api_response
+from app.utils import Resource
+from app.utils.api import make_api_response
 
 from app.models import Degree
 

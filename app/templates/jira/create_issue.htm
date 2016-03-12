@@ -7,7 +7,6 @@
 
 {% block content %}
 
-{{ _("Bug reports have been temporarily disabled because of spammers flooding the bugtracker. For issues email ict (at) svia.nl for now.") }}
 <form id="report_form" action="" method="post" name="sign_up" class="form" enctype="multipart/form-data">
     <div class='row'>
         <div class='col-md-6'>
@@ -17,6 +16,10 @@
             {{ render_field(form.summary) }}
             {{ render_select(form.issue_type) }}
             {{ render_textarea(form.description) }}
+            {% for error in form.recaptcha.errors %}
+                {{ error }}
+            {% endfor %}
+            {{ form.recaptcha }}
             {{ render_submit(_("Submit!")) }}
         </div>
 

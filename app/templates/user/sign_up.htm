@@ -42,6 +42,10 @@
         {{ render_field(form.avatar) }}
 
         {{ render_checkbox(form.receive_information) }}
+        {% for error in form.recaptcha.errors %}
+            {{ error }}
+        {% endfor %}
+        {{ form.recaptcha }}
 
         <div class="control-group">
             <div class="controls">
