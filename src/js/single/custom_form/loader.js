@@ -26,7 +26,7 @@ $(function () {
 
         var current = parseInt($slct.data('value'));
 
-        $slct.empty();
+        $slct.children(':not(.empty)').remove();
 
         $.getJSON(Flask.url_for('custom_form.loader'), {'current': current},
                 function (data) {

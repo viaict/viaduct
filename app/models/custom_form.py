@@ -77,9 +77,12 @@ class CustomForm(db.Model, BaseEntity):
                 .first())
 
     def is_archived(self):
+        latest_activity = (self.activities.order_by(Activity.end_time.desc())
+                           .first())
+
         return self.archived or (
-            self.activity is not None
-            and dt.datetime.now() < self.activity.end_time)
+            latest_activity is not None
+            and dt.datetime.now() < latest_activity.end_time)
 
     @classmethod
     def aslist(cls, current=None):

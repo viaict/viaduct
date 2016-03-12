@@ -419,5 +419,9 @@ def has_payed(submit_id=None):
 # TODO: Move to API.
 @blueprint.route('/loader/', methods=['GET'])
 def loader():
-    current = request.args.get('current')
+    try:
+        current = int(request.args.get('current'))
+    except ValueError:
+        current = None
+
     return jsonify(forms=serialize_sqla(CustomForm.aslist(current)))

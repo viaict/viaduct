@@ -1,8 +1,10 @@
 {% from "macros/form.htm" import render_submit, render_checkbox, render_field, render_select %}
+{% from "macros/custom_form.htm" import custom_form_select %}
 {% extends "content.htm" %}
 
 {% block includes %}
     <script src={{static_url("/static/js/page/filter_groups.js")}}></script>
+    <script src='{{static_url('/static/js/custom_form/loader.js')}}'></script>
 {% endblock %}
 
 {% block content %}
@@ -68,7 +70,7 @@
                     {{ render_checkbox(form.filter_html) }}
                 </div>
                 <div class='col-md-12'>
-                    {{ render_select(form.custom_form_id) }}
+                    {{ custom_form_select('custom_form_id', form.custom_form_id.data) }}
                 </div>
 
                 <div class="col-md-12">
