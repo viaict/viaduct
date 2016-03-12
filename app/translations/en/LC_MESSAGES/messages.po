@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-03-12 17:19+0100\n"
+"POT-Creation-Date: 2016-03-12 17:23+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -267,6 +267,9 @@ msgstr ""
 msgid "English description"
 msgstr ""
 
+msgid "English description (max. 180 characters)"
+msgstr ""
+
 msgid "English details"
 msgstr ""
 
@@ -274,6 +277,9 @@ msgid "English name"
 msgstr ""
 
 msgid "English name requires English description and vice versa"
+msgstr ""
+
+msgid "English tags (comma seperated)"
 msgstr ""
 
 msgid "English title"
@@ -421,6 +427,15 @@ msgstr ""
 msgid "Navigation entry"
 msgstr ""
 
+msgid "Nederlandse beschrijving (max. 180 karakters)"
+msgstr ""
+
+msgid "Nederlandse tags (komma seperated)"
+msgstr ""
+
+msgid "Nederlanse titel"
+msgstr ""
+
 msgid "New"
 msgstr ""
 
@@ -487,7 +502,7 @@ msgstr ""
 msgid "No password submitted"
 msgstr ""
 
-msgid "No start study submitted"
+msgid "No starting year of study submitted"
 msgstr ""
 
 msgid "No studentnumber submitted"
@@ -650,10 +665,10 @@ msgstr ""
 msgid "Something went wrong."
 msgstr ""
 
-msgid "Start study"
+msgid "Start time"
 msgstr ""
 
-msgid "Start time"
+msgid "Starting year study"
 msgstr ""
 
 msgid "Student ID"
@@ -713,6 +728,9 @@ msgid "The page has been saved"
 msgstr ""
 
 msgid "The page you tried to delete does not exist"
+msgstr ""
+
+msgid "The seo settings have been saved"
 msgstr ""
 
 msgid "There is already a course with this name"
@@ -844,6 +862,9 @@ msgstr ""
 msgid "required"
 msgstr ""
 
+msgid "seo"
+msgstr ""
+
 msgid "still"
 msgstr ""
 
@@ -886,9 +907,6 @@ msgstr ""
 #~ msgid "No lastname submitted"
 #~ msgstr ""
 
-#~ msgid "No start study"
-#~ msgstr ""
-
 #~ msgid "Student number"
 #~ msgstr ""
 
@@ -912,4 +930,3 @@ msgstr ""
 
 #~ msgid "You have to reload the page for the result"
 #~ msgstr ""
-

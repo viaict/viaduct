@@ -53,7 +53,7 @@ class BaseUserForm(Form):
         _('Student ID'), validators=[
             InputRequired(message=_('No studentnumber submitted'))]
     )
-    education_id = SelectField('Opleiding', coerce=int)
+    education_id = SelectField(_('Education'), coerce=int)
     avatar = FileField('Avatar', validators=[Optional()])
     receive_information = BooleanField(_('Would you like to recieve '
                                          'information from companies?'))
@@ -67,8 +67,8 @@ class BaseUserForm(Form):
 
     birth_date = DateField(_('Birthdate'), validators=[
         InputRequired(message=_('No birthdate submitted'))])
-    study_start = DateField(_('Start study'), validators=[
-        InputRequired(message=_('No start study submitted'))])
+    study_start = DateField(_('Starting year study'), validators=[
+        InputRequired(message=_('No starting year of study submitted'))])
     locale = SelectField(_('Language'),
                          choices=list(app.config['LANGUAGES'].items()))
 
@@ -88,8 +88,8 @@ class SignUpForm(BaseUserForm):
     )
     birth_date = DateField(_('Birthdate'), validators=[
         InputRequired(message=_('No birthdate submitted'))])
-    study_start = DateField(_('Start study'), validators=[
-        InputRequired(message=_('No start study submitted'))])
+    study_start = DateField(_('Starting year study'), validators=[
+        InputRequired(message=_('No starting year of study submitted'))])
     recaptcha = RecaptchaField()
 
 

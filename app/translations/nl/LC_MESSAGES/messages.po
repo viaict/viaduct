@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-03-12 17:19+0100\n"
+"POT-Creation-Date: 2016-03-12 17:23+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -78,7 +78,7 @@ msgid "Bilingualism is not fully implemented yet!"
 msgstr "Tweetaligheid is nog niet volledig ondersteund!"
 
 msgid "Birthdate"
-msgstr "Geboortedag"
+msgstr "Geboortedatum"
 
 msgid "Bug type"
 msgstr "Bug soort"
@@ -271,6 +271,10 @@ msgstr "Engelse inhoud"
 msgid "English description"
 msgstr "Engelse beschrijving"
 
+#, fuzzy
+msgid "English description (max. 180 characters)"
+msgstr "Engelse beschrijving"
+
 msgid "English details"
 msgstr "Engelse gegevens"
 
@@ -279,6 +283,9 @@ msgstr "Engelse naam"
 
 msgid "English name requires English description and vice versa"
 msgstr "Engelse naam vereist Engelse beschrijving en vica versa."
+
+msgid "English tags (comma seperated)"
+msgstr ""
 
 msgid "English title"
 msgstr "Engelse titel"
@@ -425,6 +432,15 @@ msgstr "Bewerken"
 msgid "Navigation entry"
 msgstr "Menu item"
 
+msgid "Nederlandse beschrijving (max. 180 karakters)"
+msgstr ""
+
+msgid "Nederlandse tags (komma seperated)"
+msgstr ""
+
+msgid "Nederlanse titel"
+msgstr ""
+
 msgid "New"
 msgstr "Nieuw"
 
@@ -491,8 +507,8 @@ msgstr "Geen achternaam opgeveven"
 msgid "No password submitted"
 msgstr "Geen wachtwoord opgegeven"
 
-msgid "No start study submitted"
-msgstr "Geen begin studie opgegeven"
+msgid "No starting year of study submitted"
+msgstr "Geen beginjaar studie opgegeven"
 
 msgid "No studentnumber submitted"
 msgstr "Geen studenten ID opgegeven"
@@ -658,11 +674,11 @@ msgstr ""
 msgid "Something went wrong."
 msgstr "Er is its mis gegaan"
 
-msgid "Start study"
-msgstr "Begin studie"
-
 msgid "Start time"
 msgstr "Starttijd"
+
+msgid "Starting year study"
+msgstr "Beginjaar studie"
 
 msgid "Student ID"
 msgstr "Studentkaartnummer"
@@ -724,6 +740,10 @@ msgstr "De pagina is opgeslagen."
 
 msgid "The page you tried to delete does not exist"
 msgstr "De pagina die je probeerde te verwijderen bestaat niet"
+
+#, fuzzy
+msgid "The seo settings have been saved"
+msgstr "De commissie is aangemaakt."
 
 msgid "There is already a course with this name"
 msgstr "Er bestaat al een vak met deze naam"
@@ -862,6 +882,9 @@ msgstr "pagina"
 msgid "required"
 msgstr "vereist"
 
+msgid "seo"
+msgstr ""
+
 msgid "still"
 msgstr "nog"
 
@@ -903,4 +926,3 @@ msgstr "nog"
 
 #~ msgid "You have to reload the page for the result"
 #~ msgstr "Herlaad de pagina voor het resultaat"
-
