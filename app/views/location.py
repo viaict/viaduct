@@ -3,7 +3,7 @@ from flask import Blueprint, flash, redirect, render_template, request, \
 
 from app import db
 from app.models.location import Location
-from app.utilities import serialize_sqla, validate_form
+from app.utils import serialize_sqla, validate_form
 from app.forms import LocationForm
 from app.api.module import ModuleAPI
 

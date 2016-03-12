@@ -4,11 +4,11 @@ import re
 
 from flask import render_template, request, url_for
 from app import db
-from app.helpers import get_login_form
 from app.models.activity import Activity
 from app.models.navigation import NavigationEntry
 from app.models.page import Page
 from app.api.page import PageAPI
+from app.forms import SignInForm
 
 
 class NavigationAPI:
@@ -16,7 +16,7 @@ class NavigationAPI:
     def get_navigation_bar():
         entries = NavigationAPI.get_entries(True)
         entries = NavigationAPI.remove_unauthorized(entries)
-        login_form = get_login_form()
+        login_form = SignInForm()
 
         return render_template('navigation/view_bar.htm', bar_entries=entries,
                                login_form=login_form)

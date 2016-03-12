@@ -11,7 +11,7 @@ from app import db
 from app.api import ModuleAPI
 from app.forms import NewsForm
 from app.models import News
-from app.helpers import flash_form_errors
+from app.utils import flash_form_errors
 
 blueprint = Blueprint('news', __name__, url_prefix='/news')
 
