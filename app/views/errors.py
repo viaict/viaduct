@@ -3,6 +3,8 @@ from flask import flash, request, url_for, render_template, redirect, \
 from flask.ext.login import current_user
 
 from app import app, login_manager
+from app.models import Page
+
 
 import re
 
@@ -39,15 +41,9 @@ def internal_server_error(e):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    # Move this outside this function when the errorhandler is not in utils
-    # anymore
-    from app.models import Page
-
     # Search for file extension.
     if re.match(r'(?:.*)\.[a-zA-Z]{3,}$', request.path):
         return '', 404
 
     page = Page(request.path.lstrip('/'))
     return render_template('page/404.htm', page=page), 404
-
-
