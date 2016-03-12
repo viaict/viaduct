@@ -107,7 +107,6 @@ def upload_file():
         education_id = request.form.get("education", None)
         test_type = request.form.get("test_type", None)
 
-
         error = False
 
         if not title:
@@ -175,23 +174,26 @@ def view_examination(page_nr=1):
         exams = db.session.query(Examination.id,
                                  Examination.title,
                                  Course.name,
-                                 Education.name.label("program")).join(Course).join(Education).all()
+                                 Education.name.label("program")
+                                 ).join(Course).join(Education).all()
 
         exam_matches = []
 
+        search = search.lower()
+
         for exam in exams:
-            if fuzz.partial_ratio(search, exam.title) > 75 or\
-                    fuzz.partial_ratio(search, exam.name) > 75 or\
-                    fuzz.partial_ratio(search, exam.program) > 75:
+            if fuzz.partial_ratio(search, exam.title.lower()) > 75 or\
+                    fuzz.partial_ratio(search, exam.name.lower()) > 75 or\
+                    fuzz.partial_ratio(search, exam.program.lower()) > 75:
                 exam_matches.append(exam.id)
 
         examinations = Examination.query.join(Course).join(Education)\
-                .filter(Examination.id.in_(exam_matches))\
-                .order_by(Course.name).paginate(page_nr, 15, True)
+            .filter(Examination.id.in_(exam_matches))\
+            .order_by(Course.name).paginate(page_nr, 15, True)
 
         return render_template('examination/view.htm', path=path,
-                                   examinations=examinations, search=search,
-                                   title=_('Examinations'), test_types=test_types)
+                               examinations=examinations, search=search,
+                               title=_('Examinations'), test_types=test_types)
 
     if request.args.get('delete'):
         exam_id = request.args.get('delete')
