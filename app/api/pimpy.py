@@ -7,7 +7,7 @@ import datetime
 import re
 import baas32 as b32
 
-from fuzzywuzzy.process import extractOne
+from fuzzywuzzy import fuzz
 
 from app.api.module import ModuleAPI
 from app.api.user import UserAPI
@@ -285,24 +285,39 @@ class PimpyAPI:
         found_users = []
 
         users = group.users.all()
+        
+        user_names = []
 
-        user_names = map(lambda x: "%s %s" % (x.first_name.lower().strip(),
-                                              x.last_name.lower().strip()),
-                         users)
-        user_names = [unidecode(x) for x in user_names]
-
+        for user in users:
+            x = {"id": user.id,
+                 "first_name": unidecode(user.first_name.lower().strip()),
+                 "last_name": unidecode(user.last_name.lower().strip())}
+            user_names.append(x)
+        
         for comma_sep_user in comma_sep:
-            match = extractOne(comma_sep_user, user_names)
+            maximum = 0
+            match = -1
+            
+            for user_name in user_names:
+                rate = fuzz.ratio(user_name['first_name'], comma_sep_user)
+                rate_last = fuzz.ratio(user_name['last_name'], comma_sep_user)
+
+                full_name = user_name['first_name'] +' '+ user_name['last_name']
+                rate_full = fuzz.ratio(full_name, comma_sep_user)
+
+                if rate > maximum or rate_last > maximum or rate_full > maximum:
+                    maximum = max(rate, rate_last)
+                    match = user_name['id']
+           
             found = False
 
-            if not match:
+            if match < 0:
                 return False, \
                     'Kon geen gebruiker vinden voor: %s' % (comma_sep_user)
 
-            for i in range(len(users)):
-                # could use a filter here, but meh
-                if user_names[i] == match[0]:
-                    found_users.append(users[i])
+            for user in users:
+                if user.id == match:
+                    found_users.append(user)
                     found = True
                     break
 
