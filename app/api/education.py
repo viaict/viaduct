@@ -2,10 +2,10 @@ import validictory
 
 from flask import request
 
-from viaduct import app, db
-from viaduct.helpers import Resource
-from viaduct.helpers.api import make_api_response
-from viaduct.models import Degree, Education
+from app import app, db
+from app.helpers import Resource
+from app.helpers.api import make_api_response
+from app.models import Degree, Education
 
 
 class EducationAPI(Resource):

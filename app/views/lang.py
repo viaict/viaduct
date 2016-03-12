@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-from viaduct import db, app
+from app import db, app
 from flask import Blueprint, redirect, make_response, request, url_for, flash
 from flask.ext.babel import refresh
 from flask.ext.login import current_user

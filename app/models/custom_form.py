@@ -1,5 +1,5 @@
-from viaduct import db
-from viaduct.models import BaseEntity, Activity
+from app import db
+from app.models import BaseEntity, Activity
 
 from collections import OrderedDict
 

@@ -6,7 +6,7 @@ from flask.ext.login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy as BaseSQLAlchemy, Model, \
     _BoundDeclarativeMeta, _QueryProperty, declarative_base
 from sqlalchemy import MetaData
-from viaduct.utilities import import_module, serialize_sqla
+from app.utilities import import_module, serialize_sqla
 from markdown import markdown
 import datetime
 import json
@@ -110,11 +110,11 @@ class SQLAlchemy(BaseSQLAlchemy):
 
 db = SQLAlchemy(app)
 
-from viaduct.api.user import UserAPI
-from viaduct.api.company import CompanyAPI
-from viaduct.api.guide import GuideAPI
-from viaduct.api.module import ModuleAPI
-from viaduct.helpers.thumb import thumb
+from app.api.user import UserAPI
+from app.api.company import CompanyAPI
+from app.api.guide import GuideAPI
+from app.api.module import ModuleAPI
+from app.helpers.thumb import thumb
 
 # Set jinja global variables
 app.jinja_env.globals.update(enumerate=enumerate)
@@ -145,6 +145,6 @@ path = os.path.dirname(os.path.abspath(__file__))
 
 register_views(app, os.path.join(path, 'views'))
 
-from viaduct.models import User
+from app.models import User
 
 login_manager.anonymous_user = User.get_anonymous_user

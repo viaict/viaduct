@@ -1,7 +1,7 @@
 from flask import Blueprint, request, render_template, abort
 from flask.ext.login import current_user
 
-from viaduct.forms import CreateSurveyForm
+from app.forms import CreateSurveyForm
 
 blueprint = Blueprint('survey', __name__)
 

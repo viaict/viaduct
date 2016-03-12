@@ -2,16 +2,16 @@ from flask import flash, redirect, render_template, request, url_for, abort
 from flask import Blueprint, Response
 from flask.ext.login import current_user
 
-from viaduct import db
-from viaduct.helpers import flash_form_errors
-from viaduct.forms.custom_form import CreateForm
-from viaduct.models import Activity
-from viaduct.models.user import User
-from viaduct.models.custom_form import CustomForm, CustomFormResult, \
+from app import db
+from app.helpers import flash_form_errors
+from app.forms.custom_form import CreateForm
+from app.models import Activity
+from app.models.user import User
+from app.models.custom_form import CustomForm, CustomFormResult, \
     CustomFormFollower
-from viaduct.api.module import ModuleAPI
+from app.api.module import ModuleAPI
 
-from viaduct.api import copernica
+from app.api import copernica
 from sqlalchemy import desc
 from urllib.parse import parse_qsl
 

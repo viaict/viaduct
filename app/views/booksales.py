@@ -1,12 +1,12 @@
 from flask import Blueprint, abort, redirect, url_for
 from flask import flash, render_template, request
 
-from viaduct.models.booksales import Book, Sale
+from app.models.booksales import Book, Sale
 
-from viaduct.api.module import ModuleAPI
-from viaduct.api.booksales import BookSalesAPI
+from app.api.module import ModuleAPI
+from app.api.booksales import BookSalesAPI
 
-from viaduct.forms.booksales import AddBookForm, AddSaleForm
+from app.forms.booksales import AddBookForm, AddSaleForm
 
 blueprint = Blueprint('booksales', __name__, url_prefix='/booksales')
 

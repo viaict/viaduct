@@ -2,15 +2,15 @@ from flask import Blueprint, render_template, abort, request, flash, \
     redirect, url_for
 from flask.ext.babel import _
 
-from viaduct import db
-from viaduct.helpers import flash_form_errors
-from viaduct.helpers.resource import get_all_routes
-from viaduct.models.navigation import NavigationEntry
-from viaduct.forms import NavigationEntryForm
-from viaduct.api.navigation import NavigationAPI
-from viaduct.api.module import ModuleAPI
-from viaduct.api.page import PageAPI
-from viaduct.models.page import Page
+from app import db
+from app.helpers import flash_form_errors
+from app.helpers.resource import get_all_routes
+from app.models.navigation import NavigationEntry
+from app.forms import NavigationEntryForm
+from app.api.navigation import NavigationAPI
+from app.api.module import ModuleAPI
+from app.api.page import PageAPI
+from app.models.page import Page
 
 import json
 import re

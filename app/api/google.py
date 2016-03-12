@@ -4,7 +4,7 @@ import traceback
 from apiclient.discovery import build
 from apiclient.errors import HttpError
 from oauth2client.client import SignedJwtAssertionCredentials
-from viaduct import app
+from app import app
 from flask import flash, render_template
 from email.mime.text import MIMEText
 from apiclient import errors

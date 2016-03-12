@@ -1,7 +1,7 @@
-from viaduct import db
-from viaduct.models.location import Location
-from viaduct.models.contact import Contact
-from viaduct.models import BaseEntity
+from app import db
+from app.models.location import Location
+from app.models.contact import Contact
+from app.models import BaseEntity
 
 
 class Company(db.Model, BaseEntity):

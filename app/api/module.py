@@ -1,7 +1,7 @@
 from flask.ext.login import current_user
 
-from viaduct.api.user import UserAPI
-from viaduct.models.permission import GroupPermission
+from app.api.user import UserAPI
+from app.models.permission import GroupPermission
 
 
 class ModuleAPI:

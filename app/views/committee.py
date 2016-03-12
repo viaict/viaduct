@@ -3,13 +3,13 @@ from flask import Blueprint, abort, request, flash, redirect, url_for, \
 from flask.ext.login import current_user
 from flask.ext.babel import _  # gettext
 
-from viaduct import db
-from viaduct.models import CommitteeRevision, Page, Group, User, \
+from app import db
+from app.models import CommitteeRevision, Page, Group, User, \
     NavigationEntry, PagePermission
-from viaduct.api import ModuleAPI, NavigationAPI
-from viaduct.forms import CommitteeForm
-from viaduct.helpers import flash_form_errors
-import viaduct.api.committee as CommitteeAPI
+from app.api import ModuleAPI, NavigationAPI
+from app.forms import CommitteeForm
+from app.helpers import flash_form_errors
+import app.api.committee as CommitteeAPI
 
 blueprint = Blueprint('committee', __name__)
 

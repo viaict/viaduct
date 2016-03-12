@@ -6,13 +6,13 @@ from sqlalchemy import or_, and_
 
 from datetime import datetime
 
-from viaduct import app, db
-from viaduct.models.company import Company
-from viaduct.models.location import Location
-from viaduct.models.contact import Contact
-from viaduct.forms import CompanyForm, NewCompanyForm
-from viaduct.api.module import ModuleAPI
-from viaduct.api.file import FileAPI
+from app import app, db
+from app.models.company import Company
+from app.models.location import Location
+from app.models.contact import Contact
+from app.forms import CompanyForm, NewCompanyForm
+from app.api.module import ModuleAPI
+from app.api.file import FileAPI
 
 
 blueprint = Blueprint('company', __name__, url_prefix='/companies')

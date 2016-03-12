@@ -1,9 +1,9 @@
 # To prevent circular dependencies with page and committee,
 # CommitteeRevison must be imported inside functions
-import viaduct
-from viaduct import db
-from viaduct.models import BaseEntity
-from viaduct.api import google
+import app
+from app import db
+from app.models import BaseEntity
+from app.api import google
 
 user_group = db.Table(
     'user_group',
@@ -30,7 +30,7 @@ class Group(db.Model, BaseEntity):
         self.maillist = maillist
 
     def is_committee(self, id):
-        from viaduct.models.committee import CommitteeRevision
+        from app.models.committee import CommitteeRevision
         u = db.session.query(CommitteeRevision).filter(CommitteeRevision.group_id == id)
         return db.session.query(u.exists()).first()[0]
 

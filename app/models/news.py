@@ -4,8 +4,8 @@ from sqlalchemy import event
 from flask import url_for
 from flask.ext.babel import lazy_gettext as _
 
-from viaduct import db, get_locale
-from viaduct.models import BaseEntity
+from app import db, get_locale
+from app.models import BaseEntity
 
 
 class News(db.Model, BaseEntity):

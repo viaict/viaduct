@@ -4,9 +4,9 @@ from flask import Blueprint
 
 from flask.ext.login import current_user
 
-from viaduct.helpers import flash_form_errors
-from viaduct.forms.jira import CreateIssueForm
-from viaduct.api.jira import JiraAPI
+from app.helpers import flash_form_errors
+from app.forms.jira import CreateIssueForm
+from app.api.jira import JiraAPI
 
 from flask.ext.babel import lazy_gettext as _
 

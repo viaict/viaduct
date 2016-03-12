@@ -7,14 +7,14 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask import abort, jsonify
 from flask.ext.login import current_user
 
-from viaduct import app, db
-from viaduct.helpers import flash_form_errors
+from app import app, db
+from app.helpers import flash_form_errors
 
-from viaduct.api.module import ModuleAPI
-from viaduct.api import google
+from app.api.module import ModuleAPI
+from app.api import google
 
-from viaduct.models import Group, GroupPermission, User
-from viaduct.forms.group import EditGroupPermissionForm, ViewGroupForm, \
+from app.models import Group, GroupPermission, User
+from app.forms.group import EditGroupPermissionForm, ViewGroupForm, \
     EditGroup
 
 blueprint = Blueprint('group', __name__)

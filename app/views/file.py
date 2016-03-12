@@ -3,10 +3,10 @@ Views for the file module.
 '''
 from flask import Blueprint, render_template, request, redirect, url_for, \
     jsonify, abort
-from viaduct.models.file import File
-from viaduct.forms import FileForm
-from viaduct.api import FileAPI
-from viaduct.api.module import ModuleAPI
+from app.models.file import File
+from app.forms import FileForm
+from app.api import FileAPI
+from app.api.module import ModuleAPI
 
 blueprint = Blueprint('file', __name__, url_prefix='/files')
 

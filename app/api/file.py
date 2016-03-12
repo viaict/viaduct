@@ -2,8 +2,8 @@ from flask import flash
 from werkzeug import secure_filename
 import os
 import difflib
-from viaduct.models.file import File
-from viaduct import app, db
+from app.models.file import File
+from app import app, db
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 UPLOAD_DIR = app.config['UPLOAD_DIR']

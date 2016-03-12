@@ -5,9 +5,9 @@ from flask.ext.login import current_user
 from math import ceil
 from datetime import date
 
-from viaduct import db, app
-from viaduct.models import Nominee, Nomination, Vote
-from viaduct.api.module import ModuleAPI
+from app import db, app
+from app.models import Nominee, Nomination, Vote
+from app.api.module import ModuleAPI
 
 
 blueprint = Blueprint('elections', __name__, url_prefix='/verkiezing')

@@ -1,4 +1,4 @@
-from viaduct import app
+from app import app
 import requests, json, threading
 
 token = app.config['COPERNICA_API_KEY']

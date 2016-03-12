@@ -5,12 +5,12 @@ from sqlalchemy import or_, and_, func
 
 from datetime import datetime
 
-from viaduct import app, db
-from viaduct.helpers import flash_form_errors
-from viaduct.models.vacancy import Vacancy
-from viaduct.models.company import Company
-from viaduct.forms import VacancyForm
-from viaduct.api.module import ModuleAPI
+from app import app, db
+from app.helpers import flash_form_errors
+from app.models.vacancy import Vacancy
+from app.models.company import Company
+from app.forms import VacancyForm
+from app.api.module import ModuleAPI
 
 blueprint = Blueprint('vacancy', __name__, url_prefix='/vacancies')
 FILE_FOLDER = app.config['FILE_DIR']

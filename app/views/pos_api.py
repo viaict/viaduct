@@ -3,9 +3,9 @@ from functools import wraps
 from sqlalchemy import or_
 from flask import request, Blueprint, jsonify
 
-from viaduct import app
-from viaduct.api.user import UserAPI
-from viaduct.models.user import User
+from app import app
+from app.api.user import UserAPI
+from app.models.user import User
 
 
 blueprint = Blueprint('pos_api', __name__, url_prefix='/api')

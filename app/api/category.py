@@ -1,5 +1,5 @@
-from viaduct.models.category import Category
-from viaduct import db
+from app.models.category import Category
+from app import db
 
 import re
 

@@ -1,7 +1,7 @@
-from viaduct import db
-from viaduct import get_locale
+from app import db
+from app import get_locale
 from datetime import datetime, timedelta
-from viaduct.models import BaseEntity
+from app.models import BaseEntity
 from babel.dates import format_timedelta, format_datetime
 from sqlalchemy import event
 from flask.ext.babel import lazy_gettext as _  # gettext

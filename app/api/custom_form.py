@@ -1,5 +1,5 @@
-from viaduct.models.mollie import Transaction
-from viaduct import db
+from app.models.mollie import Transaction
+from app import db
 
 
 class CustomFormAPI:

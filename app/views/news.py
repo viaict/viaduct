@@ -7,11 +7,11 @@ from flask.ext.babel import _  # gettext
 
 from sqlalchemy import desc
 
-from viaduct import db
-from viaduct.api import ModuleAPI
-from viaduct.forms import NewsForm
-from viaduct.models import News
-from viaduct.helpers import flash_form_errors
+from app import db
+from app.api import ModuleAPI
+from app.forms import NewsForm
+from app.models import News
+from app.helpers import flash_form_errors
 
 blueprint = Blueprint('news', __name__, url_prefix='/news')
 

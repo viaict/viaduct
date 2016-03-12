@@ -7,9 +7,9 @@ from flask.ext.login import current_user
 from markdown import markdown
 from .resource import Resource  # noqa
 
-from viaduct import app, login_manager
-from viaduct.forms import SignInForm
-from viaduct.models import Page
+from app import app, login_manager
+from app.forms import SignInForm
+from app.models import Page
 
 markdown_extensions = [
     'toc'

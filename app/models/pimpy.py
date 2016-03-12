@@ -1,6 +1,6 @@
-from viaduct import db
+from app import db
 import datetime
-from viaduct.models import BaseEntity
+from app.models import BaseEntity
 import baas32 as b32
 
 

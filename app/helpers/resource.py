@@ -1,6 +1,6 @@
 from flask import json, make_response, Response, request
 from flask.views import MethodView
-from viaduct import app
+from app import app
 import re
 
 

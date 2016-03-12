@@ -1,7 +1,7 @@
 import json
 import requests
 from requests.auth import HTTPBasicAuth
-from viaduct import app
+from app import app
 
 from flask.ext.login import current_user
 

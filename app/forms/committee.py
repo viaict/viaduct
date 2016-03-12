@@ -1,7 +1,7 @@
 # coding: utf-8
 from wtforms import TextAreaField, SelectField, BooleanField
 from flask.ext.babel import lazy_gettext as _
-from viaduct.forms.page import SuperPageForm
+from app.forms.page import SuperPageForm
 
 
 class CommitteeForm(SuperPageForm):

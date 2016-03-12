@@ -1,7 +1,7 @@
 from flask.ext.login import current_user
-from viaduct.models.page import Page, PageRevision, PagePermission
+from app.models.page import Page, PageRevision, PagePermission
 
-from viaduct import db
+from app import db
 
 from flask import render_template
 

@@ -4,7 +4,7 @@ from sqlalchemy import and_
 
 from datetime import datetime
 
-from viaduct.models.company import Company
+from app.models.company import Company
 
 
 class CompanyAPI:

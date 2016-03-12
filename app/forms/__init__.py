@@ -2,8 +2,8 @@ import os
 
 from flask.ext.wtf import Form
 
-from viaduct import app
-from viaduct.utilities import import_module
+from app import app
+from app.utilities import import_module
 
 
 def register_forms(path):

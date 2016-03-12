@@ -5,9 +5,9 @@ from flask import abort, Blueprint, redirect, request, render_template, \
 from flask.ext.login import current_user
 from werkzeug import secure_filename
 
-from viaduct import app
-from viaduct.forms import UploadForm
-from viaduct.helpers import flash_form_errors
+from app import app
+from app.forms import UploadForm
+from app.helpers import flash_form_errors
 
 blueprint = Blueprint('upload', __name__)
 

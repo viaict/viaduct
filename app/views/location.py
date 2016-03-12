@@ -1,11 +1,11 @@
 from flask import Blueprint, flash, redirect, render_template, request, \
     url_for, jsonify, abort
 
-from viaduct import db
-from viaduct.models.location import Location
-from viaduct.utilities import serialize_sqla, validate_form
-from viaduct.forms import LocationForm
-from viaduct.api.module import ModuleAPI
+from app import db
+from app.models.location import Location
+from app.utilities import serialize_sqla, validate_form
+from app.forms import LocationForm
+from app.api.module import ModuleAPI
 
 blueprint = Blueprint('location', __name__, url_prefix='/locations')
 

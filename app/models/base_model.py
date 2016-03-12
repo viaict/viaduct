@@ -1,8 +1,8 @@
 """Extra functionality that is used by all models. It extends db.Model with
 extra functions."""
 
-from viaduct import db
-from viaduct.utilities import serialize_sqla
+from app import db
+from app.utilities import serialize_sqla
 from datetime import datetime
 import dateutil.parser
 

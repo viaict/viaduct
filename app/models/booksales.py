@@ -1,6 +1,6 @@
-from viaduct import db
+from app import db
 from wtforms import widgets, SelectMultipleField
-from viaduct.models import BaseEntity
+from app.models import BaseEntity
 
 books = db.Table(
     'booksales_sale_group',

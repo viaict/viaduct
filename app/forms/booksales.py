@@ -2,8 +2,8 @@ from flask_wtf import Form
 from wtforms import FloatField, StringField, IntegerField, SelectField
 from wtforms.validators import InputRequired
 
-from viaduct.models.booksales import MultiCheckboxField
-from viaduct import app
+from app.models.booksales import MultiCheckboxField
+from app import app
 
 DATE_FORMAT = app.config['DATE_FORMAT']
 

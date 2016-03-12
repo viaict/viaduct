@@ -1,8 +1,8 @@
 import sys
 from sqlalchemy import event
 from flask.ext.babel import lazy_gettext as _
-from viaduct import db, get_locale
-from viaduct.models import BaseEntity, Group
+from app import db, get_locale
+from app.models import BaseEntity, Group
 
 
 class Page(db.Model, BaseEntity):

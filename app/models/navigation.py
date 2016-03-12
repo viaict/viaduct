@@ -1,6 +1,6 @@
 from sqlalchemy import event
-from viaduct import db, get_locale
-from viaduct.models import BaseEntity
+from app import db, get_locale
+from app.models import BaseEntity
 from flask.ext.babel import lazy_gettext as _
 
 

@@ -1,7 +1,7 @@
-from viaduct import db, app
-from viaduct.models.education import Education
+from app import db, app
+from app.models.education import Education
 from datetime import datetime
-from viaduct.models import BaseEntity, Group
+from app.models import BaseEntity, Group
 
 
 class User(db.Model, BaseEntity):

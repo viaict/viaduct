@@ -3,12 +3,12 @@ import datetime
 import re
 
 from flask import render_template, request, url_for
-from viaduct import db
-from viaduct.helpers import get_login_form
-from viaduct.models.activity import Activity
-from viaduct.models.navigation import NavigationEntry
-from viaduct.models.page import Page
-from viaduct.api.page import PageAPI
+from app import db
+from app.helpers import get_login_form
+from app.models.activity import Activity
+from app.models.navigation import NavigationEntry
+from app.models.page import Page
+from app.api.page import PageAPI
 
 
 class NavigationAPI:

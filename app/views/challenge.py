@@ -4,11 +4,11 @@ from flask import Blueprint, render_template, request, \
 import datetime
 
 from flask.ext.login import current_user
-from viaduct import app
-from viaduct.models.challenge import Challenge
-from viaduct.forms import ChallengeForm
-from viaduct.api.module import ModuleAPI
-from viaduct.api.challenge import ChallengeAPI
+from app import app
+from app.models.challenge import Challenge
+from app.forms import ChallengeForm
+from app.api.module import ModuleAPI
+from app.api.challenge import ChallengeAPI
 
 blueprint = Blueprint('challenge', __name__, url_prefix='/challenge')
 

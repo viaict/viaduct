@@ -1,5 +1,5 @@
 from flask.ext.login import current_user
-from viaduct.models.page import PagePermission
+from app.models.page import PagePermission
 from flask import flash
 import os
 import fnmatch
@@ -8,8 +8,8 @@ import hashlib
 
 from flask import render_template
 
-from viaduct.models.group import Group
-from viaduct.api.file import FileAPI
+from app.models.group import Group
+from app.api.file import FileAPI
 
 ALLOWED_EXTENSIONS = set(['png', 'gif', 'jpg', 'jpeg'])
 UPLOAD_DIR = 'viaduct/static/files/users/'

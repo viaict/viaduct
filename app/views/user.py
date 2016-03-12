@@ -13,21 +13,21 @@ from flask import Blueprint
 from flask.ext.login import current_user, login_user, logout_user
 from flask.ext.babel import lazy_gettext as _, gettext
 
-from viaduct import db, login_manager
-from viaduct.helpers import flash_form_errors
-from viaduct.forms import SignUpForm, SignInForm, ResetPassword,\
+from app import db, login_manager
+from app.helpers import flash_form_errors
+from app.forms import SignUpForm, SignInForm, ResetPassword,\
     RequestPassword
-from viaduct.models import User
-from viaduct.models.activity import Activity
-from viaduct.models.custom_form import CustomFormResult, CustomForm
-from viaduct.models.group import Group
-from viaduct.models.request_ticket import Password_ticket
-from viaduct.forms.user import EditUserForm, EditUserInfoForm
-from viaduct.models.education import Education
-from viaduct.api.module import ModuleAPI
-from viaduct.api import UserAPI
-from viaduct.api import copernica
-from viaduct.api.google import HttpError, send_email
+from app.models import User
+from app.models.activity import Activity
+from app.models.custom_form import CustomFormResult, CustomForm
+from app.models.group import Group
+from app.models.request_ticket import Password_ticket
+from app.forms.user import EditUserForm, EditUserInfoForm
+from app.models.education import Education
+from app.api.module import ModuleAPI
+from app.api import UserAPI
+from app.api import copernica
+from app.api.google import HttpError, send_email
 
 blueprint = Blueprint('user', __name__)
 

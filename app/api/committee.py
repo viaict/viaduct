@@ -1,4 +1,4 @@
-from viaduct.models import Page
+from app.models import Page
 
 
 def get_alphabetical():

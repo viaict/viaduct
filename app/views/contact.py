@@ -1,12 +1,12 @@
 from flask import Blueprint, flash, redirect, render_template, request, \
     url_for, abort
 
-from viaduct import db
-from viaduct.models.contact import Contact
-from viaduct.models.location import Location
-from viaduct.utilities import validate_form
-from viaduct.forms import ContactForm
-from viaduct.api.module import ModuleAPI
+from app import db
+from app.models.contact import Contact
+from app.models.location import Location
+from app.utilities import validate_form
+from app.forms import ContactForm
+from app.api.module import ModuleAPI
 
 blueprint = Blueprint('contact', __name__, url_prefix='/contacts')
 

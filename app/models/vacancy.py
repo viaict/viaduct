@@ -1,8 +1,8 @@
-from viaduct import db
+from app import db
 from datetime import datetime
 
-from viaduct.models.company import Company
-from viaduct.models import BaseEntity
+from app.models.company import Company
+from app.models import BaseEntity
 
 
 class Vacancy(db.Model, BaseEntity):

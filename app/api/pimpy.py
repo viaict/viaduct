@@ -1,4 +1,4 @@
-from viaduct import db, app
+from app import db, app
 from flask import render_template, Markup, redirect, url_for, abort,\
     flash
 from flask.ext.login import current_user
@@ -9,13 +9,13 @@ import baas32 as b32
 
 from fuzzywuzzy.process import extractOne
 
-from viaduct.api.module import ModuleAPI
-from viaduct.api.user import UserAPI
-from viaduct.models import Group, User
-from viaduct.models import Minute, Task
-from viaduct.models.pimpy import TaskUserRel
+from app.api.module import ModuleAPI
+from app.api.user import UserAPI
+from app.models import Group, User
+from app.models import Minute, Task
+from app.models.pimpy import TaskUserRel
 
-from viaduct.api import copernica
+from app.api import copernica
 
 DATE_FORMAT = app.config['DATE_FORMAT']
 

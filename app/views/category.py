@@ -1,8 +1,8 @@
 from flask import Blueprint
 from flask import render_template
 
-from viaduct.models.category import Category
-from viaduct.models.page import Page
+from app.models.category import Category
+from app.models.page import Page
 
 blueprint = Blueprint('category', __name__)
 

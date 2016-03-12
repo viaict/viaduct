@@ -2,12 +2,12 @@ import datetime
 
 from flask.ext.babel import lazy_gettext as _
 
-from viaduct import db
+from app import db
 
-from viaduct.models.course import Course
-from viaduct.models.education import Education
-from viaduct.models.user import User
-from viaduct.models import BaseEntity
+from app.models.course import Course
+from app.models.education import Education
+from app.models.user import User
+from app.models import BaseEntity
 
 
 test_types = {'Mid-Term': _('Mid-Term'),

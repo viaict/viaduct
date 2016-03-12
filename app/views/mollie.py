@@ -1,10 +1,10 @@
 from flask import Blueprint, abort, render_template, request, url_for
-from viaduct import app
-from viaduct.api.mollie import MollieAPI
-from viaduct.api.module import ModuleAPI
-from viaduct.api.custom_form import CustomFormAPI
-from viaduct.models.mollie import Transaction
-from viaduct.models.activity import Activity
+from app import app
+from app.api.mollie import MollieAPI
+from app.api.module import ModuleAPI
+from app.api.custom_form import CustomFormAPI
+from app.models.mollie import Transaction
+from app.models.activity import Activity
 
 blueprint = Blueprint('mollie', __name__, url_prefix='/mollie')
 

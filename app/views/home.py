@@ -3,10 +3,10 @@ from flask import Blueprint, render_template, abort
 from flask.ext.babel import _
 from sqlalchemy import desc
 
-from viaduct import db
-from viaduct.models import News
-from viaduct.models.page import Page, PageRevision
-from viaduct.models.activity import Activity
+from app import db
+from app.models import News
+from app.models.page import Page, PageRevision
+from app.models.activity import Activity
 
 blueprint = Blueprint('home', __name__)
 

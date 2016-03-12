@@ -1,7 +1,7 @@
-from viaduct import db
+from app import db
 
-from viaduct.models import BaseEntity
-from viaduct.models.user import User
+from app.models import BaseEntity
+from app.models.user import User
 
 
 def dump_datetime(value):

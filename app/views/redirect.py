@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, request, abort, redirect, \
     flash, url_for
-from viaduct import db
-from viaduct.models import Redirect
-from viaduct.forms import RedirectForm
-from viaduct.api.module import ModuleAPI
+from app import db
+from app.models import Redirect
+from app.forms import RedirectForm
+from app.api.module import ModuleAPI
 
 blueprint = Blueprint('redirect', __name__, url_prefix='/redirect')
 

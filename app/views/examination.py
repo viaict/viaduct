@@ -7,19 +7,19 @@ from flask.ext.babel import _
 
 from sqlalchemy import or_
 
-from viaduct import app, db
+from app import app, db
 
-from viaduct.forms import CourseForm
-from viaduct.helpers import flash_form_errors
-from viaduct.forms import EducationForm
-from viaduct.utilities import serialize_sqla
+from app.forms import CourseForm
+from app.helpers import flash_form_errors
+from app.forms import EducationForm
+from app.utilities import serialize_sqla
 
-from viaduct.models.examination import Examination, test_types
-from viaduct.models.course import Course
-from viaduct.models.education import Education
-from viaduct.models.degree import Degree
+from app.models.examination import Examination, test_types
+from app.models.course import Course
+from app.models.education import Education
+from app.models.degree import Degree
 
-from viaduct.api.module import ModuleAPI
+from app.api.module import ModuleAPI
 
 from werkzeug import secure_filename
 

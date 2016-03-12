@@ -3,7 +3,7 @@ import datetime
 
 # this is now uncommented for breaking activity for some reason
 # please some one check out what is happening
-import viaduct.api.google as google
+import app.api.google as google
 
 from flask import flash, redirect, render_template, request, url_for, abort,\
     jsonify
@@ -13,17 +13,17 @@ from flask.ext.babel import _  # gettext
 
 from werkzeug import secure_filename
 
-from viaduct import db
-from viaduct.helpers import flash_form_errors, get_login_form
-from viaduct.forms.activity import ActivityForm, CreateForm
-from viaduct.models.activity import Activity
-from viaduct.models.custom_form import CustomForm, CustomFormResult
-from viaduct.models.mollie import Transaction
-from viaduct.api.module import ModuleAPI
-from viaduct.api.mollie import MollieAPI
-from viaduct.models.education import Education
+from app import db
+from app.helpers import flash_form_errors, get_login_form
+from app.forms.activity import ActivityForm, CreateForm
+from app.models.activity import Activity
+from app.models.custom_form import CustomForm, CustomFormResult
+from app.models.mollie import Transaction
+from app.api.module import ModuleAPI
+from app.api.mollie import MollieAPI
+from app.models.education import Education
 
-from viaduct.utilities.serialize_sqla import serialize_sqla
+from app.utilities.serialize_sqla import serialize_sqla
 
 blueprint = Blueprint('activity', __name__, url_prefix='/activities')
 

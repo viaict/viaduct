@@ -1,8 +1,8 @@
-from viaduct import db
+from app import db
 
-from viaduct.models.page import Page, PageRevision
-from viaduct.models.user import User
-from viaduct.models.challenge import Challenge, Submission, Competitor
+from app.models.page import Page, PageRevision
+from app.models.user import User
+from app.models.challenge import Challenge, Submission, Competitor
 
 from sqlalchemy import and_
 import datetime

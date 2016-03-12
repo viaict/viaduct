@@ -1,11 +1,11 @@
 from flask import Blueprint
 from flask import render_template
 
-from viaduct.models.examination import Examination
-from viaduct.models.course import Course
-from viaduct.models.education import Education
+from app.models.examination import Examination
+from app.models.course import Course
+from app.models.education import Education
 
-from viaduct.api.search import SearchAPI
+from app.api.search import SearchAPI
 
 
 # THIS IS A TEST MODULE, currently testing the searchAPI

@@ -1,9 +1,9 @@
 from flask.ext.login import current_user
 from flask import abort, url_for
-from viaduct.models.mollie import Transaction
+from app.models.mollie import Transaction
 
 
-from viaduct import db, app
+from app import db, app
 
 import mollie.api.error as mollie_error
 from mollie.api.client import Client

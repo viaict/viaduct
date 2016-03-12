@@ -1,5 +1,5 @@
-from viaduct import db
-from viaduct.models import BaseEntity, User
+from app import db
+from app.models import BaseEntity, User
 
 
 class Nominee(db.Model, BaseEntity):

@@ -4,14 +4,14 @@ from flask import Blueprint, flash, redirect, render_template, request,\
 from flask.ext.login import current_user
 from flask.ext.babel import _  # gettext
 
-from viaduct import db
-from viaduct.forms import PageForm, HistoryPageForm
-from viaduct.helpers import flash_form_errors
-from viaduct.helpers.htmldiff import htmldiff
-from viaduct.models import Group, Page, PageRevision, PagePermission, \
+from app import db
+from app.forms import PageForm, HistoryPageForm
+from app.helpers import flash_form_errors
+from app.helpers.htmldiff import htmldiff
+from app.models import Group, Page, PageRevision, PagePermission, \
     CustomForm, Redirect
-from viaduct.api.module import ModuleAPI
-from viaduct.api.page import PageAPI
+from app.api.module import ModuleAPI
+from app.api.page import PageAPI
 
 blueprint = Blueprint('page', __name__)
 

@@ -1,8 +1,8 @@
 from sqlalchemy import event
 
-from viaduct import db, get_locale
-from viaduct.models.page import SuperRevision
-from viaduct.models import User
+from app import db, get_locale
+from app.models.page import SuperRevision
+from app.models import User
 
 from flask.ext.babel import lazy_gettext as _
 

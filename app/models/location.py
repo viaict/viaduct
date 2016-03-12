@@ -1,5 +1,5 @@
-from viaduct import db
-from viaduct.models import BaseEntity
+from app import db
+from app.models import BaseEntity
 
 
 class Location(db.Model, BaseEntity):

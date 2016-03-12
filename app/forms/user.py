@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from viaduct import app
+from app import app
 
 from flask_wtf import Form
 from wtforms import StringField, PasswordField, BooleanField, \

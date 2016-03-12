@@ -1,7 +1,7 @@
 from flask import abort
-from viaduct.models.booksales import Book, Sale
-from viaduct import db
-from viaduct.api.module import ModuleAPI
+from app.models.booksales import Book, Sale
+from app import db
+from app.api.module import ModuleAPI
 
 
 class BookSalesAPI:

@@ -1,16 +1,16 @@
 from flask import Blueprint, abort, redirect, url_for
 from flask import flash, render_template, request, jsonify
-from viaduct import db
+from app import db
 
 from flask.ext.login import current_user
 
-from viaduct.forms.pimpy import AddTaskForm, AddMinuteForm
-from viaduct.api.pimpy import PimpyAPI
-from viaduct.api.module import ModuleAPI
-from viaduct.models.pimpy import Task
-from viaduct.models.group import Group
+from app.forms.pimpy import AddTaskForm, AddMinuteForm
+from app.api.pimpy import PimpyAPI
+from app.api.module import ModuleAPI
+from app.models.pimpy import Task
+from app.models.group import Group
 
-from viaduct.api import copernica
+from app.api import copernica
 
 
 blueprint = Blueprint('pimpy', __name__, url_prefix='/pimpy')

@@ -1,5 +1,5 @@
 from PIL import Image, ImageChops
-import viaduct
+import app
 import os
 
 
