@@ -3,7 +3,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Studievereniging VIA{% if title %} - {{ title }}{% endif %}</title>
+        {% set seo_fields = SeoAPI.get_seo_fields(get_locale()) %}
+
+        <title>{{seo_fields.title}}</title>
+        <meta description="{{seo_fields.description}}" />
+        <meta name="keywords" content="{{seo_fields.keywords}}" />
 
         <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
@@ -53,6 +57,12 @@
                     <i class="fa fa-question-circle"></i> Help
                 </a>
                 |
+                {% if ModuleAPI.can_write('seo') %}
+                <a href="{{ url_for('seo.edit_seo', module=request.blueprint, path=request.path) }}"  data-icon="glyphicon-search" class="btn btn-sm">
+                    <i class="fa fa-search"></i> SEO
+                </a>
+                |
+                {% endif %}
                 <a href="{{ url_for('jira.create_issue', redir=request.path) }}"  class="btn btn-sm"> <i class="fa fa-bug"></i> Report a bug</a>
             </p>
             <div class="row">

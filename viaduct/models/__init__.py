@@ -15,3 +15,4 @@ from .custom_form import CustomForm  # noqa
 from .elections import Nominee, Nomination, Vote  # noqa
 from .committee import CommitteeRevision  # noqa
 from .redirect import Redirect  # noqa
+from .seo import SEO  # noqa

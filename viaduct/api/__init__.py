@@ -9,6 +9,7 @@ from .pimpy import PimpyAPI
 from .file import FileAPI  # noqa
 from .booksales import BookSalesAPI
 from .page import PageAPI
+from .seo import SeoAPI
 
 from .user import UserAPI
 from .module import ModuleAPI
@@ -24,3 +25,4 @@ application.jinja_env.globals.update(ModuleAPI=ModuleAPI)
 application.jinja_env.globals.update(BookSalesAPI=BookSalesAPI)
 application.jinja_env.globals.update(PageAPI=PageAPI)
 application.jinja_env.globals.update(CategoryAPI=CategoryAPI)
+application.jinja_env.globals.update(SeoAPI=SeoAPI)
