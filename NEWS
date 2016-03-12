@@ -1,6 +1,7 @@
 XX-03-2016 vx.x.x.x:
 * Users removed from groups are automatically added to the activeAllumniList
 * Pimpy name matching has been updated
+* Nice interactive form selection
 
 18-02-2016 v2.5.1.1:
 * Disable bugreports because of spammers
