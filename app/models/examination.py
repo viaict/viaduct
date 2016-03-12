@@ -10,11 +10,10 @@ from app.models.user import User
 from app.models import BaseEntity
 
 
-test_types = {'Mid-Term': _('Mid-Term'),
-              'End-Term': _('End-Term'),
+test_types = {'Mid-term': _('Mid-Term'),
+              'End-term': _('End-Term'),
               'Retake': _('Retake'),
-              'Unknown': _('Unknown'),
-              '': _('Unknown')}
+              'Unknown': _('Unknown')}
 
 
 class Examination(db.Model, BaseEntity):

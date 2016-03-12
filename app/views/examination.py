@@ -41,7 +41,6 @@ def file_exists(filename):
 
 
 def create_unique_file(filename):
-
     temp_filename = filename
 
     i = 0

@@ -23,9 +23,9 @@
             <div class='form-group'>
                 {{_('Examination kind')}}
                 <select name='test_type' class='form-control examination kind'>
-                    {% for type in test_types.values() %}
-                        <option value="{{ type }}" {% if type == examination.test_type %}selected="selected"{% endif %}>
-                            {{type}}
+                    {% for type_key, type_name in test_types.items() %}
+                        <option value="{{ type_key }}" {% if type_key == examination.test_type %}selected="selected"{% endif %}>
+                            {{type_name}}
                         </option>
                     {% endfor %}
                 </select>

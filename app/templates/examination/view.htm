@@ -60,7 +60,11 @@
                         <a href='/examination?search={{ (examination.course.name) }}'>{{ examination.course.name }}</a>
                     </td>
                     <td>
+                        {% if examination.test_type not in test_types %}
+                        {{ test_types['Unknown'] }}
+                        {% else %}
                         {{ test_types[examination.test_type] }}
+                        {% endif %}
                     </td>
                     <td>
                         <a href='{{ path + examination.path }}' target='_blank'><i class='glyphicon glyphicon-cloud-download'></i> {{ examination.title }}</a>
