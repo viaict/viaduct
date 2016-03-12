@@ -1,0 +1,107 @@
+{% from 'macros/pagination.htm' import render_pagination %}
+
+{% extends 'base.htm' %}
+
+{% block page %}
+<h1>{{ _('Examinations') }}</h1>
+
+    <div class='row'>
+        <div class='col-md-12'>
+            <form method='get' action='{{ url_for('examination.view_examination') }}' enctype=multipart/form-data class='form-horizontal' >
+                <div class='form-group'>
+                    <div class='col-md-8'>
+                        <div class="input-group">
+                            <input
+                                name='search' id='search'
+                                class='form-control' type='text'
+                                placeholder='{{ _('Search') }}'
+                                value='{{search}}'
+                                onkeypress='searchKeyPress(event);' />
+                            <span class="input-group-btn">
+                            <button type='submit' class='btn btn-primary'>
+                                <i class='glyphicon glyphicon-search' id='submit'></i>
+                            </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% if ModuleAPI.can_write('examination') %}
+    <p>
+        <a href='add' class='btn btn-default'>
+            <i class='glyphicon glyphicon-pencil'></i>
+            <strong>{{ _('New examination') }}</strong>
+        </a>
+    </p>
+    {% endif %}
+    <table class='table table-bordered table-striped'>
+        <thead>
+            <tr>
+                <th>{{ _('Education') }}</th>
+                <th>{{ _('Course') }}</th>
+                <th>{{ _('Examination')}}</th>
+                <th>{{ _('Date') }}</th>
+                <th>{{ _('Answers') }}</th>
+                {% if ModuleAPI.can_write('examination') %}
+                <th>{{ _('Edit') }}</th>
+                {% endif %}
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for examination in examinations.items %}
+                <tr>
+                    <td>
+                        <a href='/examination?search={{ (examination.education.name) }}'>{{ examination.education.name }}</a>
+                    </td>
+                    <td>
+                        <a href='/examination?search={{ (examination.course.name) }}'>{{ examination.course.name }}</a>
+                    </td>
+                    <td>
+                        {{ test_types[examination.test_type] }}
+                    </td>
+                    <td>
+                        <a href='{{ path + examination.path }}' target='_blank'><i class='glyphicon glyphicon-cloud-download'></i> {{ examination.title }}</a>
+                    </td>
+                    <td>
+                        {% if not examination.answer_path == '1' %}
+                        <a href='{{ path + examination.answer_path }}'><i class='glyphicon glyphicon-file'></i>{{ _('Answers') }}</a>
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    {% if ModuleAPI.can_write('examination') %}
+                        <td>
+                            <a href='{{ url_for('examination.edit', exam_id=examination.id) }}'><i class='glyphicon glyphicon-pencil'></i></a>
+                            <a onclick='confirmation({{examination.id}})' role='button' data-toggle='modal' style='cursor: pointer;'><i class='glyphicon glyphicon-remove'></i></a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {{ render_pagination(examinations, 'examination.view_examination', '?search=' + search) }}
+<script>
+function searchKeyPress(e)
+{
+	// look for window.event in case event isn't passed in
+	if (typeof e == 'undefined' && window.event) { e = window.event; }
+	if (e.keyCode == 13)
+	{
+		document.getElementById('submit').click();
+	}
+}
+
+function confirmation(id) {
+	var answer = confirm('Weet je zeker dat je het tentamen wil verwijderen?')
+	if (answer){
+		window.location = '?delete='+id;
+	}
+	else{
+	}
+}
+</script>
+
+{% endblock %}

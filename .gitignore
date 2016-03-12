@@ -22,12 +22,13 @@ Thumbs.db
 *.sublime-*
 *.swp
 
-viaduct/static/files/*
-viaduct/static/css/*
-viaduct/static/js
+app/static/files/*
+app/static/css/*
+app/static/js
 venv/*
 venv3
 .vimrc
+.ackrc
 
 .sass-cache/
 node_modules/
@@ -37,7 +38,7 @@ gitlog.txt
 gitlog.md
 gitlog.py
 
-viaduct/translations/*/LC_MESSAGES/messages.mo
+app/translations/*/LC_MESSAGES/messages.mo
 messages.pot
 
 src/js/global/jade.js

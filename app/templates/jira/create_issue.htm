@@ -1,0 +1,28 @@
+{% from "macros/form.htm" import render_field, render_select, render_textarea, render_submit%}
+
+{% extends "content.htm" %}
+{% block includes %}
+	<script src="{{static_url("/static/js/jira/create_issue.js")}}"></script>
+{% endblock %}
+
+{% block content %}
+
+<form id="report_form" action="" method="post" name="sign_up" class="form" enctype="multipart/form-data">
+    <div class='row'>
+        <div class='col-md-6'>
+            <legend>{{ _('Report bug') }}</legend>
+
+            {{ form.csrf_token }}
+            {{ render_field(form.summary) }}
+            {{ render_select(form.issue_type) }}
+            {{ render_textarea(form.description) }}
+            {% for error in form.recaptcha.errors %}
+                {{ error }}
+            {% endfor %}
+            {{ form.recaptcha }}
+            {{ render_submit(_("Submit!")) }}
+        </div>
+
+	</div>
+</form>
+{% endblock %}

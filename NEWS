@@ -1,3 +1,32 @@
+XX-03-2016 vx.x.x.x:
+* Users removed from groups are automatically added to the activeAllumniList
+
+18-02-2016 v2.5.1.1:
+* Disable bugreports because of spammers
+
+13-02-2016 v2.5.1.0:
+* Update: Removed separate gmail for password requests, now using google apps
+* Update baas32 to fix parsing PimPy tasks
+* Added the ability to disable users
+* Added types of exams to examinationts (retake, final, etc.)
+* Removed 403 status code for the homepage
+* Fixed bug that removed people from mailing lists when they changed their
+    email
+* Fix reordering of navigation entries.
+
+
+23-01-2016 v2.4.2.0:
+* Changed base32 implementation to `baas32`
+* Fixed: Allow changing custom form input for users that have not paid for the
+    form
+* Fixed: Autofill custom forms again
+* Fixed: Editing of users for non admin users
+* Use new method of managing the viaduct configuration so not everything is
+    secret.
+* Added Copernica Integration to viaduct
+* Greatly improve custom form overview, with categories, archive and following
+
+
 13-12-2015 v2.4.1.0:
 * Update: Calendar id's for new VIA Events
 

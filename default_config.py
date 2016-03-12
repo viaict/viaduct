@@ -19,18 +19,19 @@ class DefaultConfig:
     RECAPTCHA_PRIVATE_KEY = ''  # Change this for real use
     RECAPTCHA_OPTIONS = {'theme': 'white'}
 
-    EXAMINATION_UPLOAD_FOLDER = 'viaduct/static/uploads/examinations'
-    UPLOAD_DIR = 'viaduct/static/files/'
+    EXAMINATION_UPLOAD_FOLDER = 'app/static/uploads/examinations'
+    UPLOAD_DIR = 'app/static/files/'
     FILE_DIR = '/static/files/'
 
     # One date format string to rule them all (use this in strftime)
     DATE_FORMAT = "%Y-%m-%d"
+    DT_FORMAT = "%Y-%m-%d %H:%M"
     MIN_PASSWORD_LENGTH = 6
 
     LANGUAGES = {
         'en': 'English',
         'nl': 'Nederlands'
-        }
+    }
 
     # Teacher's elections configuration
     ELECTIONS_NOMINATE_START = date(2014, 12, 12)
@@ -42,12 +43,6 @@ class DefaultConfig:
     GOOGLE_API_KEY = ''   # Path to Google p12 key file, change for real use
     GOOGLE_SERVICE_EMAIL = 'test@developer.gserviceaccount.com'  # change this
     GOOGLE_CALENDAR_ID = ''  #
-
-    # Forgot password gmail account
-    GMAIL_MAIL_ACCOUNT = {
-        'username': '',
-        'password': ''
-    }
 
     # ict@svia.nl
     JIRA_ACCOUNT = {

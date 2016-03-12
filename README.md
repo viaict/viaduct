@@ -1,4 +1,4 @@
-# Version 2.4.1.1
+# Version 2.5.1.1
 Versioning works as follows: vSYSTEM.FEATURE.IMPROVEMENT.BUG-/HOTFIX
 
 #Viaduct (Opensourced, yeah)
@@ -31,10 +31,12 @@ Before installing the Python dependencies, you have to install libjpeg-dev:
 
     sudo apt-get install libjpeg-dev
 
-Python dependencies are in `requirements.txt`. Install through pip. Usage of virtual environments is recommended:
+Python dependencies are in `requirements.txt`. Install through pip (yes two
+installs are necessary). Usage of virtual environments is recommended:
 
 	virtualenv venv/ -p /usr/bin/python3
 	. venv/bin/activate
+	pip install -r requirements.txt
 	pip install -r requirements.txt
 
 Set up the awesome hooks:
@@ -106,10 +108,10 @@ translatable strings from the code. Merge the new extractions with the existing
 translations:
 ```bash
     python venv/bin/pybabel extract -F babel.cfg --sort-output -k lazy_gettext -o messages.pot .
-	python venv/bin/pybabel update -i messages.pot -d viaduct/translations
+	python venv/bin/pybabel update -i messages.pot -d app/translations
 ```
 
-Edit the file `viaduct/translations/nl/LC_MESSAGES/message.po` and add the Dutch
+Edit the file `app/translations/nl/LC_MESSAGES/message.po` and add the Dutch
 translations for the English strings. Especially look for lines marked "fuzzy",
 since they won't be compiled. If the translation is correct, remove the line
 marking "fuzzy" and continue.
@@ -117,7 +119,7 @@ marking "fuzzy" and continue.
 After that compile the strings to be used
 in the website.
 ```bash
-	python venv/bin/pybabel compile -d viaduct/translations
+	python venv/bin/pybabel compile -d app/translations
 ```
 
 ##Documentation

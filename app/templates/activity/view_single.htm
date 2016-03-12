@@ -1,0 +1,176 @@
+{% from "macros/maps.htm" import render_map %}
+{% from "macros/custom_form.htm" import user_fields %}
+{% from "macros/form.htm" import render_field, render_checkbox, render_submit %}
+
+{% extends "content.htm" %}
+
+{% block includes %}
+    {% if activity.form_data %}
+        <script src={{static_url("/static/js/unserialize.js")}}></script>
+        <script>
+            $(document).ready(function() {
+                $("#custom").unserializeForm("{{ activity.form_data | safe }}");
+            });
+        </script>
+    {% endif %}
+    <script src={{static_url("/static/js/custom_form_submission.js")}}></script>
+{% endblock %}
+
+
+{% block content %}
+    <div class="page-header">
+        {% if ModuleAPI.can_write('activity') %}
+            <a href="{{ url_for('activity.create',activity_id=activity.id) }}"
+                class="btn btn-warning pull-right">
+                <i class="glyphicon glyphicon-pencil"></i>
+                {{_('Edit')}}
+            </a>
+        {% endif %}
+
+        <h1>{{activity.name}}</h1><small> {{ activity.till_now() }}</small>
+    </div>
+
+    <div class="accordion" id="acc">
+        <div class="accordion-group">
+
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse"
+                    data-parent="#acc" href="#collapseLocation">
+                    <i class="glyphicon glyphicon-home"></i>
+                    {{_('Location')}}: {{ activity.location}}
+                    <span class="pull-right">{{_('Click to expand')}}</span>
+                </a>
+            </div>
+
+            <div id="collapseLocation" class="accordion-body collapse">
+                <div class="accordion-inner">
+                    {{ render_map(600, 400, activity.location) }}
+                </div>
+            </div>
+        </div>
+
+        {% if activity.form %}
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse"
+                        data-parent="#acc" href="#collapseForm">
+                        <i class="glyphicon glyphicon-star"></i>
+                        {{_('Register for this activity')}}
+                        <span class="pull-right">{{_('Click to expand')}}</span>
+                    </a>
+                </div>
+
+                <div id="collapseForm" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                        {% if current_user and current_user.id %}
+                            <script>
+                                var msg_success = '{{ activity.form.msg_success }}';
+                            </script>
+
+
+                            <form id="custom"
+                                action="{{ url_for('custom_form.submit', form_id=activity.form.id) }}"
+                                enctype="multipart/form-data">
+                                {% if activity.form_data %}
+                                    <!-- Display custom success message in case user refreshes / forgot info -->
+                                    <div class="alert alert-success">
+                                        {{ activity.form.msg_success }}
+                                    </div>
+                                {% endif %}
+
+
+                                {% if activity.info %}
+                                    <div class="alert alert-warning">
+                                        {{ activity.info }}
+                                    </div>
+                                {% endif %}
+
+                                <div class="row">
+                                    <div class="col-md-4 col-md-offset-1 pull-right">
+                                        {% if form.show_pay_button %}
+                                            <a href="{{ url_for('activity.create_mollie_transaction', result_id=form.form_result.id) }}" class="btn btn-warning">
+                                                {{_('Pay (+€0,50 transaction costs)')}}
+                                            </a>
+                                        {% endif %}
+
+                                        <h3>{{_('Contact details')}}</h3>
+                                        <small>{{_('These details are taken from your account.')}}</small>
+                                        {{ render_field(form.email) }}
+                                        {{ render_field(form.first_name) }}
+                                        {{ render_field(form.last_name) }}
+                                        {{ render_field(form.student_id) }}
+                                        {{ render_field(form.education_id) }}
+                                    </div>
+                                    <div class="col-md-7">
+                                        <h3>Vul a.u.b in :D</h3>
+                                        <p>{{_("Some details like shirt size or diet we try to save, so you don\'t have to fill them in more then once.")}}</p>
+                                        {{ activity.form.html | safe }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    {% if activity.form.terms: %}
+                                        <div class="col-md-7">
+                                            <label>{{_('Terms')}}:</label>
+                                            {{ activity.form.terms }}
+                                            <p>{{_('By registering you agree with the terms above.')}}</p>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <button id="custom_form" class="btn btn-success">{{_('Send form')}}</button>
+                            </form>
+
+                        {% else %}
+                            <p>{{_('You must be logged-in to register for an activity.')}}</p>
+
+                            <form method='post' name='sign-in-activity'
+                                action='{{ url_for('user.sign_in') }}'>
+                                {{ login_form.csrf_token }}
+                                {{ render_field(login_form.email) }}
+                                {{ render_field(login_form.password) }}
+                                {{ render_submit('Inloggen') }}
+                            </form>
+
+                            <ul class='list-unstyled'>
+                                <li>
+                                    <a href='{{ url_for('user.sign_up') }}'>
+                                        {{_('Register')}}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href='{{ url_for('user.request_password') }}'>
+                                        {{_('Reset password')}}
+                                    </a>
+                                </li>
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <h4>{{_('Price')}}:
+                {% if not activity.price.lower() == "gratis" and not activity.price.lower() == "free" %}
+                    &euro; {{ activity.price }}
+                {% else %}
+                    {{ _('free') }}
+                {% endif %}
+            </h4>
+
+            <div class="time">
+                <i class="glyphicon glyphicon-calendar"></i>
+                {{ activity.get_time() }}
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            {% if activity.picture %}
+                <img src="{{ thumb('/static/activity_pictures/' + activity.picture, (220, 220)) }}">
+            {% endif %}
+        </div>
+    </div>
+    <hr>
+    <p>{{ activity.description | markdown }}</p>
+{% endblock %}
