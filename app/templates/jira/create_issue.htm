@@ -16,12 +16,10 @@
             {{ render_field(form.summary) }}
             {{ render_select(form.issue_type) }}
             {{ render_textarea(form.description) }}
-            {{ if not current_user.has_payed }}
-                {% for error in form.recaptcha.errors %}
-                    {{ error }}
-                {% endfor %}
-                {{ form.recaptcha }}
-            {{ endif }}
+            {% for error in form.recaptcha.errors %}
+                {{ error }}
+            {% endfor %}
+            {{ form.recaptcha }}
             {{ render_submit(_("Submit!")) }}
         </div>
 
