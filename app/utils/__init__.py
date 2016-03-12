@@ -13,6 +13,27 @@ from .module import import_module  # noqa
 from .serialize_sqla import serialize_sqla  # noqa
 from .validate_form import validate_form  # noqa
 
+# OLD APIS
+from .navigation import NavigationAPI
+from .category import CategoryAPI
+from .pimpy import PimpyAPI
+from .file import FileAPI  # noqa
+from .booksales import BookSalesAPI
+from .page import PageAPI
+from .seo import SeoAPI
+
+from .user import UserAPI
+from .module import ModuleAPI
+
+app.jinja_env.globals.update(NavigationAPI=NavigationAPI)
+app.jinja_env.globals.update(PimpyAPI=PimpyAPI)
+app.jinja_env.globals.update(UserAPI=UserAPI)
+app.jinja_env.globals.update(ModuleAPI=ModuleAPI)
+app.jinja_env.globals.update(BookSalesAPI=BookSalesAPI)
+app.jinja_env.globals.update(PageAPI=PageAPI)
+app.jinja_env.globals.update(CategoryAPI=CategoryAPI)
+app.jinja_env.globals.update(SeoAPI=SeoAPI)
+
 markdown_extensions = [
     'toc'
 ]
