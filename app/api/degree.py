@@ -15,7 +15,7 @@ class DegreeAPI(Resource):
         view = DegreeAPI.as_view('degree_api')
 
         app.add_url_rule('/api/degrees/', view_func=view,
-                                 methods=['DELETE', 'GET', 'POST'])
+                         methods=['DELETE', 'GET', 'POST'])
 
     @staticmethod
     def get(degree_id=None):

@@ -12,7 +12,6 @@ from flask import flash, render_template, request
 from flask.ext.babel import _  # gettext
 
 
-
 blueprint = Blueprint('seo', __name__, url_prefix='/seo')
 
 
@@ -30,7 +29,6 @@ def edit_seo():
 
     # Retrieve form info.
     form = SeoForm(request.form, seo)
-
 
     # On Seo submit (edit or create)
     if form.validate_on_submit():
@@ -75,4 +73,3 @@ def edit_seo():
         flash_form_errors(form)
 
     return render_template('seo/edit_seo.htm', form=form)
-

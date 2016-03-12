@@ -127,10 +127,10 @@ def edit(user_id=None):
 
     if ModuleAPI.can_write('user'):
         form = EditUserForm(request.form, user)
-        isAdmin = True
+        is_admin = True
     else:
         form = EditUserInfoForm(request.form, user)
-        isAdmin = False
+        is_admin = False
 
     # Add education.
     educations = Education.query.all()
@@ -138,7 +138,7 @@ def edit(user_id=None):
 
     def edit_page():
         return render_template('user/edit.htm', form=form, user=user,
-                               isAdmin=isAdmin)
+                               is_admin=is_admin)
 
     if form.validate_on_submit():
 

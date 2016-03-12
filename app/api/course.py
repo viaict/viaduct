@@ -14,7 +14,7 @@ class CourseAPI(Resource):
         view = CourseAPI.as_view('course_api')
 
         app.add_url_rule('/api/courses/', view_func=view,
-                                 methods=['DELETE', 'GET', 'POST'])
+                         methods=['DELETE', 'GET', 'POST'])
 
     @staticmethod
     def get():

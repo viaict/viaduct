@@ -14,7 +14,7 @@ class EducationAPI(Resource):
         view = EducationAPI.as_view('education_api')
 
         app.add_url_rule('/api/educations/', view_func=view,
-                                 methods=['DELETE', 'GET', 'POST'])
+                         methods=['DELETE', 'GET', 'POST'])
 
     @staticmethod
     def get(education_id=None):

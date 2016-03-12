@@ -54,6 +54,7 @@ class BookSalesAPI:
 
         return True, book.id
 
+    @staticmethod
     def edit_book(book_id, title, price, isbn, stock):
         if not ModuleAPI.can_write('booksales'):
             abort(403)

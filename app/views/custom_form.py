@@ -174,7 +174,8 @@ def create(form_id=None):
                 if prev_max < len(all_sub):
                     for x in range(prev_max, max(cur_max, len(all_sub) - 1)):
                         sub = all_sub[x]
-                        copernica.reserveActivity(sub.owner_id, sub.form_id, False)
+                        copernica.reserveActivity(sub.owner_id, sub.form_id,
+                                                  False)
             elif cur_max < prev_max:
                 all_sub = CustomFormResult.query.filter(
                     CustomFormResult.form_id == form_id
@@ -182,7 +183,8 @@ def create(form_id=None):
                 if cur_max < len(all_sub):
                     for x in range(cur_max, max(prev_max, len(all_sub) - 1)):
                         sub = all_sub[x]
-                        copernica.reserveActivity(sub.owner_id, sub.form_id, True)
+                        copernica.reserveActivity(sub.owner_id, sub.form_id,
+                                                  True)
 
         db.session.add(custom_form)
         db.session.commit()
