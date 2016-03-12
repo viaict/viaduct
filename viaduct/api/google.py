@@ -4,19 +4,19 @@ import traceback
 from apiclient.discovery import build
 from apiclient.errors import HttpError
 from oauth2client.client import SignedJwtAssertionCredentials
-from viaduct import application
+from viaduct import app
 from flask import flash, render_template
 from email.mime.text import MIMEText
 from apiclient import errors
 
 # google calendar Settings > via_events > id
-calendar_id = application.config['GOOGLE_CALENDAR_ID']
+calendar_id = app.config['GOOGLE_CALENDAR_ID']
 
 # Google API service account email
-service_email = application.config['GOOGLE_SERVICE_EMAIL']
+service_email = app.config['GOOGLE_SERVICE_EMAIL']
 
 # name of the private key file
-private_key = application.config['GOOGLE_API_KEY']
+private_key = app.config['GOOGLE_API_KEY']
 
 domain = 'via.uvastudent.org'
 
@@ -155,7 +155,7 @@ def get_group_members(listname):
 
 
 def create_group(groupname, listname):
-    if application.debug:
+    if app.debug:
         return
     api = get_group_api()
     email = listname + '@' + domain
@@ -172,7 +172,7 @@ def create_group_if_not_exists(groupname, listname):
 
 
 def add_email_to_group(email, listname):
-    if application.debug:
+    if app.debug:
         return
     api = get_group_members_api()
     list_id = listname + '@' + domain
@@ -190,7 +190,7 @@ def add_email_to_group_if_not_exists(email, listname):
 
 
 def remove_email_from_group_if_exists(email, listname):
-    if application.debug:
+    if app.debug:
         return
     api = get_group_members_api()
     try:

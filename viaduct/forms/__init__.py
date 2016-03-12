@@ -2,12 +2,12 @@ import os
 
 from flask.ext.wtf import Form
 
-from viaduct import application
+from viaduct import app
 from viaduct.utilities import import_module
 
 
 def register_forms(path):
-    application_path = os.path.dirname(os.path.abspath(application.root_path))
+    app_path = os.path.dirname(os.path.abspath(app.root_path))
 
     for filename in os.listdir(path):
 
@@ -17,7 +17,7 @@ def register_forms(path):
         file_path = os.path.join(path, filename)
 
         name = os.path.splitext(file_path)[0]
-        name = os.path.relpath(name, application_path)
+        name = os.path.relpath(name, app_path)
         name = name.replace('/', '.')
 
         module = import_module(name)

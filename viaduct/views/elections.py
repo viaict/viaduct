@@ -5,7 +5,7 @@ from flask.ext.login import current_user
 from math import ceil
 from datetime import date
 
-from viaduct import db, application
+from viaduct import db, app
 from viaduct.models import Nominee, Nomination, Vote
 from viaduct.api.module import ModuleAPI
 
@@ -15,14 +15,14 @@ blueprint = Blueprint('elections', __name__, url_prefix='/verkiezing')
 
 def can_nominate():
     td = date.today()
-    return td >= application.config['ELECTIONS_NOMINATE_START'] and \
-        td < application.config['ELECTIONS_VOTE_START']
+    return td >= app.config['ELECTIONS_NOMINATE_START'] and \
+        td < app.config['ELECTIONS_VOTE_START']
 
 
 def can_vote():
     td = date.today()
-    return td >= application.config['ELECTIONS_VOTE_START'] and \
-        td <= application.config['ELECTIONS_VOTE_END']
+    return td >= app.config['ELECTIONS_VOTE_START'] and \
+        td <= app.config['ELECTIONS_VOTE_END']
 
 
 @blueprint.route('/', methods=['GET'])

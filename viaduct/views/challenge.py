@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, request, \
 import datetime
 
 from flask.ext.login import current_user
-from viaduct import application
+from viaduct import app
 from viaduct.models.challenge import Challenge
 from viaduct.forms import ChallengeForm
 from viaduct.api.module import ModuleAPI
@@ -12,8 +12,8 @@ from viaduct.api.challenge import ChallengeAPI
 
 blueprint = Blueprint('challenge', __name__, url_prefix='/challenge')
 
-# UPLOAD_FOLDER = application.config['UPLOAD_DIR']
-# FILE_FOLDER = application.config['FILE_DIR']
+# UPLOAD_FOLDER = app.config['UPLOAD_DIR']
+# FILE_FOLDER = app.config['FILE_DIR']
 # ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 
@@ -26,7 +26,7 @@ def view_list(page=1):
     if current_user.id == 0:
         return abort(403)
 
-    print((application.config['SQLALCHEMY_DATABASE_URI']))
+    print((app.config['SQLALCHEMY_DATABASE_URI']))
 
     challenge = Challenge()
     form = ChallengeForm(request.form, challenge)

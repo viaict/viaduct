@@ -7,7 +7,7 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask import abort, jsonify
 from flask.ext.login import current_user
 
-from viaduct import application, db
+from viaduct import app, db
 from viaduct.helpers import flash_form_errors
 
 from viaduct.api.module import ModuleAPI
@@ -227,9 +227,9 @@ def edit_permissions(group_id, page_nr=1):
 
     form = EditGroupPermissionForm()
 
-    # The application's blueprints are stored as a dict, with key
+    # The app's blueprints are stored as a dict, with key
     # 'blueprint.name' and value '<Blueprint object>'.
-    modules = list(application.blueprints.keys())
+    modules = list(app.blueprints.keys())
 
     # Remove current permission.
     for permission in permissions:

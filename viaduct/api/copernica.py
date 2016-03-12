@@ -1,10 +1,10 @@
-from viaduct import application
+from viaduct import app
 import requests, json, threading
 
-token = application.config['COPERNICA_API_KEY']
-database_id = application.config['COPERNICA_DATABASE_ID']
-actiepunt = application.config['COPERNICA_ACTIEPUNTEN']
-activiteit = application.config['COPERNICA_ACTIVITEITEN']
+token = app.config['COPERNICA_API_KEY']
+database_id = app.config['COPERNICA_DATABASE_ID']
+actiepunt = app.config['COPERNICA_ACTIEPUNTEN']
+activiteit = app.config['COPERNICA_ACTIVITEITEN']
 
 def subscribeNewsletter(userID):
     id = viaIDtoCopernicaID(userID)

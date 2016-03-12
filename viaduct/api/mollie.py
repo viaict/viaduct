@@ -3,18 +3,18 @@ from flask import abort, url_for
 from viaduct.models.mollie import Transaction
 
 
-from viaduct import db, application
+from viaduct import db, app
 
 import mollie.api.error as mollie_error
 from mollie.api.client import Client
 
 MOLLIE = Client()
-MOLLIE_TEST_MODE = application.config.get('MOLLIE_TEST_MODE', False)
+MOLLIE_TEST_MODE = app.config.get('MOLLIE_TEST_MODE', False)
 if MOLLIE_TEST_MODE:
-    MOLLIE.set_api_key(application.config['MOLLIE_TEST_KEY'])
+    MOLLIE.set_api_key(app.config['MOLLIE_TEST_KEY'])
     print('USING MOLLIE TEST KEY')
 else:
-    MOLLIE.set_api_key(application.config['MOLLIE_KEY'])
+    MOLLIE.set_api_key(app.config['MOLLIE_KEY'])
     print('USING MOLLIE LIVE KEY')
 
 

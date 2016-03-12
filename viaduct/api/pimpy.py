@@ -1,4 +1,4 @@
-from viaduct import db, application
+from viaduct import db, app
 from flask import render_template, Markup, redirect, url_for, abort,\
     flash
 from flask.ext.login import current_user
@@ -17,7 +17,7 @@ from viaduct.models.pimpy import TaskUserRel
 
 from viaduct.api import copernica
 
-DATE_FORMAT = application.config['DATE_FORMAT']
+DATE_FORMAT = app.config['DATE_FORMAT']
 
 
 class PimpyAPI:

@@ -6,7 +6,7 @@ from sqlalchemy import or_, and_
 
 from datetime import datetime
 
-from viaduct import application, db
+from viaduct import app, db
 from viaduct.models.company import Company
 from viaduct.models.location import Location
 from viaduct.models.contact import Contact
@@ -17,7 +17,7 @@ from viaduct.api.file import FileAPI
 
 blueprint = Blueprint('company', __name__, url_prefix='/companies')
 
-FILE_FOLDER = application.config['FILE_DIR']
+FILE_FOLDER = app.config['FILE_DIR']
 
 
 @blueprint.route('/get_companies/', methods=['GET'])

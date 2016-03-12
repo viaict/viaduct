@@ -3,9 +3,9 @@ from wtforms import FloatField, StringField, IntegerField, SelectField
 from wtforms.validators import InputRequired
 
 from viaduct.models.booksales import MultiCheckboxField
-from viaduct import application
+from viaduct import app
 
-DATE_FORMAT = application.config['DATE_FORMAT']
+DATE_FORMAT = app.config['DATE_FORMAT']
 
 
 class AddBookForm(Form):

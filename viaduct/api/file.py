@@ -3,10 +3,10 @@ from werkzeug import secure_filename
 import os
 import difflib
 from viaduct.models.file import File
-from viaduct import application, db
+from viaduct import app, db
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-UPLOAD_DIR = application.config['UPLOAD_DIR']
+UPLOAD_DIR = app.config['UPLOAD_DIR']
 
 
 class FileAPI:

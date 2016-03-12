@@ -1,7 +1,7 @@
 import json
 import requests
 from requests.auth import HTTPBasicAuth
-from viaduct import application
+from viaduct import app
 
 from flask.ext.login import current_user
 
@@ -14,11 +14,11 @@ class JiraAPI:
 
         # Use the ict@svia.nl account for to authenticate
         auth = HTTPBasicAuth(
-            application.config['JIRA_ACCOUNT']['username'],
-            application.config['JIRA_ACCOUNT']['password'])
+            app.config['JIRA_ACCOUNT']['username'],
+            app.config['JIRA_ACCOUNT']['password'])
 
         jira_url = 'https://viaduct.atlassian.net/rest/api/2/issue'
-        headers = {'content-type': 'application/json'}
+        headers = {'content-type': 'app/json'}
 
         payload = {"fields":
                    {"project": {"key": "VIA"},

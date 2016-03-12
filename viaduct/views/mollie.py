@@ -1,5 +1,5 @@
 from flask import Blueprint, abort, render_template, request, url_for
-from viaduct import application
+from viaduct import app
 from viaduct.api.mollie import MollieAPI
 from viaduct.api.module import ModuleAPI
 from viaduct.api.custom_form import CustomFormAPI
@@ -59,8 +59,8 @@ def view_all_transactions(page=0):
     if not ModuleAPI.can_read('mollie'):
         return abort(403)
 
-    test = application.config.get('MOLLIE_TEST_MODE', False)
-    key = application.config.get('MOLLIE_TEST_KEY', False)
+    test = app.config.get('MOLLIE_TEST_MODE', False)
+    key = app.config.get('MOLLIE_TEST_KEY', False)
     print(key)
 
     payments, message = MollieAPI.get_transactions(page)

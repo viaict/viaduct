@@ -1,4 +1,4 @@
-from viaduct import db, application
+from viaduct import db, app
 from viaduct.models.education import Education
 from datetime import datetime
 from viaduct.models import BaseEntity, Group
@@ -14,7 +14,7 @@ class User(db.Model, BaseEntity):
     password = db.Column(db.String(60))
     first_name = db.Column(db.String(256))
     last_name = db.Column(db.String(256))
-    locale = db.Column(db.Enum(*list(application.config['LANGUAGES'].keys())),
+    locale = db.Column(db.Enum(*list(app.config['LANGUAGES'].keys())),
                        default="nl")
     has_payed = db.Column(db.Boolean, default=None)
     shirt_size = db.Column(db.Enum('Small', 'Medium', 'Large'))

@@ -31,8 +31,8 @@ def is_module(path):
     return False
 
 
-def register_views(application, path, extension=''):
-    application_path = os.path.dirname(os.path.abspath(application.root_path))
+def register_views(app, path, extension=''):
+    app_path = os.path.dirname(os.path.abspath(app.root_path))
 
     for filename in os.listdir(path):
         file_path = os.path.join(path, filename)
@@ -41,28 +41,28 @@ def register_views(application, path, extension=''):
         if is_module(file_path):
             # Get the module name from the file path.
             module_name = os.path.splitext(file_path)[0]
-            module_name = os.path.relpath(module_name, application_path)
+            module_name = os.path.relpath(module_name, app_path)
             module_name = module_name.replace('/', '.')
 
             blueprint = getattr(import_module(module_name), 'blueprint', None)
 
             if blueprint:
                 print(('{0} has been imported.'.format(module_name)))
-                application.register_blueprint(blueprint)
+                app.register_blueprint(blueprint)
 
 
-# Set up the application and load the configuration file.
-application = Flask(__name__)
-js_glue = JSGlue(application)
-application.config.from_object('config.Config')
+# Set up the app and load the configuration file.
+app = Flask(__name__)
+js_glue = JSGlue(app)
+app.config.from_object('config.Config')
 
 # Set up Flask Babel, which is used for internationalisation support.
-babel = Babel(application)
+babel = Babel(app)
 
 
 @babel.localeselector
 def get_locale():
-    languages = application.config['LANGUAGES'].keys()
+    languages = app.config['LANGUAGES'].keys()
     # if a user is logged in, use the locale from the user settings
     if current_user and not current_user.is_anonymous() \
             and current_user.locale is not None:
@@ -80,7 +80,7 @@ def get_locale():
 # Set up the login manager, which is used to store the details related to the
 # authentication system.
 login_manager = LoginManager()
-login_manager.init_app(application)
+login_manager.init_app(app)
 login_manager.login_view = 'user.sign_in'
 
 # Set up the database.
@@ -108,7 +108,7 @@ class SQLAlchemy(BaseSQLAlchemy):
         base.query = _QueryProperty(self)
         return base
 
-db = SQLAlchemy(application)
+db = SQLAlchemy(app)
 
 from viaduct.api.user import UserAPI
 from viaduct.api.company import CompanyAPI
@@ -117,33 +117,33 @@ from viaduct.api.module import ModuleAPI
 from viaduct.helpers.thumb import thumb
 
 # Set jinja global variables
-application.jinja_env.globals.update(enumerate=enumerate)
-application.jinja_env.globals.update(render_template=render_template)
-application.jinja_env.globals.update(markdown=markdown)
-application.jinja_env.globals.update(Markup=Markup)
-application.jinja_env.globals.update(UserAPI=UserAPI)
-application.jinja_env.globals.update(CompanyAPI=CompanyAPI)
-application.jinja_env.globals.update(GuideAPI=GuideAPI)
-application.jinja_env.globals.update(ModuleAPI=ModuleAPI)
-application.jinja_env.globals.update(datetime=datetime)
-application.jinja_env.globals.update(json=json)
-application.jinja_env.globals.update(serialize_sqla=serialize_sqla)
-application.jinja_env.globals.update(len=len)
-application.jinja_env.globals.update(thumb=thumb)
-application.jinja_env.globals.update(isinstance=isinstance)
-application.jinja_env.globals.update(list=list)
+app.jinja_env.globals.update(enumerate=enumerate)
+app.jinja_env.globals.update(render_template=render_template)
+app.jinja_env.globals.update(markdown=markdown)
+app.jinja_env.globals.update(Markup=Markup)
+app.jinja_env.globals.update(UserAPI=UserAPI)
+app.jinja_env.globals.update(CompanyAPI=CompanyAPI)
+app.jinja_env.globals.update(GuideAPI=GuideAPI)
+app.jinja_env.globals.update(ModuleAPI=ModuleAPI)
+app.jinja_env.globals.update(datetime=datetime)
+app.jinja_env.globals.update(json=json)
+app.jinja_env.globals.update(serialize_sqla=serialize_sqla)
+app.jinja_env.globals.update(len=len)
+app.jinja_env.globals.update(thumb=thumb)
+app.jinja_env.globals.update(isinstance=isinstance)
+app.jinja_env.globals.update(list=list)
 
-application.jinja_env.globals.update(static_url=static_url)
-application.jinja_env.globals.update(get_locale=get_locale)
+app.jinja_env.globals.update(static_url=static_url)
+app.jinja_env.globals.update(get_locale=get_locale)
 
-application.jinja_env.globals.update(app_config=application.config)
+app.jinja_env.globals.update(app_config=app.config)
 
 # Register the blueprints.
 from . import api  # noqa
 
 path = os.path.dirname(os.path.abspath(__file__))
 
-register_views(application, os.path.join(path, 'views'))
+register_views(app, os.path.join(path, 'views'))
 
 from viaduct.models import User
 

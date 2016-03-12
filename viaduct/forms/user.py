@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from viaduct import application
+from viaduct import app
 
 from flask_wtf import Form
 from wtforms import StringField, PasswordField, BooleanField, \
@@ -13,7 +13,7 @@ from flask.ext.babel import lazy_gettext as _  # noqa
 
 import dateutil
 
-_min_password_length = application.config['MIN_PASSWORD_LENGTH']
+_min_password_length = app.config['MIN_PASSWORD_LENGTH']
 
 
 class DateField(StringField):
@@ -69,7 +69,7 @@ class BaseUserForm(Form):
     study_start = DateField(_('Start study'), validators=[
          InputRequired(message=_('No start study submitted'))])
     locale = SelectField(_('Language'),
-                         choices=list(application.config['LANGUAGES'].items()))
+                         choices=list(app.config['LANGUAGES'].items()))
 
 
 class SignUpForm(BaseUserForm):

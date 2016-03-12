@@ -7,7 +7,7 @@ from flask.ext.login import current_user
 from markdown import markdown
 from .resource import Resource  # noqa
 
-from viaduct import application, login_manager
+from viaduct import app, login_manager
 from viaduct.forms import SignInForm
 from viaduct.models import Page
 
@@ -25,7 +25,7 @@ def unauthorized():
     return redirect(url_for('user.sign_in'))
 
 
-@application.errorhandler(403)
+@app.errorhandler(403)
 def permission_denied(e):
     """ When permission denied and not logged in you will be redirected. """
     content = "403, The police has been notified!"
@@ -41,12 +41,12 @@ def permission_denied(e):
     return render_template('page/403.htm', content=content, image=image), 403
 
 
-@application.errorhandler(500)
+@app.errorhandler(500)
 def internal_server_error(e):
     return render_template('page/500.htm'), 500
 
 
-@application.errorhandler(404)
+@app.errorhandler(404)
 def page_not_found(e):
     # Search for file extension.
     if re.match(r'(?:.*)\.[a-zA-Z]{3,}$', request.path):
@@ -66,7 +66,7 @@ def get_login_form():
     return SignInForm()
 
 
-@application.template_filter('markdown')
+@app.template_filter('markdown')
 def markdown_filter(data, filter_html=True):
     if filter_html:
         safe_mode = False
@@ -77,7 +77,7 @@ def markdown_filter(data, filter_html=True):
                            extensions=markdown_extensions))
 
 
-@application.template_filter('strip_tags')
+@app.template_filter('strip_tags')
 def strip_tags_filter(data, *args):
     for tag in args:
         # Source: http://stackoverflow.com/a/6445849/849956
@@ -88,17 +88,17 @@ def strip_tags_filter(data, *args):
     return data
 
 
-@application.template_filter('markup')
+@app.template_filter('markup')
 def markup_filter(data):
     return Markup(data)
 
 
-@application.template_filter('safe_markdown')
+@app.template_filter('safe_markdown')
 def safe_markdown_filter(data):
     return Markup(markdown(data, extensions=markdown_extensions))
 
 
-@application.template_filter('pimpy_minute_line_numbers')
+@app.template_filter('pimpy_minute_line_numbers')
 def pimpy_minute_line_numbers(data):
     s = ''
     for i, line in enumerate(data.split('\n')):

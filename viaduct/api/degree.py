@@ -2,7 +2,7 @@ import validictory
 
 from flask import request
 
-from viaduct import application, db
+from viaduct import app, db
 from viaduct.helpers import Resource
 from viaduct.helpers.api import make_api_response
 
@@ -14,7 +14,7 @@ class DegreeAPI(Resource):
     def register():
         view = DegreeAPI.as_view('degree_api')
 
-        application.add_url_rule('/api/degrees/', view_func=view,
+        app.add_url_rule('/api/degrees/', view_func=view,
                                  methods=['DELETE', 'GET', 'POST'])
 
     @staticmethod

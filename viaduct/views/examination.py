@@ -7,7 +7,7 @@ from flask.ext.babel import _
 
 from sqlalchemy import or_
 
-from viaduct import application, db
+from viaduct import app, db
 
 from viaduct.forms import CourseForm
 from viaduct.helpers import flash_form_errors
@@ -27,7 +27,7 @@ from fuzzywuzzy import fuzz
 
 blueprint = Blueprint('examination', __name__)
 
-UPLOAD_FOLDER = application.config['EXAMINATION_UPLOAD_FOLDER']
+UPLOAD_FOLDER = app.config['EXAMINATION_UPLOAD_FOLDER']
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 

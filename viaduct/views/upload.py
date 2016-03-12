@@ -5,7 +5,7 @@ from flask import abort, Blueprint, redirect, request, render_template, \
 from flask.ext.login import current_user
 from werkzeug import secure_filename
 
-from viaduct import application
+from viaduct import app
 from viaduct.forms import UploadForm
 from viaduct.helpers import flash_form_errors
 
@@ -20,8 +20,8 @@ def view(filename=''):
 
 @blueprint.route('/file/direct/<filename>')
 def view_direct(filename):
-    file_path = os.path.join(application.config['UPLOAD_FOLDER'], filename)
-    path = os.path.join(application.root_path, file_path)
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    path = os.path.join(app.root_path, file_path)
 
     if not os.path.exists(path):
         abort(404)
@@ -46,8 +46,8 @@ def add():
             if len(os.path.splitext(filename)[1]) == 0:
                 filename += os.path.splitext(original)[1]
 
-            file_path = os.path.join(application.root_path,
-                                     application.config['UPLOAD_FOLDER'])
+            file_path = os.path.join(app.root_path,
+                                     app.config['UPLOAD_FOLDER'])
             file_path = os.path.join(file_path, filename)
 
             file.save(file_path)

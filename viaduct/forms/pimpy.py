@@ -6,10 +6,10 @@ from wtforms.validators import InputRequired, Optional
 import datetime
 
 from viaduct.models.pimpy import Task
-from viaduct import application
+from viaduct import app
 
 
-DATE_FORMAT = application.config['DATE_FORMAT']
+DATE_FORMAT = app.config['DATE_FORMAT']
 
 
 class AddTaskForm(Form):

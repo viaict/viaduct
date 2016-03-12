@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-from viaduct import db, application
+from viaduct import db, app
 from flask import Blueprint, redirect, make_response, request, url_for, flash
 from flask.ext.babel import refresh
 from flask.ext.login import current_user
@@ -16,7 +16,7 @@ def redirect_url(default='home.home'):
 
 @blueprint.route('/<path:lang>', methods=['GET'])
 def set_lang(lang=None):
-    if lang not in application.config['LANGUAGES'].keys():
+    if lang not in app.config['LANGUAGES'].keys():
         flash(_('Language unsupported on this site') + ': ' + lang, 'warning')
         return redirect(url_for('home.home'))
 

@@ -5,7 +5,7 @@ from sqlalchemy import or_, and_, func
 
 from datetime import datetime
 
-from viaduct import application, db
+from viaduct import app, db
 from viaduct.helpers import flash_form_errors
 from viaduct.models.vacancy import Vacancy
 from viaduct.models.company import Company
@@ -13,7 +13,7 @@ from viaduct.forms import VacancyForm
 from viaduct.api.module import ModuleAPI
 
 blueprint = Blueprint('vacancy', __name__, url_prefix='/vacancies')
-FILE_FOLDER = application.config['FILE_DIR']
+FILE_FOLDER = app.config['FILE_DIR']
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
