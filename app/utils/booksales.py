@@ -1,7 +1,7 @@
 from flask import abort
 from app.models.booksales import Book, Sale
 from app import db
-from app.api.module import ModuleAPI
+from app.utils.module import ModuleAPI
 
 
 class BookSalesAPI:

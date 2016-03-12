@@ -19,7 +19,7 @@ from app.models.course import Course
 from app.models.education import Education
 from app.models.degree import Degree
 
-from app.api.module import ModuleAPI
+from app.utils.module import ModuleAPI
 
 from werkzeug import secure_filename
 

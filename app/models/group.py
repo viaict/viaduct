@@ -3,7 +3,7 @@
 import app
 from app import db
 from app.models import BaseEntity
-from app.api import google
+from app.utils import google
 
 user_group = db.Table(
     'user_group',

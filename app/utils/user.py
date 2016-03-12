@@ -9,7 +9,7 @@ import hashlib
 from flask import render_template
 
 from app.models.group import Group
-from app.api.file import FileAPI
+from app.utils.file import FileAPI
 
 ALLOWED_EXTENSIONS = set(['png', 'gif', 'jpg', 'jpeg'])
 UPLOAD_DIR = 'app/static/files/users/'

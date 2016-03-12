@@ -1,7 +1,7 @@
 from flask import Blueprint, abort, render_template, request, url_for
 from app import app
-from app.api.mollie import MollieAPI
-from app.api.module import ModuleAPI
+from app.utils.mollie import MollieAPI
+from app.utils.module import ModuleAPI
 from app.models import Transaction, CustomForm
 from app.models.activity import Activity
 

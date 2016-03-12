@@ -1,7 +1,7 @@
 from flask import request
 
 from app.models.page import Page, PageRevision
-from app.api.module import ModuleAPI
+from app.utils.module import ModuleAPI
 
 
 # Get the guide page for a specific module

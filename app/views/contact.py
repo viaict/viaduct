@@ -6,7 +6,7 @@ from app.models.contact import Contact
 from app.models.location import Location
 from app.utils import validate_form
 from app.forms import ContactForm
-from app.api.module import ModuleAPI
+from app.utils.module import ModuleAPI
 
 blueprint = Blueprint('contact', __name__, url_prefix='/contacts')
 

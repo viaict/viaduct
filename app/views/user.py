@@ -24,10 +24,10 @@ from app.models.group import Group
 from app.models.request_ticket import Password_ticket
 from app.forms.user import EditUserForm, EditUserInfoForm
 from app.models.education import Education
-from app.api.module import ModuleAPI
-from app.api import UserAPI
-from app.api import copernica
-from app.api.google import HttpError, send_email
+from app.utils.module import ModuleAPI
+from app.utils import UserAPI
+from app.utils import copernica
+from app.utils.google import HttpError, send_email
 
 blueprint = Blueprint('user', __name__)
 

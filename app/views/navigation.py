@@ -7,9 +7,9 @@ from app.utils import flash_form_errors
 from app.utils.resource import get_all_routes
 from app.models.navigation import NavigationEntry
 from app.forms import NavigationEntryForm
-from app.api.navigation import NavigationAPI
-from app.api.module import ModuleAPI
-from app.api.page import PageAPI
+from app.utils.navigation import NavigationAPI
+from app.utils.module import ModuleAPI
+from app.utils.page import PageAPI
 from app.models.page import Page
 
 import json

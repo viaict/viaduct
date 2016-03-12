@@ -10,8 +10,8 @@ from app.utils import flash_form_errors
 from app.utils.htmldiff import htmldiff
 from app.models import Group, Page, PageRevision, PagePermission, \
     CustomForm, Redirect
-from app.api.module import ModuleAPI
-from app.api.page import PageAPI
+from app.utils.module import ModuleAPI
+from app.utils.page import PageAPI
 
 blueprint = Blueprint('page', __name__)
 

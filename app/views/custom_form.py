@@ -9,9 +9,9 @@ from app.models import Activity
 from app.models.user import User
 from app.models.custom_form import CustomForm, CustomFormResult, \
     CustomFormFollower
-from app.api.module import ModuleAPI
+from app.utils.module import ModuleAPI
 
-from app.api import copernica
+from app.utils import copernica
 from sqlalchemy import desc
 from urllib.parse import parse_qsl
 

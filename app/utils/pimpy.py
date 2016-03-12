@@ -9,13 +9,13 @@ import baas32 as b32
 
 from fuzzywuzzy import fuzz
 
-from app.api.module import ModuleAPI
-from app.api.user import UserAPI
+from app.utils.module import ModuleAPI
+from app.utils.user import UserAPI
 from app.models import Group, User
 from app.models import Minute, Task
 from app.models.pimpy import TaskUserRel
 
-from app.api import copernica
+from app.utils import copernica
 
 DATE_FORMAT = app.config['DATE_FORMAT']
 

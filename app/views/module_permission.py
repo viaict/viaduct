@@ -5,7 +5,7 @@ from app.models.examination import Examination
 from app.models.course import Course
 from app.models.education import Education
 
-from app.api.search import SearchAPI
+from app.utils.search import SearchAPI
 
 
 # THIS IS A TEST MODULE, currently testing the searchAPI

@@ -3,8 +3,8 @@ from flask import flash, render_template, request
 
 from app.models.booksales import Book, Sale
 
-from app.api.module import ModuleAPI
-from app.api.booksales import BookSalesAPI
+from app.utils.module import ModuleAPI
+from app.utils.booksales import BookSalesAPI
 
 from app.forms.booksales import AddBookForm, AddSaleForm
 

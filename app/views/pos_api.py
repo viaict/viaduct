@@ -4,7 +4,7 @@ from sqlalchemy import or_
 from flask import request, Blueprint, jsonify
 
 from app import app
-from app.api.user import UserAPI
+from app.utils.user import UserAPI
 from app.models.user import User
 
 

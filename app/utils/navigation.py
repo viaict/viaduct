@@ -7,7 +7,7 @@ from app import db
 from app.models.activity import Activity
 from app.models.navigation import NavigationEntry
 from app.models.page import Page
-from app.api.page import PageAPI
+from app.utils.page import PageAPI
 from app.forms import SignInForm
 
 

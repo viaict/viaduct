@@ -8,7 +8,7 @@ from flask.ext.babel import _  # gettext
 from sqlalchemy import desc
 
 from app import db
-from app.api import ModuleAPI
+from app.utils import ModuleAPI
 from app.forms import NewsForm
 from app.models import News
 from app.utils import flash_form_errors

@@ -3,7 +3,7 @@ import datetime
 
 # this is now uncommented for breaking activity for some reason
 # please some one check out what is happening
-import app.api.google as google
+import app.utils.google as google
 
 from flask import flash, redirect, render_template, request, url_for, abort,\
     jsonify
@@ -19,8 +19,8 @@ from app.forms.activity import ActivityForm, CreateForm
 from app.models.activity import Activity
 from app.models.custom_form import CustomForm, CustomFormResult
 from app.models.mollie import Transaction
-from app.api.module import ModuleAPI
-from app.api.mollie import MollieAPI
+from app.utils.module import ModuleAPI
+from app.utils.mollie import MollieAPI
 from app.models.education import Education
 from app.forms import SignInForm
 

@@ -7,7 +7,7 @@ from datetime import date
 
 from app import db, app
 from app.models import Nominee, Nomination, Vote
-from app.api.module import ModuleAPI
+from app.utils.module import ModuleAPI
 
 
 blueprint = Blueprint('elections', __name__, url_prefix='/verkiezing')

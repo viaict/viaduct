@@ -5,7 +5,7 @@ from app import db
 from app.models.location import Location
 from app.utils import serialize_sqla, validate_form
 from app.forms import LocationForm
-from app.api.module import ModuleAPI
+from app.utils.module import ModuleAPI
 
 blueprint = Blueprint('location', __name__, url_prefix='/locations')
 

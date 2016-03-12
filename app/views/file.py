@@ -5,8 +5,8 @@ from flask import Blueprint, render_template, request, redirect, url_for, \
     jsonify, abort
 from app.models.file import File
 from app.forms import FileForm
-from app.api import FileAPI
-from app.api.module import ModuleAPI
+from app.utils import FileAPI
+from app.utils.module import ModuleAPI
 
 blueprint = Blueprint('file', __name__, url_prefix='/files')
 

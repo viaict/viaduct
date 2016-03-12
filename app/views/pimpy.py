@@ -5,12 +5,12 @@ from app import db
 from flask.ext.login import current_user
 
 from app.forms.pimpy import AddTaskForm, AddMinuteForm
-from app.api.pimpy import PimpyAPI
-from app.api.module import ModuleAPI
+from app.utils.pimpy import PimpyAPI
+from app.utils.module import ModuleAPI
 from app.models.pimpy import Task
 from app.models.group import Group
 
-from app.api import copernica
+from app.utils import copernica
 
 
 blueprint = Blueprint('pimpy', __name__, url_prefix='/pimpy')

@@ -10,7 +10,7 @@ from app.utils import flash_form_errors
 from app.models.vacancy import Vacancy
 from app.models.company import Company
 from app.forms import VacancyForm
-from app.api.module import ModuleAPI
+from app.utils.module import ModuleAPI
 
 blueprint = Blueprint('vacancy', __name__, url_prefix='/vacancies')
 FILE_FOLDER = app.config['FILE_DIR']

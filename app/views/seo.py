@@ -1,8 +1,8 @@
 from app.forms import SeoForm
 
 from app import db
-from app.api.module import ModuleAPI
-from app.api.seo import SeoAPI
+from app.utils.module import ModuleAPI
+from app.utils.seo import SeoAPI
 from app.utils import flash_form_errors
 from app.models import SEO
 

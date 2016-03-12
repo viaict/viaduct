@@ -11,8 +11,8 @@ from app.models.company import Company
 from app.models.location import Location
 from app.models.contact import Contact
 from app.forms import CompanyForm, NewCompanyForm
-from app.api.module import ModuleAPI
-from app.api.file import FileAPI
+from app.utils.module import ModuleAPI
+from app.utils.file import FileAPI
 
 
 blueprint = Blueprint('company', __name__, url_prefix='/companies')

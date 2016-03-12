@@ -111,10 +111,10 @@ db = SQLAlchemy(app)
 
 from app.utils import import_module, serialize_sqla
 from app.utils.thumb import thumb
-from app.api.user import UserAPI
-from app.api.company import CompanyAPI
-from app.api.guide import GuideAPI
-from app.api.module import ModuleAPI
+from app.utils.user import UserAPI
+from app.utils.company import CompanyAPI
+from app.utils.guide import GuideAPI
+from app.utils.module import ModuleAPI
 
 # Set jinja global variables
 app.jinja_env.globals.update(enumerate=enumerate)

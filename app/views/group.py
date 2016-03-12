@@ -10,8 +10,8 @@ from flask.ext.login import current_user
 from app import app, db
 from app.utils import flash_form_errors
 
-from app.api.module import ModuleAPI
-from app.api import google
+from app.utils.module import ModuleAPI
+from app.utils import google
 
 from app.models import Group, GroupPermission, User
 from app.forms.group import EditGroupPermissionForm, ViewGroupForm, \

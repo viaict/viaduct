@@ -1,6 +1,6 @@
 from flask.ext.login import current_user
 
-from app.api.user import UserAPI
+from app.utils.user import UserAPI
 from app.models.permission import GroupPermission
 
 import sys
