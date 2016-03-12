@@ -5,7 +5,7 @@ from flask_failsafe import failsafe
 
 @failsafe
 def create_app():
-    from viaduct import app
+    from app import app
 
     return app
 

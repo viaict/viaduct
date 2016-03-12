@@ -12,7 +12,7 @@ from app.models.group import Group
 from app.api.file import FileAPI
 
 ALLOWED_EXTENSIONS = set(['png', 'gif', 'jpg', 'jpeg'])
-UPLOAD_DIR = 'viaduct/static/files/users/'
+UPLOAD_DIR = 'app/static/files/users/'
 
 
 class UserAPI:

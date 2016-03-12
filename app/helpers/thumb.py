@@ -4,7 +4,7 @@ import os
 
 
 def thumb(url, size=(100, 100)):
-    im_path = os.path.join(viaduct.path, url.lstrip('/'))
+    im_path = os.path.join(app.path, url.lstrip('/'))
 
     im_dir, im_name = os.path.split(im_path)
 

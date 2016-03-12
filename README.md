@@ -108,10 +108,10 @@ translatable strings from the code. Merge the new extractions with the existing
 translations:
 ```bash
     python venv/bin/pybabel extract -F babel.cfg --sort-output -k lazy_gettext -o messages.pot .
-	python venv/bin/pybabel update -i messages.pot -d viaduct/translations
+	python venv/bin/pybabel update -i messages.pot -d app/translations
 ```
 
-Edit the file `viaduct/translations/nl/LC_MESSAGES/message.po` and add the Dutch
+Edit the file `app/translations/nl/LC_MESSAGES/message.po` and add the Dutch
 translations for the English strings. Especially look for lines marked "fuzzy",
 since they won't be compiled. If the translation is correct, remove the line
 marking "fuzzy" and continue.
@@ -119,7 +119,7 @@ marking "fuzzy" and continue.
 After that compile the strings to be used
 in the website.
 ```bash
-	python venv/bin/pybabel compile -d viaduct/translations
+	python venv/bin/pybabel compile -d app/translations
 ```
 
 ##Documentation

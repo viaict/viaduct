@@ -80,7 +80,7 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: 'dist/js/concat/',
                     src: ['**'],
-                    dest: 'viaduct/static/js'
+                    dest: 'app/static/js'
                 }]
             },
 
@@ -89,13 +89,13 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: 'dist/js/min/',
                     src: ['**'],
-                    dest: 'viaduct/static/js'
+                    dest: 'app/static/js'
                 }]
             },
         },
 
         clean: {
-            served_files: 'viaduct/static/js',
+            served_files: 'app/static/js',
             dist: 'dist',
         },
 

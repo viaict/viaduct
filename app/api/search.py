@@ -31,8 +31,8 @@ class SearchAPI:
                 (Education, [Education.name])]
             > needle = "inf"
             > print searchAPI.search(stack, needle)
-            set([<viaduct.models.education.Education object at
-                0x7f4f5c2ac650>, <viaduct.models.education.Education object
+            set([<app.models.education.Education object at
+                0x7f4f5c2ac650>, <app.models.education.Education object
                 at 0x7f4f5c2ac710>])
             # (this should contain Informatica and Informatiekunde)
         """

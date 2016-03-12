@@ -4,7 +4,7 @@ import re
 from glob import glob
 from flask import json
 
-import viaduct
+import app
 
 class user:
     # Regular user should not have admin rights on any pages
@@ -29,10 +29,10 @@ class testPages(unittest.TestCase):
         return application
 
     def setUp(self):
-        viaduct.application.config['TESTING'] = True
-        viaduct.application.config['CSRF_ENABLED'] = False
-        viaduct.application.config['WTF_CSRF_ENABLED'] = False
-        self.application = viaduct.application.test_client()
+        app.application.config['TESTING'] = True
+        app.application.config['CSRF_ENABLED'] = False
+        app.application.config['WTF_CSRF_ENABLED'] = False
+        self.application = app.application.test_client()
 
         return
 
@@ -78,9 +78,9 @@ class testPages(unittest.TestCase):
     def checkPages(self, message):
         report = []
 
-        for url in viaduct.application.url_map._rules_by_endpoint:
+        for url in app.application.url_map._rules_by_endpoint:
             try:
-                path = str(viaduct.application.url_map._rules_by_endpoint[url][0])
+                path = str(app.application.url_map._rules_by_endpoint[url][0])
                 if not "delete" in path and not "remove" in path and not "sign-out" in path:
 
                     """ substitude the path variables """

@@ -55,7 +55,7 @@ class Page(db.Model, BaseEntity):
 
         class_name = '%sRevision' % (self.type.capitalize())
         revision_class = getattr(
-            sys.modules['viaduct.models.%s' % (self.type)], class_name)
+            sys.modules['app.models.%s' % (self.type)], class_name)
 
         return revision_class
 

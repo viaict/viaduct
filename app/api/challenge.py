@@ -8,7 +8,7 @@ from sqlalchemy import and_
 import datetime
 
 ALLOWED_EXTENSIONS = set(['png', 'gif', 'jpg', 'jpeg'])
-UPLOAD_DIR = 'viaduct/static/files/users/'
+UPLOAD_DIR = 'app/static/files/users/'
 
 
 class ChallengeAPI:
