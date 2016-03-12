@@ -16,15 +16,15 @@ class JiraAPI:
         auth = HTTPBasicAuth(
             app.config['JIRA_ACCOUNT']['username'],
             app.config['JIRA_ACCOUNT']['password'])
-
+        print(app.config['JIRA_ACCOUNT']['password'])
         jira_url = 'https://viaduct.atlassian.net/rest/api/2/issue'
-        headers = {'content-type': 'app/json'}
+        headers = {'content-type': 'application/json'}
 
         payload = {"fields":
                    {"project": {"key": "VIA"},
                     "summary": "{}".format(form.summary.data),
                     "description": "Bug report by: {}:\n\n{}".format(
-                        current_user.email, form.description.data),
+                       current_user.email, form.description.data),
                     "issuetype": {"id": "{}".format(form.issue_type.data)}
                     }
                    }
@@ -36,4 +36,5 @@ class JiraAPI:
             headers=headers,
             auth=auth
         )
+        print(dir(response), response.status_code, response.reason)
         return response
