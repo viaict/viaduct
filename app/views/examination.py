@@ -171,11 +171,7 @@ def view_examination(page_nr=1):
     if request.args.get('search'):
         search = request.args.get('search')
 
-        exams = db.session.query(Examination.id,
-                                 Examination.title,
-                                 Course.name,
-                                 Education.name.label("program")
-                                 ).join(Course).join(Education).all()
+        exams = Examination.query.all()
 
         exam_matches = []
 
@@ -183,8 +179,10 @@ def view_examination(page_nr=1):
 
         for exam in exams:
             if fuzz.partial_ratio(search, exam.title.lower()) > 75 or\
-                    fuzz.partial_ratio(search, exam.name.lower()) > 75 or\
-                    fuzz.partial_ratio(search, exam.program.lower()) > 75:
+                    fuzz.partial_ratio(search,
+                                       exam.course.name.lower()) > 75 or\
+                    fuzz.partial_ratio(search,
+                                       exam.education.name.lower()) > 75:
                 exam_matches.append(exam.id)
 
         examinations = Examination.query.join(Course).join(Education)\
