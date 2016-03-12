@@ -179,7 +179,7 @@ def view_examination(page_nr=1):
 
         exam_matches = []
 
-        search = search.lower()
+        search = search.lower().strip()
 
         for exam in exams:
             if fuzz.partial_ratio(search, exam.title.lower()) > 75 or\
