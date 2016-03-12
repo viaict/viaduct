@@ -1,4 +1,6 @@
-XX-03-2016 vx.x.x.x:
+xx-04-2016 vx.x.x.x:
+
+12-03-2016 v2.6.0.0:
 * Users removed from groups are automatically added to the activeAllumniList
 * Pimpy name matching has been updated
 * Nice interactive form selection
