@@ -16,7 +16,6 @@
             {{ render_field(form.summary) }}
             {{ render_select(form.issue_type) }}
             {{ render_textarea(form.description) }}
-            {{ }}
                 {% for error in form.recaptcha.errors %}
                     {{ error }}
                 {% endfor %}
