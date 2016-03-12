@@ -62,6 +62,6 @@ class Resource(MethodView):
 
         data, code, headers = unpack(response)
         response = output_json(data, code, headers)
-        response.headers['Content-type'] = 'app/json'
+        response.headers['Content-type'] = 'application/json'
 
         return response
