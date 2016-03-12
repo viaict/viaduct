@@ -1,7 +1,10 @@
+from flask.ext.login import current_user
+
 from app import db
 from app.models import BaseEntity, Activity, Transaction
 
 from collections import OrderedDict
+import datetime as dt
 
 
 def export_form_data(r):
@@ -73,6 +76,69 @@ class CustomForm(db.Model, BaseEntity):
                 .order_by(Activity.modified.desc())
                 .first())
 
+    def is_archived(self):
+        return self.archived or (
+            self.activity is not None
+            and dt.datetime.now() < self.activity.end_time)
+
+    @classmethod
+    def aslist(cls, current=None):
+        lst = [
+            ('Gevolgde formulieren', cls.qry_followed().all()),
+            ('Actieve formulieren', cls.qry_active().all()),
+        ]
+
+        if current is not None:
+            cf = cls.query.get(current)
+
+            if cf.is_archived():
+                lst.append(('Gearchiveerd geselecteerd formulier', [cf]))
+
+        return lst
+
+    @classmethod
+    def qry_followed(cls):
+        return (
+            cls.query
+            .outerjoin(Activity, cls.id == Activity.form_id)
+            .filter(CustomFormFollower.query
+                    .filter(cls.id == CustomFormFollower.form_id,
+                            CustomFormFollower.owner_id == current_user.id)
+                    .exists(),
+                    db.or_(cls.archived == False, cls.archived == None),
+                    db.or_(Activity.id == None,
+                           db.and_(Activity.id != None,
+                                   db.func.now() < Activity.end_time)))
+            .order_by(cls.modified.desc()))  # noqa
+
+    @classmethod
+    def qry_active(cls):
+        return (
+            cls.query
+            .outerjoin(Activity, cls.id == Activity.form_id)
+            .filter(
+                db.not_(CustomFormFollower.query
+                        .filter(cls.id == CustomFormFollower.form_id,
+                                CustomFormFollower.owner_id == current_user.id)
+                        .exists()),
+                db.or_(cls.archived == False, cls.archived == None),
+                db.or_(Activity.id == None,
+                       db.and_(Activity.id != None,
+                               db.func.now() < Activity.end_time)))
+            .order_by(cls.modified.desc()))  # noqa
+
+    @classmethod
+    def qry_archived(cls):
+        return (
+            cls.query
+            .outerjoin(Activity, cls.id == Activity.form_id)
+            .filter(
+                db.or_(cls.archived == True,
+                       db.and_(Activity.id != None,
+                               db.func.now() >= Activity.end_time)))
+            .order_by(cls.modified.desc()))  # noqa
+
+    @staticmethod
     def update_payment(transaction_id, payed):
         transaction = (Transaction.query
                        .filter(Transaction.id == transaction_id)

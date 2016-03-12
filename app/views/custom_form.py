@@ -1,9 +1,9 @@
-from flask import flash, redirect, render_template, request, url_for, abort
-from flask import Blueprint, Response
+from flask import (flash, redirect, render_template, request, url_for, abort,
+                   jsonify, Blueprint, Response)
 from flask.ext.login import current_user
 
 from app import db
-from app.utils import flash_form_errors
+from app.utils import flash_form_errors, serialize_sqla
 from app.forms.custom_form import CreateForm
 from app.models import Activity
 from app.models.user import User
@@ -12,7 +12,6 @@ from app.models.custom_form import CustomForm, CustomFormResult, \
 from app.api.module import ModuleAPI
 
 from app.api import copernica
-from sqlalchemy import desc
 from urllib.parse import parse_qsl
 
 import io
@@ -27,50 +26,9 @@ def view(page_nr=1):
     if not ModuleAPI.can_read('custom_form'):
         return abort(403)
 
-    followed_forms = (
-        CustomForm.query
-        .outerjoin(Activity,
-                   CustomForm.id == Activity.form_id)
-        .filter(
-            CustomFormFollower.query
-            .filter(CustomForm.id == CustomFormFollower.form_id,
-                    CustomFormFollower.owner_id == current_user.id)
-            .exists(),
-            db.or_(CustomForm.archived == False,
-                   CustomForm.archived == None),
-            db.or_(Activity.id == None,
-                   db.and_(Activity.id != None,
-                           db.func.now() < Activity.end_time)))
-        .order_by(CustomForm.modified.desc())
-        .all())  # noqa
-
-    active_forms = (
-        CustomForm.query
-        .outerjoin(Activity,
-                   CustomForm.id == Activity.form_id)
-        .filter(
-            db.not_(CustomFormFollower.query
-                    .filter(CustomForm.id == CustomFormFollower.form_id,
-                            CustomFormFollower.owner_id == current_user.id)
-                    .exists()),
-            db.or_(CustomForm.archived == False,
-                   CustomForm.archived == None),
-            db.or_(Activity.id == None,
-                   db.and_(Activity.id != None,
-                           db.func.now() < Activity.end_time)))
-        .order_by(CustomForm.modified.desc())
-        .all())  # noqa
-
-    archived_paginate = (
-        CustomForm.query
-        .outerjoin(Activity,
-                   CustomForm.id == Activity.form_id)
-        .filter(
-            db.or_(CustomForm.archived == True,
-                   db.and_(Activity.id != None,
-                           db.func.now() >= Activity.end_time)))
-        .order_by(CustomForm.modified.desc())
-        .paginate(page_nr, 10))  # noqa
+    followed_forms = CustomForm.qry_followed().all()
+    active_forms = CustomForm.qry_active().all()
+    archived_paginate = CustomForm.qry_archived().paginate(page_nr, 10)
 
     return render_template('custom_form/overview.htm',
                            followed_forms=followed_forms,
@@ -253,7 +211,7 @@ def remove_response(submit_id=None):
 
     form_id = submission.form_id
     max_attendants = submission.form.max_attendants
-        
+
     db.session.delete(submission)
     db.session.commit()
 
@@ -338,7 +296,7 @@ def submit(form_id=None):
                 response = "reserve"
             else:
                 copernica.addActivity(user.id, custom_form.name, form_id, custom_form.price, result.has_payed)
-            
+
 
         db.session.add(user)
         db.session.commit()
@@ -452,6 +410,14 @@ def has_payed(submit_id=None):
     db.session.add(submission)
     db.session.commit()
 
-    copernica.payedActivity(submission.owner_id, submission.form_id, submission.has_payed)
+    copernica.payedActivity(submission.owner_id, submission.form_id,
+                            submission.has_payed)
 
     return response
+
+
+# TODO: Move to API.
+@blueprint.route('/loader/', methods=['GET'])
+def loader():
+    current = request.args.get('current')
+    return jsonify(forms=serialize_sqla(CustomForm.aslist(current)))
