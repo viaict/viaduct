@@ -11,6 +11,10 @@ from app import app, login_manager
 from app.forms import SignInForm
 from app.models import Page
 
+from .module import import_module  # noqa
+from .serialize_sqla import serialize_sqla  # noqa
+from .validate_form import validate_form  # noqa
+
 markdown_extensions = [
     'toc'
 ]
