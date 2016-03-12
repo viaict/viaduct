@@ -4,7 +4,7 @@ import re
 from glob import glob
 from flask import json
 
-import viaduct
+import app
 
 class user:
     # Regular user should not have admin rights on any pages
@@ -26,13 +26,13 @@ class bcolors:
 
 class testPages(unittest.TestCase):
     def create_app(self):
-        return application
+        return app
 
     def setUp(self):
-        viaduct.application.config['TESTING'] = True
-        viaduct.application.config['CSRF_ENABLED'] = False
-        viaduct.application.config['WTF_CSRF_ENABLED'] = False
-        self.application = viaduct.application.test_client()
+        app.app.config['TESTING'] = True
+        app.app.config['CSRF_ENABLED'] = False
+        app.app.config['WTF_CSRF_ENABLED'] = False
+        self.app = app.app.test_client()
 
         return
 
@@ -40,13 +40,13 @@ class testPages(unittest.TestCase):
         return
 
     def login(self, username, password):
-        return self.application.post('/sign-in/', data=dict(
+        return self.app.post('/sign-in/', data=dict(
             email=username,
             password=password
         ), headers={'Referer': 'home'}, follow_redirects=True)
 
     def logout(self):
-        return self.application.get('/sign-out/', follow_redirects=True)
+        return self.app.get('/sign-out/', follow_redirects=True)
 
     def printFail(self, string):
         print(bcolors.FAIL + string + bcolors.ENDC)
@@ -78,15 +78,15 @@ class testPages(unittest.TestCase):
     def checkPages(self, message):
         report = []
 
-        for url in viaduct.application.url_map._rules_by_endpoint:
+        for url in app.app.url_map._rules_by_endpoint:
             try:
-                path = str(viaduct.application.url_map._rules_by_endpoint[url][0])
+                path = str(app.app.url_map._rules_by_endpoint[url][0])
                 if not "delete" in path and not "remove" in path and not "sign-out" in path:
 
                     """ substitude the path variables """
                     path = re.sub("\<(.+?)\>", "1", path)
 
-                    rv = self.application.get(path, follow_redirects=False)
+                    rv = self.app.get(path, follow_redirects=False)
 
                     """ Check for redirects """
                     if(rv._status_code == 302):
@@ -94,7 +94,7 @@ class testPages(unittest.TestCase):
                     else:
                         extra_info = ""
 
-                    rv = self.application.get(path, follow_redirects=True)
+                    rv = self.app.get(path, follow_redirects=True)
 
                     rv_info = str(rv._status_code) + " on " +  path + extra_info
 

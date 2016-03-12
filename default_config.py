@@ -19,8 +19,8 @@ class DefaultConfig:
     RECAPTCHA_PRIVATE_KEY = ''  # Change this for real use
     RECAPTCHA_OPTIONS = {'theme': 'white'}
 
-    EXAMINATION_UPLOAD_FOLDER = 'viaduct/static/uploads/examinations'
-    UPLOAD_DIR = 'viaduct/static/files/'
+    EXAMINATION_UPLOAD_FOLDER = 'app/static/uploads/examinations'
+    UPLOAD_DIR = 'app/static/files/'
     FILE_DIR = '/static/files/'
 
     # One date format string to rule them all (use this in strftime)
