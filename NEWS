@@ -2,6 +2,11 @@ XX-03-2016 vx.x.x.x:
 * Users removed from groups are automatically added to the activeAllumniList
 * Pimpy name matching has been updated
 * Nice interactive form selection
+* Start refactoring of the codebase (moved lots of stuff to different places)
+* Make exam search case insensitive
+* Add captcha to bug report and enable it again
+* Start with adding Search Engine Optimazation
+* Fix empty exam types
 
 18-02-2016 v2.5.1.1:
 * Disable bugreports because of spammers
