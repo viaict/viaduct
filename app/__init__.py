@@ -114,7 +114,7 @@ from app.api.user import UserAPI
 from app.api.company import CompanyAPI
 from app.api.guide import GuideAPI
 from app.api.module import ModuleAPI
-from app.helpers.thumb import thumb
+from app.utils.thumb import thumb
 
 # Set jinja global variables
 app.jinja_env.globals.update(enumerate=enumerate)

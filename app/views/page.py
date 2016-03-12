@@ -6,8 +6,8 @@ from flask.ext.babel import _  # gettext
 
 from app import db
 from app.forms import PageForm, HistoryPageForm
-from app.helpers import flash_form_errors
-from app.helpers.htmldiff import htmldiff
+from app.utils import flash_form_errors
+from app.utils.htmldiff import htmldiff
 from app.models import Group, Page, PageRevision, PagePermission, \
     CustomForm, Redirect
 from app.api.module import ModuleAPI

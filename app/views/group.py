@@ -8,7 +8,7 @@ from flask import abort, jsonify
 from flask.ext.login import current_user
 
 from app import app, db
-from app.helpers import flash_form_errors
+from app.utils import flash_form_errors
 
 from app.api.module import ModuleAPI
 from app.api import google

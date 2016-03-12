@@ -14,7 +14,7 @@ from flask.ext.login import current_user, login_user, logout_user
 from flask.ext.babel import lazy_gettext as _, gettext
 
 from app import db, login_manager
-from app.helpers import flash_form_errors
+from app.utils import flash_form_errors
 from app.forms import SignUpForm, SignInForm, ResetPassword,\
     RequestPassword
 from app.models import User

@@ -4,7 +4,7 @@ import re
 
 from flask import render_template, request, url_for
 from app import db
-from app.helpers import get_login_form
+from app.utils import get_login_form
 from app.models.activity import Activity
 from app.models.navigation import NavigationEntry
 from app.models.page import Page

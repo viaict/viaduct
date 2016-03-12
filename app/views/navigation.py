@@ -3,8 +3,8 @@ from flask import Blueprint, render_template, abort, request, flash, \
 from flask.ext.babel import _
 
 from app import db
-from app.helpers import flash_form_errors
-from app.helpers.resource import get_all_routes
+from app.utils import flash_form_errors
+from app.utils.resource import get_all_routes
 from app.models.navigation import NavigationEntry
 from app.forms import NavigationEntryForm
 from app.api.navigation import NavigationAPI
