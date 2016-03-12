@@ -7,6 +7,9 @@ XX-03-2016 vx.x.x.x:
 * Add captcha to bug report and enable it again
 * Start with adding Search Engine Optimazation
 * Fix empty exam types
+* Made searching in examnation page case-insensitive
+* Fixed labels in sign-up form
+* Fixed blank test type in examination page
 
 18-02-2016 v2.5.1.1:
 * Disable bugreports because of spammers
