@@ -10,7 +10,7 @@ from sqlalchemy import or_
 from app import app, db
 
 from app.forms import CourseForm
-from app.utils import flash_form_errors
+from app.utils.forms import flash_form_errors
 from app.forms import EducationForm
 from app.utils import serialize_sqla
 

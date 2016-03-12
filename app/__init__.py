@@ -115,7 +115,6 @@ from app.utils.user import UserAPI
 from app.utils.company import CompanyAPI
 from app.utils.guide import GuideAPI
 from app.utils.module import ModuleAPI
-
 # Set jinja global variables
 app.jinja_env.globals.update(enumerate=enumerate)
 app.jinja_env.globals.update(render_template=render_template)
@@ -144,6 +143,8 @@ from . import api  # noqa
 path = os.path.dirname(os.path.abspath(__file__))
 
 register_views(app, os.path.join(path, 'views'))
+
+from app.utils.template_filters import *
 
 from app.models import User
 

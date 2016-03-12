@@ -8,7 +8,7 @@ from app.models import CommitteeRevision, Page, Group, User, \
     NavigationEntry, PagePermission
 from app.utils import ModuleAPI, NavigationAPI
 from app.forms import CommitteeForm
-from app.utils import flash_form_errors
+from app.utils.forms import flash_form_errors
 import app.utils.committee as CommitteeAPI
 
 blueprint = Blueprint('committee', __name__)

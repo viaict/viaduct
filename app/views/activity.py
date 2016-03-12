@@ -14,7 +14,7 @@ from flask.ext.babel import _  # gettext
 from werkzeug import secure_filename
 
 from app import db
-from app.utils import flash_form_errors
+from app.utils.forms import flash_form_errors
 from app.forms.activity import ActivityForm, CreateForm
 from app.models.activity import Activity
 from app.models.custom_form import CustomForm, CustomFormResult

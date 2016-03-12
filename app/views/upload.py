@@ -7,7 +7,7 @@ from werkzeug import secure_filename
 
 from app import app
 from app.forms import UploadForm
-from app.utils import flash_form_errors
+from app.utils.forms import flash_form_errors
 
 blueprint = Blueprint('upload', __name__)
 

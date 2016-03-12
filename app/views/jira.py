@@ -4,7 +4,7 @@ from flask import Blueprint
 
 from flask.ext.login import current_user
 
-from app.utils import flash_form_errors
+from app.utils.forms import flash_form_errors
 from app.forms.jira import CreateIssueForm
 from app.utils.jira import JiraAPI
 

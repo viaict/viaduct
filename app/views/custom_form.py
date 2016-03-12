@@ -3,7 +3,7 @@ from flask import Blueprint, Response
 from flask.ext.login import current_user
 
 from app import db
-from app.utils import flash_form_errors
+from app.utils.forms import flash_form_errors
 from app.forms.custom_form import CreateForm
 from app.models import Activity
 from app.models.user import User
