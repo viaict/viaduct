@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-02-18 18:54+0100\n"
+"POT-Creation-Date: 2016-03-12 17:19+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -79,13 +79,6 @@ msgstr "Tweetaligheid is nog niet volledig ondersteund!"
 
 msgid "Birthdate"
 msgstr "Geboortedag"
-
-msgid ""
-"Bug reports have been temporarily disabled because of spammers flooding "
-"the bugtracker. For issues email ict (at) svia.nl for now."
-msgstr ""
-"Bug reports zijn tijdelijk uitgeschakeld omdat spammers de bugtracker vol"
-" spamden. Mail voor nu even ict (at) svia.nl als je bugs vindt."
 
 msgid "Bug type"
 msgstr "Bug soort"
@@ -187,6 +180,9 @@ msgstr "Verwijder nieuwsbericht"
 
 msgid "Description"
 msgstr "Beschrijving"
+
+msgid "Disabled"
+msgstr "Uitgeschakeld"
 
 msgid "Do not filter HTML tags"
 msgstr "Geen HTML tags filteren"
@@ -570,6 +566,9 @@ msgstr "Meer lezen"
 msgid "Read/Write"
 msgstr "Lees/Schrijf"
 
+msgid "Refresh"
+msgstr "Verversen"
+
 msgid "Register"
 msgstr "Registreer"
 
@@ -702,9 +701,6 @@ msgstr ""
 "De activiteit heeft het maximum aantal inschrijvingen bereikt. Je bent "
 "geplaatst op de reserve lijst."
 
-msgid "The bug has been reported!"
-msgstr "De bug report is verstuurd"
-
 msgid "The committe has been saved."
 msgstr "De commissie is aangemaakt."
 
@@ -830,9 +826,6 @@ msgstr "Je hebt jezelf inschreven, je moet nog wel betalen!"
 msgid "You have to be logged in to fill in a form"
 msgstr "Je moet ingelogd zijn om een formulier in te vullen."
 
-msgid "You have to reload the page for the result"
-msgstr "Herlaad de pagina voor het resultaat"
-
 msgid "You must be logged-in to register for an activity."
 msgstr "Je moet ingelogd zijn om je te registeren voor een activiteit."
 
@@ -904,4 +897,10 @@ msgstr "nog"
 
 #~ msgid "Kind"
 #~ msgstr "over"
+
+#~ msgid "The bug has been reported!"
+#~ msgstr "De bug report is verstuurd"
+
+#~ msgid "You have to reload the page for the result"
+#~ msgstr "Herlaad de pagina voor het resultaat"
 

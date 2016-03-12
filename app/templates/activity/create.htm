@@ -1,6 +1,12 @@
 {% from "macros/form.htm" import render_field, render_select, render_datetimefield_picker %}
+{% from "macros/custom_form.htm" import custom_form_select %}
 
 {% extends "content.htm" %}
+
+{% block includes %}
+<script src='{{static_url('/static/js/custom_form/loader.js')}}'></script>
+{% endblock %}
+
 {% block content %}
 
     {% if activity.id: %}
@@ -15,20 +21,11 @@
     <h1>{{_('Activity')}}</h1>
 
     <form method="post" enctype="multipart/form-data">
+        {{ form.csrf_token }}
 
         <div class='row'>
             <div class='col-md-12'>
-                {{ form.csrf_token }}
-                {{ render_select(form.form_id) }}
-
-                <a class="show-window btn btn-xs btn-success" target="_blank"
-                    href="{{ url_for('custom_form.create')}}">
-                    {{ _("Create form") }}
-                </a>
-                <small>
-                    {{ _("You have to reload the page for the result") }}
-                </small>
-
+                {{ custom_form_select('form_id', activity.form_id) }}
             </div>
         </div>
 
