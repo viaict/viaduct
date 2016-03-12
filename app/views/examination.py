@@ -12,7 +12,7 @@ from app import app, db
 from app.forms import CourseForm
 from app.utils import flash_form_errors
 from app.forms import EducationForm
-from app.utilities import serialize_sqla
+from app.utils import serialize_sqla
 
 from app.models.examination import Examination, test_types
 from app.models.course import Course
