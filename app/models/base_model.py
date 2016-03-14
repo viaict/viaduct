@@ -2,7 +2,7 @@
 extra functions."""
 
 from app import db
-from app.utils import serialize_sqla
+from app.utils.serialize_sqla import serialize_sqla
 from datetime import datetime
 import dateutil.parser
 
