@@ -10,6 +10,8 @@ $(function () {
 
     $("select").select2();
 
+    // TODO: the following was only used in the old creation form, upload.htm
+    // Unless we someday want to create courses and educations using AJAX, this code can be removed
     $new_course_btn.click(function (e) {
         e.preventDefault();
 

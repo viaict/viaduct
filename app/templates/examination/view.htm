@@ -30,7 +30,7 @@
     </div>
     {% if ModuleAPI.can_write('examination') %}
     <p>
-        <a href='add' class='btn btn-default'>
+        <a href='/examination/add' class='btn btn-default'>
             <i class='glyphicon glyphicon-pencil'></i>
             <strong>{{ _('New examination') }}</strong>
         </a>
@@ -101,7 +101,7 @@ function searchKeyPress(e)
 function confirmation(id) {
 	var answer = confirm('Weet je zeker dat je het tentamen wil verwijderen?')
 	if (answer){
-		window.location = '?delete='+id;
+		window.location = '?search={{ search }}&delete='+id;
 	}
 	else{
 	}
