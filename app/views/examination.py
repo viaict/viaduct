@@ -174,13 +174,13 @@ def view_examination(page_nr=1):
 
         exam_matches = []
 
-        search = search.lower().strip()
+        search_lower = search.lower().strip()
 
         for exam in exams:
-            if fuzz.partial_ratio(search, exam.title.lower()) > 75 or\
-                    fuzz.partial_ratio(search,
-                                       exam.course.name.lower()) > 75 or\
-                    fuzz.partial_ratio(search,
+            if fuzz.partial_ratio(search_lower, exam.title.lower()) > 75 or \
+                    fuzz.partial_ratio(search_lower,
+                                       exam.course.name.lower()) > 75 or \
+                    fuzz.partial_ratio(search_lower,
                                        exam.education.name.lower()) > 75:
                 exam_matches.append(exam.id)
 
@@ -423,9 +423,9 @@ def examination_api_education_add():
     degree_id = request.form.get('degree_id', '')
 
     if education_name == '':
-        return jsonify(error='Geen opleidingnaam opgegeven'), 500
+        return jsonify(error=_('No education name specified')), 500
     if degree_id == '':
-        return jsonify(error='Geen opleidinggraad opgegeven'), 500
+        return jsonify(error=_('No education degree specified')), 500
 
     education = Education(degree_id, education_name)
     db.session.add(education)

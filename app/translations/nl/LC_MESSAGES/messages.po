@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-03-12 17:23+0100\n"
+"POT-Creation-Date: 2016-03-24 13:06+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -441,9 +441,6 @@ msgstr ""
 msgid "Nederlanse titel"
 msgstr ""
 
-msgid "New"
-msgstr "Nieuw"
-
 msgid "New Examination"
 msgstr "Nieuw tentamen"
 
@@ -486,8 +483,14 @@ msgstr "Geen omschrijving opgegeven"
 msgid "No e-mail adress submitted"
 msgstr "Geen valide e-mailadres opgegeven"
 
+msgid "No education degree specified"
+msgstr "Geen opleidinggraad opgegeven"
+
 msgid "No education given."
 msgstr "Geen opleiding opgegeven."
+
+msgid "No education name specified"
+msgstr "Geen opleidinnaam opgegeven"
 
 msgid "No examination uploaded."
 msgstr "Geen tentamen geüpload."
@@ -524,6 +527,9 @@ msgstr "Geen"
 
 msgid "Not found!"
 msgstr "Niet gevonden!"
+
+msgid "Not given"
+msgstr "Niet opgegeven"
 
 msgid "Old answers preserved."
 msgstr "Oude antwoorden behouden."
@@ -897,9 +903,6 @@ msgstr "nog"
 #~ msgid "Language changed to"
 #~ msgstr "Taal aangepast naar"
 
-#~ msgid ""
-#~ msgstr ""
-
 #~ msgid "Lastname"
 #~ msgstr "Achternaam"
 
@@ -926,3 +929,13 @@ msgstr "nog"
 
 #~ msgid "You have to reload the page for the result"
 #~ msgstr "Herlaad de pagina voor het resultaat"
+
+#~ msgid "Geen opleidinggraad opgegeven"
+#~ msgstr ""
+
+#~ msgid "Geen opleidingnaam opgegeven"
+#~ msgstr ""
+
+#~ msgid "New"
+#~ msgstr "Nieuw"
+

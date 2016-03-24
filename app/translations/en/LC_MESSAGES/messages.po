@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-03-12 17:23+0100\n"
+"POT-Creation-Date: 2016-03-24 13:06+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -436,9 +436,6 @@ msgstr ""
 msgid "Nederlanse titel"
 msgstr ""
 
-msgid "New"
-msgstr ""
-
 msgid "New Examination"
 msgstr ""
 
@@ -481,7 +478,13 @@ msgstr ""
 msgid "No e-mail adress submitted"
 msgstr ""
 
+msgid "No education degree specified"
+msgstr ""
+
 msgid "No education given."
+msgstr ""
+
+msgid "No education name specified"
 msgstr ""
 
 msgid "No examination uploaded."
@@ -518,6 +521,9 @@ msgid "None"
 msgstr ""
 
 msgid "Not found!"
+msgstr ""
+
+msgid "Not given"
 msgstr ""
 
 msgid "Old answers preserved."
@@ -930,3 +936,19 @@ msgstr ""
 
 #~ msgid "You have to reload the page for the result"
 #~ msgstr ""
+
+#~ msgid "No education name specified"
+#~ msgstr ""
+
+#~ msgid "No education degree specified"
+#~ msgstr ""
+
+#~ msgid "Geen opleidinggraad opgegeven"
+#~ msgstr ""
+
+#~ msgid "Geen opleidingnaam opgegeven"
+#~ msgstr ""
+
+#~ msgid "New"
+#~ msgstr ""
+
