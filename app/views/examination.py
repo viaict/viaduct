@@ -30,6 +30,9 @@ blueprint = Blueprint('examination', __name__)
 UPLOAD_FOLDER = app.config['EXAMINATION_UPLOAD_FOLDER']
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
+REDIR_PAGES = {'view': 'examination.view_examination',
+               'add': 'examination.upload_file'}
+
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -280,6 +283,12 @@ def edit(exam_id):
 
     exam = Examination.query.get(exam_id)
 
+    if not exam:
+        flash(_('Examination could not be found.'), 'danger')
+        return redirect(url_for('examination.view_examination'))
+
+    session['examination_edit_id'] = exam_id
+
     if request.method == 'POST':
         file = request.files['file']
         answers = request.files['answers']
@@ -333,6 +342,13 @@ def edit(exam_id):
 
 @blueprint.route('/course/add/', methods=['GET', 'POST'])
 def add_course():
+    r = request.args.get('redir')
+    if r in REDIR_PAGES:
+        session['origin'] = url_for(REDIR_PAGES[r])
+    elif r == 'edit' and 'examination_edit_id' in session:
+        session['origin'] = '/examination/edit/{}'.format(
+            session['examination_edit_id'])
+
     if not ModuleAPI.can_write('examination'):
         session['prev'] = 'examination.add_course'
         return abort(403)
@@ -354,7 +370,11 @@ def add_course():
                 flash("'%s': " % title + _('Already exists in the database'),
                       'danger')
 
-            return redirect(url_for('examination.upload_file'))
+            if 'origin' in session:
+                redir = session['origin']
+            else:
+                redir = url_for('examination.upload_file')
+            return redirect(redir)
         else:
             flash_form_errors(form)
 
@@ -364,6 +384,13 @@ def add_course():
 
 @blueprint.route('/education/add/', methods=['GET', 'POST'])
 def add_education():
+    r = request.args.get('redir')
+    if r in REDIR_PAGES:
+        session['origin'] = url_for(REDIR_PAGES[r])
+    elif r == 'edit' and 'examination_edit_id' in session:
+        session['origin'] = '/examination/edit/{}'.format(
+            session['examination_edit_id'])
+
     if not ModuleAPI.can_write('examination'):
         session['prev'] = 'examination.add_education'
         return abort(403)
@@ -379,12 +406,17 @@ def add_education():
 
                 db.session.add(new_education)
                 db.session.commit()
-                flash("'%s':" % title + _('Education succesfully added.'),
+                flash("'%s': " % title + _('Education succesfully added.'),
                       'success')
             else:
-                flash("'%s':" % title + _('Already exists in the database'),
+                flash("'%s': " % title + _('Already exists in the database'),
                       'danger')
-            return redirect(url_for('examination.upload_file'))
+
+            if 'origin' in session:
+                redir = session['origin']
+            else:
+                redir = url_for('examination.upload_file')
+            return redirect(redir)
 
         else:
             flash_form_errors(form)

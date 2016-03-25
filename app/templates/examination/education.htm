@@ -17,8 +17,11 @@
                         <button type="submit" class="btn btn-success">
                             <i class= "glyphicon glyphicon-ok"></i> {{_('Add')}}
                         </button>
-                        <a href="{{url_for('examination.upload_file')}}"
-                            class='btn btn-primary'>
+                        <a href="{% if 'origin' in session -%}
+                            {{ session['origin'] }}
+                        {% else -%}
+                           {{url_for('examination.upload_file')}}
+                        {% endif -%}" class='btn btn-primary'>
                             <i class="glyphicon glyphicon-arrow-left"></i> {{_('Back')}}
                         </a>
                     </div>
