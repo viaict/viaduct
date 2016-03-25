@@ -314,44 +314,36 @@ def sign_in():
         return redirect(url_for('home.home'))
 
     form = SignInForm(request.form)
+    print(form._fields)
 
     if form.validate_on_submit():
-        user = User.query.filter(User.email == form.email.data.strip()).first()
+        user = form.validate_signin()
 
-        if user is None:
-            flash(_('It appears that account does not exist. Try again, or '
-                    'contact the website administration at ict (at) svia '
-                    '(dot) nl.'), 'danger')
-            return redirect(url_for('user.sign_in'))
+        if user:
+            # Notify the login manager that the user has been signed in.
+            login_user(user)
+            if user.disabled:
+                flash(_('Your account has been disabled, you are not allowed '
+                        'to log in'), 'danger')
+            else:
+                flash(gettext('Hey %(name)s, you\'re now logged in!',
+                              name=current_user.first_name), 'success')
 
-        submitted_hash = bcrypt.hashpw(form.password.data, user.password)
-        if submitted_hash != user.password:
-            flash(_('The password you entered appears to be incorrect.'),
-                  'danger')
-            return redirect(url_for('user.sign_in'))
+            referer = request.headers.get('Referer')
+            denied = (
+                re.match(r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),
+                         referer) is not None)
+            denied_from = session.get('denied_from')
 
-        # Notify the login manager that the user has been signed in.
-        login_user(user)
-        if user.disabled:
-            flash(_('Your account has been disabled, you are not allowed to '
-                    'log in'), 'danger')
-        else:
-            flash(gettext('Hey %(name)s, you\'re now logged in!',
-                          name=current_user.first_name), 'success')
+            if not denied:
+                if referer:
+                    return redirect(referer)
+            elif denied_from:
+                return redirect(denied_from)
 
-        referer = request.headers.get('Referer')
-        denied = re.match(r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),
-                          referer) is not None
-        denied_from = session.get('denied_from')
+            return redirect(url_for('home.home'))
 
-        if not denied:
-            if referer:
-                return redirect(referer)
-        elif denied_from:
-            return redirect(denied_from)
-
-        return redirect(url_for('home.home'))
-    else:
+    if form.errors:
         flash_form_errors(form)
 
     return render_template('user/sign_in.htm', form=form)

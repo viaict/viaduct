@@ -1,7 +1,9 @@
 # coding=utf-8
 
 from app import app
+from app.models import User
 
+from flask import flash
 from flask_wtf import Form
 from wtforms import StringField, PasswordField, BooleanField, \
     SelectField, IntegerField, FileField
@@ -13,6 +15,7 @@ from flask.ext.babel import lazy_gettext as _  # noqa
 from flask.ext.wtf.recaptcha import RecaptchaField
 
 import dateutil
+import bcrypt
 
 _min_password_length = app.config['MIN_PASSWORD_LENGTH']
 
@@ -146,6 +149,26 @@ class SignInForm(Form):
     password = PasswordField(
         _('Password'), validators=[
             InputRequired(message=_('No password submitted'))])
+
+    def validate_signin(self):
+        user = User.query.filter(User.email == self.email.data.strip()).first()
+
+        if self._errors is None:
+            self._errors = dict()
+
+        if user is None:
+            self._errors['email'] = [_(
+                'It appears that account does not exist. Try again, or contact'
+                ' the website administration at ict (at) svia (dot) nl.')]
+            return None
+
+        submitted_hash = bcrypt.hashpw(self.password.data, user.password)
+        if submitted_hash != user.password:
+            self._errors['password'] = [_(
+                'The password you entered appears to be incorrect.')]
+            return None
+
+        return user
 
 
 class RequestPassword(Form):
