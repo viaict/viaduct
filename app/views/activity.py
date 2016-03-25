@@ -160,13 +160,6 @@ def create(activity_id=None):
 
     form = CreateForm(request.form, activity)
 
-    # Add a dropdown select for available custom_forms
-    form.form_id.choices = \
-        [(c.id, c.name) for c in CustomForm.query.order_by('name')]
-
-    # Set default to "No form"
-    form.form_id.choices.insert(0, (0, _('No form')))
-
     if request.method == 'POST':
         if form.validate_on_submit():
 
@@ -207,10 +200,11 @@ def create(activity_id=None):
             venue = 1  # Facebook ID location, not used yet  # noqa
 
             # Set a custom_form if it actually exists
-            if form.form_id and form.form_id.data > 0:
-                activity.form_id = form.form_id.data
-            else:
-                activity.form_id = None
+            form_id = int(form.form_id.data)
+            if form_id == 0:
+                form_id = None
+
+            activity.form_id = form_id
 
             activity.picture = picture
             activity.owner_id = current_user.id

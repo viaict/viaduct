@@ -1,6 +1,7 @@
 from flask_wtf import Form
 from flask_wtf.file import FileField
-from wtforms import StringField, SelectField, TextAreaField, DateTimeField
+from wtforms import (StringField, SelectField, TextAreaField, DateTimeField,
+                     IntegerField)
 from wtforms.validators import InputRequired, Email
 from flask.ext.babel import lazy_gettext as _  # gettext
 
@@ -25,7 +26,7 @@ class CreateForm(Form):
     price = StringField(_('Price'), default=0)
     picture = FileField(_('Image'))
     venue = StringField(_('Venue'))
-    form_id = SelectField(_('Custom form'), coerce=int)
+    form_id = IntegerField()
 
     # Override validate from the Form class
     def validate(self):

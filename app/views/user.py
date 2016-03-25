@@ -148,8 +148,8 @@ def edit(user_id=None):
             query = query.filter(User.id != user_id)
 
         if query.count() > 0:
-            flash('Een gebruiker met dit email adres bestaat al / A user with '
-                  'the e-mail address specified does already exist.', 'danger')
+            flash(_('A user with this e-mail address already exist.'),
+                  'danger')
             return edit_page()
 
         # Because the user model is constructed to have an ID of 0 when it is
@@ -202,8 +202,10 @@ def edit(user_id=None):
         if avatar:
             UserAPI.upload(avatar, user.id)
 
-        flash('Je hebt je profiel succesvol %s.' %
-              ('aangepast' if user_id else 'aangemaakt'), 'success')
+        if user_id:
+            flash(_('Profile succesfully updated'))
+        else:
+            flash(_('Profile succesfully created'))
 
         # Sending user profiles to the Copernica software
         info = "Ja" if user.receive_information else "Nee"
@@ -212,13 +214,25 @@ def edit(user_id=None):
         gb = user.birth_date.strftime('%Y-%m-%d')
         lid = "Ja" if user.has_payed else "Nee"
 
+        # TODO: Use kwargs to get rid of these terrible if-statements.
         if user_id:
             if ModuleAPI.can_write('user'):
-                copernica.updateUser(user_id, user.email, user.first_name, user.last_name, user.education.name, user.student_id, Lid=lid, VVV=vvv, Bedrijfsinformatie=info, Geboortedatum=gb, Ingeschreven=ingeschreven)
+                copernica.updateUser(user_id, user.email, user.first_name,
+                                     user.last_name, user.education.name,
+                                     user.student_id, Lid=lid, VVV=vvv,
+                                     Bedrijfsinformatie=info, Geboortedatum=gb,
+                                     Ingeschreven=ingeschreven)
             else:
-                copernica.updateUser(user_id, user.email, user.first_name, user.last_name, user.education.name, user.student_id, Bedrijfsinformatie=info, Geboortedatum=gb, Ingeschreven=ingeschreven)
+                copernica.updateUser(user_id, user.email, user.first_name,
+                                     user.last_name, user.education.name,
+                                     user.student_id, Bedrijfsinformatie=info,
+                                     Geboortedatum=gb,
+                                     Ingeschreven=ingeschreven)
         else:
-            copernica.newUser(user.email, user.first_name, user.last_name, user.education.name, user.id, user.student_id, Lid=lid, VVV=vvv, Bedrijfsinformatie=info, Geboortedatum=gb, Ingeschreven=ingeschreven)
+            copernica.newUser(user.email, user.first_name, user.last_name,
+                              user.education.name, user.id, user.student_id,
+                              Lid=lid, VVV=vvv, Bedrijfsinformatie=info,
+                              Geboortedatum=gb, Ingeschreven=ingeschreven)
 
         return redirect(url_for('user.view_single', user_id=user.id))
     else:
@@ -244,7 +258,7 @@ def sign_up():
         query = User.query.filter(User.email == form.email.data)
 
         if query.count() > 0:
-            flash(_('A user with the e-mail address specified already exists'),
+            flash(_('A user with this e-mail address already exists'),
                   'danger')
             return render_template('user/sign_up.htm', form=form)
 
@@ -277,7 +291,9 @@ def sign_up():
 
         gb = user.birth_date.strftime('%Y-%m-%d')
         info = "Ja" if user.receive_information else "Nee"
-        copernica.newUser(user.email, user.first_name, user.last_name, user.education.name, user.id, user.student_id, Bedrijfsinformatie=info, Geboortedatum=gb)
+        copernica.newUser(user.email, user.first_name, user.last_name,
+                          user.education.name, user.id, user.student_id,
+                          Bedrijfsinformatie=info, Geboortedatum=gb)
 
         flash(gettext('Welcome %(name)s! Your profile has been succesfully '
                       'created and you have been logged in!',
@@ -298,44 +314,36 @@ def sign_in():
         return redirect(url_for('home.home'))
 
     form = SignInForm(request.form)
+    print(form._fields)
 
     if form.validate_on_submit():
-        user = User.query.filter(User.email == form.email.data.strip()).first()
+        user = form.validate_signin()
 
-        if user is None:
-            flash('It appears that account does not exist. Try again, or '
-                  'contact the website administration at ict (at) svia (dot) '
-                  'nl.', 'danger')
-            return redirect(url_for('user.sign_in'))
+        if user:
+            # Notify the login manager that the user has been signed in.
+            login_user(user)
+            if user.disabled:
+                flash(_('Your account has been disabled, you are not allowed '
+                        'to log in'), 'danger')
+            else:
+                flash(gettext('Hey %(name)s, you\'re now logged in!',
+                              name=current_user.first_name), 'success')
 
-        submitted_hash = bcrypt.hashpw(form.password.data, user.password)
-        if submitted_hash != user.password:
-            flash('De gegevens die je hebt ingevoerd zijn onjuist.',
-                  'danger')
-            return redirect(url_for('user.sign_in'))
+            referer = request.headers.get('Referer')
+            denied = (
+                re.match(r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),
+                         referer) is not None)
+            denied_from = session.get('denied_from')
 
-        # Notify the login manager that the user has been signed in.
-        login_user(user)
-        if user.disabled:
-            flash('Your account has been disabled, you are not allowed to log in',
-                  'danger')
-        else:
-            flash(gettext('Hey %(name)s, you\'re now logged in!',
-                          name=current_user.first_name), 'success')
+            if not denied:
+                if referer:
+                    return redirect(referer)
+            elif denied_from:
+                return redirect(denied_from)
 
-        referer = request.headers.get('Referer')
-        denied = re.match(r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),
-                          referer) is not None
-        denied_from = session.get('denied_from')
+            return redirect(url_for('home.home'))
 
-        if not denied:
-            if referer:
-                return redirect(referer)
-        elif denied_from:
-            return redirect(denied_from)
-
-        return redirect(url_for('home.home'))
-    else:
+    if form.errors:
         flash_form_errors(form)
 
     return render_template('user/sign_in.htm', form=form)
@@ -346,7 +354,7 @@ def sign_out():
     # Notify the login manager that the user has been signed out.
     logout_user()
 
-    flash('Je bent uitgelogd.', 'success')
+    flash(_('Captain\'s log succesfully ended.'), 'success')
 
     referer = request.headers.get('Referer')
     if referer:
@@ -378,12 +386,13 @@ def request_password():
 
         # Check if the user does exist, and if the passwords do match.
         if not user:
-            flash('De ingevoerde gegevens zijn niet correct.', 'danger')
+            flash(_('Your email and student id appear to be incorrect.'),
+                  'danger')
         else:
             _hash = create_hash(256)
 
-            reset_link = "http://www.svia.nl" + url_for('user.reset_password')\
-                + _hash
+            reset_link = ("http://www.svia.nl" + url_for('user.reset_password')
+                          + _hash)
 
             send_email(to=user.email,
                        subject='Password reset https://svia.nl',
@@ -392,8 +401,8 @@ def request_password():
                        user=user,
                        reset_link=reset_link)
 
-            flash('Er is een email verstuurd naar ' + form.email.data +
-                  ' met instructies.', 'success')
+            flash(gettext('An email has been sent to %(email) with further '
+                          'instructions.', email=form.email.data), 'success')
             return redirect(url_for('home.home'))
     else:
         flash_form_errors(form)
@@ -416,14 +425,14 @@ def reset_password(hash=0):
 
     # Check if the request was followed within a hour
     if not ticket or ((datetime.now() - ticket.created_on).seconds < 3600):
-        flash('Geen valide ticket gevonden')
+        flash(_('No valid ticket found'))
         return redirect(url_for('user.request_password'))
 
     if form.validate_on_submit():
         user = User.query.filter(User.id == ticket.user).first()
 
         if not user:
-            flash('There is something wrong with the reset link.', 'danger')
+            flash(_('There is something wrong with the reset link.'), 'danger')
             return redirect(url_for('user.request_password'))
 
         # Actually reset the password of the user
@@ -431,7 +440,7 @@ def reset_password(hash=0):
         db.session.add(user)
         db.session.commit()
 
-        flash('Uw wachtwoord is aangepast', 'success')
+        flash(_('Your password has been updated.'), 'success')
         return redirect(url_for('user.view_single'))
 
     else:

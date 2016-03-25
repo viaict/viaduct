@@ -15,6 +15,8 @@ test_types = {'Mid-term': _('Mid-Term'),
               'Retake': _('Retake'),
               'Unknown': _('Unknown')}
 
+test_type_default = 'Unknown'
+
 
 class Examination(db.Model, BaseEntity):
     __tablename__ = 'examination'
@@ -41,7 +43,7 @@ class Examination(db.Model, BaseEntity):
 
     def __init__(self, path, title, course_id, education_id,
                  timestamp=datetime.datetime.utcnow(), answers='',
-                 test_type='Unknown'):
+                 test_type=test_type_default):
         self.timestamp = timestamp
         self.path = path
         self.title = title

@@ -1,10 +1,13 @@
 import os
 
 from flask import Flask, request, Markup, render_template
+from flask.json import JSONEncoder as BaseEncoder
 from flask.ext.babel import Babel
 from flask.ext.login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy as BaseSQLAlchemy, Model, \
     _BoundDeclarativeMeta, _QueryProperty, declarative_base
+
+from speaklater import _LazyString
 from sqlalchemy import MetaData
 from markdown import markdown
 import datetime
@@ -12,7 +15,7 @@ import json
 from flask_jsglue import JSGlue
 
 
-version = 'v2.6.0.1'
+version = 'v2.6.1.0'
 
 
 def static_url(url):
@@ -75,6 +78,18 @@ def get_locale():
         return request.accept_languages.best_match(
             list(languages), default='nl')
 
+
+class JSONEncoder(BaseEncoder):
+    '''Custom JSON encoding'''
+    def default(self, o):
+        if isinstance(o, _LazyString):
+            # Lazy strings need to be evaluation.
+            return str(o)
+
+        return BaseEncoder.default(self, o)
+
+
+app.json_encoder = JSONEncoder
 
 # Set up the login manager, which is used to store the details related to the
 # authentication system.

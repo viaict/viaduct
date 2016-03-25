@@ -14,7 +14,7 @@ from app.utils.forms import flash_form_errors
 from app.forms import EducationForm
 from app.utils import serialize_sqla
 
-from app.models.examination import Examination, test_types
+from app.models.examination import Examination, test_types, test_type_default
 from app.models.course import Course
 from app.models.education import Education
 from app.models.degree import Degree
@@ -29,6 +29,9 @@ blueprint = Blueprint('examination', __name__)
 
 UPLOAD_FOLDER = app.config['EXAMINATION_UPLOAD_FOLDER']
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+
+REDIR_PAGES = {'view': 'examination.view_examination',
+               'add': 'examination.upload_file'}
 
 
 def allowed_file(filename):
@@ -130,13 +133,15 @@ def upload_file():
             error = True
 
         if error:
-            return render_template('examination/upload.htm', courses=courses,
-                                   educations=educations, message='',
+            dummy_exam = Examination(filename, title, int(course_id),
+                                     int(education_id), answers=answer_path,
+                                     test_type=test_type)
+
+            return render_template('examination/edit.htm', courses=courses,
+                                   educations=educations,
+                                   examination=dummy_exam,
                                    title=_('Examinations'), degrees=degrees,
-                                   exam_title=title, course_id=int(course_id),
-                                   test_type=test_type,
-                                   education_id=int(education_id),
-                                   test_types=test_types)
+                                   test_types=test_types, new_exam=False)
 
         exam = Examination(filename, title, course_id, education_id,
                            answers=answer_path, test_type=test_type)
@@ -145,14 +150,16 @@ def upload_file():
 
         flash(_('Examination successfully uploaded.'), 'success')
 
-        return render_template('examination/upload.htm', courses=courses,
-                               educations=educations, message='',
+        return render_template('examination/edit.htm', courses=courses,
+                               educations=educations, examination=exam,
                                title=_('Examinations'), degrees=degrees,
-                               test_types=test_types)
+                               test_types=test_types, new_exam=False)
 
-    return render_template('examination/upload.htm', courses=courses,
-                           educations=educations, title=_('Examinations'),
-                           degrees=degrees, test_types=test_types)
+    return render_template('examination/edit.htm', courses=courses,
+                           educations=educations,
+                           title=_('Examinations'), degrees=degrees,
+                           test_types=test_types, new_exam=True,
+                           test_type_default=test_type_default)
 
 
 @blueprint.route('/examination/', methods=['GET', 'POST'])
@@ -163,10 +170,26 @@ def view_examination(page_nr=1):
         session['prev'] = 'examination.view_examination'
         return abort(403)
 
-    # action = url_for('examination.view_examination')
+    # First check if the delete argument is set before loading
+    # the search results
+    if request.args.get('delete'):
+        exam_id = request.args.get('delete')
+        examination = Examination.query.filter(Examination.id == exam_id)\
+            .first()
 
-    path = '/static/uploads/examinations/'
+        if not examination:
+            flash(_('Specified examination does not exist'), 'danger')
+        else:
+            try:
+                os.remove(os.path.join(UPLOAD_FOLDER, examination.path))
+            except:
+                flash(_('File does not exist, examination deleted.'), 'info')
 
+            db.session.delete(examination)
+            db.session.commit()
+            flash(_('Examination successfully deleted.'))
+
+    # After deletion, do the search.
     if request.args.get('search'):
         search = request.args.get('search')
 
@@ -174,46 +197,28 @@ def view_examination(page_nr=1):
 
         exam_matches = []
 
-        search = search.lower().strip()
+        search_lower = search.lower().strip()
 
         for exam in exams:
-            if fuzz.partial_ratio(search, exam.title.lower()) > 75 or\
-                    fuzz.partial_ratio(search,
-                                       exam.course.name.lower()) > 75 or\
-                    fuzz.partial_ratio(search,
+            if fuzz.partial_ratio(search_lower, exam.title.lower()) > 75 or \
+                    fuzz.partial_ratio(search_lower,
+                                       exam.course.name.lower()) > 75 or \
+                    fuzz.partial_ratio(search_lower,
                                        exam.education.name.lower()) > 75:
                 exam_matches.append(exam.id)
 
-        examinations = Examination.query.join(Course).join(Education)\
-            .filter(Examination.id.in_(exam_matches))\
+        examinations = Examination.query.join(Course).join(Education) \
+            .filter(Examination.id.in_(exam_matches)) \
+            .order_by(Course.name).paginate(page_nr, 15, True)
+    else:
+        search = ""
+        examinations = Examination.query.join(Course)\
             .order_by(Course.name).paginate(page_nr, 15, True)
 
-        return render_template('examination/view.htm', path=path,
-                               examinations=examinations, search=search,
-                               title=_('Examinations'), test_types=test_types)
+    path = '/static/uploads/examinations/'
 
-    if request.args.get('delete'):
-        exam_id = request.args.get('delete')
-        examination = Examination.query.filter(Examination.id == exam_id)\
-            .first()
-
-        try:
-            os.remove(os.path.join(UPLOAD_FOLDER, examination.path))
-        except:
-            flash(_('File does not exist, examination deleted.'), 'info')
-
-        db.session.delete(examination)
-        db.session.commit()
-        flash(_('Examination successfully deleted.'))
-        examinations = Examination.query.paginate(page_nr, 15, False)
-        return render_template('examination/admin.htm', path=path,
-                               examinations=examinations, search="",
-                               title=_('Examinations'), test_types=test_types)
-
-    examinations = Examination.query.join(Course)\
-        .order_by(Course.name).paginate(page_nr, 15, True)
     return render_template('examination/view.htm', path=path,
-                           examinations=examinations, search="",
+                           examinations=examinations, search=search,
                            title=_('Examinations'), test_types=test_types)
 
 
@@ -278,6 +283,12 @@ def edit(exam_id):
 
     exam = Examination.query.get(exam_id)
 
+    if not exam:
+        flash(_('Examination could not be found.'), 'danger')
+        return redirect(url_for('examination.view_examination'))
+
+    session['examination_edit_id'] = exam_id
+
     if request.method == 'POST':
         file = request.files['file']
         answers = request.files['answers']
@@ -326,11 +337,18 @@ def edit(exam_id):
     return render_template(
         'examination/edit.htm', path=path, examination=exam,
         title=_('Examinations'), courses=courses, educations=educations,
-        test_types=test_types)
+        test_types=test_types, new_exam=False)
 
 
 @blueprint.route('/course/add/', methods=['GET', 'POST'])
 def add_course():
+    r = request.args.get('redir')
+    if r in REDIR_PAGES:
+        session['origin'] = url_for(REDIR_PAGES[r])
+    elif r == 'edit' and 'examination_edit_id' in session:
+        session['origin'] = '/examination/edit/{}'.format(
+            session['examination_edit_id'])
+
     if not ModuleAPI.can_write('examination'):
         session['prev'] = 'examination.add_course'
         return abort(403)
@@ -346,13 +364,17 @@ def add_course():
                 new_course = Course(title, description)
                 db.session.add(new_course)
                 db.session.commit()
-                flash("'%s':" % title + _('Course succesfully added.'),
+                flash("'%s': " % title + _('Course succesfully added.'),
                       'success')
             else:
-                flash("'%s':" % title + _('Already exists in the database'),
+                flash("'%s': " % title + _('Already exists in the database'),
                       'danger')
 
-            return redirect(url_for('examination.upload_file'))
+            if 'origin' in session:
+                redir = session['origin']
+            else:
+                redir = url_for('examination.upload_file')
+            return redirect(redir)
         else:
             flash_form_errors(form)
 
@@ -362,6 +384,13 @@ def add_course():
 
 @blueprint.route('/education/add/', methods=['GET', 'POST'])
 def add_education():
+    r = request.args.get('redir')
+    if r in REDIR_PAGES:
+        session['origin'] = url_for(REDIR_PAGES[r])
+    elif r == 'edit' and 'examination_edit_id' in session:
+        session['origin'] = '/examination/edit/{}'.format(
+            session['examination_edit_id'])
+
     if not ModuleAPI.can_write('examination'):
         session['prev'] = 'examination.add_education'
         return abort(403)
@@ -377,12 +406,17 @@ def add_education():
 
                 db.session.add(new_education)
                 db.session.commit()
-                flash("'%s':" % title + _('Education succesfully added.'),
+                flash("'%s': " % title + _('Education succesfully added.'),
                       'success')
             else:
-                flash("'%s':" % title + _('Already exists in the database'),
+                flash("'%s': " % title + _('Already exists in the database'),
                       'danger')
-            return redirect(url_for('examination.upload_file'))
+
+            if 'origin' in session:
+                redir = session['origin']
+            else:
+                redir = url_for('examination.upload_file')
+            return redirect(redir)
 
         else:
             flash_form_errors(form)
@@ -423,9 +457,9 @@ def examination_api_education_add():
     degree_id = request.form.get('degree_id', '')
 
     if education_name == '':
-        return jsonify(error='Geen opleidingnaam opgegeven'), 500
+        return jsonify(error=_('No education name specified')), 500
     if degree_id == '':
-        return jsonify(error='Geen opleidinggraad opgegeven'), 500
+        return jsonify(error=_('No education degree specified')), 500
 
     education = Education(degree_id, education_name)
     db.session.add(education)
