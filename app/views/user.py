@@ -214,13 +214,25 @@ def edit(user_id=None):
         gb = user.birth_date.strftime('%Y-%m-%d')
         lid = "Ja" if user.has_payed else "Nee"
 
+        # TODO: Use kwargs to get rid of these terrible if-statements.
         if user_id:
             if ModuleAPI.can_write('user'):
-                copernica.updateUser(user_id, user.email, user.first_name, user.last_name, user.education.name, user.student_id, Lid=lid, VVV=vvv, Bedrijfsinformatie=info, Geboortedatum=gb, Ingeschreven=ingeschreven)
+                copernica.updateUser(user_id, user.email, user.first_name,
+                                     user.last_name, user.education.name,
+                                     user.student_id, Lid=lid, VVV=vvv,
+                                     Bedrijfsinformatie=info, Geboortedatum=gb,
+                                     Ingeschreven=ingeschreven)
             else:
-                copernica.updateUser(user_id, user.email, user.first_name, user.last_name, user.education.name, user.student_id, Bedrijfsinformatie=info, Geboortedatum=gb, Ingeschreven=ingeschreven)
+                copernica.updateUser(user_id, user.email, user.first_name,
+                                     user.last_name, user.education.name,
+                                     user.student_id, Bedrijfsinformatie=info,
+                                     Geboortedatum=gb,
+                                     Ingeschreven=ingeschreven)
         else:
-            copernica.newUser(user.email, user.first_name, user.last_name, user.education.name, user.id, user.student_id, Lid=lid, VVV=vvv, Bedrijfsinformatie=info, Geboortedatum=gb, Ingeschreven=ingeschreven)
+            copernica.newUser(user.email, user.first_name, user.last_name,
+                              user.education.name, user.id, user.student_id,
+                              Lid=lid, VVV=vvv, Bedrijfsinformatie=info,
+                              Geboortedatum=gb, Ingeschreven=ingeschreven)
 
         return redirect(url_for('user.view_single', user_id=user.id))
     else:
@@ -279,7 +291,9 @@ def sign_up():
 
         gb = user.birth_date.strftime('%Y-%m-%d')
         info = "Ja" if user.receive_information else "Nee"
-        copernica.newUser(user.email, user.first_name, user.last_name, user.education.name, user.id, user.student_id, Bedrijfsinformatie=info, Geboortedatum=gb)
+        copernica.newUser(user.email, user.first_name, user.last_name,
+                          user.education.name, user.id, user.student_id,
+                          Bedrijfsinformatie=info, Geboortedatum=gb)
 
         flash(gettext('Welcome %(name)s! Your profile has been succesfully '
                       'created and you have been logged in!',
@@ -385,8 +399,8 @@ def request_password():
         else:
             _hash = create_hash(256)
 
-            reset_link = "http://www.svia.nl" + url_for('user.reset_password')\
-                + _hash
+            reset_link = ("http://www.svia.nl" + url_for('user.reset_password')
+                          + _hash)
 
             send_email(to=user.email,
                        subject='Password reset https://svia.nl',
