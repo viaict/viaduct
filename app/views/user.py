@@ -148,8 +148,8 @@ def edit(user_id=None):
             query = query.filter(User.id != user_id)
 
         if query.count() > 0:
-            flash('Een gebruiker met dit email adres bestaat al / A user with '
-                  'the e-mail address specified does already exist.', 'danger')
+            flash(_('A user with this e-mail address already exist.'),
+                  'danger')
             return edit_page()
 
         # Because the user model is constructed to have an ID of 0 when it is
@@ -202,8 +202,10 @@ def edit(user_id=None):
         if avatar:
             UserAPI.upload(avatar, user.id)
 
-        flash('Je hebt je profiel succesvol %s.' %
-              ('aangepast' if user_id else 'aangemaakt'), 'success')
+        if user_id:
+            flash(_('Profile succesfully updated'))
+        else:
+            flash(_('Profile succesfully created'))
 
         # Sending user profiles to the Copernica software
         info = "Ja" if user.receive_information else "Nee"
@@ -244,7 +246,7 @@ def sign_up():
         query = User.query.filter(User.email == form.email.data)
 
         if query.count() > 0:
-            flash(_('A user with the e-mail address specified already exists'),
+            flash(_('A user with this e-mail address already exists'),
                   'danger')
             return render_template('user/sign_up.htm', form=form)
 
@@ -303,22 +305,22 @@ def sign_in():
         user = User.query.filter(User.email == form.email.data.strip()).first()
 
         if user is None:
-            flash('It appears that account does not exist. Try again, or '
-                  'contact the website administration at ict (at) svia (dot) '
-                  'nl.', 'danger')
+            flash(_('It appears that account does not exist. Try again, or '
+                    'contact the website administration at ict (at) svia '
+                    '(dot) nl.'), 'danger')
             return redirect(url_for('user.sign_in'))
 
         submitted_hash = bcrypt.hashpw(form.password.data, user.password)
         if submitted_hash != user.password:
-            flash('De gegevens die je hebt ingevoerd zijn onjuist.',
+            flash(_('The password you entered appears to be incorrect.'),
                   'danger')
             return redirect(url_for('user.sign_in'))
 
         # Notify the login manager that the user has been signed in.
         login_user(user)
         if user.disabled:
-            flash('Your account has been disabled, you are not allowed to log in',
-                  'danger')
+            flash(_('Your account has been disabled, you are not allowed to '
+                    'log in'), 'danger')
         else:
             flash(gettext('Hey %(name)s, you\'re now logged in!',
                           name=current_user.first_name), 'success')
@@ -346,7 +348,7 @@ def sign_out():
     # Notify the login manager that the user has been signed out.
     logout_user()
 
-    flash('Je bent uitgelogd.', 'success')
+    flash(_('Captain\'s log succesfully ended.'), 'success')
 
     referer = request.headers.get('Referer')
     if referer:
@@ -378,7 +380,8 @@ def request_password():
 
         # Check if the user does exist, and if the passwords do match.
         if not user:
-            flash('De ingevoerde gegevens zijn niet correct.', 'danger')
+            flash(_('Your email and student id appear to be incorrect.'),
+                  'danger')
         else:
             _hash = create_hash(256)
 
@@ -392,8 +395,8 @@ def request_password():
                        user=user,
                        reset_link=reset_link)
 
-            flash('Er is een email verstuurd naar ' + form.email.data +
-                  ' met instructies.', 'success')
+            flash(gettext('An email has been sent to %(email) with further '
+                          'instructions.', email=form.email.data), 'success')
             return redirect(url_for('home.home'))
     else:
         flash_form_errors(form)
@@ -416,14 +419,14 @@ def reset_password(hash=0):
 
     # Check if the request was followed within a hour
     if not ticket or ((datetime.now() - ticket.created_on).seconds < 3600):
-        flash('Geen valide ticket gevonden')
+        flash(_('No valid ticket found'))
         return redirect(url_for('user.request_password'))
 
     if form.validate_on_submit():
         user = User.query.filter(User.id == ticket.user).first()
 
         if not user:
-            flash('There is something wrong with the reset link.', 'danger')
+            flash(_('There is something wrong with the reset link.'), 'danger')
             return redirect(url_for('user.request_password'))
 
         # Actually reset the password of the user
@@ -431,7 +434,7 @@ def reset_password(hash=0):
         db.session.add(user)
         db.session.commit()
 
-        flash('Uw wachtwoord is aangepast', 'success')
+        flash(_('Your password has been updated.'), 'success')
         return redirect(url_for('user.view_single'))
 
     else:
