@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from wtforms import BooleanField, StringField, TextAreaField, FieldList, \
-    SelectField, SubmitField, RadioField, FormField
+    SelectField, SubmitField, RadioField, FormField, IntegerField
 
 from wtforms.validators import InputRequired, Regexp, Optional
 
@@ -26,7 +26,7 @@ class PageForm(SuperPageForm):
     nl_content = TextAreaField(_('Dutch content'))
     en_content = TextAreaField(_('English content'))
     filter_html = BooleanField(_('Do not filter HTML tags'))
-    custom_form_id = SelectField(_('Custom form'), coerce=int)
+    custom_form_id = IntegerField()
     permissions = FieldList(FormField(EditGroupPagePermissionEntry))
 
     def validate(self):

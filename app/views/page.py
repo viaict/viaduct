@@ -100,12 +100,6 @@ def edit_page(path=''):
     else:
         form = PageForm()
 
-    form.custom_form_id.choices = \
-        [(c.id, c.name) for c in CustomForm.query.order_by('name')]
-
-    # Set default to 'No form'
-    form.custom_form_id.choices.insert(0, (0, _('No form')))
-
     groups = Group.query.all()
 
     # on page submit (edit or create)
@@ -121,7 +115,7 @@ def edit_page(path=''):
         db.session.commit()
 
         custom_form_id = int(form.custom_form_id.data)
-        if not custom_form_id:
+        if custom_form_id == 0:
             custom_form_id = None
 
         new_revision = PageRevision(page,
