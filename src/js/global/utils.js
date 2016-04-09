@@ -2,16 +2,37 @@ var utils = function() { // jshint ignore:line
     'use strict';
     var utils = {};
     utils.datatables =  {};
+
+    var datatable_language;
+    if (viaduct.locale == 'nl') {
+        // If Dutch override english defaults. Translations taken from:
+        // https://github.com/DataTables/Plugins/blob/master/i18n/Dutch.lang
+        datatable_language = {
+            "processing": "Bezig...",
+            "lengthMenu": "_MENU_ resultaten weergeven",
+            "zeroRecords": "Geen resultaten gevonden",
+            "info": "_START_ tot _END_ van _TOTAL_ resultaten",
+            "infoEmpty": "Geen resultaten om weer te geven",
+            "infoFiltered": " (gefilterd uit _MAX_ resultaten)",
+            "infoPostFix": "",
+            "search": "Zoeken:",
+            "emptyTable": "Geen resultaten aanwezig in de tabel",
+            "infoThousands": ".",
+            "loadingRecords": "Een moment geduld aub - bezig met laden...",
+            "paginate": {
+                "first": "Eerste",
+                "last": "Laatste",
+                "next": "Volgende",
+                "previous": "Vorige"
+            }
+        };
+    }
+
     utils.datatables.defaults = {
                 "processing": true,
                 "responsive": true,
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-                "language": {
-                    "paginate": {
-                        "next": "Volgende",
-                        "previous": "Vorige"
-                    }
-                },
+                "language": datatable_language,
                 "columnDefs": [ {
                     "targets": [0],
                     "visible": false,
