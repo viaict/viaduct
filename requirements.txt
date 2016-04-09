@@ -7,6 +7,9 @@ cffi==0.8.6
 cryptography==0.7.1
 enum34==1.0.4
 ez-setup==0.9
+flake8==2.5.4
+flake8-docstrings==0.2.5
+flake8-putty==0.3.2
 Flask==0.10.1
 Flask-Babel==0.9
 Flask-Failsafe==0.2
@@ -25,17 +28,24 @@ Jinja2==2.7.3
 Mako==1.0.1
 Markdown==2.5.2
 MarkupSafe==0.23
+mccabe==0.4.0
 -e git://github.com/JelteF/mollie-api-python@dec672784ed35d8f010aba0a5e4b740b6e419aa7#egg=mollie_api_python
 oauth2client==1.4.12
+packaging==16.6
 pathtools==0.1.2
+pep257==0.7.0
+pep8==1.7.0
+pep8-naming==0.3.3
 Pillow==2.7.0
 py-bcrypt==0.4
 pyasn1==0.1.7
 pyasn1-modules==0.0.5
 pycparser==2.10
 pycrypto==2.6.1
+pyflakes==1.0.0
 PyMySQL==0.6.3
 pyOpenSSL==0.14
+pyparsing==2.1.1
 python-dateutil==2.4.0
 pytz==2014.10
 PyYAML==3.11
