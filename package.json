@@ -39,7 +39,10 @@
           "viaduct",
           "utils",
           "Flask",
-          "markdown"
+          "markdown",
+          "jade",
+          "sprintf",
+          "flash"
       ]
   }
 }
