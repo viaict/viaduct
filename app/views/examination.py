@@ -413,7 +413,7 @@ def add_course():
         else:
             flash_form_errors(form)
 
-    return render_template('examination/course.htm', title=_('Examinations'),
+    return render_template('course/edit.htm', title=_('Examinations'),
                            form=form)
 
 
@@ -456,7 +456,7 @@ def add_education():
         else:
             flash_form_errors(form)
 
-    return render_template('examination/education.htm',
+    return render_template('education/edit.htm',
                            title=_('Examinations'),
                            form=form)
 

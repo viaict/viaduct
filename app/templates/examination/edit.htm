@@ -29,9 +29,9 @@
                         {% endfor %}
                     </select>
                     <span class="input-group-btn">
-                        <a href="/course/add?redir={% if new_exam %}add{% else %}edit{% endif %}" class="btn btn-default">
+                        <a href="/course/add?redir={% if new_exam %}add{% else %}edit{% endif %}" class="btn btn-default btn-success">
                             <i class="glyphicon glyphicon-pencil"></i>
-                            <strong>{{_('New course')}}</strong>
+                                {{_('New course')}}
                         </a>
                     </span>
                 </div>
@@ -59,9 +59,9 @@
                         {% endfor %}
                     </select>
                     <span class="input-group-btn">
-                        <a href="/education/add?redir={% if new_exam %}add{% else %}edit{% endif %}" class="btn btn-default">
+                        <a href="/education/add?redir={% if new_exam %}add{% else %}edit{% endif %}" class="btn btn-default btn-success">
                             <i class="glyphicon glyphicon-pencil"></i>
-                            <strong>{{_('New education')}}</strong>
+                            {{_('New education')}}
                         </a>
                     </span>
                 </div>
