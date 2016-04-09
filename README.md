@@ -37,9 +37,10 @@ installs are necessary). Usage of virtual environments is recommended:
 
 Set up the awesome hooks:
 ```bash
-cd .git/hooks
-ln -s ../../secrets/post-* .
-cd ../..
+cd .git
+rm -rf hooks
+ln -s ../secrets/hooks .
+cd ..
 .git/hooks/post-merge
 ```
 
