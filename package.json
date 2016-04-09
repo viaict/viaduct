@@ -39,7 +39,7 @@
           "viaduct",
           "utils",
           "Flask",
-          "markdown",
+          "markdown"
       ]
   }
 }
