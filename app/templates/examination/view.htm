@@ -74,6 +74,13 @@
             </thead>
 
             <tbody>
+                {% if examinations == None %}
+                    <tr>
+                        <td valign="top" colspan="9">
+                            {{ _('No examinations found') }}
+                        </td>
+                    </tr>
+                {% else %}
                 {% for examination in examinations.items %}
                     <tr>
                         <td>
@@ -107,11 +114,14 @@
                         {% endif %}
                     </tr>
                 {% endfor %}
+                {% endif %}
             </tbody>
         </table>
     </div>
 
+    {% if examinations != None %}
     {{ render_pagination(examinations, 'examination.view_examination', '?search=' + search) }}
+    {% endif %}
 <script>
 function searchKeyPress(e)
 {

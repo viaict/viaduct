@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-03-25 14:15+0100\n"
+"POT-Creation-Date: 2016-04-09 13:33+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -168,9 +168,6 @@ msgstr "Huidig"
 
 msgid "Current image"
 msgstr "Huidige plaatje"
-
-msgid "Custom form"
-msgstr "Formulier"
 
 msgid "Date"
 msgstr "Datum"
@@ -512,6 +509,9 @@ msgstr "Geen opleidinnaam opgegeven"
 
 msgid "No examination uploaded."
 msgstr "Geen tentamen geüpload."
+
+msgid "No examinations found"
+msgstr "Geen tentamens gevonden"
 
 msgid "No first name sunmitted"
 msgstr "Geen voornaam opgeveven"
@@ -982,4 +982,7 @@ msgstr "nog"
 
 #~ msgid "New"
 #~ msgstr "Nieuw"
+
+#~ msgid "Custom form"
+#~ msgstr "Formulier"
 
