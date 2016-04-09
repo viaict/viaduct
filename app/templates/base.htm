@@ -20,13 +20,17 @@
         <script src="{{static_url("/static/js/global.js")}}"></script>
         <script src="{{static_url("/jsglue.js")}}"></script>
 
-        <script>var viaduct = {};</script>
 
         {% if data %}
             <script>
-                viaduct = {{json.dumps(serialize_sqla(data))|safe}};
+                var viaduct = {{json.dumps(serialize_sqla(data))|safe}};
             </script>
+        {% else %}
+            <script>var viaduct = {};</script>
         {% endif %}
+        <script>
+            viaduct.locale = "{{get_locale()}}";
+        </script>
 
         {% block includes %}
         {% endblock %}

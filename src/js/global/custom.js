@@ -88,4 +88,14 @@ $(document).ready(function() {
         after: "a.readmore",
         watch: true,
     });
+
+
+    /* Submit buttons should have a loading text once the form is submitted.
+     * This is important so forms cannot be submitted multiple times.
+     */
+
+    $('form').on('submit', function() {
+        var $button = $('button[type=submit]', this);
+        utils.form.button_loading($button);
+    });
 });

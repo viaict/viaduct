@@ -4,7 +4,6 @@ $(function () {
     var btn_stati = 'btn-info btn-warning btn-success btn-danger';
 
     /* updates the task status */
-    $('.pimpy_task').attr('data-loading-text', 'BITTE WARTEN!');
 
     $('.pimpy_status').click(function () {
         var $this = $(this);
@@ -15,7 +14,7 @@ $(function () {
         var $task_rows = $('.pimpy_task_row[data-task-id=' + task_id + ']');
         var $task_btns = $('.pimpy_task', $task_rows);
 
-        $task_btns.button('loading');
+        utils.form.button_loading($task_btns);
 
         $.getJSON('/pimpy/tasks/update_status', {
             task_id: task_id,

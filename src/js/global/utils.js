@@ -76,3 +76,17 @@ utils.jadetpl = function jadetpl(tpl, params, helper) {
     jade.render(helper[0], tpl, params);
     return helper.children();
 };
+
+
+utils.form = {};
+
+utils.form.button_loading = function($button) {
+    if (viaduct.locale == 'en') {
+        $button.button({loadingText: 'Loading...'});
+    }
+    else {
+        $button.button({loadingText: 'Bezig...'});
+    }
+
+    $button.button('loading');
+};
