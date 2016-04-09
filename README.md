@@ -9,7 +9,7 @@ See [tutorial](TUTORIAL.md).
 Ubuntu install packages (other OS's should install similar stuff):
 ```bash
 sudo apt-get install python3 sqlite python3-pip virtualenv mysql-server git-flow npm \
-nodejs libjpeg-dev libffi-dev
+nodejs libjpeg-dev libffi-dev ruby
 ln -s /usr/bin/nodejs /usr/bin/node
 ```
 
@@ -29,11 +29,12 @@ The first one is master, the second develop after that just keep hitting return.
 
 Python dependencies are in `requirements.txt`. Install through pip (yes two
 installs are necessary). Usage of virtual environments is recommended:
-
-	virtualenv venv/ -p /usr/bin/python3
-	. venv/bin/activate
-	pip install -r requirements.txt
-	pip install -r requirements.txt
+```
+virtualenv venv/ -p /usr/bin/python3
+. venv/bin/activate
+pip install -r requirements.txt
+pip install -r requirements.txt
+```
 
 Set up the awesome hooks:
 ```bash
@@ -46,14 +47,13 @@ cd ..
 
 Build dependencies are for ruby and npm:
 * Install Ruby gems
-    - Install Ruby
     - `gem install bundler`
     - `bundle install` (if that does not work try this:
       http://guides.rubygems.org/faqs/#user-install)
 
-* Install Grunt build dependencies
-    - Install nodeJS (with npm included)
-    - `(sudo) npm install -g grunt-cli`
+* Install Grunt build dependencies and install JSHint:
+    - `sudo npm install -g grunt-cli`
+    - `sudo npm install -g jshint`
     - `npm install`
 
 * Get a live database of the via server by asking the coordinator.
