@@ -83,4 +83,9 @@ $(document).ready(function() {
     $('.confirm', '.confirmation').on('click', function() {
         return confirm("Are you sure you want to do this?");
     });
+
+    $('.dotdotdot').dotdotdot({
+        after: "a.readmore",
+        watch: true,
+    });
 });

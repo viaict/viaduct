@@ -7,13 +7,13 @@
                 {{ activity.till_now() }}
             </span>
             <h3>
-                <a class="dotdotdot" href="{{ url_for('activity.get_activity', activity_id=activity.id)}}">{{ activity.name }}</a>
+                <a class="overflow-dots" href="{{ url_for('activity.get_activity', activity_id=activity.id)}}">{{ activity.name }}</a>
             </h3>
             <ul>
-                <li class="dotdotdot"><i class="glyphicon glyphicon-calendar"></i>
+                <li class="overflow-dots"><i class="glyphicon glyphicon-calendar"></i>
                 {{ activity.get_time() }}</li>
 
-                <li class="dotdotdot"><i class="glyphicon glyphicon-home"></i>
+                <li class="overflow-dots"><i class="glyphicon glyphicon-home"></i>
                 {{ activity.location }}</li>
             </ul>
     </div> {# activity-simple #}
