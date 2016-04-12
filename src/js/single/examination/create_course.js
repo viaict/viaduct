@@ -15,7 +15,7 @@ $(function () {
     $new_course_btn.click(function (e) {
         e.preventDefault();
 
-        $new_course_btn.button('loading');
+        utils.forms.button_loading($new_course_btn);
 
         var course_name = $new_course_name.val();
 
@@ -64,7 +64,7 @@ $(function () {
     $new_education_btn.click(function (e) {
         e.preventDefault();
 
-        $new_education_btn.button('loading');
+        utils.forms.button_loading($new_education_btn);
 
         var education_name = $new_education_name.val();
         var education_degree_id = $new_education_degree.val();

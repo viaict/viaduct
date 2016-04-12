@@ -34,7 +34,7 @@ class MollieAPI:
         db.session.commit()
 
         # Add transaction costs
-        amount += 0.50
+        amount += 0.29
 
         # Create the mollie payment
         try:
@@ -110,7 +110,7 @@ class MollieAPI:
     @staticmethod
     def get_transactions(page=0):
         try:
-            payments = MOLLIE.payments.all(offset=page*20, count=20)[0]
+            payments = MOLLIE.payments.all(offset=page * 20, count=20)[0]
         except mollie_error.Error as e:
             return False, 'Api call failed: ' + e.message
 

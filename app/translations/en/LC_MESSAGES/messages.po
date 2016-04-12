@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-03-25 14:15+0100\n"
+"POT-Creation-Date: 2016-04-09 13:33+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -164,9 +164,6 @@ msgid "Current"
 msgstr ""
 
 msgid "Current image"
-msgstr ""
-
-msgid "Custom form"
 msgstr ""
 
 msgid "Date"
@@ -506,6 +503,9 @@ msgid "No education name specified"
 msgstr ""
 
 msgid "No examination uploaded."
+msgstr ""
+
+msgid "No examinations found"
 msgstr ""
 
 msgid "No first name sunmitted"
@@ -1000,5 +1000,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "A user with the e-mail address specified already exists"
+#~ msgstr ""
+
+#~ msgid "Custom form"
 #~ msgstr ""
 

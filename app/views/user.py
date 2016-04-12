@@ -314,7 +314,6 @@ def sign_in():
         return redirect(url_for('home.home'))
 
     form = SignInForm(request.form)
-    print(form._fields)
 
     if form.validate_on_submit():
         user = form.validate_signin()

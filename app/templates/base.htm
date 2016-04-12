@@ -17,16 +17,20 @@
         <link href="{{static_url("/static/css/custom.css")}}" rel="stylesheet" />
         <link href="{{static_url("/static/css/navigation.css")}}" rel="stylesheet" />
 
+        {% if data %}
+            <script>
+                var viaduct = {{json.dumps(serialize_sqla(data))|safe}};
+            </script>
+        {% else %}
+            <script>var viaduct = {};</script>
+        {% endif %}
+        <script>
+            viaduct.locale = "{{get_locale()}}";
+        </script>
+
         <script src="{{static_url("/static/js/global.js")}}"></script>
         <script src="{{static_url("/jsglue.js")}}"></script>
 
-        <script>var viaduct = {};</script>
-
-        {% if data %}
-            <script>
-                viaduct = {{json.dumps(serialize_sqla(data))|safe}};
-            </script>
-        {% endif %}
 
         {% block includes %}
         {% endblock %}

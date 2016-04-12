@@ -5,7 +5,7 @@ from flask import abort, flash, session, redirect, render_template, request, \
 from flask.ext.login import login_required
 from flask.ext.babel import _
 
-from sqlalchemy import or_
+from sqlalchemy import or_, func
 
 from app import app, db
 
@@ -194,22 +194,57 @@ def view_examination(page_nr=1):
         search = request.args.get('search')
 
         exams = Examination.query.all()
-
-        exam_matches = []
+        exam_matches_per_course = {}
+        course_max_scores = {}
 
         search_lower = search.lower().strip()
 
         for exam in exams:
-            if fuzz.partial_ratio(search_lower, exam.title.lower()) > 75 or \
-                    fuzz.partial_ratio(search_lower,
-                                       exam.course.name.lower()) > 75 or \
-                    fuzz.partial_ratio(search_lower,
-                                       exam.education.name.lower()) > 75:
-                exam_matches.append(exam.id)
+            course = exam.course.name.lower()
+            title_ratio = fuzz.partial_ratio(search_lower, exam.title.lower())
+            course_ratio = fuzz.partial_ratio(search_lower, course)
+            education_ratio = fuzz.partial_ratio(search_lower,
+                                                 exam.education.name.lower())
+            if title_ratio > 75 or course_ratio > 75 or education_ratio > 75:
+                # Calculate the score for the exam
+                # TODO: maybe use a weighted mean instead of max
+                score = max(title_ratio, course_ratio, education_ratio)
 
-        examinations = Examination.query.join(Course).join(Education) \
-            .filter(Examination.id.in_(exam_matches)) \
-            .order_by(Course.name).paginate(page_nr, 15, True)
+                exam_tuple = (score, exam.id)
+
+                # If the course did not occur before, add it
+                # to the dictionaries and set the max score
+                # to the score of this exam
+                if course not in exam_matches_per_course:
+                    exam_matches_per_course[course] = [exam_tuple]
+                    course_max_scores[course] = score
+
+                # Otherwise, add the exam to the list of the course
+                # and update the maximum course score
+                else:
+                    exam_matches_per_course[course].append(exam_tuple)
+                    course_max_scores[course] = max(score,
+                                                    course_max_scores[course])
+        if len(course_max_scores) == 0:
+            examinations = None
+        else:
+            # Sort the courses by their max score
+            courses_sorted = sorted(course_max_scores,
+                                    key=course_max_scores.get, reverse=True)
+
+            # Create the list of exam ids. These are ordered by course with
+            # their maximum score, and for each course ordered by exam score
+            exam_matches = []
+            for course in courses_sorted:
+                exam_matches.extend(list(zip(*sorted(
+                    exam_matches_per_course[course], reverse=True)))[1])
+
+            # Query the exams. The order_by clause keeps them in the same
+            # order as the exam_matches list
+            examinations = Examination.query \
+                .filter(Examination.id.in_(exam_matches)) \
+                .order_by(func.field(Examination.id, *exam_matches)) \
+                .paginate(page_nr, 15, True)
     else:
         search = ""
         examinations = Examination.query.join(Course)\
@@ -378,7 +413,7 @@ def add_course():
         else:
             flash_form_errors(form)
 
-    return render_template('examination/course.htm', title=_('Examinations'),
+    return render_template('course/edit.htm', title=_('Examinations'),
                            form=form)
 
 
@@ -421,7 +456,7 @@ def add_education():
         else:
             flash_form_errors(form)
 
-    return render_template('examination/education.htm',
+    return render_template('education/edit.htm',
                            title=_('Examinations'),
                            form=form)
 

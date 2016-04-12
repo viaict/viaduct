@@ -7,6 +7,8 @@ $(document).ready(function() {
      * Dual licensed under the MIT and GPL licenses.
      * http://benalman.com/about/license/
      */
+
+    'use strict';
     (function($, undefined) {
       $.fn.serializeObject = function(){
         var obj = {};
@@ -25,12 +27,11 @@ $(document).ready(function() {
 
     })(jQuery);
 
-    if (!msg_success)
-        var msg_success = "Je hebt het formulier succesvol ingevuld";
+    var msg_success = "Je hebt het formulier succesvol ingevuld";
 
 
-    $("#custom_form").click(function() {
-        var custom_form = $(this).closest('form');
+    $("form#custom").submit(function() {
+        var custom_form = $(this);
         var validated   = true;
 
         // Validate required input fields
@@ -55,13 +56,15 @@ $(document).ready(function() {
                     if (result == "success")
                         flash(msg_success, "success");
                     else if (result == "edit")
-                        flash("Je formulier is aangepast", "alert");
+                        flash("Je formulier is aangepast", "warning");
                     else if (result == 'reserve')
                         flash('Je staat op de reserve lijst', 'success');
                     else
                         flash("Er is iets misgegaan bij het invullen :(", "danger");
                 }
-            );
+            ).always(function() {
+                utils.form.submit_button(custom_form).button('reset');
+            });
         }
 
         return false;
