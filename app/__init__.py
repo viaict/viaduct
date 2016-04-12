@@ -15,7 +15,7 @@ import json
 from flask_jsglue import JSGlue
 
 
-version = 'v2.6.1.0'
+version = 'v2.6.2.0'
 
 
 def static_url(url):
@@ -80,7 +80,8 @@ def get_locale():
 
 
 class JSONEncoder(BaseEncoder):
-    '''Custom JSON encoding'''
+    """Custom JSON encoding."""
+
     def default(self, o):
         if isinstance(o, _LazyString):
             # Lazy strings need to be evaluation.
@@ -108,12 +109,15 @@ constraint_naming_convention = {
 
 
 class SQLAlchemy(BaseSQLAlchemy):
-    """ Custom SQLAlchemy object that uses naming conventions.
+    """
+    Custom SQLAlchemy object that uses naming conventions.
+
     https://stackoverflow.com/questions/29153930/
 
     With Flask-SQLAlchemy 2.1 this can be done better, but it is not released
     yet. And 2.0 caused issues because of autoflush so those should be fixed.
     """
+
     def make_declarative_base(self):
         metadata = MetaData(naming_convention=constraint_naming_convention)
 
@@ -124,12 +128,12 @@ class SQLAlchemy(BaseSQLAlchemy):
 
 db = SQLAlchemy(app)
 
-from app.utils import import_module, serialize_sqla
-from app.utils.thumb import thumb
-from app.utils.user import UserAPI
-from app.utils.company import CompanyAPI
-from app.utils.guide import GuideAPI
-from app.utils.module import ModuleAPI
+from app.utils import import_module, serialize_sqla  # noqa
+from app.utils.thumb import thumb  # noqa
+from app.utils.user import UserAPI  # noqa
+from app.utils.company import CompanyAPI  # noqa
+from app.utils.guide import GuideAPI  # noqa
+from app.utils.module import ModuleAPI  # noqa
 # Set jinja global variables
 app.jinja_env.globals.update(enumerate=enumerate)
 app.jinja_env.globals.update(render_template=render_template)
@@ -159,8 +163,8 @@ path = os.path.dirname(os.path.abspath(__file__))
 
 register_views(app, os.path.join(path, 'views'))
 
-from app.utils.template_filters import *
+from app.utils.template_filters import *  # noqa
 
-from app.models import User
+from app.models import User  # noqa
 
 login_manager.anonymous_user = User.get_anonymous_user
