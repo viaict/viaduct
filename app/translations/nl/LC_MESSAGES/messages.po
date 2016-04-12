@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-04-09 13:33+0200\n"
+"POT-Creation-Date: 2016-04-12 16:04+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -66,6 +66,9 @@ msgstr "Archiveer datum"
 
 msgid "Archive date needs to be after the publish date."
 msgstr "Archiveer datum moet na de publiceer datum zijn."
+
+msgid "Are you sure you want to delete this course?"
+msgstr "Weet je zeker dat je dit vak wilt verwijderen?"
 
 msgid "Are you sure you want to delete this exam?"
 msgstr "Weet je zeker dat je het tentamen wil verwijderen?"
@@ -142,8 +145,26 @@ msgstr "Land"
 msgid "Course"
 msgstr "Vak"
 
+msgid "Course could not be found."
+msgstr "Vak kan niet worden gevonden"
+
+msgid "Course overview"
+msgstr "Vakoverzicht"
+
+msgid "Course still has examinations in the database."
+msgstr "Vak heeft nog tentamens in de tentamenbank."
+
 msgid "Course succesfully added."
 msgstr "Vak succesvol toegevoegd."
+
+msgid "Course succesfully deleted."
+msgstr "Vak succesvol verwijderd."
+
+msgid "Course succesfully saved."
+msgstr "Vak succesvol opgeslagen."
+
+msgid "Courses"
+msgstr "Vakken"
 
 msgid "Coördinator"
 msgstr "Coördinator"
@@ -162,6 +183,9 @@ msgstr "Nieuwsbericht aanmaken"
 
 msgid "Create user"
 msgstr "Gebruiker aanmaken"
+
+msgid "Created"
+msgstr "Aangemaakt"
 
 msgid "Current"
 msgstr "Huidig"
@@ -235,6 +259,9 @@ msgstr "E-mailadres"
 msgid "Edit"
 msgstr "Aanpassen"
 
+msgid "Edit course"
+msgstr "Vak aanpassen"
+
 msgid "Edit news item"
 msgstr "Nieuwsbericht aanpassen"
 
@@ -247,8 +274,14 @@ msgstr "Wijzig gebruikersrechten"
 msgid "Education"
 msgstr "Opleiding"
 
+msgid "Education overview"
+msgstr "Opleidingsoverzicht"
+
 msgid "Education succesfully added."
 msgstr "Opleiding succesvol toegevoegd."
+
+msgid "Educations"
+msgstr "Opleidingen"
 
 msgid "Either Dutch or English content required"
 msgstr "Een Nederlandse of Engelse inhoud is vereist."
@@ -441,6 +474,10 @@ msgstr "Deeltentamen"
 msgid "Minimal password length "
 msgstr "Minimum lengte van wachtwoord: "
 
+#, fuzzy
+msgid "Modified"
+msgstr "Laatste aanpassing"
+
 msgid "Modify"
 msgstr "Bewerken"
 
@@ -567,7 +604,8 @@ msgstr "Wachtwoord"
 msgid "Passwords do not match"
 msgstr "De opgegeven wachtwoorden komen niet overeen"
 
-msgid "Pay (+€0,50 transaction costs)"
+#, fuzzy
+msgid "Pay (+€0,29 transaction costs)"
 msgstr "Betalen (+€0,50 transactiekosten)"
 
 msgid "Permission"
@@ -840,6 +878,9 @@ msgstr "Vacatures"
 msgid "Venue"
 msgstr "Oort"
 
+msgid "View"
+msgstr "Weergeven"
+
 msgid "Visible for members only"
 msgstr "Alleen zichtbaar voor leden"
 
@@ -962,9 +1003,6 @@ msgstr "nog"
 #~ msgid "Minimal password length %d"
 #~ msgstr "Minimum lengte van wachtwoord: %d"
 
-#~ msgid "Title"
-#~ msgstr "Titel"
-
 #~ msgid "Kind"
 #~ msgstr "over"
 
@@ -986,3 +1024,5 @@ msgstr "nog"
 #~ msgid "Custom form"
 #~ msgstr "Formulier"
 
+msgid "view"
+msgstr "bekijken"
