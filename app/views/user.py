@@ -110,9 +110,7 @@ def remove_avatar(user_id=None):
 @blueprint.route('/users/create/', methods=['GET', 'POST'])
 @blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
 def edit(user_id=None):
-    """
-    Create user for admins and edit for admins and users.
-    """
+    """Create user for admins and edit for admins and users."""
     if not ModuleAPI.can_write('user') and\
             (not current_user or current_user.id != user_id):
         return abort(403)
@@ -364,7 +362,7 @@ def sign_out():
 
 @blueprint.route('/request_password/', methods=['GET', 'POST'])
 def request_password():
-    """ Create a ticket and send a email with link to reset_password page. """
+    """Create a ticket and send a email with link to reset_password page."""
 
     def create_hash(bits=96):
         assert bits % 8 == 0
@@ -412,9 +410,12 @@ def request_password():
 @blueprint.route('/reset_password/', methods=['GET', 'POST'])
 @blueprint.route('/reset_password/<string:hash>/', methods=['GET', 'POST'])
 def reset_password(hash=0):
-    """ Reset form existing of two fields, password and password_repeat.
+    """
+    Reset form existing of two fields, password and password_repeat.
+
     Checks if the hash in the url is found in the database and timestamp
-    has not expired"""
+    has not expired.
+    """
 
     form = ResetPassword(request.form)
 
