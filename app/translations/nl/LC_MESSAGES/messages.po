@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-04-12 16:04+0200\n"
+"POT-Creation-Date: 2016-04-12 16:29+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -51,6 +51,9 @@ msgstr "Adres"
 
 msgid "Already exists in the database"
 msgstr "Bestaat al in de database."
+
+msgid "Amount of examinations:"
+msgstr "Aantal tentamens:"
 
 msgid "An email has been sent to %(email) with further instructions."
 msgstr "Er is een email verstuurd naar %(email) met verdere instructies."
@@ -979,6 +982,9 @@ msgstr ""
 msgid "still"
 msgstr "nog"
 
+msgid "view"
+msgstr "bekijken"
+
 #~ msgid "Content"
 #~ msgstr "Inhoud"
 
@@ -1024,5 +1030,3 @@ msgstr "nog"
 #~ msgid "Custom form"
 #~ msgstr "Formulier"
 
-msgid "view"
-msgstr "bekijken"
