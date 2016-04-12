@@ -111,7 +111,7 @@ def remove_avatar(user_id=None):
 @blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
 def edit(user_id=None):
     """
-    Create user for admins and edit for admins and users
+    Create user for admins and edit for admins and users.
     """
     if not ModuleAPI.can_write('user') and\
             (not current_user or current_user.id != user_id):
@@ -390,8 +390,8 @@ def request_password():
         else:
             _hash = create_hash(256)
 
-            reset_link = ("http://www.svia.nl" + url_for('user.reset_password')
-                          + _hash)
+            reset_link = ("http://www.svia.nl" +
+                          url_for('user.reset_password') + _hash)
 
             send_email(to=user.email,
                        subject='Password reset https://svia.nl',
