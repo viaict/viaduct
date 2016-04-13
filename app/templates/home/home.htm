@@ -1,0 +1,52 @@
+{% extends 'base.htm' %}
+
+{% block includes %}
+<link href="{{static_url("/static/css/home.css")}}" rel="stylesheet" />
+{% endblock %}
+
+{% block page %}
+    </div>
+    <div id="jumbotron" style="background-image: url()">
+        <div class="container">
+            <div class="introduction">
+                <h1 class="overflow-dots">Studievereniging Via</h1>
+                <p class="dotdotdot">Via, kort voor 'Vereniging Informatiewetenschappen Amsterdam' is de studievereniging voor Informatica, Kunstmatige Intelligentie en Informatiekunde aan de Universiteit van Amsterdam. </p>
+            </div>
+            <address>
+                <ul>
+                    <li>Science Park 904, Room A0.10</li>
+                    <li>1098 XH Amsterdam</li>
+                    <li>(020) 525 7880</li>
+                    <li><a href="mailto:bestuur@svia.nl">bestuur@svia.nl</a></li>
+                </ul>
+            </address>
+        </div>
+    </div>
+    <div class="container home">
+    <div class="row">
+        <div class="col-md-7 newsrole">
+            <h2>{{ _('Latest news') }}</h2>
+            {% for item in news %}
+                <article>
+                    <a href='{{ url_for('news.view', news_id=item.id) }}'>
+                        <h3>{{ item.title }}</h3>
+                    </a>
+                    <span class="author">{{ item.publish_date}} - {{ item.user.name }}</span>
+                    <div class="excerpt">
+                        {{ item.get_short_content(300) | markdown }}
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+        {% for revision in revisions %}
+            <div class="col-md-5 activities-simple">
+                {% if revision.activity %}
+                    {{ revision.activity | safe }}
+                {% else %}
+                    <h2>{{ revision.title }}</h2>
+                    <p>{{ revision.content | markdown(revision.filter_html) }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div> {# /.row #}
+{% endblock %}

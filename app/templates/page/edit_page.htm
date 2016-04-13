@@ -1,0 +1,107 @@
+{% from "macros/form.htm" import render_submit, render_checkbox, render_field, render_select %}
+{% from "macros/custom_form.htm" import custom_form_select %}
+{% extends "content.htm" %}
+
+{% block includes %}
+    <script src={{static_url("/static/js/page/filter_groups.js")}}></script>
+    <script src='{{static_url('/static/js/custom_form/loader.js')}}'></script>
+{% endblock %}
+
+{% block content %}
+    <div class='row'>
+        <div class='col-sm-12'>
+            <h1>
+                {% if news_id %}
+                    {{ _('Edit') }}
+                {% else %}
+                    {{ _('Create')}}
+                {% endif %}
+                {{ _('page') }}
+                {% if not new_page %}
+                    <form action='{{ url_for('page.delete', path=page.path) }}' method='post' class='pull-right'>
+                        <button class="btn btn-danger pull-right" type='submit'>{{_('Remove page') }}</button>
+                    </form>
+                {% endif %}
+            </h1>
+        </div>
+    </div>
+
+    <form method="post" id="edit_page">
+        <fieldset>
+            {{ form.csrf_token }}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel with-nav-tabs panel-default">
+                        <div class="panel-heading">
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a data-toggle="tab" href="#lang_dutch">
+                                        {{_('Dutch details') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-toggle="tab" href="#lang_english">
+                                        {{ _('English details') }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div id="lang_dutch" class="tab-pane fade in active">
+                                    {{ render_field(form.nl_title) }}
+                                    {{ render_field(form.nl_content) }}
+                                </div>
+                                <div id="lang_english" class="tab-pane fade">
+                                    {{ render_field(form.en_title) }}
+                                    {{ render_field(form.en_content) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-12'>
+                    {{ render_field(form.comment) }}
+                </div>
+                <div class='col-md-6'>
+                    {{ render_checkbox(form.needs_payed) }}
+                </div>
+                <div class='col-md-6'>
+                    {{ render_checkbox(form.filter_html) }}
+                </div>
+                <div class='col-md-12'>
+                    {{ custom_form_select('custom_form_id', form.custom_form_id.data) }}
+                </div>
+
+                <div class="col-md-12">
+                    <label>{{ _('Group permissions') }}</label>
+                </div>
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#dev-table" placeholder="{{ _('Filter groups') }}" />
+                </div>
+                <div class="col-md-12">
+                    <table class="table table-hover table-bordered table-striped" id="dev-table">
+                        <thead>
+                            <tr>
+                                <th>Groep</th>
+                                <th>Permission</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for group, form_entry in groups %}
+                                <tr>
+                                    <td>{{ group.name }}</td>
+                                    <td>{{ form_entry.select }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class='col-md-12'>
+                    {{ render_submit(_('Save')) }}
+                </div>
+            </div>
+        </fieldset>
+    </form>
+{% endblock %}

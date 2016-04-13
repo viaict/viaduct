@@ -3,5 +3,5 @@ import sys
 
 logging.basicConfig(stream=sys.stderr)
 
-from viaduct import application
+from app import application
 

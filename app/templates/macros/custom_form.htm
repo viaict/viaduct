@@ -1,0 +1,64 @@
+{% macro user_fields(user) %}
+
+<div id="custom_form_user">
+<div class="control-group">
+	<label class="content-label">Studentnummer</label>
+	<div class="controls">
+		<input type="text" class="col-md-6" name="student_id" value="{{ user.student_id or '' }}">
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="content-label">Voornaam</label>
+	<div class="controls">
+		<input type="text" class="col-md-6" name="first_name" value="{{ user.first_name or '' }}">
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="content-label">Achternaam</label>
+	<div class="controls">
+		<input type="text" class="col-md-6" name="last_name" value="{{ user.last_name or '' }}">
+	</div>
+</div>
+
+
+<div class="control-group">
+	<label class="content-label">Email</label>
+	<div class="controls">
+		<input type="text" class="col-md-6" name="email" value="{{ user.email or '' }}">
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="content-label">Telefoonnummer</label>
+	<div class="controls">
+		<input type="text" class="col-md-6" name="phone_nr" value="{{ user.phone_nr or '' }}">
+	</div>
+</div>
+</div>
+{% endmacro %}
+
+{% macro custom_form_select(name, value=None, id=None) %}
+    {% if id == None %}
+        {% set id = name %}
+    {% endif %}
+
+    <div class='custom-form-field input-group'>
+        <select class='form-control' name='{{name}}' id='{{id}}' data-value='{{value}}'>
+            <option class='empty' value='0'>{{_('No form')}}</option>
+        </select>
+        <span class='input-group-btn'>
+            <button class='form-reload btn btn-default' type='button'>
+                <span class='refresh'>{{_('Refresh')}}</span>
+                <span class='loading'>
+                    <i class='fa fa-cog fa-spin'></i>
+                </span>
+            </button>
+        </span>
+    </div>
+
+    <a class="show-window btn btn-xs btn-success" target="_blank" href="{{ url_for('custom_form.create')}}">
+        {{ _("Create form") }}
+    </a>
+{% endmacro %}

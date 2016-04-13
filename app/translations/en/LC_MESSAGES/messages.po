@@ -1,0 +1,1073 @@
+# English translations for PROJECT.
+# Copyright (C) 2015 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2016-04-13 12:01+0200\n"
+"PO-Revision-Date: 2015-04-12 18:42+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.3\n"
+
+msgid "A user with this e-mail address already exist."
+msgstr ""
+
+msgid "A user with this e-mail address already exists"
+msgstr ""
+
+msgid ""
+"According to Google this email does not exist. Please use an email that "
+"does."
+msgstr ""
+
+msgid "Activities"
+msgstr ""
+
+msgid "Activity"
+msgstr ""
+
+msgid "Activity archive"
+msgstr ""
+
+msgid "Activity overview"
+msgstr ""
+
+msgid "Activitycommittee"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "Address"
+msgstr ""
+
+msgid "Already exists in the database"
+msgstr ""
+
+msgid "Amount of examinations:"
+msgstr ""
+
+msgid "An email has been sent to %(email) with further instructions."
+msgstr ""
+
+msgid "An image with this name already exists."
+msgstr ""
+
+msgid "Answers"
+msgstr ""
+
+msgid "Archive date"
+msgstr ""
+
+msgid "Archive date needs to be after the publish date."
+msgstr ""
+
+msgid "Are you sure you want to delete this course?"
+msgstr ""
+
+msgid "Are you sure you want to delete this education?"
+msgstr ""
+
+msgid "Are you sure you want to delete this exam?"
+msgstr ""
+
+msgid "Attended activities"
+msgstr ""
+
+msgid ""
+"Attention: we now use a base32 encoding. Read this module's manual for "
+"more information."
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+msgid "Bilingualism is not fully implemented yet!"
+msgstr ""
+
+msgid "Birthdate"
+msgstr ""
+
+msgid "Bug type"
+msgstr ""
+
+msgid "By registering you agree with the terms above."
+msgstr ""
+
+msgid "Cannot delete image, image does not exist"
+msgstr ""
+
+msgid "Cannot find parent navigation entry."
+msgstr ""
+
+#, fuzzy
+msgid "Captain's log succesfully ended."
+msgstr "."
+
+msgid "Change password"
+msgstr ""
+
+msgid "City"
+msgstr ""
+
+msgid "Click to expand"
+msgstr ""
+
+msgid "Comment"
+msgstr ""
+
+msgid "Comment for change"
+msgstr ""
+
+msgid "Committee"
+msgstr ""
+
+msgid "Committee members"
+msgstr ""
+
+msgid "Committees"
+msgstr ""
+
+msgid "Compare"
+msgstr ""
+
+msgid "Contact details"
+msgstr ""
+
+msgid "Country"
+msgstr ""
+
+msgid "Course"
+msgstr ""
+
+msgid "Course could not be found."
+msgstr ""
+
+msgid "Course overview"
+msgstr ""
+
+msgid "Course still has examinations in the database."
+msgstr ""
+
+msgid "Course succesfully added."
+msgstr ""
+
+msgid "Course succesfully deleted."
+msgstr ""
+
+msgid "Course succesfully saved."
+msgstr ""
+
+msgid "Courses"
+msgstr ""
+
+msgid "Coördinator"
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+msgid "Create activity"
+msgstr ""
+
+msgid "Create form"
+msgstr ""
+
+msgid "Create news item"
+msgstr ""
+
+msgid "Create user"
+msgstr ""
+
+msgid "Created"
+msgstr ""
+
+msgid "Current"
+msgstr ""
+
+msgid "Current image"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Delete activity"
+msgstr ""
+
+msgid "Delete avatar"
+msgstr ""
+
+msgid "Delete menu item and pagina"
+msgstr ""
+
+msgid "Delete news item"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Disabled"
+msgstr ""
+
+msgid "Do not filter HTML tags"
+msgstr ""
+
+msgid "Do you have an idea for an activity?"
+msgstr ""
+
+msgid "Dutch"
+msgstr ""
+
+msgid "Dutch content"
+msgstr ""
+
+msgid "Dutch description"
+msgstr ""
+
+msgid "Dutch details"
+msgstr ""
+
+msgid "Dutch name"
+msgstr ""
+
+msgid "Dutch name requires Dutch description and vice versa"
+msgstr ""
+
+msgid "Dutch title"
+msgstr ""
+
+msgid "Dutch title requires Dutch content and vice versa"
+msgstr ""
+
+msgid "Dutch title requires Dutch description and vice versa"
+msgstr ""
+
+msgid "E-mail address"
+msgstr ""
+
+msgid "E-mail adress"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Edit course"
+msgstr ""
+
+msgid "Edit education"
+msgstr ""
+
+msgid "Edit news item"
+msgstr ""
+
+msgid "Edit page"
+msgstr ""
+
+msgid "Edit user permissions"
+msgstr ""
+
+msgid "Education"
+msgstr ""
+
+msgid "Education could not be found."
+msgstr ""
+
+msgid "Education overview"
+msgstr ""
+
+msgid "Education still has examinations in the database."
+msgstr ""
+
+msgid "Education succesfully added."
+msgstr ""
+
+msgid "Education succesfully deleted."
+msgstr ""
+
+msgid "Education succesfully saved."
+msgstr ""
+
+msgid "Educations"
+msgstr ""
+
+msgid "Either Dutch or English content required"
+msgstr ""
+
+msgid "Either Dutch or English description required"
+msgstr ""
+
+msgid "Either Dutch or English name required"
+msgstr ""
+
+msgid "Either Dutch or English title required"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "End time"
+msgstr ""
+
+msgid "End-Term"
+msgstr ""
+
+msgid "English"
+msgstr ""
+
+msgid "English content"
+msgstr ""
+
+msgid "English description"
+msgstr ""
+
+msgid "English description (max. 180 characters)"
+msgstr ""
+
+msgid "English details"
+msgstr ""
+
+msgid "English name"
+msgstr ""
+
+msgid "English name requires English description and vice versa"
+msgstr ""
+
+msgid "English tags (comma seperated)"
+msgstr ""
+
+msgid "English title"
+msgstr ""
+
+msgid "English title requires English content and vice versa"
+msgstr ""
+
+msgid "English title requires English description and vice versa"
+msgstr ""
+
+msgid "Examination"
+msgstr ""
+
+msgid "Examination could not be found."
+msgstr ""
+
+msgid "Examination kind"
+msgstr ""
+
+msgid "Examination succesfully changed."
+msgstr ""
+
+msgid "Examination successfully deleted."
+msgstr ""
+
+msgid "Examination successfully uploaded."
+msgstr ""
+
+msgid "Examinations"
+msgstr ""
+
+msgid "Exams"
+msgstr ""
+
+msgid "Export users"
+msgstr ""
+
+msgid "External link"
+msgstr ""
+
+msgid "Favourer"
+msgstr ""
+
+msgid "File does not exist, examination deleted."
+msgstr ""
+
+msgid "Filter groups"
+msgstr ""
+
+msgid "First name"
+msgstr ""
+
+msgid "Firstname"
+msgstr ""
+
+msgid "Forgot password?"
+msgstr ""
+
+msgid "Free"
+msgstr ""
+
+msgid "Group"
+msgstr ""
+
+msgid "Group permissions"
+msgstr ""
+
+msgid "Groups"
+msgstr ""
+
+msgid "Has payed"
+msgstr ""
+
+#, python-format
+msgid "Hey %(name)s, you're now logged in!"
+msgstr ""
+
+msgid "Honorary member"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Image"
+msgstr ""
+
+msgid "Information"
+msgstr ""
+
+msgid "Interim coördinator"
+msgstr ""
+
+msgid "Interim-coördinator"
+msgstr ""
+
+msgid "Invalid e-mail address"
+msgstr ""
+
+msgid "Invalid e-mail adress submitted"
+msgstr ""
+
+msgid ""
+"It appears that account does not exist. Try again, or contact the website"
+" administration at ict (at) svia (dot) nl."
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgid "Language unsupported on this site"
+msgstr ""
+
+msgid "Last modified"
+msgstr ""
+
+msgid "Last name"
+msgstr ""
+
+msgid "Latest news"
+msgstr ""
+
+msgid "List"
+msgstr ""
+
+msgid "List of activities"
+msgstr ""
+
+msgid "Loading..."
+msgstr ""
+
+msgid "Location"
+msgstr ""
+
+msgid "Log in"
+msgstr ""
+
+msgid "Member"
+msgstr ""
+
+msgid "Mid-Term"
+msgstr ""
+
+msgid "Minimal password length "
+msgstr ""
+
+msgid "Modified"
+msgstr ""
+
+msgid "Modify"
+msgstr ""
+
+msgid "Navigation entry"
+msgstr ""
+
+msgid "Nederlandse beschrijving (max. 180 karakters)"
+msgstr ""
+
+msgid "Nederlandse tags (komma seperated)"
+msgstr ""
+
+msgid "Nederlanse titel"
+msgstr ""
+
+msgid "New Examination"
+msgstr ""
+
+msgid "New activity"
+msgstr ""
+
+msgid "New course"
+msgstr ""
+
+msgid "New education"
+msgstr ""
+
+msgid "New examination"
+msgstr ""
+
+msgid "New item"
+msgstr ""
+
+msgid "News"
+msgstr ""
+
+msgid "News item saved"
+msgstr ""
+
+msgid "News item succesfully deleted"
+msgstr ""
+
+msgid "Next"
+msgstr ""
+
+msgid "No answers uploaded."
+msgstr ""
+
+msgid "No birthdate submitted"
+msgstr ""
+
+msgid "No description supplied"
+msgstr ""
+
+msgid "No e-mail adress submitted"
+msgstr ""
+
+msgid "No education degree specified"
+msgstr ""
+
+msgid "No education given."
+msgstr ""
+
+msgid "No education name specified"
+msgstr ""
+
+msgid "No examination uploaded."
+msgstr ""
+
+msgid "No examinations found"
+msgstr ""
+
+msgid "No first name sunmitted"
+msgstr ""
+
+msgid "No form"
+msgstr ""
+
+msgid "No issue type supplied"
+msgstr ""
+
+msgid "No last name submitted"
+msgstr ""
+
+msgid "No password submitted"
+msgstr ""
+
+msgid "No starting year of study submitted"
+msgstr ""
+
+msgid "No studentnumber submitted"
+msgstr ""
+
+msgid "No title entered"
+msgstr ""
+
+msgid "No title given."
+msgstr ""
+
+msgid "No valid ticket found"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "Not found!"
+msgstr ""
+
+msgid "Not given"
+msgstr ""
+
+msgid "Old answers preserved."
+msgstr ""
+
+msgid "Old examination preserved."
+msgstr ""
+
+msgid "Page not found"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Passwords do not match"
+msgstr ""
+
+msgid "Pay (+€0,29 transaction costs)"
+msgstr ""
+
+msgid "Permission"
+msgstr ""
+
+msgid "Phone"
+msgstr ""
+
+msgid "Please fill in"
+msgstr ""
+
+msgid "Position vacant"
+msgstr ""
+
+msgid "Previous"
+msgstr ""
+
+msgid "Price"
+msgstr ""
+
+msgid "Privacy"
+msgstr ""
+
+#, fuzzy
+msgid "Profile succesfully created"
+msgstr "."
+
+#, fuzzy
+msgid "Profile succesfully updated"
+msgstr "."
+
+msgid "Public"
+msgstr ""
+
+msgid "Publish date"
+msgstr ""
+
+msgid "Published at"
+msgstr ""
+
+msgid "Read"
+msgstr ""
+
+msgid "Read more"
+msgstr ""
+
+msgid "Read/Write"
+msgstr ""
+
+msgid "Refresh"
+msgstr ""
+
+msgid "Register"
+msgstr ""
+
+msgid "Register account"
+msgstr ""
+
+msgid "Register for this activity"
+msgstr ""
+
+msgid "Register new user"
+msgstr ""
+
+msgid "Registered activities"
+msgstr ""
+
+msgid "Remove page"
+msgstr ""
+
+msgid "Repeat password"
+msgstr ""
+
+msgid "Report bug"
+msgstr ""
+
+msgid "Reset password"
+msgstr ""
+
+msgid "Retake"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Save password"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Select a time and date by clicking on the clock"
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "Send an e-mail to the"
+msgstr ""
+
+msgid "Send form"
+msgstr ""
+
+msgid "Show activities in the archive"
+msgstr ""
+
+msgid "Show all news items"
+msgstr ""
+
+msgid "Show history"
+msgstr ""
+
+msgid "Show news item archive"
+msgstr ""
+
+msgid "Show recent news items"
+msgstr ""
+
+msgid "Show upcoming activities"
+msgstr ""
+
+msgid "Sign In"
+msgstr ""
+
+msgid ""
+"Some details like shirt size or diet we try to save, so you don't have to"
+" fill them in more then once."
+msgstr ""
+
+msgid ""
+"Some field (like shirt-size or diet) we try to save, so that you don't "
+"have to enter them the next time"
+msgstr ""
+
+msgid "Something went wrong."
+msgstr ""
+
+msgid "Specified examination does not exist"
+msgstr ""
+
+msgid "Start time"
+msgstr ""
+
+msgid "Starting year study"
+msgstr ""
+
+msgid "Student ID"
+msgstr ""
+
+msgid "Studentnumber"
+msgstr ""
+
+msgid "Study"
+msgstr ""
+
+msgid "Study course"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+msgid "Submit!"
+msgstr ""
+
+msgid "Terms"
+msgstr ""
+
+msgid "The Police has been notified."
+msgstr ""
+
+msgid "The activity has been created."
+msgstr ""
+
+msgid "The activity has been edited."
+msgstr ""
+
+msgid ""
+"The activity has reached its maximum number of registrations. You have "
+"been placed on the reserves list."
+msgstr ""
+
+msgid "The committe has been saved."
+msgstr ""
+
+msgid "The link refers to a page that does not exist, pleasecreate the page!"
+msgstr ""
+
+msgid "The navigation entry has been saved."
+msgstr ""
+
+msgid "The number of registrations at this moment is"
+msgstr ""
+
+msgid "The order has been saved successfully"
+msgstr ""
+
+msgid "The page has been deletd"
+msgstr ""
+
+msgid "The page has been saved"
+msgstr ""
+
+msgid "The page you tried to delete does not exist"
+msgstr ""
+
+msgid "The password you entered appears to be incorrect."
+msgstr ""
+
+msgid "The seo settings have been saved"
+msgstr ""
+
+msgid "There is already a course with this name"
+msgstr ""
+
+msgid "There is something wrong with the reset link."
+msgstr ""
+
+msgid "These details are taken from your account."
+msgstr ""
+
+msgid "This news item does not exist"
+msgstr ""
+
+msgid "Timestamp"
+msgstr ""
+
+msgid "Tip"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "Unauthorized!"
+msgstr ""
+
+msgid ""
+"Unfortunately it is currently unclear to us if you are a member of "
+"<strong>via</strong>. This is probably due to not having paid your member"
+" contribution. You can pay for your contribution by oredering this along "
+"with your books, or you could pass the <strong>via</strong>-room by."
+msgstr ""
+
+msgid "Unknown"
+msgstr ""
+
+msgid "User"
+msgstr ""
+
+msgid "User overview"
+msgstr ""
+
+msgid "User tips"
+msgstr ""
+
+msgid "Using the bookstore requires an account."
+msgstr ""
+
+msgid "Vancancies"
+msgstr ""
+
+msgid "Venue"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
+msgid "Visible for members only"
+msgstr ""
+
+msgid ""
+"We'd be delighted to help if you have any further questions. You can "
+"contact us by sending an e-mail to:<em>bestuur (at) svia (dot) nl</em>."
+msgstr ""
+
+msgid "We've encountered an internal server error"
+msgstr ""
+
+msgid "Welcome"
+msgstr ""
+
+#, python-format
+msgid ""
+"Welcome %(name)s! Your profile has been succesfully created and you have "
+"been logged in!"
+msgstr ""
+
+msgid "Would you like to recieve information from companies?"
+msgstr ""
+
+msgid "Written by"
+msgstr ""
+
+msgid "Wrong format answers."
+msgstr ""
+
+msgid "Wrong format examination."
+msgstr ""
+
+msgid "You can edit your registration by resubmittingthe form."
+msgstr ""
+
+msgid "You do not have rights to remove pages"
+msgstr ""
+
+msgid "You have successfully registered, payment is still required!"
+msgstr ""
+
+msgid "You have to be logged in to fill in a form"
+msgstr ""
+
+msgid "You must be logged-in to register for an activity."
+msgstr ""
+
+msgid "Your account has been disabled, you are not allowed to log in"
+msgstr ""
+
+msgid "Your email and student id appear to be incorrect."
+msgstr ""
+
+msgid "Your password has been updated."
+msgstr ""
+
+msgid "Your registration has been completed"
+msgstr ""
+
+msgid "Zipcode"
+msgstr ""
+
+msgid "ago"
+msgstr ""
+
+msgid "at"
+msgstr ""
+
+msgid "committee"
+msgstr ""
+
+msgid "free"
+msgstr ""
+
+msgid "in"
+msgstr ""
+
+msgid "is required"
+msgstr ""
+
+msgid "news item"
+msgstr ""
+
+msgid "page"
+msgstr ""
+
+msgid "required"
+msgstr ""
+
+msgid "seo"
+msgstr ""
+
+msgid "still"
+msgstr ""
+
+msgid "view"
+msgstr ""
+
+#~ msgid "Participants of this activity"
+#~ msgstr ""
+
+#~ msgid "Bilingualism is not fully implemented yet !"
+#~ msgstr ""
+
+#~ msgid "Show archive"
+#~ msgstr ""
+
+#~ msgid "Show recent news"
+#~ msgstr ""
+
+#~ msgid "Content"
+#~ msgstr ""
+
+#~ msgid "New news item"
+#~ msgstr ""
+
+#~ msgid "newsitem"
+#~ msgstr ""
+
+#~ msgid "Geen"
+#~ msgstr ""
+
+#~ msgid ""
+#~ msgstr ""
+
+#~ msgid "Language changed to"
+#~ msgstr ""
+
+#~ msgid "Lastname"
+#~ msgstr ""
+
+#~ msgid "No firstname sunmitted"
+#~ msgstr ""
+
+#~ msgid "No lastname submitted"
+#~ msgstr ""
+
+#~ msgid "Student number"
+#~ msgstr ""
+
+#~ msgid "Would you like to recieve information     from companies?"
+#~ msgstr ""
+
+#~ msgid "No student number submitted"
+#~ msgstr ""
+
+#~ msgid "Minimal password length %d"
+#~ msgstr ""
+
+#~ msgid "Title"
+#~ msgstr ""
+
+#~ msgid "Kind"
+#~ msgstr ""
+
+#~ msgid "The bug has been reported!"
+#~ msgstr ""
+
+#~ msgid "You have to reload the page for the result"
+#~ msgstr ""
+
+#~ msgid "No education name specified"
+#~ msgstr ""
+
+#~ msgid "No education degree specified"
+#~ msgstr ""
+
+#~ msgid "Geen opleidinggraad opgegeven"
+#~ msgstr ""
+
+#~ msgid "Geen opleidingnaam opgegeven"
+#~ msgstr ""
+
+#~ msgid "New"
+#~ msgstr ""
+
+#~ msgid "A user with the e-mail address specified already exists"
+#~ msgstr ""
+
+#~ msgid "Custom form"
+#~ msgstr ""
+
+#~ msgid "Pay (+€0,50 transaction costs)"
+#~ msgstr ""
+

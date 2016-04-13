@@ -19,8 +19,8 @@ class DefaultConfig:
     RECAPTCHA_PRIVATE_KEY = ''  # Change this for real use
     RECAPTCHA_OPTIONS = {'theme': 'white'}
 
-    EXAMINATION_UPLOAD_FOLDER = 'viaduct/static/uploads/examinations'
-    UPLOAD_DIR = 'viaduct/static/files/'
+    EXAMINATION_UPLOAD_FOLDER = 'app/static/uploads/examinations'
+    UPLOAD_DIR = 'app/static/files/'
     FILE_DIR = '/static/files/'
 
     # One date format string to rule them all (use this in strftime)
@@ -56,3 +56,8 @@ class DefaultConfig:
     MOLLIE_KEY = ''
     MOLLIE_REDIRECT_URL = 'https://svia.nl/mollie/check/'
     MOLLIE_TEST_MODE = True
+
+    COPERNICA_API_KEY = ""
+    COPERNICA_DATABASE_ID = ""
+    COPERNICA_ACTIEPUNTEN = ""
+    COPERNICA_ACTIVITEITEN = ""

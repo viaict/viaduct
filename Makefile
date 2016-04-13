@@ -1,4 +1,4 @@
-i18n = viaduct/translations
+i18n = app/translations
 cfg = babel.cfg
 messages = messages.pot
 pybabel=venv/bin/pybabel

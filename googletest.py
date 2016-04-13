@@ -1,4 +1,4 @@
-import viaduct.api.google as google
+import app.api.google as google
 from pprint import pprint
 
 service = google.build_groups_service()

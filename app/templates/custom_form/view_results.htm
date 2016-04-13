@@ -1,0 +1,95 @@
+{% extends "content.htm" %}
+
+{% import 'macros/rubber_form.htm' as rubber %}
+
+{% block includes %}
+    <script src={{static_url("/static/js/custom_form/view_results.js")}}></script>
+{% endblock %}
+
+{% block content %}
+
+<h1>
+	Inzendingen <small>'{{ custom_form.name }}'</small>
+	<span class="badge badge-info pull-right">{{ custom_form.custom_form_results.count() }} inzendingen</span>
+</h1>
+
+<p><em>Gele entries zijn "reserve" inschrijvingen</em>
+
+{% if custom_form.results %}
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Gebruiker</th>
+            <th>Informatie</th>
+            <th>Datum aanmelding</th>
+            <th>Betaald</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for i, result in enumerate(custom_form.results) %}
+            <tr {% if i >= custom_form.max_attendants %}
+                    {{ 'class=is_reserve' }}
+                {% endif %}>
+                <td><img src='{{ UserAPI.avatar(result.owner) }}' class='img-responsive thumbnail' style='width: 50px;' /></td>
+                <td>
+                    {% if result.owner.id %}
+                    <a href="{{ url_for('user.view_single', user_id=result.owner.id) }}">
+                        {{ result.owner.name }}
+                    </a>
+                    {% else %}
+                        Verwijderde account
+                    {% endif %}
+                </td>
+                <td>
+                    {% if result.owner.id %}
+                    {{ result.owner.email }}<br>
+                    {{ result.owner.phone_nr }}<br>
+                    {% endif %}
+
+                    <dl>
+                        {% for key, val in result.data.items() %}
+                        <dt>
+                            {{ key.replace('[]', '') }}
+                        </dt>
+                        <dd>
+                            {% if isinstance(val, list) %}
+                                {{ ', '.join(val) }}
+                            {% else %}
+                                {{ unquote_plus(val) }}
+                            {% endif %}
+                        </dd>
+                        {% endfor %}
+                    </dl>
+                </td>
+                <td>{{ result.time }}</td>
+                <td>
+                    <button id="{{ result.id }}" title="Gebruiker als betaald aan- / afvinken" class="btn btn-sm btn-success has_payed">
+                        {% if result.has_payed %}
+                            <i class="glyphicon glyphicon-check"></i>
+                        {% else %}
+                            <i class="glyphicon glyphicon-unchecked"></i>
+                        {% endif %}
+                    </button>
+                </td>
+                <td><button id="{{ result.id }}" title="Inzending verwijderen" message="Hoi {{ current_user.first_name }}, weet je zeker dat je deze wilt verwijderen?" class="btn btn-sm btn-danger keeswildeleteknopje"><i class="glyphicon glyphicon-trash"></i></button></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<form method='post' action='{{ url_for('custom_form.export', form_id=custom_form.id) }}'>
+    {% for name in xps.keys() %}
+        {{ rubber.checkbox(name, xps[name]['label'],
+                           xps[name]['on_by_default']) }}
+    {% endfor %}
+    {{ rubber.button(type='submit', text='Exporteren') }}
+</form>
+
+{% else %}
+<p>Er zijn nog geen resultaten om te tonen</p>
+{% endif %}
+
+{% endblock %}

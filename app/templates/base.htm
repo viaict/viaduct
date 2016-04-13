@@ -1,0 +1,107 @@
+{% from "macros/flash.htm" import render_flash %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        {% set seo_fields = SeoAPI.get_seo_fields(get_locale()) %}
+
+        <title>{{seo_fields.title}}</title>
+        <meta description="{{seo_fields.description}}" />
+        <meta name="keywords" content="{{seo_fields.keywords}}" />
+
+        <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
+
+        <link href="/static/img/via.png" rel="image_src" />
+
+        <link href="{{static_url("/static/css/custom.css")}}" rel="stylesheet" />
+        <link href="{{static_url("/static/css/navigation.css")}}" rel="stylesheet" />
+
+        {% if data %}
+            <script>
+                var viaduct = {{json.dumps(serialize_sqla(data))|safe}};
+            </script>
+        {% else %}
+            <script>var viaduct = {};</script>
+        {% endif %}
+        <script>
+            viaduct.locale = "{{get_locale()}}";
+        </script>
+
+        <script src="{{static_url("/static/js/global.js")}}"></script>
+        <script src="{{static_url("/jsglue.js")}}"></script>
+
+
+        {% block includes %}
+        {% endblock %}
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    </head>
+
+    <body>
+        {{ UserAPI.get_membership_warning() | safe }}
+        {{ NavigationAPI.get_navigation_bar()|safe }}
+        <div class="container">
+            <p class="text-right guide" style="margin-top: -20px">
+                <!-- Language switcher -->
+                {% if get_locale() == 'en' %}
+                    <a href='{{url_for('lang.set_lang', lang='en')}}' class='btn btn-sm text-muted'><i class="fa fa-language"></i> <u>English</u></a>
+                    |
+                    <a href='{{url_for('lang.set_lang', lang='nl')}}' class='btn btn-sm'><i class="fa fa-language"></i> Nederlands</a>
+                    |
+                {% endif %}
+                {% if get_locale() == 'nl' %}
+                    <a href='{{url_for('lang.set_lang', lang='en')}}' class='btn btn-sm'><i class="fa fa-language"></i> English</a>
+                    |
+                    <a href='{{url_for('lang.set_lang', lang='nl')}}' class='btn btn-sm text-muted'><i class="fa fa-language"></i> <u>Nederlands</u></a>
+                    |
+                {% endif %}
+                <!-- Guide menu trigger -->
+                <a data-icon="glyphicon-picture" class="btn btn-sm" data-toggle="modal" data-target="#moduleGuide">
+                    <i class="fa fa-question-circle"></i> Help
+                </a>
+                |
+                {% if ModuleAPI.can_write('seo') %}
+                <a href="{{ url_for('seo.edit_seo', module=request.blueprint, path=request.path) }}"  data-icon="glyphicon-search" class="btn btn-sm">
+                    <i class="fa fa-search"></i> SEO
+                </a>
+                |
+                {% endif %}
+                <a href="{{ url_for('jira.create_issue', redir=request.path) }}"  class="btn btn-sm"> <i class="fa fa-bug"></i> Report a bug</a>
+            </p>
+            <div class="row">
+                <div class="col-sm-12" id="messages">
+                    {{ render_flash() }}
+                </div>
+            </div>
+
+            {% block page %}
+            {% endblock %}
+            {{ PageAPI.get_footer()|safe }}
+        </div>
+        <!-- Start guide modal -->
+        {% set user_guide = GuideAPI.get_current_user_guide() %}
+        {% set admin_guide = GuideAPI.get_current_admin_guide() %}
+        <div class="modal fade" id="moduleGuide" tabindex="-1" role="dialog" aria-labelledby="guide" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <b>{{ user_guide.title | markdown }}</b>
+              </div>
+              <div class="modal-body">
+                    {{ user_guide.content | markdown }}
+              </div>
+              <div class="modal-header">
+                <b>{{ admin_guide.title | markdown }}</b>
+              </div>
+              <div class="modal-body">
+                    {{ admin_guide.content | markdown }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End guide modal -->
+    </body>
+</html>

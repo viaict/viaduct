@@ -1,0 +1,76 @@
+{% macro render_field(field) %}
+    <div class="form-group">
+        {{ field.label }}
+        {{ field(placeholder=field.label.text, class='form-control') }}
+    </div>
+{% endmacro %}
+
+{% macro render_button(field, cls='btn btn-default') %}
+    {{ field(class=cls) }}
+{% endmacro %}
+
+{% macro render_submit(text) %}
+<button class='btn btn-primary' data-loading-text={{_('Loading...')}}
+    type='submit'>{{ text }}</button>
+{% endmacro %}
+
+{% macro render_checkbox(field) %}
+    <div class="checkbox">
+        <label>
+            {{ field }} {{ field.label.text }}
+        </label>
+    </div>
+{% endmacro %}
+
+{% macro render_textarea(field) %}
+    <div class="form-group">
+        {{ field.label }}
+        {{ field(placeholder=field.label.text, class='form-control',
+        cols='50', rows='50') }}
+    </div>
+{% endmacro %}
+
+{% macro render_datefield(field) %}
+    <div class="form-group">
+        {{ field.label }}
+        {{ field(class='form-control', **{'data-date-format': 'yyyy-mm-dd hh:ii'}) }}
+    </div>
+{% endmacro %}
+
+<!-- Render with date and time -->
+{% macro render_datetimefield_picker(field) %}
+    <div class="form-group">
+        {{ field.label }}
+        <div class='input-group date' id='{{field.id}}'>
+            <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+            {{ field(class='form-control', **{'data-date-format': 'yyyy-mm-dd hh:ii'}) }}
+        </div>
+    </div>
+    <script>$('#' + "{{ field.id }}").datetimepicker({ format: 'yyyy-mm-dd hh:ii' });</script>
+{% endmacro %}
+
+<!-- Render with date only -->
+{% macro render_datefield_picker(field) %}
+    <div class="form-group">
+        {{ field.label }}
+        <div class='input-group date' id='{{field.id}}'>
+            <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+            {{ field(class='form-control', **{'data-date-format': 'yyyy-mm-dd'}) }}
+        </div>
+    </div>
+    <script>$('#' + "{{ field.id }}").datetimepicker({ format: 'yyyy-mm-dd' });</script>
+{% endmacro %}
+
+{% macro render_select(field) %}
+    <div class="form-group">
+        {{ field.label }}
+        {{ field(class='form-control') }}
+    </div>
+{% endmacro %}
+
+{% macro render_file(field) %}
+    <div class="form-group">
+        {{ field.label }}
+        {{ field(class='form-control') }}
+    </div>
+{% endmacro %}

@@ -1,0 +1,25 @@
+<a href="/activities">
+    <h2>{{_('Activity overview')}}</h2>
+</a>
+{% for activity in activities.items %}
+    <div class="activity">
+            <span>
+                {{ activity.till_now() }}
+            </span>
+            <h3>
+                <a class="overflow-dots" href="{{ url_for('activity.get_activity', activity_id=activity.id)}}">{{ activity.name }}</a>
+            </h3>
+            <ul>
+                <li class="overflow-dots"><i class="glyphicon glyphicon-calendar"></i>
+                {{ activity.get_time() }}</li>
+
+                <li class="overflow-dots"><i class="glyphicon glyphicon-home"></i>
+                {{ activity.location }}</li>
+            </ul>
+    </div> {# activity-simple #}
+{% endfor %}
+
+<address>
+{{_('Do you have an idea for an activity?')}}<br>
+{{_('Send an e-mail to the')}} <a href="mailto:actie@svia.nl">{{_('Activitycommittee')}}</a>.
+</address>

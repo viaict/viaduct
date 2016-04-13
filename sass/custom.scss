@@ -31,6 +31,12 @@ label.checkbox {
     padding: 15px;
 }
 
+.overflow-dots {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
 #sublogo {
     min-height: 120px;
 }
