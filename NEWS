@@ -1,4 +1,9 @@
-xx-04-2016 vx.x.x.x:
+18-04-2016 v2.6.3.1:
+* Added course and education management pages
+* Fixed bug in PimPy minute parsing
+* Changed Mollie costs to 0.29 EUR
+* Fix dotdotdot problem in Firefox
+* Added pre-commit codestyle check
 
 12-03-2016 v2.6.0.0:
 * Users removed from groups are automatically added to the activeAllumniList
