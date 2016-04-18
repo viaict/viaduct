@@ -1,4 +1,6 @@
 import os
+import json
+
 from flask import Blueprint
 from flask import abort, flash, session, redirect, render_template, request, \
     url_for, jsonify
@@ -31,7 +33,12 @@ UPLOAD_FOLDER = app.config['EXAMINATION_UPLOAD_FOLDER']
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 REDIR_PAGES = {'view': 'examination.view_examination',
-               'add': 'examination.upload_file'}
+               'add': 'examination.upload_file',
+               'educations': 'examination.view_educations',
+               'courses': 'examination.view_courses'
+               }
+
+DATE_FORMAT = app.config['DATE_FORMAT']
 
 
 def allowed_file(filename):
@@ -375,6 +382,32 @@ def edit(exam_id):
         test_types=test_types, new_exam=False)
 
 
+@blueprint.route('/courses/', methods=['GET'])
+def view_courses():
+    if not ModuleAPI.can_write('examination'):
+        return abort(403)
+
+    return render_template('course/view.htm')
+
+
+@blueprint.route('/courses/api/get/', methods=['GET'])
+def get_courses():
+    if not ModuleAPI.can_write('examination'):
+        return abort(403)
+
+    courses = Course.query.all()
+    courses_list = []
+
+    for course in courses:
+        courses_list.append(
+            [course.id,
+             course.name,
+             course.description if course.description != "" else "N/A"
+             ])
+
+    return json.dumps({"data": courses_list})
+
+
 @blueprint.route('/course/add/', methods=['GET', 'POST'])
 def add_course():
     r = request.args.get('redir')
@@ -405,6 +438,8 @@ def add_course():
                 flash("'%s': " % title + _('Already exists in the database'),
                       'danger')
 
+                return render_template('course/edit.htm', new=True, form=form)
+
             if 'origin' in session:
                 redir = session['origin']
             else:
@@ -413,8 +448,119 @@ def add_course():
         else:
             flash_form_errors(form)
 
-    return render_template('course/edit.htm', title=_('Examinations'),
-                           form=form)
+    return render_template('course/edit.htm', new=True, form=form)
+
+
+@blueprint.route('/course/edit/<int:course_id>', methods=['GET', 'POST'])
+def edit_course(course_id):
+    r = request.args.get('redir')
+    if r in REDIR_PAGES:
+        session['origin'] = url_for(REDIR_PAGES[r])
+    elif r == 'edit' and 'examination_edit_id' in session:
+        session['origin'] = '/examination/edit/{}'.format(
+            session['examination_edit_id'])
+
+    if not ModuleAPI.can_write('examination'):
+        session['prev'] = 'examination.edit_course'
+        return abort(403)
+
+    course = Course.query.get(course_id)
+
+    if not course:
+        flash(_('Course could not be found.'), 'danger')
+        return redirect(url_for('examination.view_courses'))
+
+    exam_count = Examination.query.filter(Examination.course == course).count()
+    if 'delete' in request.args:
+        if exam_count > 0:
+            flash(_('Course still has examinations in the database.'),
+                  'danger')
+            form = CourseForm(title=course.name,
+                              description=course.description)
+            return render_template('course/edit.htm', new=False,
+                                   form=form,
+                                   course=course, redir=r,
+                                   exam_count=exam_count)
+
+        Course.query.filter_by(id=course_id).delete()
+        db.session.commit()
+
+        flash(_('Course succesfully deleted.'), 'success')
+        if 'origin' in session:
+            redir = session['origin']
+        else:
+            redir = url_for('examination.upload_file')
+        return redirect(redir)
+
+    if request.method == 'POST':
+        form = CourseForm(request.form)
+        if form.validate_on_submit():
+            title = form.title.data
+            if title != course.name and Course.query.filter(
+                    Course.name == title).count() >= 1:
+                flash("'%s': " % title + _('Already exists in the database'),
+                      'danger')
+                return render_template('course/edit.htm', new=False,
+                                       form=form, redir=r,
+                                       course=course,
+                                       exam_count=exam_count)
+            else:
+                description = form.description.data
+                course.name = title
+                course.description = description
+
+                db.session.commit()
+                flash(_('Course succesfully saved.'),
+                      'success')
+
+                if 'origin' in session:
+                    redir = session['origin']
+                else:
+                    redir = url_for('examination.upload_file')
+                return redirect(redir)
+        else:
+            flash_form_errors(form)
+    else:
+        form = CourseForm(title=course.name, description=course.description)
+
+    return render_template('course/edit.htm', new=False,
+                           form=form, redir=r, course=course,
+                           exam_count=exam_count)
+
+
+@blueprint.route('/educations/', methods=['GET'])
+def view_educations():
+    if not ModuleAPI.can_write('examination'):
+        return abort(403)
+
+    return render_template('education/view.htm')
+
+
+@blueprint.route('/educations/api/get/', methods=['GET'])
+def get_educations():
+    if not ModuleAPI.can_write('examination'):
+        return abort(403)
+
+    educations = Education.query.all()
+    educations_list = []
+
+    for education in educations:
+        created = "N/A"
+        modified = "N/A"
+        if education.created:
+            created = education.created.strftime(DATE_FORMAT)
+
+        if education.modified:
+            modified = education.modified.strftime(DATE_FORMAT)
+
+        educations_list.append(
+            [education.id,
+             education.name,
+             created,
+             modified
+             ])
+
+    return json.dumps({"data": educations_list})
 
 
 @blueprint.route('/education/add/', methods=['GET', 'POST'])
@@ -457,8 +603,83 @@ def add_education():
             flash_form_errors(form)
 
     return render_template('education/edit.htm',
-                           title=_('Examinations'),
-                           form=form)
+                           form=form, new=True)
+
+
+@blueprint.route('/education/edit/<int:education_id>', methods=['GET', 'POST'])
+def edit_education(education_id):
+    r = request.args.get('redir')
+    if r in REDIR_PAGES:
+        session['origin'] = url_for(REDIR_PAGES[r])
+    elif r == 'edit' and 'examination_edit_id' in session:
+        session['origin'] = '/examination/edit/{}'.format(
+            session['examination_edit_id'])
+
+    if not ModuleAPI.can_write('examination'):
+        session['prev'] = 'examination.edit_education'
+        return abort(403)
+
+    education = Education.query.get(education_id)
+
+    if not education:
+        flash(_('Education could not be found.'), 'danger')
+        return redirect(url_for('examination.view_educations'))
+
+    exam_count = Examination.query.filter(
+        Examination.education == education).count()
+
+    if 'delete' in request.args:
+        if exam_count > 0:
+            flash(_('Education still has examinations in the database.'),
+                  'danger')
+            form = CourseForm(title=education.name)
+            return render_template('education/edit.htm', new=False,
+                                   form=form, education=education,
+                                   redir=r, exam_count=exam_count)
+
+        Education.query.filter_by(id=education_id).delete()
+        db.session.commit()
+
+        flash(_('Education succesfully deleted.'), 'success')
+        if 'origin' in session:
+            redir = session['origin']
+        else:
+            redir = url_for('examination.upload_file')
+        return redirect(redir)
+
+    if request.method == 'POST':
+        form = EducationForm(request.form)
+        if form.validate_on_submit():
+            name = form.title.data
+            if name != education.name and Education.query.filter(
+                    Education.name == name).count() >= 1:
+                flash("'%s': " % name + _('Already exists in the database'),
+                      'danger')
+                return render_template('education/edit.htm', new=False,
+                                       form=form, redir=r,
+                                       exam_count=exam_count,
+                                       education=education)
+            else:
+                education.name = name
+
+                db.session.commit()
+                flash("'%s': " % name + _('Education succesfully saved.'),
+                      'success')
+
+                if 'origin' in session:
+                    redir = session['origin']
+                else:
+                    redir = url_for('examination.view_educations')
+                return redirect(redir)
+
+        else:
+            flash_form_errors(form)
+    else:
+        form = CourseForm(title=education.name)
+
+    return render_template('education/edit.htm', new=False,
+                           form=form, redir=r, exam_count=exam_count,
+                           education=education)
 
 
 @blueprint.route('/examination/api/course/', methods=['POST'])

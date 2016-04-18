@@ -31,15 +31,16 @@
 
     {% if ModuleAPI.can_write('examination') %}
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-8">
             <div class="form-group btn-group">
-                <a href='/examination/add' class='btn btn-default'>
+                <a href='/examination/add' class='btn btn-success'>
                     <i class='glyphicon glyphicon-pencil'></i>
-                    <strong>{{ _('New examination') }}</strong>
+                    <span>{{ _('New examination') }}</span>
                 </a>
                 <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
                         <i class='glyphicon glyphicon-plus'></i>
+                        <span class="hidden-xs">{{ _('Add') }}</span>
                     </button>
                     <ul class="dropdown-menu">
                         <li>
@@ -49,6 +50,23 @@
                         </li>
                         <li><a href='/education/add?redir=view' class='dropdown-item'>
                                 {{ _('Education') }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <i class='glyphicon glyphicon-list'></i>
+                        <strong class="hidden-xs">{{ _('View') }}</strong>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href='/courses' class='dropdown-item'>
+                                {{ _('Courses') }}
+                            </a>
+                        </li>
+                        <li><a href='/educations' class='dropdown-item'>
+                                {{ _('Educations') }}
                             </a>
                         </li>
                     </ul>

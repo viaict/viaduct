@@ -25,6 +25,7 @@ class PimpyAPI:
     def commit_minute_to_db(content, date, group_id):
         """
         Enter minute into the database.
+
         Return succes (boolean, message (string). Message is the new minute.id
         if succes is true, otherwise it contains an error message.
         """
@@ -49,6 +50,7 @@ class PimpyAPI:
                           line, minute_id, status):
         """
         Enter task into the database.
+
         Return succes (boolean), message (string). Message is the new task.id
         if succes is true, otherwise it contains an error message.
         """
@@ -87,16 +89,18 @@ class PimpyAPI:
 
         # Add task to Copernica
         for user in users:
-            copernica.addActiepunt(user.id, task.base32_id(), task.group.name, task.title, task.get_status_string())
+            copernica.addActiepunt(user.id, task.base32_id(), task.group.name,
+                                   task.title, task.get_status_string())
 
-        
         return True, task.id
 
     @staticmethod
     def edit_task(task_id, name, content, group_id,
                   filled_in_users, line):
         """
-        Returns succes (boolean), message (string). Message is irrelevant if
+        Return succes (boolean), message (string).
+
+        Message is irrelevant if
         succes is true, otherwise it contains what exactly went wrong.
 
         In case of succes the task is edited in the database.
@@ -130,7 +134,8 @@ class PimpyAPI:
         db.session.commit()
 
         for user in users:
-            copernica.actiepuntStatus(user.id, task.base32_id(), task.get_status_string)
+            copernica.actiepuntStatus(user.id, task.base32_id(),
+                                      task.get_status_string)
 
         return True, "Taak bewerkt."
 
@@ -138,6 +143,7 @@ class PimpyAPI:
     def parse_minute(content, group_id, minute_id):
         """
         Parse the specified minutes for tasks and return them in a list.
+
         Same for DONE tasks and REMOVED tasks
 
         syntax within the content:
@@ -222,7 +228,11 @@ class PimpyAPI:
             done_ids = filter(None, match.split(","))
 
             for b32_id in done_ids:
-                done_id = b32.decode(b32_id.strip())
+                b32_id_strip = b32_id.strip()
+                if b32_id_strip == '':
+                    continue
+                done_id = b32.decode(b32_id_strip)
+
                 try:
                     done_task = Task.query.filter(Task.id == done_id).first()
                 except:
@@ -254,9 +264,10 @@ class PimpyAPI:
     @staticmethod
     def get_list_of_users_from_string(group_id, comma_sep):
         """
+        Get the list of users from a comma seperated string of usernames.
+
         Parses a string which is a list of comma separated user names
         to a list of users, searching only within the group given
-
         Returns users, message. Users is false if there is something wrong,
         in which case the message is stated in message, otherwise message
         equals "" and users is the list of matched users
@@ -285,7 +296,7 @@ class PimpyAPI:
         found_users = []
 
         users = group.users.all()
-        
+
         user_names = []
 
         for user in users:
@@ -293,22 +304,24 @@ class PimpyAPI:
                  "first_name": unidecode(user.first_name.lower().strip()),
                  "last_name": unidecode(user.last_name.lower().strip())}
             user_names.append(x)
-        
+
         for comma_sep_user in comma_sep:
             maximum = 0
             match = -1
-            
+
             for user_name in user_names:
                 rate = fuzz.ratio(user_name['first_name'], comma_sep_user)
                 rate_last = fuzz.ratio(user_name['last_name'], comma_sep_user)
 
-                full_name = user_name['first_name'] +' '+ user_name['last_name']
+                full_name = user_name['first_name'] + ' ' \
+                    + user_name['last_name']
                 rate_full = fuzz.ratio(full_name, comma_sep_user)
 
-                if rate > maximum or rate_last > maximum or rate_full > maximum:
+                if rate > maximum or rate_last > maximum or \
+                        rate_full > maximum:
                     maximum = max(rate, rate_last)
                     match = user_name['id']
-           
+
             found = False
 
             if match < 0:
@@ -365,7 +378,8 @@ class PimpyAPI:
     @staticmethod
     def get_all_tasks(group_id):
         """
-        Shows all tasks ever made.
+        Show all tasks ever made.
+
         Can specify specific group.
         No internal permission system made yet.
         Do not make routes to this module yet.
@@ -443,9 +457,8 @@ class PimpyAPI:
 
     @staticmethod
     def get_minutes(group_id):
-        """
-        Load all minutes in the given group
-        """
+        """Load all minutes in the given group."""
+
         if not ModuleAPI.can_read('pimpy'):
             abort(403)
         if not current_user:
@@ -473,9 +486,8 @@ class PimpyAPI:
 
     @staticmethod
     def get_minute(group_id, minute_id, line_number):
-        """
-        Load (and thus view) specifically one minute
-        """
+        """Load (and thus view) specifically one minute."""
+
         if not ModuleAPI.can_read('pimpy'):
             abort(403)
         if not current_user:
@@ -495,9 +507,8 @@ class PimpyAPI:
 
     @staticmethod
     def update_content(task_id, content):
-        """
-        Update the content of the task with the given id
-        """
+        """Update the content of the task with the given id."""
+
         task = Task.query.filter(Task.id == task_id).first()
         task.content = content
         db.session.commit()
@@ -505,35 +516,37 @@ class PimpyAPI:
 
     @staticmethod
     def update_title(task_id, title):
-        """
-        Update the title of the task with the given id
-        """
+        """Update the title of the task with the given id."""
+
         task = Task.query.filter(Task.id == task_id).first()
         task.title = title
         db.session.commit()
         for user in task.users:
-            copernica.updateActiepunt(user.id, task.base32_id(), task.title, task.get_status_string())
+            copernica.updateActiepunt(user.id, task.base32_id(),
+                                      task.title, task.get_status_string())
         return True, "De taak is succesvol aangepast."
 
     @staticmethod
     def update_users(task_id, comma_sep_users):
-        """
-        Update the users of the task with the given id
-        """
+        """Update the users of the task with the given id."""
+
         task = Task.query.filter(Task.id == task_id).first()
         old_users = task.users
         users, message = PimpyAPI.get_list_of_users_from_string(
             task.group_id, comma_sep_users)
         if not users:
             return False, message
-        
+
         # Sync to Copernica
         for user in old_users:
             if user not in users:
-                copernica.updateActiepunt(user.id, task.base32_id(), task.title, "Removed")
+                copernica.updateActiepunt(user.id, task.base32_id(),
+                                          task.title, "Removed")
         for user in users:
             if user not in old_users:
-                copernica.addActiepunt(user.id, task.base32_id(), task.group.name, task.title, task.get_status_string())
+                copernica.addActiepunt(user.id, task.base32_id(),
+                                       task.group.name, task.title,
+                                       task.get_status_string())
 
         task.users = users
         db.session.commit()

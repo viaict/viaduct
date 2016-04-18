@@ -7,7 +7,24 @@
     <div class="col-md-6">
         <form action="" method=post enctype=multipart/form-data>
             <fieldset>
-                <legend> {{_('New education')}}</legend>
+                <legend>
+                {%- if new -%}
+                    {{ _('New education') }}
+                {%- else -%}
+                    {{ _('Edit education') }}
+                {%- endif -%}
+                </legend>
+                {%- if not new -%}
+                <label>{{ _('Amount of examinations:') }}</label>
+                    {% if exam_count == 0 %}
+                        {{ _('None') }}
+                    {% else %}
+                        <a href="/examination?search={{ education.name }}" class="view-results btn btn-xs btn-primary" style="margin-left: 20px">
+                            <span class="badge badge-inverse">{{ exam_count }}</span>
+                            {{ _('view') }}
+                        </a>
+                    {% endif %}
+                {%- endif -%}
 
                 {{ form.csrf_token }}
                 {{ render_field(form.title) }}
@@ -15,8 +32,18 @@
                 <div class="control-group">
                     <div class="controls btn-group">
                         <button type="submit" class="btn btn-success">
-                            <i class= "glyphicon glyphicon-ok"></i> {{_('Add')}}
+                            <i class= "glyphicon glyphicon-ok"></i>
+                            {% if new %}
+                                {{ _('Add') }}
+                            {% else %}
+                                {{ _('Save') }}
+                            {% endif %}
                         </button>
+                        {% if not new and exam_count == 0 %}
+                        <a onclick="confirmation()" role="button" class="btn btn-danger">
+                            <i class="glyphicon glyphicon-remove"></i> {{ _('Delete' )}}
+                        </a>
+                        {% endif %}
                         <a href="{% if 'origin' in session -%}
                             {{ session['origin'] }}
                         {% else -%}
@@ -30,5 +57,20 @@
         </form>
     </div>
 </div>
+{% if not new and exam_count == 0 %}
+<script>
+function confirmation() {
+    var answer = confirm("{{ _("Are you sure you want to delete this education?") }}")
+    if (answer){
+        window.location = '?delete&redir=
+        {%- if redir -%}
+            {{ redir }}
+        {%- else -%}
+            educations
+        {%- endif -%}'
+    }
+}
+</script>
+{% endif %}
 {% endblock %}
 
