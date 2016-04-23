@@ -40,9 +40,12 @@
     </head>
 
     <body>
+        {%- if not __fullscreen_mode -%}
         {{ UserAPI.get_membership_warning() | safe }}
         {{ NavigationAPI.get_navigation_bar()|safe }}
+        {%- endif -%}
         <div class="container">
+            {%- if not __fullscreen_mode -%}
             <p class="text-right guide" style="margin-top: -20px">
                 <!-- Language switcher -->
                 {% if get_locale() == 'en' %}
@@ -70,6 +73,7 @@
                 {% endif %}
                 <a href="{{ url_for('jira.create_issue', redir=request.path) }}"  class="btn btn-sm"> <i class="fa fa-bug"></i> Report a bug</a>
             </p>
+            {%- endif -%}
             <div class="row">
                 <div class="col-sm-12" id="messages">
                     {{ render_flash() }}
@@ -78,7 +82,9 @@
 
             {% block page %}
             {% endblock %}
+            {%- if not __fullscreen_mode -%}
             {{ PageAPI.get_footer()|safe }}
+            {%- endif -%}
         </div>
         <!-- Start guide modal -->
         {% set user_guide = GuideAPI.get_current_user_guide() %}

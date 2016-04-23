@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask import flash, redirect, render_template, url_for
+from flask import flash, redirect, render_template, url_for, request
 from flask.ext.login import login_required
 from flask.ext.babel import _
 
@@ -50,9 +50,11 @@ def contest_list():
 
 @blueprint.route('/contest/<int:contest_id>/')
 def contest_view(contest_id=None):
+    fullscreen = 'fullscreen' in request.args
+
     r = domjudge_request_get('api/contests')
     if not r:
-        return render_template('domjudge/view.htm')
+        return render_template('domjudge/view.htm', fullscreen=fullscreen)
 
     if str(contest_id) not in r.json():
         flash(_("Contest does not exist"), 'danger')
@@ -92,14 +94,14 @@ def contest_view(contest_id=None):
 
     r = domjudge_request_get('api/teams')
     if not r:
-        return render_template('domjudge/view.htm')
+        return render_template('domjudge/view.htm', fullscreen=fullscreen)
 
     teams = r.json()
     teams_dict = {}
     for team in teams:
         teams_dict[team['id']] = team
 
-    return render_template('domjudge/view.htm',
+    return render_template('domjudge/view.htm', fullscreen=fullscreen,
                            contest=contest, scoreboard=scoreboard,
                            problems=problems, teams=teams_dict)
 
