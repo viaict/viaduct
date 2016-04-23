@@ -1,0 +1,38 @@
+{% extends 'content.htm' %}
+
+{% block content %}
+<h1>{{ _('Contests') }}</h1>
+
+    <div class='table-responsive'>
+        <table class='table table-bordered'>
+            <thead>
+                <tr>
+                    <th>{{ _('Name') }}</th>
+                    <th>{{ _('Start time') }}</th>
+                    <th>{{ _('End time') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if not contests %}
+                    <tr>
+                        <td valign="top" colspan="9">
+                            {{ _('No contests found') }}
+                        </td>
+                    </tr>
+                {% else %}
+                {% for contest in contests %}
+                    <tr>
+                        <td>
+                            <a href="{{ url_for('domjudge.contest_view', contest_id=contest.id) }}">
+                                {{ contest.name }}
+                            </a>
+                        </td>
+                        <td>{{ contest.start }}</td>
+                        <td>{{ contest.end }}</td>
+                    </tr>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

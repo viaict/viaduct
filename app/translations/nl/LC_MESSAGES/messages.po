@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-04-13 12:01+0200\n"
+"POT-Creation-Date: 2016-04-23 11:45+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -54,6 +54,9 @@ msgstr "Bestaat al in de database."
 
 msgid "Amount of examinations:"
 msgstr "Aantal tentamens:"
+
+msgid "Amount solved"
+msgstr "Aantal opgelost"
 
 msgid "An email has been sent to %(email) with further instructions."
 msgstr "Er is een email verstuurd naar %(email) met verdere instructies."
@@ -144,6 +147,12 @@ msgstr "Vergelijken"
 
 msgid "Contact details"
 msgstr "Contact gegevens"
+
+msgid "Contest does not exist"
+msgstr "Wedstrijd bestaat niet"
+
+msgid "Contests"
+msgstr "Wedstrijden"
 
 msgid "Country"
 msgstr "Land"
@@ -283,9 +292,8 @@ msgstr "Wijzig gebruikersrechten"
 msgid "Education"
 msgstr "Opleiding"
 
-#, fuzzy
 msgid "Education could not be found."
-msgstr "Tentamen kan niet worden gevonden."
+msgstr "Opleiding kan niet worden gevonden."
 
 msgid "Education overview"
 msgstr "Opleidingsoverzicht"
@@ -435,6 +443,9 @@ msgstr "ID"
 msgid "Image"
 msgstr "Plaatje"
 
+msgid "Incorrect"
+msgstr "Onjuist"
+
 msgid "Information"
 msgstr "Informatie"
 
@@ -472,6 +483,9 @@ msgstr "Achternaam"
 msgid "Latest news"
 msgstr "Laatste nieuws"
 
+msgid "Legend"
+msgstr "Legenda"
+
 msgid "List"
 msgstr "Lijst"
 
@@ -502,6 +516,9 @@ msgstr "Laatste aanpassing"
 
 msgid "Modify"
 msgstr "Bewerken"
+
+msgid "Name"
+msgstr "Naam"
 
 msgid "Navigation entry"
 msgstr "Menu item"
@@ -550,6 +567,9 @@ msgstr "Geen antwoorden geüpload."
 
 msgid "No birthdate submitted"
 msgstr "Geen geboortedag opgegeven"
+
+msgid "No contests found"
+msgstr "Geen wedstrijden gevonden"
 
 msgid "No description supplied"
 msgstr "Geen omschrijving opgegeven"
@@ -666,6 +686,9 @@ msgstr "Publiceer datum"
 msgid "Published at"
 msgstr "Gepubliceerd op"
 
+msgid "Rank"
+msgstr "Rang"
+
 msgid "Read"
 msgstr "Lees"
 
@@ -702,6 +725,9 @@ msgstr "Herhaal wachtwoord"
 msgid "Report bug"
 msgstr "Verstuur een bug report"
 
+msgid "Request to DOMjudge server failed"
+msgstr "Request aan de DOMjudge server mislukt"
+
 msgid "Reset password"
 msgstr "Reset wachtwoord"
 
@@ -713,6 +739,9 @@ msgstr "Opslaan"
 
 msgid "Save password"
 msgstr "Wachtwoord opslaan"
+
+msgid "Scoreboard"
+msgstr "Scorebord"
 
 msgid "Search"
 msgstr "Zoeken"
@@ -749,6 +778,9 @@ msgstr "Toon aankomende activiteiten"
 
 msgid "Sign In"
 msgstr "Inloggen"
+
+msgid "Solved"
+msgstr "Opgelost"
 
 msgid ""
 "Some details like shirt size or diet we try to save, so you don't have to"
@@ -793,6 +825,9 @@ msgstr "Opslaan"
 
 msgid "Submit!"
 msgstr "Versturen!"
+
+msgid "Team"
+msgstr "Team"
 
 msgid "Terms"
 msgstr "Voorwaarden"
@@ -864,6 +899,9 @@ msgstr "Tip"
 msgid "Title"
 msgstr "Titel"
 
+msgid "Total time"
+msgstr "Totale tijd"
+
 msgid "Unauthorized!"
 msgstr "Ongeautoriseerd!"
 
@@ -881,6 +919,9 @@ msgstr ""
 
 msgid "Unknown"
 msgstr "Onbekend"
+
+msgid "Untried"
+msgstr "Niet geprobeerd"
 
 msgid "User"
 msgstr "Gebruiker"

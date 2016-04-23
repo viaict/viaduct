@@ -1,0 +1,82 @@
+{% extends 'base.htm' %}
+
+{% block page %}
+{% if contest %}
+
+<h1>{{ contest['name'] }}</h1>
+
+<div class="row">
+    <div class="col-md-2">
+        <label style="display: block">{{ _('Start time') }}:</label>
+        <label style="display: block">{{ _('End time') }}:</label>
+    </div>
+    <div class="col-md-10">
+        <p>{{ contest['start'] }}</p>
+        <p style="margin-bottom: 0">{{ contest['end'] }}</p>
+    </div>
+</div>
+<h2>{{ _('Scoreboard') }}:</h2>
+<div class="table-responsive">
+    <table class='table table-bordered'>
+        <thead>
+            <tr>
+                <th>{{ _('Rank') }}</th>
+                <th>{{ _('Team') }}</th>
+                <th>{{ _('Amount solved')}} / {{ _('Total time') }}</th>
+                {% for problem in problems %}
+                <th>
+                    <p class="domjudge-problem-title"
+                        style="background-color: {{ problem['color'] }}">
+                        {{- problem['shortname'] -}}
+                    </p>
+                </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for team in scoreboard %}
+            <tr>
+                <td>{{ team['rank'] }}</td>
+                <td>
+                    {%- set team_info = teams[team['team']] -%}
+                    <strong>{{ team_info['name'] }}</strong>
+                    {%- if team_info['affiliation'] -%}
+                    <p>{{ team_info['affiliation'] }}</p>
+                    {%- endif -%}
+                </td>
+                <td>
+                    <strong>{{ team['score']['num_solved'] }}</strong>
+                    / {{ team['score']['total_time'] }}
+                </td>
+                {% for problem in team['problems'] %}
+                <td class="{{ problem['class'] }}">
+                {{ problem['num_judged'] }}
+                {%- if problem['solved'] %}
+                     / {{ problem['time'] }}
+                {%- endif -%}
+                </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="row">
+    <div class="col-md-4 domjudge-legend">
+        <label>{{ _('Legend') }}:</label>
+        <ul class="domjudge-legend-list">
+            <li class="domjudge-legend-item-solved">{{ _('Solved') }}</li>
+            <li class="domjudge-legend-item-incorrect">{{ _('Incorrect') }}</li>
+            <li class="domjudge-legend-item-untried">{{ _('Untried') }}</li>
+        </ul>
+    </div>
+</div>
+{% endif %}
+<div class="control-group">
+    <div class="controls btn-group">
+        <a href="{{ url_for('domjudge.contest_list') }}" class='btn btn-primary'>
+            <i class="glyphicon glyphicon-arrow-left"></i> {{_('Back')}}
+        </a>
+    </div>
+</div>
+{% endblock %}
