@@ -1270,6 +1270,7 @@ p{line-height: 25px;}
 
 
 .domjudge-problem-untried {
+    background-color: white;
 }
 
 .domjudge-problem-incorrect {
@@ -1330,4 +1331,8 @@ p{line-height: 25px;}
 
 .domjudge-legend-item-untried {
     @extend .domjudge-legend-item, .domjudge-problem-untried;
+}
+
+.domjudge-problem-link {
+    white-space: nowrap;
 }
