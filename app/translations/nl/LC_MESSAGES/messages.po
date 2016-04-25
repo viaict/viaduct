@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-04-23 16:35+0200\n"
+"POT-Creation-Date: 2016-04-25 18:06+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -148,8 +148,8 @@ msgstr "Vergelijken"
 msgid "Contact details"
 msgstr "Contact gegevens"
 
-msgid "Contest does not exist"
-msgstr "Wedstrijd bestaat niet"
+msgid "Contest does not exist."
+msgstr "Wedstrijd bestaat niet."
 
 msgid "Contests"
 msgstr "Wedstrijden"
@@ -464,6 +464,9 @@ msgstr "Geen valide e-mailadres"
 msgid "Invalid e-mail adress submitted"
 msgstr "Geen valide e-mailadres opgegeven"
 
+msgid "Invalid language."
+msgstr "Ongeldige taal"
+
 msgid ""
 "It appears that account does not exist. Try again, or contact the website"
 " administration at ict (at) svia (dot) nl."
@@ -513,9 +516,8 @@ msgstr "Deeltentamen"
 msgid "Minimal password length "
 msgstr "Minimum lengte van wachtwoord: "
 
-#, fuzzy
 msgid "Modified"
-msgstr "Laatste aanpassing"
+msgstr "Aangepast"
 
 msgid "Modify"
 msgstr "Bewerken"
@@ -595,6 +597,9 @@ msgstr "Geen tentamen geüpload."
 msgid "No examinations found"
 msgstr "Geen tentamens gevonden"
 
+msgid "No file uploaded."
+msgstr "Geen bestand geüpload."
+
 msgid "No first name sunmitted"
 msgstr "Geen voornaam opgeveven"
 
@@ -673,6 +678,15 @@ msgstr "Prijs"
 
 msgid "Privacy"
 msgstr "Privacy"
+
+msgid "Problem does not exist."
+msgstr "Probleem bestaat niet."
+
+msgid "Problem list"
+msgstr "Probleemoverzicht"
+
+msgid "Problems"
+msgstr "Problemen"
 
 msgid "Profile succesfully created"
 msgstr "Profiel aanmaken gelukt"
@@ -802,6 +816,9 @@ msgstr ""
 msgid "Something went wrong."
 msgstr "Er is its mis gegaan"
 
+msgid "Source code file"
+msgstr "Broncode bestand"
+
 msgid "Specified examination does not exist"
 msgstr "Opgegeven tentamen bestaat niet"
 
@@ -823,8 +840,14 @@ msgstr "Studie"
 msgid "Study course"
 msgstr "Studie"
 
+msgid "Submission successful."
+msgstr "Inzending succesvol."
+
 msgid "Submit"
 msgstr "Opslaan"
+
+msgid "Submit solution"
+msgstr "Oplossing insturen"
 
 msgid "Submit!"
 msgstr "Versturen!"

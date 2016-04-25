@@ -193,7 +193,7 @@ def contest_view(contest_id=None):
         return render_template('domjudge/view.htm', fullscreen=fullscreen)
 
     if str(contest_id) not in r.json():
-        flash(_("Contest does not exist"), 'danger')
+        flash(_("Contest does not exist."), 'danger')
         return redirect(url_for('domjudge.contest_list'))
 
     contest = r.json()[str(contest_id)]
@@ -255,7 +255,7 @@ def contest_problems_list(contest_id):
         return render_template('domjudge/problem/list.htm')
 
     if str(contest_id) not in r.json():
-        flash(_("Contest does not exist"), 'danger')
+        flash(_("Contest does not exist."), 'danger')
         return redirect(url_for('domjudge.contest_list'))
 
     contest = r.json()[str(contest_id)]

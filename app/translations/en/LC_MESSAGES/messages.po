@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-04-23 16:35+0200\n"
+"POT-Creation-Date: 2016-04-25 18:06+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -145,7 +145,7 @@ msgstr ""
 msgid "Contact details"
 msgstr ""
 
-msgid "Contest does not exist"
+msgid "Contest does not exist."
 msgstr ""
 
 msgid "Contests"
@@ -461,6 +461,9 @@ msgstr ""
 msgid "Invalid e-mail adress submitted"
 msgstr ""
 
+msgid "Invalid language."
+msgstr ""
+
 msgid ""
 "It appears that account does not exist. Try again, or contact the website"
 " administration at ict (at) svia (dot) nl."
@@ -589,6 +592,9 @@ msgstr ""
 msgid "No examinations found"
 msgstr ""
 
+msgid "No file uploaded."
+msgstr ""
+
 msgid "No first name sunmitted"
 msgstr ""
 
@@ -665,6 +671,15 @@ msgid "Price"
 msgstr ""
 
 msgid "Privacy"
+msgstr ""
+
+msgid "Problem does not exist."
+msgstr ""
+
+msgid "Problem list"
+msgstr ""
+
+msgid "Problems"
 msgstr ""
 
 #, fuzzy
@@ -793,6 +808,9 @@ msgstr ""
 msgid "Something went wrong."
 msgstr ""
 
+msgid "Source code file"
+msgstr ""
+
 msgid "Specified examination does not exist"
 msgstr ""
 
@@ -814,7 +832,13 @@ msgstr ""
 msgid "Study course"
 msgstr ""
 
+msgid "Submission successful."
+msgstr ""
+
 msgid "Submit"
+msgstr ""
+
+msgid "Submit solution"
 msgstr ""
 
 msgid "Submit!"
@@ -1114,5 +1138,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Pay (+€0,50 transaction costs)"
+#~ msgstr ""
+
+#~ msgid "Contest does not exist"
 #~ msgstr ""
 
