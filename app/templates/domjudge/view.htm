@@ -1,35 +1,59 @@
 {% set __fullscreen_mode = fullscreen %}
 {% extends 'base.htm' %}
 
+{% block includes %}
+{% if __fullscreen_mode %}
+        <link href="{{static_url("/static/css/domjudge-scoreboard-fullscreen.css")}}" rel="stylesheet" />
+{% endif %}
+{% endblock %}
+
 {% block page %}
 {% if contest %}
 
 <h1>{{ contest['name'] }}</h1>
 
 <div class="row">
-    <div class="col-md-2">
-        <label style="display: block">{{ _('Start time') }}:</label>
-        <label style="display: block">{{ _('End time') }}:</label>
+    {%- if not fullscreen -%}
+    <div class="pull-right">
+        <a href="{{ url_for('domjudge.contest_problems_list', contest_id=contest['id']) }}"
+            class="btn btn-primary">
+            <i class="glyphicon glyphicon-list" style="margin-right: 5px"></i>
+            {{ _('Problem list') }}
+        </a>
     </div>
-    <div class="col-md-10">
-        <p>{{ contest['start'] }}</p>
-        <p style="margin-bottom: 0">{{ contest['end'] }}</p>
+    {%- endif -%}
+    <div class="col-md-6" id="domjudge-time-table">
+        <table >
+            <tr>
+                <td><label>{{ _('Start time') }}:</label></td>
+                <td>{{ contest['start'] }}</td>
+            </tr>
+            <tr>
+                <td><label>{{ _('End time') }}:</label></td>
+                <td>{{ contest['end'] }}</td>
+            </tr>
+        </table>
     </div>
 </div>
+{%- if not fullscreen -%}
 <h2>{{ _('Scoreboard') }}:</h2>
-<div class="table-responsive">
+{%- endif -%}
+<div class="table-responsive" id="domjudge-scoreboard-table">
     <table class='table table-bordered'>
         <thead>
             <tr>
                 <th>{{ _('Rank') }}</th>
-                <th>{{ _('Team') }}</th>
+                <th>{{ _('Team') }} / {{ _('User') }}</th>
                 <th>{{ _('Amount solved')}} / {{ _('Total time') }}</th>
                 {% for problem in problems %}
                 <th>
-                    <p class="domjudge-problem-title"
+                    <a href="{{ url_for('domjudge.contest_problem_submit',
+                        contest_id=contest['id'], problem_id=problem['id']) }}"
+                        class="domjudge-problem-title"
                         style="background-color: {{ problem['color'] }}">
+                        <i class="glyphicon glyphicon-flag" style="margin-right: 5px"></i>
                         {{- problem['shortname'] -}}
-                    </p>
+                    </a>
                 </th>
                 {% endfor %}
             </tr>
@@ -64,7 +88,7 @@
 </div>
 <div class="row">
     <div class="col-md-4 domjudge-legend">
-        <label>{{ _('Legend') }}:</label>
+        <label id="domjudge-legend-label">{{ _('Legend') }}:</label>
         <ul class="domjudge-legend-list">
             <li class="domjudge-legend-item-solved">{{ _('Solved') }}</li>
             <li class="domjudge-legend-item-incorrect">{{ _('Incorrect') }}</li>

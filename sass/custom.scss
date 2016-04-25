@@ -1258,7 +1258,7 @@ p{line-height: 25px;}
     color: #000000;
 }
 
-.domjudge-problem-title {
+.domjudge-problem-badge {
     border-radius: 10px;
     border: solid;
     display: inline-block;
@@ -1268,6 +1268,17 @@ p{line-height: 25px;}
     border-width: 2px;
 }
 
+.domjudge-problem-title {
+    @extend .domjudge-problem-badge;
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.domjudge-problem-title:hover {
+    color: inherit;
+    text-decoration: inherit;
+    cursor: pointer;
+}
 
 .domjudge-problem-untried {
     background-color: white;
@@ -1344,3 +1355,9 @@ p{line-height: 25px;}
 #domjudge-submit-solution-label {
     margin-bottom: 20px;
 }
+
+#domjudge-time-table td {
+    padding-left: 20px;
+    padding-top: 5px;
+}
+

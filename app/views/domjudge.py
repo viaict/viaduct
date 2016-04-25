@@ -6,15 +6,18 @@ from flask.ext.babel import _
 
 from app import app
 from flask.ext.login import current_user
+from app.models.user import User
 
 import requests
 import datetime as dt
+import re
 
 DOMJUDGE_URL = app.config['DOMJUDGE_URL']
 DOMJUDGE_ADMIN_USERNAME = app.config['DOMJUDGE_ADMIN_USERNAME']
 DOMJUDGE_ADMIN_PASSWORD = app.config['DOMJUDGE_ADMIN_PASSWORD']
 
 DT_FORMAT = app.config['DT_FORMAT']
+VIA_USER_TEAM = re.compile(r"^via_user_team_(\d+)$")
 
 blueprint = Blueprint('domjudge', __name__, url_prefix='/domjudge')
 
@@ -232,6 +235,12 @@ def contest_view(contest_id=None):
     teams = r.json()
     teams_dict = {}
     for team in teams:
+        m = VIA_USER_TEAM.match(team['name'])
+        if m:
+            user_id = int(m.group(1))
+            user = User.query.get(user_id)
+            team['name'] = '{} {}'.format(user.first_name, user.last_name)
+
         teams_dict[team['id']] = team
 
     return render_template('domjudge/view.htm', fullscreen=fullscreen,

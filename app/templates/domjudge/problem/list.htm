@@ -10,7 +10,7 @@
         <ul class="list-group">
         {% for problem in problems %}
             <li class="list-group-item">
-                <p class="domjudge-problem-title"
+                <p class="domjudge-problem-badge"
                     style="background-color: {{ problem['color'] }}; margin-right: 20px;">
                     <i class="glyphicon glyphicon-flag"></i>
                 </p>
@@ -30,6 +30,13 @@
             </li>
         {% endfor %}
         </ul>
+    </div>
+</div>
+<div class="control-group">
+    <div class="controls btn-group">
+        <a href="{{ url_for('domjudge.contest_view', contest_id=contest['id']) }}" class='btn btn-primary'>
+            <i class="glyphicon glyphicon-arrow-left"></i> {{_('Back')}}
+        </a>
     </div>
 </div>
 {% endif %}
