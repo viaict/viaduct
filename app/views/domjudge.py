@@ -25,6 +25,26 @@ VIA_USER_TEAM = re.compile(r"^via_user_team_(\d+)$")
 blueprint = Blueprint('domjudge', __name__, url_prefix='/domjudge')
 
 
+def get_teams():
+    r = DOMjudgeAPI.request_get('api/teams')
+    if not r:
+        return None
+
+    teams = r.json()
+    teams_dict = {}
+    for team in teams:
+        m = VIA_USER_TEAM.match(team['name'])
+        if m:
+            user_id = int(m.group(1))
+            user = User.query.get(user_id)
+            if user:
+                team['name'] = '{} {}'.format(user.first_name, user.last_name)
+
+        teams_dict[team['id']] = team
+
+    return teams_dict
+
+
 @blueprint.route('/')
 def contest_list():
     r = DOMjudgeAPI.request_get('api/contests')
@@ -85,21 +105,9 @@ def contest_view(contest_id=None):
     problems = r.json()
     problems.sort(key=lambda x: x['label'])
 
-    r = DOMjudgeAPI.request_get('api/teams')
-    if not r:
+    teams_dict = get_teams()
+    if not teams_dict:
         return render_template('domjudge/view.htm', fullscreen=fullscreen)
-
-    teams = r.json()
-    teams_dict = {}
-    for team in teams:
-        m = VIA_USER_TEAM.match(team['name'])
-        if m:
-            user_id = int(m.group(1))
-            user = User.query.get(user_id)
-            if user:
-                team['name'] = '{} {}'.format(user.first_name, user.last_name)
-
-        teams_dict[team['id']] = team
 
     return render_template('domjudge/view.htm', fullscreen=fullscreen,
                            contest=contest, scoreboard=scoreboard,
@@ -288,3 +296,97 @@ def contest_problem_submit(contest_id, problem_id):
                                contest=contest,
                                contest_id=contest_id,
                                languages=languages)
+
+
+@blueprint.route('/contest/<int:contest_id>/submissions/')
+def contest_submissions_view(contest_id):
+    r = DOMjudgeAPI.request_get('api/contests')
+    if not r:
+        return render_template('domjudge/submissions.htm')
+
+    if str(contest_id) not in r.json():
+        flash(_("Contest does not exist."), 'danger')
+        return redirect(url_for('domjudge.contest_list'))
+
+    contest = r.json()[str(contest_id)]
+
+    session = DOMjudgeAPI.login(DOMJUDGE_ADMIN_USERNAME,
+                                DOMJUDGE_ADMIN_PASSWORD)
+
+    # Admin login failed, just give a 'request failed' error flash
+    if not session:
+        return render_template('domjudge/submissions.htm')
+
+    r = DOMjudgeAPI.request_get('api/submissions?cid={}'.format(contest_id),
+                                session=session)
+    if not r:
+        return render_template('domjudge/submissions.htm')
+
+    submissions = r.json()
+
+    r = DOMjudgeAPI.request_get('api/judgings?cid={}'.format(contest_id),
+                                session=session)
+    if not r:
+        return render_template('domjudge/submissions.htm')
+
+    judgings = r.json()
+
+    DOMjudgeAPI.logout(session)
+
+    r = DOMjudgeAPI.request_get('api/languages')
+    if not r:
+        return render_template('domjudge/submissions.htm')
+
+    languages = {}
+    for lang in r.json():
+        languages[lang['id']] = lang
+
+    teams = get_teams()
+    if not teams:
+        return render_template('domjudge/submissions.htm')
+
+    r = DOMjudgeAPI.request_get('api/problems?cid={}'.format(contest_id))
+    if not r:
+        return render_template('domjudge/submissions.htm')
+
+    problems = {}
+    for p in r.json():
+        problems[p['id']] = p
+
+    judgings_dict = {}
+    for j in judgings:
+        judgings_dict[j['submission']] = j
+
+    submission_states = {'queued': _('Pending'),
+                         'pending': _('Pending'),
+                         'judging': _('Judging'),
+                         'too-late': _('Too late'),
+                         'correct': _('Correct'),
+                         'compiler-error': _('Compiler Error'),
+                         'timelimit': _('Timelimit'),
+                         'run-error': _('Run Error'),
+                         'no-output': _('No Output'),
+                         'wrong-answer': _('Wrong Answer')
+                         }
+
+    for s in submissions:
+        s['timestr'] = dt.datetime.fromtimestamp(s['time']).strftime(DT_FORMAT)
+        s['team'] = teams[s['team']]['name']
+        s['problem'] = problems[s['problem']]['name']
+        s['language'] = languages[s['language']]['name']
+        s_id = s['id']
+
+        if s_id not in judgings_dict:
+            outcome = 'pending'
+        else:
+            outcome = judgings_dict[s_id]['outcome']
+            if outcome == 'queued':
+                outcome = 'pending'
+
+        s['result'] = submission_states[outcome]
+        s['result_class'] = 'domjudge-submission-' + outcome
+
+    submissions.sort(key=lambda x: x['time'], reverse=True)
+
+    return render_template('domjudge/submissions.htm',
+                           contest=contest, submissions=submissions)

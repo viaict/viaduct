@@ -158,5 +158,3 @@ class DOMjudgeAPI:
                                                   files=files, session=session)
         if result:
             return r
-        else:
-            assert(False)

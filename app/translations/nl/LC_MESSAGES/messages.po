@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-04-25 18:06+0200\n"
+"POT-Creation-Date: 2016-05-11 12:36+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -145,6 +145,9 @@ msgstr "Commissies"
 msgid "Compare"
 msgstr "Vergelijken"
 
+msgid "Compiler Error"
+msgstr "Compileerfout"
+
 msgid "Contact details"
 msgstr "Contact gegevens"
 
@@ -153,6 +156,9 @@ msgstr "Wedstrijd bestaat niet."
 
 msgid "Contests"
 msgstr "Wedstrijden"
+
+msgid "Correct"
+msgstr "Correct"
 
 msgid "Country"
 msgstr "Land"
@@ -474,6 +480,9 @@ msgstr ""
 "Het lijkt erop dat dit account niet bestaat. Probeer het opnieuw, of "
 "contacteerd de website-administratie via ict (at) svia (dot) nl."
 
+msgid "Judging"
+msgstr "Beoordelen"
+
 msgid "Language"
 msgstr "Taal"
 
@@ -567,6 +576,9 @@ msgstr "Niewsbericht succesvol verwijderd"
 msgid "Next"
 msgstr "Volgende"
 
+msgid "No Output"
+msgstr "Geen uitvoer"
+
 msgid "No answers uploaded."
 msgstr "Geen antwoorden geüpload."
 
@@ -658,6 +670,9 @@ msgstr "De opgegeven wachtwoorden komen niet overeen"
 msgid "Pay (+€0,29 transaction costs)"
 msgstr "Betalen (+€0,50 transactiekosten)"
 
+msgid "Pending"
+msgstr "In de wachtrij"
+
 msgid "Permission"
 msgstr "Rechten"
 
@@ -678,6 +693,10 @@ msgstr "Prijs"
 
 msgid "Privacy"
 msgstr "Privacy"
+
+#, fuzzy
+msgid "Problem"
+msgstr "Problemen"
 
 msgid "Problem does not exist."
 msgstr "Probleem bestaat niet."
@@ -748,8 +767,14 @@ msgstr "Request aan de DOMjudge server mislukt"
 msgid "Reset password"
 msgstr "Reset wachtwoord"
 
+msgid "Result"
+msgstr "Resultaat"
+
 msgid "Retake"
 msgstr "Herkansing"
+
+msgid "Run Error"
+msgstr "Run Fout"
 
 msgid "Save"
 msgstr "Opslaan"
@@ -843,6 +868,9 @@ msgstr "Studie"
 msgid "Submission successful."
 msgstr "Inzending succesvol."
 
+msgid "Submissions"
+msgstr "Inzendingen"
+
 msgid "Submit"
 msgstr "Opslaan"
 
@@ -916,6 +944,12 @@ msgstr "Deze gegevens worden opgehaald uit je account."
 msgid "This news item does not exist"
 msgstr "Dit nieuwsbericht bestaat niet."
 
+msgid "Time"
+msgstr "Tijd"
+
+msgid "Timelimit"
+msgstr "Tijdslimiet"
+
 msgid "Timestamp"
 msgstr "Tijdstip"
 
@@ -924,6 +958,9 @@ msgstr "Tip"
 
 msgid "Title"
 msgstr "Titel"
+
+msgid "Too late"
+msgstr "Te laat"
 
 msgid "Total time"
 msgstr "Totale tijd"
@@ -998,6 +1035,9 @@ msgstr "Wil je informatie van bedrijven ontvangen?"
 
 msgid "Written by"
 msgstr "Geschreven door"
+
+msgid "Wrong Answer"
+msgstr "Verkeerd antwoord"
 
 msgid "Wrong format answers."
 msgstr "Fout formaat antwoorden."

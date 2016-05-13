@@ -1258,6 +1258,11 @@ p{line-height: 25px;}
     color: #000000;
 }
 
+$DOMJUDGE_RED:          #d9534f;
+$DOMJUDGE_GREEN:        #5cb85c;
+$DOMJUDGE_ORANGE:       #f0ad4e;
+$DOMJUDGE_LIGHTBLUE:    #5ab0c9;
+
 .domjudge-problem-badge {
     border-radius: 10px;
     border: solid;
@@ -1285,11 +1290,11 @@ p{line-height: 25px;}
 }
 
 .domjudge-problem-incorrect {
-    background-color: #d9534f;
+    background-color: $DOMJUDGE_RED;
 }
 
 .domjudge-problem-solved {
-    background-color: #5cb85c;
+    background-color: $DOMJUDGE_GREEN;
 }
 
 .domjudge-problem-cell {
@@ -1361,3 +1366,52 @@ p{line-height: 25px;}
     padding-top: 5px;
 }
 
+.domjudge-submission {
+    font-weight: bold;
+    color: white;
+}
+
+.domjudge-submission-pending {
+    @extend .domjudge-submission;
+    background-color: $DOMJUDGE_LIGHTBLUE;
+}
+
+.domjudge-submission-judging {
+    @extend .domjudge-submission;
+    background-color: $DOMJUDGE_LIGHTBLUE;
+}
+
+.domjudge-submission-too-late {
+    @extend .domjudge-submission;
+    background-color: $DOMJUDGE_ORANGE;
+}
+
+.domjudge-submission-correct {
+    @extend .domjudge-submission;
+    background-color: $DOMJUDGE_GREEN;
+}
+
+.domjudge-submission-timelimit {
+    @extend .domjudge-submission;
+    background-color: $DOMJUDGE_ORANGE;
+}
+
+.domjudge-submission-compiler-error {
+    @extend .domjudge-submission;
+    background-color: $DOMJUDGE_RED;
+}
+
+.domjudge-submission-run-error {
+    @extend .domjudge-submission;
+    background-color: $DOMJUDGE_RED;
+}
+
+.domjudge-submission-no-output {
+    @extend .domjudge-submission;
+    background-color: $DOMJUDGE_ORANGE;
+}
+
+.domjudge-submission-wrong-answer {
+    @extend .domjudge-submission;
+    background-color: $DOMJUDGE_RED;
+}

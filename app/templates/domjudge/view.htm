@@ -14,11 +14,16 @@
 
 <div class="row">
     {%- if not fullscreen -%}
-    <div class="pull-right">
+    <div class="pull-right btn-group">
         <a href="{{ url_for('domjudge.contest_problems_list', contest_id=contest['id']) }}"
             class="btn btn-primary">
             <i class="glyphicon glyphicon-list" style="margin-right: 5px"></i>
             {{ _('Problem list') }}
+        </a>
+        <a href="{{ url_for('domjudge.contest_submissions_view', contest_id=contest['id']) }}"
+            class="btn btn-primary">
+            <i class="glyphicon glyphicon-pencil" style="margin-right: 5px"></i>
+            {{ _('Submissions') }}
         </a>
     </div>
     {%- endif -%}
