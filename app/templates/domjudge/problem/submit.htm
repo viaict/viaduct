@@ -1,0 +1,79 @@
+{% extends 'base.htm' %}
+
+{% block includes %}
+{%- if problem -%}
+        <script type="text/javascript">
+            function get_language_for_extension(extension)
+            {
+                switch(extension)
+                {
+                {%- for lang in languages -%}
+                    {% for ext in lang['extensions'] %}
+                    case '{{ ext }}':
+                    {%- endfor %}
+                        return '{{ lang['id'] }}';
+                {%- endfor %}
+                    default:
+                        return null;
+                }
+            }
+        </script>
+        <script src="{{ static_url('/static/js/domjudge/submit.js') }}"></script>
+{%- endif -%}
+{% endblock %}
+
+{% block page %}
+{% if problem %}
+<h1>{{ contest['name'] }}</h1>
+<legend id="domjudge-problem-head">
+    <p class="domjudge-problem-badge"
+        style="background-color: {{ problem['color'] }}; margin-right: 20px;">
+        <i class="glyphicon glyphicon-flag"></i>
+    </p>
+{# TODO: clean this horrible hacky CSS mess #}
+<span class="domjudge-problem-link dotdotdot"
+    style="display: inline-block; width: 60%; height: 30px;">
+    <a href="{{ url_for('domjudge.contest_problem_view', problem_id=problem['id']) }}">
+        <i class="glyphicon glyphicon-cloud-download"></i>
+        {{ problem['name'] }}
+    </a>
+</span>
+</legend>
+<h3 id="domjudge-submit-solution-label">{{ _('Submit solution') }}:</h3>
+<form method='post' enctype='multipart/form-data'>
+    <div class='form-group'>
+        <label>{{ _('Source code file') }}:</label>
+        <input type='file' name='file' id='file' class='form-control' required />
+    </div>
+    <div class='form-group'>
+        <label>{{ _('Language') }}:</label>
+        <select name='language' id='problem-language' class='form-control'>
+            {% for lang in languages %}
+            <option value="{{ lang['id'] }}">
+                {{ lang['name'] }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="control-group">
+        <div class="controls btn-group">
+            <button type="submit" class="btn btn-success">
+                <i class= "glyphicon glyphicon-ok"></i> {{_('Send')}}
+            </button>
+            <a href="{{ url_for('domjudge.contest_problems_list', contest_id=contest_id) }}" class='btn btn-primary'>
+                <i class="glyphicon glyphicon-arrow-left"></i> {{_('Back')}}
+            </a>
+        </div>
+    </div>
+</form>
+{% else %}
+<div class="control-group">
+    <div class="controls btn-group">
+        <a href="{{ url_for('domjudge.contest_problems_list', contest_id=contest_id) }}" class='btn btn-primary'>
+            <i class="glyphicon glyphicon-arrow-left"></i> {{_('Back')}}
+        </a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

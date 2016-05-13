@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-04-13 12:01+0200\n"
+"POT-Creation-Date: 2016-05-11 12:36+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -53,6 +53,9 @@ msgid "Already exists in the database"
 msgstr ""
 
 msgid "Amount of examinations:"
+msgstr ""
+
+msgid "Amount solved"
 msgstr ""
 
 msgid "An email has been sent to %(email) with further instructions."
@@ -139,7 +142,19 @@ msgstr ""
 msgid "Compare"
 msgstr ""
 
+msgid "Compiler Error"
+msgstr ""
+
 msgid "Contact details"
+msgstr ""
+
+msgid "Contest does not exist."
+msgstr ""
+
+msgid "Contests"
+msgstr ""
+
+msgid "Correct"
 msgstr ""
 
 msgid "Country"
@@ -406,6 +421,9 @@ msgstr ""
 msgid "Free"
 msgstr ""
 
+msgid "Fullscreen"
+msgstr ""
+
 msgid "Group"
 msgstr ""
 
@@ -431,6 +449,9 @@ msgstr ""
 msgid "Image"
 msgstr ""
 
+msgid "Incorrect"
+msgstr ""
+
 msgid "Information"
 msgstr ""
 
@@ -446,9 +467,15 @@ msgstr ""
 msgid "Invalid e-mail adress submitted"
 msgstr ""
 
+msgid "Invalid language."
+msgstr ""
+
 msgid ""
 "It appears that account does not exist. Try again, or contact the website"
 " administration at ict (at) svia (dot) nl."
+msgstr ""
+
+msgid "Judging"
 msgstr ""
 
 msgid "Language"
@@ -464,6 +491,9 @@ msgid "Last name"
 msgstr ""
 
 msgid "Latest news"
+msgstr ""
+
+msgid "Legend"
 msgstr ""
 
 msgid "List"
@@ -494,6 +524,9 @@ msgid "Modified"
 msgstr ""
 
 msgid "Modify"
+msgstr ""
+
+msgid "Name"
 msgstr ""
 
 msgid "Navigation entry"
@@ -538,10 +571,16 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
+msgid "No Output"
+msgstr ""
+
 msgid "No answers uploaded."
 msgstr ""
 
 msgid "No birthdate submitted"
+msgstr ""
+
+msgid "No contests found"
 msgstr ""
 
 msgid "No description supplied"
@@ -563,6 +602,9 @@ msgid "No examination uploaded."
 msgstr ""
 
 msgid "No examinations found"
+msgstr ""
+
+msgid "No file uploaded."
 msgstr ""
 
 msgid "No first name sunmitted"
@@ -622,6 +664,9 @@ msgstr ""
 msgid "Pay (+€0,29 transaction costs)"
 msgstr ""
 
+msgid "Pending"
+msgstr ""
+
 msgid "Permission"
 msgstr ""
 
@@ -643,6 +688,18 @@ msgstr ""
 msgid "Privacy"
 msgstr ""
 
+msgid "Problem"
+msgstr ""
+
+msgid "Problem does not exist."
+msgstr ""
+
+msgid "Problem list"
+msgstr ""
+
+msgid "Problems"
+msgstr ""
+
 #, fuzzy
 msgid "Profile succesfully created"
 msgstr "."
@@ -658,6 +715,9 @@ msgid "Publish date"
 msgstr ""
 
 msgid "Published at"
+msgstr ""
+
+msgid "Rank"
 msgstr ""
 
 msgid "Read"
@@ -696,16 +756,28 @@ msgstr ""
 msgid "Report bug"
 msgstr ""
 
+msgid "Request to DOMjudge server failed"
+msgstr ""
+
 msgid "Reset password"
 msgstr ""
 
+msgid "Result"
+msgstr ""
+
 msgid "Retake"
+msgstr ""
+
+msgid "Run Error"
 msgstr ""
 
 msgid "Save"
 msgstr ""
 
 msgid "Save password"
+msgstr ""
+
+msgid "Scoreboard"
 msgstr ""
 
 msgid "Search"
@@ -744,6 +816,9 @@ msgstr ""
 msgid "Sign In"
 msgstr ""
 
+msgid "Solved"
+msgstr ""
+
 msgid ""
 "Some details like shirt size or diet we try to save, so you don't have to"
 " fill them in more then once."
@@ -755,6 +830,9 @@ msgid ""
 msgstr ""
 
 msgid "Something went wrong."
+msgstr ""
+
+msgid "Source code file"
 msgstr ""
 
 msgid "Specified examination does not exist"
@@ -778,10 +856,22 @@ msgstr ""
 msgid "Study course"
 msgstr ""
 
+msgid "Submission successful."
+msgstr ""
+
+msgid "Submissions"
+msgstr ""
+
 msgid "Submit"
 msgstr ""
 
+msgid "Submit solution"
+msgstr ""
+
 msgid "Submit!"
+msgstr ""
+
+msgid "Team"
 msgstr ""
 
 msgid "Terms"
@@ -843,6 +933,12 @@ msgstr ""
 msgid "This news item does not exist"
 msgstr ""
 
+msgid "Time"
+msgstr ""
+
+msgid "Timelimit"
+msgstr ""
+
 msgid "Timestamp"
 msgstr ""
 
@@ -850,6 +946,12 @@ msgid "Tip"
 msgstr ""
 
 msgid "Title"
+msgstr ""
+
+msgid "Too late"
+msgstr ""
+
+msgid "Total time"
 msgstr ""
 
 msgid "Unauthorized!"
@@ -863,6 +965,9 @@ msgid ""
 msgstr ""
 
 msgid "Unknown"
+msgstr ""
+
+msgid "Untried"
 msgstr ""
 
 msgid "User"
@@ -910,6 +1015,9 @@ msgid "Would you like to recieve information from companies?"
 msgstr ""
 
 msgid "Written by"
+msgstr ""
+
+msgid "Wrong Answer"
 msgstr ""
 
 msgid "Wrong format answers."
@@ -1069,5 +1177,35 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Pay (+€0,50 transaction costs)"
+#~ msgstr ""
+
+#~ msgid "Contest does not exist"
+#~ msgstr ""
+
+#~ msgid "Compiler Error"
+#~ msgstr ""
+
+#~ msgid "Correct"
+#~ msgstr ""
+
+#~ msgid "Judging"
+#~ msgstr ""
+
+#~ msgid "No Output"
+#~ msgstr ""
+
+#~ msgid "Pending"
+#~ msgstr ""
+
+#~ msgid "Run Error"
+#~ msgstr ""
+
+#~ msgid "Timelimit"
+#~ msgstr ""
+
+#~ msgid "Too late"
+#~ msgstr ""
+
+#~ msgid "Wrong Answer"
 #~ msgstr ""
 

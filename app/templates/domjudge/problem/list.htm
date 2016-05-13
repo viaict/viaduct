@@ -1,0 +1,43 @@
+{% extends 'base.htm' %}
+
+{% block page %}
+{% if contest %}
+<h1>{{ contest['name'] }}</h1>
+<legend>{{ _('Problems') }}</legend>
+
+<div class="row">
+    <div class='col-md-12'>
+        <ul class="list-group">
+        {% for problem in problems %}
+            <li class="list-group-item">
+                <p class="domjudge-problem-badge"
+                    style="background-color: {{ problem['color'] }}; margin-right: 20px;">
+                    <i class="glyphicon glyphicon-flag"></i>
+                </p>
+                {# TODO: clean this horrible hacky CSS mess #}
+                <span class="domjudge-problem-link dotdotdot"
+                    style="display: inline-block; width: 60%; height: 30px;">
+                    <a href="{{ url_for('domjudge.contest_problem_view', problem_id=problem.id) }}">
+                        <i class="glyphicon glyphicon-cloud-download"></i>
+                        {{ problem['name'] }}
+                    </a>
+                </span>
+                <a class="btn btn-primary" style="float: right"
+                    href="{{ url_for('domjudge.contest_problem_submit', contest_id=contest.id, problem_id=problem.id) }}">
+                    <i class="glyphicon glyphicon-upload"></i>
+                    <span class="hidden-xs">{{ _('Submit solution') }}</span>
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+<div class="control-group">
+    <div class="controls btn-group">
+        <a href="{{ url_for('domjudge.contest_view', contest_id=contest['id']) }}" class='btn btn-primary'>
+            <i class="glyphicon glyphicon-arrow-left"></i> {{_('Back')}}
+        </a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

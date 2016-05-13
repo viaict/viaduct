@@ -1257,3 +1257,161 @@ p{line-height: 25px;}
     background-color: #ffaaaa;
     color: #000000;
 }
+
+$DOMJUDGE_RED:          #d9534f;
+$DOMJUDGE_GREEN:        #5cb85c;
+$DOMJUDGE_ORANGE:       #f0ad4e;
+$DOMJUDGE_LIGHTBLUE:    #5ab0c9;
+
+.domjudge-problem-badge {
+    border-radius: 10px;
+    border: solid;
+    display: inline-block;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin: 0px;
+    border-width: 2px;
+}
+
+.domjudge-problem-title {
+    @extend .domjudge-problem-badge;
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.domjudge-problem-title:hover {
+    color: inherit;
+    text-decoration: inherit;
+    cursor: pointer;
+}
+
+.domjudge-problem-untried {
+    background-color: white;
+}
+
+.domjudge-problem-incorrect {
+    background-color: $DOMJUDGE_RED;
+}
+
+.domjudge-problem-solved {
+    background-color: $DOMJUDGE_GREEN;
+}
+
+.domjudge-problem-cell {
+    font-weight: bold;
+}
+
+.domjudge-problem-solved-first-cell {
+    @extend .domjudge-problem-solved, .domjudge-problem-cell;
+}
+
+.domjudge-problem-untried-cell{
+    @extend .domjudge-problem-untried, .domjudge-problem-cell;
+
+}
+
+.domjudge-problem-incorrect-cell {
+    @extend .domjudge-problem-incorrect, .domjudge-problem-cell;
+    color: white;
+}
+
+.domjudge-problem-solved-cell {
+    @extend .domjudge-problem-solved, .domjudge-problem-cell;
+    color: white;
+}
+
+.domjudge-legend {
+    margin-bottom: 0;
+}
+
+.domjudge-legend-list {
+    @extend .list-group;
+}
+
+.domjudge-legend-item {
+    @extend .list-group-item;
+    padding: 5px 5px;
+    text-align: center;
+    font-weight: bolder;
+}
+
+.domjudge-legend-item-solved {
+    @extend .domjudge-legend-item, .domjudge-problem-solved;
+    color: white;
+}
+
+.domjudge-legend-item-incorrect {
+    @extend .domjudge-legend-item, .domjudge-problem-incorrect;
+    color: white;
+}
+
+.domjudge-legend-item-untried {
+    @extend .domjudge-legend-item, .domjudge-problem-untried;
+}
+
+.domjudge-problem-link {
+    white-space: nowrap;
+}
+
+#domjudge-problem-head {
+    padding-bottom: 5px;
+}
+
+#domjudge-submit-solution-label {
+    margin-bottom: 20px;
+}
+
+#domjudge-time-table td {
+    padding-left: 20px;
+    padding-top: 5px;
+}
+
+.domjudge-submission {
+    font-weight: bold;
+    color: white;
+}
+
+.domjudge-submission-pending {
+    @extend .domjudge-submission;
+    background-color: $DOMJUDGE_LIGHTBLUE;
+}
+
+.domjudge-submission-judging {
+    @extend .domjudge-submission;
+    background-color: $DOMJUDGE_LIGHTBLUE;
+}
+
+.domjudge-submission-too-late {
+    @extend .domjudge-submission;
+    background-color: $DOMJUDGE_ORANGE;
+}
+
+.domjudge-submission-correct {
+    @extend .domjudge-submission;
+    background-color: $DOMJUDGE_GREEN;
+}
+
+.domjudge-submission-timelimit {
+    @extend .domjudge-submission;
+    background-color: $DOMJUDGE_ORANGE;
+}
+
+.domjudge-submission-compiler-error {
+    @extend .domjudge-submission;
+    background-color: $DOMJUDGE_RED;
+}
+
+.domjudge-submission-run-error {
+    @extend .domjudge-submission;
+    background-color: $DOMJUDGE_RED;
+}
+
+.domjudge-submission-no-output {
+    @extend .domjudge-submission;
+    background-color: $DOMJUDGE_ORANGE;
+}
+
+.domjudge-submission-wrong-answer {
+    @extend .domjudge-submission;
+    background-color: $DOMJUDGE_RED;
+}
