@@ -666,9 +666,8 @@ msgstr "Wachtwoord"
 msgid "Passwords do not match"
 msgstr "De opgegeven wachtwoorden komen niet overeen"
 
-#, fuzzy
 msgid "Pay (+€0,29 transaction costs)"
-msgstr "Betalen (+€0,50 transactiekosten)"
+msgstr "Betalen (+€0,29 transactiekosten)"
 
 msgid "Pending"
 msgstr "In de wachtrij"
