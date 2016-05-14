@@ -137,7 +137,7 @@ class UserAPI:
         """ Renders a warning when the membership status of a member is
         unclear. """
         if not current_user or current_user.id == 0 or \
-                current_user.has_payed is not None:
+                current_user.has_payed:
             return ''
 
         return render_template('user/membership_warning.htm')
