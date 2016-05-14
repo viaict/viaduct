@@ -1,4 +1,4 @@
-# Version 2.6.3.2
+# Version 2.6.4.0
 Versioning works as follows: vSYSTEM.FEATURE.IMPROVEMENT.BUG-/HOTFIX
 
 #Viaduct (Opensourced, yeah)
@@ -105,7 +105,7 @@ translatable strings from the code. Merge the new extractions with the existing
 translations:
 ```bash
     python venv/bin/pybabel extract -F babel.cfg --sort-output -k lazy_gettext -o messages.pot .
-	python venv/bin/pybabel update -i messages.pot -d app/translations
+    python venv/bin/pybabel update -i messages.pot -d app/translations
 ```
 
 Edit the file `app/translations/nl/LC_MESSAGES/message.po` and add the Dutch
@@ -116,7 +116,7 @@ marking "fuzzy" and continue.
 After that compile the strings to be used
 in the website.
 ```bash
-	python venv/bin/pybabel compile -d app/translations
+    python venv/bin/pybabel compile -d app/translations
 ```
 
 ##Documentation
