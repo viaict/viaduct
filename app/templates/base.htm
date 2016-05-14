@@ -44,6 +44,9 @@
         {{ UserAPI.get_membership_warning() | safe }}
         {{ NavigationAPI.get_navigation_bar()|safe }}
         {%- endif -%}
+        {% block below_menu %}
+        {% endblock %}
+
         <div class="container">
             {%- if not __fullscreen_mode -%}
             <p class="text-right guide" style="margin-top: -20px">
