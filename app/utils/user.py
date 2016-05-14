@@ -3,7 +3,9 @@ from app.models.page import PagePermission
 from flask import flash
 import os
 import fnmatch
-import urllib.request, urllib.parse, urllib.error
+import urllib.request
+import urllib.parse
+import urllib.error
 import hashlib
 
 from flask import render_template
@@ -18,9 +20,7 @@ UPLOAD_DIR = 'app/static/files/users/'
 class UserAPI:
     @staticmethod
     def has_avatar(user_id):
-        """
-        Checks if the user has uploaded an avatar if so return true
-        """
+        """Check if the user has uploaded an avatar."""
         for file in os.listdir(UPLOAD_DIR):
             if fnmatch.fnmatch(file, 'avatar_' + str(user_id) + '.*'):
                 return True
@@ -28,9 +28,7 @@ class UserAPI:
 
     @staticmethod
     def remove_avatar(user):
-        """
-        When called removes user avatar.
-        """
+        """Remove avatar of a user."""
         # Find avatar by avatar_<userid>.*
         for file in os.listdir(UPLOAD_DIR):
             if fnmatch.fnmatch(file, 'avatar_' + str(user.id) + '.*'):
@@ -39,10 +37,11 @@ class UserAPI:
 
     @staticmethod
     def avatar(user):
-        """
-        Returns users avatar. If the user uploaded a avatar return it.
+        """Return the avatar of the user.
+
+        If the user uploaded a avatar return it.
         If the user did not upload an avatar checks if the user has an
-        gravatar, if so return.
+        gravatar, if so return that.
         If the user neither has an avatar nor an gravatar return default image.
         """
 
@@ -65,10 +64,10 @@ class UserAPI:
 
     @staticmethod
     def upload(f, user_id):
-        """
+        """Upload the new avatar.
+
         Checks if the file type is allowed if so removes any
         previous uploaded avatars.
-        Uploads the new avatar
         """
         filename = f.filename
         # Check if the file is allowed.
@@ -95,14 +94,14 @@ class UserAPI:
 
     @staticmethod
     def get_groups_for_user_id(user):
-        """Returns all the groups the current user belongs in. If there is no
-        current_user (no sign in), all is returned if guests exists, otherwise
-        it crashes because there can not be no all.
+        """Return all the groups the current user belongs in.
+
+        If there is no current_user (no sign in), all is returned if guests
+        exists, otherwise it crashes because there can not be no all.
 
         I believe we cant put this in user because current_user can be None if
-        there is no user currently logged in, but I might be mistaken (Inja
+        there is no user currently logged in, but I might be mistaken. (Inja
         july 10 2013).
-
         """
         if not user or not user.id:
             group = Group.query.filter(Group.name == 'all').first()
@@ -115,9 +114,7 @@ class UserAPI:
 
     @staticmethod
     def get_groups_for_current_user():
-        """
-        calls the get_groups_for_user_id function with current user
-        """
+        """Call the get_groups_for_user_id function with current user."""
         return UserAPI.get_groups_for_user_id(current_user)
 
     @staticmethod
@@ -134,8 +131,7 @@ class UserAPI:
 
     @staticmethod
     def get_membership_warning():
-        """ Renders a warning when the membership status of a member is
-        unclear. """
+        """Render a warning if the current user has not payed."""
         if not current_user or current_user.id == 0 or \
                 current_user.has_payed:
             return ''
