@@ -693,9 +693,8 @@ msgstr "Prijs"
 msgid "Privacy"
 msgstr "Privacy"
 
-#, fuzzy
 msgid "Problem"
-msgstr "Problemen"
+msgstr "Probleem"
 
 msgid "Problem description"
 msgstr "Probleembeschrijving"
@@ -965,9 +964,8 @@ msgstr ""
 msgid "This news item does not exist"
 msgstr "Dit nieuwsbericht bestaat niet."
 
-#, fuzzy
 msgid "Time"
-msgstr "Eindtijd"
+msgstr "Tijd"
 
 msgid "Timelimit"
 msgstr "Tijdslimiet"
