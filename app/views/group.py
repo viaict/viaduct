@@ -75,6 +75,7 @@ def create():
     if form.validate_on_submit():
         name = request.form['name'].strip()
         maillist = request.form['maillist'].strip()
+        committee_url = form.committee_url.data.strip()
         valid_form = True
 
         if Group.query.filter(Group.name == name).count() > 0:
@@ -89,10 +90,15 @@ def create():
 
             flash('De groep is aangemaakt.', 'success')
 
+            if committee_url != '':
+                return redirect('%s?group_id=%d' % (
+                    url_for('committee.edit_committee',
+                            committee=committee_url), group.id))
+
             return redirect(url_for('group.view'))
 
     return render_template('group/create.htm', title='Maak groep',
-                           form=form)
+                           form=form, group=None)
 
 
 @blueprint.route('/groups/<int:group_id>/edit/', methods=['GET', 'POST'])
@@ -130,7 +136,7 @@ def edit(group_id):
                 return redirect(url_for('group.view'))
 
     return render_template('group/create.htm', title='Pas groep aan',
-                           form=form)
+                           form=form, group=group)
 
 
 @blueprint.route('/groups/<int:group_id>/users/', methods=['GET', 'POST'])

@@ -37,21 +37,32 @@ def edit_committee(committee=''):
         revision = None
         form = CommitteeForm()
 
+    try:
+        url_group_id = int(request.args.get('group_id', None))
+    except:
+        url_group_id = None
+
     form.group_id.choices = [(group.id, group.name) for group in
                              Group.query.order_by(Group.name).all()]
 
     if len(request.form) == 0:
         if revision:
             selected_group_id = revision.group_id
+        elif url_group_id is not None:
+            selected_group_id = url_group_id
         else:
             selected_group_id = form.group_id.choices[0][0]
     else:
         selected_group_id = int(form.group_id.data)
 
+    form.group_id.data = selected_group_id
+
     selected_group = Group.query.get(selected_group_id)
     form.coordinator_id.choices = [
         (user.id, user.name) for user in
         selected_group.users.order_by(User.first_name, User.last_name).all()]
+
+    form.nl_title.data = selected_group.name
 
     if form.validate_on_submit():
         committee_nl_title = form.nl_title.data.strip()

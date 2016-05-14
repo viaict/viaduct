@@ -1,0 +1,119 @@
+{% set __fullscreen_mode = fullscreen %}
+{% extends 'base.htm' %}
+
+{% block includes %}
+{% if __fullscreen_mode %}
+        <link href="{{static_url("/static/css/domjudge-scoreboard-fullscreen.css")}}" rel="stylesheet" />
+{% endif %}
+{% endblock %}
+
+{% block page %}
+{% if contest %}
+
+<h1>{{ contest['name'] }}</h1>
+
+<div class="row">
+    {%- if not fullscreen -%}
+    <div class="pull-right btn-group">
+        <a href="{{ url_for('domjudge.contest_problems_list', contest_id=contest['id']) }}"
+            class="btn btn-primary">
+            <i class="glyphicon glyphicon-list" style="margin-right: 5px"></i>
+            {{ _('Problem list') }}
+        </a>
+        <a href="{{ url_for('domjudge.contest_submissions_view', contest_id=contest['id']) }}"
+            class="btn btn-primary">
+            <i class="glyphicon glyphicon-pencil" style="margin-right: 5px"></i>
+            {{ _('Submissions') }}
+        </a>
+    </div>
+    {%- endif -%}
+    <div class="col-md-6" id="domjudge-time-table">
+        <table >
+            <tr>
+                <td><label>{{ _('Start time') }}:</label></td>
+                <td>{{ contest['start'] }}</td>
+            </tr>
+            <tr>
+                <td><label>{{ _('End time') }}:</label></td>
+                <td>{{ contest['end'] }}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+{%- if not fullscreen -%}
+<h2>{{ _('Scoreboard') }}:</h2>
+{%- endif -%}
+<div class="table-responsive" id="domjudge-scoreboard-table">
+    <table class='table table-striped'>
+        <thead>
+            <tr>
+                <th>{{ _('Rank') }}</th>
+                <th>{{ _('Team') }} / {{ _('User') }}</th>
+                <th>{{ _('Amount solved')}} / {{ _('Total time') }}</th>
+                {% for problem in problems %}
+                <th>
+                    <a href="{{ url_for('domjudge.contest_problem_submit',
+                        contest_id=contest['id'], problem_id=problem['id']) }}"
+                        class="domjudge-problem-title"
+                        style="background-color: {{ problem['color'] }}">
+                        <i class="glyphicon glyphicon-flag" style="margin-right: 5px"></i>
+                        {{- problem['shortname'] -}}
+                    </a>
+                </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for team in scoreboard %}
+            <tr>
+                <td>{{ team['rank'] }}</td>
+                <td>
+                    {%- set team_info = teams[team['team']] -%}
+                    <strong>{{ team_info['name'] }}</strong>
+                    {%- if team_info['affiliation'] -%}
+                    <p>{{ team_info['affiliation'] }}</p>
+                    {%- endif -%}
+                </td>
+                <td>
+                    <strong>{{ team['score']['num_solved'] }}</strong>
+                    / {{ team['score']['total_time'] }}
+                </td>
+                {% for problem in team['problems'] %}
+                <td class="{{ problem['class'] }}">
+                {{ problem['num_judged'] }}
+                {%- if problem['solved'] %}
+                     / {{ problem['time'] }}
+                {%- endif -%}
+                </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% if not fullscreen %}
+<div class="row">
+    <div class="col-md-4 domjudge-legend">
+        <label id="domjudge-legend-label">{{ _('Legend') }}:</label>
+        <ul class="domjudge-legend-list">
+            <li class="domjudge-legend-item-solved">{{ _('Solved') }}</li>
+            <li class="domjudge-legend-item-incorrect">{{ _('Incorrect') }}</li>
+            <li class="domjudge-legend-item-untried">{{ _('Untried') }}</li>
+        </ul>
+    </div>
+</div>
+{% endif %}
+{% endif %}
+{% if not fullscreen %}
+<div class="control-group">
+    <div class="controls btn-group">
+        <a href="{{ url_for('domjudge.contest_list') }}" class='btn btn-primary'>
+            <i class="glyphicon glyphicon-arrow-left"></i> {{_('Back')}}
+        </a>
+        <a href="{{ request.url }}?fullscreen" class='btn btn-warning'>
+            <i class="glyphicon glyphicon-fullscreen"></i> {{_('Fullscreen')}}
+        </a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

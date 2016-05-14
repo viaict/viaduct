@@ -4,8 +4,8 @@
 <link href="{{static_url("/static/css/home.css")}}" rel="stylesheet" />
 {% endblock %}
 
-{% block page %}
-    </div>
+
+{% block below_menu %}
     <div id="jumbotron" style="background-image: url()">
         <div class="container">
             <div class="introduction">
@@ -22,7 +22,9 @@
             </address>
         </div>
     </div>
-    <div class="container home">
+{% endblock %}
+
+{% block page %}
     <div class="row">
         <div class="col-md-7 newsrole">
             <h2>{{ _('Latest news') }}</h2>

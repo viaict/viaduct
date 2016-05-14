@@ -26,6 +26,7 @@ class EditGroup(Form):
     name = StringField('Naam', validators=[
         InputRequired(message='Geen naam opgegeven')])
     maillist = StringField('Naam maillijst (zonder @svia.nl)')
+    committee_url = StringField('Commissie-pagina URL (zonder slash)')
 
 
 class EditGroupPermissionForm(Form):

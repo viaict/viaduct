@@ -158,7 +158,10 @@ def create(form_id=None):
         custom_form.transaction_description = form.transaction_description.data
         custom_form.terms = form.terms.data
 
+        follower = None
+
         if not form_id:
+            follower = CustomFormFollower(owner_id=current_user.id)
             flash('You\'ve created a form successfully.', 'success')
 
         else:
@@ -188,6 +191,11 @@ def create(form_id=None):
 
         db.session.add(custom_form)
         db.session.commit()
+
+        if follower is not None:
+            follower.form_id = custom_form.id
+            db.session.add(follower)
+            db.session.commit()
 
         return redirect(url_for('custom_form.view'))
     else:
@@ -297,8 +305,8 @@ def submit(form_id=None):
                 # Create "Reserve" signup
                 response = "reserve"
             else:
-                copernica.addActivity(user.id, custom_form.name, form_id, custom_form.price, result.has_payed)
-
+                copernica.addActivity(user.id, custom_form.name, form_id,
+                                      custom_form.price, result.has_payed)
 
         db.session.add(user)
         db.session.commit()

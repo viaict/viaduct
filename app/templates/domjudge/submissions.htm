@@ -1,0 +1,49 @@
+{% extends 'base.htm' %}
+
+{% block page %}
+{% if contest %}
+<h1>{{ contest['name'] }}</h1>
+<legend>{{ _('Submissions') }}</legend>
+
+
+<div class='table-responsive'>
+    <table class='table table-bordered'>
+        <thead>
+            <tr>
+                <th>{{ _('Time') }}</th>
+                <th>{{ _('Team') }} / {{ _('User') }}</th>
+                <th>{{ _('Result') }}</th>
+                <th>{{ _('Problem') }}</th>
+                <th>{{ _('Language') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for submission in submissions %}
+            <tr>
+                <td>{{ submission.timestr }}</td>
+                <td>{{ submission.team }}</td>
+                <td class='{{ submission.result_class }}'>{{ submission.result }}</td>
+                <td>{{ submission.problem }}</td>
+                <td>{{ submission.language }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="control-group">
+    <div class="controls btn-group">
+        <a href="{{ url_for('domjudge.contest_view', contest_id=contest['id']) }}" class='btn btn-primary'>
+            <i class="glyphicon glyphicon-arrow-left"></i> {{_('Back')}}
+        </a>
+    </div>
+</div>
+{% else %}
+<div class="control-group">
+    <div class="controls btn-group">
+        <a href="{{ url_for('domjudge.contest_list') }}" class='btn btn-primary'>
+            <i class="glyphicon glyphicon-arrow-left"></i> {{_('Back')}}
+        </a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

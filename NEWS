@@ -1,3 +1,8 @@
+14-05-2016 v2.6.4.0:
+* DOMjudge integration for the BAPC stunt
+* Automatic committee creation after creating group
+* Attempt to fix minutes date
+
 18-04-2016 v2.6.3.1:
 * Added course and education management pages
 * Fixed bug in PimPy minute parsing

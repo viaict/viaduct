@@ -8,8 +8,12 @@
         {{ form.csrf_token }}
         {{ render_field(form.name) }}
         {{ render_field(form.maillist) }}
-        {{ render_submit('Sla op') }}
 
+        {% if not group %}
+        {{ render_field(form.committee_url) }}
+        {% endif %}
+
+        {{ render_submit('Sla op') }}
 	</fieldset>
 </form>
 {% endblock %}

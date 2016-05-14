@@ -61,3 +61,7 @@ class DefaultConfig:
     COPERNICA_DATABASE_ID = ""
     COPERNICA_ACTIEPUNTEN = ""
     COPERNICA_ACTIVITEITEN = ""
+
+    DOMJUDGE_ADMIN_USERNAME = "viaduct"
+    DOMJUDGE_ADMIN_PASSWORD = ""
+    DOMJUDGE_URL = "http://localhost:80/"

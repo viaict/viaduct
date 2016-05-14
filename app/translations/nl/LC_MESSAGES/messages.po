@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-04-13 12:01+0200\n"
+"POT-Creation-Date: 2016-05-14 17:51+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -54,6 +54,9 @@ msgstr "Bestaat al in de database."
 
 msgid "Amount of examinations:"
 msgstr "Aantal tentamens:"
+
+msgid "Amount solved"
+msgstr "Aantal opgelost"
 
 msgid "An email has been sent to %(email) with further instructions."
 msgstr "Er is een email verstuurd naar %(email) met verdere instructies."
@@ -142,8 +145,20 @@ msgstr "Commissies"
 msgid "Compare"
 msgstr "Vergelijken"
 
+msgid "Compiler Error"
+msgstr "Compileerfout"
+
 msgid "Contact details"
 msgstr "Contact gegevens"
+
+msgid "Contest does not exist."
+msgstr "Wedstrijd bestaat niet."
+
+msgid "Contests"
+msgstr "Wedstrijden"
+
+msgid "Correct"
+msgstr "Correct"
 
 msgid "Country"
 msgstr "Land"
@@ -283,9 +298,8 @@ msgstr "Wijzig gebruikersrechten"
 msgid "Education"
 msgstr "Opleiding"
 
-#, fuzzy
 msgid "Education could not be found."
-msgstr "Tentamen kan niet worden gevonden."
+msgstr "Opleiding kan niet worden gevonden."
 
 msgid "Education overview"
 msgstr "Opleidingsoverzicht"
@@ -410,6 +424,9 @@ msgstr "Wachtwoord vergeten?"
 msgid "Free"
 msgstr "Gratis"
 
+msgid "Fullscreen"
+msgstr "Schermvullend"
+
 msgid "Group"
 msgstr "Groep"
 
@@ -435,6 +452,9 @@ msgstr "ID"
 msgid "Image"
 msgstr "Plaatje"
 
+msgid "Incorrect"
+msgstr "Onjuist"
+
 msgid "Information"
 msgstr "Informatie"
 
@@ -450,12 +470,18 @@ msgstr "Geen valide e-mailadres"
 msgid "Invalid e-mail adress submitted"
 msgstr "Geen valide e-mailadres opgegeven"
 
+msgid "Invalid language."
+msgstr "Ongeldige taal"
+
 msgid ""
 "It appears that account does not exist. Try again, or contact the website"
 " administration at ict (at) svia (dot) nl."
 msgstr ""
 "Het lijkt erop dat dit account niet bestaat. Probeer het opnieuw, of "
 "contacteerd de website-administratie via ict (at) svia (dot) nl."
+
+msgid "Judging"
+msgstr "Beoordelen"
 
 msgid "Language"
 msgstr "Taal"
@@ -471,6 +497,9 @@ msgstr "Achternaam"
 
 msgid "Latest news"
 msgstr "Laatste nieuws"
+
+msgid "Legend"
+msgstr "Legenda"
 
 msgid "List"
 msgstr "Lijst"
@@ -496,12 +525,14 @@ msgstr "Deeltentamen"
 msgid "Minimal password length "
 msgstr "Minimum lengte van wachtwoord: "
 
-#, fuzzy
 msgid "Modified"
-msgstr "Laatste aanpassing"
+msgstr "Aangepast"
 
 msgid "Modify"
 msgstr "Bewerken"
+
+msgid "Name"
+msgstr "Naam"
 
 msgid "Navigation entry"
 msgstr "Menu item"
@@ -545,11 +576,17 @@ msgstr "Niewsbericht succesvol verwijderd"
 msgid "Next"
 msgstr "Volgende"
 
+msgid "No Output"
+msgstr "Geen uitvoer"
+
 msgid "No answers uploaded."
 msgstr "Geen antwoorden geüpload."
 
 msgid "No birthdate submitted"
 msgstr "Geen geboortedag opgegeven"
+
+msgid "No contests found"
+msgstr "Geen wedstrijden gevonden"
 
 msgid "No description supplied"
 msgstr "Geen omschrijving opgegeven"
@@ -571,6 +608,9 @@ msgstr "Geen tentamen geüpload."
 
 msgid "No examinations found"
 msgstr "Geen tentamens gevonden"
+
+msgid "No file uploaded."
+msgstr "Geen bestand geüpload."
 
 msgid "No first name sunmitted"
 msgstr "Geen voornaam opgeveven"
@@ -626,9 +666,11 @@ msgstr "Wachtwoord"
 msgid "Passwords do not match"
 msgstr "De opgegeven wachtwoorden komen niet overeen"
 
-#, fuzzy
 msgid "Pay (+€0,29 transaction costs)"
-msgstr "Betalen (+€0,50 transactiekosten)"
+msgstr "Betalen (+€0,29 transactiekosten)"
+
+msgid "Pending"
+msgstr "In de wachtrij"
 
 msgid "Permission"
 msgstr "Rechten"
@@ -651,6 +693,21 @@ msgstr "Prijs"
 msgid "Privacy"
 msgstr "Privacy"
 
+msgid "Problem"
+msgstr "Probleem"
+
+msgid "Problem description"
+msgstr "Probleembeschrijving"
+
+msgid "Problem does not exist."
+msgstr "Probleem bestaat niet."
+
+msgid "Problem list"
+msgstr "Probleemoverzicht"
+
+msgid "Problems"
+msgstr "Problemen"
+
 msgid "Profile succesfully created"
 msgstr "Profiel aanmaken gelukt"
 
@@ -665,6 +722,9 @@ msgstr "Publiceer datum"
 
 msgid "Published at"
 msgstr "Gepubliceerd op"
+
+msgid "Rank"
+msgstr "Rang"
 
 msgid "Read"
 msgstr "Lees"
@@ -702,17 +762,29 @@ msgstr "Herhaal wachtwoord"
 msgid "Report bug"
 msgstr "Verstuur een bug report"
 
+msgid "Request to DOMjudge server failed"
+msgstr "Request aan de DOMjudge server mislukt"
+
 msgid "Reset password"
 msgstr "Reset wachtwoord"
 
+msgid "Result"
+msgstr ""
+
 msgid "Retake"
 msgstr "Herkansing"
+
+msgid "Run Error"
+msgstr "Run Fout"
 
 msgid "Save"
 msgstr "Opslaan"
 
 msgid "Save password"
 msgstr "Wachtwoord opslaan"
+
+msgid "Scoreboard"
+msgstr "Scorebord"
 
 msgid "Search"
 msgstr "Zoeken"
@@ -750,6 +822,9 @@ msgstr "Toon aankomende activiteiten"
 msgid "Sign In"
 msgstr "Inloggen"
 
+msgid "Solved"
+msgstr "Opgelost"
+
 msgid ""
 "Some details like shirt size or diet we try to save, so you don't have to"
 " fill them in more then once."
@@ -766,6 +841,9 @@ msgstr ""
 
 msgid "Something went wrong."
 msgstr "Er is its mis gegaan"
+
+msgid "Source code file"
+msgstr "Broncode bestand"
 
 msgid "Specified examination does not exist"
 msgstr "Opgegeven tentamen bestaat niet"
@@ -788,11 +866,23 @@ msgstr "Studie"
 msgid "Study course"
 msgstr "Studie"
 
+msgid "Submission successful."
+msgstr "Inzending succesvol."
+
+msgid "Submissions"
+msgstr "Inzendingen"
+
 msgid "Submit"
 msgstr "Opslaan"
 
+msgid "Submit solution"
+msgstr "Oplossing insturen"
+
 msgid "Submit!"
 msgstr "Versturen!"
+
+msgid "Team"
+msgstr "Team"
 
 msgid "Terms"
 msgstr "Voorwaarden"
@@ -852,8 +942,33 @@ msgstr "Er is iets mis met de reset-link."
 msgid "These details are taken from your account."
 msgstr "Deze gegevens worden opgehaald uit je account."
 
+msgid ""
+"This is probably due to not having paid your member contribution. You can"
+" pay for your contribution by ordering this along with your books, or you"
+" could pass by the <strong>via</strong>-room."
+msgstr ""
+"Dit komt waarschijnlijk omdat je nog niet hebt betaald voor je "
+"lidmaatschap. Je kan je lidmaatschap betalen door dit bij de "
+"boekenverkoop bij te bestellen of even langs de "
+"<strong>via</strong>-kamer te komen."
+
+msgid ""
+"This is probably due to the fact that we have to confirm you're a student"
+" at the UvA. Please come by the <strong>via</strong> room so this can be "
+"confirmed."
+msgstr ""
+"Dit komt waarschijnlijk, omdat er nog bevestigd moet worden dat je een "
+"student bent aan de UvA. Kom even langs de <strong>via</strong> kamer "
+"zodat dit geregeld kan worden."
+
 msgid "This news item does not exist"
 msgstr "Dit nieuwsbericht bestaat niet."
+
+msgid "Time"
+msgstr "Tijd"
+
+msgid "Timelimit"
+msgstr "Tijdslimiet"
 
 msgid "Timestamp"
 msgstr "Tijdstip"
@@ -864,23 +979,27 @@ msgstr "Tip"
 msgid "Title"
 msgstr "Titel"
 
+msgid "Too late"
+msgstr "Te laat"
+
+msgid "Total time"
+msgstr "Totale tijd"
+
 msgid "Unauthorized!"
 msgstr "Ongeautoriseerd!"
 
 msgid ""
 "Unfortunately it is currently unclear to us if you are a member of "
-"<strong>via</strong>. This is probably due to not having paid your member"
-" contribution. You can pay for your contribution by oredering this along "
-"with your books, or you could pass the <strong>via</strong>-room by."
+"<strong>via</strong>."
 msgstr ""
 "Helaas is het voor ons onduidelijk of je lid van <strong>via</strong> "
-"bent. Dit komt waarschijnlijk omdat je nog niet hebt betaald voor je "
-"lidmaatschap. Je kan je lidmaatschap betalen door dit bij de "
-"boekenverkoop bij te bestellen of even langs de "
-"<strong>via</strong>-kamer te komen."
+"bent."
 
 msgid "Unknown"
 msgstr "Onbekend"
+
+msgid "Untried"
+msgstr "Niet geprobeerd"
 
 msgid "User"
 msgstr "Gebruiker"
@@ -931,6 +1050,9 @@ msgstr "Wil je informatie van bedrijven ontvangen?"
 
 msgid "Written by"
 msgstr "Geschreven door"
+
+msgid "Wrong Answer"
+msgstr "Verkeerd antwoord"
 
 msgid "Wrong format answers."
 msgstr "Fout formaat antwoorden."
@@ -1048,4 +1170,13 @@ msgstr "bekijken"
 
 #~ msgid "Custom form"
 #~ msgstr "Formulier"
+
+#~ msgid "Problem"
+#~ msgstr "Problemen"
+
+#~ msgid "Result"
+#~ msgstr "Resultaat"
+
+#~ msgid "Time"
+#~ msgstr "Tijd"
 
