@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-05-14 15:52+0200\n"
+"POT-Creation-Date: 2016-05-14 17:51+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -693,6 +693,13 @@ msgstr "Prijs"
 msgid "Privacy"
 msgstr "Privacy"
 
+#, fuzzy
+msgid "Problem"
+msgstr "Problemen"
+
+msgid "Problem description"
+msgstr "Probleembeschrijving"
+
 msgid "Problem does not exist."
 msgstr "Probleem bestaat niet."
 
@@ -761,6 +768,9 @@ msgstr "Request aan de DOMjudge server mislukt"
 
 msgid "Reset password"
 msgstr "Reset wachtwoord"
+
+msgid "Result"
+msgstr ""
 
 msgid "Retake"
 msgstr "Herkansing"
@@ -954,6 +964,10 @@ msgstr ""
 
 msgid "This news item does not exist"
 msgstr "Dit nieuwsbericht bestaat niet."
+
+#, fuzzy
+msgid "Time"
+msgstr "Eindtijd"
 
 msgid "Timelimit"
 msgstr "Tijdslimiet"

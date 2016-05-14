@@ -280,7 +280,8 @@ def contest_problem_submit(contest_id, problem_id):
             session = DOMjudgeAPI.login(dom_username, dom_password)
 
             if not session:
-                return render_template('domjudge/problem/submit.htm')
+                return render_template('domjudge/problem/submit.htm',
+                                       contest_id=contest_id)
 
         r = DOMjudgeAPI.submit(contest['shortname'], language,
                                problem['shortname'], file, session)

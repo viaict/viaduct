@@ -31,6 +31,7 @@
         <i class="glyphicon glyphicon-flag"></i>
     </p>
 {# TODO: clean this horrible hacky CSS mess #}
+{{ _('Problem description') }}:
 <span class="domjudge-problem-link dotdotdot"
     style="display: inline-block; width: 60%; height: 30px;">
     <a href="{{ url_for('domjudge.contest_problem_view', problem_id=problem['id']) }}">

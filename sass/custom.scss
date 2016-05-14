@@ -1290,11 +1290,11 @@ $DOMJUDGE_LIGHTBLUE:    #5ab0c9;
 }
 
 .domjudge-problem-incorrect {
-    background-color: $DOMJUDGE_RED;
+    background-color: $DOMJUDGE_RED !important;
 }
 
 .domjudge-problem-solved {
-    background-color: $DOMJUDGE_GREEN;
+    background-color: $DOMJUDGE_GREEN !important;
 }
 
 .domjudge-problem-cell {
@@ -1307,7 +1307,6 @@ $DOMJUDGE_LIGHTBLUE:    #5ab0c9;
 
 .domjudge-problem-untried-cell{
     @extend .domjudge-problem-untried, .domjudge-problem-cell;
-
 }
 
 .domjudge-problem-incorrect-cell {

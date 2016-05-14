@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-05-14 15:52+0200\n"
+"POT-Creation-Date: 2016-05-14 17:51+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -688,6 +688,12 @@ msgstr ""
 msgid "Privacy"
 msgstr ""
 
+msgid "Problem"
+msgstr ""
+
+msgid "Problem description"
+msgstr ""
+
 msgid "Problem does not exist."
 msgstr ""
 
@@ -757,6 +763,9 @@ msgid "Request to DOMjudge server failed"
 msgstr ""
 
 msgid "Reset password"
+msgstr ""
+
+msgid "Result"
 msgstr ""
 
 msgid "Retake"
@@ -937,6 +946,9 @@ msgid ""
 msgstr ""
 
 msgid "This news item does not exist"
+msgstr ""
+
+msgid "Time"
 msgstr ""
 
 msgid "Timelimit"
