@@ -106,7 +106,7 @@ def contest_view(contest_id=None):
     problems.sort(key=lambda x: x['label'])
 
     teams_dict = get_teams()
-    if not teams_dict:
+    if teams_dict is None:
         return render_template('domjudge/view.htm', fullscreen=fullscreen)
 
     return render_template('domjudge/view.htm', fullscreen=fullscreen,
