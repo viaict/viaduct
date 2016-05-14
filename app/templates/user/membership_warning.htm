@@ -1,7 +1,12 @@
 <div id='membership_warning'>
     <div>
         <p>
-            {{_('Welcome')}}, {{ current_user.first_name }}! {{_('Unfortunately it is currently unclear to us if you are a member of <strong>via</strong>. This is probably due to not having paid your member contribution. You can pay for your contribution by oredering this along with your books, or you could pass the <strong>via</strong>-room by.')}}
+            {{_('Welcome')}}, {{ current_user.first_name }}! {{_('Unfortunately it is currently unclear to us if you are a member of <strong>via</strong>.')}}
+            {% if current_user.education.name.startswith('MSc') %}
+                {{_("This is probably due to the fact that we have to confirm you're a student at the UvA. Please come by the <strong>via</strong> room so this can be confirmed.")}}
+            {% else %}
+                {{_('This is probably due to not having paid your member contribution. You can pay for your contribution by ordering this along with your books, or you could pass by the <strong>via</strong>-room.')}}
+            {% endif %}
         </p>
         <p>
             {{_('We\'d be delighted to help if you have any further questions. You can contact us by sending an e-mail to:<em>bestuur (at) svia (dot) nl</em>.')}}

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-05-11 12:36+0200\n"
+"POT-Creation-Date: 2016-05-14 15:52+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -688,9 +688,6 @@ msgstr ""
 msgid "Privacy"
 msgstr ""
 
-msgid "Problem"
-msgstr ""
-
 msgid "Problem does not exist."
 msgstr ""
 
@@ -760,9 +757,6 @@ msgid "Request to DOMjudge server failed"
 msgstr ""
 
 msgid "Reset password"
-msgstr ""
-
-msgid "Result"
 msgstr ""
 
 msgid "Retake"
@@ -930,10 +924,19 @@ msgstr ""
 msgid "These details are taken from your account."
 msgstr ""
 
-msgid "This news item does not exist"
+msgid ""
+"This is probably due to not having paid your member contribution. You can"
+" pay for your contribution by ordering this along with your books, or you"
+" could pass by the <strong>via</strong>-room."
 msgstr ""
 
-msgid "Time"
+msgid ""
+"This is probably due to the fact that we have to confirm you're a student"
+" at the UvA. Please come by the <strong>via</strong> room so this can be "
+"confirmed."
+msgstr ""
+
+msgid "This news item does not exist"
 msgstr ""
 
 msgid "Timelimit"
@@ -959,9 +962,7 @@ msgstr ""
 
 msgid ""
 "Unfortunately it is currently unclear to us if you are a member of "
-"<strong>via</strong>. This is probably due to not having paid your member"
-" contribution. You can pay for your contribution by oredering this along "
-"with your books, or you could pass the <strong>via</strong>-room by."
+"<strong>via</strong>."
 msgstr ""
 
 msgid "Unknown"
@@ -1207,5 +1208,14 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Wrong Answer"
+#~ msgstr ""
+
+#~ msgid "Problem"
+#~ msgstr ""
+
+#~ msgid "Result"
+#~ msgstr ""
+
+#~ msgid "Time"
 #~ msgstr ""
 
