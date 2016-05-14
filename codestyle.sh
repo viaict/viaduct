@@ -26,3 +26,7 @@ git $gitparams --name-only | grep .py\$ | grep --invert-match '^migrations/versi
 # Check for JSHint errors in changed files except for minified files since
 # these are not created by us
 git $gitparams --name-only | grep .js\$ | grep --invert-match '\.min\.' | xargs --no-run-if-empty jshint
+
+# Fuzzy means translations are changed and probably incorrect
+! grep fuzzy app/translations/nl/LC_MESSAGES/messages.po > /dev/null || \
+    ! echo "The dutch translations file contained fuzzy translations"
