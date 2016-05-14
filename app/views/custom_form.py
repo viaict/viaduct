@@ -297,8 +297,8 @@ def submit(form_id=None):
                 # Create "Reserve" signup
                 response = "reserve"
             else:
-                copernica.addActivity(user.id, custom_form.name, form_id, custom_form.price, result.has_payed)
-
+                copernica.addActivity(user.id, custom_form.name, form_id,
+                                      custom_form.price, result.has_payed)
 
         db.session.add(user)
         db.session.commit()
