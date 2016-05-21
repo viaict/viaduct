@@ -8,9 +8,9 @@ from app.utils import Resource
 
 class SeoAPI(Resource):
 
-    """ Get the seo fields as dict"""
     @staticmethod
     def get_seo_fields(language='nl', module_name=None, request_path=None):
+        """ Get the seo fields as dict"""
         # Check if the module and path are set.
         if module_name is None:
             module_name = request.blueprint
