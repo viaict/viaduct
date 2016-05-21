@@ -68,7 +68,7 @@ class SeoAPI(Resource):
                             'informatiekunde, University of Amsterdam'}
 
     """ Attempt to retrieve seo object, None otherwise """
-    def get_seo(module_name=None, request_path=None):
+    def get_seo(self, module_name=None, request_path=None):
         # Check if the module and path are set.
         if module_name is None:
             module_name = request.blueprint
