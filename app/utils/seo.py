@@ -4,10 +4,10 @@ from flask import request
 
 from app.models import Page, SEO, Activity
 from app.utils import Resource
-from sqlalchemy import event
 
-""" API for retrieving seo information of pages """
+
 class SeoAPI(Resource):
+    """ API for retrieving seo information of pages """
 
     """ Get the seo fields as dict"""
     @staticmethod
@@ -19,7 +19,7 @@ class SeoAPI(Resource):
         if request_path is None:
             request_path = request.path
 
-        # Check which type of seo fields should be retrieved, based on 
+        # Check which type of seo fields should be retrieved, based on
         # the module name.
         if module_name == "activity":
             # Get activity id
@@ -48,10 +48,10 @@ class SeoAPI(Resource):
             seo = SEO.get_by_url(module_name)
 
         # Retrieve the seo fields based on the seo object
-        # or global set values. 
+        # or global set values.
         if seo is not None:
 
-            # Retrieve the language specific SEO fields 
+            # Retrieve the language specific SEO fields
             if language == 'nl':
                 return {'title': seo.nl_title,
                         'description': seo.nl_description,
@@ -62,10 +62,12 @@ class SeoAPI(Resource):
                         'tags': seo.en_tags}
         else:
             # TODO, good standard tags
-            return {'title': 'Studievereniging via - University of Amsterdam',
-                    'description': 'Studievereniging via - University of Amsterdam',
-                    'tags': 'Studievereniging,via, informatica, informatiekunde,' +\
-                            'University of Amsterdam'}
+            return {'title': 'via',
+                    'description': 'Studievereniging via - Informatica, ' +
+                                   'Informatiekunde, Informatica, ' +
+                                   'University of Amsterdam',
+                    'tags': 'Studievereniging,via, informatica, ' +
+                            'informatiekunde, University of Amsterdam'}
 
     """ Attempt to retrieve seo object, None otherwise """
     def get_seo(module_name=None, request_path=None):
@@ -76,7 +78,7 @@ class SeoAPI(Resource):
         if request_path is None:
             request_path = request.path
 
-        # Check which type of seo fields should be retrieved, based on 
+        # Check which type of seo fields should be retrieved, based on
         # the module name.
         if module_name == "activity":
             # Get activity id
@@ -106,7 +108,6 @@ class SeoAPI(Resource):
 
             return seo
 
-
         return None
 
     @staticmethod
@@ -118,14 +119,14 @@ class SeoAPI(Resource):
         if request_path is None:
             request_path = request.path
 
-        # Empty resources for all resources that are not retrieved. 
+        # Empty resources for all resources that are not retrieved.
         page = None
         page_id = None
         activity = None
         activity_id = None
         path = None
 
-        # Check which type of seo fields should be retrieved, based on 
+        # Check which type of seo fields should be retrieved, based on
         # the module name.
         if module_name == "activity":
             # Regex search for acitivity id
@@ -134,8 +135,9 @@ class SeoAPI(Resource):
             # Fetch id from regex
             activity_id = activity_result.group(1)
 
-            # Find activity 
-            activity = Activity.query.filter(Activity.id == activity_id).first()
+            # Find activity
+            activity = Activity.query.filter(Activity.id ==
+                                             activity_id).first()
             print("lalalala")
 
         elif module_name == "page":
