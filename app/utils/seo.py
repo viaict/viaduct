@@ -7,7 +7,7 @@ from app.utils import Resource
 
 
 class SeoAPI(Resource):
-    """ API for retrieving seo information of pages """
+    # API for retrieving seo information of pages
 
     """ Get the seo fields as dict"""
     @staticmethod
