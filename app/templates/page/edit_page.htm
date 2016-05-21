@@ -100,7 +100,7 @@
         </fieldset>
     </form>
 {% if not new_page %}
-    <form action='{{ url_for('page.delete', path=page.path) }}' method='post' class='col-md-4 remove-button'>
+    <form action='{{ url_for('page.delete', path=page.path) }}' method='post' class='col-md-4' style="padding:0px;padding-top:5px;">
         <button class="btn btn-danger " onclick="return confirm('Are you sure?')" type='submit'>{{_('Remove page') }}</button>
     </form>
 {% endif %}
