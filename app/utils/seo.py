@@ -7,6 +7,7 @@ from app.utils import Resource
 
 
 class SeoAPI(Resource):
+
     """ Get the seo fields as dict"""
     @staticmethod
     def get_seo_fields(language='nl', module_name=None, request_path=None):
