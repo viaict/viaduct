@@ -17,11 +17,6 @@
                     {{ _('Create')}}
                 {% endif %}
                 {{ _('page') }}
-                {% if not new_page %}
-                    <form action='{{ url_for('page.delete', path=page.path) }}' method='post' class='pull-right'>
-                        <button class="btn btn-danger pull-right" type='submit'>{{_('Remove page') }}</button>
-                    </form>
-                {% endif %}
             </h1>
         </div>
     </div>
@@ -98,10 +93,15 @@
                         </tbody>
                     </table>
                 </div>
-                <div class='col-md-12'>
+                <div class='col-md-4'>
                     {{ render_submit(_('Save')) }}
                 </div>
             </div>
         </fieldset>
     </form>
+{% if not new_page %}
+    <form action='{{ url_for('page.delete', path=page.path) }}' method='post' class='col-md-4 remove-button'>
+        <button class="btn btn-danger " onclick="return confirm('Are you sure?')" type='submit'>{{_('Remove page') }}</button>
+    </form>
+{% endif %}
 {% endblock %}
