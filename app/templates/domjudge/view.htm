@@ -49,7 +49,12 @@
             <tr>
                 <th>{{ _('Rank') }}</th>
                 <th>{{ _('Team') }} / {{ _('User') }}</th>
-                <th>{{ _('Amount solved')}} / {{ _('Total time') }}</th>
+                <th>
+                    {% if embed -%}<center>{%- endif %}
+                        {{ _('Amount solved')}} / {{ _('Total problems') }}
+                    {% if embed -%}</center>{%- endif %}
+                </th>
+                {%- if not embed -%}
                 {% for problem in problems %}
                 <th>
                     <a href="{{ url_for('domjudge.contest_problem_submit',

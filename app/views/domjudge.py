@@ -64,6 +64,7 @@ def contest_list():
 @blueprint.route('/contest/<int:contest_id>/')
 def contest_view(contest_id=None):
     fullscreen = 'fullscreen' in request.args
+    embed = 'embed' in request.args
 
     r = DOMjudgeAPI.request_get('api/contests')
     if not r:
@@ -109,7 +110,8 @@ def contest_view(contest_id=None):
     if teams_dict is None:
         return render_template('domjudge/view.htm', fullscreen=fullscreen)
 
-    return render_template('domjudge/view.htm', fullscreen=fullscreen,
+    return render_template('domjudge/view.htm',
+                           fullscreen=fullscreen, embed=embed,
                            contest=contest, scoreboard=scoreboard,
                            problems=problems, teams=teams_dict)
 
