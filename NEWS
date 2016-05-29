@@ -1,3 +1,7 @@
+29-05-2016 v2.6.5.0:
+* DOMjudge integration: added scoreboard table for embedding in slide.
+* Moved delete button on edit page form.
+
 14-05-2016 v2.6.4.0:
 * DOMjudge integration for the BAPC stunt
 * Automatic committee creation after creating group
