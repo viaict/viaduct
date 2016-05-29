@@ -4,6 +4,9 @@
 {% block includes %}
 {% if __fullscreen_mode %}
         <link href="{{static_url("/static/css/domjudge-scoreboard-fullscreen.css")}}" rel="stylesheet" />
+        {% if embed %}
+        <link href="{{static_url("/static/css/domjudge-scoreboard-embed.css")}}" rel="stylesheet" />
+        {% endif %}
 {% endif %}
 {% endblock %}
 
@@ -49,7 +52,12 @@
             <tr>
                 <th>{{ _('Rank') }}</th>
                 <th>{{ _('Team') }} / {{ _('User') }}</th>
-                <th>{{ _('Amount solved')}} / {{ _('Total time') }}</th>
+                <th>
+                    {% if embed -%}<center>{%- endif %}
+                        {{ _('Amount solved')}} / {{ _('Total problems') }}
+                    {% if embed -%}</center>{%- endif %}
+                </th>
+                {%- if not embed -%}
                 {% for problem in problems %}
                 <th>
                     <a href="{{ url_for('domjudge.contest_problem_submit',
@@ -61,12 +69,17 @@
                     </a>
                 </th>
                 {% endfor %}
+                {%- endif -%}
             </tr>
         </thead>
         <tbody>
         {% for team in scoreboard %}
             <tr>
-                <td>{{ team['rank'] }}</td>
+                <td>
+                    {% if embed -%}<strong>{%- endif %}
+                    {{ team['rank'] }}
+                    {% if embed -%}</strong>{%- endif %}
+                </td>
                 <td>
                     {%- set team_info = teams[team['team']] -%}
                     <strong>{{ team_info['name'] }}</strong>
@@ -75,9 +88,11 @@
                     {%- endif -%}
                 </td>
                 <td>
-                    <strong>{{ team['score']['num_solved'] }}</strong>
-                    / {{ team['score']['total_time'] }}
+                    {% if embed -%}<center>{%- endif %}
+                        <strong>{{ team['score']['num_solved'] }}</strong> / {{ len(problems) }}
+                    {% if embed -%}</center>{%- endif %}
                 </td>
+                {%- if not embed -%}
                 {% for problem in team['problems'] %}
                 <td class="{{ problem['class'] }}">
                 {{ problem['num_judged'] }}
@@ -86,6 +101,7 @@
                 {%- endif -%}
                 </td>
                 {% endfor %}
+                {%- endif -%}
             </tr>
         {% endfor %}
         </tbody>

@@ -33,13 +33,15 @@ def get_teams():
     teams = r.json()
     teams_dict = {}
     for team in teams:
-        m = VIA_USER_TEAM.match(team['name'])
+        origname = team['name']
+        m = VIA_USER_TEAM.match(origname)
         if m:
             user_id = int(m.group(1))
             user = User.query.get(user_id)
             if user:
                 team['name'] = '{} {}'.format(user.first_name, user.last_name)
 
+        team['origname'] = origname
         teams_dict[team['id']] = team
 
     return teams_dict
@@ -64,6 +66,7 @@ def contest_list():
 @blueprint.route('/contest/<int:contest_id>/')
 def contest_view(contest_id=None):
     fullscreen = 'fullscreen' in request.args
+    embed = 'embed' in request.args
 
     r = DOMjudgeAPI.request_get('api/contests')
     if not r:
@@ -109,7 +112,8 @@ def contest_view(contest_id=None):
     if teams_dict is None:
         return render_template('domjudge/view.htm', fullscreen=fullscreen)
 
-    return render_template('domjudge/view.htm', fullscreen=fullscreen,
+    return render_template('domjudge/view.htm',
+                           fullscreen=fullscreen, embed=embed,
                            contest=contest, scoreboard=scoreboard,
                            problems=problems, teams=teams_dict)
 
@@ -300,6 +304,7 @@ def contest_problem_submit(contest_id, problem_id):
 
 
 @blueprint.route('/contest/<int:contest_id>/submissions/')
+@login_required
 def contest_submissions_view(contest_id):
     r = DOMjudgeAPI.request_get('api/contests')
     if not r:
@@ -372,6 +377,12 @@ def contest_submissions_view(contest_id):
 
     for s in submissions:
         s['timestr'] = dt.datetime.fromtimestamp(s['time']).strftime(DT_FORMAT)
+        m = VIA_USER_TEAM.match(teams[s['team']]['origname'])
+        if m:
+            s['userid'] = int(m.group(1))
+        else:
+            s['userid'] = -1
+
         s['team'] = teams[s['team']]['name']
         s['problem'] = problems[s['problem']]['name']
         s['language'] = languages[s['language']]['name']
@@ -389,5 +400,5 @@ def contest_submissions_view(contest_id):
 
     submissions.sort(key=lambda x: x['time'], reverse=True)
 
-    return render_template('domjudge/submissions.htm',
+    return render_template('domjudge/submissions.htm', user=current_user.id,
                            contest=contest, submissions=submissions)

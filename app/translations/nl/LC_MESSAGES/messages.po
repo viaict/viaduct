@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-05-14 17:51+0200\n"
+"POT-Creation-Date: 2016-05-27 12:49+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -982,8 +982,8 @@ msgstr "Titel"
 msgid "Too late"
 msgstr "Te laat"
 
-msgid "Total time"
-msgstr "Totale tijd"
+msgid "Total problems"
+msgstr "Totaal aantal problemen"
 
 msgid "Unauthorized!"
 msgstr "Ongeautoriseerd!"
@@ -1179,4 +1179,7 @@ msgstr "bekijken"
 
 #~ msgid "Time"
 #~ msgstr "Tijd"
+
+#~ msgid "Total time"
+#~ msgstr "Totale tijd"
 

@@ -19,6 +19,7 @@
         </thead>
         <tbody>
             {% for submission in submissions %}
+            {%- if submission['userid'] == user -%}
             <tr>
                 <td>{{ submission.timestr }}</td>
                 <td>{{ submission.team }}</td>
@@ -26,6 +27,7 @@
                 <td>{{ submission.problem }}</td>
                 <td>{{ submission.language }}</td>
             </tr>
+            {%- endif -%}
             {% endfor %}
         </tbody>
     </table>

@@ -1,0 +1,48 @@
+$TABLECOLOR:          #324D0E;
+
+body {
+    background: none;
+}
+
+.container {
+    font-size: 175%;
+}
+
+h1 {
+    display: none;
+}
+
+#domjudge-time-table {
+    display: none;
+}
+
+#domjudge-scoreboard-table {
+    color: $TABLECOLOR;
+}
+
+#domjudge-scoreboard-table table thead tr  {
+    border-bottom: 4px solid $TABLECOLOR;
+}
+
+#domjudge-scoreboard-table table tbody tr  {
+    border-bottom: 2px solid $TABLECOLOR;
+}
+
+.domjudge-problem-title {
+    background: none !important;
+    border: none;
+}
+
+td {
+    background: none !important;
+}
+
+.domjudge-problem-solved-cell {
+    background: none !important;
+    color: $TABLECOLOR;
+}
+
+.domjudge-problem-incorrect-cell {
+    background: none !important;
+    color: $TABLECOLOR;
+}
