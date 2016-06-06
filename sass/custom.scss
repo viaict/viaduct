@@ -1262,6 +1262,26 @@ $DOMJUDGE_RED:          #d9534f;
 $DOMJUDGE_GREEN:        #5cb85c;
 $DOMJUDGE_ORANGE:       #f0ad4e;
 $DOMJUDGE_LIGHTBLUE:    #5ab0c9;
+$DOMJUDGE_LIGHTGREEN:   #7CD449;
+
+
+@media(min-width:992px){
+    #domjudge-scoreboard-table {
+        width: 980px;
+    }
+}
+
+@media(min-width:1200px){
+    #domjudge-scoreboard-table {
+        width: 1300px;
+    }
+}
+
+@media(max-width: 768px){
+    #domjudge-buttons {
+        margin-right: 10px;
+    }
+}
 
 .domjudge-problem-badge {
     border-radius: 10px;
@@ -1279,6 +1299,10 @@ $DOMJUDGE_LIGHTBLUE:    #5ab0c9;
     text-decoration: inherit;
 }
 
+.domjudge-problem-title-name {
+    white-space: nowrap;
+}
+
 .domjudge-problem-title:hover {
     color: inherit;
     text-decoration: inherit;
@@ -1294,6 +1318,10 @@ $DOMJUDGE_LIGHTBLUE:    #5ab0c9;
 }
 
 .domjudge-problem-solved {
+    background-color: $DOMJUDGE_LIGHTGREEN !important;
+}
+
+.domjudge-problem-solved-first {
     background-color: $DOMJUDGE_GREEN !important;
 }
 
@@ -1302,7 +1330,8 @@ $DOMJUDGE_LIGHTBLUE:    #5ab0c9;
 }
 
 .domjudge-problem-solved-first-cell {
-    @extend .domjudge-problem-solved, .domjudge-problem-cell;
+    @extend .domjudge-problem-solved-first, .domjudge-problem-cell;
+    color: white;
 }
 
 .domjudge-problem-untried-cell{
@@ -1332,6 +1361,11 @@ $DOMJUDGE_LIGHTBLUE:    #5ab0c9;
     padding: 5px 5px;
     text-align: center;
     font-weight: bolder;
+}
+
+.domjudge-legend-item-solved-first {
+    @extend .domjudge-legend-item, .domjudge-problem-solved-first;
+    color: white;
 }
 
 .domjudge-legend-item-solved {

@@ -17,20 +17,31 @@
 
 <div class="row">
     {%- if not fullscreen -%}
-    <div class="pull-right btn-group">
+    <div class="pull-right btn-group" id="domjudge-buttons">
         <a href="{{ url_for('domjudge.contest_problems_list', contest_id=contest['id']) }}"
             class="btn btn-primary">
             <i class="glyphicon glyphicon-list" style="margin-right: 5px"></i>
-            {{ _('Problem list') }}
+            <span class="hidden-xs">{{ _('Problem list') }}</span>
         </a>
         <a href="{{ url_for('domjudge.contest_submissions_view', contest_id=contest['id']) }}"
             class="btn btn-primary">
             <i class="glyphicon glyphicon-pencil" style="margin-right: 5px"></i>
-            {{ _('Submissions') }}
+            <span class="hidden-xs">{{ _('Submissions') }}</span>
         </a>
+        {%- if use_pagination -%}
+        <a class="btn btn-warning {% if page == 1 %}disabled{% endif %}" href="{{ url_for('domjudge.contest_view', contest_id=contest_id, page=(page-1) ) }}">
+            {{ _('Previous') }}
+        </a>
+        <a class="btn btn-warning disabled">
+            {{ page }}
+        </a>
+        <a class="btn btn-warning {% if page == amount_pages %}disabled{% endif %}" href="{{ url_for('domjudge.contest_view', contest_id=contest_id, page=(page+1) ) }}">
+            {{ _('Next') }}
+        </a>
+        {%- endif -%}
     </div>
     {%- endif -%}
-    <div class="col-md-6" id="domjudge-time-table">
+    <div id="domjudge-time-table">
         <table >
             <tr>
                 <td><label>{{ _('Start time') }}:</label></td>
@@ -65,7 +76,7 @@
                         class="domjudge-problem-title"
                         style="background-color: {{ problem['color'] }}">
                         <i class="glyphicon glyphicon-flag" style="margin-right: 5px"></i>
-                        {{- problem['shortname'] -}}
+                        <span class="domjudge-problem-title-name">{{- problem['shortname'] -}}</span>
                     </a>
                 </th>
                 {% endfor %}
@@ -112,6 +123,7 @@
     <div class="col-md-4 domjudge-legend">
         <label id="domjudge-legend-label">{{ _('Legend') }}:</label>
         <ul class="domjudge-legend-list">
+            <li class="domjudge-legend-item-solved-first">{{ _('Solved first') }}</li>
             <li class="domjudge-legend-item-solved">{{ _('Solved') }}</li>
             <li class="domjudge-legend-item-incorrect">{{ _('Incorrect') }}</li>
             <li class="domjudge-legend-item-untried">{{ _('Untried') }}</li>
