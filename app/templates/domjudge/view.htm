@@ -28,6 +28,17 @@
             <i class="glyphicon glyphicon-pencil" style="margin-right: 5px"></i>
             <span class="hidden-xs">{{ _('Submissions') }}</span>
         </a>
+        {%- if use_pagination -%}
+        <a class="btn btn-warning {% if page == 1 %}disabled{% endif %}" href="{{ url_for('domjudge.contest_view', contest_id=contest_id, page=(page-1) ) }}">
+            {{ _('Previous') }}
+        </a>
+        <a class="btn btn-warning disabled">
+            {{ page }}
+        </a>
+        <a class="btn btn-warning {% if page == amount_pages %}disabled{% endif %}" href="{{ url_for('domjudge.contest_view', contest_id=contest_id, page=(page+1) ) }}">
+            {{ _('Next') }}
+        </a>
+        {%- endif -%}
     </div>
     {%- endif -%}
     <div id="domjudge-time-table">

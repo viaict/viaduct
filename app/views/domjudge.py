@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask import flash, redirect, \
-    render_template, url_for, request, Response
+    render_template, url_for, request, Response, abort
 from flask.ext.login import login_required
 from flask.ext.babel import _
 
@@ -12,6 +12,7 @@ from app.utils.domjudge import DOMjudgeAPI
 
 import datetime as dt
 import re
+import math
 
 
 DOMJUDGE_URL = app.config['DOMJUDGE_URL']
@@ -63,8 +64,9 @@ def contest_list():
     return render_template('domjudge/list.htm', contests=data)
 
 
-@blueprint.route('/contest/<int:contest_id>/')
-def contest_view(contest_id=None):
+@blueprint.route('/contest/<int:contest_id>/', defaults={'page': 1})
+@blueprint.route('/contest/<int:contest_id>/<int:page>')
+def contest_view(contest_id, page):
     fullscreen = 'fullscreen' in request.args
     embed = 'embed' in request.args
 
@@ -87,8 +89,31 @@ def contest_view(contest_id=None):
     if not r:
         return render_template('domjudge/view.htm')
     scoreboard = r.json()
+
+    r = DOMjudgeAPI.request_get('api/problems?cid={}'.format(contest_id))
+    if not r:
+        return render_template('domjudge/view.htm')
+    problems = r.json()
+    problems.sort(key=lambda x: x['label'])
+
+    problems_per_page = 8
+    use_pagination = len(problems) > problems_per_page
+    if use_pagination:
+        amount_pages = math.ceil(len(problems) / problems_per_page)
+        problems = problems[(page - 1) * problems_per_page:
+                            page * problems_per_page]
+    else:
+        amount_pages = 1
+
+    if page > amount_pages:
+        return abort(404)
+
     problems_first = {}
     for team in scoreboard:
+        team['problems'].sort(key=lambda x: x['label'])
+        if use_pagination:
+            team['problems'] = team['problems'][(page - 1) * problems_per_page:
+                                                page * problems_per_page]
         for problem in team['problems']:
             if problem['solved']:
                 _class = "domjudge-problem-solved-cell"
@@ -109,25 +134,14 @@ def contest_view(contest_id=None):
 
             problem['class'] = _class
 
-        team['problems'].sort(key=lambda x: x['label'])
-
     for (problem, time) in problems_first.values():
         problem['class'] = 'domjudge-problem-solved-first-cell'
-
-    r = DOMjudgeAPI.request_get('api/problems?cid={}'.format(contest_id))
-    if not r:
-        return render_template('domjudge/view.htm')
-    problems = r.json()
-    problems.sort(key=lambda x: x['label'])
 
     teams_dict = get_teams()
     if teams_dict is None:
         return render_template('domjudge/view.htm', fullscreen=fullscreen)
 
-    return render_template('domjudge/view.htm',
-                           fullscreen=fullscreen, embed=embed,
-                           contest=contest, scoreboard=scoreboard,
-                           problems=problems, teams=teams_dict)
+    return render_template('domjudge/view.htm', teams=teams_dict, **locals())
 
 
 @blueprint.route('/contest/<int:contest_id>/problems/')
@@ -309,10 +323,7 @@ def contest_problem_submit(contest_id, problem_id):
                                 contest_id=contest_id))
     else:
         return render_template('domjudge/problem/submit.htm',
-                               problem=problem,
-                               contest=contest,
-                               contest_id=contest_id,
-                               languages=languages)
+                               **locals())
 
 
 @blueprint.route('/contest/<int:contest_id>/submissions/')
