@@ -87,11 +87,20 @@ def contest_view(contest_id=None):
     if not r:
         return render_template('domjudge/view.htm')
     scoreboard = r.json()
+    problems_first = {}
     for team in scoreboard:
         for problem in team['problems']:
-            # TODO: find out what exactly 'solved first' means
             if problem['solved']:
                 _class = "domjudge-problem-solved-cell"
+                problem_label = problem['label']
+                if problem_label in problems_first:
+                    (p, besttime) = problems_first[problem_label]
+                    if problem['time'] < besttime:
+                        problems_first[problem_label] = \
+                            (problem, problem['time'])
+                else:
+                    problems_first[problem_label] = \
+                        (problem, problem['time'])
             else:
                 if problem['num_judged'] > 0:
                     _class = "domjudge-problem-incorrect-cell"
@@ -101,6 +110,9 @@ def contest_view(contest_id=None):
             problem['class'] = _class
 
         team['problems'].sort(key=lambda x: x['label'])
+
+    for (problem, time) in problems_first.values():
+        problem['class'] = 'domjudge-problem-solved-first-cell'
 
     r = DOMjudgeAPI.request_get('api/problems?cid={}'.format(contest_id))
     if not r:
