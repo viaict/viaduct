@@ -1,3 +1,6 @@
+06-06-2016 v2.6.6.0:
+* DOMjudge integration: Some improvements on scoreboard.
+
 29-05-2016 v2.6.5.0:
 * DOMjudge integration: added scoreboard table for embedding in slide.
 * Moved delete button on edit page form.
