@@ -17,20 +17,20 @@
 
 <div class="row">
     {%- if not fullscreen -%}
-    <div class="pull-right btn-group">
+    <div class="pull-right btn-group" id="domjudge-buttons">
         <a href="{{ url_for('domjudge.contest_problems_list', contest_id=contest['id']) }}"
             class="btn btn-primary">
             <i class="glyphicon glyphicon-list" style="margin-right: 5px"></i>
-            {{ _('Problem list') }}
+            <span class="hidden-xs">{{ _('Problem list') }}</span>
         </a>
         <a href="{{ url_for('domjudge.contest_submissions_view', contest_id=contest['id']) }}"
             class="btn btn-primary">
             <i class="glyphicon glyphicon-pencil" style="margin-right: 5px"></i>
-            {{ _('Submissions') }}
+            <span class="hidden-xs">{{ _('Submissions') }}</span>
         </a>
     </div>
     {%- endif -%}
-    <div class="col-md-6" id="domjudge-time-table">
+    <div id="domjudge-time-table">
         <table >
             <tr>
                 <td><label>{{ _('Start time') }}:</label></td>
@@ -65,7 +65,7 @@
                         class="domjudge-problem-title"
                         style="background-color: {{ problem['color'] }}">
                         <i class="glyphicon glyphicon-flag" style="margin-right: 5px"></i>
-                        {{- problem['shortname'] -}}
+                        <span class="domjudge-problem-title-name">{{- problem['shortname'] -}}</span>
                     </a>
                 </th>
                 {% endfor %}

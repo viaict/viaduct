@@ -1263,6 +1263,25 @@ $DOMJUDGE_GREEN:        #5cb85c;
 $DOMJUDGE_ORANGE:       #f0ad4e;
 $DOMJUDGE_LIGHTBLUE:    #5ab0c9;
 
+
+@media(min-width:992px){
+    #domjudge-scoreboard-table {
+        width: 980px;
+    }
+}
+
+@media(min-width:1200px){
+    #domjudge-scoreboard-table {
+        width: 1300px;
+    }
+}
+
+@media(max-width: 768px){
+    #domjudge-buttons {
+        margin-right: 10px;
+    }
+}
+
 .domjudge-problem-badge {
     border-radius: 10px;
     border: solid;
@@ -1277,6 +1296,10 @@ $DOMJUDGE_LIGHTBLUE:    #5ab0c9;
     @extend .domjudge-problem-badge;
     color: inherit;
     text-decoration: inherit;
+}
+
+.domjudge-problem-title-name {
+    white-space: nowrap;
 }
 
 .domjudge-problem-title:hover {
