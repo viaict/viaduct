@@ -100,7 +100,7 @@
                 </td>
                 <td>
                     {% if embed -%}<center>{%- endif %}
-                        <strong>{{ team['score']['num_solved'] }}</strong> / {{ len(problems) }}
+                        <strong>{{ team['score']['num_solved'] }}</strong> / {{ total_problems_amount }}
                     {% if embed -%}</center>{%- endif %}
                 </td>
                 {%- if not embed -%}
