@@ -1,13 +1,14 @@
 {% from "macros/flash.htm" import render_flash %}
 
 <!DOCTYPE html>
-<html>
+<html xmlns:fb="http://ogp.me/ns/fb#">
     <head>
         {% set seo_fields = SeoAPI.get_seo_fields(get_locale()) %}
 
         <title>{{seo_fields.title}}</title>
         <meta description="{{seo_fields.description}}" />
         <meta name="keywords" content="{{seo_fields.tags}}" />
+        <meta property="og:image" content="/static/img/via.png" />
 
         <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
