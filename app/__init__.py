@@ -91,8 +91,12 @@ class JSONEncoder(BaseEncoder):
 
 
 @app.context_processor
-def inject_url_root():
-    return dict(url_root=request.url_root)
+def inject_urls():
+    return dict(
+        request_path=request.path,
+        request_base_url=request.base_url,
+        request_url=request.url,
+        request_url_root=request.url_root)
 
 
 app.json_encoder = JSONEncoder

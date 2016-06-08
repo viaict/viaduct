@@ -8,7 +8,11 @@
         <title>{{seo_fields.title}}</title>
         <meta description="{{seo_fields.description}}" />
         <meta name="keywords" content="{{seo_fields.tags}}" />
-        <meta property="og:image" content="{{ url_root }}static/img/via.png" />
+
+        <meta property="og:title" content="{{seo_fields.title}}" />
+        <meta property="og:description" content="{{seo_fields.description}}" />
+        <meta property="og:url" content="{{ request_url }}" />
+        <meta property="og:image" content="{{ request_url_root }}static/img/via_large.png" />
 
         <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
