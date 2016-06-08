@@ -15,7 +15,7 @@ import json
 from flask_jsglue import JSGlue
 
 
-version = 'v2.6.6.2'
+version = 'v2.6.6.3'
 
 
 def static_url(url):
@@ -88,6 +88,11 @@ class JSONEncoder(BaseEncoder):
             return str(o)
 
         return BaseEncoder.default(self, o)
+
+
+@app.context_processor
+def inject_url_root():
+    return dict(url_root=request.url_root)
 
 
 app.json_encoder = JSONEncoder
