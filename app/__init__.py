@@ -90,6 +90,11 @@ class JSONEncoder(BaseEncoder):
         return BaseEncoder.default(self, o)
 
 
+@app.context_processor
+def inject_url_root():
+    return dict(url_root=request.url_root)
+
+
 app.json_encoder = JSONEncoder
 
 # Set up the login manager, which is used to store the details related to the
