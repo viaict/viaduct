@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-06-06 17:41+0200\n"
+"POT-Creation-Date: 2016-06-16 16:44+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -362,7 +362,7 @@ msgid "English name requires English description and vice versa"
 msgstr "Engelse naam vereist Engelse beschrijving en vica versa."
 
 msgid "English tags (comma seperated)"
-msgstr ""
+msgstr "Engelse tags (komma gescheiden)"
 
 msgid "English title"
 msgstr "Engelse titel"
@@ -681,6 +681,9 @@ msgstr "Telefoonnummer"
 msgid "Please fill in"
 msgstr "Alstublief invullen"
 
+msgid "Please fill in :D"
+msgstr "Vul a.u.b. in :D"
+
 msgid "Position vacant"
 msgstr "Positie openstaand"
 
@@ -769,7 +772,7 @@ msgid "Reset password"
 msgstr "Reset wachtwoord"
 
 msgid "Result"
-msgstr ""
+msgstr "Resultaat"
 
 msgid "Retake"
 msgstr "Herkansing"
@@ -1174,15 +1177,9 @@ msgstr "bekijken"
 #~ msgid "Custom form"
 #~ msgstr "Formulier"
 
-#~ msgid "Problem"
-#~ msgstr "Problemen"
-
-#~ msgid "Result"
-#~ msgstr "Resultaat"
-
-#~ msgid "Time"
-#~ msgstr "Tijd"
-
 #~ msgid "Total time"
 #~ msgstr "Totale tijd"
+
+#~ msgid "Vul a.u.b in :D"
+#~ msgstr "Please fill in :D"
 

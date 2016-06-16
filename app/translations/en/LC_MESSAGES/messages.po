@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-06-06 17:41+0200\n"
+"POT-Creation-Date: 2016-06-16 16:44+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -111,7 +111,6 @@ msgstr ""
 msgid "Cannot find parent navigation entry."
 msgstr ""
 
-#, fuzzy
 msgid "Captain's log succesfully ended."
 msgstr "."
 
@@ -676,6 +675,9 @@ msgstr ""
 msgid "Please fill in"
 msgstr ""
 
+msgid "Please fill in :D"
+msgstr ""
+
 msgid "Position vacant"
 msgstr ""
 
@@ -703,13 +705,11 @@ msgstr ""
 msgid "Problems"
 msgstr ""
 
-#, fuzzy
 msgid "Profile succesfully created"
-msgstr "."
+msgstr ""
 
-#, fuzzy
 msgid "Profile succesfully updated"
-msgstr "."
+msgstr ""
 
 msgid "Public"
 msgstr ""
@@ -1235,5 +1235,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Total time"
+#~ msgstr ""
+
+#~ msgid "Vul a.u.b in :D"
 #~ msgstr ""
 
