@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-06-16 16:44+0200\n"
+"POT-Creation-Date: 2016-06-17 08:51+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -94,9 +94,6 @@ msgstr ""
 
 msgid "Back"
 msgstr "Terug"
-
-msgid "Bilingualism is not fully implemented yet!"
-msgstr "Tweetaligheid is nog niet volledig ondersteund!"
 
 msgid "Birthdate"
 msgstr "Geboortedatum"
@@ -1081,6 +1078,9 @@ msgstr "Je moet ingelogd zijn om een formulier in te vullen."
 msgid "You must be logged-in to register for an activity."
 msgstr "Je moet ingelogd zijn om je te registeren voor een activiteit."
 
+msgid "You need to be logged in to set a permanent language."
+msgstr "Je moet ingelogd zijn om een permanente taal in te stellen."
+
 msgid "Your account has been disabled, you are not allowed to log in"
 msgstr "Je account is gedeactiveerd, je mag niet inloggen"
 
@@ -1132,6 +1132,13 @@ msgstr "nog"
 msgid "view"
 msgstr "bekijken"
 
+msgid ""
+"{} is now set as language for this session. To make this setting "
+"permanent, <a href='{}'>click here</a>"
+msgstr ""
+"{} is nu de taal voor deze sessie. Om deze instelling permanent te maken,"
+" <a href='{}'>klik hier</a>."
+
 #~ msgid "Content"
 #~ msgstr "Inhoud"
 
@@ -1182,4 +1189,10 @@ msgstr "bekijken"
 
 #~ msgid "Vul a.u.b in :D"
 #~ msgstr "Please fill in :D"
+
+#~ msgid "Bilingualism is not fully implemented yet!"
+#~ msgstr "Tweetaligheid is nog niet volledig ondersteund!"
+
+#~ msgid ""
+#~ msgstr ""
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-06-16 16:44+0200\n"
+"POT-Creation-Date: 2016-06-17 08:51+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -91,9 +91,6 @@ msgid ""
 msgstr ""
 
 msgid "Back"
-msgstr ""
-
-msgid "Bilingualism is not fully implemented yet!"
 msgstr ""
 
 msgid "Birthdate"
@@ -1057,6 +1054,9 @@ msgstr ""
 msgid "You must be logged-in to register for an activity."
 msgstr ""
 
+msgid "You need to be logged in to set a permanent language."
+msgstr ""
+
 msgid "Your account has been disabled, you are not allowed to log in"
 msgstr ""
 
@@ -1106,6 +1106,11 @@ msgid "still"
 msgstr ""
 
 msgid "view"
+msgstr ""
+
+msgid ""
+"{} is now set as language for this session. To make this setting "
+"permanent, <a href='{}'>click here</a>"
 msgstr ""
 
 #~ msgid "Participants of this activity"
@@ -1238,5 +1243,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Vul a.u.b in :D"
+#~ msgstr ""
+
+#~ msgid "Bilingualism is not fully implemented yet!"
 #~ msgstr ""
 

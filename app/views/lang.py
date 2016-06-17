@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 from app import db, app
-from flask import Blueprint, redirect, make_response, request, url_for, flash
+from flask import Blueprint, redirect, session, request, url_for, flash
 from flask.ext.babel import refresh
 from flask.ext.login import current_user
 from flask.ext.babel import _
@@ -14,22 +14,34 @@ def redirect_url(default='home.home'):
     return request.args.get('next') or request.referrer or url_for(default)
 
 
+@blueprint.route('/set/<path:lang>', methods=['GET'])
+def set_user_lang(lang=None):
+    if lang not in app.config['LANGUAGES'].keys():
+        flash(_('Language unsupported on this site') + ': ' + lang, 'warning')
+        return redirect(url_for('home.home'))
+    if current_user.is_anonymous():
+        flash(_('You need to be logged in to set a permanent language.'))
+        return redirect(redirect_url())
+
+    current_user.locale = lang
+    db.session.add(current_user)
+    db.session.commit()
+    refresh()
+    return redirect(redirect_url())
+
+
 @blueprint.route('/<path:lang>', methods=['GET'])
 def set_lang(lang=None):
     if lang not in app.config['LANGUAGES'].keys():
         flash(_('Language unsupported on this site') + ': ' + lang, 'warning')
         return redirect(url_for('home.home'))
 
-    if current_user.is_anonymous():
-        rv = make_response(redirect(redirect_url()))
-        rv.set_cookie('lang', lang)
-        refresh()
-        flash(_('Bilingualism is not fully implemented yet!'), 'info')
-        return rv
-    else:
-        current_user.locale = lang
-        db.session.add(current_user)
-        db.session.commit()
-        refresh()
-        flash(_('Bilingualism is not fully implemented yet!'), 'info')
-        return redirect(redirect_url())
+    session['lang'] = lang
+    if current_user.is_authenticated():
+        msg = _("{} is now set as language for this session. To make this "
+                "setting permanent, <a href='{}'>click here</a>")
+        flash(msg.format(app.config['LANGUAGES'][lang],
+                         url_for('lang.set_user_lang', lang=lang)),
+              'safe')
+
+    return redirect(redirect_url())

@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, request, Markup, render_template
+from flask import Flask, request, Markup, render_template, session
 from flask.json import JSONEncoder as BaseEncoder
 from flask.ext.babel import Babel
 from flask.ext.login import LoginManager, current_user
@@ -65,18 +65,17 @@ babel = Babel(app)
 @babel.localeselector
 def get_locale():
     languages = app.config['LANGUAGES'].keys()
+    # Try to look-up an session set for language
+    lang = session['lang']
+    if lang and lang in languages:
+        return lang
+
     # if a user is logged in, use the locale from the user settings
     if current_user and not current_user.is_anonymous() \
             and current_user.locale is not None:
         return current_user.locale
 
-    # Try to look-up an cookie set for language
-    lang = request.cookies.get('lang')
-    if lang and lang in languages:
-        return lang
-    else:
-        return request.accept_languages.best_match(
-            list(languages), default='nl')
+    return request.accept_languages.best_match(list(languages), default='nl')
 
 
 class JSONEncoder(BaseEncoder):
