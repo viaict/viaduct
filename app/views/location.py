@@ -20,22 +20,19 @@ def get_contacts(location_id):
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
-@blueprint.route('/<int:page>/', methods=['GET', 'POST'])
-def list(page=1):
+@blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
+def list(page_nr=1):
     if not ModuleAPI.can_read('location'):
         return abort(403)
 
-    locations = Location.query.paginate(page, 15, False)
+    locations = Location.query.paginate(page_nr, 15, False)
     return render_template('location/list.htm', locations=locations)
 
 
 @blueprint.route('/create/', methods=['GET'])
 @blueprint.route('/edit/<int:location_id>/', methods=['GET'])
 def view(location_id=None):
-    '''
-    FRONTEND
-    Create, view or edit a location.
-    '''
+    """FRONTEND, Create, view or edit a location."""
     if not ModuleAPI.can_read('location'):
         return abort(403)
 
@@ -52,10 +49,7 @@ def view(location_id=None):
 @blueprint.route('/create/', methods=['POST'])
 @blueprint.route('/edit/<int:location_id>/', methods=['POST'])
 def update(location_id=None):
-    '''
-    BACKEND
-    Create or edit a location.
-    '''
+    """BACKEND, Create or edit a location."""
     if not ModuleAPI.can_write('location'):
         return abort(403)
 
@@ -85,10 +79,7 @@ def update(location_id=None):
 
 @blueprint.route('/delete/<int:location_id>/', methods=['POST'])
 def delete(location_id):
-    '''
-    BACKEND
-    Delete a location.
-    '''
+    """BACKEND, Delete a location."""
     if not ModuleAPI.can_write('location'):
         return abort(403)
 
