@@ -12,24 +12,20 @@ blueprint = Blueprint('contact', __name__, url_prefix='/contacts')
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
-@blueprint.route('/<int:page>/', methods=['GET', 'POST'])
-def list(page=1):
-    '''
-    Show a paginated list of contacts.
-    '''
+@blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
+def list(page_nr=1):
+    """Show a paginated list of contacts."""
     if not ModuleAPI.can_read('contact'):
         return abort(403)
 
-    contacts = Contact.query.paginate(page, 15, False)
+    contacts = Contact.query.paginate(page_nr, 15, False)
     return render_template('contact/list.htm', contacts=contacts)
 
 
 @blueprint.route('/create/', methods=['GET'])
 @blueprint.route('/edit/<int:contact_id>/', methods=['GET'])
 def edit(contact_id=None):
-    '''
-    Create or edit a contact, frontend.
-    '''
+    """Create or edit a contact, frontend."""
     if not ModuleAPI.can_read('contact'):
         return abort(403)
 
@@ -50,9 +46,7 @@ def edit(contact_id=None):
 @blueprint.route('/create/', methods=['POST'])
 @blueprint.route('/edit/<int:contact_id>/', methods=['POST'])
 def update(contact_id=None):
-    '''
-    Create or edit a contact, backend.
-    '''
+    """Create or edit a contact, backend."""
     if not ModuleAPI.can_write('contact'):
         return abort(403)
 
@@ -80,9 +74,7 @@ def update(contact_id=None):
 
 @blueprint.route('/delete/<int:contact_id>/', methods=['POST'])
 def delete(contact_id):
-    '''
-    Delete a contact.
-    '''
+    """Delete a contact."""
     if not ModuleAPI.can_write('contact'):
         return abort(403)
 
