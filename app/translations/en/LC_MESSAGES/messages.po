@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-06-17 08:51+0200\n"
+"POT-Creation-Date: 2016-06-17 22:00+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -615,6 +615,9 @@ msgstr ""
 msgid "No last name submitted"
 msgstr ""
 
+msgid "No location"
+msgstr ""
+
 msgid "No password submitted"
 msgstr ""
 
@@ -854,6 +857,9 @@ msgid "Studentnumber"
 msgstr ""
 
 msgid "Study"
+msgstr ""
+
+msgid "Study Association"
 msgstr ""
 
 msgid "Study course"
@@ -1105,6 +1111,12 @@ msgstr ""
 msgid "still"
 msgstr ""
 
+msgid ""
+"via, short for 'Vereniging Informatiewetenschappen Amsterdam' (Dutch), is"
+" the study association for Computer Science, Artificial Intelligence and "
+"Information Science at the University of Amsterdam."
+msgstr ""
+
 msgid "view"
 msgstr ""
 
@@ -1246,5 +1258,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Bilingualism is not fully implemented yet!"
+#~ msgstr ""
+
+#~ msgid "Studievereniging"
 #~ msgstr ""
 
