@@ -66,7 +66,7 @@ babel = Babel(app)
 def get_locale():
     languages = app.config['LANGUAGES'].keys()
     # Try to look-up an session set for language
-    lang = session['lang']
+    lang = session.get('lang')
     if lang and lang in languages:
         return lang
 
