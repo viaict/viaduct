@@ -23,7 +23,13 @@
 						{% for contact in contacts.items %}
 						<tr>
 							<td><a href="{{ url_for('contact.edit', contact_id=contact.id) }}">{{ contact.name }}</a></td>
-							<td><a href="{{ url_for('location.view', location_id=contact.location.id) }}">{{ contact.location.address }}, {{contact.location.zip}} {{ contact.location.city }}</a></td>
+                            <td>
+                                {% if contact.location %}
+                                    <a href="{{ url_for('location.view', location_id=contact.location.id) }}">{{ contact.location.address }}, {{contact.location.zip}} {{ contact.location.city }}</a>
+                                {% else %}
+                                <a href="{{ url_for('contact.edit', contact_id=contact.id) }}">{{_('No location')}}</a>
+                                {% endif  %}
+                            </td>
 							<td>{{contact.phone_nr}}</td>
 							<td><a target="blank_" href="mailto:{{contact.email}}">{{contact.email}}</a></td>
 						</tr>
