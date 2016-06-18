@@ -31,6 +31,7 @@
     </div>
 
     <div class="accordion" id="acc">
+        {% if activity.location %}
         <div class="accordion-group">
 
             <div class="accordion-heading">
@@ -48,6 +49,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
 
         {% if activity.form %}
             <div class="accordion-group">
@@ -102,7 +104,7 @@
                                         {{ render_field(form.education_id) }}
                                     </div>
                                     <div class="col-md-7">
-                                        <h3>Vul a.u.b in :D</h3>
+                                        <h3>{{_('Please fill in :D')}}</h3>
                                         <p>{{_("Some details like shirt size or diet we try to save, so you don\'t have to fill them in more then once.")}}</p>
                                         {{ activity.form.html | safe }}
                                     </div>

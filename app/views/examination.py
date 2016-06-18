@@ -7,7 +7,7 @@ from flask import abort, flash, session, redirect, render_template, request, \
 from flask.ext.login import login_required
 from flask.ext.babel import _
 
-from sqlalchemy import or_, func
+from sqlalchemy import func
 
 from app import app, db
 
@@ -100,7 +100,7 @@ def upload_file_real(file, old_path='1'):
 
 @blueprint.route('/examination/add/', methods=['GET', 'POST'])
 def upload_file():
-    if not ModuleAPI.can_write('examination'):
+    if not ModuleAPI.can_write('examination', True):
         session['prev'] = 'examination.upload_file'
         return abort(403)
 
@@ -173,7 +173,9 @@ def upload_file():
 @blueprint.route('/examination/<int:page_nr>/', methods=['GET', 'POST'])
 @login_required
 def view_examination(page_nr=1):
-    if not ModuleAPI.can_read('examination', False):
+    if not ModuleAPI.can_read('examination', True):
+        flash(_('Valid membership is required for the examination module'),
+              'warning')
         session['prev'] = 'examination.view_examination'
         return abort(403)
 
@@ -264,58 +266,6 @@ def view_examination(page_nr=1):
                            title=_('Examinations'), test_types=test_types)
 
 
-@blueprint.route('/examination/admin/', methods=['GET', 'POST'])
-@blueprint.route('/examination/admin/<int:page_nr>/', methods=['GET', 'POST'])
-def examination_admin(page_nr=1):
-    if not ModuleAPI.can_write('examination', False):
-        session['prev'] = 'examination.examination_admin'
-        return abort(403)
-
-    path = '/static/uploads/examinations/'
-
-    if request.args.get('search'):
-        search = request.args.get('search')
-        examinations = Examination.query.join(Course).join(Education)\
-            .filter(or_(Examination.title.like('%' + search + '%'),
-                        Course.name.like('%' + search + '%'),
-                        Education.name.like('%' + search + '%')))\
-            .paginate(page_nr, 15, False)
-        return render_template('examination/admin.htm', path=path,
-                               examinations=examinations, search=search,
-                               message="", title=_('Examinations'))
-
-    if request.args.get('delete'):
-        exam_id = request.args.get('delete')
-        examination = Examination.query.filter(Examination.id == exam_id)\
-            .first()
-
-        if examination:
-            os.remove(os.path.join(UPLOAD_FOLDER, examination.path))
-            db.session.delete(examination)
-            db.session.commit()
-            flash(_("Examination successfully deleted."))
-        else:
-            flash(_("Examination could not be found."))
-        examinations = Examination.query.paginate(page_nr, 15, False)
-        return render_template('examination/admin.htm', path=path,
-                               examinations=examinations, search="",
-                               title=_('Examinations'))
-
-    if request.args.get('edit'):
-        exam_id = request.args.get('edit')
-        examination = Examination.query.filter(Examination.id == exam_id)\
-            .first()
-
-        os.remove(os.path.join(UPLOAD_FOLDER, examination.path))
-        db.session.delete(examination)
-        db.session.commit()
-
-    examinations = Examination.query.paginate(page_nr, 15, False)
-    return render_template('examination/admin.htm', path=path,
-                           examinations=examinations, search="", message="",
-                           title=_('Examinations'))
-
-
 @blueprint.route('/examination/edit/<int:exam_id>/', methods=['GET', 'POST'])
 @login_required
 def edit(exam_id):
@@ -384,7 +334,7 @@ def edit(exam_id):
 
 @blueprint.route('/courses/', methods=['GET'])
 def view_courses():
-    if not ModuleAPI.can_write('examination'):
+    if not ModuleAPI.can_write('examination', True):
         return abort(403)
 
     return render_template('course/view.htm')
@@ -392,7 +342,7 @@ def view_courses():
 
 @blueprint.route('/courses/api/get/', methods=['GET'])
 def get_courses():
-    if not ModuleAPI.can_write('examination'):
+    if not ModuleAPI.can_write('examination', True):
         return abort(403)
 
     courses = Course.query.all()
@@ -417,7 +367,7 @@ def add_course():
         session['origin'] = '/examination/edit/{}'.format(
             session['examination_edit_id'])
 
-    if not ModuleAPI.can_write('examination'):
+    if not ModuleAPI.can_write('examination', True):
         session['prev'] = 'examination.add_course'
         return abort(403)
 
@@ -460,7 +410,7 @@ def edit_course(course_id):
         session['origin'] = '/examination/edit/{}'.format(
             session['examination_edit_id'])
 
-    if not ModuleAPI.can_write('examination'):
+    if not ModuleAPI.can_write('examination', True):
         session['prev'] = 'examination.edit_course'
         return abort(403)
 
@@ -530,7 +480,7 @@ def edit_course(course_id):
 
 @blueprint.route('/educations/', methods=['GET'])
 def view_educations():
-    if not ModuleAPI.can_write('examination'):
+    if not ModuleAPI.can_write('examination', True):
         return abort(403)
 
     return render_template('education/view.htm')
@@ -538,7 +488,7 @@ def view_educations():
 
 @blueprint.route('/educations/api/get/', methods=['GET'])
 def get_educations():
-    if not ModuleAPI.can_write('examination'):
+    if not ModuleAPI.can_write('examination', True):
         return abort(403)
 
     educations = Education.query.all()
@@ -565,14 +515,14 @@ def get_educations():
 
 @blueprint.route('/education/add/', methods=['GET', 'POST'])
 def add_education():
-    r = request.args.get('redir')
+    r = request.args.get('redir', True)
     if r in REDIR_PAGES:
         session['origin'] = url_for(REDIR_PAGES[r])
     elif r == 'edit' and 'examination_edit_id' in session:
         session['origin'] = '/examination/edit/{}'.format(
             session['examination_edit_id'])
 
-    if not ModuleAPI.can_write('examination'):
+    if not ModuleAPI.can_write('examination', True):
         session['prev'] = 'examination.add_education'
         return abort(403)
 
@@ -615,7 +565,7 @@ def edit_education(education_id):
         session['origin'] = '/examination/edit/{}'.format(
             session['examination_edit_id'])
 
-    if not ModuleAPI.can_write('examination'):
+    if not ModuleAPI.can_write('examination', True):
         session['prev'] = 'examination.edit_education'
         return abort(403)
 
@@ -684,7 +634,7 @@ def edit_education(education_id):
 
 @blueprint.route('/examination/api/course/', methods=['POST'])
 def examination_api_course_add():
-    if not ModuleAPI.can_write('examination'):
+    if not ModuleAPI.can_write('examination', True):
         return abort(403)
 
     course_name = request.form.get('course_name', '')
@@ -706,7 +656,7 @@ def examination_api_course_add():
 
 @blueprint.route('/examination/api/education/', methods=['POST'])
 def examination_api_education_add():
-    if not ModuleAPI.can_write('examination'):
+    if not ModuleAPI.can_write('examination', True):
         return abort(403)
 
     education_name = request.form.get('education_name', '')

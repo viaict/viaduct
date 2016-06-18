@@ -4,24 +4,26 @@ import os
 import difflib
 from app.models.file import File
 from app import app, db
+from flask.ext.babel import lazy_gettext as _
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 UPLOAD_DIR = app.config['UPLOAD_DIR']
 
 
 class FileAPI:
-    '''
-    API for files.
-    '''
+    """API for files."""
 
     @staticmethod
     def upload(f):
         filename = f.filename
 
         # Check if the file is allowed.
-        if '.' not in filename or \
-                not filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS:
-            flash('Bestandstype is niet toegestaan.', 'danger')
+        if filename == '':
+            return
+
+        if '.' not in filename or not filename.rsplit('.', 1)[1].lower() \
+                in ALLOWED_EXTENSIONS:
+            flash(_('Filetype not allowed'), 'danger')
             return
 
         # Convert the name.
@@ -44,10 +46,11 @@ class FileAPI:
         db.session.commit()
 
         if new_file:
-            flash('Het bestand is succesvol geupload onder de naam '
-                  '<em>%s</em>' % (new_file.name))
+            flash(_('File created successfully'), 'success')
+
         else:
-            flash('Er is iets misgegaan, waarschuw de ICT-commissie', 'danger')
+            flash(_('An error occurred while uploading the file'),
+                  'danger')
 
         return new_file
 

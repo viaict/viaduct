@@ -126,7 +126,6 @@ p.report-bug{
 }
 #carousel div {
     text-align: center;
-    height: 250px;
     position: relative;
     float: left;
     display: block;
@@ -163,18 +162,14 @@ p.report-bug{
 #carousel div {
     text-align: center;
     width: 200px;
-    height: 165px;
     padding: 0 20px;
     float: left;
     position: relative;
 }
 #carousel div img {
     border: none;
-    width: 100%;
-    height: auto;
-}
-#carousel div span {
-    display: none;
+    width: auto;
+    max-height: 160px;
 }
 #carousel div:hover span,
 #carousel div.hover span {
@@ -594,15 +589,9 @@ div.sortable {
 #carousel div {
     text-align: center;
     width: 200px;
-    height: 140px;
     padding: 0 20px;
     float: left;
     position: relative;
-}
-#carousel div img {
-    border: none;
-    width: 100%;
-    height: auto;
 }
 #carousel div span {
     display: none;

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-06-06 17:41+0200\n"
+"POT-Creation-Date: 2016-06-18 17:38+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -16,6 +16,12 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
+
+msgid "A description is required."
+msgstr ""
+
+msgid "A title is required."
+msgstr ""
 
 msgid "A user with this e-mail address already exist."
 msgstr ""
@@ -61,6 +67,9 @@ msgstr ""
 msgid "An email has been sent to %(email) with further instructions."
 msgstr ""
 
+msgid "An error occurred while uploading the file"
+msgstr ""
+
 msgid "An image with this name already exists."
 msgstr ""
 
@@ -93,7 +102,7 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-msgid "Bilingualism is not fully implemented yet!"
+msgid "Bijbaan"
 msgstr ""
 
 msgid "Birthdate"
@@ -111,7 +120,6 @@ msgstr ""
 msgid "Cannot find parent navigation entry."
 msgstr ""
 
-#, fuzzy
 msgid "Captain's log succesfully ended."
 msgstr "."
 
@@ -139,19 +147,67 @@ msgstr ""
 msgid "Committees"
 msgstr ""
 
+msgid "Company"
+msgstr ""
+
+#, python-format
+msgid "Company \"%s\" deleted"
+msgstr ""
+
+#, python-format
+msgid "Company \"%s\" saved."
+msgstr ""
+
+msgid "Company Phone"
+msgstr ""
+
+msgid "Company email"
+msgstr ""
+
 msgid "Compare"
 msgstr ""
 
 msgid "Compiler Error"
 msgstr ""
 
+msgid "Contact Email"
+msgstr ""
+
+msgid "Contact Name"
+msgstr ""
+
+msgid "Contact Phone"
+msgstr ""
+
 msgid "Contact details"
+msgstr ""
+
+#, python-format
+msgid "Contact name \"%s\" is already in use."
+msgstr ""
+
+msgid "Contact person"
 msgstr ""
 
 msgid "Contest does not exist."
 msgstr ""
 
 msgid "Contests"
+msgstr ""
+
+msgid "Contract"
+msgstr ""
+
+msgid "Contract enddate"
+msgstr ""
+
+msgid "Contract enddate is required."
+msgstr ""
+
+msgid "Contract startdate"
+msgstr ""
+
+msgid "Contract startdate is required."
 msgstr ""
 
 msgid "Correct"
@@ -214,6 +270,9 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
+msgid "Deeltijd"
+msgstr ""
+
 msgid "Delete"
 msgstr ""
 
@@ -230,6 +289,9 @@ msgid "Delete news item"
 msgstr ""
 
 msgid "Description"
+msgstr ""
+
+msgid "Description is required."
 msgstr ""
 
 msgid "Disabled"
@@ -250,6 +312,9 @@ msgstr ""
 msgid "Dutch description"
 msgstr ""
 
+msgid "Dutch description (max. 180 characters)"
+msgstr ""
+
 msgid "Dutch details"
 msgstr ""
 
@@ -257,6 +322,9 @@ msgid "Dutch name"
 msgstr ""
 
 msgid "Dutch name requires Dutch description and vice versa"
+msgstr ""
+
+msgid "Dutch tags (comma seperated)"
 msgstr ""
 
 msgid "Dutch title"
@@ -331,6 +399,12 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
+msgid "End date"
+msgstr ""
+
+msgid "End date is required."
+msgstr ""
+
 msgid "End time"
 msgstr ""
 
@@ -403,7 +477,13 @@ msgstr ""
 msgid "Favourer"
 msgstr ""
 
+msgid "File created successfully"
+msgstr ""
+
 msgid "File does not exist, examination deleted."
+msgstr ""
+
+msgid "Filetype not allowed"
 msgstr ""
 
 msgid "Filter groups"
@@ -511,6 +591,9 @@ msgstr ""
 msgid "Log in"
 msgstr ""
 
+msgid "Logo"
+msgstr ""
+
 msgid "Member"
 msgstr ""
 
@@ -529,16 +612,14 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
+#, python-format
+msgid "Name \"%s\" is already in use."
+msgstr ""
+
+msgid "Name is required."
+msgstr ""
+
 msgid "Navigation entry"
-msgstr ""
-
-msgid "Nederlandse beschrijving (max. 180 karakters)"
-msgstr ""
-
-msgid "Nederlandse tags (komma seperated)"
-msgstr ""
-
-msgid "Nederlanse titel"
 msgstr ""
 
 msgid "New Examination"
@@ -619,6 +700,9 @@ msgstr ""
 msgid "No last name submitted"
 msgstr ""
 
+msgid "No location"
+msgstr ""
+
 msgid "No password submitted"
 msgstr ""
 
@@ -676,7 +760,13 @@ msgstr ""
 msgid "Please fill in"
 msgstr ""
 
+msgid "Please fill in :D"
+msgstr ""
+
 msgid "Position vacant"
+msgstr ""
+
+msgid "Postoffice Box"
 msgstr ""
 
 msgid "Previous"
@@ -703,13 +793,11 @@ msgstr ""
 msgid "Problems"
 msgstr ""
 
-#, fuzzy
 msgid "Profile succesfully created"
-msgstr "."
+msgstr ""
 
-#, fuzzy
 msgid "Profile succesfully updated"
-msgstr "."
+msgstr ""
 
 msgid "Public"
 msgstr ""
@@ -786,6 +874,9 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
+msgid "Search for title, contact or company"
+msgstr ""
+
 msgid "Select a time and date by clicking on the clock"
 msgstr ""
 
@@ -844,6 +935,15 @@ msgstr ""
 msgid "Specified examination does not exist"
 msgstr ""
 
+msgid "Stage"
+msgstr ""
+
+msgid "Start date"
+msgstr ""
+
+msgid "Start date is required."
+msgstr ""
+
 msgid "Start time"
 msgstr ""
 
@@ -857,6 +957,9 @@ msgid "Studentnumber"
 msgstr ""
 
 msgid "Study"
+msgstr ""
+
+msgid "Study Association"
 msgstr ""
 
 msgid "Study course"
@@ -966,6 +1069,10 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
+#, python-format
+msgid "Title \"%s\" is already in use."
+msgstr ""
+
 msgid "Too late"
 msgstr ""
 
@@ -998,6 +1105,21 @@ msgstr ""
 msgid "Using the bookstore requires an account."
 msgstr ""
 
+msgid "Vacancy created"
+msgstr ""
+
+msgid "Vacancy deleted"
+msgstr ""
+
+msgid "Vacancy saved"
+msgstr ""
+
+msgid "Vacany"
+msgstr ""
+
+msgid "Valid membership is required for the examination module"
+msgstr ""
+
 msgid "Vancancies"
 msgstr ""
 
@@ -1010,12 +1132,18 @@ msgstr ""
 msgid "Visible for members only"
 msgstr ""
 
+msgid "Voltijd"
+msgstr ""
+
 msgid ""
 "We'd be delighted to help if you have any further questions. You can "
 "contact us by sending an e-mail to:<em>bestuur (at) svia (dot) nl</em>."
 msgstr ""
 
 msgid "We've encountered an internal server error"
+msgstr ""
+
+msgid "Website"
 msgstr ""
 
 msgid "Welcome"
@@ -1025,6 +1153,12 @@ msgstr ""
 msgid ""
 "Welcome %(name)s! Your profile has been succesfully created and you have "
 "been logged in!"
+msgstr ""
+
+msgid "Workload"
+msgstr ""
+
+msgid "Workload is required."
 msgstr ""
 
 msgid "Would you like to recieve information from companies?"
@@ -1057,6 +1191,9 @@ msgstr ""
 msgid "You must be logged-in to register for an activity."
 msgstr ""
 
+msgid "You need to be logged in to set a permanent language."
+msgstr ""
+
 msgid "Your account has been disabled, you are not allowed to log in"
 msgstr ""
 
@@ -1069,7 +1206,7 @@ msgstr ""
 msgid "Your registration has been completed"
 msgstr ""
 
-msgid "Zipcode"
+msgid "Zip code"
 msgstr ""
 
 msgid "ago"
@@ -1079,6 +1216,12 @@ msgid "at"
 msgstr ""
 
 msgid "committee"
+msgstr ""
+
+msgid "create"
+msgstr ""
+
+msgid "edit"
 msgstr ""
 
 msgid "free"
@@ -1105,7 +1248,18 @@ msgstr ""
 msgid "still"
 msgstr ""
 
+msgid ""
+"via, short for 'Vereniging Informatiewetenschappen Amsterdam' (Dutch), is"
+" the study association for Computer Science, Artificial Intelligence and "
+"Information Science at the University of Amsterdam."
+msgstr ""
+
 msgid "view"
+msgstr ""
+
+msgid ""
+"{} is now set as language for this session. To make this setting "
+"permanent, <a href='{}'>click here</a>"
 msgstr ""
 
 #~ msgid "Participants of this activity"
@@ -1235,5 +1389,29 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Total time"
+#~ msgstr ""
+
+#~ msgid "Vul a.u.b in :D"
+#~ msgstr ""
+
+#~ msgid "Bilingualism is not fully implemented yet!"
+#~ msgstr ""
+
+#~ msgid "Studievereniging"
+#~ msgstr ""
+
+#~ msgid "Nederlandse beschrijving (max. 180 karakters)"
+#~ msgstr ""
+
+#~ msgid "Nederlandse tags (komma seperated)"
+#~ msgstr ""
+
+#~ msgid "Nederlanse titel"
+#~ msgstr ""
+
+#~ msgid "Zipcode"
+#~ msgstr ""
+
+#~ msgid "Contactpersoon"
 #~ msgstr ""
 

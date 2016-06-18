@@ -1,4 +1,4 @@
-# Version 2.6.6.5
+# Version 2.6.7.0
 Versioning works as follows: vSYSTEM.FEATURE.IMPROVEMENT.BUG-/HOTFIX
 
 #Viaduct (Opensourced, yeah)
@@ -8,7 +8,7 @@ See [tutorial](TUTORIAL.md).
 ## Setup:
 Ubuntu install packages (other OS's should install similar stuff):
 ```bash
-sudo apt-get install python3 sqlite python3-pip virtualenv mysql-server git-flow npm \
+sudo apt-get install python3 python3-pip python-virtualenv mysql-server git-flow npm \
 nodejs libjpeg-dev libffi-dev ruby
 ln -s /usr/bin/nodejs /usr/bin/node
 ```

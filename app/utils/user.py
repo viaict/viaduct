@@ -13,6 +13,8 @@ from flask import render_template
 from app.models.group import Group
 from app.utils.file import FileAPI
 
+from flask.ext.babel import lazy_gettext as _
+
 ALLOWED_EXTENSIONS = set(['png', 'gif', 'jpg', 'jpeg'])
 UPLOAD_DIR = 'app/static/files/users/'
 
@@ -70,10 +72,14 @@ class UserAPI:
         previous uploaded avatars.
         """
         filename = f.filename
+
         # Check if the file is allowed.
-        if '.' not in filename or \
-                not filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS:
-            flash('Bestandstype is niet toegestaan.', 'danger')
+        if filename == '':
+            return
+
+        if '.' not in filename or not filename.rsplit('.', 1)[1].lower() \
+                in ALLOWED_EXTENSIONS:
+            flash(_('Filetype not allowed'), 'danger')
             return
 
         # convert the name.

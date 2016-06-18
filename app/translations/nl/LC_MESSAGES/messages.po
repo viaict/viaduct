@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-06-06 17:41+0200\n"
+"POT-Creation-Date: 2016-06-18 17:38+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -16,6 +16,12 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
+
+msgid "A description is required."
+msgstr "Geen omschrijving opgegeven."
+
+msgid "A title is required."
+msgstr "Een titel is vereist."
 
 msgid "A user with this e-mail address already exist."
 msgstr "Er bestaat al een gebruiker met dat emailadres."
@@ -61,6 +67,9 @@ msgstr "Aantal opgelost"
 msgid "An email has been sent to %(email) with further instructions."
 msgstr "Er is een email verstuurd naar %(email) met verdere instructies."
 
+msgid "An error occurred while uploading the file"
+msgstr "Er is een fout opgetreden bij het uploaden van het bestand"
+
 msgid "An image with this name already exists."
 msgstr "Er bestaat al een plaatje met deze naam."
 
@@ -95,8 +104,8 @@ msgstr ""
 msgid "Back"
 msgstr "Terug"
 
-msgid "Bilingualism is not fully implemented yet!"
-msgstr "Tweetaligheid is nog niet volledig ondersteund!"
+msgid "Bijbaan"
+msgstr "Bijbaan"
 
 msgid "Birthdate"
 msgstr "Geboortedatum"
@@ -142,20 +151,68 @@ msgstr "Commissieleden"
 msgid "Committees"
 msgstr "Commissies"
 
+msgid "Company"
+msgstr "Bedrijf"
+
+#, python-format
+msgid "Company \"%s\" deleted"
+msgstr "Bedrijf verwijderd"
+
+#, python-format
+msgid "Company \"%s\" saved."
+msgstr "Bedrijf opgeslagen."
+
+msgid "Company Phone"
+msgstr "Bedrijf telefoon"
+
+msgid "Company email"
+msgstr "Bedrijf email"
+
 msgid "Compare"
 msgstr "Vergelijken"
 
 msgid "Compiler Error"
 msgstr "Compileerfout"
 
+msgid "Contact Email"
+msgstr "Contact email"
+
+msgid "Contact Name"
+msgstr "Contact Naam"
+
+msgid "Contact Phone"
+msgstr ""
+
 msgid "Contact details"
 msgstr "Contact gegevens"
+
+#, python-format
+msgid "Contact name \"%s\" is already in use."
+msgstr "Contact naam \" %s \" wordt al gebruikt."
+
+msgid "Contact person"
+msgstr "Contactpersoon"
 
 msgid "Contest does not exist."
 msgstr "Wedstrijd bestaat niet."
 
 msgid "Contests"
 msgstr "Wedstrijden"
+
+msgid "Contract"
+msgstr "Contract"
+
+msgid "Contract enddate"
+msgstr "Contract einddatum"
+
+msgid "Contract enddate is required."
+msgstr "Contract startdatum is vereist"
+
+msgid "Contract startdate"
+msgstr "Contract startdatum"
+
+msgid "Contract startdate is required."
+msgstr "Contract startdatum is vereist"
 
 msgid "Correct"
 msgstr "Correct"
@@ -217,6 +274,9 @@ msgstr "Huidige plaatje"
 msgid "Date"
 msgstr "Datum"
 
+msgid "Deeltijd"
+msgstr "Deeltijd"
+
 msgid "Delete"
 msgstr "Verwijderen"
 
@@ -234,6 +294,9 @@ msgstr "Verwijder nieuwsbericht"
 
 msgid "Description"
 msgstr "Beschrijving"
+
+msgid "Description is required."
+msgstr "Omschrijving is vereist."
 
 msgid "Disabled"
 msgstr "Uitgeschakeld"
@@ -253,6 +316,9 @@ msgstr "Nederlandse inhoud"
 msgid "Dutch description"
 msgstr "Nederlandse beschrijving"
 
+msgid "Dutch description (max. 180 characters)"
+msgstr "Nederlandse beschrijving (max. 180 characters)"
+
 msgid "Dutch details"
 msgstr "Nederlandse gegevens"
 
@@ -261,6 +327,9 @@ msgstr "Nederlandse naam"
 
 msgid "Dutch name requires Dutch description and vice versa"
 msgstr "Nederlandse naam vereist Nederlandse beschrijving en vica versa."
+
+msgid "Dutch tags (comma seperated)"
+msgstr "Nederlandse tags (komma gescheiden)"
 
 msgid "Dutch title"
 msgstr "Nederlandse titel"
@@ -334,6 +403,12 @@ msgstr "Een Nederlandse of Engelse titel is vereist."
 msgid "Email"
 msgstr "Email adres"
 
+msgid "End date"
+msgstr "Einddatum"
+
+msgid "End date is required."
+msgstr "Einddatum is vereist"
+
 msgid "End time"
 msgstr "Eindtijd"
 
@@ -362,7 +437,7 @@ msgid "English name requires English description and vice versa"
 msgstr "Engelse naam vereist Engelse beschrijving en vica versa."
 
 msgid "English tags (comma seperated)"
-msgstr ""
+msgstr "Engelse tags (komma gescheiden)"
 
 msgid "English title"
 msgstr "Engelse titel"
@@ -406,8 +481,14 @@ msgstr "Externe link"
 msgid "Favourer"
 msgstr "Begunstigde"
 
+msgid "File created successfully"
+msgstr "Bestand succesvol opgeslagen."
+
 msgid "File does not exist, examination deleted."
 msgstr "Bestand bestaat niet, tentamen verwijderd."
+
+msgid "Filetype not allowed"
+msgstr "Bestandstype niet toegestaan"
 
 msgid "Filter groups"
 msgstr "Filter groepen"
@@ -516,6 +597,9 @@ msgstr "Locatie"
 msgid "Log in"
 msgstr "Log in"
 
+msgid "Logo"
+msgstr "Logo"
+
 msgid "Member"
 msgstr "Lid"
 
@@ -534,17 +618,15 @@ msgstr "Bewerken"
 msgid "Name"
 msgstr "Naam"
 
+#, python-format
+msgid "Name \"%s\" is already in use."
+msgstr "Naam \" %s \" wordt al gebruikt."
+
+msgid "Name is required."
+msgstr "Naam is vereist"
+
 msgid "Navigation entry"
 msgstr "Menu item"
-
-msgid "Nederlandse beschrijving (max. 180 karakters)"
-msgstr ""
-
-msgid "Nederlandse tags (komma seperated)"
-msgstr ""
-
-msgid "Nederlanse titel"
-msgstr ""
 
 msgid "New Examination"
 msgstr "Nieuw tentamen"
@@ -624,6 +706,9 @@ msgstr "Geen bug soort opgegeven"
 msgid "No last name submitted"
 msgstr "Geen achternaam opgeveven"
 
+msgid "No location"
+msgstr "Geen locatie"
+
 msgid "No password submitted"
 msgstr "Geen wachtwoord opgegeven"
 
@@ -681,8 +766,14 @@ msgstr "Telefoonnummer"
 msgid "Please fill in"
 msgstr "Alstublief invullen"
 
+msgid "Please fill in :D"
+msgstr "Vul a.u.b. in :D"
+
 msgid "Position vacant"
 msgstr "Positie openstaand"
+
+msgid "Postoffice Box"
+msgstr "Postbus"
 
 msgid "Previous"
 msgstr "Vorige"
@@ -769,7 +860,7 @@ msgid "Reset password"
 msgstr "Reset wachtwoord"
 
 msgid "Result"
-msgstr ""
+msgstr "Resultaat"
 
 msgid "Retake"
 msgstr "Herkansing"
@@ -788,6 +879,9 @@ msgstr "Scorebord"
 
 msgid "Search"
 msgstr "Zoeken"
+
+msgid "Search for title, contact or company"
+msgstr "Zoeken op titel, contact of bedrijf"
 
 msgid "Select a time and date by clicking on the clock"
 msgstr "Selecteer een tijd en datum door op de klok te klikken"
@@ -851,6 +945,15 @@ msgstr "Broncode bestand"
 msgid "Specified examination does not exist"
 msgstr "Opgegeven tentamen bestaat niet"
 
+msgid "Stage"
+msgstr "Stage"
+
+msgid "Start date"
+msgstr "Startdatum"
+
+msgid "Start date is required."
+msgstr "Startdatum is vereist"
+
 msgid "Start time"
 msgstr "Starttijd"
 
@@ -865,6 +968,9 @@ msgstr "Studenten ID"
 
 msgid "Study"
 msgstr "Studie"
+
+msgid "Study Association"
+msgstr "Studievereniging"
 
 msgid "Study course"
 msgstr "Studie"
@@ -982,6 +1088,10 @@ msgstr "Tip"
 msgid "Title"
 msgstr "Titel"
 
+#, python-format
+msgid "Title \"%s\" is already in use."
+msgstr "Titel \" %s \" wordt al gebruikt."
+
 msgid "Too late"
 msgstr "Te laat"
 
@@ -1016,6 +1126,21 @@ msgstr "Gebruikerstips"
 msgid "Using the bookstore requires an account."
 msgstr "Voor het gebruik van de boekenwinkel is een account vereist."
 
+msgid "Vacancy created"
+msgstr "Vacature aangemaakt"
+
+msgid "Vacancy deleted"
+msgstr "Vacature verwijderd"
+
+msgid "Vacancy saved"
+msgstr "Vacature opgeslagen"
+
+msgid "Vacany"
+msgstr "Vacature"
+
+msgid "Valid membership is required for the examination module"
+msgstr "Geldig lidmaatschap is vereist voor de tentamenbank"
+
 msgid "Vancancies"
 msgstr "Vacatures"
 
@@ -1028,6 +1153,9 @@ msgstr "Weergeven"
 msgid "Visible for members only"
 msgstr "Alleen zichtbaar voor leden"
 
+msgid "Voltijd"
+msgstr "Voltijd"
+
 msgid ""
 "We'd be delighted to help if you have any further questions. You can "
 "contact us by sending an e-mail to:<em>bestuur (at) svia (dot) nl</em>."
@@ -1039,6 +1167,9 @@ msgstr ""
 msgid "We've encountered an internal server error"
 msgstr "We zijn een interne server fout tegen gekomen"
 
+msgid "Website"
+msgstr "Website"
+
 msgid "Welcome"
 msgstr "Gegroet"
 
@@ -1047,6 +1178,12 @@ msgid ""
 "Welcome %(name)s! Your profile has been succesfully created and you have "
 "been logged in!"
 msgstr "Welkom %(name)s! Je profiel is aangemaakt en je bent ingelogd!"
+
+msgid "Workload"
+msgstr "Werklast"
+
+msgid "Workload is required."
+msgstr "Werklast is vereist."
 
 msgid "Would you like to recieve information from companies?"
 msgstr "Wil je informatie van bedrijven ontvangen?"
@@ -1078,6 +1215,9 @@ msgstr "Je moet ingelogd zijn om een formulier in te vullen."
 msgid "You must be logged-in to register for an activity."
 msgstr "Je moet ingelogd zijn om je te registeren voor een activiteit."
 
+msgid "You need to be logged in to set a permanent language."
+msgstr "Je moet ingelogd zijn om een permanente taal in te stellen."
+
 msgid "Your account has been disabled, you are not allowed to log in"
 msgstr "Je account is gedeactiveerd, je mag niet inloggen"
 
@@ -1090,7 +1230,7 @@ msgstr "Uw wachtwoord is geüpdatet."
 msgid "Your registration has been completed"
 msgstr "Je inschrijving is voltooid"
 
-msgid "Zipcode"
+msgid "Zip code"
 msgstr "Postcode"
 
 msgid "ago"
@@ -1101,6 +1241,12 @@ msgstr "om"
 
 msgid "committee"
 msgstr "commissie"
+
+msgid "create"
+msgstr "aanmaken"
+
+msgid "edit"
+msgstr "aanpassen"
 
 msgid "free"
 msgstr "gratis"
@@ -1126,8 +1272,24 @@ msgstr ""
 msgid "still"
 msgstr "nog"
 
+msgid ""
+"via, short for 'Vereniging Informatiewetenschappen Amsterdam' (Dutch), is"
+" the study association for Computer Science, Artificial Intelligence and "
+"Information Science at the University of Amsterdam."
+msgstr ""
+"via, kort voor 'Vereniging Informatiewetenschappen Amsterdam' is de "
+"studievereniging voor Informatica, Kunstmatige Intelligentie en "
+"Informatiekunde aan de Universiteit van Amsterdam."
+
 msgid "view"
 msgstr "bekijken"
+
+msgid ""
+"{} is now set as language for this session. To make this setting "
+"permanent, <a href='{}'>click here</a>"
+msgstr ""
+"{} is nu de taal voor deze sessie. Om deze instelling permanent te maken,"
+" <a href='{}'>klik hier</a>."
 
 #~ msgid "Content"
 #~ msgstr "Inhoud"
@@ -1174,15 +1336,30 @@ msgstr "bekijken"
 #~ msgid "Custom form"
 #~ msgstr "Formulier"
 
-#~ msgid "Problem"
-#~ msgstr "Problemen"
-
-#~ msgid "Result"
-#~ msgstr "Resultaat"
-
-#~ msgid "Time"
-#~ msgstr "Tijd"
-
 #~ msgid "Total time"
 #~ msgstr "Totale tijd"
+
+#~ msgid "Vul a.u.b in :D"
+#~ msgstr "Please fill in :D"
+
+#~ msgid "Bilingualism is not fully implemented yet!"
+#~ msgstr "Tweetaligheid is nog niet volledig ondersteund!"
+
+#~ msgid ""
+#~ msgstr ""
+
+#~ msgid "Studievereniging"
+#~ msgstr "Study association"
+
+#~ msgid "Nederlandse beschrijving (max. 180 karakters)"
+#~ msgstr ""
+
+#~ msgid "Nederlandse tags (komma seperated)"
+#~ msgstr ""
+
+#~ msgid "Nederlanse titel"
+#~ msgstr ""
+
+#~ msgid "Contactpersoon"
+#~ msgstr ""
 

@@ -1,9 +1,7 @@
 # coding=utf-8
-
 from app import app
 from app.models import User
 
-from flask import flash
 from flask_wtf import Form
 from wtforms import StringField, PasswordField, BooleanField, \
     SelectField, IntegerField, FileField
@@ -64,7 +62,7 @@ class BaseUserForm(Form):
     phone_nr = StringField(_('Phone'))
 
     address = StringField(_('Address'))
-    zip = StringField(_('Zipcode'))
+    zip = StringField(_('Zip code'))
     city = StringField(_('City'))
     country = StringField(_('Country'), default='Nederland')
 
@@ -97,7 +95,8 @@ class SignUpForm(BaseUserForm):
 
 
 class EditUserForm(BaseUserForm):
-    """ Edit a user as administrator """
+    """Edit a user as administrator."""
+
     id = IntegerField('ID')
     password = PasswordField(_('Password'))
     repeat_password = PasswordField(_('Repeat password'))
@@ -106,19 +105,20 @@ class EditUserForm(BaseUserForm):
     favourer = BooleanField(_('Favourer'))
     disabled = BooleanField(_('Disabled'))
 
-    def validate_password(form, field):
+    def validate_password(self, field):
         """Providing a password is only required when creating a new user."""
-        if form.id.data == 0 and len(field.data) == 0:
+        if self.id.data == 0 and len(field.data) == 0:
             raise ValidationError(_('No password submitted'))
 
-    def validate_repeat_password(form, field):
+    def validate_repeat_password(self, field):
         """Only validate the repeat password if a password is set."""
-        if len(form.password.data) > 0 and field.data != form.password.data:
+        if len(self.password.data) > 0 and field.data != self.password.data:
             raise ValidationError(_('Passwords do not match'))
 
 
 class EditUserInfoForm(BaseUserForm):
-    """ Edit your own user information """
+    """Edit your own user information."""
+
     id = IntegerField('ID')
     password = PasswordField(
         _('Password'), validators=[
@@ -131,14 +131,14 @@ class EditUserInfoForm(BaseUserForm):
             EqualTo('password', message=_('Passwords do not match'))]
     )
 
-    def validate_password(form, field):
+    def validate_password(self, field):
         """Providing a password is only required when creating a new user."""
-        if form.id.data == 0 and len(field.data) == 0:
+        if self.id.data == 0 and len(field.data) == 0:
             raise ValidationError(_('No password submitted'))
 
-    def validate_repeat_password(form, field):
+    def validate_repeat_password(self, field):
         """Only validate the repeat password if a password is set."""
-        if len(form.password.data) > 0 and field.data != form.password.data:
+        if len(self.password.data) > 0 and field.data != self.password.data:
             raise ValidationError(_('Passwords do not match'))
 
 

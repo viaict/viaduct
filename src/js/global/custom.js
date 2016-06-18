@@ -7,6 +7,7 @@ $(document).ready(function() {
         var $c = $('#carousel');
 
         $c.carouFredSel({
+            height: 180,
             align: false,
             items: 6,
             scroll: {
