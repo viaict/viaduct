@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-06-18 16:24+0200\n"
+"POT-Creation-Date: 2016-06-18 17:38+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -154,14 +154,44 @@ msgstr "Commissies"
 msgid "Company"
 msgstr "Bedrijf"
 
+#, python-format
+msgid "Company \"%s\" deleted"
+msgstr "Bedrijf verwijderd"
+
+#, python-format
+msgid "Company \"%s\" saved."
+msgstr "Bedrijf opgeslagen."
+
+msgid "Company Phone"
+msgstr "Bedrijf telefoon"
+
+msgid "Company email"
+msgstr "Bedrijf email"
+
 msgid "Compare"
 msgstr "Vergelijken"
 
 msgid "Compiler Error"
 msgstr "Compileerfout"
 
+msgid "Contact Email"
+msgstr "Contact email"
+
+msgid "Contact Name"
+msgstr "Contact Naam"
+
+msgid "Contact Phone"
+msgstr ""
+
 msgid "Contact details"
 msgstr "Contact gegevens"
+
+#, python-format
+msgid "Contact name \"%s\" is already in use."
+msgstr "Contact naam \" %s \" wordt al gebruikt."
+
+msgid "Contact person"
+msgstr "Contactpersoon"
 
 msgid "Contest does not exist."
 msgstr "Wedstrijd bestaat niet."
@@ -171,6 +201,18 @@ msgstr "Wedstrijden"
 
 msgid "Contract"
 msgstr "Contract"
+
+msgid "Contract enddate"
+msgstr "Contract einddatum"
+
+msgid "Contract enddate is required."
+msgstr "Contract startdatum is vereist"
+
+msgid "Contract startdate"
+msgstr "Contract startdatum"
+
+msgid "Contract startdate is required."
+msgstr "Contract startdatum is vereist"
 
 msgid "Correct"
 msgstr "Correct"
@@ -252,6 +294,9 @@ msgstr "Verwijder nieuwsbericht"
 
 msgid "Description"
 msgstr "Beschrijving"
+
+msgid "Description is required."
+msgstr "Omschrijving is vereist."
 
 msgid "Disabled"
 msgstr "Uitgeschakeld"
@@ -552,6 +597,9 @@ msgstr "Locatie"
 msgid "Log in"
 msgstr "Log in"
 
+msgid "Logo"
+msgstr "Logo"
+
 msgid "Member"
 msgstr "Lid"
 
@@ -569,6 +617,13 @@ msgstr "Bewerken"
 
 msgid "Name"
 msgstr "Naam"
+
+#, python-format
+msgid "Name \"%s\" is already in use."
+msgstr "Naam \" %s \" wordt al gebruikt."
+
+msgid "Name is required."
+msgstr "Naam is vereist"
 
 msgid "Navigation entry"
 msgstr "Menu item"
@@ -716,6 +771,9 @@ msgstr "Vul a.u.b. in :D"
 
 msgid "Position vacant"
 msgstr "Positie openstaand"
+
+msgid "Postoffice Box"
+msgstr "Postbus"
 
 msgid "Previous"
 msgstr "Vorige"
@@ -1109,6 +1167,9 @@ msgstr ""
 msgid "We've encountered an internal server error"
 msgstr "We zijn een interne server fout tegen gekomen"
 
+msgid "Website"
+msgstr "Website"
+
 msgid "Welcome"
 msgstr "Gegroet"
 
@@ -1169,7 +1230,7 @@ msgstr "Uw wachtwoord is geüpdatet."
 msgid "Your registration has been completed"
 msgstr "Je inschrijving is voltooid"
 
-msgid "Zipcode"
+msgid "Zip code"
 msgstr "Postcode"
 
 msgid "ago"
@@ -1297,5 +1358,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Nederlanse titel"
+#~ msgstr ""
+
+#~ msgid "Contactpersoon"
 #~ msgstr ""
 

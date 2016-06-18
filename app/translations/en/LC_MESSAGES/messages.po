@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-06-18 16:24+0200\n"
+"POT-Creation-Date: 2016-06-18 17:38+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -150,13 +150,43 @@ msgstr ""
 msgid "Company"
 msgstr ""
 
+#, python-format
+msgid "Company \"%s\" deleted"
+msgstr ""
+
+#, python-format
+msgid "Company \"%s\" saved."
+msgstr ""
+
+msgid "Company Phone"
+msgstr ""
+
+msgid "Company email"
+msgstr ""
+
 msgid "Compare"
 msgstr ""
 
 msgid "Compiler Error"
 msgstr ""
 
+msgid "Contact Email"
+msgstr ""
+
+msgid "Contact Name"
+msgstr ""
+
+msgid "Contact Phone"
+msgstr ""
+
 msgid "Contact details"
+msgstr ""
+
+#, python-format
+msgid "Contact name \"%s\" is already in use."
+msgstr ""
+
+msgid "Contact person"
 msgstr ""
 
 msgid "Contest does not exist."
@@ -166,6 +196,18 @@ msgid "Contests"
 msgstr ""
 
 msgid "Contract"
+msgstr ""
+
+msgid "Contract enddate"
+msgstr ""
+
+msgid "Contract enddate is required."
+msgstr ""
+
+msgid "Contract startdate"
+msgstr ""
+
+msgid "Contract startdate is required."
 msgstr ""
 
 msgid "Correct"
@@ -247,6 +289,9 @@ msgid "Delete news item"
 msgstr ""
 
 msgid "Description"
+msgstr ""
+
+msgid "Description is required."
 msgstr ""
 
 msgid "Disabled"
@@ -546,6 +591,9 @@ msgstr ""
 msgid "Log in"
 msgstr ""
 
+msgid "Logo"
+msgstr ""
+
 msgid "Member"
 msgstr ""
 
@@ -562,6 +610,13 @@ msgid "Modify"
 msgstr ""
 
 msgid "Name"
+msgstr ""
+
+#, python-format
+msgid "Name \"%s\" is already in use."
+msgstr ""
+
+msgid "Name is required."
 msgstr ""
 
 msgid "Navigation entry"
@@ -709,6 +764,9 @@ msgid "Please fill in :D"
 msgstr ""
 
 msgid "Position vacant"
+msgstr ""
+
+msgid "Postoffice Box"
 msgstr ""
 
 msgid "Previous"
@@ -1085,6 +1143,9 @@ msgstr ""
 msgid "We've encountered an internal server error"
 msgstr ""
 
+msgid "Website"
+msgstr ""
+
 msgid "Welcome"
 msgstr ""
 
@@ -1145,7 +1206,7 @@ msgstr ""
 msgid "Your registration has been completed"
 msgstr ""
 
-msgid "Zipcode"
+msgid "Zip code"
 msgstr ""
 
 msgid "ago"
@@ -1346,5 +1407,11 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Nederlanse titel"
+#~ msgstr ""
+
+#~ msgid "Zipcode"
+#~ msgstr ""
+
+#~ msgid "Contactpersoon"
 #~ msgstr ""
 

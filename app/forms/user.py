@@ -62,7 +62,7 @@ class BaseUserForm(Form):
     phone_nr = StringField(_('Phone'))
 
     address = StringField(_('Address'))
-    zip = StringField(_('Zipcode'))
+    zip = StringField(_('Zip code'))
     city = StringField(_('City'))
     country = StringField(_('Country'), default='Nederland')
 

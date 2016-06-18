@@ -1,41 +1,47 @@
 from flask_wtf import Form
 from flask_wtf.file import FileField
-from wtforms import StringField, SelectField, TextAreaField, DateField, \
-    SubmitField
+from flask.ext.babel import lazy_gettext as _
+from wtforms import StringField, SelectField, TextAreaField, DateField
 from wtforms.validators import InputRequired
 
 
 class CompanyForm(Form):
-    name = StringField('Naam', validators=[InputRequired()])
-    description = TextAreaField('Beschrijving', validators=[InputRequired()])
-    contract_start_date = DateField('Contract begindatum',
-                                    validators=[InputRequired()])
-    contract_end_date = DateField('Contract einddatum',
-                                  validators=[InputRequired()])
+    name = StringField(_('Name'), validators=[InputRequired(
+        message=_("Name is required."))])
+    description = TextAreaField('Description', validators=[InputRequired(
+        message=_("Description is required."))])
+    contract_start_date = DateField(
+        _('Contract startdate'), validators=[InputRequired(
+            message=_("Contract startdate is required."))])
+    contract_end_date = DateField(
+        _('Contract enddate'), validators=[InputRequired(
+            message=_("Contract enddate is required."))])
     location_id = SelectField('Locatie', coerce=int)
-    file = FileField('Logo')
-    contact_id = SelectField('Contactpersoon', coerce=int)
-    website = StringField('Website')
-    submit = SubmitField('Opslaan')
+    file = FileField(_('Logo'))
+    contact_id = SelectField(_('Contact person'), coerce=int)
+    website = StringField(_('Website'))
 
 
 class NewCompanyForm(Form):
-    name = StringField('Naam', validators=[InputRequired()])
-    description = TextAreaField('Beschrijving', validators=[InputRequired()])
-    contract_start_date = DateField('Contract begindatum',
-                                    validators=[InputRequired()])
-    contract_end_date = DateField('Contract einddatum',
-                                  validators=[InputRequired()])
-    file = FileField('Logo')
-    website = StringField('Website')
-    contact_name = StringField('Contact Naam')
-    contact_email = StringField('Contact Email')
-    contact_phone_nr = StringField('Contact Telefoon')
-    location_city = StringField('Plaats')
-    location_country = StringField('Land')
-    location_address = StringField('Adres')
-    location_zip = StringField('Postcode')
-    location_postoffice_box = StringField('Postbus')
-    location_email = StringField('Bedrijf Email')
-    location_phone_nr = StringField('Bedrijf Telefoon')
-    submit = SubmitField('Opslaan')
+    name = StringField(_('Name'), validators=[InputRequired(
+        message=_("Name is required."))])
+    description = TextAreaField('Description', validators=[InputRequired(
+        message=_("Description is required."))])
+    contract_start_date = DateField(
+        _('Contract startdate'), validators=[InputRequired(
+            message=_("Contract startdate is required."))])
+    contract_end_date = DateField(
+        _('Contract enddate'), validators=[InputRequired(
+            message=_("Contract enddate is required."))])
+    file = FileField(_('Logo'))
+    website = StringField(_('Website'))
+    contact_name = StringField(_('Contact Name'))
+    contact_email = StringField(_('Contact Email'))
+    contact_phone_nr = StringField(_('Contact Phone'))
+    location_city = StringField(_('City'))
+    location_country = StringField(_('Country'))
+    location_address = StringField(_('Address'))
+    location_zip = StringField(_('Zip code'))
+    location_postoffice_box = StringField(_('Postoffice Box'))
+    location_email = StringField(_('Company email'))
+    location_phone_nr = StringField(_('Company Phone'))
