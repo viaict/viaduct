@@ -97,7 +97,8 @@ def edit(vacancy_id=None):
                                order_by('name')]
 
     if form.validate_on_submit():
-        if Vacancy.query.filter(Vacancy.title == form.title.data).count():
+        if not vacancy.id and Vacancy.query.filter(
+                Vacancy.title == form.title.data).count():
             flash(_('Title "%s" is already in use.' % form.title.data),
                   'danger')
             return render_template('vacancy/edit.htm', vacancy=vacancy,
