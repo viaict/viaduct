@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-06-18 13:08+0200\n"
+"POT-Creation-Date: 2016-06-18 16:24+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -66,6 +66,9 @@ msgstr "Aantal opgelost"
 
 msgid "An email has been sent to %(email) with further instructions."
 msgstr "Er is een email verstuurd naar %(email) met verdere instructies."
+
+msgid "An error occurred while uploading the file"
+msgstr "Er is een fout opgetreden bij het uploaden van het bestand"
 
 msgid "An image with this name already exists."
 msgstr "Er bestaat al een plaatje met deze naam."
@@ -433,8 +436,14 @@ msgstr "Externe link"
 msgid "Favourer"
 msgstr "Begunstigde"
 
+msgid "File created successfully"
+msgstr "Bestand succesvol opgeslagen."
+
 msgid "File does not exist, examination deleted."
 msgstr "Bestand bestaat niet, tentamen verwijderd."
+
+msgid "Filetype not allowed"
+msgstr "Bestandstype niet toegestaan"
 
 msgid "Filter groups"
 msgstr "Filter groepen"
