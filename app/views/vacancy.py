@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for,\
     abort, flash
+from flask.ext.babel import lazy_gettext as _
 
 from sqlalchemy import or_, and_, func
 
@@ -18,7 +19,7 @@ FILE_FOLDER = app.config['FILE_DIR']
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
-def view_list(page_nr=1):
+def list(page_nr=1):
     if not ModuleAPI.can_read('vacancy'):
         return abort(403)
 
@@ -76,39 +77,10 @@ def view_list(page_nr=1):
                            search="", path=FILE_FOLDER, title="Vacatures")
 
 
-@blueprint.route('/create/', methods=['GET'])
-@blueprint.route('/edit/<int:vacancy_id>/', methods=['GET'])
+@blueprint.route('/create/', methods=['GET', 'POST'])
+@blueprint.route('/edit/<int:vacancy_id>/', methods=['GET', 'POST'])
 def edit(vacancy_id=None):
-    '''
-    FRONTEND
-    Create, view or edit a vacancy.
-    '''
-    if not ModuleAPI.can_read('vacancy'):
-        return abort(403)
-
-    # Select vacancy.
-    if vacancy_id:
-        vacancy = Vacancy.query.get(vacancy_id)
-    else:
-        vacancy = Vacancy()
-
-    form = VacancyForm(request.form, vacancy)
-
-    # Add companies.
-    form.company_id.choices = [(c.id, c.name) for c in Company.query.
-                               order_by('name')]
-
-    return render_template('vacancy/edit.htm', vacancy=vacancy, form=form,
-                           title="Vacatures")
-
-
-@blueprint.route('/create/', methods=['POST'])
-@blueprint.route('/edit/<int:vacancy_id>/', methods=['POST'])
-def update(vacancy_id=None):
-    '''
-    BACKEND
-    Create, view or edit a vacancy.
-    '''
+    """Create, view or edit a vacancy."""
     if not ModuleAPI.can_write('vacancy'):
         return abort(403)
 
@@ -125,6 +97,11 @@ def update(vacancy_id=None):
                                order_by('name')]
 
     if form.validate_on_submit():
+        if Vacancy.query.filter(Vacancy.title == form.title.data).count():
+            flash(_('Title "%s" is already in use.' % form.title.data),
+                  'danger')
+            return render_template('vacancy/edit.htm', vacancy=vacancy,
+                                   form=form, title="Vacatures")
         vacancy.title = form.title.data
         vacancy.description = form.description.data
         vacancy.start_date = form.start_date.data
@@ -137,49 +114,26 @@ def update(vacancy_id=None):
         db.session.commit()
 
         if vacancy_id:
-            flash('Vacature opgeslagen', 'success')
+            flash(_('Vacancy saved'), 'success')
         else:
-            vacancy_id = vacancy.id
-            flash('Vacature aangemaakt', 'success')
+            flash(_('Vacancy created'), 'success')
+        return redirect(url_for('vacancy.list'))
     else:
-        error_handled = False
-        if not form.title.data:
-            flash('Geen titel opgegeven', 'danger')
-            error_handled = True
-        if not form.description:
-            flash('Geen beschrijving opgegeven', 'danger')
-            error_handled = True
-        if not form.start_date:
-            flash('Geen begindatum opgegeven', 'danger')
-            error_handled = True
-        if not form.end_date:
-            flash('Geen einddatum opgegeven', 'danger')
-            error_handled = True
-        if not form.workload:
-            flash('Geen werklast opgegeven', 'danger')
-            error_handled = True
+        flash_form_errors(form)
 
-        if not error_handled:
-            flash_form_errors(form)
-
-    return redirect(url_for('vacancy.edit', vacancy_id=vacancy_id))
+    return render_template('vacancy/edit.htm', vacancy=vacancy, form=form,
+                           title="Vacatures")
 
 
 @blueprint.route('/delete/<int:vacancy_id>/', methods=['POST'])
-def delete(vacancy_id):
-    '''
-    BACKEND
-    Delete a vacancy.
-    '''
+def delete(vacancy_id=None):
+    """Delete a vacancy."""
     if not ModuleAPI.can_write('vacancy'):
         return abort(403)
 
-    vacancy = Vacancy.query.get(vacancy_id)
-    if not vacancy:
-        return abort(404)
-
+    vacancy = Vacancy.query.get_or_404(vacancy_id)
     db.session.delete(vacancy)
     db.session.commit()
-    flash('Vacature verwijderd', 'success')
+    flash(_('Vacancy deleted'), 'success')
 
-    return redirect(url_for('vacancy.view_list'))
+    return redirect(url_for('vacancy.list'))

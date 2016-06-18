@@ -174,6 +174,8 @@ def upload_file():
 @login_required
 def view_examination(page_nr=1):
     if not ModuleAPI.can_read('examination', True):
+        flash(_('Valid membership is required for the examination module'),
+              'warning')
         session['prev'] = 'examination.view_examination'
         return abort(403)
 

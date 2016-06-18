@@ -21,9 +21,9 @@
     <br />
     <div class="row">
         <div class="col-md-12">
-            <form method="get" action="{{ url_for('vacancy.view_list') }}" enctype=multipart/form-data class="form-inline" >
+            <form method="get" action="{{ url_for('vacancy.list') }}" enctype=multipart/form-data class="form-inline" >
                 <input name="search" id="search" class="col-md-5" type="text"
-                placeholder="Zoek op titel, contract of bedrijf" value="{{search}}"
+                placeholder="{{_('Search for title, contact or company')}}" value="{{search}}"
                 onkeypress="searchKeyPress(event);">
                 </input>
                 <button type="submit" class="btn btn-primary">
@@ -37,9 +37,9 @@
             <div class="row">
             <div class="col-md-1"></div>
 
-            <div class="col-md-4"><h4>Titel</h4></div>
-            <div class="col-md-3"><h4>Contract</h4></div>
-            <div class="col-md-4"><h4>Bedrijf</h4></div>
+            <div class="col-md-4"><h4>{{_('Title')}}</h4></div>
+            <div class="col-md-3"><h4>{{_('Contract')}}</h4></div>
+            <div class="col-md-4"><h4>{{_('Company')}}</h4></div>
         </div>
     </div>
 </div>
@@ -104,7 +104,7 @@
                             <a class="btn btn-warning"
                                 href="{{ url_for('vacancy.edit', vacancy_id=vacancy.id) }}" >
                                 <i class="glyphicon glyphicon-pencil"></i>
-                                 Bewerken
+                                {{_('Edit')}}
                             </a>
                             <form onsubmit="return confirm('Wilt u {{vacancy.title}} echt verwijderen?');"
                                 action="{{ url_for('vacancy.delete', vacancy_id=vacancy.id) }}"
@@ -112,11 +112,11 @@
                                 <fieldset>
                                     <button class="btn btn-danger" type="submit">
                                         <i class="glyphicon glyphicon-pencil"></i>
-                                        Verwijderen
+                                        {{_('Delete')}}
                                     </button>
                                 </fieldset>
                             </form>
-							{% endif %}
+                            {% endif %}
                         </p>
                         </div>
                         <div class="col-md-6">
@@ -135,7 +135,7 @@
         </tbody>
     </table>
 
-    {{ render_pagination(vacancies, 'vacancy.view_list', "?search=" + search) }}
+    {{ render_pagination(vacancies, 'vacancy.list', "?search=" + search) }}
     </div>
     </div>
 <script>
