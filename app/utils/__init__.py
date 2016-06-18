@@ -4,13 +4,12 @@ from .resource import Resource  # noqa
 
 from .module import import_module  # noqa
 from .serialize_sqla import serialize_sqla  # noqa
-from .validate_form import validate_form  # noqa
 
 # OLD APIS
 from .navigation import NavigationAPI
 from .category import CategoryAPI
 from .pimpy import PimpyAPI
-from .file import FileAPI  # noqa
+from .file import FileAPI
 from .page import PageAPI
 from .seo import SeoAPI
 

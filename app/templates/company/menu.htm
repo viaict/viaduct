@@ -1,0 +1,30 @@
+<div class="btn-group">
+    {% if ModuleAPI.can_read('location') %}
+    <a class="btn btn-primary" href="{{ url_for('location.list') }}">{{_('All locations')}}</a>
+    {% endif %}
+    {% if ModuleAPI.can_read('contact') %}
+    <a class="btn btn-primary" href="{{ url_for('contact.list') }}">{{_('All contacts')}}</a>
+    {% endif %}
+    {% if ModuleAPI.can_read('company') %}
+    <a class="btn btn-primary" href="{{ url_for('company.list') }}">{{_('All companies')}}</a>
+    {% endif %}
+    {% if ModuleAPI.can_read('vacancy') %}
+    <a class="btn btn-primary" href="{{ url_for('vacancy.list') }}">{{_('All vacancies')}}</a>
+    {% endif %}
+</div>
+<div class="pull-right btn-group">
+    {% if ModuleAPI.can_write('location') %}
+    <a class="btn btn-success" href="{{ url_for('location.edit') }}">{{_('New location')}}</a>
+    {% endif %}
+    {% if ModuleAPI.can_write('contact') %}
+    <a class="btn btn-success" href="{{ url_for('contact.edit') }}">{{_('New contact')}}</a>
+    {% endif %}
+    {% if ModuleAPI.can_write('company') %}
+    <a class="btn btn-success" href="{{ url_for('company.edit') }}">{{_('New company')}}</a>
+    {% endif %}
+    {% if ModuleAPI.can_write('vacancy') %}
+    <a class="btn btn-success" href="{{ url_for('vacancy.edit') }}">{{_('New vacancy')}}</a>
+    {% endif %}
+</div>
+<br/>
+<br/>

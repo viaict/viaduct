@@ -10,45 +10,26 @@
 {% endblock %}
 
 {% block content %}
-	<div class="col-md-12">
-	{% if ModuleAPI.can_write('location') %}
-		<a class="btn btn-primary" href="{{ url_for('location.view') }}">Nieuwe locatie</a>
-	{% endif %}
-	{% if ModuleAPI.can_write('contact') %}
-		<a class="btn btn-primary" href="{{ url_for('contact.edit') }}">Nieuw contact</a>
-	{% endif %}
-	{% if ModuleAPI.can_write('company') %}
-		<a class="btn btn-primary" href="{{ url_for('company.edit') }}">Nieuw bedrijf</a>
-	{% endif %}
-	{% if ModuleAPI.can_write('vacancy') %}
-		<a class="btn btn-primary" href="{{ url_for('vacancy.edit') }}">Nieuwe vacature</a>
-	{% endif %}
-	<br/>
-	<br/>
-    <div class="row">
-        <div class="col-md-12">
-            <table id="datatable" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Naam</th>
-                        <th>Website</th>
-                        <th>Locatie</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <th></th>
-                        <th>Naam</th>
-                        <th>Website</th>
-                        <th>Locatie</th>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-    </div>
+    {% include 'company/menu.htm' %}
+    <table id="datatable" class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Naam</th>
+                <th>Website</th>
+                <th>Locatie</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th></th>
+                <th>Naam</th>
+                <th>Website</th>
+                <th>Locatie</th>
+            </tr>
+        </tfoot>
+    </table>
 
-	</div>
 <script>
 $( document ).ready(function() {
 

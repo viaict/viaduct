@@ -3,43 +3,32 @@
 {% extends 'content.htm' %}
 
 {% block content %}
-	{% if ModuleAPI.can_write('contact') %}
-		<p><a class="btn btn-default" href="{{ url_for('contact.edit') }}">Nieuwe contactpersoon</a></p>
-	{% endif %}
-
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12	">
-				<table class="table table-striped table-condensed">
-					<thead>
-						<tr>
-							<th>Naam</th>
-							<th>Adres</th>
-							<th>Telefoon</th>
-							<th>Email</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for contact in contacts.items %}
-						<tr>
-							<td><a href="{{ url_for('contact.edit', contact_id=contact.id) }}">{{ contact.name }}</a></td>
-                            <td>
-                                {% if contact.location %}
-                                    <a href="{{ url_for('location.view', location_id=contact.location.id) }}">{{ contact.location.address }}, {{contact.location.zip}} {{ contact.location.city }}</a>
-                                {% else %}
-                                <a href="{{ url_for('contact.edit', contact_id=contact.id) }}">{{_('No location')}}</a>
-                                {% endif  %}
-                            </td>
-							<td>{{contact.phone_nr}}</td>
-							<td><a target="blank_" href="mailto:{{contact.email}}">{{contact.email}}</a></td>
-						</tr>
-						{% endfor %}
-					</tbody>
-			</table>
-			</div>
-		</div>
-	</div>
-
-
-	{{ render_pagination(contacts, 'contact.list') }}
+{% include 'company/menu.htm' %}
+<table class="table table-striped table-condensed">
+    <thead>
+        <tr>
+            <th>Naam</th>
+            <th>Adres</th>
+            <th>Telefoon</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for contact in contacts.items %}
+        <tr>
+            <td><a href="{{ url_for('contact.edit', contact_id=contact.id) }}">{{ contact.name }}</a></td>
+            <td>
+                {% if contact.location %}
+                <a href="{{ url_for('location.edit', location_id=contact.location.id) }}">{{ contact.location.address }}, {{contact.location.zip}} {{ contact.location.city }}</a>
+                {% else %}
+                <a href="{{ url_for('contact.edit', contact_id=contact.id) }}">{{_('No location')}}</a>
+                {% endif  %}
+            </td>
+            <td>{{contact.phone_nr}}</td>
+            <td><a target="blank_" href="mailto:{{contact.email}}">{{contact.email}}</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{{ render_pagination(contacts, 'contact.list') }}
 {% endblock %}
