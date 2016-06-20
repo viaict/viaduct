@@ -1,4 +1,4 @@
-# Version 2.6.7.0
+# Version 2.6.7.1
 Versioning works as follows: vSYSTEM.FEATURE.IMPROVEMENT.BUG-/HOTFIX
 
 #Viaduct (Opensourced, yeah)
