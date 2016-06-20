@@ -8,8 +8,7 @@ from wtforms.validators import InputRequired
 class CompanyForm(Form):
     name = StringField(_('Name'), validators=[InputRequired(
         message=_("Name is required."))])
-    description = TextAreaField('Description', validators=[InputRequired(
-        message=_("Description is required."))])
+    description = TextAreaField('Description')
     contract_start_date = DateField(
         _('Contract startdate'), validators=[InputRequired(
             message=_("Contract startdate is required."))])
@@ -25,8 +24,7 @@ class CompanyForm(Form):
 class NewCompanyForm(Form):
     name = StringField(_('Name'), validators=[InputRequired(
         message=_("Name is required."))])
-    description = TextAreaField('Description', validators=[InputRequired(
-        message=_("Description is required."))])
+    description = TextAreaField('Description')
     contract_start_date = DateField(
         _('Contract startdate'), validators=[InputRequired(
             message=_("Contract startdate is required."))])
