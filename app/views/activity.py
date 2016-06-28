@@ -8,8 +8,8 @@ import app.utils.google as google
 from flask import flash, redirect, render_template, request, url_for, abort,\
     jsonify
 from flask import Blueprint
-from flask.ext.login import current_user
-from flask.ext.babel import _  # gettext
+from flask_login import current_user
+from flask_babel import _  # gettext
 
 from werkzeug import secure_filename
 
@@ -17,7 +17,7 @@ from app import db
 from app.utils.forms import flash_form_errors
 from app.forms.activity import ActivityForm, CreateForm
 from app.models.activity import Activity
-from app.models.custom_form import CustomForm, CustomFormResult
+from app.models.custom_form import CustomFormResult
 from app.models.mollie import Transaction
 from app.utils.module import ModuleAPI
 from app.utils.mollie import MollieAPI

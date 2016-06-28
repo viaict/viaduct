@@ -1,4 +1,4 @@
-from flask.ext.login import current_user
+from flask_login import current_user
 
 from app import db
 from app.models import BaseEntity, Activity, Transaction
@@ -81,8 +81,8 @@ class CustomForm(db.Model, BaseEntity):
                            .first())
 
         return self.archived or (
-            latest_activity is not None
-            and dt.datetime.now() < latest_activity.end_time)
+            latest_activity is not None and
+            dt.datetime.now() < latest_activity.end_time)
 
     @classmethod
     def aslist(cls, current=None):

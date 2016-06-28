@@ -15,8 +15,8 @@ Alle taal in de code is Engels. Vertalingen worden gedaan dmv Flask-Babel.
 Alle strings dienen worden ingevoerd met de (lazy_)gettext functie.
 
 ```python
-    from flask.ext.babel import _ (In views)
-    from flask.ext.babel import lazy_gettext as _ (In models en Forms)
+    from flask_babel import _ (In views)
+    from flask_babel import lazy_gettext as _ (In models en Forms)
 ```
 
 ## TABS EN VIM ENZO

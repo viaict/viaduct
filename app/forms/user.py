@@ -3,14 +3,14 @@ from app import app
 from app.models import User
 
 from flask_wtf import Form
+from flask_wtf.recaptcha import RecaptchaField
 from wtforms import StringField, PasswordField, BooleanField, \
     SelectField, IntegerField, FileField
 from wtforms.widgets import TextInput
 from wtforms.validators import InputRequired, Email, EqualTo, ValidationError,\
     Length, Optional
 
-from flask.ext.babel import lazy_gettext as _  # noqa
-from flask.ext.wtf.recaptcha import RecaptchaField
+from flask_babel import lazy_gettext as _  # noqa
 
 import dateutil
 import bcrypt

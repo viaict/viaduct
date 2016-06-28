@@ -4,8 +4,8 @@ import json
 from flask import Blueprint
 from flask import abort, flash, session, redirect, render_template, request, \
     url_for, jsonify
-from flask.ext.login import login_required
-from flask.ext.babel import _
+from flask_login import login_required
+from flask_babel import _
 
 from sqlalchemy import func
 

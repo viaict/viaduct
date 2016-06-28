@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, abort, request, flash, \
     redirect, url_for
-from flask.ext.babel import _
+from flask_babel import _
 
 from app import db
 from app.utils.forms import flash_form_errors

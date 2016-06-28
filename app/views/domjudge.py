@@ -1,11 +1,10 @@
 from flask import Blueprint
 from flask import flash, redirect, \
     render_template, url_for, request, Response, abort
-from flask.ext.login import login_required
-from flask.ext.babel import _
+from flask_login import login_required, current_user
+from flask_babel import _
 
 from app import app
-from flask.ext.login import current_user
 from app.models.user import User
 
 from app.utils.domjudge import DOMjudgeAPI

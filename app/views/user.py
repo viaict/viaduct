@@ -10,19 +10,18 @@ from datetime import datetime
 from flask import flash, redirect, render_template, request, url_for, abort,\
     session
 from flask import Blueprint
-from flask.ext.login import current_user, login_user, logout_user
-from flask.ext.babel import lazy_gettext as _, gettext
+from flask_login import current_user, login_user, logout_user
+from flask_babel import lazy_gettext as _, gettext
 
 from app import db, login_manager
 from app.utils.forms import flash_form_errors
-from app.forms import SignUpForm, SignInForm, ResetPassword,\
-    RequestPassword
+from app.forms import SignUpForm, SignInForm, ResetPassword, RequestPassword
+from app.forms.user import EditUserForm, EditUserInfoForm
 from app.models import User
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult, CustomForm
 from app.models.group import Group
 from app.models.request_ticket import Password_ticket
-from app.forms.user import EditUserForm, EditUserInfoForm
 from app.models.education import Education
 from app.utils.module import ModuleAPI
 from app.utils import UserAPI

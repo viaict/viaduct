@@ -1,4 +1,4 @@
-from flask.ext.sqlalchemy import get_debug_queries
+from flask_sqlalchemy import get_debug_queries
 
 
 def print_queries():

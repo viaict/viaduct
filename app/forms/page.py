@@ -1,11 +1,10 @@
+from flask_babel import lazy_gettext as _
 from flask_wtf import Form
+from wtforms import Form as UnsafeForm
 from wtforms import BooleanField, StringField, TextAreaField, FieldList, \
     SelectField, SubmitField, RadioField, FormField, IntegerField
 
 from wtforms.validators import InputRequired, Regexp, Optional
-
-from wtforms import Form as UnsafeForm
-from flask.ext.babel import lazy_gettext as _
 
 
 class EditGroupPagePermissionEntry(UnsafeForm):
@@ -14,7 +13,8 @@ class EditGroupPagePermissionEntry(UnsafeForm):
 
 
 class SuperPageForm(Form):
-    """TODO"""
+    """TODO."""
+
     nl_title = StringField(_('Dutch title'))
     en_title = StringField(_('English title'))
 

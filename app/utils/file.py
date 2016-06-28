@@ -4,7 +4,7 @@ import os
 import difflib
 from app.models.file import File
 from app import app, db
-from flask.ext.babel import lazy_gettext as _
+from flask_babel import lazy_gettext as _
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 UPLOAD_DIR = app.config['UPLOAD_DIR']

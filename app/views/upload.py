@@ -2,7 +2,7 @@ import os
 
 from flask import abort, Blueprint, redirect, request, render_template, \
     send_file, url_for
-from flask.ext.login import current_user
+from flask_login import current_user
 from werkzeug import secure_filename
 
 from app import app

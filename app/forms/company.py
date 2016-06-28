@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from flask_wtf.file import FileField
-from flask.ext.babel import lazy_gettext as _
+from flask_babel import lazy_gettext as _
 from wtforms import StringField, SelectField, TextAreaField, DateField
 from wtforms.validators import InputRequired
 

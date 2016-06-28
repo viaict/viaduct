@@ -2,7 +2,7 @@ from flask_wtf import Form
 from wtforms import StringField
 from wtforms.validators import InputRequired, Email
 
-from flask.ext.babel import lazy_gettext as _
+from flask_babel import lazy_gettext as _
 
 
 class LocationForm(Form):

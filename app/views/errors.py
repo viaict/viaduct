@@ -1,6 +1,6 @@
 from flask import flash, request, url_for, render_template, redirect, \
     session
-from flask.ext.login import current_user
+from flask_login import current_user
 
 from app import app, login_manager
 from app.models import Page
@@ -20,7 +20,7 @@ def unauthorized():
 
 @app.errorhandler(403)
 def permission_denied(e):
-    """ When permission denied and not logged in you will be redirected. """
+    """When permission denied and not logged in you will be redirected."""
     content = "403, The police has been notified!"
     image = '/static/img/403.jpg'
 

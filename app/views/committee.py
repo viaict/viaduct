@@ -1,7 +1,7 @@
 from flask import Blueprint, abort, request, flash, redirect, url_for, \
     render_template
-from flask.ext.login import current_user
-from flask.ext.babel import _  # gettext
+from flask_login import current_user
+from flask_babel import _  # gettext
 
 from app import db
 from app.models import CommitteeRevision, Page, Group, User, \

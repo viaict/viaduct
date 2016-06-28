@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, render_template, url_for, request, \
     jsonify, abort
-from flask.ext.login import current_user
+from flask_login import current_user
 
 from math import ceil
 from datetime import date

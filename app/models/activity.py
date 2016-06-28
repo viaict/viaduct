@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from app.models import BaseEntity
 from babel.dates import format_timedelta, format_datetime
 from sqlalchemy import event
-from flask.ext.babel import lazy_gettext as _  # gettext
+from flask_babel import lazy_gettext as _  # gettext
 
 
 # Model to support Facebook/Google API integration
@@ -74,8 +74,10 @@ class Activity(db.Model, BaseEntity):
 
     def get_time(self):
         """
-        Get a proper representation of all datetime date, based on the time the
-        event is gonna take/when it is going to start/when it's gonna end
+        Get a proper representation of all datetime date.
+
+        Based on the time the event is gonna take/when it is going to
+        start/when it's gonna end.
         """
         today = datetime.now()
         if self.start_time.month == self.end_time.month and \
@@ -106,9 +108,7 @@ class Activity(db.Model, BaseEntity):
         return datetime.now() >= self.end_time
 
     def get_short_description(self, characters):
-        """
-        Get a description cut a number of characters, with suffixed dots.
-        """
+        """Get a description cut a number of characters, with suffixed dots."""
         if (len(self.description) > characters):
             short_description = self.description[:characters].strip()
             words = short_description.split(' ')[:-1]
@@ -118,23 +118,17 @@ class Activity(db.Model, BaseEntity):
         return self.description
 
     def get_timedelta_to_start(self):
-        """
-        Returns locale based description of time left to start.
-        """
+        """Leturn locale based description of time left to start."""
         return format_timedelta(datetime.now() - self.start_time,
                                 locale=get_locale())
 
     def get_timedelta_from_end(self):
-        """
-        Returns locale based description of time in the past.
-        """
+        """Locale based description of time in the past."""
         return format_timedelta(datetime.now() - self.end_time,
                                 locale=get_locale())
 
     def get_timedelta_to_end(self):
-        """
-        Returns locale based description of time until the end of the activity.
-        """
+        """Locale based description of time until the end of the activity."""
         return format_timedelta(self.end_time - datetime.now(),
                                 locale=get_locale())
 
@@ -142,9 +136,7 @@ class Activity(db.Model, BaseEntity):
         return time.strftime("%Y-%m-%d %H:%M")
 
     def till_now(self):
-        """
-        Returns a locale based description of datetimedelta till now
-        """
+        """Locale based description of datetimedelta till now."""
         if self.is_in_future():
             return _('in') + ' %s' % (self.get_timedelta_to_start())
 
@@ -157,6 +149,8 @@ class Activity(db.Model, BaseEntity):
 @event.listens_for(Activity, 'load')
 def set_activity_locale(activity, context):
     """
+    Fill model content according to language.
+
     This function is called after an Activity model is filled with data from
     the database, but before is used in all other code.
 
@@ -165,6 +159,7 @@ def set_activity_locale(activity, context):
     the alternative language, suffixing the title of the activity with the
     displayed language.
     """
+
     locale = get_locale()
     nl_available = activity.nl_name and activity.nl_description
     en_available = activity.en_name and activity.en_description

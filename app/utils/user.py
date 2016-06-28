@@ -1,4 +1,4 @@
-from flask.ext.login import current_user
+from flask_login import current_user
 from app.models.page import PagePermission
 from flask import flash
 import os
@@ -13,7 +13,7 @@ from flask import render_template
 from app.models.group import Group
 from app.utils.file import FileAPI
 
-from flask.ext.babel import lazy_gettext as _
+from flask_babel import lazy_gettext as _
 
 ALLOWED_EXTENSIONS = set(['png', 'gif', 'jpg', 'jpeg'])
 UPLOAD_DIR = 'app/static/files/users/'

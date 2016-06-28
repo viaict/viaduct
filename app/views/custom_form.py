@@ -1,6 +1,6 @@
 from flask import (flash, redirect, render_template, request, url_for, abort,
                    jsonify, Blueprint, Response)
-from flask.ext.login import current_user
+from flask_login import current_user
 
 from app import db
 from app.utils import serialize_sqla

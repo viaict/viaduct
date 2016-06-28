@@ -1,5 +1,5 @@
 from flask import Blueprint, request, render_template, abort
-from flask.ext.login import current_user
+from flask_login import current_user
 
 from app.forms import CreateSurveyForm
 

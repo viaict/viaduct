@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, request, \
 
 import datetime
 
-from flask.ext.login import current_user
+from flask_login import current_user
 from app import app
 from app.models.challenge import Challenge
 from app.forms import ChallengeForm

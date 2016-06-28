@@ -5,7 +5,7 @@ import json
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask import abort, jsonify
-from flask.ext.login import current_user
+from flask_login import current_user
 
 from app import app, db
 from app.utils.forms import flash_form_errors

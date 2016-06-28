@@ -2,8 +2,8 @@ import os
 
 from flask import Flask, request, Markup, render_template, session
 from flask.json import JSONEncoder as BaseEncoder
-from flask.ext.babel import Babel
-from flask.ext.login import LoginManager, current_user
+from flask_babel import Babel
+from flask_login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy as BaseSQLAlchemy, Model, \
     _BoundDeclarativeMeta, _QueryProperty, declarative_base
 

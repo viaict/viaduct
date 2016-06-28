@@ -1,7 +1,7 @@
 from flask_wtf import Form
+from flask_babel import lazy_gettext as _
 from wtforms import StringField, BooleanField
 from wtforms.validators import InputRequired
-from flask.ext.babel import lazy_gettext as _
 
 
 class NavigationEntryForm(Form):

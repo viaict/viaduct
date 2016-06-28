@@ -9,7 +9,7 @@ from app.models import SEO
 
 from flask import Blueprint, abort, redirect, url_for
 from flask import flash, render_template, request
-from flask.ext.babel import _  # gettext
+from flask_babel import _  # gettext
 
 
 blueprint = Blueprint('seo', __name__, url_prefix='/seo')

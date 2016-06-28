@@ -1,7 +1,7 @@
 from app import db, app
 from flask import render_template, Markup, redirect, url_for, abort,\
     flash
-from flask.ext.login import current_user
+from flask_login import current_user
 from unidecode import unidecode
 import datetime
 import re

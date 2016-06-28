@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint, flash, redirect, render_template, request,\
     url_for, abort
-from flask.ext.login import current_user
-from flask.ext.babel import _  # gettext
+from flask_login import current_user
+from flask_babel import _  # gettext
 
 from app import db
 from app.forms import PageForm, HistoryPageForm
 from app.utils.forms import flash_form_errors
 from app.utils.htmldiff import htmldiff
-from app.models import Group, Page, PageRevision, PagePermission, \
-    CustomForm, Redirect
+from app.models import Group, Page, PageRevision, PagePermission, Redirect
 from app.utils.module import ModuleAPI
 from app.utils.page import PageAPI
 

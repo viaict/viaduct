@@ -1,6 +1,6 @@
 from app import app, db, version
-from flask.ext.script import Manager, Server
-from flask.ext.migrate import Migrate, MigrateCommand
+from flask_script import Manager, Server
+from flask_migrate import Migrate, MigrateCommand
 from flask_failsafe import failsafe
 
 import re

@@ -1,6 +1,6 @@
 import sys
 from sqlalchemy import event
-from flask.ext.babel import lazy_gettext as _
+from flask_babel import lazy_gettext as _
 from app import db, get_locale
 from app.models import BaseEntity, Group
 
@@ -75,11 +75,14 @@ def set_revision_class(page, context):
 
 
 class SuperRevision(db.Model, BaseEntity):
-    """Any revision class should inherit from this one. It contains all general
-    revision fields, as well as some helper functions.
+    """
+    Contains all general revision fields, as well as some helper functions.
 
+    Any revision class should inherit from this one.
     NOTE: I am not able to get a relationship to work with page here, so you
-    will have to implement that yourself."""
+    will have to implement that yourself.
+    """
+
     __abstract__ = True
 
     # Things needed in template context.
@@ -90,15 +93,17 @@ class SuperRevision(db.Model, BaseEntity):
     comment = db.Column(db.String(1024))
 
     def __init__(self, nl_title, en_title, comment):
-        """Any necessary initialization. Don't forget to call
-        `super().__init__(title, comment)`!"""
+        """
+        Any necessary initialization. Don't forget to call
+        `super().__init__(nl_title, en_title, comment)`!
+        """
         self.title = None
         self.nl_title = nl_title
         self.en_title = en_title
         self.comment = comment
 
     def get_comparable(self):
-        """As long as no alternative comparable is given, compare titles."""
+        """Compare titles, as long as no alternative comparable is given."""
         return self.title
 
     @classmethod
@@ -147,6 +152,8 @@ class PageRevision(SuperRevision):
 @event.listens_for(PageRevision, 'load')
 def set_page_revision_locale(page_rev, context):
     """
+    Load the correct info in the model.
+
     This function is called after an PageRevision model is filled with data
     from the database, but before is used in all other code.
 
