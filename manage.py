@@ -1,10 +1,20 @@
 from app import app, db, version
-from flask.ext.script import Manager
+from flask.ext.script import Manager, Server
 from flask.ext.migrate import Migrate, MigrateCommand
+from flask_failsafe import failsafe
 
 import re
 
 manager = Manager(app)
+
+
+@failsafe
+def create_app():
+    from app import app
+
+    return app
+
+manager.add_command("runserver", Server())
 
 
 @manager.command
