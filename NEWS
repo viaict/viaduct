@@ -1,9 +1,11 @@
+xx-xx-xxxx v2.x.x.x:
+* Added facebook link in base.htm
+
 18-06-2016 v2.6.7.0:
 * Lanuage switcher now only changes for session, until saved permanently.
 * Security leaks fixed with regard to permission on modules.
 * The jumbotron is now available in Engels.
 * Fixed the company admin forms.
-* Fixed clipping of sponsor carousel.
 
 08-06-2016 v2.6.6.4:
 * Added Open Graph tags in base.htm
