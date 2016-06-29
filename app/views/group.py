@@ -118,6 +118,7 @@ def edit(group_id):
         if form.validate_on_submit():
             name = form.data['name'].strip()
             maillist = form.data['maillist'].strip().lower()
+
             valid_form = True
 
             group_with_same_name = Group.query.\
@@ -129,6 +130,10 @@ def edit(group_id):
             if valid_form:
                 group.name = name
                 group.maillist = maillist
+                if maillist == '':
+                    group.maillist = None
+                else:
+                    group.maillist = maillist
 
                 db.session.commit()
                 google.create_group_if_not_exists(name, maillist)
