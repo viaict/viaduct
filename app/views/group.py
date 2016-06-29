@@ -82,7 +82,11 @@ def create():
             valid_form = False
 
         if valid_form:
-            group = Group(name, maillist.lower())
+            maillist = maillist.strip().lower()
+            if maillist == '':
+                group = Group(name, None)
+            else:
+                group = Group(name, maillist)
 
             db.session.add(group)
             db.session.commit()

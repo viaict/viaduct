@@ -1,5 +1,7 @@
 {% from "macros/pagination.htm" import render_pagination %}
 
+{% extends "content.htm" %}
+
 {% block includes %}
     <script>
         var get_users = "{{ url_for('user.get_users') }}"
@@ -8,8 +10,6 @@
     </script>
     <script src="{{static_url("/static/js/group/add_users.js")}}"></script>
 {% endblock %}
-
-{% extends "content.htm" %}
 
 {% block content %}
 <h1>Gebruiker toevoegen aan {{ group.name }}</h1>
