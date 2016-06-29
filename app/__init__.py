@@ -4,7 +4,7 @@ from flask import Flask, request, Markup, render_template, session
 from flask.json import JSONEncoder as BaseEncoder
 from flask_babel import Babel
 from flask_login import LoginManager, current_user
-from flask_sqlalchemy import SQLAlchemy as BaseSQLAlchemy, Model, \
+from flask_sqlalchemy import SQLAlchemy, Model, \
     _BoundDeclarativeMeta, _QueryProperty, declarative_base
 
 from speaklater import _LazyString
@@ -114,26 +114,10 @@ constraint_naming_convention = {
     "pk": "pk_%(table_name)s"
 }
 
-
-class SQLAlchemy(BaseSQLAlchemy):
-    """
-    Custom SQLAlchemy object that uses naming conventions.
-
-    https://stackoverflow.com/questions/29153930/
-
-    With Flask-SQLAlchemy 2.1 this can be done better, but it is not released
-    yet. And 2.0 caused issues because of autoflush so those should be fixed.
-    """
-
-    def make_declarative_base(self):
-        metadata = MetaData(naming_convention=constraint_naming_convention)
-
-        base = declarative_base(metadata=metadata, cls=Model, name='Model',
-                                metaclass=_BoundDeclarativeMeta)
-        base.query = _QueryProperty(self)
-        return base
-
-db = SQLAlchemy(app)
+# Custom SQLAlchemy object that uses naming conventions.
+# https://stackoverflow.com/questions/29153930/
+db = SQLAlchemy(
+    app, metadata=MetaData(naming_convention=constraint_naming_convention))
 
 from app.utils import import_module, serialize_sqla  # noqa
 from app.utils.thumb import thumb  # noqa
