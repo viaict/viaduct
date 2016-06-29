@@ -2,7 +2,7 @@
     <div>
         <p>
             {{_('Welcome')}}, {{ current_user.first_name }}! {{_('Unfortunately it is currently unclear to us if you are a member of <strong>via</strong>.')}}
-            {% if current_user.education.name.startswith('MSc') %}
+            {% if current_user.is_authenticated and current_user.education.name.startswith('MSc') %}
                 {{_("This is probably due to the fact that we have to confirm you're a student at the UvA. Please come by the <strong>via</strong> room so this can be confirmed.")}}
             {% else %}
                 {{_('This is probably due to not having paid your member contribution. You can pay for your contribution by ordering this along with your books, or you could pass by the <strong>via</strong>-room.')}}

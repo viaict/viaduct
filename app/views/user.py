@@ -48,23 +48,24 @@ def view_single(user_id=None):
     can_read = False
     can_write = False
 
-    if not current_user:
+    # Only logged in users can view profiles
+    if current_user.is_anonymous:
         return abort(403)
+    # Unpayed members cannot view other profiles
     if current_user.id != user_id and not current_user.has_payed:
         return abort(403)
+    # A user can always view his own profile
     if current_user.id == user_id:
         can_write = True
         can_read = True
+    # group rights
     if ModuleAPI.can_read('user'):
         can_read = True
     if ModuleAPI.can_write('user'):
         can_write = True
         can_read = True
 
-    user = User.query.get(user_id)
-    if not user:
-        return abort(404)
-
+    user = User.query.get_or_404(user_id)
     user.avatar = UserAPI.avatar(user)
     user.groups = UserAPI.get_groups_for_user_id(user)
 
@@ -100,7 +101,7 @@ def view_single(user_id=None):
 def remove_avatar(user_id=None):
     user = User.query.get(user_id)
     if not ModuleAPI.can_write('user') and\
-            (not current_user or current_user.id != user_id):
+            (current_user.is_anonymous or current_user.id != user_id):
         return abort(403)
     UserAPI.remove_avatar(user)
     return redirect(url_for('user.view_single', user_id=user_id))
@@ -111,7 +112,7 @@ def remove_avatar(user_id=None):
 def edit(user_id=None):
     """Create user for admins and edit for admins and users."""
     if not ModuleAPI.can_write('user') and\
-            (not current_user or current_user.id != user_id):
+            (current_user.is_anonymous or current_user.id != user_id):
         return abort(403)
 
     # Select user
@@ -242,7 +243,7 @@ def edit(user_id=None):
 def sign_up():
     # Redirect the user to the index page if he or she has been authenticated
     # already.
-    if current_user and current_user.is_authenticated():
+    if current_user.is_authenticated:
         return redirect(url_for('home.home'))
 
     form = SignUpForm(request.form)
@@ -307,7 +308,7 @@ def sign_up():
 def sign_in():
     # Redirect the user to the index page if he or she has been authenticated
     # already.
-    if current_user and current_user.is_authenticated():
+    if current_user.is_authenticated:
         return redirect(url_for('home.home'))
 
     form = SignInForm(request.form)
@@ -507,7 +508,7 @@ def api_delete_user():
     if not ModuleAPI.can_write('user'):
         return abort(403)
 
-    user_ids = request.json['selected_ids']
+    user_ids = request.get_json()['selected_ids']
     del_users = User.query.filter(User.id.in_(user_ids)).all()
 
     for user in del_users:

@@ -1,5 +1,4 @@
 # coding: utf-8
-
 import copy
 import json
 
@@ -185,7 +184,7 @@ def delete_group_users(group_id):
         flash('There is no such group.')
         return redirect(url_for('group.view'))
 
-    user_ids = request.json['selected_ids']
+    user_ids = request.get_json()['selected_ids']
 
     users = group.get_users().filter(User.id.in_(user_ids))\
         .order_by(User.first_name).order_by(User.last_name).all()
@@ -305,7 +304,7 @@ def group_api_add_users(group_id):
         return abort(403)
     group = Group.query.get(group_id)
 
-    user_ids = request.json['selected_ids']
+    user_ids = request.get_json()['selected_ids']
     add_users = User.query.filter(User.id.in_(user_ids)).all()
 
     for user in add_users:

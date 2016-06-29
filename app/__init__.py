@@ -71,8 +71,7 @@ def get_locale():
         return lang
 
     # if a user is logged in, use the locale from the user settings
-    if current_user and not current_user.is_anonymous() \
-            and current_user.locale is not None:
+    if current_user.is_authenticated and current_user.locale is not None:
         return current_user.locale
 
     return request.accept_languages.best_match(list(languages), default='nl')
@@ -158,10 +157,8 @@ app.jinja_env.globals.update(len=len)
 app.jinja_env.globals.update(thumb=thumb)
 app.jinja_env.globals.update(isinstance=isinstance)
 app.jinja_env.globals.update(list=list)
-
 app.jinja_env.globals.update(static_url=static_url)
 app.jinja_env.globals.update(get_locale=get_locale)
-
 app.jinja_env.globals.update(app_config=app.config)
 
 # Register the blueprints.
@@ -173,6 +170,5 @@ register_views(app, os.path.join(path, 'views'))
 
 from app.utils.template_filters import *  # noqa
 
-from app.models import User  # noqa
-
-login_manager.anonymous_user = User.get_anonymous_user
+from app.models.user import AnonymousUser  # noqa
+login_manager.anonymous_user = AnonymousUser

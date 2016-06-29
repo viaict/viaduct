@@ -20,10 +20,7 @@ blueprint = Blueprint('challenge', __name__, url_prefix='/challenge')
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/dashboard/', methods=['GET', 'POST'])
 def view_list(page=1):
-    if not ModuleAPI.can_read('challenge'):
-        return abort(403)
-
-    if current_user.id == 0:
+    if not ModuleAPI.can_read('challenge') or current_user.is_anonymous:
         return abort(403)
 
     print((app.config['SQLALCHEMY_DATABASE_URI']))
@@ -148,7 +145,7 @@ def create_challenge(challenge_id=None):
 
 @blueprint.route('/api/new_submission', methods=['GET', 'POST'])
 def new_submission(challenge_id=None):
-    if not ModuleAPI.can_read('challenge'):
+    if not ModuleAPI.can_read('challenge') or current_user.is_anonymous:
         abort(403)
 
     if request.args.get('challenge_id'):

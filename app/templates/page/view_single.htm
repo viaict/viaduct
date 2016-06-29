@@ -11,7 +11,7 @@
     {% if revision.custom_form %}
         <hr />
         <div>
-            {% if current_user and current_user.id %}
+            {% if current_user.is_authenticated %}
                 <script>
                     var msg_success = '{{ revision.custom_form.msg_success }}';
                 </script>

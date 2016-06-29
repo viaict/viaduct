@@ -18,7 +18,7 @@ class CourseAPI(Resource):
 
     @staticmethod
     def get():
-        data = request.json
+        data = request.get_json()
         schema = {
             'type': 'object',
             'properties': {
@@ -57,7 +57,7 @@ class CourseAPI(Resource):
 
     @staticmethod
     def post():
-        data = request.json
+        data = request.get_json()
         schema = {'type': 'object',
                   'properties': {'education_id': {'type': 'integer'},
                                  'name': {'type': 'string'},
@@ -87,7 +87,7 @@ class CourseAPI(Resource):
 
     @staticmethod
     def delete():
-        data = request.json
+        data = request.get_json()
         schema = {'type': [{'type': 'integer'},
                            {'type': 'array', 'items': {'type': 'integer'}}]}
 

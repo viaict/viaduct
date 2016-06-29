@@ -22,7 +22,8 @@ class ModuleAPI:
 
         Distinguishes between payed members and regular users
         """
-        if needs_payed and (not current_user or not current_user.has_payed):
+        if needs_payed and\
+                (current_user.is_anonymous or not current_user.has_payed):
             return False
         return ModuleAPI\
             .get_highest_permission_for_module(module_name) >= 1
@@ -30,7 +31,8 @@ class ModuleAPI:
     @staticmethod
     def can_write(module_name, needs_payed=False):
         """Check if the current user can edit the module_name."""
-        if needs_payed and (not current_user or not current_user.has_payed):
+        if needs_payed and\
+                (current_user.is_anonymous or not current_user.has_payed):
             return False
         return ModuleAPI\
             .get_highest_permission_for_module(module_name) >= 2

@@ -104,7 +104,7 @@ def get_activity(activity_id=0):
 
         # Check if the current user has already entered data in this custom
         # form
-        if current_user and current_user.id > 0:
+        if current_user.is_authenticated:
             form_result = CustomFormResult.query \
                 .filter(CustomFormResult.form_id == activity.form_id) \
                 .filter(CustomFormResult.owner_id == current_user.id).first()

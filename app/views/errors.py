@@ -27,7 +27,7 @@ def permission_denied(e):
     # Save the path you were rejected from.
     session['denied_from'] = request.path
 
-    if not current_user or current_user.is_anonymous():
+    if current_user.is_anonymous:
         flash('Je hebt geen rechten om deze pagina te bekijken.', 'danger')
         return redirect(url_for('user.sign_in'))
 

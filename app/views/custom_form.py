@@ -133,7 +133,7 @@ def export(form_id):
 @blueprint.route('/create/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<int:form_id>', methods=['GET', 'POST'])
 def create(form_id=None):
-    if not ModuleAPI.can_write('custom_form'):
+    if not ModuleAPI.can_write('custom_form') or current_user.is_anonymous:
         return abort(403)
 
     if form_id:
@@ -239,23 +239,17 @@ def remove_response(submit_id=None):
 @blueprint.route('/submit/<int:form_id>', methods=['POST'])
 def submit(form_id=None):
     # TODO make sure custom_form rights are set on server
-    if not ModuleAPI.can_read('activity'):
+    if not ModuleAPI.can_read('activity') or current_user.is_anonymous:
         return abort(403)
 
     response = "success"
 
     if form_id:
         custom_form = CustomForm.query.get(form_id)
+        user = User.query.get(current_user.id)
 
         if not custom_form:
             abort(404)
-
-        # Logged in user
-        if current_user and current_user.id > 0:
-            user = User.query.get(current_user.id)
-        else:
-            # Need to be logged in
-            return abort(403)
 
     if not user:
         response = "error"
@@ -321,12 +315,7 @@ def submit(form_id=None):
 @blueprint.route('/follow/<int:form_id>/<int:page_nr>/',
                  methods=['GET', 'POST'])
 def follow(form_id, page_nr=1):
-    if not ModuleAPI.can_write('custom_form'):
-        return abort(403)
-
-    # Logged in user
-    if not current_user or current_user.id <= 0:
-        # Need to be logged in
+    if not ModuleAPI.can_write('custom_form') or current_user.is_anonymous:
         return abort(403)
 
     # Unfollow if re-submitted
@@ -351,10 +340,7 @@ def follow(form_id, page_nr=1):
 @blueprint.route('/archive/<int:form_id>/<int:page_nr>/',
                  methods=['GET', 'POST'])
 def archive(form_id, page_nr=1):
-    if not ModuleAPI.can_write('custom_form'):
-        return abort(403)
-
-    if not current_user or current_user.id <= 0:
+    if not ModuleAPI.can_write('custom_form') or current_user.is_anonymous:
         return abort(403)
 
     form = CustomForm.query.get(form_id)
@@ -373,10 +359,7 @@ def archive(form_id, page_nr=1):
 @blueprint.route('/unarchive/<int:form_id>/<int:page_nr>/',
                  methods=['GET', 'POST'])
 def unarchive(form_id, page_nr=1):
-    if not ModuleAPI.can_write('custom_form'):
-        return abort(403)
-
-    if not current_user or current_user.id <= 0:
+    if not ModuleAPI.can_write('custom_form') or current_user.is_anonymous:
         return abort(403)
 
     form = CustomForm.query.get(form_id)
@@ -395,12 +378,7 @@ def unarchive(form_id, page_nr=1):
 def has_payed(submit_id=None):
     response = "success"
 
-    if not ModuleAPI.can_write('custom_form'):
-        return abort(403)
-
-    # Logged in user
-    if not current_user or current_user.id <= 0:
-        # Need to be logged in
+    if not ModuleAPI.can_write('custom_form') or current_user.is_anonymous:
         return abort(403)
 
     # Test if user already signed up

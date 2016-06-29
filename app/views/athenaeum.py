@@ -8,7 +8,7 @@ blueprint = Blueprint('athenaeum', __name__, url_prefix='/athenaeum')
 
 @blueprint.route('/', methods=['GET'])
 def embed():
-    if current_user.is_anonymous():
+    if current_user.is_anonymous:
         flash(_('Using the bookstore requires an account.'), 'warning')
         return abort(403)
 
