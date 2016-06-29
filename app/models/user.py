@@ -6,6 +6,22 @@ from datetime import datetime
 
 
 class AnonymousUser(AnonymousUserMixin):
+    """
+    Has attributes for flask-login.
+
+    is_anonymous = True, is_active & is_authenticated = False.
+    current_user is equal to an instance of this class whenever the user is
+    not logged in.
+
+    Check logged in using:
+
+    >>> if current_user.is_anonymous:
+    >>>     abort(403)
+
+    Keep in mind, all the user attributes are not available when the user is
+    not logged in.
+    """
+
     id = 0
     has_payed = False
 
