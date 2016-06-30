@@ -54,3 +54,10 @@ validictory==0.9.3
 watchdog==0.8.3
 Werkzeug==0.11.10
 WTForms==2.1
+# Required for oauth2 (google client)
+cffi==1.7.0
+cryptography==1.4
+idna==2.1
+pyOpenSSL==16.0.0
+pycparser==2.14
+
