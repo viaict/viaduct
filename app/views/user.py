@@ -398,8 +398,8 @@ def request_password():
                        user=user,
                        reset_link=reset_link)
 
-            flash(gettext('An email has been sent to %(email) with further '
-                          'instructions.', email=form.email.data), 'success')
+            flash(_('An email has been sent to %(email)s with further '
+                    'instructions.', email=form.email.data), 'success')
             return redirect(url_for('home.home'))
     else:
         flash_form_errors(form)
