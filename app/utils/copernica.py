@@ -7,7 +7,7 @@ from flask import flash
 from flask.ext.babel import _
 from functools import wraps
 from app import app, db
-from app.api import google
+from app.utils import google
 from app.models.user import User
 
 API_TOKEN = app.config['COPERNICA_API_KEY']
