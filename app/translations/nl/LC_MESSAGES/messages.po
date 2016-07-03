@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-07-03 13:29+0200\n"
+"POT-Creation-Date: 2016-07-03 13:34+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -1277,11 +1277,17 @@ msgstr "Je kan je inschrijving aanpassen door opnieuw in te schrijven"
 msgid "You do not have rights to remove pages"
 msgstr "Je hebt geen rechten om pagina's te verwijderen"
 
+msgid "You do not have the rights to view this page."
+msgstr "Je hebt geen rechten om deze pagina te bekijken."
+
 msgid "You have successfully registered, payment is still required!"
 msgstr "Je hebt jezelf inschreven, je moet nog wel betalen!"
 
 msgid "You have to be logged in to fill in a form"
 msgstr "Je moet ingelogd zijn om een formulier in te vullen."
+
+msgid "You must be logged in to view this page."
+msgstr "Je moet ingelogd zijn om deze pagina te bekijken."
 
 msgid "You must be logged-in to register for an activity."
 msgstr "Je moet ingelogd zijn om je te registeren voor een activiteit."
