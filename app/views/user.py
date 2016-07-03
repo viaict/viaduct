@@ -11,21 +11,24 @@ from flask import flash, redirect, render_template, request, url_for, abort,\
     session
 from flask import Blueprint
 from flask_login import current_user, login_user, logout_user
-from flask_babel import lazy_gettext as _, gettext
+from flask_babel import _
 
 from app import db, login_manager
-from app.utils.forms import flash_form_errors
+
 from app.forms import SignUpForm, SignInForm, ResetPassword, RequestPassword
 from app.forms.user import EditUserForm, EditUserInfoForm
+
 from app.models import User
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult, CustomForm
 from app.models.group import Group
 from app.models.request_ticket import Password_ticket
 from app.models.education import Education
-from app.utils.module import ModuleAPI
+
 from app.utils import UserAPI
 from app.utils import copernica
+from app.utils.module import ModuleAPI
+from app.utils.forms import flash_form_errors
 from app.utils.google import HttpError, send_email
 
 blueprint = Blueprint('user', __name__)
@@ -117,7 +120,7 @@ def edit(user_id=None):
 
     # Select user
     if user_id:
-        user = User.query.get(user_id)
+        user = User.query.get_or_404(user_id)
     else:
         user = User()
 
@@ -280,11 +283,6 @@ def sign_up():
         db.session.add(group)
         db.session.commit()
 
-        # Upload avatar
-        avatar = request.files['avatar']
-        if avatar:
-            UserAPI.upload(avatar, user.id)
-
         login_user(user)
 
         gb = user.birth_date.strftime('%Y-%m-%d')
@@ -293,9 +291,9 @@ def sign_up():
                           user.education.name, user.id, user.student_id,
                           Bedrijfsinformatie=info, Geboortedatum=gb)
 
-        flash(gettext('Welcome %(name)s! Your profile has been succesfully '
-                      'created and you have been logged in!',
-                      name=current_user.first_name), 'success')
+        flash(_('Welcome %(name)s! Your profile has been succesfully '
+                'created and you have been logged in!',
+                name=current_user.first_name), 'success')
 
         return redirect(url_for('home.home'))
     else:
@@ -323,8 +321,8 @@ def sign_in():
                 flash(_('Your account has been disabled, you are not allowed '
                         'to log in'), 'danger')
             else:
-                flash(gettext('Hey %(name)s, you\'re now logged in!',
-                              name=current_user.first_name), 'success')
+                flash(_('Hey %(name)s, you\'re now logged in!',
+                        name=current_user.first_name), 'success')
 
             referer = request.headers.get('Referer')
             denied = (
