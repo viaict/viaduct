@@ -1,5 +1,7 @@
-xx-xx-xxxx v2.x.x.x:
+07-07-2016 v2.6.8.0:
 * Added facebook link in base.htm
+* New registration form
+
 
 18-06-2016 v2.6.7.0:
 * Lanuage switcher now only changes for session, until saved permanently.
