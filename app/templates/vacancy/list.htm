@@ -113,20 +113,17 @@
     </div>
     <hr>
     {% endfor %}
-</tbody>
-    </table>
 
     {{ render_pagination(vacancies, 'vacancy.list', "?search=" + search) }}
 </div>
-    </div>
-    <script>
-        $( document ).ready(function() {
+<script>
+    $( document ).ready(function() {
 
-            /* Prevent the expand function being called when clicking on a link */
-            $( document).on('click', 'a.search_click', function(e){
-                e.preventdefaults();
-                document.location.href=$(this).attr("href");
-            });
+        /* Prevent the expand function being called when clicking on a link */
+        $( document).on('click', 'a.search_click', function(e){
+            e.preventdefaults();
+            document.location.href=$(this).attr("href");
         });
-    </script>
-    {% endblock %}
+    });
+</script>
+{% endblock %}
