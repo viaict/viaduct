@@ -1,7 +1,8 @@
 from flask import Blueprint, request, render_template, abort
-from flask.ext.login import current_user
+from flask_login import current_user
 
 from app.forms import CreateSurveyForm
+from app.utils.module import ModuleAPI
 
 blueprint = Blueprint('survey', __name__)
 
@@ -13,7 +14,7 @@ def view():
 
 @blueprint.route('/survey/create/', methods=['GET', 'POST'])
 def create():
-    if not current_user or current_user.email != 'administrator@svia.nl':
+    if not ModuleAPI.can_write('survey') or current_user.is_anonymous:
         return abort(403)
 
     form = CreateSurveyForm(request.form)

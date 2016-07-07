@@ -1,6 +1,7 @@
 from flask import flash, request, url_for, render_template, redirect, \
     session
-from flask.ext.login import current_user
+from flask_login import current_user
+from flask_babel import _
 
 from app import app, login_manager
 from app.models import Page
@@ -14,21 +15,21 @@ def unauthorized():
     # Save the path the user was rejected from.
     session['denied_from'] = request.path
 
-    flash('You must be logged in to view this page.', 'danger')
+    flash(_('You must be logged in to view this page.'), 'danger')
     return redirect(url_for('user.sign_in'))
 
 
 @app.errorhandler(403)
 def permission_denied(e):
-    """ When permission denied and not logged in you will be redirected. """
+    """When permission denied and not logged in you will be redirected."""
     content = "403, The police has been notified!"
     image = '/static/img/403.jpg'
 
     # Save the path you were rejected from.
     session['denied_from'] = request.path
 
-    if not current_user or current_user.is_anonymous():
-        flash('Je hebt geen rechten om deze pagina te bekijken.', 'danger')
+    if current_user.is_authenticated:
+        flash(_('You do not have the rights to view this page.'), 'danger')
         return redirect(url_for('user.sign_in'))
 
     return render_template('page/403.htm', content=content, image=image), 403

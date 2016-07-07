@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-06-18 17:38+0200\n"
+"POT-Creation-Date: 2016-07-03 13:34+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -55,6 +55,24 @@ msgstr "Toevoegen"
 msgid "Address"
 msgstr "Adres"
 
+msgid "Address is required."
+msgstr "Adres is vereist."
+
+msgid "Admin data"
+msgstr ""
+
+msgid "All companies"
+msgstr "Alle bedrijven"
+
+msgid "All contacts"
+msgstr "Alle contacten"
+
+msgid "All locations"
+msgstr "Alle locaties"
+
+msgid "All vacancies"
+msgstr "Alle vacatures"
+
 msgid "Already exists in the database"
 msgstr "Bestaat al in de database."
 
@@ -64,8 +82,9 @@ msgstr "Aantal tentamens:"
 msgid "Amount solved"
 msgstr "Aantal opgelost"
 
-msgid "An email has been sent to %(email) with further instructions."
-msgstr "Er is een email verstuurd naar %(email) met verdere instructies."
+#, python-format
+msgid "An email has been sent to %(email)s with further instructions."
+msgstr "Er is een email verstuurd naar %(email)s met verdere instructies."
 
 msgid "An error occurred while uploading the file"
 msgstr "Er is een fout opgetreden bij het uploaden van het bestand"
@@ -133,6 +152,9 @@ msgstr "Verander wachtwoord"
 msgid "City"
 msgstr "Plaats"
 
+msgid "City is required."
+msgstr "Stad is vereist."
+
 msgid "Click to expand"
 msgstr "Klik om uit te klappen"
 
@@ -181,10 +203,14 @@ msgid "Contact Name"
 msgstr "Contact Naam"
 
 msgid "Contact Phone"
-msgstr ""
+msgstr "Contact telefoonnummer"
 
 msgid "Contact details"
 msgstr "Contact gegevens"
+
+#, python-format
+msgid "Contact email \"%s\" is already in use."
+msgstr "Contact email \" %s \" wordt al gebruikt."
 
 #, python-format
 msgid "Contact name \"%s\" is already in use."
@@ -192,6 +218,12 @@ msgstr "Contact naam \" %s \" wordt al gebruikt."
 
 msgid "Contact person"
 msgstr "Contactpersoon"
+
+msgid "Contact person deleted."
+msgstr "Contactpersoon verwijderd."
+
+msgid "Contact person saved."
+msgstr "Contactpersoon opgeslagen."
 
 msgid "Contest does not exist."
 msgstr "Wedstrijd bestaat niet."
@@ -219,6 +251,9 @@ msgstr "Correct"
 
 msgid "Country"
 msgstr "Land"
+
+msgid "Country is required."
+msgstr "Land is vereist."
 
 msgid "Course"
 msgstr "Vak"
@@ -294,9 +329,6 @@ msgstr "Verwijder nieuwsbericht"
 
 msgid "Description"
 msgstr "Beschrijving"
-
-msgid "Description is required."
-msgstr "Omschrijving is vereist."
 
 msgid "Disabled"
 msgstr "Uitgeschakeld"
@@ -402,6 +434,9 @@ msgstr "Een Nederlandse of Engelse titel is vereist."
 
 msgid "Email"
 msgstr "Email adres"
+
+msgid "Email is required."
+msgstr "Email is vereist"
 
 msgid "End date"
 msgstr "Einddatum"
@@ -594,6 +629,15 @@ msgstr "Bezig..."
 msgid "Location"
 msgstr "Locatie"
 
+msgid "Location deleted."
+msgstr "Locatie verwijderd"
+
+msgid "Location is required."
+msgstr "Locatie is vereist."
+
+msgid "Location saved."
+msgstr "Location opgeslagen."
+
 msgid "Log in"
 msgstr "Log in"
 
@@ -634,6 +678,12 @@ msgstr "Nieuw tentamen"
 msgid "New activity"
 msgstr "Nieuwe activiteit"
 
+msgid "New company"
+msgstr "Nieuw Bedrijf"
+
+msgid "New contact"
+msgstr "Nieuw contactpersoon"
+
 msgid "New course"
 msgstr "Nieuw vak"
 
@@ -645,6 +695,12 @@ msgstr "Nieuw tentamen"
 
 msgid "New item"
 msgstr "Nieuw item"
+
+msgid "New location"
+msgstr "Nieuwe locatie"
+
+msgid "New vacancy"
+msgstr "Nieuwe vacature"
 
 msgid "News"
 msgstr "Niews"
@@ -712,6 +768,9 @@ msgstr "Geen locatie"
 msgid "No password submitted"
 msgstr "Geen wachtwoord opgegeven"
 
+msgid "No permissions to read contacts"
+msgstr "Geen rechten om contacten te bekijken."
+
 msgid "No starting year of study submitted"
 msgstr "Geen beginjaar studie opgegeven"
 
@@ -730,6 +789,9 @@ msgstr "Geen valide ticket gevonden"
 msgid "None"
 msgstr "Geen"
 
+msgid "Not a valid email."
+msgstr "Geen valide e-mailadres."
+
 msgid "Not found!"
 msgstr "Niet gevonden!"
 
@@ -741,6 +803,9 @@ msgstr "Oude antwoorden behouden."
 
 msgid "Old examination preserved."
 msgstr "Oude tentamen behouden."
+
+msgid "Optional data"
+msgstr ""
 
 msgid "Page not found"
 msgstr "Pagina niet gevonden"
@@ -763,6 +828,9 @@ msgstr "Rechten"
 msgid "Phone"
 msgstr "Telefoonnummer"
 
+msgid "Phone is required."
+msgstr "Telefoonnummer is vereist."
+
 msgid "Please fill in"
 msgstr "Alstublief invullen"
 
@@ -771,6 +839,9 @@ msgstr "Vul a.u.b. in :D"
 
 msgid "Position vacant"
 msgstr "Positie openstaand"
+
+msgid "Post address"
+msgstr "Postbus"
 
 msgid "Postoffice Box"
 msgstr "Postbus"
@@ -1206,11 +1277,17 @@ msgstr "Je kan je inschrijving aanpassen door opnieuw in te schrijven"
 msgid "You do not have rights to remove pages"
 msgstr "Je hebt geen rechten om pagina's te verwijderen"
 
+msgid "You do not have the rights to view this page."
+msgstr "Je hebt geen rechten om deze pagina te bekijken."
+
 msgid "You have successfully registered, payment is still required!"
 msgstr "Je hebt jezelf inschreven, je moet nog wel betalen!"
 
 msgid "You have to be logged in to fill in a form"
 msgstr "Je moet ingelogd zijn om een formulier in te vullen."
+
+msgid "You must be logged in to view this page."
+msgstr "Je moet ingelogd zijn om deze pagina te bekijken."
 
 msgid "You must be logged-in to register for an activity."
 msgstr "Je moet ingelogd zijn om je te registeren voor een activiteit."
@@ -1232,6 +1309,9 @@ msgstr "Je inschrijving is voltooid"
 
 msgid "Zip code"
 msgstr "Postcode"
+
+msgid "Zip code is required."
+msgstr "Postcode is vereist."
 
 msgid "ago"
 msgstr "geleden"
@@ -1267,7 +1347,7 @@ msgid "required"
 msgstr "vereist"
 
 msgid "seo"
-msgstr ""
+msgstr "seo"
 
 msgid "still"
 msgstr "nog"
@@ -1304,7 +1384,7 @@ msgstr ""
 #~ msgstr "Achternaam"
 
 #~ msgid "No lastname submitted"
-#~ msgstr ""
+#~ msgstr "Geen achternaam ingevuld"
 
 #~ msgid "Student number"
 #~ msgstr "Studenten ID"
@@ -1345,9 +1425,6 @@ msgstr ""
 #~ msgid "Bilingualism is not fully implemented yet!"
 #~ msgstr "Tweetaligheid is nog niet volledig ondersteund!"
 
-#~ msgid ""
-#~ msgstr ""
-
 #~ msgid "Studievereniging"
 #~ msgstr "Study association"
 
@@ -1361,5 +1438,14 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Contactpersoon"
+#~ msgstr ""
+
+#~ msgid "ReCaptcha invalid"
+#~ msgstr "ReCaptcha ongeldig"
+
+#~ msgid "Admin"
+#~ msgstr ""
+
+#~ msgid "Optionel data"
 #~ msgstr ""
 

@@ -1,7 +1,7 @@
 from app import app
 
 from flask import flash
-from flask.ext.babel import _
+from flask_babel import _
 
 import requests
 import datetime as dt

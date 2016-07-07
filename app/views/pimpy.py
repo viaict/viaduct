@@ -2,7 +2,7 @@ from flask import Blueprint, abort, redirect, url_for
 from flask import flash, render_template, request, jsonify
 from app import db
 
-from flask.ext.login import current_user
+from flask_login import current_user
 
 from app.forms.pimpy import AddTaskForm, AddMinuteForm
 from app.utils.pimpy import PimpyAPI

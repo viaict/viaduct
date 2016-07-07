@@ -1,7 +1,7 @@
 from app import db, app
 from flask import render_template, Markup, redirect, url_for, abort,\
     flash
-from flask.ext.login import current_user
+from flask_login import current_user
 from unidecode import unidecode
 import datetime
 import re
@@ -344,7 +344,7 @@ class PimpyAPI:
     def get_navigation_menu(group_id, personal, type):
         if not ModuleAPI.can_read('pimpy'):
             abort(403)
-        if not current_user:
+        if current_user.is_anonymous:
             flash('Huidige gebruiker niet gevonden!', 'danger')
             return redirect(url_for('pimpy.view_minutes'))
 
@@ -386,7 +386,7 @@ class PimpyAPI:
         """
         if not ModuleAPI.can_read('pimpy'):
             abort(403)
-        if not current_user:
+        if current_user.is_anonymous:
             flash('Huidige gebruiker niet gevonden.', 'danger')
             return redirect(url_for('pimpy.view_tasks'))
 
@@ -419,7 +419,7 @@ class PimpyAPI:
     def get_tasks(group_id, personal):
         if not ModuleAPI.can_read('pimpy'):
             abort(403)
-        if not current_user:
+        if current_user.is_anonymous:
             flash('Huidige gebruiker niet gevonden', 'danger')
             return redirect(url_for('pimpy.view_tasks'))
 
@@ -461,7 +461,7 @@ class PimpyAPI:
 
         if not ModuleAPI.can_read('pimpy'):
             abort(403)
-        if not current_user:
+        if current_user.is_anonymous:
             flash('Huidige gebruiker niet gevonden', 'danger')
             return redirect(url_for('pimpy.view_minutes'))
 
@@ -490,7 +490,7 @@ class PimpyAPI:
 
         if not ModuleAPI.can_read('pimpy'):
             abort(403)
-        if not current_user:
+        if current_user.is_anonymous:
             flash('Huidige gebruiker niet gevonden', 'danger')
             return redirect(url_for('pimpy.view_minutes'))
 

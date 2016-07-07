@@ -1,4 +1,4 @@
-{% from "macros/form.htm" import render_field, render_checkbox %}
+{% from "macros/form.htm" import render_field, render_checkbox, render_submit %}
 
 {% extends "content.htm" %}
 
@@ -6,51 +6,31 @@
 <form action="" method="post" name="sign_up" class="form-horizontal" enctype="multipart/form-data">
     <fieldset>
         <legend>{{_('Register')}}</legend>
-
         {{ form.csrf_token }}
-        {{ render_field(form.email) }}
-        {{ render_field(form.password) }}
-        {{ render_field(form.repeat_password) }}
 
-        <div class='row'>&nbsp;</div>
+        <div class="col-md-5">
+            {{ render_field(form.first_name) }}
+            {{ render_field(form.last_name) }}
+            {{ render_field(form.birth_date) }}
+            {{ render_field(form.address) }}
+            {{ render_field(form.zip) }}
+            {{ render_field(form.city) }}
+            {{ render_field(form.country) }}
+        </div>
 
-        {{ render_field(form.first_name) }}
-        {{ render_field(form.last_name) }}
+        <div class="col-md-offset-2 col-md-5">
+            {{ render_field(form.email) }}
+            {{ render_field(form.password) }}
+            {{ render_field(form.repeat_password) }}
+            {{ render_field(form.student_id) }}
+            {{ render_field(form.education_id) }}
+            {{ render_field(form.study_start) }}
+            {{ render_checkbox(form.receive_information) }}
+        </div>
 
-        <div class='row'>&nbsp;</div>
-
-        {{ render_field(form.birth_date) }}
-
-        <div class='row'>&nbsp;</div>
-
-        {{ render_field(form.student_id) }}
-        {{ render_field(form.education_id) }}
-        {{ render_field(form.locale) }}
-        {{ render_field(form.study_start) }}
-
-        <div class='row'>&nbsp;</div>
-
-        {{ render_field(form.phone_nr) }}
-
-        <div class='row'>&nbsp;</div>
-
-        {{ render_field(form.address) }}
-        {{ render_field(form.zip) }}
-        {{ render_field(form.city) }}
-        {{ render_field(form.country) }}
-
-        {{ render_field(form.avatar) }}
-
-        {{ render_checkbox(form.receive_information) }}
-        {% for error in form.recaptcha.errors %}
-            {{ error }}
-        {% endfor %}
-        {{ form.recaptcha }}
-
-        <div class="control-group">
-            <div class="controls">
-                <button type="submit" class="btn btn-success">{{_('Register')}}</button>
-            </div>
+        <div class="col-md-12">
+            {{ render_field(form.recaptcha) }}
+            {{ render_submit(_('Register')) }}
         </div>
     </fieldset>
 </form>

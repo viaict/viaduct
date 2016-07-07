@@ -1,6 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, request, \
     url_for, jsonify, abort
-from flask.ext.babel import lazy_gettext as _
+from flask_babel import lazy_gettext as _
 
 from app import db
 from app.models.location import Location

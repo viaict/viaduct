@@ -6,10 +6,10 @@
                 <div class="col-sm-12">
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
-                        {% if not current_user or current_user.is_anonymous() %}
+                        {% if current_user.is_anonymous %}
                             <img class="visible-xs" src="/static/img/user.png" alt="..." id="loginImageMobile" class="img-rounded" data-target="#bs-example-navbar-collapse-2" data-toggle="collapse">
                         {% else %}
-                            <img class="visible-xs" src="{{ UserAPI.avatar( current_user ) }}" alt="..." id="loginImageMobile" class="img-rounded" data-target="#bs-example-navbar-collapse-2" data-toggle="collapse">
+                            <img class="visible-xs" src="{{ UserAPI.avatar(current_user) }}" alt="..." id="loginImageMobile" class="img-rounded" data-target="#bs-example-navbar-collapse-2" data-toggle="collapse">
                         {% endif %}
                           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                             <span class="sr-only">Toggle navigation</span>
@@ -72,7 +72,7 @@
                         </ul>
 
                         <div class="dropdown">
-                        {% if not current_user or current_user.is_anonymous() %}
+                        {% if current_user.is_anonymous %}
                          <a data-toggle="dropdown" href="#">
                             <img class="hidden-xs img-rounded" src="/static/img/user.png" alt="..." id="loginImage">
                           </a>
@@ -91,10 +91,10 @@
                           </div>
                         {% else %}
                           <a data-toggle="dropdown" href="#">
-                            <img class="hidden-xs img-rounded" src="{{ UserAPI.avatar( current_user ) }}" alt="..." id="loginImage" >
+                            <img class="hidden-xs img-rounded" src="{{ UserAPI.avatar(current_user) }}" alt="..." id="loginImage" >
                           </a>
                           <div class="dropdown-menu" id="loginContainer">
-                            <img src="{{ UserAPI.avatar( current_user ) }}" alt="..." id="userImage" class="img-rounded hidden-xs">
+                            <img src="{{ UserAPI.avatar(current_user) }}" alt="..." id="userImage" class="img-rounded hidden-xs">
                             <div id="userInformation">
                                 <p>{{ current_user.name }}</p>
                                 <p>{{ current_user.email }}</p>
@@ -109,7 +109,7 @@
                     </div><!-- /.navbar-collapse -->
                     <div class="collapse navbar-collapse loginForMobile" id="bs-example-navbar-collapse-2">
 
-                        {% if not current_user or current_user.is_anonymous() %}
+                        {% if current_user.is_anonymous %}
                             <form method="post" name="sign-in" id="sign-in-menu-mobile" action="{{ url_for('user.sign_in') }}">
                             {{ login_form.csrf_token }}
                             {{ render_field(login_form.email) }}
@@ -124,8 +124,7 @@
 
                         {% else %}
 
-
-                            <img src="{{ UserAPI.avatar( current_user ) }}" alt="..." id="userImageMobile" class="img-rounded">
+                            <img src="{{ UserAPI.avatar(current_user) }}" alt="..." id="userImageMobile" class="img-rounded">
                             <div id="userInformationMobile">
                                 <p>{{ current_user.name }}</p>
                                 <p>{{ current_user.email }}</p>
@@ -135,7 +134,7 @@
                                 <a href="{{ url_for('user.sign_out') }}"> <button class="btn btn-primary fullWidth" >uitloggen</button></a>
                             </div>
 
-                           {% endif %}
+                       {% endif %}
 
 
 

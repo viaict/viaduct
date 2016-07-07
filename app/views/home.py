@@ -1,6 +1,6 @@
 from datetime import date, datetime
 from flask import Blueprint, render_template, abort
-from flask.ext.babel import _
+from flask_babel import _
 from sqlalchemy import desc
 
 from app import db

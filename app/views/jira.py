@@ -2,21 +2,20 @@
 from flask import abort, flash, render_template, request, redirect, url_for
 from flask import Blueprint
 
-from flask.ext.login import current_user
+from flask_login import current_user
 
 from app.utils.forms import flash_form_errors
 from app.forms.jira import CreateIssueForm
 from app.utils.jira import JiraAPI
 
-from flask.ext.babel import lazy_gettext as _
+from flask_babel import lazy_gettext as _
 
 blueprint = Blueprint('jira', __name__)
 
 
 @blueprint.route('/create-issue/', methods=['GET', 'POST'])
 def create_issue():
-
-    if not current_user or not current_user.has_payed:
+    if current_user.is_anonymous or not current_user.has_payed:
         abort(403)
 
     form = CreateIssueForm(request.form)

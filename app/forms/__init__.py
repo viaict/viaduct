@@ -1,6 +1,6 @@
 import os
 
-from flask.ext.wtf import Form
+from flask_wtf import Form
 
 from app import app
 from app.utils import import_module

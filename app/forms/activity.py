@@ -1,9 +1,9 @@
+from flask_babel import lazy_gettext as _  # gettext
 from flask_wtf import Form
 from flask_wtf.file import FileField
 from wtforms import (StringField, SelectField, TextAreaField, DateTimeField,
                      IntegerField)
 from wtforms.validators import InputRequired, Email
-from flask.ext.babel import lazy_gettext as _  # gettext
 
 
 class CreateForm(Form):

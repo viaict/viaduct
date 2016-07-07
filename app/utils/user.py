@@ -1,4 +1,4 @@
-from flask.ext.login import current_user
+from flask_login import current_user
 from app.models.page import PagePermission
 from flask import flash
 import os
@@ -13,7 +13,7 @@ from flask import render_template
 from app.models.group import Group
 from app.utils.file import FileAPI
 
-from flask.ext.babel import lazy_gettext as _
+from flask_babel import lazy_gettext as _
 
 ALLOWED_EXTENSIONS = set(['png', 'gif', 'jpg', 'jpeg'])
 UPLOAD_DIR = 'app/static/files/users/'
@@ -125,7 +125,7 @@ class UserAPI:
 
     @staticmethod
     def can_read(page):
-        if page.needs_payed and (not current_user or
+        if page.needs_payed and (current_user.is_anonymous or
                                  not current_user.has_payed):
             return False
 
@@ -138,8 +138,8 @@ class UserAPI:
     @staticmethod
     def get_membership_warning():
         """Render a warning if the current user has not payed."""
-        if not current_user or current_user.id == 0 or \
-                current_user.has_payed:
+        if current_user.is_anonymous or\
+                (current_user.is_authenticated and current_user.has_payed):
             return ''
 
         return render_template('user/membership_warning.htm')

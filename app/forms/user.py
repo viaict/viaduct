@@ -3,14 +3,14 @@ from app import app
 from app.models import User
 
 from flask_wtf import Form
+from flask_wtf.recaptcha import RecaptchaField, Recaptcha
 from wtforms import StringField, PasswordField, BooleanField, \
     SelectField, IntegerField, FileField
 from wtforms.widgets import TextInput
 from wtforms.validators import InputRequired, Email, EqualTo, ValidationError,\
     Length, Optional
 
-from flask.ext.babel import lazy_gettext as _  # noqa
-from flask.ext.wtf.recaptcha import RecaptchaField
+from flask_babel import lazy_gettext as _, gettext  # noqa
 
 import dateutil
 import bcrypt
@@ -42,36 +42,35 @@ class BaseUserForm(Form):
     email = StringField(_('E-mail adress'), validators=[
         InputRequired(message=_('No e-mail adress submitted')),
         Email(message=_('Invalid e-mail adress submitted'))])
-    first_name = StringField(
-        _('First name'), validators=[
-            InputRequired(message=_('No first name sunmitted'))]
+    first_name = StringField(_('First name'), validators=[
+        InputRequired(message=_('No first name sunmitted'))]
     )
-    last_name = StringField(
-        _('Last name'), validators=[
-            InputRequired(message=_('No last name submitted'))]
+    last_name = StringField(_('Last name'), validators=[
+        InputRequired(message=_('No last name submitted'))]
     )
-    student_id = StringField(
-        _('Student ID'), validators=[
-            InputRequired(message=_('No studentnumber submitted'))]
+    student_id = StringField(_('Student ID'), validators=[
+        InputRequired(message=_('No studentnumber submitted'))]
     )
     education_id = SelectField(_('Education'), coerce=int)
-    avatar = FileField('Avatar', validators=[Optional()])
     receive_information = BooleanField(_('Would you like to recieve '
                                          'information from companies?'))
-
-    phone_nr = StringField(_('Phone'))
 
     address = StringField(_('Address'))
     zip = StringField(_('Zip code'))
     city = StringField(_('City'))
     country = StringField(_('Country'), default='Nederland')
 
+    # Dates
     birth_date = DateField(_('Birthdate'), validators=[
         InputRequired(message=_('No birthdate submitted'))])
     study_start = DateField(_('Starting year study'), validators=[
         InputRequired(message=_('No starting year of study submitted'))])
-    locale = SelectField(_('Language'),
-                         choices=list(app.config['LANGUAGES'].items()))
+
+    # Optional fields
+    locale = SelectField(_('Language'), validators=[
+        Optional()], choices=list(app.config['LANGUAGES'].items()))
+    phone_nr = StringField(_('Phone'), validators=[Optional()])
+    avatar = FileField('Avatar', validators=[Optional()])
 
 
 class SignUpForm(BaseUserForm):
@@ -91,7 +90,8 @@ class SignUpForm(BaseUserForm):
         InputRequired(message=_('No birthdate submitted'))])
     study_start = DateField(_('Starting year study'), validators=[
         InputRequired(message=_('No starting year of study submitted'))])
-    recaptcha = RecaptchaField()
+    recaptcha = RecaptchaField(
+        validators=[Recaptcha(message='Check Recaptcha')])
 
 
 class EditUserForm(BaseUserForm):
@@ -124,7 +124,8 @@ class EditUserInfoForm(BaseUserForm):
         _('Password'), validators=[
             Length(message=(_('Minimal password length ') +
                             str(_min_password_length)),
-                   min=_min_password_length)]
+                   min=_min_password_length),
+            Optional()]
     )
     repeat_password = PasswordField(
         _('Repeat password'), validators=[

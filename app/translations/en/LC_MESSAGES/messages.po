@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-06-18 17:38+0200\n"
+"POT-Creation-Date: 2016-07-03 13:34+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -55,6 +55,24 @@ msgstr ""
 msgid "Address"
 msgstr ""
 
+msgid "Address is required."
+msgstr ""
+
+msgid "Admin data"
+msgstr ""
+
+msgid "All companies"
+msgstr ""
+
+msgid "All contacts"
+msgstr ""
+
+msgid "All locations"
+msgstr ""
+
+msgid "All vacancies"
+msgstr ""
+
 msgid "Already exists in the database"
 msgstr ""
 
@@ -64,7 +82,8 @@ msgstr ""
 msgid "Amount solved"
 msgstr ""
 
-msgid "An email has been sent to %(email) with further instructions."
+#, python-format
+msgid "An email has been sent to %(email)s with further instructions."
 msgstr ""
 
 msgid "An error occurred while uploading the file"
@@ -129,6 +148,9 @@ msgstr ""
 msgid "City"
 msgstr ""
 
+msgid "City is required."
+msgstr ""
+
 msgid "Click to expand"
 msgstr ""
 
@@ -183,10 +205,20 @@ msgid "Contact details"
 msgstr ""
 
 #, python-format
+msgid "Contact email \"%s\" is already in use."
+msgstr ""
+
+#, python-format
 msgid "Contact name \"%s\" is already in use."
 msgstr ""
 
 msgid "Contact person"
+msgstr ""
+
+msgid "Contact person deleted."
+msgstr ""
+
+msgid "Contact person saved."
 msgstr ""
 
 msgid "Contest does not exist."
@@ -214,6 +246,9 @@ msgid "Correct"
 msgstr ""
 
 msgid "Country"
+msgstr ""
+
+msgid "Country is required."
 msgstr ""
 
 msgid "Course"
@@ -289,9 +324,6 @@ msgid "Delete news item"
 msgstr ""
 
 msgid "Description"
-msgstr ""
-
-msgid "Description is required."
 msgstr ""
 
 msgid "Disabled"
@@ -397,6 +429,9 @@ msgid "Either Dutch or English title required"
 msgstr ""
 
 msgid "Email"
+msgstr ""
+
+msgid "Email is required."
 msgstr ""
 
 msgid "End date"
@@ -588,6 +623,15 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
+msgid "Location deleted."
+msgstr ""
+
+msgid "Location is required."
+msgstr ""
+
+msgid "Location saved."
+msgstr ""
+
 msgid "Log in"
 msgstr ""
 
@@ -628,6 +672,12 @@ msgstr ""
 msgid "New activity"
 msgstr ""
 
+msgid "New company"
+msgstr ""
+
+msgid "New contact"
+msgstr ""
+
 msgid "New course"
 msgstr ""
 
@@ -638,6 +688,12 @@ msgid "New examination"
 msgstr ""
 
 msgid "New item"
+msgstr ""
+
+msgid "New location"
+msgstr ""
+
+msgid "New vacancy"
 msgstr ""
 
 msgid "News"
@@ -706,6 +762,9 @@ msgstr ""
 msgid "No password submitted"
 msgstr ""
 
+msgid "No permissions to read contacts"
+msgstr ""
+
 msgid "No starting year of study submitted"
 msgstr ""
 
@@ -724,6 +783,9 @@ msgstr ""
 msgid "None"
 msgstr ""
 
+msgid "Not a valid email."
+msgstr ""
+
 msgid "Not found!"
 msgstr ""
 
@@ -734,6 +796,9 @@ msgid "Old answers preserved."
 msgstr ""
 
 msgid "Old examination preserved."
+msgstr ""
+
+msgid "Optional data"
 msgstr ""
 
 msgid "Page not found"
@@ -757,6 +822,9 @@ msgstr ""
 msgid "Phone"
 msgstr ""
 
+msgid "Phone is required."
+msgstr ""
+
 msgid "Please fill in"
 msgstr ""
 
@@ -764,6 +832,9 @@ msgid "Please fill in :D"
 msgstr ""
 
 msgid "Position vacant"
+msgstr ""
+
+msgid "Post address"
 msgstr ""
 
 msgid "Postoffice Box"
@@ -1182,10 +1253,16 @@ msgstr ""
 msgid "You do not have rights to remove pages"
 msgstr ""
 
+msgid "You do not have the rights to view this page."
+msgstr ""
+
 msgid "You have successfully registered, payment is still required!"
 msgstr ""
 
 msgid "You have to be logged in to fill in a form"
+msgstr ""
+
+msgid "You must be logged in to view this page."
 msgstr ""
 
 msgid "You must be logged-in to register for an activity."
@@ -1207,6 +1284,9 @@ msgid "Your registration has been completed"
 msgstr ""
 
 msgid "Zip code"
+msgstr ""
+
+msgid "Zip code is required."
 msgstr ""
 
 msgid "ago"
@@ -1413,5 +1493,20 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Contactpersoon"
+#~ msgstr ""
+
+#~ msgid "An email has been sent to %(email) with further instructions."
+#~ msgstr ""
+
+#~ msgid "Description is required."
+#~ msgstr ""
+
+#~ msgid "ReCaptcha invalid"
+#~ msgstr ""
+
+#~ msgid "Admin"
+#~ msgstr ""
+
+#~ msgid "Optionel data"
 #~ msgstr ""
 

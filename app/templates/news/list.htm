@@ -2,58 +2,54 @@
 
 {% extends "content.htm" %}
 
-{% block page %}
+{% block content %}
 
-    <div class='row'>
-        <div class='col-md-offset-1 col-md-10'>
-            <div class='btn-group'>
-                {% if ModuleAPI.can_write('news') %}
-                    <a href='{{ url_for('news.edit') }}' class='btn btn-success'>
-                        {{ _('Create news item') }}
-                    </a>
-                    <a href='{{ url_for('news.all') }}' class='btn btn-primary'>
-                        {{ _('Show all news items') }}
-                    </a>
-                {% endif %}
-                {% if archive %}
-                    <a href='{{ url_for('news.list') }}' class='btn btn-default'>
-                        {{ _('Show recent news items') }}
-                    </a>
-                {% else %}
-                    <a href='{{ url_for('news.archive') }}' class='btn btn-default'>
-                        {{ _('Show news item archive') }}
-                    </a>
-                {% endif %}
-            </div>
-        <hr />
-        <div id='news-items'>
-            {% for item in items.items %}
-                <div class='well'>
-                    <div class='row'>
-                        <div class='col-md-8 title'>
-                            <a href='{{ url_for('news.view', news_id=item.id) }}'>
-                                <h3>{{ item.title }}</h3>
-                            </a>
-                        </div>
-                        <div class='col-md-4 text-right'>
-                            {{_('Published at')}}: <em>{{ item.publish_date.strftime('%Y-%m-%d') }}</em><br />
-                            {{_('Written by')}}: <em>{{ item.user.name }}</em>
-                        </div>
-                    </div>
-                    <div class='row'>
-                        <div class='col-md-12'>
-                            {{ item.get_short_content(300) | markdown }}
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-            <hr />
-            </div>
-            {% if archive %}
-                {{ render_pagination(items, 'news.archive') }}
-            {% else %}
-                {{ render_pagination(items, 'news.list') }}
-            {% endif %}
-        </div>
+    <div class='btn-group'>
+        {% if ModuleAPI.can_write('news') %}
+            <a href='{{ url_for('news.edit') }}' class='btn btn-success'>
+                {{ _('Create news item') }}
+            </a>
+            <a href='{{ url_for('news.all') }}' class='btn btn-primary'>
+                {{ _('Show all news items') }}
+            </a>
+        {% endif %}
+        {% if archive %}
+            <a href='{{ url_for('news.list') }}' class='btn btn-default'>
+                {{ _('Show recent news items') }}
+            </a>
+        {% else %}
+            <a href='{{ url_for('news.archive') }}' class='btn btn-default'>
+                {{ _('Show news item archive') }}
+            </a>
+        {% endif %}
     </div>
+    <hr/>
+
+    {% for item in items.items %}
+        <div class='well'>
+            <div class='row'>
+                <div class='col-md-8 title'>
+                    <a href='{{ url_for('news.view', news_id=item.id) }}'>
+                        <h3>{{ item.title }}</h3>
+                    </a>
+                </div>
+                <div class='col-md-4 text-right'>
+                    {{_('Published at')}}: <em>{{ item.publish_date.strftime('%Y-%m-%d') }}</em><br />
+                    {{_('Written by')}}: <em>{{ item.user.name }}</em>
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col-md-12'>
+                    {{ item.get_short_content(300) | markdown }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <hr />
+    </div>
+    {% if archive %}
+        {{ render_pagination(items, 'news.archive') }}
+    {% else %}
+        {{ render_pagination(items, 'news.list') }}
+    {% endif %}
 {% endblock %}

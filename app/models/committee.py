@@ -4,7 +4,7 @@ from app import db, get_locale
 from app.models.page import SuperRevision
 from app.models import User
 
-from flask.ext.babel import lazy_gettext as _
+from flask_babel import lazy_gettext as _
 
 
 class CommitteeRevision(SuperRevision):
@@ -41,7 +41,7 @@ class CommitteeRevision(SuperRevision):
     def __init__(self, page=None, nl_title='', en_title='', comment='',
                  user_id=None, nl_description='', en_description='',
                  group_id=None, coordinator_id=None, interim=None):
-        super(CommitteeRevision, self).__init__(nl_title, en_title,  comment)
+        super(CommitteeRevision, self).__init__(nl_title, en_title, comment)
 
         self.page = page
         self.user_id = user_id
@@ -60,6 +60,8 @@ class CommitteeRevision(SuperRevision):
 @event.listens_for(CommitteeRevision, 'load')
 def set_committee_revision_locale(com_rev, context):
     """
+    Fill model content according to language.
+
     This function is called after an CommitteeRevision model is filled with
     data from the database, but before is used in all other code.
 

@@ -10,15 +10,19 @@
 {% endmacro %}
 
 {% macro render_submit(text) %}
-<button class='btn btn-primary' data-loading-text={{_('Loading...')}}
-    type='submit'>{{ text }}</button>
+    <div class="form-group">
+        <button class='btn btn-primary' data-loading-text={{_('Loading...')}}
+            type='submit'>{{ text }}</button>
+    </div>
 {% endmacro %}
 
 {% macro render_checkbox(field) %}
-    <div class="checkbox">
-        <label>
-            {{ field }} {{ field.label.text }}
-        </label>
+    <div class="form-group">
+        <div class="checkbox">
+            <label>
+                {{ field }} {{ field.label.text }}
+            </label>
+        </div>
     </div>
 {% endmacro %}
 

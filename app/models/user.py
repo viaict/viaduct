@@ -1,10 +1,32 @@
 from app import db, app
-from app.models.education import Education
-from datetime import datetime
 from app.models import BaseEntity, Group
+from app.models.education import Education
+from flask_login import UserMixin, AnonymousUserMixin
+from datetime import datetime
 
 
-class User(db.Model, BaseEntity):
+class AnonymousUser(AnonymousUserMixin):
+    """
+    Has attributes for flask-login.
+
+    is_anonymous = True, is_active & is_authenticated = False.
+    current_user is equal to an instance of this class whenever the user is
+    not logged in.
+
+    Check logged in using:
+
+    >>> if current_user.is_anonymous:
+    >>>     abort(403)
+
+    Keep in mind, all the user attributes are not available when the user is
+    not logged in.
+    """
+
+    id = 0
+    has_payed = False
+
+
+class User(db.Model, UserMixin, BaseEntity):
     __tablename__ = 'user'
 
     prints = ('id', 'email', 'password', 'first_name', 'last_name',
@@ -60,26 +82,14 @@ class User(db.Model, BaseEntity):
         self.receive_information = receive_information
 
     def __setattr__(self, name, value):
-        """ if has_payed is set to true, we want to store the date that
-        happend.  Because of legacy code and sqlalchemy we do it this way """
+        """
+        If has_payed is set to true, we want to store the date that happend.
+
+        Because of legacy code and sqlalchemy we do it this way
+        """
         if name == 'has_payed' and value:
             super(User, self).__setattr__("payed_date", datetime.now())
         super(User, self).__setattr__(name, value)
-
-    def is_authenticated(self):
-        """Necessary."""
-        return self.id != 0 and not self.disabled
-
-    def is_active(self):
-        """Necessary."""
-        return self.id != 0 and not self.disabled
-
-    def is_anonymous(self):
-        return self.id == 0
-
-    def get_id(self):
-        """Necessary for Flask-Login."""
-        return str(self.id)
 
     def update_email(self, new_email):
         if self.email == new_email:

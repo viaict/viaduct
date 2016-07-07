@@ -1,13 +1,13 @@
-from app import db, get_locale
-from app.models import Page, Activity, BaseEntity
+from app import db
+from app.models import BaseEntity
 
 
-from flask.ext.babel import lazy_gettext as _
-
-""" Meta tags for pages, activities and modules for SEO 
+""" Meta tags for pages, activities and modules for SEO
     Please use with the provided SEO API.
     @author Bram van den Akker
 """
+
+
 class SEO(db.Model, BaseEntity):
     __tablename__ = 'seo'
 
@@ -31,8 +31,8 @@ class SEO(db.Model, BaseEntity):
 
     url = db.Column(db.Text)
 
-    def __init__(self, page=None, page_id=None, activity=None, activity_id=None, 
-                 url=None, nl_title='', en_title='', 
+    def __init__(self, page=None, page_id=None, activity=None,
+                 activity_id=None, url=None, nl_title='', en_title='',
                  nl_description='', en_description='',
                  nl_tags='', en_tags=''):
         self.page = page

@@ -2,12 +2,13 @@ import os
 
 from flask import abort, Blueprint, redirect, request, render_template, \
     send_file, url_for
-from flask.ext.login import current_user
+from flask_login import current_user
 from werkzeug import secure_filename
 
 from app import app
 from app.forms import UploadForm
 from app.utils.forms import flash_form_errors
+from app.utils.module import ModuleAPI
 
 blueprint = Blueprint('upload', __name__)
 
@@ -31,7 +32,7 @@ def view_direct(filename):
 
 @blueprint.route('/file/add/', methods=['GET', 'POST'])
 def add():
-    if not current_user or current_user.email != 'administrator@svia.nl':
+    if not ModuleAPI.can_write('file') or current_user.is_anonymous:
         return abort(403)
 
     form = UploadForm(request.form)

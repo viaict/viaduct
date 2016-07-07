@@ -1,6 +1,6 @@
 import datetime
 
-from flask.ext.babel import lazy_gettext as _
+from flask_babel import lazy_gettext as _
 
 from app import db
 

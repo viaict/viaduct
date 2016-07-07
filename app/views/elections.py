@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, render_template, url_for, request, \
     jsonify, abort
-from flask.ext.login import current_user
+from flask_login import current_user
 
 from math import ceil
 from datetime import date
@@ -45,7 +45,7 @@ def nominate():
     if not can_nominate():
         return redirect(url_for('elections.main'))
 
-    if not current_user or not current_user.has_payed:
+    if current_user.is_anonymous or not current_user.has_payed:
         return abort(403)
 
     nominated_ids = [n.nominee.id for n in current_user.nominations.all()]
@@ -70,12 +70,12 @@ def submit_nomination():
     if not can_nominate():
         return jsonify(error='Het nomineren is gesloten')
 
-    if current_user is None:
+    if current_user.is_anonymous:
         return jsonify(error='Je moet ingelogd zijn om een docent te '
-                       'nomineren'), 500
+                       'nomineren'), 403
     if not current_user.has_payed:
         return jsonify(error='Je moet betaald lid zijn om een docent te '
-                       'nomineren'), 500
+                       'nomineren'), 403
 
     nominee_id = request.form.get('id')
 
@@ -99,13 +99,13 @@ def remove_nomination():
     if not can_nominate():
         return jsonify(error='Het nomineren is gesloten')
 
-    if current_user is None or not current_user.has_payed:
-        return jsonify(error='Je hebt hier helemaal niks te zoeken'), 500
+    if current_user.is_anonymous or not current_user.has_payed:
+        return jsonify(error='Je hebt hier helemaal niks te zoeken'), 403
 
     nomination = Nomination.query.get(request.form.get('id'))
 
     if nomination.user_id != current_user.id:
-        return jsonify(error='Haha, NOPE! Pff, sukkel.'), 500
+        return jsonify(error='Haha, NOPE! Pff, sukkel.'), 403
 
     db.session.delete(nomination)
     db.session.commit()
@@ -118,7 +118,7 @@ def vote():
     if not can_vote():
         return redirect(url_for('elections.main'))
 
-    if current_user is None or not current_user.has_payed:
+    if current_user.is_anonymous or not current_user.has_payed:
         return abort(403)
 
     nominees = Nominee.query.filter(Nominee.valid == True)\
@@ -139,10 +139,10 @@ def submit_vote():
     if not can_vote():
         return jsonify(error='Het stemmen is gesloten')
 
-    if current_user is None:
-        return jsonify(error='Je moet ingelogd zijn om te stemmen'), 500
+    if current_user.is_anonymous:
+        return jsonify(error='Je moet ingelogd zijn om te stemmen'), 403
     if not current_user.has_payed:
-        return jsonify(error='Je moet betaald lid zijn om te stemmen'), 500
+        return jsonify(error='Je moet betaald lid zijn om te stemmen'), 403
 
     nominee_id = request.form.get('nominee_id')
     nominee = Nominee.query.get(nominee_id)
@@ -186,7 +186,7 @@ def admin_nominate():
 @blueprint.route('/admin/nomineren/', methods=['POST'])
 def validate_nominate():
     if not ModuleAPI.can_write('elections'):
-        return jsonify(error='Hey, dit mag jij helemaal niet doen!'), 500
+        return jsonify(error='Hey, dit mag jij helemaal niet doen!'), 403
 
     nominee = Nominee.query.get(request.form.get('id'))
     valid = request.form.get('valid') == 'true'

@@ -1,11 +1,10 @@
 # coding: utf-8
-
 import copy
 import json
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask import abort, jsonify
-from flask.ext.login import current_user
+from flask_login import current_user
 
 from app import app, db
 from app.utils.forms import flash_form_errors
@@ -119,6 +118,7 @@ def edit(group_id):
         if form.validate_on_submit():
             name = form.data['name'].strip()
             maillist = form.data['maillist'].strip().lower()
+
             valid_form = True
 
             group_with_same_name = Group.query.\
@@ -130,6 +130,10 @@ def edit(group_id):
             if valid_form:
                 group.name = name
                 group.maillist = maillist
+                if maillist == '':
+                    group.maillist = None
+                else:
+                    group.maillist = maillist
 
                 db.session.commit()
                 google.create_group_if_not_exists(name, maillist)
@@ -189,7 +193,7 @@ def delete_group_users(group_id):
         flash('There is no such group.')
         return redirect(url_for('group.view'))
 
-    user_ids = request.json['selected_ids']
+    user_ids = request.get_json()['selected_ids']
 
     users = group.get_users().filter(User.id.in_(user_ids))\
         .order_by(User.first_name).order_by(User.last_name).all()
@@ -309,7 +313,7 @@ def group_api_add_users(group_id):
         return abort(403)
     group = Group.query.get(group_id)
 
-    user_ids = request.json['selected_ids']
+    user_ids = request.get_json()['selected_ids']
     add_users = User.query.filter(User.id.in_(user_ids)).all()
 
     for user in add_users:

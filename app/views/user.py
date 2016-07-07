@@ -10,23 +10,25 @@ from datetime import datetime
 from flask import flash, redirect, render_template, request, url_for, abort,\
     session
 from flask import Blueprint
-from flask.ext.login import current_user, login_user, logout_user
-from flask.ext.babel import lazy_gettext as _, gettext
+from flask_login import current_user, login_user, logout_user
+from flask_babel import _
 
 from app import db, login_manager
-from app.utils.forms import flash_form_errors
-from app.forms import SignUpForm, SignInForm, ResetPassword,\
-    RequestPassword
+
+from app.forms import SignUpForm, SignInForm, ResetPassword, RequestPassword
+from app.forms.user import EditUserForm, EditUserInfoForm
+
 from app.models import User
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult, CustomForm
 from app.models.group import Group
 from app.models.request_ticket import Password_ticket
-from app.forms.user import EditUserForm, EditUserInfoForm
 from app.models.education import Education
-from app.utils.module import ModuleAPI
+
 from app.utils import UserAPI
 from app.utils import copernica
+from app.utils.module import ModuleAPI
+from app.utils.forms import flash_form_errors
 from app.utils.google import HttpError, send_email
 
 blueprint = Blueprint('user', __name__)
@@ -49,23 +51,24 @@ def view_single(user_id=None):
     can_read = False
     can_write = False
 
-    if not current_user:
+    # Only logged in users can view profiles
+    if current_user.is_anonymous:
         return abort(403)
+    # Unpayed members cannot view other profiles
     if current_user.id != user_id and not current_user.has_payed:
         return abort(403)
+    # A user can always view his own profile
     if current_user.id == user_id:
         can_write = True
         can_read = True
+    # group rights
     if ModuleAPI.can_read('user'):
         can_read = True
     if ModuleAPI.can_write('user'):
         can_write = True
         can_read = True
 
-    user = User.query.get(user_id)
-    if not user:
-        return abort(404)
-
+    user = User.query.get_or_404(user_id)
     user.avatar = UserAPI.avatar(user)
     user.groups = UserAPI.get_groups_for_user_id(user)
 
@@ -101,7 +104,7 @@ def view_single(user_id=None):
 def remove_avatar(user_id=None):
     user = User.query.get(user_id)
     if not ModuleAPI.can_write('user') and\
-            (not current_user or current_user.id != user_id):
+            (current_user.is_anonymous or current_user.id != user_id):
         return abort(403)
     UserAPI.remove_avatar(user)
     return redirect(url_for('user.view_single', user_id=user_id))
@@ -112,12 +115,12 @@ def remove_avatar(user_id=None):
 def edit(user_id=None):
     """Create user for admins and edit for admins and users."""
     if not ModuleAPI.can_write('user') and\
-            (not current_user or current_user.id != user_id):
+            (current_user.is_anonymous or current_user.id != user_id):
         return abort(403)
 
     # Select user
     if user_id:
-        user = User.query.get(user_id)
+        user = User.query.get_or_404(user_id)
     else:
         user = User()
 
@@ -243,7 +246,7 @@ def edit(user_id=None):
 def sign_up():
     # Redirect the user to the index page if he or she has been authenticated
     # already.
-    if current_user and current_user.is_authenticated():
+    if current_user.is_authenticated:
         return redirect(url_for('home.home'))
 
     form = SignUpForm(request.form)
@@ -280,11 +283,6 @@ def sign_up():
         db.session.add(group)
         db.session.commit()
 
-        # Upload avatar
-        avatar = request.files['avatar']
-        if avatar:
-            UserAPI.upload(avatar, user.id)
-
         login_user(user)
 
         gb = user.birth_date.strftime('%Y-%m-%d')
@@ -293,9 +291,9 @@ def sign_up():
                           user.education.name, user.id, user.student_id,
                           Bedrijfsinformatie=info, Geboortedatum=gb)
 
-        flash(gettext('Welcome %(name)s! Your profile has been succesfully '
-                      'created and you have been logged in!',
-                      name=current_user.first_name), 'success')
+        flash(_('Welcome %(name)s! Your profile has been succesfully '
+                'created and you have been logged in!',
+                name=current_user.first_name), 'success')
 
         return redirect(url_for('home.home'))
     else:
@@ -308,7 +306,7 @@ def sign_up():
 def sign_in():
     # Redirect the user to the index page if he or she has been authenticated
     # already.
-    if current_user and current_user.is_authenticated():
+    if current_user.is_authenticated:
         return redirect(url_for('home.home'))
 
     form = SignInForm(request.form)
@@ -323,8 +321,8 @@ def sign_in():
                 flash(_('Your account has been disabled, you are not allowed '
                         'to log in'), 'danger')
             else:
-                flash(gettext('Hey %(name)s, you\'re now logged in!',
-                              name=current_user.first_name), 'success')
+                flash(_('Hey %(name)s, you\'re now logged in!',
+                        name=current_user.first_name), 'success')
 
             referer = request.headers.get('Referer')
             denied = (
@@ -508,7 +506,7 @@ def api_delete_user():
     if not ModuleAPI.can_write('user'):
         return abort(403)
 
-    user_ids = request.json['selected_ids']
+    user_ids = request.get_json()['selected_ids']
     del_users = User.query.filter(User.id.in_(user_ids)).all()
 
     for user in del_users:

@@ -64,7 +64,7 @@
 
                 <div id="collapseForm" class="accordion-body collapse">
                     <div class="accordion-inner">
-                        {% if current_user and current_user.id %}
+                        {% if current_user.is_authenicated %}
                             <script>
                                 var msg_success = '{{ activity.form.msg_success }}';
                             </script>

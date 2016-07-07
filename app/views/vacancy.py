@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for,\
     abort, flash
-from flask.ext.babel import lazy_gettext as _
+from flask_babel import lazy_gettext as _
 
 from sqlalchemy import or_, and_, func
 

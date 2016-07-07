@@ -2,15 +2,15 @@ from datetime import date
 
 from flask import Blueprint, abort, render_template, request, flash, redirect,\
     url_for
-from flask.ext.login import current_user
-from flask.ext.babel import _  # gettext
+from flask_login import current_user
+from flask_babel import _  # gettext
 
 from sqlalchemy import desc
 
 from app import db
-from app.utils import ModuleAPI
 from app.forms import NewsForm
 from app.models import News
+from app.utils import ModuleAPI
 from app.utils.forms import flash_form_errors
 
 blueprint = Blueprint('news', __name__, url_prefix='/news')

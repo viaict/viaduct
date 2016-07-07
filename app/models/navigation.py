@@ -1,7 +1,6 @@
 from sqlalchemy import event
 from app import db, get_locale
 from app.models import BaseEntity
-from flask.ext.babel import lazy_gettext as _
 
 
 class NavigationEntry(db.Model, BaseEntity):
@@ -47,6 +46,8 @@ class NavigationEntry(db.Model, BaseEntity):
 @event.listens_for(NavigationEntry, 'load')
 def set_navigation_entry_locale(nav_entry, context):
     """
+    Fill model content according to language.
+
     This function is called after an NavigationEntry model is filled with data
     from the database, but before is used in all other code.
 

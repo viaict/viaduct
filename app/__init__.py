@@ -2,9 +2,9 @@ import os
 
 from flask import Flask, request, Markup, render_template, session
 from flask.json import JSONEncoder as BaseEncoder
-from flask.ext.babel import Babel
-from flask.ext.login import LoginManager, current_user
-from flask_sqlalchemy import SQLAlchemy as BaseSQLAlchemy, Model, \
+from flask_babel import Babel
+from flask_login import LoginManager, current_user
+from flask_sqlalchemy import SQLAlchemy, Model, \
     _BoundDeclarativeMeta, _QueryProperty, declarative_base
 
 from speaklater import _LazyString
@@ -15,7 +15,7 @@ import json
 from flask_jsglue import JSGlue
 
 
-version = 'v2.6.7.2'
+version = 'v2.6.8.0'
 
 
 def static_url(url):
@@ -71,8 +71,7 @@ def get_locale():
         return lang
 
     # if a user is logged in, use the locale from the user settings
-    if current_user and not current_user.is_anonymous() \
-            and current_user.locale is not None:
+    if current_user.is_authenticated and current_user.locale is not None:
         return current_user.locale
 
     return request.accept_languages.best_match(list(languages), default='nl')
@@ -115,26 +114,10 @@ constraint_naming_convention = {
     "pk": "pk_%(table_name)s"
 }
 
-
-class SQLAlchemy(BaseSQLAlchemy):
-    """
-    Custom SQLAlchemy object that uses naming conventions.
-
-    https://stackoverflow.com/questions/29153930/
-
-    With Flask-SQLAlchemy 2.1 this can be done better, but it is not released
-    yet. And 2.0 caused issues because of autoflush so those should be fixed.
-    """
-
-    def make_declarative_base(self):
-        metadata = MetaData(naming_convention=constraint_naming_convention)
-
-        base = declarative_base(metadata=metadata, cls=Model, name='Model',
-                                metaclass=_BoundDeclarativeMeta)
-        base.query = _QueryProperty(self)
-        return base
-
-db = SQLAlchemy(app)
+# Custom SQLAlchemy object that uses naming conventions.
+# https://stackoverflow.com/questions/29153930/
+db = SQLAlchemy(
+    app, metadata=MetaData(naming_convention=constraint_naming_convention))
 
 from app.utils import import_module, serialize_sqla  # noqa
 from app.utils.thumb import thumb  # noqa
@@ -158,10 +141,8 @@ app.jinja_env.globals.update(len=len)
 app.jinja_env.globals.update(thumb=thumb)
 app.jinja_env.globals.update(isinstance=isinstance)
 app.jinja_env.globals.update(list=list)
-
 app.jinja_env.globals.update(static_url=static_url)
 app.jinja_env.globals.update(get_locale=get_locale)
-
 app.jinja_env.globals.update(app_config=app.config)
 
 # Register the blueprints.
@@ -173,6 +154,5 @@ register_views(app, os.path.join(path, 'views'))
 
 from app.utils.template_filters import *  # noqa
 
-from app.models import User  # noqa
-
-login_manager.anonymous_user = User.get_anonymous_user
+from app.models.user import AnonymousUser  # noqa
+login_manager.anonymous_user = AnonymousUser

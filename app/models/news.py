@@ -2,7 +2,7 @@ from datetime import date
 from sqlalchemy import event
 
 from flask import url_for
-from flask.ext.babel import lazy_gettext as _
+from flask_babel import lazy_gettext as _
 
 from app import db, get_locale
 from app.models import BaseEntity
@@ -37,7 +37,7 @@ class News(db.Model, BaseEntity):
         self.publish_date = publish_date
 
     def get_short_content(self, characters):
-        """ Get a shortened version of the total post """
+        """Get a shortened version of the total post."""
         if len(self.content) > characters:
             short_content = self.content[:characters].strip()
 
@@ -54,6 +54,8 @@ class News(db.Model, BaseEntity):
 @event.listens_for(News, 'load')
 def set_news_locale(news, context):
     """
+    Fill model content according to language.
+
     This function is called after an News model is filled with data from
     the database, but before is used in all other code.
 

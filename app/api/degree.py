@@ -38,7 +38,7 @@ class DegreeAPI(Resource):
 
     @staticmethod
     def post():
-        data = request.json
+        data = request.get_json()
         schema = {'type': 'object',
                   'properties': {'name': {'type': 'string'},
                                  'abbreviation': {'type': 'string'}}}

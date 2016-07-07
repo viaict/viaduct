@@ -37,7 +37,7 @@ class EducationAPI(Resource):
 
     @staticmethod
     def post():
-        data = request.json
+        data = request.get_json()
         schema = {'type': 'object',
                   'properties': {'degree_id': {'type', 'string'},
                                  'name': {'type': 'string'}}}
