@@ -1,6 +1,10 @@
-xx-xx-xxxx v2.x.x.x:
+XX-XX-XXXX v2.x.x.0:
+* Fixed bug where people on the reservelist were able to pay for events
+
+07-07-2016 v2.6.8.0:
 * Added facebook link in base.htm
-* Fixed bug where people on the reservelist of an activity were able to pay for the activity
+* New registration form
+
 
 18-06-2016 v2.6.7.0:
 * Lanuage switcher now only changes for session, until saved permanently.

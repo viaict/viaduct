@@ -4,6 +4,9 @@ from flask import Blueprint, flash, redirect, render_template, request,\
 from flask_login import current_user
 from flask_babel import _  # gettext
 
+from flask_wtf import Form
+from wtforms.fields import StringField
+
 from app import db
 from app.forms import PageForm, HistoryPageForm
 from app.utils.forms import flash_form_errors
@@ -171,14 +174,33 @@ def edit_page(path=''):
                            path=path, groups=zip(groups, form.permissions))
 
 
-@blueprint.route('/remove/<path:path>/', methods=['POST'])
+@blueprint.route('/delete/<path:path>/', methods=['GET', 'POST'])
 def delete(path):
     if not ModuleAPI.can_write('page'):
         return abort(403)
 
-    if PageAPI.remove_page(path):
-        flash(_('The page has been deletd'), 'success')
-    else:
-        flash(_('The page you tried to delete does not exist'), 'danger')
+    page = Page.get_by_path(path)
+    if not page:
+        flash(_('The page you tried to delete does not exist.'), 'danger')
+        return redirect(url_for('page.get_page', path=path))
+        abort(404)
+    rev = page.get_latest_revision()
 
-    return redirect(url_for('home.home'))
+    class DeleteForm(Form):
+        title = StringField(_('Page title'))
+
+    form = DeleteForm(request.form)
+
+    if form.validate_on_submit():
+        if rev.title == form.title.data:
+            db.session.delete(page)
+            db.session.commit()
+            flash(_('The page has been deleted'), 'success')
+            return redirect(url_for('home.home'))
+        else:
+            flash(_('The given title does not match the page title.'),
+                  'warning')
+    else:
+        flash_form_errors(form)
+
+    return render_template('page/delete.htm', rev=rev, form=form)
