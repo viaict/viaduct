@@ -60,7 +60,7 @@ class User(db.Model, UserMixin, BaseEntity):
     zip = db.Column(db.String(8))
     city = db.Column(db.String(256))
     country = db.Column(db.String(256), default='Nederland')
-
+    alumnus = db.Column(db.Boolean, default=False)
     education = db.relationship(Education,
                                 backref=db.backref('user', lazy='dynamic'))
 
