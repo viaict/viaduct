@@ -180,6 +180,9 @@ def edit(user_id=None):
             user.honorary_member = form.honorary_member.data
             user.favourer = form.favourer.data
             user.disabled = form.disabled.data
+            user.alumnus = form.alumnus.data
+            if user.alumnus:
+                user.has_payed = False
         user.student_id = form.student_id.data.strip()
         user.education_id = form.education_id.data
         user.birth_date = form.birth_date.data
@@ -475,7 +478,7 @@ def get_users():
              "<i class='glyphicon glyphicon-ok'></i>"
                 if user.favourer else "",
              "<i class='glyphicon glyphicon-ok'></i>"
-                if user.disabled else ""
+                if user.alumnus else ""
              ])
     return json.dumps({"data": user_list})
 
