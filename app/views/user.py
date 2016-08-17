@@ -181,8 +181,8 @@ def edit(user_id=None):
             user.favourer = form.favourer.data
             user.disabled = form.disabled.data
             user.alumnus = form.alumnus.data
-            if user.alumnus:
-                user.has_payed = False
+        if user.alumnus:
+            user.has_payed = False
         user.student_id = form.student_id.data.strip()
         user.education_id = form.education_id.data
         user.birth_date = form.birth_date.data
