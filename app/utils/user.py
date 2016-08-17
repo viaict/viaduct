@@ -139,7 +139,8 @@ class UserAPI:
     def get_membership_warning():
         """Render a warning if the current user has not payed."""
         if current_user.is_anonymous or\
-                (current_user.is_authenticated and current_user.has_payed):
+                (current_user.is_authenticated and
+                    (current_user.has_payed or current_user.alumnus)):
             return ''
 
         return render_template('user/membership_warning.htm')
