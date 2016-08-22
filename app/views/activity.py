@@ -104,7 +104,7 @@ def get_activity(activity_id=0):
 
         # Check if the current user has already entered data in this custom
         # form
-        if current_user.is_authenticated:
+        if current_user.is_authenticated and current_user.has_payed:
             all_form_results = CustomFormResult.query \
                 .filter(CustomFormResult.form_id == activity.form_id)
             form_result = all_form_results \
@@ -141,6 +141,11 @@ def get_activity(activity_id=0):
                     activity.info = _("The number of registrations at this "
                                       "moment is") + ": " +\
                         str(activity.num_attendants)
+        else:
+            activity.info = _("You have to be a registered member of "
+                              "via in order to register for "
+                              "activities. If you believe you are a "
+                              "member, please contact the board.")
 
     return render_template('activity/view_single.htm', activity=activity,
                            form=form, login_form=SignInForm(),

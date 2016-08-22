@@ -118,7 +118,9 @@
                                         </div>
                                     {% endif %}
                                 </div>
-                                <button id="custom_form" class="btn btn-success">{{_('Send form')}}</button>
+                                {% if current_user.has_payed %}
+                                    <button id="custom_form" class="btn btn-success">{{_('Send form')}}</button>
+                                {% endif %}
                             </form>
 
                         {% else %}
