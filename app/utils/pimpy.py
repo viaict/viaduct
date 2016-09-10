@@ -169,7 +169,7 @@ class PimpyAPI:
         dones_found = []
         removes_found = []
 
-        regex = re.compile("\s*(?:ACTIE|TODO) ([^\n\r]*)")
+        regex = re.compile(r"\s*(?:ACTIE|TODO)\s+([^\n\r]*)")
         for i, line in enumerate(content.splitlines()):
             matches = regex.findall(line)
 
@@ -179,6 +179,11 @@ class PimpyAPI:
                 except:
                     print("could not split the line on ':'.\nSkipping hit.")
                     flash("Kon niet verwerken: " + action, 'danger')
+                    continue
+
+                # Ignore todos where everyone in the group would get
+                # ONE SHARED task
+                if not listed_users.strip():
                     continue
 
                 users, message = PimpyAPI.get_list_of_users_from_string(
@@ -195,7 +200,7 @@ class PimpyAPI:
                     continue
                 tasks_found.append(task)
 
-        regex = re.compile("\s*(?:ACTIES|TODOS) ([^\n\r]*)")
+        regex = re.compile("\s*(?:ACTIES|TODOS)([^\n\r]*:\s*[^\n\r]*)")
         for i, line in enumerate(content.splitlines()):
             matches = regex.findall(line)
 
@@ -248,7 +253,10 @@ class PimpyAPI:
             remove_ids = filter(None, match.split(","))
 
             for b32_id in remove_ids:
-                remove_id = b32.decode(b32_id.strip())
+                b32_id_strip = b32_id.strip()
+                if b32_id_strip == '':
+                    continue
+                remove_id = b32.decode(b32_id_strip)
                 try:
                     remove_task = Task.query\
                         .filter(Task.id == remove_id).first()
@@ -288,10 +296,13 @@ class PimpyAPI:
             return False,
         "Geen komma gescheiden lijst met gebruikers gevonden."
 
+        comma_sep = comma_sep.strip()
+
         if not comma_sep:
             return group.users.all(), ''
 
-        comma_sep = map(lambda x: x.lower().strip(), comma_sep.split(','))
+        comma_sep = filter(None, map(lambda x: x.lower().strip(),
+                                     comma_sep.split(',')))
 
         found_users = []
 
