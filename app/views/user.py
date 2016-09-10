@@ -181,8 +181,6 @@ def edit(user_id=None):
             user.favourer = form.favourer.data
             user.disabled = form.disabled.data
             user.alumnus = form.alumnus.data
-        if user.alumnus:
-            user.has_payed = False
         user.student_id = form.student_id.data.strip()
         user.education_id = form.education_id.data
         user.birth_date = form.birth_date.data
@@ -212,7 +210,6 @@ def edit(user_id=None):
         else:
             copernica.update_user(user, subscribe=True)
             flash(_('Profile succesfully created'))
-
         return redirect(url_for('user.view_single', user_id=user.id))
     else:
         flash_form_errors(form)
