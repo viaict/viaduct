@@ -1,8 +1,10 @@
-XX-XX-XXXX v2.x.x.0:
+10-09-2016 v2.6.9.0:
 * Fixed bug where people on the reservelist were able to pay for events.
 * Followers of forms automatically recieve an e-mail when there is a new response to the form.
 * Unverified members are no longer able to register for activities.
 * Improved ACTIE/ACTIES parsing in minutes.
+* Completed copernica integration for users.
+* Fixed bug where password reset would not work.
 
 07-07-2016 v2.6.8.0:
 * Added facebook link in base.htm
