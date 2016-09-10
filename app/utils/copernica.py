@@ -21,7 +21,7 @@ def copernica_enabled(f):
         if not COPERNICA_ENABLED:
             return False
         else:
-            f(args, kwargs)
+            f(*args, **kwargs)
     return wrapped
 
 
