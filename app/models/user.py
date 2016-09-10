@@ -63,6 +63,7 @@ class User(db.Model, UserMixin, BaseEntity):
 
     education = db.relationship(Education,
                                 backref=db.backref('user', lazy='dynamic'))
+    copernica_id = db.Column(db.Integer(), nullable=True)
 
     def __init__(self, email=None, password=None, first_name=None,
                  last_name=None, student_id=None, education_id=None,
