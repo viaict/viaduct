@@ -57,6 +57,7 @@ class DefaultConfig:
     MOLLIE_REDIRECT_URL = 'https://svia.nl/mollie/check/'
     MOLLIE_TEST_MODE = True
 
+    COPERNICA_ENABLED = False
     COPERNICA_API_KEY = ""
     COPERNICA_DATABASE_ID = ""
     COPERNICA_ACTIEPUNTEN = ""
