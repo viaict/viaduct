@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-09-10 11:31+0200\n"
+"POT-Creation-Date: 2016-09-11 00:36+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -245,6 +245,9 @@ msgstr "Contract startdatum"
 
 msgid "Contract startdate is required."
 msgstr "Contract startdatum is vereist"
+
+msgid "Copy to clipboard"
+msgstr "Kopiëren naar klembord"
 
 msgid "Correct"
 msgstr "Correct"
@@ -519,6 +522,9 @@ msgstr "Externe link"
 msgid "Favourer"
 msgstr "Begunstigde"
 
+msgid "File"
+msgstr "Bestand"
+
 msgid "File created successfully"
 msgstr "Bestand succesvol opgeslagen."
 
@@ -619,6 +625,9 @@ msgstr "Laatste nieuws"
 
 msgid "Legend"
 msgstr "Legenda"
+
+msgid "Link to file"
+msgstr "Link naar bestand"
 
 msgid "List"
 msgstr "Lijst"
@@ -808,7 +817,7 @@ msgid "Old examination preserved."
 msgstr "Oude tentamen behouden."
 
 msgid "Optional data"
-msgstr ""
+msgstr "Optionele gegevens"
 
 msgid "Page not found"
 msgstr "Pagina niet gevonden"
@@ -983,6 +992,9 @@ msgstr "Toon historie"
 
 msgid "Show news item archive"
 msgstr "Toon niews berichten in het archief"
+
+msgid "Show plaintext"
+msgstr "Laat als plaintext zien"
 
 msgid "Show recent news items"
 msgstr "Toon recente news berichten"
@@ -1193,6 +1205,9 @@ msgstr "Onbekend"
 
 msgid "Untried"
 msgstr "Niet geprobeerd"
+
+msgid "Upload"
+msgstr "Uploaden"
 
 msgid "User"
 msgstr "Gebruiker"

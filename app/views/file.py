@@ -1,8 +1,5 @@
-'''
-Views for the file module.
-'''
-from flask import Blueprint, render_template, request, redirect, url_for, \
-    jsonify, abort
+"""Views for the file module."""
+from flask import Blueprint, render_template, request, jsonify, abort
 from app.models.file import File
 from app.forms import FileForm
 from app.utils import FileAPI
@@ -14,9 +11,7 @@ blueprint = Blueprint('file', __name__, url_prefix='/files')
 @blueprint.route('/', methods=['GET'])
 @blueprint.route('/<int:page_nr>/', methods=['GET'])
 def list(page_nr=1):
-    '''
-    List all files that are not assigned to a page.
-    '''
+    """List all files that are not assigned to a page."""
     if not ModuleAPI.can_read('file'):
         return abort(403)
 
@@ -30,23 +25,23 @@ def list(page_nr=1):
 @blueprint.route('/', methods=['POST'])
 @blueprint.route('/<int:page_nr>/', methods=['POST'])
 def upload(page_nr=1):
-    '''
-    Upload a file.
-    '''
+    """Upload a file."""
     if not ModuleAPI.can_write('file'):
         return abort(403)
 
-    new_file = request.files['file']
-    FileAPI.upload(new_file)
+    new_file_name = request.files['file']
+    new_file = FileAPI.upload(new_file_name)
 
-    return redirect(url_for('file.list', page_nr=page_nr))
+    files = File.query.filter_by(page=None).order_by(File.name)\
+        .paginate(page_nr, 30, False)
+    form = FileForm()
+
+    return render_template('files/list.htm', **locals())
 
 
 @blueprint.route('/search/<string:query>/', methods=['GET'])
 def search(query):
-    '''
-    Fuzzy search files.
-    '''
+    """Fuzzy search files."""
     if not ModuleAPI.can_read('file'):
         return jsonify(error='Geen toestemming')
 

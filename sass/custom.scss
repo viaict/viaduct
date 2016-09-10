@@ -1247,6 +1247,16 @@ p{line-height: 25px;}
     color: #000000;
 }
 
+.text-monospace {
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+
+#newfile-url-copytext {
+    cursor: default;
+    background-color: initial;
+    opacity: initial;
+}
+
 $DOMJUDGE_RED:          #d9534f;
 $DOMJUDGE_GREEN:        #5cb85c;
 $DOMJUDGE_ORANGE:       #f0ad4e;
