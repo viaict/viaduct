@@ -13,6 +13,6 @@ def embed():
         return abort(403)
 
     """Embed the athenaeum website."""
-    url = 'https://athenaeum-sv.mijnboekhandelaar.com/'
+    url = 'https://www.athenaeum.nl/studieboeken/studieverenigingen/#A-12;10'
 
     return render_template('athenaeum/embed.htm', url=url)
