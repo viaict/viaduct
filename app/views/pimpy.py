@@ -35,15 +35,32 @@ def view_task_archive(group_id='all'):
 def view_minutes(group_id='all'):
     if not ModuleAPI.can_read('pimpy'):
         return abort(403)
+    if not (group_id == 'all' or group_id.isdigit()):
+        return abort(404)
+
     return PimpyAPI.get_minutes(group_id)
 
 
-@blueprint.route('/minutes/<group_id>/<minute_id>/')
-@blueprint.route('/minutes/<group_id>/<minute_id>/<line_number>')
+@blueprint.route('/minutes/<group_id>/<int:minute_id>/')
+@blueprint.route('/minutes/<group_id>/<int:minute_id>/<int:line_number>')
 def view_minute(group_id='all', minute_id=0, line_number=-1):
     if not ModuleAPI.can_read('pimpy'):
         return abort(403)
+    if not (group_id == 'all' or group_id.isdigit()):
+        return abort(404)
+
     return PimpyAPI.get_minute(group_id, minute_id, line_number)
+
+
+@blueprint.route('/minutes/<group_id>/<int:minute_id>/raw')
+def view_minute_raw(group_id, minute_id):
+    if not ModuleAPI.can_read('pimpy'):
+        return abort(403)
+    if not (group_id == 'all' or group_id.isdigit()):
+        return abort(404)
+
+    return (PimpyAPI.get_minute_raw(group_id, minute_id),
+            {'Content-Type': 'text/plain; charset=utf-8'})
 
 
 @blueprint.route('/tasks/', methods=['GET', 'POST'])
@@ -51,6 +68,9 @@ def view_minute(group_id='all', minute_id=0, line_number=-1):
 def view_tasks(group_id='all'):
     if not ModuleAPI.can_read('pimpy'):
         return abort(403)
+    if not (group_id == 'all' or group_id.isdigit()):
+        return abort(404)
+
     return PimpyAPI.get_tasks(group_id, False)
 
 
@@ -60,6 +80,9 @@ def view_tasks(group_id='all'):
 def view_tasks_personal(group_id='all'):
     if not ModuleAPI.can_read('pimpy'):
         return abort(403)
+    if not (group_id == 'all' or group_id.isdigit()):
+        return abort(404)
+
     return PimpyAPI.get_tasks(group_id, True)
 
 
@@ -93,6 +116,9 @@ def update_task_status():
 def add_task(group_id='all'):
     if not ModuleAPI.can_write('pimpy'):
         return abort(403)
+    if not (group_id == 'all' or group_id.isdigit()):
+        return abort(404)
+
     if group_id == '':
         group_id = 'all'
 
@@ -161,6 +187,9 @@ def edit_task(task_id=-1):
 def add_minute(group_id='all'):
     if not ModuleAPI.can_write('pimpy'):
         return abort(403)
+    if not (group_id == 'all' or group_id.isdigit()):
+        return abort(404)
+
     if group_id == '':
         group_id = 'all'
     group = Group.query.filter(Group.id == group_id).first()

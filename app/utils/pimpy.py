@@ -497,14 +497,15 @@ class PimpyAPI:
         # this should be done with a sql in statement, or something, but meh
         else:
             for group in current_user.groups:
-                query = Minute.query.filter(Minute.group_id == group.id)
-                query = query.order_by(Minute.minute_date.desc())
-                list_items[group.name] = query.all()
+                list_items[group.name] = Minute.query\
+                    .filter(Minute.group_id == group.id)\
+                    .order_by(Minute.minute_date.desc())\
+                    .all()
 
-        return Markup(render_template('pimpy/api/minutes.htm',
-                                      list_items=list_items, type='minutes',
-                                      group_id=group_id, line_number=-1,
-                                      title='PimPy'))
+        return render_template('pimpy/api/minutes.htm',
+                               list_items=list_items, type='minutes',
+                               group_id=group_id, line_number=-1,
+                               title='PimPy')
 
     @staticmethod
     def get_minute(group_id, minute_id, line_number):
@@ -526,6 +527,19 @@ class PimpyAPI:
                                type='minutes', group_id=group_id,
                                line_number=line_number, tag=tag,
                                title='PimPy')
+
+    @staticmethod
+    def get_minute_raw(group_id, minute_id):
+        """Load specifically one minute in raw format (without markup)."""
+
+        if not ModuleAPI.can_read('pimpy'):
+            abort(403)
+        if current_user.is_anonymous:
+            flash('Huidige gebruiker niet gevonden', 'danger')
+            return redirect(url_for('pimpy.view_minutes'))
+
+        minute = Minute.query.filter(Minute.id == minute_id).first()
+        return minute.content
 
     @staticmethod
     def update_content(task_id, content):
