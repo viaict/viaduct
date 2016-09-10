@@ -2,6 +2,8 @@ from flask import Blueprint, abort, redirect, url_for
 from flask import flash, render_template, request, jsonify
 from app import db
 
+import datetime
+
 from flask_login import current_user
 
 from app.forms.pimpy import AddTaskForm, AddMinuteForm
@@ -16,18 +18,18 @@ from app.models.group import Group
 blueprint = Blueprint('pimpy', __name__, url_prefix='/pimpy')
 
 
-@blueprint.route('/archive/', methods=['GET', 'POST'])
-@blueprint.route('/archive/<int:group_id>/', methods=['GET', 'POST'])
-def view_task_archive(group_id='all'):
-    """Show all tasks ever made.
+# @blueprint.route('/archive/', methods=['GET', 'POST'])
+# @blueprint.route('/archive/<int:group_id>/', methods=['GET', 'POST'])
+# def view_task_archive(group_id='all'):
+#     """Show all tasks ever made.
 
-    Can specify specific group.
-    No internal permission system made yet.
-    Do not make routes to this module yet.
-    """
-    if not ModuleAPI.can_read('pimpy'):
-        return abort(403)
-    return PimpyAPI.get_all_tasks(group_id)
+#     Can specify specific group.
+#     No internal permission system made yet.
+#     Do not make routes to this module yet.
+#     """
+#     if not ModuleAPI.can_read('pimpy'):
+#         return abort(403)
+#     return PimpyAPI.get_all_tasks(group_id)
 
 
 @blueprint.route('/minutes/', methods=['GET', 'POST'])
@@ -37,8 +39,17 @@ def view_minutes(group_id='all'):
         return abort(403)
     if not (group_id == 'all' or group_id.isdigit()):
         return abort(404)
-
     return PimpyAPI.get_minutes(group_id)
+
+@blueprint.route('/archive/', methods=['GET', 'POST'])
+@blueprint.route('/archive/<group_id>', methods=['GET', 'POST'])
+def view_minutes_in_date_range(group_id='all'):
+    if not ModuleAPI.can_read('pimpy'):
+        return abort(403)
+    group_id=request.form['group_id']
+    start_date=request.form['start_date']
+    end_date=request.form['end_date']
+    return PimpyAPI.get_minutes_in_date_range(group_id, start_date, end_date)
 
 
 @blueprint.route('/minutes/<group_id>/<int:minute_id>/')

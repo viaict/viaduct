@@ -531,6 +531,12 @@ class PimpyAPI:
     @staticmethod
     def get_minute_raw(group_id, minute_id):
         """Load specifically one minute in raw format (without markup)."""
+        minute = Minute.query.filter(Minute.id == minute_id).first()
+        return minute.content
+
+    @staticmethod
+    def get_minutes_in_date_range(group_id, start_date, end_date):
+        """Load all minutes in the given group."""
 
         if not ModuleAPI.can_read('pimpy'):
             abort(403)
@@ -538,8 +544,29 @@ class PimpyAPI:
             flash('Huidige gebruiker niet gevonden', 'danger')
             return redirect(url_for('pimpy.view_minutes'))
 
-        minute = Minute.query.filter(Minute.id == minute_id).first()
-        return minute.content
+        list_items = {}
+
+        start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
+        end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d")
+
+        if group_id != 'all':
+            query = Minute.query.filter(Minute.group_id == group_id).\
+                    filter(start_date <= Minute.minute_date,
+                          Minute.minute_date <= end_date).\
+                    order_by(Minute.minute_date.desc())
+            list_items[Group.query.filter(Group.id == group_id).first().name]\
+                = query.all()
+        # this should be done with a sql in statement, or something, but meh
+        else:
+            for group in current_user.groups:
+                query = Minute.query.filter(Minute.group_id == group.id)
+                query = query.order_by(Minute.minute_date.desc())
+                list_items[group.name] = query.all()
+
+        return Markup(render_template('pimpy/api/minutes.htm',
+                                      list_items=list_items, type='minutes',
+                                      group_id=group_id, line_number=-1,
+                                      title='PimPy'))
 
     @staticmethod
     def update_content(task_id, content):
