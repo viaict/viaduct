@@ -81,7 +81,6 @@ def update_user(user, subscribe=False):
         "Achternaam": user.last_name,
         "Studie": user.education.name if user.education else "Other",
         "Studienummer": user.student_id,
-        "Ingeschreven": "Ja" if subscribe else "Nee",
         "Lid": "Ja" if user.has_payed else "Nee",
         "VVV": "Ja" if user.favourer else "Nee",
         "Bedrijfsinformatie": "Ja" if user.receive_information else "Nee",
@@ -89,6 +88,8 @@ def update_user(user, subscribe=False):
                           if user.birth_date else "0000-00-00"),
         "WebsiteID": user.id
     }
+    if subscribe:
+        data["Ingeschreven"] = "Ja"
 
     if not user.copernica_id or user.copernica_id == 0:
         url = ("https://api.copernica.com/database/" + DATABASE_ID +
