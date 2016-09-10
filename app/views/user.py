@@ -357,6 +357,10 @@ def request_password():
         else:
             _hash = create_hash(256)
 
+            ticket = Password_ticket(user.id, _hash)
+            db.session.add(ticket)
+            db.session.commit()
+
             reset_link = ("http://www.svia.nl" +
                           url_for('user.reset_password') + _hash)
 
@@ -377,7 +381,7 @@ def request_password():
 
 
 @blueprint.route('/reset_password/', methods=['GET', 'POST'])
-@blueprint.route('/reset_password/<string:hash>/', methods=['GET', 'POST'])
+@blueprint.route('/reset_password/<string:hash>', methods=['GET', 'POST'])
 def reset_password(hash=0):
     """
     Reset form existing of two fields, password and password_repeat.
@@ -393,7 +397,7 @@ def reset_password(hash=0):
         db.and_(Password_ticket.hash == hash)).first()
 
     # Check if the request was followed within a hour
-    if not ticket or ((datetime.now() - ticket.created_on).seconds < 3600):
+    if ticket is None or ((datetime.now() - ticket.created_on).seconds > 3600):
         flash(_('No valid ticket found'))
         return redirect(url_for('user.request_password'))
 
