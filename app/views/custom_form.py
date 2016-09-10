@@ -174,11 +174,17 @@ def create(form_id=None):
                 all_sub = CustomFormResult.query.filter(
                     CustomFormResult.form_id == form_id
                 ).all()
+                # Update for users that were on the reserve list that they
+                # can now attend.
                 if prev_max < len(all_sub):
                     for x in range(prev_max, max(cur_max, len(all_sub) - 1)):
                         sub = all_sub[x]
-                        copernica.reserveActivity(sub.owner_id, sub.form_id,
-                                                  False)
+                        copernica_data = {
+                            "Reserve": "Nee"
+                        }
+                        copernica.update_subprofile(
+                            copernica.SUBPROFILE_ACTIVITY, sub.owner_id,
+                            sub.form_id, copernica_data)
             elif cur_max < prev_max:
                 all_sub = CustomFormResult.query.filter(
                     CustomFormResult.form_id == form_id
@@ -186,8 +192,12 @@ def create(form_id=None):
                 if cur_max < len(all_sub):
                     for x in range(cur_max, max(prev_max, len(all_sub) - 1)):
                         sub = all_sub[x]
-                        copernica.reserveActivity(sub.owner_id, sub.form_id,
-                                                  True)
+                        copernica_data = {
+                            "Reserve": "Ja"
+                        }
+                        copernica.update_subprofile(
+                            copernica.SUBPROFILE_ACTIVITY, sub.owner_id,
+                            sub.form_id, copernica_data)
 
         db.session.add(custom_form)
         db.session.commit()
@@ -231,7 +241,12 @@ def remove_response(submit_id=None):
 
     if max_attendants <= len(all_sub):
         from_list = all_sub[max_attendants - 1]
-        copernica.reserveActivity(from_list.owner_id, from_list.form_id, False)
+        copernica_data = {
+            "Reserve": "Nee"
+        }
+        copernica.update_subprofile(
+            copernica.SUBPROFILE_ACTIVITY, from_list.owner_id,
+            from_list.form_id, copernica_data)
 
     return response
 
@@ -299,8 +314,15 @@ def submit(form_id=None):
                 # Create "Reserve" signup
                 response = "reserve"
             else:
-                copernica.addActivity(user.id, custom_form.name, form_id,
-                                      custom_form.price, result.has_payed)
+                copernica_data = {
+                    "Naam": custom_form.name,
+                    "Betaald": result.has_payed,
+                    "Bedrag": custom_form.price,
+                    "viaductID": form_id,
+                    "Reserve": "Ja" if response is "reserve" else "Nee",
+                }
+                copernica.add_subprofile(copernica.SUBPROFILE_ACTIVITY,
+                                         user.id, copernica_data)
 
         db.session.add(user)
         db.session.commit()
@@ -398,8 +420,13 @@ def has_payed(submit_id=None):
     db.session.add(submission)
     db.session.commit()
 
-    copernica.payedActivity(submission.owner_id, submission.form_id,
-                            submission.has_payed)
+    copernica_data = {
+        "Betaald": "Ja" if submission.has_payed else "Nee",
+    }
+
+    copernica.update_subprofile(copernica.SUBPROFILE_ACTIVITY,
+                                submission.owner_id, submission.form_id,
+                                copernica_data)
 
     return response
 

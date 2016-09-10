@@ -204,36 +204,11 @@ def edit(user_id=None):
             UserAPI.upload(avatar, user.id)
 
         if user_id:
+            copernica.update_user(user)
             flash(_('Profile succesfully updated'))
         else:
+            copernica.update_user(user, subscribe=True)
             flash(_('Profile succesfully created'))
-
-        # Sending user profiles to the Copernica software
-        info = "Ja" if user.receive_information else "Nee"
-        ingeschreven = "Ja" if user.has_payed or user.favourer else "Nee"
-        vvv = "Ja" if user.favourer else "Nee"
-        gb = user.birth_date.strftime('%Y-%m-%d')
-        lid = "Ja" if user.has_payed else "Nee"
-
-        # TODO: Use kwargs to get rid of these terrible if-statements.
-        if user_id:
-            if ModuleAPI.can_write('user'):
-                copernica.updateUser(user_id, user.email, user.first_name,
-                                     user.last_name, user.education.name,
-                                     user.student_id, Lid=lid, VVV=vvv,
-                                     Bedrijfsinformatie=info, Geboortedatum=gb,
-                                     Ingeschreven=ingeschreven)
-            else:
-                copernica.updateUser(user_id, user.email, user.first_name,
-                                     user.last_name, user.education.name,
-                                     user.student_id, Bedrijfsinformatie=info,
-                                     Geboortedatum=gb,
-                                     Ingeschreven=ingeschreven)
-        else:
-            copernica.newUser(user.email, user.first_name, user.last_name,
-                              user.education.name, user.id, user.student_id,
-                              Lid=lid, VVV=vvv, Bedrijfsinformatie=info,
-                              Geboortedatum=gb, Ingeschreven=ingeschreven)
 
         return redirect(url_for('user.view_single', user_id=user.id))
     else:
@@ -283,13 +258,9 @@ def sign_up():
         db.session.add(group)
         db.session.commit()
 
-        login_user(user)
+        copernica.update_user(user, subscribe=True)
 
-        gb = user.birth_date.strftime('%Y-%m-%d')
-        info = "Ja" if user.receive_information else "Nee"
-        copernica.newUser(user.email, user.first_name, user.last_name,
-                          user.education.name, user.id, user.student_id,
-                          Bedrijfsinformatie=info, Geboortedatum=gb)
+        login_user(user)
 
         flash(_('Welcome %(name)s! Your profile has been succesfully '
                 'created and you have been logged in!',
