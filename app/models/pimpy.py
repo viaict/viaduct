@@ -3,7 +3,6 @@ import datetime
 from app.models import BaseEntity
 import baas32 as b32
 
-
 # many to many relationship tables
 task_user = db.Table(
     'pimpy_task_user',
@@ -67,9 +66,7 @@ class Task(db.Model, BaseEntity):
         return b32.encode(self.id)
 
     def get_status_string(self):
-        """
-        Returns a string representing the status
-        """
+        """Return a string representing the status."""
         if self.status >= 0 and self.status < len(self.status_meanings):
             return self.status_meanings[self.status]
         return "Onbekend"
@@ -79,9 +76,7 @@ class Task(db.Model, BaseEntity):
             self.status = status
 
     def get_status_color(self):
-        """
-        Returns a string representing the status
-        """
+        """Return a string representing the status."""
         if self.status >= 0 and self.status < len(self.status_colors):
             return self.status_colors[self.status]
         return "Onbekend"
@@ -94,9 +89,7 @@ class Task(db.Model, BaseEntity):
         return statusi
 
     def get_users(self):
-        """
-        Returns a list of users, comma separated
-        """
+        """Return a list of users, comma separated."""
         return ", ".join(map(lambda x: "%s %s" % (x.first_name, x.last_name),
                              self.users))
 
@@ -121,9 +114,7 @@ class Minute(db.Model, BaseEntity):
         self.minute_date = minute_date
 
     def get_name(self):
-        """
-        A representable (unique) name for minute
-        """
+        """A representable (unique) name for minute."""
         return 'minute%d' % self.id
 
     def get_timestamp(self):
@@ -132,18 +123,15 @@ class Minute(db.Model, BaseEntity):
     def get_content(self):
         return self.content
 
-    def get_content_numbered(self):
-        s = ''
+    def get_content_lines(self):
         for i, line in enumerate(self.content.split('\n')):
-            s += '<a id="%dln%d" class="pimpy_minute_line"/><div class="pimpy_line_number"> %d </div> %s &zwnj; </a>' % \
-                (self.id, i, i, line[:-1])
-        return s
+            yield (self.id, i, line[:-1])
 
     def get_group(self):
         return self.group
 
     def get_minute_day(self):
-        """ returns the date of when the meeting took place in yyyy-mm-dd"""
+        """Return the date of when the meeting took place in ryyy-mm-dd."""
         return self.minute_date.strftime('%Y-%m-%d')
 
     def get_title(self):

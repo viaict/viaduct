@@ -10,7 +10,7 @@ from app.utils.module import ModuleAPI
 from app.models.pimpy import Task
 from app.models.group import Group
 
-from app.utils import copernica
+# from app.utils import copernica
 
 
 blueprint = Blueprint('pimpy', __name__, url_prefix='/pimpy')
@@ -35,15 +35,32 @@ def view_task_archive(group_id='all'):
 def view_minutes(group_id='all'):
     if not ModuleAPI.can_read('pimpy'):
         return abort(403)
+    if not (group_id == 'all' or group_id.isdigit()):
+        return abort(404)
+
     return PimpyAPI.get_minutes(group_id)
 
 
-@blueprint.route('/minutes/<group_id>/<minute_id>/')
-@blueprint.route('/minutes/<group_id>/<minute_id>/<line_number>')
+@blueprint.route('/minutes/<group_id>/<int:minute_id>/')
+@blueprint.route('/minutes/<group_id>/<int:minute_id>/<int:line_number>')
 def view_minute(group_id='all', minute_id=0, line_number=-1):
     if not ModuleAPI.can_read('pimpy'):
         return abort(403)
+    if not (group_id == 'all' or group_id.isdigit()):
+        return abort(404)
+
     return PimpyAPI.get_minute(group_id, minute_id, line_number)
+
+
+@blueprint.route('/minutes/<group_id>/<int:minute_id>/raw')
+def view_minute_raw(group_id, minute_id):
+    if not ModuleAPI.can_read('pimpy'):
+        return abort(403)
+    if not (group_id == 'all' or group_id.isdigit()):
+        return abort(404)
+
+    return (PimpyAPI.get_minute_raw(group_id, minute_id),
+            {'Content-Type': 'text/plain; charset=utf-8'})
 
 
 @blueprint.route('/tasks/', methods=['GET', 'POST'])
@@ -51,6 +68,9 @@ def view_minute(group_id='all', minute_id=0, line_number=-1):
 def view_tasks(group_id='all'):
     if not ModuleAPI.can_read('pimpy'):
         return abort(403)
+    if not (group_id == 'all' or group_id.isdigit()):
+        return abort(404)
+
     return PimpyAPI.get_tasks(group_id, False)
 
 
@@ -60,6 +80,9 @@ def view_tasks(group_id='all'):
 def view_tasks_personal(group_id='all'):
     if not ModuleAPI.can_read('pimpy'):
         return abort(403)
+    if not (group_id == 'all' or group_id.isdigit()):
+        return abort(404)
+
     return PimpyAPI.get_tasks(group_id, True)
 
 
@@ -76,9 +99,14 @@ def update_task_status():
     list_items = query.all()
     for task in list_items:
         task.update_status(new_status)
-        for user in task.users:
-            copernica.updateActiepunt(user.id, task.base32_id(), task.title,
-                                      task.get_status_string())
+        # for user in task.users:
+        #     copernica_data = {
+        #         "Actiepunt": task.title,
+        #         "Status": task.get_status_string(),
+        #     }
+        #     copernica.update_subprofile(copernica.SUBPROFILE_TASK,
+        #                                 user.id, task.base32_id(),
+        #                                 copernica_data)
     db.session.commit()
     return jsonify(status=task.get_status_color())
 
@@ -88,6 +116,9 @@ def update_task_status():
 def add_task(group_id='all'):
     if not ModuleAPI.can_write('pimpy'):
         return abort(403)
+    if not (group_id == 'all' or group_id.isdigit()):
+        return abort(404)
+
     if group_id == '':
         group_id = 'all'
 
@@ -156,6 +187,9 @@ def edit_task(task_id=-1):
 def add_minute(group_id='all'):
     if not ModuleAPI.can_write('pimpy'):
         return abort(403)
+    if not (group_id == 'all' or group_id.isdigit()):
+        return abort(404)
+
     if group_id == '':
         group_id = 'all'
     group = Group.query.filter(Group.id == group_id).first()
@@ -182,26 +216,38 @@ def add_minute(group_id='all'):
                     form.content.data, form.group.data, message)
                 for task in tasks:
                     db.session.add(task)
+                # for user in task.users:
+                #     copernica_data = {
+                #         "viaductID": task.base32_id(),
+                #         "Actiepunt": task.title,
+                #         "Status": task.get_status_string(),
+                #         "Groep": task.group.name,
+                #     }
+                #     copernica.add_subprofile(
+                #         copernica.SUBPROFILE_TASK, user.id, copernica_data)
+
                 for done in dones:
                     done.update_status(4)
-                    for user in done.users:
-                        copernica.updateActiepunt(
-                            user.id, done.base32_id(), done.title,
-                            done.get_status_string())
+                # for user in done.users:
+                #     copernica_data = {
+                #         "Actiepunt": task.title,
+                #         "Status": task.get_status_string(),
+                #     }
+                #     copernica.update_subprofile(copernica.SUBPROFILE_TASK,
+                #                                 user.id, task.base32_id(),
+                #                                 copernica_data)
+
                 for remove in removes:
                     remove.update_status(5)
-                    for user in remove.users:
-                        copernica.updateActiepunt(
-                            user.id, remove.base32_id(), remove.title,
-                            remove.get_status_string())
+                # for user in remove.users:
+                #     copernica_data = {
+                #         "Actiepunt": task.title,
+                #         "Status": task.get_status_string(),
+                #     }
+                #     copernica.update_subprofile(copernica.SUBPROFILE_TASK,
+                #                                 user.id, task.base32_id(),
+                #                                 copernica_data)
                 db.session.commit()
-
-                # Sync tasks to Copernica
-                for task in tasks:
-                    for user in task.users:
-                        copernica.addActiepunt(
-                            user.id, task.base32_id(), task.group.name,
-                            task.title, task.get_status_string())
 
                 flash('De notulen zijn verwerkt!', 'success')
 

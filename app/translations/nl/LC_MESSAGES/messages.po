@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-07-03 13:34+0200\n"
+"POT-Creation-Date: 2016-09-10 11:31+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -178,11 +178,11 @@ msgstr "Bedrijf"
 
 #, python-format
 msgid "Company \"%s\" deleted"
-msgstr "Bedrijf verwijderd"
+msgstr "Bedrijf \"%s\" verwijderd"
 
 #, python-format
 msgid "Company \"%s\" saved."
-msgstr "Bedrijf opgeslagen."
+msgstr "Bedrijf \"%s\" opgeslagen."
 
 msgid "Company Phone"
 msgstr "Bedrijf telefoon"
@@ -326,6 +326,9 @@ msgstr "Verwijder menu item en pagina"
 
 msgid "Delete news item"
 msgstr "Verwijder nieuwsbericht"
+
+msgid "Delete page:"
+msgstr "Pagina verwijderen:"
 
 msgid "Description"
 msgstr "Beschrijving"
@@ -810,6 +813,9 @@ msgstr ""
 msgid "Page not found"
 msgstr "Pagina niet gevonden"
 
+msgid "Page title"
+msgstr "Pagina titel"
+
 msgid "Password"
 msgstr "Wachtwoord"
 
@@ -1000,13 +1006,6 @@ msgstr ""
 "Sommige velden (zoals shirt-maat of dieet) proberen we op te slaan, zodat"
 " je het de volgende keer niet nog eens moet invullen."
 
-msgid ""
-"Some field (like shirt-size or diet) we try to save, so that you don't "
-"have to enter them the next time"
-msgstr ""
-"Sommige velden (zoals shirt-maat of dieet) proberen we op te slaan, zodat"
-" je het de volgende keer niet nog eens moet invullen."
-
 msgid "Something went wrong."
 msgstr "Er is its mis gegaan"
 
@@ -1083,8 +1082,18 @@ msgstr ""
 "De activiteit heeft het maximum aantal inschrijvingen bereikt. Je bent "
 "geplaatst op de reserve lijst."
 
+msgid ""
+"The activity has reached its maximum number of registrations. You will be"
+" placed on the reserves list."
+msgstr ""
+"De activiteit heeft het maximum aantal inschrijvingen bereikt. Je bent "
+"geplaatst op de reserve lijst."
+
 msgid "The committe has been saved."
 msgstr "De commissie is aangemaakt."
+
+msgid "The given title does not match the page title."
+msgstr ""
 
 msgid "The link refers to a page that does not exist, pleasecreate the page!"
 msgstr "De link verwijst naar een pagina die niet bestaat, maak eerst deze pagina!"
@@ -1098,13 +1107,13 @@ msgstr "Het aantal registraties op dit moment is"
 msgid "The order has been saved successfully"
 msgstr "De volgorde is opgeslagen."
 
-msgid "The page has been deletd"
+msgid "The page has been deleted"
 msgstr "De pagina is verwijderd."
 
 msgid "The page has been saved"
 msgstr "De pagina is opgeslagen."
 
-msgid "The page you tried to delete does not exist"
+msgid "The page you tried to delete does not exist."
 msgstr "De pagina die je probeerde te verwijderen bestaat niet"
 
 msgid "The password you entered appears to be incorrect."
@@ -1283,6 +1292,11 @@ msgstr "Je hebt geen rechten om deze pagina te bekijken."
 msgid "You have successfully registered, payment is still required!"
 msgstr "Je hebt jezelf inschreven, je moet nog wel betalen!"
 
+msgid ""
+"You have to be a registered member of via in order to register for "
+"activities. If you believe you are a member, please contact the board."
+msgstr ""
+
 msgid "You have to be logged in to fill in a form"
 msgstr "Je moet ingelogd zijn om een formulier in te vullen."
 
@@ -1447,5 +1461,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Optionel data"
+#~ msgstr ""
+
+#~ msgid ""
 #~ msgstr ""
 

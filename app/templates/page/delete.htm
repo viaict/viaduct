@@ -1,0 +1,17 @@
+{% from "macros/form.htm" import render_field, render_submit %}
+
+{% extends "content.htm" %}
+
+{% block content %}
+<form action="" method="post" name="sign_up" class="form-horizontal" enctype="multipart/form-data" >
+    <fieldset>
+        <legend>{{ _('Delete page:') }} "{{ rev.title }}"</legend>
+        <span class="text-danger"><strong>Type the name of the page to confirm delete. This cannot be undone.</strong></span>
+        <div class="col-md-6">
+            {{ form.csrf_token }}
+            {{ render_field(form.title) }}
+            {{ render_submit(_('Submit')) }}
+        </div>
+    </fieldset>
+</form>
+{% endblock %}

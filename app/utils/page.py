@@ -39,7 +39,7 @@ class PageAPI:
 
     @staticmethod
     def can_read(page):
-        if page.needs_payed and (not current_user or
+        if page.needs_payed and (current_user.is_anonymous or
                                  not current_user.has_payed):
             return False
 

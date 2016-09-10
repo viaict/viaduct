@@ -15,7 +15,7 @@ from app.models import Group, User
 from app.models import Minute, Task
 from app.models.pimpy import TaskUserRel
 
-from app.utils import copernica
+# from app.utils import copernica
 
 DATE_FORMAT = app.config['DATE_FORMAT']
 
@@ -88,9 +88,15 @@ class PimpyAPI:
         db.session.commit()
 
         # Add task to Copernica
-        for user in users:
-            copernica.addActiepunt(user.id, task.base32_id(), task.group.name,
-                                   task.title, task.get_status_string())
+        # for user in users:
+        #     copernica_data = {
+        #         "viaductID": task.base32_id(),
+        #         "Actiepunt": task.title,
+        #         "Status": task.get_status_string(),
+        #         "Groep": task.group.name,
+        #     }
+        #     copernica.add_subprofile(
+        #         copernica.SUBPROFILE_TASK, user.id, copernica_data)
 
         return True, task.id
 
@@ -133,9 +139,14 @@ class PimpyAPI:
 
         db.session.commit()
 
-        for user in users:
-            copernica.actiepuntStatus(user.id, task.base32_id(),
-                                      task.get_status_string)
+        # for user in users:
+        #     copernica_data = {
+        #         "Actiepunt": task.title,
+        #         "Status": task.get_status_string(),
+        #     }
+        #     copernica.update_subprofile(copernica.SUBPROFILE_TASK,
+        #                                 user.id, task.base32_id(),
+        #                                 copernica_data)
 
         return True, "Taak bewerkt."
 
@@ -169,7 +180,7 @@ class PimpyAPI:
         dones_found = []
         removes_found = []
 
-        regex = re.compile("\s*(?:ACTIE|TODO) ([^\n\r]*)")
+        regex = re.compile(r"\s*(?:ACTIE|TODO)\s+([^\n\r]*)")
         for i, line in enumerate(content.splitlines()):
             matches = regex.findall(line)
 
@@ -179,6 +190,11 @@ class PimpyAPI:
                 except:
                     print("could not split the line on ':'.\nSkipping hit.")
                     flash("Kon niet verwerken: " + action, 'danger')
+                    continue
+
+                # Ignore todos where everyone in the group would get
+                # ONE SHARED task
+                if not listed_users.strip():
                     continue
 
                 users, message = PimpyAPI.get_list_of_users_from_string(
@@ -195,7 +211,7 @@ class PimpyAPI:
                     continue
                 tasks_found.append(task)
 
-        regex = re.compile("\s*(?:ACTIES|TODOS) ([^\n\r]*)")
+        regex = re.compile("\s*(?:ACTIES|TODOS)([^\n\r]*:\s*[^\n\r]*)")
         for i, line in enumerate(content.splitlines()):
             matches = regex.findall(line)
 
@@ -248,7 +264,10 @@ class PimpyAPI:
             remove_ids = filter(None, match.split(","))
 
             for b32_id in remove_ids:
-                remove_id = b32.decode(b32_id.strip())
+                b32_id_strip = b32_id.strip()
+                if b32_id_strip == '':
+                    continue
+                remove_id = b32.decode(b32_id_strip)
                 try:
                     remove_task = Task.query\
                         .filter(Task.id == remove_id).first()
@@ -288,10 +307,13 @@ class PimpyAPI:
             return False,
         "Geen komma gescheiden lijst met gebruikers gevonden."
 
+        comma_sep = comma_sep.strip()
+
         if not comma_sep:
             return group.users.all(), ''
 
-        comma_sep = map(lambda x: x.lower().strip(), comma_sep.split(','))
+        comma_sep = filter(None, map(lambda x: x.lower().strip(),
+                                     comma_sep.split(',')))
 
         found_users = []
 
@@ -475,14 +497,15 @@ class PimpyAPI:
         # this should be done with a sql in statement, or something, but meh
         else:
             for group in current_user.groups:
-                query = Minute.query.filter(Minute.group_id == group.id)
-                query = query.order_by(Minute.minute_date.desc())
-                list_items[group.name] = query.all()
+                list_items[group.name] = Minute.query\
+                    .filter(Minute.group_id == group.id)\
+                    .order_by(Minute.minute_date.desc())\
+                    .all()
 
-        return Markup(render_template('pimpy/api/minutes.htm',
-                                      list_items=list_items, type='minutes',
-                                      group_id=group_id, line_number=-1,
-                                      title='PimPy'))
+        return render_template('pimpy/api/minutes.htm',
+                               list_items=list_items, type='minutes',
+                               group_id=group_id, line_number=-1,
+                               title='PimPy')
 
     @staticmethod
     def get_minute(group_id, minute_id, line_number):
@@ -506,6 +529,19 @@ class PimpyAPI:
                                title='PimPy')
 
     @staticmethod
+    def get_minute_raw(group_id, minute_id):
+        """Load specifically one minute in raw format (without markup)."""
+
+        if not ModuleAPI.can_read('pimpy'):
+            abort(403)
+        if current_user.is_anonymous:
+            flash('Huidige gebruiker niet gevonden', 'danger')
+            return redirect(url_for('pimpy.view_minutes'))
+
+        minute = Minute.query.filter(Minute.id == minute_id).first()
+        return minute.content
+
+    @staticmethod
     def update_content(task_id, content):
         """Update the content of the task with the given id."""
 
@@ -521,9 +557,14 @@ class PimpyAPI:
         task = Task.query.filter(Task.id == task_id).first()
         task.title = title
         db.session.commit()
-        for user in task.users:
-            copernica.updateActiepunt(user.id, task.base32_id(),
-                                      task.title, task.get_status_string())
+        # for user in task.users:
+        #     copernica_data = {
+        #         "Actiepunt": task.title,
+        #         "Status": task.get_status_string(),
+        #     }
+        #     copernica.update_subprofile(copernica.SUBPROFILE_TASK,
+        #                                 user.id, task.base32_id(),
+        #                                 copernica_data)
         return True, "De taak is succesvol aangepast."
 
     @staticmethod
@@ -531,22 +572,32 @@ class PimpyAPI:
         """Update the users of the task with the given id."""
 
         task = Task.query.filter(Task.id == task_id).first()
-        old_users = task.users
+        # old_users = task.users
         users, message = PimpyAPI.get_list_of_users_from_string(
             task.group_id, comma_sep_users)
         if not users:
             return False, message
 
         # Sync to Copernica
-        for user in old_users:
-            if user not in users:
-                copernica.updateActiepunt(user.id, task.base32_id(),
-                                          task.title, "Removed")
-        for user in users:
-            if user not in old_users:
-                copernica.addActiepunt(user.id, task.base32_id(),
-                                       task.group.name, task.title,
-                                       task.get_status_string())
+        # for user in old_users:
+        #     if user not in users:
+        #         copernica_data = {
+        #             "Actiepunt": task.title,
+        #             "Status": task.get_status_string(),
+        #         }
+        #         copernica.update_subprofile(copernica.SUBPROFILE_TASK,
+        #                                     user.id, task.base32_id(),
+        #                                     copernica_data)
+        # for user in users:
+        #     if user not in old_users:
+        #         copernica_data = {
+        #             "viaductID": task.base32_id(),
+        #             "Actiepunt": task.title,
+        #             "Status": task.get_status_string(),
+        #             "Groep": task.group.name,
+        #         }
+        #         copernica.add_subprofile(
+        #             copernica.SUBPROFILE_TASK, user.id, copernica_data)
 
         task.users = users
         db.session.commit()

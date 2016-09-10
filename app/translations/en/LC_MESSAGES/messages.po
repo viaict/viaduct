@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-07-03 13:34+0200\n"
+"POT-Creation-Date: 2016-09-10 11:31+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -321,6 +321,9 @@ msgid "Delete menu item and pagina"
 msgstr ""
 
 msgid "Delete news item"
+msgstr ""
+
+msgid "Delete page:"
 msgstr ""
 
 msgid "Description"
@@ -804,6 +807,9 @@ msgstr ""
 msgid "Page not found"
 msgstr ""
 
+msgid "Page title"
+msgstr ""
+
 msgid "Password"
 msgstr ""
 
@@ -992,11 +998,6 @@ msgid ""
 " fill them in more then once."
 msgstr ""
 
-msgid ""
-"Some field (like shirt-size or diet) we try to save, so that you don't "
-"have to enter them the next time"
-msgstr ""
-
 msgid "Something went wrong."
 msgstr ""
 
@@ -1071,7 +1072,15 @@ msgid ""
 "been placed on the reserves list."
 msgstr ""
 
+msgid ""
+"The activity has reached its maximum number of registrations. You will be"
+" placed on the reserves list."
+msgstr ""
+
 msgid "The committe has been saved."
+msgstr ""
+
+msgid "The given title does not match the page title."
 msgstr ""
 
 msgid "The link refers to a page that does not exist, pleasecreate the page!"
@@ -1086,13 +1095,13 @@ msgstr ""
 msgid "The order has been saved successfully"
 msgstr ""
 
-msgid "The page has been deletd"
+msgid "The page has been deleted"
 msgstr ""
 
 msgid "The page has been saved"
 msgstr ""
 
-msgid "The page you tried to delete does not exist"
+msgid "The page you tried to delete does not exist."
 msgstr ""
 
 msgid "The password you entered appears to be incorrect."
@@ -1257,6 +1266,11 @@ msgid "You do not have the rights to view this page."
 msgstr ""
 
 msgid "You have successfully registered, payment is still required!"
+msgstr ""
+
+msgid ""
+"You have to be a registered member of via in order to register for "
+"activities. If you believe you are a member, please contact the board."
 msgstr ""
 
 msgid "You have to be logged in to fill in a form"
@@ -1508,5 +1522,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Optionel data"
+#~ msgstr ""
+
+#~ msgid "The page you tried to delete does not exist"
 #~ msgstr ""
 

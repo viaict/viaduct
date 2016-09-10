@@ -1,176 +1,92 @@
-from app import app
-import requests, json, threading
+import requests
+import re
 
-token = app.config['COPERNICA_API_KEY']
-database_id = app.config['COPERNICA_DATABASE_ID']
-actiepunt = app.config['COPERNICA_ACTIEPUNTEN']
-activiteit = app.config['COPERNICA_ACTIVITEITEN']
+from app import app, db
+from app.models.user import User
 
-def subscribeNewsletter(userID):
-    id = viaIDtoCopernicaID(userID)
-    if(id == -1):
-        return
-    url = "https://api.copernica.com/profile/" + str(id) + "/fields?access_token=" + token
-    data = {
-        'Ingeschreven':'Ja'
-    }
+API_TOKEN = app.config['COPERNICA_API_KEY']
+DATABASE_ID = app.config['COPERNICA_DATABASE_ID']
+SUBPROFILE_TASK = app.config['COPERNICA_ACTIEPUNTEN']
+SUBPROFILE_ACTIVITY = app.config['COPERNICA_ACTIVITEITEN']
+
+
+# def subscribeNewsletter(userID):
+# def unsubscribeNewsletter(userID):
+def update_newsletter(user, subscribe=True):
+    """Update the newsletter preferences of the user."""
+    url = ("https://api.copernica.com/profile/" + str(user.copernica_id) +
+           "/fields?access_token=" + API_TOKEN)
+    data = {'Ingeschreven': 'Ja' if subscribe else "Nee"}
     requests.post(url, data)
-    # subprocess.Popen(["venv/bin/python", "scripts/copernica_sender.py", "post", url, json.dumps(data)])
 
-def unsubscribeNewsletter(userID):
-    id = viaIDtoCopernicaID(userID)
-    if(id == -1):
-        return
-    url = "https://api.copernica.com/profile/" + str(id) + "/fields?access_token=" + token
-    data = {
-        "Ingeschreven" : "Nee"
-    }
+
+# def addActivity(websiteID, name, eventID, amount=0, payed=False,
+def add_subprofile(subprofile, user_id, data):
+    """Create a news subprofile for for a user."""
+    user = User.query.filter(id == user_id).first()
+    if not user:
+        raise KeyError('Cannot find user with id: ' + user_id)
+
+    url = ("https://api.copernica.com/profile/" + str(user.copernica_id) +
+           "/subprofiles/" + subprofile + "?access_token=" + API_TOKEN)
     requests.post(url, data)
-    # subprocess.Popen(["venv/bin/python", "scripts/copernica_sender.py", "post", url, json.dumps(data)])
 
-def addActivity(websiteID, name, eventID, amount=0, payed=False, reserve=False):
-    threading.Thread(target=addActivity_thread, args=(websiteID, name, eventID, amount, payed)).start()
 
-def addActivity_thread(websiteID, name, eventID, amount=0, payed=False, reserve=False):
-    id = viaIDtoCopernicaID(websiteID)
-    if(id == -1):
-        return
-    url = "https://api.copernica.com/profile/" + str(id) + "/subprofiles/" + activiteit + "?access_token=" + token
-    data = {
-        "Naam" : name, 
-        "Betaald" : "Ja" if (payed or amount == 0) else "Nee",
-        "Reserve" : "Ja" if reserve else "Nee",
-        "Bedrag": amount,
-        "WebsiteID" : eventID
-    }
-    requests.post(url, data)
-    # subprocess.Popen(["venv/bin/python", "scripts/copernica_sender.py", "post", url, json.dumps(data)])
+# def reserveActivity(userID, eventID, reserve):
+def update_subprofile(subprofile, user_id, entry_id, data):
+    """
+    Update subprofile of a user in the copernica database.
 
-def reserveActivity(userID, eventID, reserve):
-    threading.Thread(target=reserveActivity_thread, args=(userID, eventID, reserve)).start()
+    This is done by first quering all the subprofiles of a profile with
+    matchting viaductID. When profiles are found, all of them are updated with
+    the new data.
+    """
+    user = User.query.filter(User.id == user_id).first()
+    if not user:
+        raise KeyError('Cannot find user with id: ' + str(user_id))
 
-def reserveActivity_thread(userID, eventID, reserve):
-    id = viaIDtoCopernicaID(userID)
-    if(id == -1):
-        return
-    url = "https://api.copernica.com/profile/" + str(id) + "/subprofiles/" + activiteit + "?fields[]=WebsiteID%3D%3D"  + str(eventID) + "&access_token=" + token
-    
-    data = {
-        "Reserve" : "Ja" if reserve else "Nee"
-    }
+    url = ("https://api.copernica.com/profile/" + str(user.copernica_id) +
+           "/subprofiles/" + subprofile + "?fields[]=viaductID%3D%3D" +
+           str(entry_id) + "&access_token=" + API_TOKEN)
 
+    print(url)
     r = requests.get(url)
-    for event in r.json()['data']:
-        url = "https://api.copernica.com/subprofile/" + event['ID'] + "/fields?access_token=" + token
-        requests.post(url, data)
+    rv = [r]
+    for entry in r.json()['data']:
+        url = ("https://api.copernica.com/subprofile/" + entry['ID'] +
+               "/fields?access_token=" + API_TOKEN)
+        rv.append(requests.post(url, data))
 
-def payedActivity(userID, eventID, payed):
-    threading.Thread(target=payedActivity_thread, args=(userID, eventID, payed)).start()
+    return rv
 
-def payedActivity_thread(userID, eventID, payed):
-    id = viaIDtoCopernicaID(userID)
-    if(id == -1):
-        return
-    url = "https://api.copernica.com/profile/" + str(id) + "/subprofiles/" + activiteit + "?fields[]=WebsiteID%3D%3D"  + str(eventID) + "&access_token=" + token
-    
+
+def update_user(user, subscribe=False):
     data = {
-        "betaald" : "Ja" if payed else "Nee"
+        "Emailadres": user.email,
+        "Voornaam": user.first_name,
+        "Achternaam": user.last_name,
+        "Studie": user.education.name,
+        "Studienummer": user.student_id,
+        "Ingeschreven": "Ja" if subscribe else "Nee",
+        "Lid": "Ja" if user.has_payed else "Nee",
+        "VVV": "Ja" if user.favourer else "Nee",
+        "Bedrijfsinformatie": "Ja" if user.receive_information else "Nee",
+        "Geboortedatum": user.birth_date.strftime('%Y-%m-%d'),
+        "WebsiteID": user.id
     }
 
-    r = requests.get(url)
-    for event in r.json()['data']:
-        url = "https://api.copernica.com/subprofile/" + event['ID'] + "/fields?access_token=" + token
-        # subprocess.Popen(["venv/bin/python", "scripts/copernica_sender.py", "post", url, json.dumps(data)])
-        requests.post(url, data)
+    if not user.copernica_id or user.copernica_id == 0:
+        url = ("https://api.copernica.com/database/" + DATABASE_ID +
+               "/profiles?access_token=" + API_TOKEN)
+        r = requests.post(url, data)
 
-def addActiepunt(websiteID, aID, groep, punt, status):
-    threading.Thread(target=addActiepunt_thread, args=(websiteID, aID, groep, punt, status)).start()
-
-def addActiepunt_thread(websiteID, aID, groep, punt, status):
-    id = viaIDtoCopernicaID(websiteID)
-    if (id == -1): 
-        return
-    data = {
-        "Groep": groep,
-        "aID": aID,
-        "Actiepunt": punt,
-        "Status": status
-    }
-    url = "https://api.copernica.com/profile/" + str(id) + "/subprofiles/" + actiepunt + "?access_token=" + token
-    requests.post(url, data)
-
-def updateActiepunt(websiteID, aID, punt, status):
-    threading.Thread(target=updateActiepunt_thread, args=(websiteID, aID, punt, status)).start()
-
-def updateActiepunt_thread(websiteID, aID, punt, status):
-    id = viaIDtoCopernicaID(websiteID)
-    if(id == -1):
-        return
-    data = {
-        "Status" : status,
-        "Actiepunt" : punt,
-    }
-    url = "https://api.copernica.com/profile/" + str(id) + "/subprofiles/" + actiepunt + "?fields[]=aID%3D%3D" + str(aID) + "&access_token=" + token
-    r = requests.get(url)
-    for punt in r.json()['data']:
-        url = "https://api.copernica.com/subprofile/" + punt['ID'] + "/fields?access_token=" + token
-        requests.post(url, data)
-        # subprocess.Popen(["venv/bin/python", "scripts/copernica_sender.py", "post", url, json.dumps(data)])
-
-def viaIDtoCopernicaID(id):
-    uID = -1
-    url = "https://api.copernica.com/database/" + database_id + "/profiles?fields[]=WebsiteID%3D%3D" + str(id) + "&access_token=" + token
-
-    r = requests.get(url)
-    if len(r.json()['data']) > 0:
-        uID = r.json()['data'][0]['ID']
-    return uID
-
-def newUser(mail, first, last, study, websiteID, studentnr, *args, **kwargs):
-    threading.Thread(target=newUser_thread, args=(mail, first, last, study, websiteID, studentnr), kwargs=kwargs).start()
-
-def newUser_thread(mail, first, last, study, websiteID, studentnr, *args, **kwargs):
-    if (viaIDtoCopernicaID(websiteID) != -1):
-        return updateUser(websiteID, mail, first, last, study, args, kwargs)
-    url = "https://api.copernica.com/database/" + database_id + "/profiles?access_token=" + token
-    data = {
-        "Emailadres" : mail,
-        "Voornaam": first,
-        "Achternaam": last,
-        "Studie" : study,
-        "WebsiteID": websiteID,
-        "Studienummer" : studentnr,
-        "Ingeschreven": kwargs['Ingeschreven'] if 'Ingeschreven' in kwargs else "Nee",
-        "Lid": kwargs['Lid'] if 'Lid' in kwargs else "Nee",
-        "VVV": kwargs['VVV'] if 'VVV' in kwargs else "Nee",
-        "Bedrijfsinformatie": kwargs['Bedrijfsinformatie'] if 'Bedrijfsinformatie' in kwargs else "Nee",
-        "Geboortedatum": kwargs['Geboortedatum'] if 'Geboortedatum' in kwargs else "0000-00-00",
-    }
-    # print("Data to send to Copernica:")
-    # print(data)
-    requests.post(url, data)
-    # subprocess.Popen(["venv/bin/python", "scripts/copernica_sender.py", "post", url, json.dumps(data)])
-
-def updateUser(websiteID, mail, first, last, study, studentnr, *args, **kwargs):
-    threading.Thread(target=updateUser_thread, args=(websiteID, mail, first, last, study, studentnr), kwargs=kwargs).start()
-
-def updateUser_thread(websiteID, mail, first, last, study, studentnr, *args, **kwargs):
-    id = viaIDtoCopernicaID(websiteID)
-    if(id == -1):
-        print ("User bestaat nog niet")
-        return newUser(mail, first, last, study, websiteID, args, kwargs)
-    url = "https://api.copernica.com/database/" + database_id + "/profiles?fields[]=ID%3D%3D" + str(id) + "&access_token=" + token
-    data = {
-        "Emailadres" : mail,
-        "Voornaam": first,
-        "Achternaam": last,
-        "Studie" : study,
-        "Studienummer" : studentnr,
-        "Ingeschreven": kwargs['Ingeschreven'] if 'Ingeschreven' in kwargs else "Ja",
-        "Lid": kwargs['Lid'] if 'Lid' in kwargs else "Nee",
-        "VVV": kwargs['VVV'] if 'VVV' in kwargs else "Nee",
-        "Bedrijfsinformatie": kwargs['Bedrijfsinformatie'] if 'Bedrijfsinformatie' in kwargs else "Nee",
-        "Geboortedatum": kwargs['Geboortedatum'] if 'Geboortedatum' in kwargs else "0000-00-00",
-    }
-    requests.put(url, data)
-    # subprocess.Popen(["venv/bin/python", "scripts/copernica_sender.py", "put", url, json.dumps(data)])
+        # Regex to extract the copernica_id from the Location URL
+        rx = re.compile('\/([0-9]+)\?')
+        user.copernica_id = re.search(rx, r.headers['Location']).groups()[0]
+        db.session.add(user)
+        db.session.commit()
+    else:
+        url = ("https://api.copernica.com/database/" + DATABASE_ID +
+               "/profiles?fields[]=ID%3D%3D" + str(user.copernica_id) +
+               "&access_token=" + API_TOKEN)
+        requests.put(url, data)

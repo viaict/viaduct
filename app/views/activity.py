@@ -104,14 +104,18 @@ def get_activity(activity_id=0):
 
         # Check if the current user has already entered data in this custom
         # form
-        if current_user.is_authenticated:
-            form_result = CustomFormResult.query \
-                .filter(CustomFormResult.form_id == activity.form_id) \
+        if current_user.is_authenticated and current_user.has_payed:
+            all_form_results = CustomFormResult.query \
+                .filter(CustomFormResult.form_id == activity.form_id)
+            form_result = all_form_results \
+                .filter(CustomFormResult.owner_id == current_user.id).first()
+            attending = all_form_results.limit(activity.form.max_attendants) \
+                .from_self() \
                 .filter(CustomFormResult.owner_id == current_user.id).first()
 
             if form_result:
                 activity.form_data = form_result.data.replace('"', "'")
-                if not form_result.has_payed:
+                if not form_result.has_payed and attending:
                     # There is 50 cents administration fee
                     if form_result.form.price - 0.5 > 0:
                         form.show_pay_button = True
@@ -121,18 +125,27 @@ def get_activity(activity_id=0):
                     activity.info = _("Your registration has been completed")\
                         + _("You can edit your registration by resubmitting"
                             "the form.")
-                else:
+                elif attending:
                     activity.info = _("You have successfully registered"
                                       ", payment is still required!")
+                else:
+                    activity.info = _("The activity has reached its maximum "
+                                      "number of registrations. You have been "
+                                      "placed on the reserves list.")
             else:
                 if activity.num_attendants >= activity.form.max_attendants:
                     activity.info = _("The activity has reached its maximum "
-                                      "number of registrations. You have been "
+                                      "number of registrations. You will be "
                                       "placed on the reserves list.")
                 else:
                     activity.info = _("The number of registrations at this "
                                       "moment is") + ": " +\
                         str(activity.num_attendants)
+        else:
+            activity.info = _("You have to be a registered member of "
+                              "via in order to register for "
+                              "activities. If you believe you are a "
+                              "member, please contact the board.")
 
     return render_template('activity/view_single.htm', activity=activity,
                            form=form, login_form=SignInForm(),

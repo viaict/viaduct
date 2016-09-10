@@ -6,6 +6,8 @@ from app.models import BaseEntity, Activity, Transaction
 from collections import OrderedDict
 import datetime as dt
 
+from app.utils.google import send_email
+
 
 def export_form_data(r):
     import re
@@ -172,10 +174,23 @@ class CustomFormResult(db.Model, BaseEntity):
         self.data = data
         self.has_payed = has_payed
         self.price = price
+        self.notify_followers()
 
     def __repr__(self):
         return "<FormResult owner:%s has_payed:%s>" % (self.owner.first_name,
                                                        self.has_payed)
+
+    def notify_followers(self):
+        followers = CustomFormFollower.query\
+            .filter(CustomFormFollower.form_id == self.form_id)
+        for follower in followers:
+            send_email(to=follower.owner.email,
+                       subject='Formulier ingevuld',
+                       email_template='email/form.html',
+                       sender='via',
+                       user=follower.owner,
+                       form_id=self.form_id)
+        return
 
 
 class CustomFormFollower(db.Model, BaseEntity):

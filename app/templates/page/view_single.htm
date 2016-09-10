@@ -18,7 +18,6 @@
 
                 <form id="custom" action="{{ url_for('custom_form.submit', form_id=revision.custom_form.id)}}" enctype="multipart/form-data">
                     <h3>{{_('Please fill in')}}</h3>
-                    <p>{{_('Some field (like shirt-size or diet) we try to save, so that you don\'t have to enter them the next time')}}</p>
                     {{ revision.custom_form.html | safe }}
 
                     <button id="custom_form" class="btn btn-success">{{_('Send form')}}</button>
