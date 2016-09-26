@@ -8,40 +8,31 @@
                 <button type="button" class="btn btn-filter btn-primary active" data-hide='{{ status_meaning[0] | replace(" ","_")}}'> {{ status_meaning[0] }}</button>
             {% endfor %}
         </div>
+        <table class="table table-hover">
+        <tbody>
         {% for i, tr in enumerate(tasks_rel): %}
 
             {% if prev_group != tr.task.group_id %}
                 {% set prev_group = tr.task.group_id %}
-                {% set changed = True %}
 
-                {% if i %}
-                    </tbody>
-                    </table>
-                {% endif %}
-
+                <tr>
+                <td colspan="3" class="pimpy-group-head-td">
                 <h1>
                     <a href="{% if personal %}{{ url_for('pimpy.view_tasks_personal', group_id=tr.task.group.id) }}{% else %}{{ url_for('pimpy.view_tasks', group_id=tr.task.group.id) }}{% endif %}">{{ tr.task.group.name }}</a>
                 </h1>
+                </td>
+                </tr>
             {% endif %}
 
             {% if not personal: %}
                 {% if prev_user != tr.user_id %}
                     {% set prev_user = tr.user_id %}
-
-                    {% if not changed %}
-                        {% set changed = True %}
-                        </tbody>
-                        </table>
-                    {% endif %}
-
+                <tr>
+                <td colspan="3" class="pimpy-user-head-td">
                     <h3> {{ tr.user.name }} </h3>
+                </td>
+                </tr>
                 {% endif %}
-            {% endif %}
-
-            {% if changed: %}
-                {% set changed = False %}
-                <table class="table table-hover">
-                <tbody>
             {% endif %}
 
             {% set t = tr.task %}
@@ -60,8 +51,8 @@
                     </div>
                 </td><td>
                 {{ t.title }}
-                </td><td>
-                {{ t.get_users() }}
+                </td><td class="pimpy-user-col">
+                    {{ t.get_users(True) | safe }}
                 </td>
             </tr>
             <tr class='pimpy_status_{{ t.get_status_string() | replace(" ","_")}}'>
@@ -76,7 +67,7 @@
                             </dd>
                             <dt>Gebruikers:</dt>
                             <dd>
-                                <p class="pimpy_editable" id="users" data-pk="{{ t.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ t.id }}" data-title="Task Content">{{ t.get_users() }}</p>
+                                <p class="pimpy_editable" id="users" data-pk="{{ t.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ t.id }}" data-title="Task Content">{{ t.get_users(True) | safe }}</p>
                             </dd>
                             <dt>Beschrijving:</dt>
                             <dd>
