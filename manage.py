@@ -82,7 +82,7 @@ def _bump_version(current_version, new_version):
     readme_version_regex = re.compile(r'^# Version \d+.\d+.\d+.\d+')
     init_version_regex = re.compile(
         r"^version\s+=\s+'v\d+.\d+.\d+.\d+'")
-    readme_newversionline = '# Version {}.{}.{}.{}'.format(*new_version)
+    readme_newversionline = '# Viaduct v{}.{}.{}.{}'.format(*new_version)
     init_newversionline = "version = 'v{}.{}.{}.{}'".format(*new_version)
 
     _bump_file('README.md', readme_version_regex,
