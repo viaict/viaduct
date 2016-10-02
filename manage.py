@@ -79,7 +79,7 @@ def _bump_version(current_version, new_version):
         print("Abort")
         return
 
-    readme_version_regex = re.compile(r'^# Version \d+.\d+.\d+.\d+')
+    readme_version_regex = re.compile(r'^# Viaduct v\d+.\d+.\d+.\d+')
     init_version_regex = re.compile(
         r"^version\s+=\s+'v\d+.\d+.\d+.\d+'")
     readme_newversionline = '# Viaduct v{}.{}.{}.{}'.format(*new_version)
