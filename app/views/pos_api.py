@@ -40,8 +40,8 @@ def get_members():
     return jsonify(data=data), 200
 
 
-@requires_pos_api_key
 @blueprint.route('/get_member_details/<int:_id>/', methods=['GET'])
+@requires_pos_api_key
 def get_member_details(_id=None):
     if not id:
         return jsonify(errors='No user id given'), 400
