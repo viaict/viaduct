@@ -1,11 +1,17 @@
-from app import app, db, version
-from flask_script import Manager, Server
+from app import app, db, version, js_glue
+from flask_script import Manager, Server, prompt
 from flask_migrate import Migrate, MigrateCommand
 from flask_failsafe import failsafe
 
-import re
 
-manager = Manager(app)
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+
+import time
+import re
+import sys
+import subprocess
+import platform
 
 
 @failsafe
@@ -14,7 +20,29 @@ def create_app():
 
     return app
 
+migrate = Migrate(app, db)
+versionbump = Manager(usage=("Apply a version bump."
+                             "Versioning works using the following format: "
+                             "SYSTEM.FEATURE.IMPROVEMENT.BUG-/HOTFIX"))
+manager = Manager(app, usage=("Manager console for viaduct"))
 manager.add_command("runserver", Server())
+manager.add_command('db', MigrateCommand)
+manager.add_command('versionbump', versionbump)
+
+
+def prompt_bool(q, default=False):
+    yes_choices = ['y', 'yes', '1', 'on', 'true', 't']
+    no_choices = ['n', 'n', '0', 'off', 'false', 'f']
+    while True:
+        if default:
+            answer = input(q + " [Y/n]: ") or 'y'
+
+        else:
+            answer = input(q + " [y/N]: ") or 'n'
+        if answer.lower() in yes_choices:
+            return True
+        if answer.lower() in no_choices:
+            return False
 
 
 @manager.command
@@ -25,10 +53,10 @@ def routes():
         if rule.endpoint == 'static':
             continue
         methods = rule.methods
-        if 'OPTIONS' in methods:
-            methods.remove('OPTIONS')
-        if 'HEAD' in methods:
-            methods.remove('HEAD')
+        for opt in ['OPTIONS', 'HEAD']:
+            if opt in methods:
+                methods.remove(opt)
+
         methods = ', '.join(sorted(rule.methods))
         splitted = rule.endpoint.split('.')
         if len(splitted) != 2:
@@ -44,20 +72,85 @@ def routes():
         else:
             rules[blueprint] = [data]
 
-    print("\n\t{:30s} {:30s} {}".format("Function", "Methods", "URL"))
-    print("=" * 100)
+    print("\n{:40s} {:30s} {}".format("Function", "Methods", "URL"))
+    print("=" * 80)
     for blueprint in sorted(rules.keys()):
-        print("Blueprint {}:".format(blueprint))
         for (endpoint, methods, url) in rules[blueprint]:
-            print("\t{:30s} {:30s} {}".format(endpoint, methods, url))
+            print("{:40s} {:30s} {}".format(blueprint + "." + endpoint,
+                                            methods, url))
         print("")
 
 
-VersionBump = Manager(
-    usage="""Apply a version bump.
-Versioning works using the following format:
-SYSTEM.FEATURE.IMPROVEMENT.BUG-/HOTFIX
-""")
+@manager.command
+def flaskjs():
+    """Genereate the javascript file for url_for in javascript."""
+    with open('src/js/global/flask.js', 'w', encoding='utf8') as f:
+        f.write(js_glue.generate_js())
+
+
+class EventHandler(FileSystemEventHandler):
+    def process(self, event):
+        if event.src_path[-5:] == '.jade':
+            print("Modified: ", event.src_path)
+            self.jade()
+
+    def jade(self):
+        if platform.system() == 'Windows':
+            subprocess.call(('node node_modules/clientjade/bin/clientjade'
+                             ' src/jade/ > src/js/global/jade.js'),
+                            shell=True)
+        else:
+            subprocess.call(('./node_modules/clientjade/bin/clientjade'
+                             ' src/jade/ > src/js/global/jade.js'),
+                            shell=True)
+
+    def on_created(self, event):
+        self.process(event)
+
+    def on_deleted(self, event):
+        self.process(event)
+
+    def on_modified(self, event):
+        self.process(event)
+
+
+@manager.command
+def jade():
+    """Keep track of the jade files and recompile if neccesary."""
+    print("Started tracking jade files...")
+    path = sys.argv[2] if len(sys.argv) > 2 else '.'
+    event_handler = EventHandler()
+    observer = Observer()
+    observer.schedule(event_handler, path, recursive=True)
+    observer.start()
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        observer.stop()  # HAMMERTIME!
+    observer.join()
+
+
+@manager.command
+def mysqlinit():
+    """Insert the viaduct user and give it rights for the viaduct db."""
+    mysql_user = prompt("User for mysql database", default="root")
+    cmd = "mysql -u %s " % mysql_user
+    sudo = prompt_bool("Use sudo", default=False)
+    if sudo:
+        cmd = "sudo " + cmd
+    password = prompt_bool("Use password", default=True)
+    if password:
+        cmd += "-p "
+    cmd += "< script/mysqlinit.sql"
+    print(cmd)
+    subprocess.call(cmd, shell=True)
+
+
+@manager.command
+def test():
+    """Run all tests in the test folder."""
+    subprocess.call("python -m unittest discover", shell=True)
 
 
 def _get_current_version():
@@ -74,9 +167,9 @@ def _bump_version(current_version, new_version):
     print("\nCurrent version: \tv{}.{}.{}.{}".format(*current_version))
     print("New version: \t\tv{}.{}.{}.{}".format(*new_version))
 
-    answer = input("Continue? [y/N] ")
-    if len(answer) == 0 or answer[0].lower() != 'y':
-        print("Abort")
+    answer = prompt_bool("Continue?")
+    if not answer:
+        print("Aborted")
         return
 
     readme_version_regex = re.compile(r'^# Viaduct v\d+.\d+.\d+.\d+')
@@ -110,8 +203,8 @@ def _bump_file(fn, regex, newversion_line):
             raise ValueError('No version found in file {}'.format(fn))
 
 
-@VersionBump.command
-def bugfix():
+@versionbump.command
+def hotfix():
     """Increment one on BUG-/HOTFIX level."""
     current_version = _get_current_version()
     (s, f, i, b) = current_version
@@ -119,7 +212,7 @@ def bugfix():
     _bump_version(current_version, new_version)
 
 
-@VersionBump.command
+@versionbump.command
 def improvement():
     """Increment one on IMPROVEMENT level."""
     current_version = _get_current_version()
@@ -128,7 +221,7 @@ def improvement():
     _bump_version(current_version, new_version)
 
 
-@VersionBump.command
+@versionbump.command
 def feature():
     """Increment one on FEATURE level."""
     current_version = _get_current_version()
@@ -137,7 +230,7 @@ def feature():
     _bump_version(current_version, new_version)
 
 
-@VersionBump.command
+@versionbump.command
 def system():
     """Increment one on SYSTEM level."""
     current_version = _get_current_version()
@@ -145,10 +238,6 @@ def system():
     new_version = (s + 1, 0, 0, 0)
     _bump_version(current_version, new_version)
 
-
-migrate = Migrate(app, db)
-manager.add_command('db', MigrateCommand)
-manager.add_command('versionbump', VersionBump)
 
 if __name__ == '__main__':
     manager.run()

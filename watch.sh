@@ -8,7 +8,7 @@ PIDS[0]=$!
 grunt watch &
 PIDS[1]=$!
 
-python watch_jade.py &
+python manage.py jade &
 PIDS[2]=$!
 
 python manage.py runserver &
