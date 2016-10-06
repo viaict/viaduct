@@ -8,14 +8,16 @@
      permission.
  - Views never use extended logic. It processes incoming data from forms or JSON
      and generates output data. Extended logic should always go into util.
- - Often create and edit functions for forms can be combined, please do so:
-     `
-    @blueprint.route('/users/create/', methods=['GET', 'POST'])
-    @blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
-    def edit(user_id=None):
-    `
+ - Often create and edit functions for forms can be combined, please do so and
      name it `def edit():`, so that the URL can be generated using
      `url_for('module.edit')`.
+
+         ```python
+        @blueprint.route('/users/create/', methods=['GET', 'POST'])
+        @blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
+        def edit(user_id=None):
+        ```
+
  - Always put a docstring on a view, explaining the usage of view.
 
 ## Documentation
