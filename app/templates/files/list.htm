@@ -18,8 +18,16 @@
                 e.clearSelection();
             });
         });
+
     </script>
 {%- endif -%}
+
+<script>
+function search(){
+  query = document.getElementById('search_input').value;
+  location.href='?search=' + query;
+}
+</script>
 {% endblock %}
 
 {% block page %}
@@ -48,6 +56,11 @@
 		{{ render_button(form.submit) }}
 	</form>
 </div>
+<div class="form-group">
+  <input type="text" class="form-control" id="search_input"></input><br>
+  <button class="btn btn-default" onclick="search()">Search</button>
+</div>
+
 {%- endif -%}
 
 <ul>

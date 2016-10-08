@@ -15,8 +15,15 @@ def list(page_nr=1):
     if not ModuleAPI.can_read('file'):
         return abort(403)
 
-    files = File.query.filter_by(page=None).order_by(File.name)\
-                .paginate(page_nr, 30, False)
+    if request.args.get('search'):
+        search = request.args.get('search')
+        filters = FileAPI.search(search)
+        files = File.query.filter(File.name.in_(filters), File.page==None)
+    else:
+        files = File.query.filter(File.page==None)
+
+    files = files.order_by(File.name).paginate(1, 30, False)
+
     form = FileForm()
 
     return render_template('files/list.htm', files=files, form=form)
@@ -37,12 +44,3 @@ def upload(page_nr=1):
     form = FileForm()
 
     return render_template('files/list.htm', **locals())
-
-
-@blueprint.route('/search/<string:query>/', methods=['GET'])
-def search(query):
-    """Fuzzy search files."""
-    if not ModuleAPI.can_read('file'):
-        return jsonify(error='Geen toestemming')
-
-    return jsonify(filenames=FileAPI.search(query))
