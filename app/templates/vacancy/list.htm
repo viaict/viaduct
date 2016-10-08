@@ -34,6 +34,9 @@
                 <div class="col-md-4">{{vacancy.title}}</div>
                 <div class="col-md-3">
                     <a class="search_click" href="?search={{vacancy.contract_of_service}}">{{vacancy.contract_of_service}}</a>
+                    {% if vacancy.workload and vacancy.workload != '0' %}
+                    ({{vacancy.workload}} uur)
+                    {% endif %}
                 </div>
                 <div class="col-md-4">
                     <a class="search_click" href="?search={{vacancy.company.name}}" >{{vacancy.company.name}}</a>
