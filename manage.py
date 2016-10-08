@@ -117,6 +117,14 @@ class EventHandler(FileSystemEventHandler):
 @manager.command
 def jade():
     """Keep track of the jade files and recompile if neccesary."""
+    if platform.system() == 'Windows':
+        subprocess.call(('node node_modules/clientjade/bin/clientjade'
+    		     ' src/jade/ > src/js/global/jade.js'),
+    		    shell=True)
+    else:
+        subprocess.call(('./node_modules/clientjade/bin/clientjade'
+    		     ' src/jade/ > src/js/global/jade.js'),
+    		    shell=True)
     print("Started tracking jade files...")
     path = sys.argv[2] if len(sys.argv) > 2 else '.'
     event_handler = EventHandler()
