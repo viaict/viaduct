@@ -9,7 +9,7 @@ class Page(db.Model, BaseEntity):
     __tablename__ = 'page'
 
     path = db.Column(db.String(200), unique=True)
-    needs_payed = db.Column(db.Boolean)
+    needs_paid = db.Column(db.Boolean)
 
     type = db.Column(db.String(256))
 

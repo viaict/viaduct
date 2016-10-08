@@ -54,8 +54,8 @@ def view_single(user_id=None):
     # Only logged in users can view profiles
     if current_user.is_anonymous:
         return abort(403)
-    # Unpayed members cannot view other profiles
-    if current_user.id != user_id and not current_user.has_payed:
+    # Unpaid members cannot view other profiles
+    if current_user.id != user_id and not current_user.has_paid:
         return abort(403)
     # A user can always view his own profile
     if current_user.id == user_id:
@@ -176,7 +176,7 @@ def edit(user_id=None):
         user.last_name = form.last_name.data.strip()
         user.locale = form.locale.data
         if ModuleAPI.can_write('user'):
-            user.has_payed = form.has_payed.data
+            user.has_paid = form.has_paid.data
             user.honorary_member = form.honorary_member.data
             user.favourer = form.favourer.data
             user.disabled = form.disabled.data
@@ -469,7 +469,7 @@ def get_users():
              user.education.name
                 if user.education else "",
              "<i class='glyphicon glyphicon-ok'></i>"
-                if user.has_payed else "",
+                if user.has_paid else "",
              "<i class='glyphicon glyphicon-ok'></i>"
                 if user.honorary_member else "",
              "<i class='glyphicon glyphicon-ok'></i>"

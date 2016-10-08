@@ -573,7 +573,7 @@ msgstr "Groep permissies"
 msgid "Groups"
 msgstr "Groepen"
 
-msgid "Has payed"
+msgid "Has paid"
 msgstr "Heeft betaald"
 
 #, python-format

@@ -100,7 +100,7 @@ class EditUserForm(BaseUserForm):
     id = IntegerField('ID')
     password = PasswordField(_('Password'))
     repeat_password = PasswordField(_('Repeat password'))
-    has_payed = BooleanField(_('Has payed'))
+    has_paid = BooleanField(_('Has paid'))
     honorary_member = BooleanField(_('Honorary member'))
     favourer = BooleanField(_('Favourer'))
     disabled = BooleanField(_('Disabled'))
