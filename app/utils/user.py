@@ -96,6 +96,7 @@ class UserAPI:
 
         # Save file.
         f.save(path)
+        os.chmod(path, 0o644)
         return
 
     @staticmethod

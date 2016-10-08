@@ -41,6 +41,7 @@ def thumb(url, size=(100, 100)):
         im = ImageChops.offset(im, x_off, y_off)
 
         im.save(thmb_path)
+        os.chmod(thmb_path, 0o644)
 
     slash = url.rindex('/')
     thmb_url = url[:slash] + '/.thumb/' + thmb_name

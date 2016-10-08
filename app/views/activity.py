@@ -193,8 +193,9 @@ def create(activity_id=None):
                                            form=form,
                                            title=title)
 
-                file.save(os.path.join('app/static/activity_pictures',
-                                       picture))
+                fpath = os.path.join('app/static/activity_pictures', picture)
+                file.save(fpath)
+                os.chmod(fpath, 0o644)
 
                 # Remove old picture
                 if activity.picture:

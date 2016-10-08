@@ -89,7 +89,9 @@ def upload_file_real(file, old_path='1'):
             if old_path != '1':
                 os.remove(os.path.join(UPLOAD_FOLDER, old_path))
 
-            file.save(os.path.join(UPLOAD_FOLDER, filename))
+            fpath = os.path.join(UPLOAD_FOLDER, filename)
+            file.save(fpath)
+            os.chmod(fpath, 0o644)
 
             return filename
         else:
