@@ -140,10 +140,6 @@ def get_activity(activity_id=0):
                     activity.info = _("The activity has reached its maximum "
                                       "number of registrations. You will be "
                                       "placed on the reserves list.")
-                else:
-                    activity.info = _("The number of registrations at this "
-                                      "moment is") + ": " +\
-                        str(activity.num_attendants)
         else:
             activity.info = _("You have to be a registered member of "
                               "via in order to register for "
