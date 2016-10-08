@@ -41,15 +41,29 @@ def view_minutes(group_id='all'):
         return abort(404)
     return PimpyAPI.get_minutes(group_id)
 
+
 @blueprint.route('/archive/', methods=['GET', 'POST'])
 @blueprint.route('/archive/<group_id>', methods=['GET', 'POST'])
 def view_minutes_in_date_range(group_id='all'):
     if not ModuleAPI.can_read('pimpy'):
         return abort(403)
-    group_id=request.form['group_id']
-    start_date=request.form['start_date']
-    end_date=request.form['end_date']
+    group_id = request.form['group_id']
+    start_date = request.form['start_date']
+    end_date = request.form['end_date']
     return PimpyAPI.get_minutes_in_date_range(group_id, start_date, end_date)
+
+
+@blueprint.route('/task_archive/', methods=['GET', 'POST'])
+@blueprint.route('/task_archive/<group_id>', methods=['GET', 'POST'])
+def view_tasks_in_date_range(group_id='all'):
+    if not ModuleAPI.can_read('pimpy'):
+        return abort(403)
+    personal_toggle = request.form['personal_toggle']
+    group_id = request.form['group_id']
+    start_date = request.form['start_date']
+    end_date = request.form['end_date']
+    return PimpyAPI.get_tasks_in_date_range(
+        group_id, personal_toggle, start_date, end_date)
 
 
 @blueprint.route('/minutes/<group_id>/<int:minute_id>/')
