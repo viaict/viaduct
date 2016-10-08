@@ -19,7 +19,6 @@ class VacancyForm(Form):
                                                ('deeltijd', _('Deeltijd')),
                                                ('bijbaan', _('Bijbaan')),
                                                ('stage', _('Stage'))])
-    workload = StringField(_('Workload'), validators=[InputRequired(
-        message=_('Workload is required.'))])
+    workload = StringField(_('Workload'))
     company_id = SelectField(_('Company'), coerce=int)
     submit = SubmitField(_('Submit'))
