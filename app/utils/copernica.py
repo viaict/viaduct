@@ -82,6 +82,7 @@ def update_user(user, subscribe=False):
         "Studie": user.education.name if user.education else "Other",
         "Studienummer": user.student_id,
         "Lid": "Ja" if user.has_payed else "Nee",
+        "Alumnus": "Ja" if user.alumnus else "Nee",
         "VVV": "Ja" if user.favourer else "Nee",
         "Bedrijfsinformatie": "Ja" if user.receive_information else "Nee",
         "Geboortedatum": (user.birth_date.strftime('%Y-%m-%d')
