@@ -1,0 +1,155 @@
+{% from 'macros/pagination.htm' import render_pagination %}
+
+{% extends 'base.htm' %}
+
+{% block page %}
+<h1>{{ _('Summaries') }}</h1>
+
+    <div class='row'>
+        <div class='col-md-12'>
+            <form method='get' action='{{ url_for('summary.view') }}' enctype=multipart/form-data class='form-horizontal' >
+                <div class='form-group'>
+                    <div class='col-md-8'>
+                        <div class="input-group">
+                            <input
+                                name='search' id='search'
+                                class='form-control' type='text'
+                                placeholder='{{ _('Search') }}'
+                                value='{{search}}'
+                                onkeypress='searchKeyPress(event);' />
+                            <span class="input-group-btn">
+                            <button type='submit' class='btn btn-primary'>
+                                <i class='glyphicon glyphicon-search' id='submit'></i>
+                            </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if ModuleAPI.can_write('summary') %}
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group btn-group">
+                <a href='{{ url_for('summary.add') }}' class='btn btn-success'>
+                    <i class='glyphicon glyphicon-pencil'></i>
+                    <span>{{ _('New summary') }}</span>
+                </a>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                        <i class='glyphicon glyphicon-plus'></i>
+                        <span class="hidden-xs">{{ _('Add') }}</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href='/course/add?redir=view' class='dropdown-item'>
+                                {{ _('Course') }}
+                            </a>
+                        </li>
+                        <li><a href='/education/add?redir=view' class='dropdown-item'>
+                                {{ _('Education') }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <i class='glyphicon glyphicon-list'></i>
+                        <strong class="hidden-xs">{{ _('View') }}</strong>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href='/courses' class='dropdown-item'>
+                                {{ _('Courses') }}
+                            </a>
+                        </li>
+                        <li><a href='/educations' class='dropdown-item'>
+                                {{ _('Educations') }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="table-responsive">
+        <table class='table table-bordered table-striped'>
+            <thead>
+                <tr>
+                    <th>{{ _('Education') }}</th>
+                    <th>{{ _('Course') }}</th>
+                    <th>{{ _('Title') }}</th>
+                    <th>{{ _('Date') }}</th>
+                    {% if ModuleAPI.can_write('summary') %}
+                    <th>{{ _('Edit') }}</th>
+                    {% endif %}
+                </tr>
+            </thead>
+
+            <tbody>
+                {% if summaries == None %}
+                    <tr>
+                        <td valign="top" colspan="9">
+                            {{ _('No summaries found') }}
+                        </td>
+                    </tr>
+                {% else %}
+                {% for summary in summaries.items %}
+                    <tr>
+                        <td>
+                            <a href='/summary?search={{ (summary.education.name) }}'>{{ summary.education.name }}</a>
+                        </td>
+                        <td>
+                            <a href='/summary?search={{ (summary.course.name) }}'>{{ summary.course.name }}</a>
+                        </td>
+                        <td>
+                            <a href='{{ path + summary.path }}' target='_blank'><i class='glyphicon glyphicon-cloud-download'></i> {{ summary.title }}</a>
+                        </td>
+                        <td>
+                            {{ summary.date }}
+                        </td>
+                        {% if ModuleAPI.can_write('summary') %}
+                            <td>
+                                <a href='{{ url_for('summary.edit', summary_id=summary.id) }}'><i class='glyphicon glyphicon-pencil'></i></a>
+                                <a onclick='confirmation({{summary.id}})' role='button' data-toggle='modal' style='cursor: pointer;'><i class='glyphicon glyphicon-remove'></i></a>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if summaries != None %}
+    {{ render_pagination(summaries, 'summary.view', '?search=' + search) }}
+    {% endif %}
+    <form id="hiddenDeleteForm" action="?search={{ search }}" method="POST">
+        <input type="hidden" name="delete" />
+    </form>
+<script>
+
+function searchKeyPress(e)
+{
+    // look for window.event in case event isn't passed in
+    if (typeof e == 'undefined' && window.event) { e = window.event; }
+    if (e.keyCode == 13)
+    {
+        document.getElementById('submit').click();
+    }
+}
+
+function confirmation(id) {
+    var answer = confirm("{{ _("Are you sure you want to delete this summary?") }}");
+    if (answer){
+        $('#hiddenDeleteForm input').val(id);
+        $('#hiddenDeleteForm').submit();
+    }
+}
+</script>
+
+{% endblock %}

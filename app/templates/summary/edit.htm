@@ -1,0 +1,49 @@
+{% from "macros/form.htm" import
+render_field, render_select,
+render_datefield_picker, render_education_select,
+render_course_select, enable_select2 %}
+
+{% extends "base.htm" %}
+
+{% block includes %}
+{{ enable_select2() }}
+{% endblock %}
+
+{%block page %}
+    <fieldset>
+        {% if new_summary %}
+        <legend>{{_('New summary')}}</legend>
+        {% else %}
+        <legend>{{_('Edit summary')}} - {{summary.title}}</legend>
+        {% endif %}
+
+        <form method=post enctype=multipart/form-data>
+            {{ form.csrf_token }}
+
+            {{ render_field(form.title) }}
+            {{ render_datefield_picker(form.date) }}
+
+            {%- if new_summary -%}
+            {{ render_education_select(form.education, educations) }}
+            {{ render_course_select(form.course, courses) }}
+            {%- else -%}
+            {{ render_education_select(form.education, educations, selected=summary.education) }}
+            {{ render_course_select(form.course, courses, selected=summary.course) }}
+            {%- endif -%}
+
+            {{ render_field(form.summary) }}
+
+            <div class="control-group">
+                <div class="controls btn-group">
+                    <button type="submit" class="btn btn-success">
+                        <i class= "glyphicon glyphicon-ok"></i> {{_('Submit')}}
+                    </button>
+                    <a href="{{url_for('summary.view')}}"
+                        class='btn btn-primary'>
+                        <i class="glyphicon glyphicon-arrow-left"></i> {{_('Back')}}
+                    </a>
+                </div>
+            </div>
+        </form>
+    </fieldset>
+{% endblock %}

@@ -20,6 +20,7 @@ class DefaultConfig:
     RECAPTCHA_OPTIONS = {'theme': 'white'}
 
     EXAMINATION_UPLOAD_FOLDER = 'app/static/uploads/examinations'
+    SUMMARY_UPLOAD_FOLDER = 'app/static/uploads/summaries'
     UPLOAD_DIR = 'app/static/files/'
     FILE_DIR = '/static/files/'
 
