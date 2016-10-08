@@ -9,7 +9,7 @@ class Vacancy(db.Model, BaseEntity):
     __tablename__ = 'vacancy'
 
     title = db.Column(db.String(200), unique=True)
-    description = db.Column(db.String(1024))
+    description = db.Column(db.Text)
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)
     contract_of_service = db.Column(db.Enum('voltijd', 'deeltijd',
