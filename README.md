@@ -67,8 +67,10 @@ follows:
  - Support branches? [support/] `Hit [enter]`.
  - Version tag prefix? [] `Type 'v' and hit [enter]`.
 
-Start the setup of git-flow with the following command:
+First checkout master, then start the setup of git-flow with the following 
+commands:
 ```bash
+git checkout master
 git flow init
 ```
 
