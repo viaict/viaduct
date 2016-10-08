@@ -347,11 +347,16 @@ def request_password():
 
     if form.validate_on_submit():
         user = User.query.filter(
-            User.email == form.email.data,
-            User.student_id == form.student_id.data).first()
+            User.email == form.email.data).first()
+
+        if not user.student_id:
+            flash(_('Your account does not seem to have a student id '
+                    'configured, contact the board at bestuur@svia.nl.'),
+                  'danger')
+            return render_template('user/request_password.htm', form=form)
 
         # Check if the user does exist, and if the passwords do match.
-        if not user:
+        if (user.student_id != form.student_id.data):
             flash(_('Your email and student id appear to be incorrect.'),
                   'danger')
         else:
