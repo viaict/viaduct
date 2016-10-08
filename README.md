@@ -15,7 +15,19 @@ sudo apt-get install python3 python3-pip python-virtualenv mysql-server git-flow
 nodejs libjpeg-dev libffi-dev ruby python3-dev
 ln -s /usr/bin/nodejs /usr/bin/node
 ```
+### Python environment
 
+Python dependencies are in `requirements.txt`. Install all the requirements
+through pip. Usage of virtual environments is recommended. Running the `pip
+install` command twice is needed to correctly install the translation binaries
+of the Babel package.:
+
+```bash
+virtualenv venv/ -p /usr/bin/python3
+. venv/bin/activate
+pip install -r requirements.txt
+pip install -r requirements.txt  # YES DO IT TWICE
+```
 
 ### Configuration files
 The config of viaduct is a private repository that is not pushed to the
@@ -59,21 +71,6 @@ Start the setup of git-flow with the following command:
 ```bash
 git flow init
 ```
-
-### Python environment
-
-Python dependencies are in `requirements.txt`. Install all the requirements
-through pip. Usage of virtual environments is recommended. Running the `pip
-install` command twice is needed to correctly install the translation binaries
-of the Babel package.:
-
-```bash
-virtualenv venv/ -p /usr/bin/python3
-. venv/bin/activate
-pip install -r requirements.txt
-pip install -r requirements.txt  # YES DO IT TWICE
-```
-
 
 ### Ruby and NodeJS tools
 Build dependencies are for ruby and npm:
