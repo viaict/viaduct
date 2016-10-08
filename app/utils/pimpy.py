@@ -551,9 +551,9 @@ class PimpyAPI:
 
         if group_id != 'all':
             query = Minute.query.filter(Minute.group_id == group_id).\
-                    filter(start_date <= Minute.minute_date,
-                          Minute.minute_date <= end_date).\
-                    order_by(Minute.minute_date.desc())
+                filter(start_date <= Minute.minute_date,
+                       Minute.minute_date <= end_date).\
+                order_by(Minute.minute_date.desc())
             list_items[Group.query.filter(Group.id == group_id).first().name]\
                 = query.all()
         # this should be done with a sql in statement, or something, but meh
