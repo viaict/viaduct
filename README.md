@@ -68,10 +68,11 @@ follows:
  - Version tag prefix? [] `Type 'v' and hit [enter]`.
 
 First checkout master, then start the setup of git-flow with the following 
-commands:
+commands. Then, go back to develop:
 ```bash
 git checkout master
 git flow init
+git checkout develop
 ```
 
 ### Ruby and NodeJS tools
