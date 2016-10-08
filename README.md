@@ -41,6 +41,10 @@ cd ..
 ```
 
 ### Git Flow
+
+For reference of git flow, please see the [Git flow
+cheatsheet](http://danielkummer.github.io/git-flow-cheatsheet/)
+
 We use git flow to streamline the development cycle. Our configuration is as
 follows:
  - Branch name for production releases: [master] `Hit [enter]`.
