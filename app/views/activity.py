@@ -121,10 +121,13 @@ def get_activity(activity_id=0):
                         form.show_pay_button = True
                         form.form_result = form_result
 
-                if form_result.has_payed:
-                    activity.info = _("Your registration has been completed")\
+                if form_result.has_payed or \
+                        (attending and activity.price.lower()
+                            in ["gratis", "free", "0"]):
+                    activity.info = _("Your registration has been completed.")\
+                        + " " \
                         + _("You can edit your registration by resubmitting"
-                            "the form.")
+                            " the form.")
                 elif attending:
                     activity.info = _("You have successfully registered"
                                       ", payment is still required!")
