@@ -210,7 +210,7 @@ def create(activity_id=None):
             elif not picture:
                 picture = None
 
-            venue = 1  # Facebook ID location, not used yet  # noqa
+            activity.venue = 1  # Facebook ID location, not used yet  # noqa
 
             # Set a custom_form if it actually exists
             form_id = int(form.form_id.data)
