@@ -121,10 +121,13 @@ def get_activity(activity_id=0):
                         form.show_pay_button = True
                         form.form_result = form_result
 
-                if form_result.has_payed:
-                    activity.info = _("Your registration has been completed")\
+                if form_result.has_payed or \
+                        (attending and activity.price.lower()
+                            in ["gratis", "free", "0"]):
+                    activity.info = _("Your registration has been completed.")\
+                        + " " \
                         + _("You can edit your registration by resubmitting"
-                            "the form.")
+                            " the form.")
                 elif attending:
                     activity.info = _("You have successfully registered"
                                       ", payment is still required!")
@@ -137,10 +140,6 @@ def get_activity(activity_id=0):
                     activity.info = _("The activity has reached its maximum "
                                       "number of registrations. You will be "
                                       "placed on the reserves list.")
-                else:
-                    activity.info = _("The number of registrations at this "
-                                      "moment is") + ": " +\
-                        str(activity.num_attendants)
         else:
             activity.info = _("You have to be a registered member of "
                               "via in order to register for "
@@ -194,8 +193,9 @@ def create(activity_id=None):
                                            form=form,
                                            title=title)
 
-                file.save(os.path.join('app/static/activity_pictures',
-                                       picture))
+                fpath = os.path.join('app/static/activity_pictures', picture)
+                file.save(fpath)
+                os.chmod(fpath, 0o644)
 
                 # Remove old picture
                 if activity.picture:
@@ -210,7 +210,7 @@ def create(activity_id=None):
             elif not picture:
                 picture = None
 
-            venue = 1  # Facebook ID location, not used yet  # noqa
+            activity.venue = 1  # Facebook ID location, not used yet  # noqa
 
             # Set a custom_form if it actually exists
             form_id = int(form.form_id.data)

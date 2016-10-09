@@ -46,7 +46,8 @@
                             </dl>
 
                             <h2>
-                                {% if activity.price.lower() != "gratis" and activity.price.lower() != "free" %}
+                                {% if activity.price.lower() != "gratis" and activity.price.lower() != "free"
+                                        and activity.price != "0" %}
                                     &euro; {{ activity.price}}
                                 {% else %}
                                     {{ _('free') }}

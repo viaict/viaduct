@@ -1,51 +1,129 @@
 <div class="col-md-4">
-<ul class="nav">
+  <ul class="nav">
     <li>
-        <ul>
-            Bekijk
-            <ul class="nav nav-pills">
-                <li class="pimpy-menu {% if type == 'minutes' %} active {% endif %} ">
-                    <a href="{{ url_for(endpoints['view_minutes'], group_id=group_id) }}">
-                        Notulen
-                    </a>
-                </li>
-                <li class="pimpy-menu {% if type == 'tasks' %} active {% endif %} ">
-                    <a href="{{ url_for(endpoints['view_tasks_chosenpersonal'], group_id=group_id) }}">
-                        Taken
-                    </a>
-                </li>
-            </ul>
+      <ul>
+        Bekijk
+        <ul class="nav nav-pills">
+          <li class="pimpy-menu {% if type == 'minutes' %} active {% endif %} ">
+            <a href="{{ url_for(endpoints['view_minutes'], group_id=group_id) }}">
+              Notulen
+            </a>
+          </li>
+          <li class="pimpy-menu {% if type == 'tasks' %} active {% endif %} ">
+            <a href="{{ url_for(endpoints['view_tasks_chosenpersonal'], group_id=group_id) }}">
+              Taken
+            </a>
+          </li>
         </ul>
-        {% if type == 'tasks' %}
-            <ul>
-                Van
-                <ul class="nav nav-pills">
-                    <li class="pimpy-menu {% if personal %} active {% endif %} ">
-                        <a href="{{ url_for(endpoints['view_chosentype_personal'], group_id=group_id) }}">Zelf</a>
-                    </li>
-                    <li class="pimpy-menu {% if not personal %} active {% endif %} ">
-                        <a href="{{ url_for(endpoints['view_chosentype'], group_id=group_id) }}">Alle</a>
-                    </li>
-                </ul>
-            </ul>
-        {% endif %}
+      </ul>
+      {% if type == 'tasks' %}
+      <ul>
+        Van
+        <ul class="nav nav-pills">
+          <li class="pimpy-menu {% if personal %} active {% endif %} ">
+            <a href="{{ url_for(endpoints['view_chosentype_personal'], group_id=group_id) }}">Zelf</a>
+          </li>
+          <li class="pimpy-menu {% if not personal %} active {% endif %} ">
+            <a href="{{ url_for(endpoints['view_chosentype'], group_id=group_id) }}">Alle</a>
+          </li>
+        </ul>
+      </ul>
+      {% endif %}
     </li>
     <li>
-        <ul>
-            Groepen
-            <ul class="nav nav-pills nav-stacked pimpy-menu-group">
-                <li {% if group_id == 'all' %} class="active" {% endif %} >
-                    <a href="{{ url_for(endpoints['view_chosentype_chosenpersonal']) }}">Alle</a>
-                </li>
-                {% for group in groups %}
-                    <li {% if group_id == group.id %} class="active" {% endif %} >
-                        <a href="{{ url_for(endpoints['view_chosentype_chosenpersonal'], group_id=group.id) }}">{{ group.name }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
+      <ul>
+        Groepen
+        <ul class="nav nav-pills nav-stacked pimpy-menu-group">
+          <li {% if group_id == 'all' %} class="active" {% endif %} >
+            <a href="{{ url_for(endpoints['view_chosentype_chosenpersonal']) }}">Alle</a>
+          </li>
+          {% for group in groups %}
+          <li {% if group_id == group.id %} class="active" {% endif %} >
+            <a href="{{ url_for(endpoints['view_chosentype_chosenpersonal'], group_id=group.id) }}">{{ group.name }}</a>
+          </li>
+          {% endfor %}
         </ul>
+      </ul>
     </li>
-    
-</ul>
+    {% if type != 'tasks' %}
+    <li>
+      <ul>
+        Datum
+        <ul class="nav nav-pills nav-stacked pimpy-menu-group">
+          <form action="{{ url_for("pimpy.view_minutes_in_date_range") }}" method="post">
+            <input id="group_id" name="group_id" type="hidden" value="{{ group_id }}">
+            <div class="form-group">
+              <label for="start_date">Van</label>
+              <div class="input-group date" id="start_date">
+                <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                <input class="form-control" data-date-format="yyyy-mm-dd"
+                                            id="start_date"
+                                            name="start_date"
+                                            type="text"
+                                            value="{{ datetime.date.today().strftime("%Y-%m-%d" )}}">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="end_date">Tot</label>
+              <div class="input-group date" id="end_date">
+                <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                <input class="form-control" data-date-format="yyyy-mm-dd"
+                                            id="end_date"
+                                            name="end_date"
+                                            type="text"
+                                            value="{{ datetime.date.today().strftime("%Y-%m-%d" )}}">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Zoeken</button>
+          </form>
+
+          <script>$('#start_date').datetimepicker({ format: 'yyyy-mm-dd' });</script>
+          <script>$('#end_date').datetimepicker({ format: 'yyyy-mm-dd' });</script>
+        </ul>
+      </ul>
+    </li>
+    {% endif%}
+    {% if type == 'tasks' %}
+    <li>
+      <ul>
+        Datum
+        <ul class="nav nav-pills nav-stacked pimpy-menu-group">
+          <form action="{{ url_for("pimpy.view_tasks_in_date_range") }}" method="post">
+            <input id="group_id" name="group_id" type="hidden" value="{{ group_id }}">
+            <!-- <input id="personal_toggle" name="personal_toggle" type="hidden" -->
+            <!-- value="{{ personal }}"> -->
+            <div class="form-group">
+              <label for="start_date">Van</label>
+              <div class="input-group date" id="start_date">
+                <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                <input class="form-control" data-date-format="yyyy-mm-dd"
+                                            id="start_date"
+                                            name="start_date"
+                                            type="text"
+                                            value="{{ datetime.date.today().strftime("%Y-%m-%d" )}}">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="end_date">Tot</label>
+              <div class="input-group date" id="end_date">
+                <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                <input class="form-control" data-date-format="yyyy-mm-dd"
+                                            id="end_date"
+                                            name="end_date"
+                                            type="text"
+                                            value="{{ (datetime.date.today() +
+                                            datetime.timedelta(days=1)).strftime("%Y-%m-%d" )}}">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Zoeken</button>
+          </form>
+
+          <script>$('#start_date').datetimepicker({ format: 'yyyy-mm-dd' });</script>
+          <script>$('#end_date').datetimepicker({ format: 'yyyy-mm-dd' });</script>
+        </ul>
+      </ul>
+    </li>
+    {% endif%}
+  </ul>
 </div>
 

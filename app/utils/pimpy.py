@@ -478,6 +478,50 @@ class PimpyAPI:
                                       title='PimPy'))
 
     @staticmethod
+    def get_tasks_in_date_range(group_id, personal, start_date, end_date):
+        """Load all tasks for a given group in a daterange."""
+
+        if not ModuleAPI.can_read('pimpy'):
+            abort(403)
+        if current_user.is_anonymous:
+            flash('Huidige gebruiker niet gevonden', 'danger')
+            return redirect(url_for('pimpy.view_tasks'))
+
+        status_meanings = Task.get_status_meanings()
+
+        tasks_rel = TaskUserRel.query.join(Task).join(User)
+
+        groups = UserAPI.get_groups_for_current_user()
+        groups = map(lambda x: x.id, groups)
+
+        if group_id == 'all':
+            tasks_rel = tasks_rel.filter(Task.group_id.in_(groups))
+
+        else:
+            group_id = int(group_id)
+            if group_id not in groups:
+                abort(403)
+
+            tasks_rel = tasks_rel.filter(Task.group_id == group_id)
+
+        if personal:
+            tasks_rel = tasks_rel.filter(User.id == current_user.id)
+
+        tasks_rel = tasks_rel.filter(~Task.status.in_((4, 5))).join(Group).\
+            filter(start_date <= Task.timestamp,
+                   Task.timestamp <= end_date)
+        tasks_rel = tasks_rel.order_by(Group.name.asc(), User.first_name.asc(),
+                                       User.last_name.asc(), Task.id.asc())
+
+        return Markup(render_template('pimpy/api/tasks.htm',
+                                      personal=personal,
+                                      group_id=group_id,
+                                      tasks_rel=tasks_rel,
+                                      type='tasks',
+                                      status_meanings=status_meanings,
+                                      title='PimPy'))
+
+    @staticmethod
     def get_minutes(group_id):
         """Load all minutes in the given group."""
 
@@ -531,6 +575,12 @@ class PimpyAPI:
     @staticmethod
     def get_minute_raw(group_id, minute_id):
         """Load specifically one minute in raw format (without markup)."""
+        minute = Minute.query.filter(Minute.id == minute_id).first()
+        return minute.content
+
+    @staticmethod
+    def get_minutes_in_date_range(group_id, start_date, end_date):
+        """Load all minutes in the given group."""
 
         if not ModuleAPI.can_read('pimpy'):
             abort(403)
@@ -538,8 +588,29 @@ class PimpyAPI:
             flash('Huidige gebruiker niet gevonden', 'danger')
             return redirect(url_for('pimpy.view_minutes'))
 
-        minute = Minute.query.filter(Minute.id == minute_id).first()
-        return minute.content
+        list_items = {}
+
+        start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
+        end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d")
+
+        if group_id != 'all':
+            query = Minute.query.filter(Minute.group_id == group_id).\
+                filter(start_date <= Minute.minute_date,
+                       Minute.minute_date <= end_date).\
+                order_by(Minute.minute_date.desc())
+            list_items[Group.query.filter(Group.id == group_id).first().name]\
+                = query.all()
+        # this should be done with a sql in statement, or something, but meh
+        else:
+            for group in current_user.groups:
+                query = Minute.query.filter(Minute.group_id == group.id)
+                query = query.order_by(Minute.minute_date.desc())
+                list_items[group.name] = query.all()
+
+        return Markup(render_template('pimpy/api/minutes.htm',
+                                      list_items=list_items, type='minutes',
+                                      group_id=group_id, line_number=-1,
+                                      title='PimPy'))
 
     @staticmethod
     def update_content(task_id, content):

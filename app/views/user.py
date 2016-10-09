@@ -180,6 +180,7 @@ def edit(user_id=None):
             user.honorary_member = form.honorary_member.data
             user.favourer = form.favourer.data
             user.disabled = form.disabled.data
+            user.alumnus = form.alumnus.data
         user.student_id = form.student_id.data.strip()
         user.education_id = form.education_id.data
         user.birth_date = form.birth_date.data
@@ -209,7 +210,6 @@ def edit(user_id=None):
         else:
             copernica.update_user(user, subscribe=True)
             flash(_('Profile succesfully created'))
-
         return redirect(url_for('user.view_single', user_id=user.id))
     else:
         flash_form_errors(form)
@@ -347,11 +347,16 @@ def request_password():
 
     if form.validate_on_submit():
         user = User.query.filter(
-            User.email == form.email.data,
-            User.student_id == form.student_id.data).first()
+            User.email == form.email.data).first()
+
+        if not user.student_id:
+            flash(_('Your account does not seem to have a student id '
+                    'configured, contact the board at bestuur@svia.nl.'),
+                  'danger')
+            return render_template('user/request_password.htm', form=form)
 
         # Check if the user does exist, and if the passwords do match.
-        if not user:
+        if (user.student_id != form.student_id.data):
             flash(_('Your email and student id appear to be incorrect.'),
                   'danger')
         else:
@@ -470,7 +475,7 @@ def get_users():
              "<i class='glyphicon glyphicon-ok'></i>"
                 if user.favourer else "",
              "<i class='glyphicon glyphicon-ok'></i>"
-                if user.disabled else ""
+                if user.alumnus else ""
              ])
     return json.dumps({"data": user_list})
 

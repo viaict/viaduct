@@ -78,3 +78,57 @@
         {{ field(class='form-control') }}
     </div>
 {% endmacro %}
+
+{% macro render_education_select(field, educations, selected=None, redir=None) %}
+<div class='form-group'>
+    {{ field.label }}
+    <div class='input-group'>
+        <select id='{{ field.id }}' name='{{ field.name }}' class='form-control'>
+            {% for education in educations %}
+            <option value="{{ education.id }}"
+                {%- if selected and education.id == selected.id %} selected="selected"{% endif -%}>
+                {{education.name}}
+            </option>
+            {% endfor %}
+        </select>
+        <span class="input-group-btn">
+            <a href="/education/add{% if redir %}?redir={{ redir }}{% endif %}" class="btn btn-default btn-success">
+                <i class="glyphicon glyphicon-pencil"></i>
+                {{_('New education')}}
+            </a>
+        </span>
+    </div>
+</div>
+{% endmacro %}
+
+
+{% macro render_course_select(field, courses, selected=None, redir=None) %}
+<div class='form-group'>
+    {{ field.label }}
+    <div class='input-group'>
+        <select id='{{ field.id }}' name='{{ field.name }}' class='form-control'>
+            {% for course in courses %}
+            <option value="{{ course.id }}"
+                {%- if selected and course.id == selected.id %} selected="selected"{% endif -%}>
+                {{course.name}}
+            </option>
+            {% endfor %}
+        </select>
+        <span class="input-group-btn">
+            <a href="/courses/add{% if redir %}?redir={{ redir }}{% endif %}" class="btn btn-default btn-success">
+                <i class="glyphicon glyphicon-pencil"></i>
+                {{_('New course')}}
+            </a>
+        </span>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro enable_select2() %}
+        <script type='text/javascript'>
+        $(function () {
+            'use strict';
+            $("select").select2();
+        });
+        </script>
+{% endmacro %}

@@ -39,6 +39,7 @@ class FileAPI:
         # Save file.
         path = os.path.join(os.getcwd(), UPLOAD_DIR, filename)
         f.save(path)
+        os.chmod(path, 0o644)
 
         # Add to database.
         new_file = File(filename)

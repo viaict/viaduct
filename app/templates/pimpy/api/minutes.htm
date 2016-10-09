@@ -21,7 +21,7 @@
                             <div class="col-xs-2"><i class="fa fa-chevron-down pull-right"></i></div>
                         </div>
                         <div class="pimpy_minute_toggle" id="{{ list_item.get_name() }}">
-                            <a href="{{ url_for('pimpy.view_minute_raw', group_id=list_item.group.id, minute_id=list_item.id) }}">Laat als plaintext zien</a>
+                            <a href="{{ url_for('pimpy.view_minute_raw', group_id=list_item.group.id, minute_id=list_item.id) }}">{{ _('Show plaintext') }}</a>
                             <div class="pimpy_minute_styled">
                                 {% for (id, num, line) in list_item.get_content_lines() %}
                                 <a id="{{- id -}}ln{{- num -}} " class="pimpy_minute_line"/>

@@ -57,8 +57,12 @@
             {{render_checkbox(form.disabled) }}
         </div>
         {% endif %}
-
-
+        {% if user.has_payed %}
+        <legend>{{_('I have finished studying')}}</legend>
+        <div class="col-md-5">
+            {{render_checkbox(form.alumnus) }}
+        </div>
+        {% endif %}
         <div class="col-md-12">
             {{ render_submit(_('Save'))}}
         </div>

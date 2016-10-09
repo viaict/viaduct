@@ -1,3 +1,17 @@
+09-10-2016 v2.7.0.0:
+* Added: Option to copy link to clipboard after a file was uploaded.
+* Added: Option to search through uploaded files.
+* Added: Email to committee pages.
+* Added: Workload of vacancies to vancancy overview page.
+* Added: Option to mark account as alumnus.
+* Added: Option to filter pimpy items (minutes and tasks) on date.
+* Added: Option for uploading summaries.
+* Fixed: Form cost of 0 now renders properly as it would with gratis/free.
+* Fixed: Minor security risks.
+* Fixed: Password reset for users without a studentnumber.
+* Fixed: Alignment of names in Pimpy.
+* Removed: Upload module. Functionality was already available in the file module.
+
 10-09-2016 v2.6.9.0:
 * Fixed bug where people on the reservelist were able to pay for events.
 * Followers of forms automatically recieve an e-mail when there is a new response to the form.

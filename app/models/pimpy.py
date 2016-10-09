@@ -1,6 +1,7 @@
 from app import db
 import datetime
 from app.models import BaseEntity
+from jinja2 import escape
 import baas32 as b32
 
 # many to many relationship tables
@@ -88,10 +89,23 @@ class Task(db.Model, BaseEntity):
             statusi[i] = [Task.status_meanings[i], Task.status_colors[i], i]
         return statusi
 
-    def get_users(self):
-        """Return a list of users, comma separated."""
-        return ", ".join(map(lambda x: "%s %s" % (x.first_name, x.last_name),
-                             self.users))
+    def get_users(self, include_break_spans=False):
+        """
+        Return a list of users, comma separated.
+        The usernames are escaped, so the resulting string is safe to render.
+
+        When include_break_spans is set to True, each name is
+        wrapped inside a span which does not allow breaking, so webbrowsers
+        will only break on full names.
+        """
+        users = map(
+            lambda x: str(escape("%s %s" % (x.first_name, x.last_name))),
+            self.users)
+
+        if include_break_spans:
+            users = map(lambda x: "<span style='white-space: nowrap'>" +
+                        x + "</span>", users)
+        return ", ".join(users)
 
 
 class Minute(db.Model, BaseEntity):

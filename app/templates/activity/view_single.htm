@@ -156,7 +156,8 @@
     <div class="row">
         <div class="col-md-8">
             <h4>{{_('Price')}}:
-                {% if not activity.price.lower() == "gratis" and not activity.price.lower() == "free" %}
+                {% if not activity.price.lower() == "gratis" and not activity.price.lower() == "free"
+                        and not activity.price == "0"%}
                     &euro; {{ activity.price }}
                 {% else %}
                     {{ _('free') }}

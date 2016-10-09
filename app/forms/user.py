@@ -104,6 +104,7 @@ class EditUserForm(BaseUserForm):
     honorary_member = BooleanField(_('Honorary member'))
     favourer = BooleanField(_('Favourer'))
     disabled = BooleanField(_('Disabled'))
+    alumnus = BooleanField(_('Alumnus'))
 
     def validate_password(self, field):
         """Providing a password is only required when creating a new user."""
@@ -120,6 +121,14 @@ class EditUserInfoForm(BaseUserForm):
     """Edit your own user information."""
 
     id = IntegerField('ID')
+    alumnus = BooleanField(_('Yes, I have finished studying'))
+    recieve_information_VIA = \
+        SelectField(_("Would you like to recieve mail from via?"),
+                    choices=[(0, ""),
+                             (1, _("Yes")),
+                             (2, _("Yes, but only for alumni activity")),
+                             (3, _("No"))],
+                    coerce=int)
     password = PasswordField(
         _('Password'), validators=[
             Length(message=(_('Minimal password length ') +

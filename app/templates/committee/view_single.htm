@@ -16,6 +16,8 @@
         {% if revision.interim %}
             <br />{{_('Interim-coördinator')}}: {{ revision.coordinator.name }}
         {% endif %}
+
+        <br />Email: {{ revision.group.maillist }}@svia.nl
     </p>
     <hr />
     {{ revision.description | strip_tags('script', 'link', 'style', 'video', 'audio') | markdown }}
