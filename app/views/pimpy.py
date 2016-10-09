@@ -58,12 +58,11 @@ def view_minutes_in_date_range(group_id='all'):
 def view_tasks_in_date_range(group_id='all'):
     if not ModuleAPI.can_read('pimpy'):
         return abort(403)
-    personal_toggle = request.form['personal_toggle']
     group_id = request.form['group_id']
     start_date = request.form['start_date']
     end_date = request.form['end_date']
     return PimpyAPI.get_tasks_in_date_range(
-        group_id, personal_toggle, start_date, end_date)
+        group_id, False, start_date, end_date)
 
 
 @blueprint.route('/minutes/<group_id>/<int:minute_id>/')
