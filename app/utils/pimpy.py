@@ -180,7 +180,7 @@ class PimpyAPI:
         dones_found = []
         removes_found = []
 
-        regex = re.compile(r"\s*(?:ACTIE|TODO)\s+([^\n\r]*)")
+        regex = re.compile(r"\s*(?:ACTIE|TODO)([\s:]\s*[^\n\r]*)")
         for i, line in enumerate(content.splitlines()):
             matches = regex.findall(line)
 
@@ -189,12 +189,7 @@ class PimpyAPI:
                     listed_users, title = action.split(":", 1)
                 except:
                     print("could not split the line on ':'.\nSkipping hit.")
-                    flash("Kon niet verwerken: " + action, 'danger')
-                    continue
-
-                # Ignore todos where everyone in the group would get
-                # ONE SHARED task
-                if not listed_users.strip():
+                    flash("Kon niet verwerken: " + str(action), 'danger')
                     continue
 
                 users, message = PimpyAPI.get_list_of_users_from_string(
