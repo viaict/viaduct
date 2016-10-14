@@ -161,7 +161,7 @@ def edit_committee(committee=''):
         db.session.add(new_revision)
         db.session.commit()
 
-        flash(_('The committe has been saved.'), 'success')
+        flash(_('The committee has been saved.'), 'success')
 
         return redirect(url_for('page.get_page', path=path))
     else:
