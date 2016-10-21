@@ -1,8 +1,9 @@
 from app import app, db, version, js_glue
+from app.models import User, Group
+
 from flask_script import Manager, Server, prompt
 from flask_migrate import Migrate, MigrateCommand
 from flask_failsafe import failsafe
-
 
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -13,6 +14,9 @@ import sys
 import subprocess
 import platform
 
+from fuzzywuzzy import fuzz
+from unidecode import unidecode
+
 
 @failsafe
 def create_app():
@@ -21,13 +25,20 @@ def create_app():
     return app
 
 migrate = Migrate(app, db)
-versionbump = Manager(usage=("Apply a version bump."
-                             "Versioning works using the following format: "
-                             "SYSTEM.FEATURE.IMPROVEMENT.BUG-/HOTFIX"))
-manager = Manager(app, usage=("Manager console for viaduct"))
+versionbump = Manager(
+    help="Apply a version bump",
+    description=("Apply a version bump. "
+                 "Versioning works using the following format: "
+                 "SYSTEM.FEATURE.IMPROVEMENT.BUG-/HOTFIX"))
+administrators = Manager(
+    help="Add or remove users from the administrators group",
+    description="Add or remove users from the administrators group")
+
+manager = Manager(app, description="Manager console for viaduct")
 manager.add_command("runserver", Server())
 manager.add_command('db', MigrateCommand)
 manager.add_command('versionbump', versionbump)
+manager.add_command('administrators', administrators)
 
 
 def prompt_bool(q, default=False):
@@ -83,7 +94,7 @@ def routes():
 
 @manager.command
 def flaskjs():
-    """Genereate the javascript file for url_for in javascript."""
+    """Generate the javascript file for url_for in javascript."""
     with open('src/js/global/flask.js', 'w', encoding='utf8') as f:
         f.write(js_glue.generate_js())
 
@@ -119,12 +130,12 @@ def jade():
     """Keep track of the jade files and recompile if neccesary."""
     if platform.system() == 'Windows':
         subprocess.call(('node node_modules/clientjade/bin/clientjade'
-    		     ' src/jade/ > src/js/global/jade.js'),
-    		    shell=True)
+                         ' src/jade/ > src/js/global/jade.js'),
+                        shell=True)
     else:
         subprocess.call(('./node_modules/clientjade/bin/clientjade'
-    		     ' src/jade/ > src/js/global/jade.js'),
-    		    shell=True)
+                         ' src/jade/ > src/js/global/jade.js'),
+                        shell=True)
     print("Started tracking jade files...")
     path = sys.argv[2] if len(sys.argv) > 2 else '.'
     event_handler = EventHandler()
@@ -172,7 +183,7 @@ def _get_current_version():
 
 
 def _bump_version(current_version, new_version):
-    print("\nCurrent version: \tv{}.{}.{}.{}".format(*current_version))
+    print("Current version: \tv{}.{}.{}.{}".format(*current_version))
     print("New version: \t\tv{}.{}.{}.{}".format(*new_version))
 
     answer = prompt_bool("Continue?")
@@ -247,5 +258,90 @@ def system():
     _bump_version(current_version, new_version)
 
 
+def _administrators_action(user_search, remove):
+    """Method for adding or removing users in the administrators group."""
+    admin_group = Group.query.filter(Group.name == "administrators").first()
+    if admin_group is None:
+        print("Administrators group does not exist.")
+        return
+
+    if user_search.isdigit():
+        # Search for user ID
+        user_id = int(user_search)
+        user_found = User.query.get(user_id)
+        if user_found is None or user_id == 0:
+            print("User with ID {} does not exist.".format(user_id))
+            return
+    else:
+        # Search in user name
+        users = User.query.all()
+
+        maximum = 0
+        user_found = None
+
+        # Find user with highest match ratio
+        for user in users:
+            if user.id == 0:
+                continue
+
+            first_name = unidecode(user.first_name.lower().strip())
+            last_name = unidecode(user.last_name.lower().strip())
+
+            rate_first = fuzz.ratio(first_name, user_search)
+            rate_last = fuzz.ratio(last_name, user_search)
+
+            full_name = first_name + ' ' + last_name
+            rate_full = fuzz.ratio(full_name, user_search)
+
+            if rate_first > maximum or \
+                    rate_last > maximum or \
+                    rate_full > maximum:
+                maximum = max(rate_first, max(rate_last, rate_full))
+                user_found = user
+
+        if user_found is None:
+            print("No user found")
+            return
+
+    print("Found user: {} (ID {})".format(user_found.name, user_found.id))
+    if admin_group in user_found.groups.all():
+        if not remove:
+            print("User is already in administrators group")
+            return
+    elif remove:
+        print("User is not in administrators group")
+        return
+
+    if remove:
+        prompt = "Remove {} from administrators group?".format(user_found.name)
+    else:
+        prompt = "Add {} to administrators group?".format(user_found.name)
+
+    if prompt_bool(prompt):
+        if remove:
+            admin_group.delete_user(user_found)
+        else:
+            admin_group.add_user(user_found)
+
+        db.session.commit()
+        print("User successfully {}.".format("removed" if remove else "added"))
+
+
+@administrators.option(dest='user', help='User ID or name')
+def add(user):
+    """Add a user to the administrator group."""
+    _administrators_action(user, False)
+
+
+@administrators.option(dest='user', help='User ID or name')
+def remove(user):
+    """Remove a user from the administrator group."""
+    _administrators_action(user, True)
+
+
 if __name__ == '__main__':
+    # Print two newlines after the output of app/__init__.py
+    # to make the command's output more readable
+    sys.stdout.write("\n\n")
+
     manager.run()
