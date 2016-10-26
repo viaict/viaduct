@@ -20,7 +20,7 @@ from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult
 from app.models.mollie import Transaction
 from app.utils.module import ModuleAPI
-from app.utils.mollie import MollieAPI
+from app.utils import mollie
 from app.models.education import Education
 from app.forms import SignInForm
 
@@ -267,14 +267,14 @@ def create_mollie_transaction(result_id):
         print(description)
         amount = form_result.form.price
         user = form_result.owner
-        payment_url, transaction = MollieAPI.create_transaction(
+        payment_url, transaction = mollie.create_transaction(
             amount, description, user=user, form_result=form_result)
         if payment_url:
             return redirect(payment_url)
         else:
             return render_template('mollie/success.htm', message=transaction)
     else:
-        payment_url, message = MollieAPI.get_payment_url(
+        payment_url, message = mollie.get_payment_url(
             mollie_id=transaction.mollie_id)
         if payment_url:
             return redirect(payment_url)

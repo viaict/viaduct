@@ -1,9 +1,10 @@
 from flask import Blueprint, abort, render_template, request, url_for
 from app import app
-from app.utils.mollie import MollieAPI
+from app.utils import mollie
 from app.utils.module import ModuleAPI
-from app.models import Transaction, CustomForm
+from app.models.custom_form import CustomForm
 from app.models.activity import Activity
+from app.models.mollie import Transaction
 
 blueprint = Blueprint('mollie', __name__, url_prefix='/mollie')
 
@@ -16,7 +17,7 @@ def mollie_check(trans_id=0, mollie_id=0):
             return render_template('mollie/success.htm', message='no id given')
         else:
             mollie_id = request.form['id']
-            trans_id = MollieAPI.get_other_id(mollie_id=mollie_id)
+            trans_id = mollie.get_other_id(mollie_id=mollie_id)
 
     transaction = Transaction.query.\
         filter(Transaction.id == trans_id).first()
@@ -30,8 +31,8 @@ def mollie_check(trans_id=0, mollie_id=0):
         link = url_for('activity.get_activity', activity_id=activity.id)
     else:
         link = False
-    success, message = MollieAPI.check_transaction(transaction_id=trans_id,
-                                                   mollie_id=mollie_id)
+    success, message = mollie.check_transaction(transaction_id=trans_id,
+                                                mollie_id=mollie_id)
     CustomForm.update_payment(trans_id, success)
     return render_template('mollie/success.htm',
                            message=message,
@@ -40,13 +41,16 @@ def mollie_check(trans_id=0, mollie_id=0):
 
 @blueprint.route('/webhook/', methods=['GET', 'POST'])
 def webhook():
+    print(request.form)
     if request.method == 'GET':
         return ''
     if 'id' not in request.form:
         return ''
+    if request.form['id'] == '':
+        return ''
     mollie_id = request.form['id']
-    success, message = MollieAPI.check_transaction(mollie_id=mollie_id)
-    trans_id = MollieAPI.get_other_id(mollie_id=mollie_id)
+    success, message = mollie.check_transaction(mollie_id=mollie_id)
+    trans_id = mollie.get_other_id(mollie_id=mollie_id)
     CustomForm.update_payment(trans_id, success)
     return ''
 
@@ -62,7 +66,7 @@ def view_all_transactions(page=0):
     key = app.config.get('MOLLIE_TEST_KEY', False)
     print(key)
 
-    payments, message = MollieAPI.get_transactions(page)
+    payments, message = mollie.get_transactions(page)
     print(payments)
     print(message)
     if payments:
