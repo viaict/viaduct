@@ -1,7 +1,9 @@
 from flask_login import current_user
 
 from app import db
-from app.models import BaseEntity, Activity, Transaction
+from app.models.mollie import Transaction
+from app.models.activity import Activity
+from app.models.base_model import BaseEntity
 
 from collections import OrderedDict
 import datetime as dt
