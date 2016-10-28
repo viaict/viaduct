@@ -38,7 +38,7 @@ manager = Manager(app, description="Manager console for viaduct")
 manager.add_command("runserver", Server())
 manager.add_command('db', MigrateCommand)
 manager.add_command('versionbump', versionbump)
-manager.add_command('administrators', administrators)
+manager.add_command('admin', administrators)
 
 
 def prompt_bool(q, default=False):
