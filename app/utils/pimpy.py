@@ -30,7 +30,7 @@ class PimpyAPI:
         if succes is true, otherwise it contains an error message.
         """
         if not ModuleAPI.can_write('pimpy'):
-            abort(403)
+            return abort(403)
 
         try:
             date = datetime.datetime.strptime(date, DATE_FORMAT)
@@ -55,7 +55,7 @@ class PimpyAPI:
         if succes is true, otherwise it contains an error message.
         """
         if not ModuleAPI.can_write('pimpy'):
-            abort(403)
+            return abort(403)
 
         if group_id == 'all':
             return False, "Groep kan niet 'All' zijn"
@@ -112,7 +112,7 @@ class PimpyAPI:
         In case of succes the task is edited in the database.
         """
         if not ModuleAPI.can_write('pimpy'):
-            abort(403)
+            return abort(403)
 
         if task_id == -1:
             return False, "Geen taak ID opgegeven."
@@ -292,7 +292,7 @@ class PimpyAPI:
         and comma_sep is a string with comma seperated users.
         """
         if not ModuleAPI.can_read('pimpy'):
-            abort(403)
+            return abort(403)
 
         group = Group.query.filter(Group.id == group_id).first()
         if group is None:
@@ -360,7 +360,7 @@ class PimpyAPI:
     @staticmethod
     def get_navigation_menu(group_id, personal, type):
         if not ModuleAPI.can_read('pimpy'):
-            abort(403)
+            return abort(403)
         if current_user.is_anonymous:
             flash('Huidige gebruiker niet gevonden!', 'danger')
             return redirect(url_for('pimpy.view_minutes'))
@@ -402,7 +402,7 @@ class PimpyAPI:
         Do not make routes to this module yet.
         """
         if not ModuleAPI.can_read('pimpy'):
-            abort(403)
+            return abort(403)
         if current_user.is_anonymous:
             flash('Huidige gebruiker niet gevonden.', 'danger')
             return redirect(url_for('pimpy.view_tasks'))
@@ -420,9 +420,9 @@ class PimpyAPI:
             tasks = Task.query.filter(Task.group_id == group_id).all()
             group = Group.query.filter(Group.id == group_id).first()
             if not group:
-                abort(404)
+                return abort(404)
             if group not in UserAPI.get_groups_for_current_user():
-                abort(403)
+                return abort(403)
             list_users['Iedereen'] = tasks
             list_items[group.name] = list_users
 
@@ -435,7 +435,7 @@ class PimpyAPI:
     @staticmethod
     def get_tasks(group_id, personal):
         if not ModuleAPI.can_read('pimpy'):
-            abort(403)
+            return abort(403)
         if current_user.is_anonymous:
             flash('Huidige gebruiker niet gevonden', 'danger')
             return redirect(url_for('pimpy.view_tasks'))
@@ -453,7 +453,7 @@ class PimpyAPI:
         else:
             group_id = int(group_id)
             if group_id not in groups:
-                abort(403)
+                return abort(403)
 
             tasks_rel = tasks_rel.filter(Task.group_id == group_id)
 
@@ -477,7 +477,7 @@ class PimpyAPI:
         """Load all tasks for a given group in a daterange."""
 
         if not ModuleAPI.can_read('pimpy'):
-            abort(403)
+            return abort(403)
         if current_user.is_anonymous:
             flash('Huidige gebruiker niet gevonden', 'danger')
             return redirect(url_for('pimpy.view_tasks'))
@@ -495,7 +495,7 @@ class PimpyAPI:
         else:
             group_id = int(group_id)
             if group_id not in groups:
-                abort(403)
+                return abort(403)
 
             tasks_rel = tasks_rel.filter(Task.group_id == group_id)
 
@@ -521,7 +521,7 @@ class PimpyAPI:
         """Load all minutes in the given group."""
 
         if not ModuleAPI.can_read('pimpy'):
-            abort(403)
+            return abort(403)
         if current_user.is_anonymous:
             flash('Huidige gebruiker niet gevonden', 'danger')
             return redirect(url_for('pimpy.view_minutes'))
@@ -551,15 +551,16 @@ class PimpyAPI:
         """Load (and thus view) specifically one minute."""
 
         if not ModuleAPI.can_read('pimpy'):
-            abort(403)
-        if current_user.is_anonymous:
-            flash('Huidige gebruiker niet gevonden', 'danger')
-            return redirect(url_for('pimpy.view_minutes'))
+            return abort(403)
 
         list_items = {}
-        query = Minute.query.filter(Minute.id == minute_id)
+        minute = Minute.query.filter(Minute.id == minute_id).first()
         group = Group.query.filter(Group.id == group_id).first()
-        list_items[group.name] = query.all()
+
+        if group != minute.group:
+            return abort(403)
+
+        list_items[group.name] = [minute]
         tag = "%dln%d" % (list_items[group.name][0].id, int(line_number))
 
         return render_template('pimpy/api/minutes.htm', list_items=list_items,
@@ -570,7 +571,15 @@ class PimpyAPI:
     @staticmethod
     def get_minute_raw(group_id, minute_id):
         """Load specifically one minute in raw format (without markup)."""
+
+        if not ModuleAPI.can_read('pimpy'):
+            return abort(403)
+
         minute = Minute.query.filter(Minute.id == minute_id).first()
+        group = Group.query.filter(Group.id == group_id).first()
+        if group != minute.group:
+            return abort(403)
+
         return minute.content
 
     @staticmethod
@@ -578,7 +587,7 @@ class PimpyAPI:
         """Load all minutes in the given group."""
 
         if not ModuleAPI.can_read('pimpy'):
-            abort(403)
+            return abort(403)
         if current_user.is_anonymous:
             flash('Huidige gebruiker niet gevonden', 'danger')
             return redirect(url_for('pimpy.view_minutes'))
