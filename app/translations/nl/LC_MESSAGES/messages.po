@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-10-29 14:55+0200\n"
+"POT-Creation-Date: 2016-10-31 00:03+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -640,6 +640,9 @@ msgstr "Laatste nieuws"
 
 msgid "Legend"
 msgstr "Legenda"
+
+msgid "Link copied"
+msgstr "Link gekopieerd"
 
 msgid "Link to file"
 msgstr "Link naar bestand"
