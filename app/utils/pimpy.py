@@ -2,6 +2,7 @@ from app import db, app
 from flask import render_template, Markup, redirect, url_for, abort,\
     flash
 from flask_login import current_user
+from flask_babel import _
 from unidecode import unidecode
 import datetime
 import re
@@ -242,16 +243,21 @@ class PimpyAPI:
                 b32_id_strip = b32_id.strip()
                 if b32_id_strip == '':
                     continue
-                done_id = b32.decode(b32_id_strip)
-
                 try:
-                    done_task = Task.query.filter(Task.id == done_id).first()
-                except:
-                    print("could not find the given task")
-                    flash("Kan DONE niet vinden, id: " + done_id, "danger")
+                    done_id = b32.decode(b32_id_strip)
+                except ValueError:
+                    flash(_("Invalid DONE task id: ") + b32_id_strip,
+                          'danger')
                     continue
-                if done_task is not None:
-                    dones_found.append(done_task)
+
+                done_task = Task.query.filter(Task.id == done_id).first()
+
+                if done_task is None:
+                    flash(_("Could not find DONE task: ") + b32_id_strip,
+                          "danger")
+                    continue
+
+                dones_found.append(done_task)
 
         regex = re.compile("\s*(?:REMOVE) ([^\n\r]*)")
         matches = regex.findall(content)
@@ -262,16 +268,22 @@ class PimpyAPI:
                 b32_id_strip = b32_id.strip()
                 if b32_id_strip == '':
                     continue
-                remove_id = b32.decode(b32_id_strip)
+
                 try:
-                    remove_task = Task.query\
-                        .filter(Task.id == remove_id).first()
-                except:
-                    print("could not find the given task")
-                    flash("Kan REMOVE niet vinden, id: " + remove_id, "danger")
+                    remove_id = b32.decode(b32_id_strip)
+                except ValueError:
+                    flash(_("Invalid REMOVE task id: ") + b32_id,
+                          'danger')
                     continue
-                if remove_task is not None:
-                    removes_found.append(remove_task)
+
+                remove_task = Task.query\
+                    .filter(Task.id == remove_id).first()
+                if remove_task is None:
+                    flash(_("Could not find REMOVE task: ") + b32_id_strip,
+                          "danger")
+                    continue
+
+                removes_found.append(remove_task)
 
         return tasks_found, dones_found, removes_found
 
