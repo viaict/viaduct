@@ -59,7 +59,7 @@ def view_single(form_id=None):
         data = parse_qs(entry.data)
 
         # Add the entry date
-        time = entry.created.strftime("%Y-%m-%d %H:%I") if \
+        time = entry.created.strftime("%Y-%m-%d %H:%M") if \
             entry.created is not None else ""
 
         # Append the results with a single entry
