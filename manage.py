@@ -1,13 +1,15 @@
 from app import app, db, version, js_glue
-from app.models import User, Group
+from app.models import User, Group, Education, \
+    Degree, GroupPermission, NavigationEntry
 
-from flask_script import Manager, Server, prompt
+from flask_script import Manager, Server, prompt, prompt_pass
 from flask_migrate import Migrate, MigrateCommand
 from flask_failsafe import failsafe
 
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
+import os
 import time
 import re
 import sys
@@ -16,6 +18,12 @@ import platform
 
 from fuzzywuzzy import fuzz
 from unidecode import unidecode
+
+from flask import current_app
+import alembic
+import alembic.config
+import sqlalchemy
+import bcrypt
 
 
 @failsafe
@@ -170,6 +178,162 @@ def mysqlinit():
 def test():
     """Run all tests in the test folder."""
     subprocess.call("python -m unittest discover", shell=True)
+
+
+def _add_group(name):
+    try:
+        db.session.add(Group(name, None))
+        db.session.commit()
+    except sqlalchemy.exc.IntegrityError:
+        db.session.rollback()
+        print("-> Group '{}' already exists.".format(name))
+
+
+def _add_user(user, catch_error=False, error_msg=None):
+    try:
+        db.session.add(user)
+        db.session.commit()
+    except sqlalchemy.exc.IntegrityError:
+        db.session.rollback()
+        if catch_error:
+            print("-> {}.".format(error_msg))
+        else:
+            raise
+
+
+def _add_navigation(entries, parent=None):
+    for pos, (nl_title, en_title, url, activities, children) \
+            in enumerate(entries):
+        nav = NavigationEntry(parent, nl_title, en_title, url,
+                              False, activities, pos + 1)
+        db.session.add(nav)
+        db.session.commit()
+        _add_navigation(children, nav)
+
+
+@manager.command
+def createdb():
+    """Create a new empty database with a single administrator."""
+
+    print("* Creating database schema")
+
+    # Create the database schema
+    db.create_all()
+
+    print("* Adding alembic stamp")
+
+    # Create alembic_version table
+    migrations_directory = current_app.extensions['migrate'].directory
+    config = alembic.config.Config(
+        os.path.join(migrations_directory, 'alembic.ini'))
+    config.set_main_option('script_location', migrations_directory)
+    alembic.command.stamp(config, "head")
+
+    # Add required groups
+    print("* Adding 'all','administrators' and 'BC' groups")
+    _add_group('all')
+    _add_group('administrators')
+    _add_group('BC')
+
+    # Add educations, which must be present to create the administrator user
+    print("* Adding educations")
+    education_names = [
+        "BSc Informatica",
+        "BSc Kunstmatige Intelligentie",
+        "BSc Informatiekunde",
+        "MSc Information Studies",
+        "MSc Software Engineering",
+        "MSc System and Network Engineering",
+        "MSc Artificial Intelligence",
+        "MSc Logic",
+        "MSc Computational Science",
+        "MSc Computer Science",
+        "MSc Medical Informatics",
+        "MSc Grid Computing",
+        "Other",
+        "Minor programmeren",
+        "Minor Informatica",
+        "Minor Kunstmatige Intelligentie"]
+
+    placeholder_degree = Degree("placeholder", "placeholder")
+    db.session.add(placeholder_degree)
+    db.session.commit()
+
+    db.session.bulk_save_objects(
+        Education(placeholder_degree.id, name) for name in education_names)
+    db.session.commit()
+
+    # Add some default navigation
+    print("* Adding default navigation entries")
+    navigation_entries = [
+        ('via', 'via', '/via', False, [
+            ('Nieuws', 'News', '/news/', False, []),
+            ('PimPy', 'PimPy', '/pimpy', False, []),
+            ('Commissies', 'Committees', '/commissie', False, []),
+            ('Admin', 'Admin', '/admin', False, [
+                ('Navigatie', 'Navigation', '/navigation', False, []),
+                ('Formulieren', 'Forms', '/forms', False, []),
+                ('Redirect', 'Redirect', '/redirect', False, []),
+                ('Users', 'Users', '/users', False, []),
+                ('Groups', 'Groups', '/groups', False, []),
+                ('Files', 'Files', '/files', False, [])
+            ]),
+        ]),
+        ('Activiteiten', 'Activities', '/activities', True, [
+            ('Activiteiten Archief', 'Activities archive',
+             '/activities/archive', False, []),
+            ('Activiteiten Overzicht', 'Activities overview',
+             '/activities/view', False, [])
+        ]),
+        ('Vacatures', 'Vacancies', '/vacancies/', False, []),
+        ('Tentamenbank', 'Examinations', '/examination', False, []),
+        ('Samenvattingen', 'Summaries', '/summary', False, [])
+    ]
+
+    _add_navigation(navigation_entries)
+
+    print("* Adding administrator user")
+
+    first_name = prompt("\tFirst name")
+    last_name = prompt("\tLast name")
+
+    email_regex = re.compile("^[^@]+@[^@]+\.[^@]+$")
+    while True:
+        email = prompt("\tEmail")
+        if email_regex.match(email):
+            break
+        print("\tInvalid email address: " + email)
+
+    while True:
+        passwd_plain = prompt_pass("\tPassword")
+        passwd_plain_rep = prompt_pass("\tRepeat password")
+        if passwd_plain == passwd_plain_rep:
+            break
+        print("\tPasswords do not match")
+
+    passwd = bcrypt.hashpw(passwd_plain, bcrypt.gensalt())
+    admin = User(
+        first_name=first_name,
+        last_name=last_name,
+        email=email,
+        password=passwd,
+        education_id=Education.query.first().id)
+    admin.has_payed = True
+    _add_user(admin, True,
+              "A user with email '{}' already exists".format(email))
+
+    # Add admin user to administrators group
+    admin_group = Group.query.filter_by(name='administrators').first()
+    admin_group.add_user(admin)
+    db.session.commit()
+
+    # Grant read/write privilege to administrators group on every module
+    db.session.bulk_save_objects(
+        GroupPermission(module, admin_group.id, 2) for module in
+        app.blueprints.keys())
+    db.session.commit()
+
+    print("Done!")
 
 
 def _get_current_version():
