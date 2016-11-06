@@ -13,8 +13,6 @@ from app.utils.module import ModuleAPI
 from app.utils import copernica
 from urllib.parse import parse_qsl
 
-import io
-import csv
 
 blueprint = Blueprint('custom_form', __name__, url_prefix='/forms')
 
@@ -117,9 +115,12 @@ def export(form_id):
     for i in csv_rows:
         label_set.update(list(i.keys()))
 
+    from io import StringIO
+    from csv import DictWriter
+
     # Write all the values to the io field
-    str_io = io.StringIO()
-    wrt = csv.DictWriter(str_io, fieldnames=label_set)
+    str_io = StringIO()
+    wrt = DictWriter(str_io, fieldnames=label_set)
     wrt.writeheader()
     wrt.writerows(csv_rows)
 
@@ -251,18 +252,18 @@ def remove_response(submit_id=None):
 
 
 @blueprint.route('/submit/<int:form_id>', methods=['POST'])
-def submit(form_id=None):
+def submit(form_id=-1):
     # TODO make sure custom_form rights are set on server
     if not ModuleAPI.can_read('activity') or current_user.is_anonymous:
-        return abort(403)
+        return "error", 403
 
     response = "success"
 
-    if form_id:
-        custom_form = CustomForm.query.get(form_id)
-
-        if not custom_form:
-            abort(404)
+    custom_form = CustomForm.query.get(form_id)
+    if not custom_form:
+        return "error", 404
+    if not custom_form.submittable_by(current_user):
+        return "error", 403
 
     # These fields might be there
     try:
