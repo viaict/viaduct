@@ -42,3 +42,5 @@ app/translations/*/LC_MESSAGES/messages.mo
 messages.pot
 
 src/js/global/jade.js
+
+cache/
