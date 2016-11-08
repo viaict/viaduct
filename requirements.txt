@@ -60,4 +60,6 @@ cryptography==1.4
 idna==2.1
 pyOpenSSL==16.0.0
 pycparser==2.14
+flask-cache
+flask-debugtoolbar
 
