@@ -97,11 +97,12 @@ class NavigationAPI:
 
     @staticmethod
     def get_entries(inc_activities=False):
-        entries = NavigationEntry.query.all()
-        entry_dict = dict((entry.id, entry) for entry in entries)
+        entries_all = NavigationEntry.query.order_by(NavigationEntry.position)\
+            .all()
+        entry_dict = dict((entry.id, entry) for entry in entries_all)
 
         entries = []
-        for _, entry in entry_dict.items():
+        for entry in entries_all:
             if entry.parent_id is not None:
                 parent = entry_dict[entry.parent_id]
                 try:
