@@ -137,7 +137,7 @@ def create(form_id=None):
         return abort(403)
 
     if form_id:
-        custom_form = CustomForm.query.get(form_id)
+        custom_form = CustomForm.query.get_or_404(form_id)
         prev_max = custom_form.max_attendants
         if not custom_form:
             abort(404)

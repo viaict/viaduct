@@ -3,7 +3,8 @@ import datetime
 import re
 
 from flask import render_template, request, url_for
-from app import db
+from urllib.parse import urlparse
+from app import db, cache
 from app.models.activity import Activity
 from app.models.navigation import NavigationEntry
 from app.models.page import Page
@@ -96,29 +97,40 @@ class NavigationAPI:
 
     @staticmethod
     def get_entries(inc_activities=False):
-        entries = db.session.query(NavigationEntry).filter_by(parent_id=None)\
-            .order_by(NavigationEntry.position).all()
+        entries_all = NavigationEntry.query.order_by(NavigationEntry.position)\
+            .all()
+        entry_dict = dict((entry.id, entry) for entry in entries_all)
 
-        # Fill in activity lists.
-        if inc_activities:
-            for entry in entries:
-                if entry.activity_list:
-                    entry.activities = []
-                    activities = db.session.query(Activity)\
-                        .filter(Activity.end_time > datetime.datetime.now())\
-                        .order_by("activity_start_time").all()
+        entries = []
+        for entry in entries_all:
+            if entry.parent_id is not None:
+                parent = entry_dict[entry.parent_id]
+                try:
+                    parent.children_fast.append(entry)
+                except AttributeError:
+                    parent.children_fast = [entry]
+            else:
+                entries.append(entry)
 
-                    for activity in activities:
-                        entry.activities.append(
-                            NavigationEntry(
-                                entry,
-                                activity.nl_name,
-                                activity.en_name,
-                                url_for(
-                                    'activity.get_activity',
-                                    activity_id=activity.id),
-                                False, False, 0,
-                                activity.till_now()))
+            # Fill in activity lists.
+            if entry.activity_list:
+                entry.activities = []
+                activities = db.session.query(Activity)\
+                    .filter(Activity.end_time > datetime.datetime.now())\
+                    .order_by("activity_start_time").all()
+
+                for activity in activities:
+                    entry.activities.append(
+                        NavigationEntry(
+                            entry,
+                            activity.nl_name,
+                            activity.en_name,
+                            url_for(
+                                'activity.get_activity',
+                                activity_id=activity.id),
+                            False, False, 0,
+                            activity.till_now()))
+
         return entries
 
     @staticmethod
@@ -158,11 +170,6 @@ class NavigationAPI:
                 authorized_entries.remove(entry)
 
         return authorized_entries
-
-    @staticmethod
-    def order_entries(query):
-        """Order entries."""
-        return query.order_by(NavigationEntry.position)
 
     @staticmethod
     def get_navigation_backtrack():
