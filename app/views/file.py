@@ -16,13 +16,13 @@ def list(page_nr=1):
         return abort(403)
 
     if request.args.get('search'):
-        search = request.args.get('search')
+        search = request.args.get('search', None)
         filters = FileAPI.search(search)
         files = File.query.filter(File.name.in_(filters), File.page==None)
     else:
         files = File.query.filter(File.page==None)
 
-    files = files.order_by(File.name).paginate(1, 30, False)
+    files = files.order_by(File.name).paginate(page_nr, 30, False)
 
     form = FileForm()
 
