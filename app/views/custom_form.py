@@ -259,7 +259,7 @@ def submit(form_id=-1):
 
     custom_form = CustomForm.query.get_or_404(form_id)
     if not custom_form.submittable_by(current_user):
-        return abort(403)s
+        return abort(403)
 
     # These fields might be there
     try:
