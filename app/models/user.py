@@ -54,7 +54,6 @@ class User(db.Model, UserMixin, BaseEntity):
     payed_date = db.Column(db.DateTime)
     birth_date = db.Column(db.Date)
     study_start = db.Column(db.Date)
-    receive_information = db.Column(db.Boolean, default=False)
     disabled = db.Column(db.Boolean, default=False)
     address = db.Column(db.String(256))
     zip = db.Column(db.String(8))
@@ -63,7 +62,6 @@ class User(db.Model, UserMixin, BaseEntity):
     alumnus = db.Column(db.Boolean, default=False)
     education = db.relationship(Education,
                                 backref=db.backref('user', lazy='dynamic'))
-    copernica_id = db.Column(db.Integer(), nullable=True)
 
     def __init__(self, email=None, password=None, first_name=None,
                  last_name=None, student_id=None, education_id=None,

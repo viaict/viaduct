@@ -17,17 +17,17 @@ class MailingList(db.Model, BaseEntity):
         self.member_only = member_only
 
 
-class MailingListUser(db.model, BaseEntity):
+class MailingListUser(db.Model, BaseEntity):
 
     prints = ('user_id', 'mailing_list_id', 'copernica_id', 'subscribed')
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.Relationship('User',
+    user = db.relationship('User',
                            backref=db.backref('mailinglists',
                                               lazy='dynamic'))
     mailing_list_id = db.Column(db.Integer,
                                 db.ForeignKey('mailing_list.copernica_db_id'))
-    mailing_list = db.Relationship('MailingList',
+    mailing_list = db.relationship('MailingList',
                                    backref=db.backref('followers',
                                                       lazy='dynamic'))
     copernica_user_id = db.Column(db.Integer)
