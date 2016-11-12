@@ -340,6 +340,9 @@ def sign_out():
 def request_password():
     """Create a ticket and send a email with link to reset_password page."""
 
+    if current_user.is_authenticated:
+        return redirect(url_for('user.view_single', user_id=current_user.id))
+
     def create_hash(bits=96):
         assert bits % 8 == 0
         required_length = bits / 8 * 2
