@@ -10,7 +10,7 @@ from datetime import datetime
 from flask import flash, redirect, render_template, request, url_for, abort,\
     session
 from flask import Blueprint
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 from flask_babel import _
 
 from app import db, login_manager
@@ -43,9 +43,14 @@ def load_user(user_id):
     return user
 
 
+@blueprint.route('/users/view/', methods=['GET'])
 @blueprint.route('/users/view/<int:user_id>', methods=['GET'])
+@login_required
 def view_single(user_id=None):
     if user_id is None:
+        if current_user.is_authenticated:
+            return redirect(url_for('user.view_single',
+                                    user_id=current_user.id))
         return redirect(url_for('user.view'))
 
     can_read = False
@@ -101,6 +106,7 @@ def view_single(user_id=None):
 
 
 @blueprint.route('/users/remove_avatar/<int:user_id>', methods=['GET'])
+@login_required
 def remove_avatar(user_id=None):
     user = User.query.get(user_id)
     if not ModuleAPI.can_write('user') and\
@@ -112,6 +118,7 @@ def remove_avatar(user_id=None):
 
 @blueprint.route('/users/create/', methods=['GET', 'POST'])
 @blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
+@login_required
 def edit(user_id=None):
     """Create user for admins and edit for admins and users."""
     if not ModuleAPI.can_write('user') and\
@@ -366,8 +373,8 @@ def request_password():
             db.session.add(ticket)
             db.session.commit()
 
-            reset_link = ("http://www.svia.nl" +
-                          url_for('user.reset_password') + _hash)
+            reset_link = url_for('user.reset_password',
+                                 hash=_hash, _external=True)
 
             send_email(to=user.email,
                        subject='Password reset https://svia.nl',

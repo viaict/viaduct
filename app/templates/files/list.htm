@@ -5,6 +5,9 @@
 
 {% block includes %}
 {%- if new_file -%}
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.tooltipster/4.1.4/css/tooltipster.bundle.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.tooltipster/4.1.4/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-borderless.min.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.tooltipster/4.1.4/js/tooltipster.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/clipboard.js/1.5.12/clipboard.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -13,10 +16,31 @@
             // Set the textbox value to the full url of the file
             $('#newfile-url-copytext').val(url_link[0].href);
 
+
+            // Initialize the 'Link copied' tooltip
+            $('#newfile-url-copytext').tooltipster({
+                theme: 'tooltipster-borderless',
+                trigger: 'custom',
+                animation: 'fade',
+                triggerClose: {
+                    click: true,
+                    mouseleave: true,
+                    originClick: true,
+                    scroll: true,
+                    tap: true,
+                    touchleave: true
+                }
+            });
+            /*
+            */
+
             var clipboard = new Clipboard('#newfile-url-copy');
             clipboard.on('success', function(e) {
                 e.clearSelection();
+                // Show the tooltip
+                $('#newfile-url-copytext').tooltipster('open');
             });
+
         });
 
     </script>
@@ -38,9 +62,12 @@ function search(){
     <div class="col-md-12">
         <b>{{ _('Link to file') }}:</b>
         <div class="input-group" style="padding-bottom: 5px">
-            <input id="newfile-url-copytext" class="form-control text-monospace" type="text" readonly></input>
+            <input id="newfile-url-copytext"  title="{{ _('Link copied') }}"
+            class="form-control text-monospace" type="text" readonly></input>
             <span class="input-group-btn">
-                <button class="btn btn-primary" id="newfile-url-copy" data-clipboard-target="#newfile-url-copytext">
+                <button class="btn btn-primary"
+                    id="newfile-url-copy"
+                    data-clipboard-target="#newfile-url-copytext">
                     <i class="fa fa-clipboard"></i> {{ _('Copy to clipboard') }}
                 </button>
             </span>

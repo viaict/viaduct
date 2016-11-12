@@ -1,7 +1,7 @@
 import sys
 from sqlalchemy import event
 from flask_babel import lazy_gettext as _
-from app import db, get_locale
+from app import db, get_locale, cache
 from app.models import BaseEntity, Group
 
 
@@ -199,14 +199,18 @@ class PagePermission(db.Model):
         self.page_id = page_id
 
     @staticmethod
+    @cache.memoize(timeout=10)
+    def get_groups(user):
+        if not user or not user.is_active:
+            return [Group.query.filter(Group.name == 'all').first()]
+        else:
+            return user.groups.all()
+
+    @staticmethod
     def get_user_rights(user, page_id):
         rights = 0
 
-        if not user or not user.is_active:
-            groups = [Group.query.filter(Group.name == 'all').first()]
-        else:
-            groups = user.groups.all()
-
+        groups = PagePermission.get_groups(user)
         page = Page.query.filter(Page.id == page_id).first()
 
         if page:

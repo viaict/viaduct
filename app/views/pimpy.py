@@ -2,8 +2,6 @@ from flask import Blueprint, abort, redirect, url_for
 from flask import flash, render_template, request, jsonify
 from app import db
 
-import datetime
-
 from flask_login import current_user
 
 from app.forms.pimpy import AddTaskForm, AddMinuteForm
@@ -39,6 +37,9 @@ def view_minutes(group_id='all'):
         return abort(403)
     if not (group_id == 'all' or group_id.isdigit()):
         return abort(404)
+    if group_id != 'all' and not current_user.member_of_group(group_id):
+        return abort(403)
+
     return PimpyAPI.get_minutes(group_id)
 
 
@@ -47,6 +48,10 @@ def view_minutes(group_id='all'):
 def view_minutes_in_date_range(group_id='all'):
     if not ModuleAPI.can_read('pimpy'):
         return abort(403)
+
+    if group_id != 'all' and not current_user.member_of_group(group_id):
+        return abort(403)
+
     group_id = request.form['group_id']
     start_date = request.form['start_date']
     end_date = request.form['end_date']
@@ -58,12 +63,14 @@ def view_minutes_in_date_range(group_id='all'):
 def view_tasks_in_date_range(group_id='all'):
     if not ModuleAPI.can_read('pimpy'):
         return abort(403)
-    personal_toggle = request.form['personal_toggle']
+    if group_id != 'all' and not current_user.member_of_group(group_id):
+        return abort(403)
+
     group_id = request.form['group_id']
     start_date = request.form['start_date']
     end_date = request.form['end_date']
     return PimpyAPI.get_tasks_in_date_range(
-        group_id, personal_toggle, start_date, end_date)
+        group_id, False, start_date, end_date)
 
 
 @blueprint.route('/minutes/<group_id>/<int:minute_id>/')
@@ -74,6 +81,9 @@ def view_minute(group_id='all', minute_id=0, line_number=-1):
     if not (group_id == 'all' or group_id.isdigit()):
         return abort(404)
 
+    if group_id != 'all' and not current_user.member_of_group(group_id):
+        return abort(403)
+
     return PimpyAPI.get_minute(group_id, minute_id, line_number)
 
 
@@ -83,6 +93,9 @@ def view_minute_raw(group_id, minute_id):
         return abort(403)
     if not (group_id == 'all' or group_id.isdigit()):
         return abort(404)
+
+    if group_id != 'all' and not current_user.member_of_group(group_id):
+        return abort(403)
 
     return (PimpyAPI.get_minute_raw(group_id, minute_id),
             {'Content-Type': 'text/plain; charset=utf-8'})
@@ -95,6 +108,8 @@ def view_tasks(group_id='all'):
         return abort(403)
     if not (group_id == 'all' or group_id.isdigit()):
         return abort(404)
+    if group_id != 'all' and not current_user.member_of_group(group_id):
+        return abort(403)
 
     return PimpyAPI.get_tasks(group_id, False)
 
@@ -107,6 +122,8 @@ def view_tasks_personal(group_id='all'):
         return abort(403)
     if not (group_id == 'all' or group_id.isdigit()):
         return abort(404)
+    if group_id != 'all' and not current_user.member_of_group(group_id):
+        return abort(403)
 
     return PimpyAPI.get_tasks(group_id, True)
 
@@ -143,6 +160,8 @@ def add_task(group_id='all'):
         return abort(403)
     if not (group_id == 'all' or group_id.isdigit()):
         return abort(404)
+    if group_id != 'all' and not current_user.member_of_group(group_id):
+        return abort(403)
 
     if group_id == '':
         group_id = 'all'
@@ -214,6 +233,8 @@ def add_minute(group_id='all'):
         return abort(403)
     if not (group_id == 'all' or group_id.isdigit()):
         return abort(404)
+    if group_id != 'all' and not current_user.member_of_group(group_id):
+        return abort(403)
 
     if group_id == '':
         group_id = 'all'

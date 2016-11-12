@@ -30,8 +30,10 @@ class PageAPI:
         if revision:
             exists = True
         else:
-            revision = PageRevision(footer, 'Footer', '', current_user,
-                                    '<strong>No footer found</strong>')
+            title = 'Footer'
+            content = '<strong>No footer found</strong>'
+            revision = PageRevision(footer, title, title, '', current_user,
+                                    content, content)
             exists = False
 
         return render_template('page/get_footer.htm', footer_revision=revision,

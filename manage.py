@@ -1,17 +1,29 @@
 from app import app, db, version, js_glue
-from flask_script import Manager, Server, prompt
+from app.models import User, Group, Education, \
+    Degree, GroupPermission, NavigationEntry
+
+from flask_script import Manager, Server, prompt, prompt_pass
 from flask_migrate import Migrate, MigrateCommand
 from flask_failsafe import failsafe
-
 
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
+import os
 import time
 import re
 import sys
 import subprocess
 import platform
+
+from fuzzywuzzy import fuzz
+from unidecode import unidecode
+
+from flask import current_app
+import alembic
+import alembic.config
+import sqlalchemy
+import bcrypt
 
 
 @failsafe
@@ -21,13 +33,20 @@ def create_app():
     return app
 
 migrate = Migrate(app, db)
-versionbump = Manager(usage=("Apply a version bump."
-                             "Versioning works using the following format: "
-                             "SYSTEM.FEATURE.IMPROVEMENT.BUG-/HOTFIX"))
-manager = Manager(app, usage=("Manager console for viaduct"))
+versionbump = Manager(
+    help="Apply a version bump",
+    description=("Apply a version bump. "
+                 "Versioning works using the following format: "
+                 "SYSTEM.FEATURE.IMPROVEMENT.BUG-/HOTFIX"))
+administrators = Manager(
+    help="Add or remove users from the administrators group",
+    description="Add or remove users from the administrators group")
+
+manager = Manager(app, description="Manager console for viaduct")
 manager.add_command("runserver", Server())
 manager.add_command('db', MigrateCommand)
 manager.add_command('versionbump', versionbump)
+manager.add_command('admin', administrators)
 
 
 def prompt_bool(q, default=False):
@@ -83,7 +102,7 @@ def routes():
 
 @manager.command
 def flaskjs():
-    """Genereate the javascript file for url_for in javascript."""
+    """Generate the javascript file for url_for in javascript."""
     with open('src/js/global/flask.js', 'w', encoding='utf8') as f:
         f.write(js_glue.generate_js())
 
@@ -119,12 +138,12 @@ def jade():
     """Keep track of the jade files and recompile if neccesary."""
     if platform.system() == 'Windows':
         subprocess.call(('node node_modules/clientjade/bin/clientjade'
-    		     ' src/jade/ > src/js/global/jade.js'),
-    		    shell=True)
+                         ' src/jade/ > src/js/global/jade.js'),
+                        shell=True)
     else:
         subprocess.call(('./node_modules/clientjade/bin/clientjade'
-    		     ' src/jade/ > src/js/global/jade.js'),
-    		    shell=True)
+                         ' src/jade/ > src/js/global/jade.js'),
+                        shell=True)
     print("Started tracking jade files...")
     path = sys.argv[2] if len(sys.argv) > 2 else '.'
     event_handler = EventHandler()
@@ -161,6 +180,162 @@ def test():
     subprocess.call("python -m unittest discover", shell=True)
 
 
+def _add_group(name):
+    try:
+        db.session.add(Group(name, None))
+        db.session.commit()
+    except sqlalchemy.exc.IntegrityError:
+        db.session.rollback()
+        print("-> Group '{}' already exists.".format(name))
+
+
+def _add_user(user, catch_error=False, error_msg=None):
+    try:
+        db.session.add(user)
+        db.session.commit()
+    except sqlalchemy.exc.IntegrityError:
+        db.session.rollback()
+        if catch_error:
+            print("-> {}.".format(error_msg))
+        else:
+            raise
+
+
+def _add_navigation(entries, parent=None):
+    for pos, (nl_title, en_title, url, activities, children) \
+            in enumerate(entries):
+        nav = NavigationEntry(parent, nl_title, en_title, url,
+                              False, activities, pos + 1)
+        db.session.add(nav)
+        db.session.commit()
+        _add_navigation(children, nav)
+
+
+@manager.command
+def createdb():
+    """Create a new empty database with a single administrator."""
+
+    print("* Creating database schema")
+
+    # Create the database schema
+    db.create_all()
+
+    print("* Adding alembic stamp")
+
+    # Create alembic_version table
+    migrations_directory = current_app.extensions['migrate'].directory
+    config = alembic.config.Config(
+        os.path.join(migrations_directory, 'alembic.ini'))
+    config.set_main_option('script_location', migrations_directory)
+    alembic.command.stamp(config, "head")
+
+    # Add required groups
+    print("* Adding 'all','administrators' and 'BC' groups")
+    _add_group('all')
+    _add_group('administrators')
+    _add_group('BC')
+
+    # Add educations, which must be present to create the administrator user
+    print("* Adding educations")
+    education_names = [
+        "BSc Informatica",
+        "BSc Kunstmatige Intelligentie",
+        "BSc Informatiekunde",
+        "MSc Information Studies",
+        "MSc Software Engineering",
+        "MSc System and Network Engineering",
+        "MSc Artificial Intelligence",
+        "MSc Logic",
+        "MSc Computational Science",
+        "MSc Computer Science",
+        "MSc Medical Informatics",
+        "MSc Grid Computing",
+        "Other",
+        "Minor programmeren",
+        "Minor Informatica",
+        "Minor Kunstmatige Intelligentie"]
+
+    placeholder_degree = Degree("placeholder", "placeholder")
+    db.session.add(placeholder_degree)
+    db.session.commit()
+
+    db.session.bulk_save_objects(
+        Education(placeholder_degree.id, name) for name in education_names)
+    db.session.commit()
+
+    # Add some default navigation
+    print("* Adding default navigation entries")
+    navigation_entries = [
+        ('via', 'via', '/via', False, [
+            ('Nieuws', 'News', '/news/', False, []),
+            ('PimPy', 'PimPy', '/pimpy', False, []),
+            ('Commissies', 'Committees', '/commissie', False, []),
+            ('Admin', 'Admin', '/admin', False, [
+                ('Navigatie', 'Navigation', '/navigation', False, []),
+                ('Formulieren', 'Forms', '/forms', False, []),
+                ('Redirect', 'Redirect', '/redirect', False, []),
+                ('Users', 'Users', '/users', False, []),
+                ('Groups', 'Groups', '/groups', False, []),
+                ('Files', 'Files', '/files', False, [])
+            ]),
+        ]),
+        ('Activiteiten', 'Activities', '/activities', True, [
+            ('Activiteiten Archief', 'Activities archive',
+             '/activities/archive', False, []),
+            ('Activiteiten Overzicht', 'Activities overview',
+             '/activities/view', False, [])
+        ]),
+        ('Vacatures', 'Vacancies', '/vacancies/', False, []),
+        ('Tentamenbank', 'Examinations', '/examination', False, []),
+        ('Samenvattingen', 'Summaries', '/summary', False, [])
+    ]
+
+    _add_navigation(navigation_entries)
+
+    print("* Adding administrator user")
+
+    first_name = prompt("\tFirst name")
+    last_name = prompt("\tLast name")
+
+    email_regex = re.compile("^[^@]+@[^@]+\.[^@]+$")
+    while True:
+        email = prompt("\tEmail")
+        if email_regex.match(email):
+            break
+        print("\tInvalid email address: " + email)
+
+    while True:
+        passwd_plain = prompt_pass("\tPassword")
+        passwd_plain_rep = prompt_pass("\tRepeat password")
+        if passwd_plain == passwd_plain_rep:
+            break
+        print("\tPasswords do not match")
+
+    passwd = bcrypt.hashpw(passwd_plain, bcrypt.gensalt())
+    admin = User(
+        first_name=first_name,
+        last_name=last_name,
+        email=email,
+        password=passwd,
+        education_id=Education.query.first().id)
+    admin.has_payed = True
+    _add_user(admin, True,
+              "A user with email '{}' already exists".format(email))
+
+    # Add admin user to administrators group
+    admin_group = Group.query.filter_by(name='administrators').first()
+    admin_group.add_user(admin)
+    db.session.commit()
+
+    # Grant read/write privilege to administrators group on every module
+    db.session.bulk_save_objects(
+        GroupPermission(module, admin_group.id, 2) for module in
+        app.blueprints.keys())
+    db.session.commit()
+
+    print("Done!")
+
+
 def _get_current_version():
     current_version_str = version
     m = re.match(r'^v(\d+).(\d+).(\d+).(\d+)$', current_version_str)
@@ -172,7 +347,7 @@ def _get_current_version():
 
 
 def _bump_version(current_version, new_version):
-    print("\nCurrent version: \tv{}.{}.{}.{}".format(*current_version))
+    print("Current version: \tv{}.{}.{}.{}".format(*current_version))
     print("New version: \t\tv{}.{}.{}.{}".format(*new_version))
 
     answer = prompt_bool("Continue?")
@@ -247,5 +422,90 @@ def system():
     _bump_version(current_version, new_version)
 
 
+def _administrators_action(user_search, remove):
+    """Method for adding or removing users in the administrators group."""
+    admin_group = Group.query.filter(Group.name == "administrators").first()
+    if admin_group is None:
+        print("Administrators group does not exist.")
+        return
+
+    if user_search.isdigit():
+        # Search for user ID
+        user_id = int(user_search)
+        user_found = User.query.get(user_id)
+        if user_found is None or user_id == 0:
+            print("User with ID {} does not exist.".format(user_id))
+            return
+    else:
+        # Search in user name
+        users = User.query.all()
+
+        maximum = 0
+        user_found = None
+
+        # Find user with highest match ratio
+        for user in users:
+            if user.id == 0:
+                continue
+
+            first_name = unidecode(user.first_name.lower().strip())
+            last_name = unidecode(user.last_name.lower().strip())
+
+            rate_first = fuzz.ratio(first_name, user_search)
+            rate_last = fuzz.ratio(last_name, user_search)
+
+            full_name = first_name + ' ' + last_name
+            rate_full = fuzz.ratio(full_name, user_search)
+
+            if rate_first > maximum or \
+                    rate_last > maximum or \
+                    rate_full > maximum:
+                maximum = max(rate_first, max(rate_last, rate_full))
+                user_found = user
+
+        if user_found is None:
+            print("No user found")
+            return
+
+    print("Found user: {} (ID {})".format(user_found.name, user_found.id))
+    if admin_group in user_found.groups.all():
+        if not remove:
+            print("User is already in administrators group")
+            return
+    elif remove:
+        print("User is not in administrators group")
+        return
+
+    if remove:
+        prompt = "Remove {} from administrators group?".format(user_found.name)
+    else:
+        prompt = "Add {} to administrators group?".format(user_found.name)
+
+    if prompt_bool(prompt):
+        if remove:
+            admin_group.delete_user(user_found)
+        else:
+            admin_group.add_user(user_found)
+
+        db.session.commit()
+        print("User successfully {}.".format("removed" if remove else "added"))
+
+
+@administrators.option(dest='user', help='User ID or name')
+def add(user):
+    """Add a user to the administrator group."""
+    _administrators_action(user, False)
+
+
+@administrators.option(dest='user', help='User ID or name')
+def remove(user):
+    """Remove a user from the administrator group."""
+    _administrators_action(user, True)
+
+
 if __name__ == '__main__':
+    # Print two newlines after the output of app/__init__.py
+    # to make the command's output more readable
+    sys.stdout.write("\n\n")
+
     manager.run()

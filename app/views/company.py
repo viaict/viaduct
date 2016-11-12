@@ -213,7 +213,7 @@ def create(company_id=None):
 
     # Select company.
     if company_id:
-        company = Company.query.get(company_id)
+        company = Company.query.get_or_404(company_id)
     else:
         company = Company()
 

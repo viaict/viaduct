@@ -26,8 +26,8 @@
                         <ul class="nav navbar-nav">
                             {% for entry in bar_entries %}
 
-                                {% set children = entry.activities if entry.activities else NavigationAPI.order_entries(entry.children).all() %}
-                                {% set children = NavigationAPI.remove_unauthorized(children) %}
+                                {% set children = entry.activities if entry.activities else entry.children_fast %}
+                                {# set children = NavigationAPI.remove_unauthorized(children) #}
 
                                 <li class="{% if children %}dropdown{% endif %}">
                                     <a {% if children %}class="dropdown-toggle" data-hover="dropdown" data-delay="200" data-close-others="true"{% endif %} {% if entry.external %}target="_blank"{% endif %}
@@ -43,8 +43,8 @@
                                         "
                                         >
                                         {% for child in children %}
-                                        {% set grandChildren = NavigationAPI.order_entries(child.children).all() if not entry.activities %}
-                                        {% set grandChildren = NavigationAPI.remove_unauthorized(grandChildren) %}
+                                        {% set grandChildren = child.children_fast if not entry.activities %}
+                                        {# set grandChildren = NavigationAPI.remove_unauthorized(grandChildren) #}
 
                                              <li {% if grandChildren %} class="dropdown-submenu" {% endif %}>
                                                 <a {% if child.external %}target="_blank"{% endif %} href="{% if child.external %}https://{% endif %}{{ child.url }}" {% if grandChildren %} class="dropdown-toggle" {% endif %} >

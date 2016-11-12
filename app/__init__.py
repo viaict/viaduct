@@ -6,6 +6,8 @@ from flask_babel import Babel
 from flask_login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy, Model, \
     _BoundDeclarativeMeta, _QueryProperty, declarative_base
+from flask_cache import Cache
+from flask_debugtoolbar import DebugToolbarExtension
 
 from speaklater import _LazyString
 from sqlalchemy import MetaData
@@ -15,7 +17,7 @@ import json
 from flask_jsglue import JSGlue
 
 
-version = 'v2.6.9.2'
+version = 'v2.7.1.0'
 
 
 def static_url(url):
@@ -57,6 +59,12 @@ def register_views(app, path, extension=''):
 app = Flask(__name__)
 js_glue = JSGlue(app)
 app.config.from_object('config.Config')
+app.config['CACHE_TYPE'] = 'filesystem'
+app.config['CACHE_DIR'] = 'cache'
+
+cache = Cache(app)
+toolbar = DebugToolbarExtension(app)
+
 
 # Set up Flask Babel, which is used for internationalisation support.
 babel = Babel(app)
