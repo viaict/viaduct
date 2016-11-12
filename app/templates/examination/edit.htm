@@ -1,7 +1,12 @@
+{% from "macros/form.htm" import
+render_field, render_select,
+render_datefield_picker, render_education_select,
+render_course_select, enable_select2 %}
+
 {% extends "base.htm" %}
 
 {% block includes %}
-<script src="{{ static_url('/static/js/examination/create_course.js') }}"></script>
+{{ enable_select2() }}
 {% endblock %}
 
 {%block page %}
@@ -9,84 +14,31 @@
         {% if new_exam %}
         <legend>{{_('New examination')}}</legend>
         {% else %}
-        <legend>{{_('Edit')}} '{{examination.title}}'</legend>
+        <legend>{{_('Edit examination')}}
+            {%- if examination.date %}
+             - {{examination.date}}
+            {%- endif -%}
+        </legend>
         {% endif %}
 
         <form method=post enctype=multipart/form-data>
-            <div class='form-group'>
-                {{_('Date')}}
-                <input type=text name=title value="{% if not new_exam %} {{examination.title}} {% endif %}" class='form-control'>
-            </div>
+            {{ form.csrf_token }}
+            {{ render_datefield_picker(form.date) }}
 
-            <div class='form-group'>
-                {{_('Course')}}
-                <div class='input-group'>
-                    <select name=course class='form-control'>
-                        {% for course in courses %}
-                            <option value="{{ course.id }}" {% if not new_exam and course.id == examination.course_id %}selected="selected"{% endif %}>
-                                {{course.name}}
-                            </option>
-                        {% endfor %}
-                    </select>
-                    <span class="input-group-btn">
-                        <a href="/course/add?redir={% if new_exam %}add{% else %}edit{% endif %}" class="btn btn-default btn-success">
-                            <i class="glyphicon glyphicon-pencil"></i>
-                                {{_('New course')}}
-                        </a>
-                    </span>
-                </div>
-            </div>
-            <div class='form-group'>
-                {{_('Examination kind')}}
-                <select name='test_type' class='form-control examination kind'>
-                    {% for type_key, type_name in test_types.items() %}
-                        <option value="{{ type_key }}" {% if (new_exam and type_key == test_type_default) or (not new_exam and type_key == examination.test_type) %}selected="selected"{% endif %}>
-                            {{type_name}}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
+            {%- if new_exam -%}
+            {{ render_education_select(form.education, educations) }}
+            {{ render_course_select(form.course, courses) }}
+            {%- else -%}
+            {{ render_education_select(form.education, educations, selected=examination.education) }}
+            {{ render_course_select(form.course, courses, selected=examination.course) }}
+            {%- endif -%}
 
-            <div class='form-group'>
-                {{_('Education')}}
-                <div class='input-group'>
-                    <select name=education class='form-control'>
-                        {% for education in educations %}
-                        <option value="{{ education.id }}"
-                        {% if not new_exam and education.id == examination.education_id %}selected="selected"{% endif %}>
-                                {{education.name}}
-                            </option>
-                        {% endfor %}
-                    </select>
-                    <span class="input-group-btn">
-                        <a href="/education/add?redir={% if new_exam %}add{% else %}edit{% endif %}" class="btn btn-default btn-success">
-                            <i class="glyphicon glyphicon-pencil"></i>
-                            {{_('New education')}}
-                        </a>
-                    </span>
-                </div>
-            </div>
+            {{ render_select(form.test_type) }}
 
-            <div class='form-group'>
-                <label>{{_('Examination')}}</label>
-                {% if not new_exam %}
-                ({{_('Current')}}: {{ examination.path }} )
-                {% endif %}
-                <input type='file' name='file' class='form-control' />
-            </div>
+            {{ render_field(form.comment) }}
 
-            <div class='form-group'>
-                <label>{{_('Answers')}}</label>
-                {% if not new_exam %}
-                    {% if examination.answer_path == '1' %}
-                    ({{_('Not given')}})
-                    {% else %}
-                    ({{_('Current')}}: {{ examination.answer_path }})
-                    {% endif %}
-                {% endif %}
-
-                <input type='file' name='answers' class='form-control' />
-            </div>
+            {{ render_field(form.examination) }}
+            {{ render_field(form.answers) }}
 
             <div class="control-group">
                 <div class="controls btn-group">

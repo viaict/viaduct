@@ -84,6 +84,7 @@
                     <th>{{ _('Course') }}</th>
                     <th>{{ _('Examination')}}</th>
                     <th>{{ _('Date') }}</th>
+                    <th>{{ _('Comment') }}</th>
                     <th>{{ _('Answers') }}</th>
                     {% if ModuleAPI.can_write('examination') %}
                     <th>{{ _('Edit') }}</th>
@@ -115,10 +116,22 @@
                             {% endif %}
                         </td>
                         <td>
-                            <a href='{{ path + examination.path }}' target='_blank'><i class='glyphicon glyphicon-cloud-download'></i> {{ examination.title }}</a>
+                            <a href='{{ path + examination.path }}' target='_blank' style="white-space: nowrap">
+                                <i class='glyphicon glyphicon-cloud-download'></i>
+                                {% if examination.date %}
+                                    {{ examination.date }}
+                                {%- else -%}
+                                    ({{ _('Date unknown') }})
+                                {%- endif -%}
+                            </a>
                         </td>
                         <td>
-                            {% if not examination.answer_path == '1' %}
+                            {%- if examination.comment -%}
+                                {{ examination.comment }}
+                            {%- endif -%}
+                        </td>
+                        <td>
+                            {% if examination.answer_path and examination.answer_path != '1' %}
                             <a href='{{ path + examination.answer_path }}' target='_blank'><i class='glyphicon glyphicon-file'></i>{{ _('Answers') }}</a>
                             {% else %}
                                 N/A

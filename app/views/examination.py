@@ -11,15 +11,14 @@ from sqlalchemy import func
 
 from app import app, db
 
-from app.forms import CourseForm
+from app.forms import CourseForm, EducationForm
+from app.forms.examination import EditForm
 from app.utils.forms import flash_form_errors
-from app.forms import EducationForm
 from app.utils import serialize_sqla
 
 from app.models.examination import Examination, test_types, test_type_default
 from app.models.course import Course
 from app.models.education import Education
-from app.models.degree import Degree
 
 from app.utils.module import ModuleAPI
 
@@ -33,7 +32,7 @@ UPLOAD_FOLDER = app.config['EXAMINATION_UPLOAD_FOLDER']
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 REDIR_PAGES = {'view': 'examination.view_examination',
-               'add': 'examination.upload_file',
+               'add': 'examination.add',
                'educations': 'examination.view_educations',
                'courses': 'examination.view_courses'
                }
@@ -101,74 +100,142 @@ def upload_file_real(file, old_path='1'):
 
 
 @blueprint.route('/examination/add/', methods=['GET', 'POST'])
-def upload_file():
+@login_required
+def add():
     if not ModuleAPI.can_write('examination', True):
-        session['prev'] = 'examination.upload_file'
+        session['prev'] = 'examination.add'
         return abort(403)
+
+    form = EditForm(request.form, )
 
     courses = Course.query.order_by(Course.name).all()
     educations = Education.query.order_by(Education.name).all()
-    degrees = Degree.query.order_by(Degree.name).all()
+    form.course.choices = [(c.id, c.name) for c in courses]
+    form.education.choices = [(e.id, e.name) for e in educations]
+    form.test_type.choices = test_types.items()
 
     if request.method == 'POST':
-        file = request.files.get('file', None)
-        answers = request.files.get('answers', None)
-        title = request.form.get("title", None)
-        course_id = request.form.get("course", None)
-        education_id = request.form.get("education", None)
-        test_type = request.form.get("test_type", None)
+        if form.validate_on_submit():
+            file = request.files.get('examination', None)
+            answers = request.files.get('answers', None)
 
-        error = False
+            error = False
 
-        if not title:
-            flash(_('No title given.'), 'danger')
-            error = True
+            filename = upload_file_real(file)
+            if file:
+                if not filename:
+                    flash(_('Wrong format examination.'), 'danger')
+                    error = True
 
-        filename = upload_file_real(file)
-        if file:
-            if not filename:
-                flash(_('Wrong format examination.'), 'danger')
+                answer_path = upload_file_real(answers)
+                if answer_path is False:
+                    flash(_('No answers uploaded.'), 'warning')
+                    answer_path = None
+                elif answer_path is None:
+                    flash(_('Wrong format answers.'), 'danger')
+                    error = True
+            else:
+                flash(_('No examination uploaded.'), 'danger')
                 error = True
 
-            answer_path = upload_file_real(answers)
-            if answer_path is False:
-                flash(_('No answers uploaded.'), 'warning')
-                answer_path = 1
-            elif answer_path is None:
-                flash(_('Wrong format answers.'), 'danger')
-                error = True
+            if error:
+                dummy_exam = Examination(filename, form.comment.data,
+                                         form.date.data, form.course.data,
+                                         form.education.data,
+                                         test_type=form.test_type.data)
+
+                return render_template('examination/edit.htm',
+                                       courses=courses,
+                                       educations=educations,
+                                       examination=dummy_exam,
+                                       form=form,
+                                       test_types=test_types, new_exam=False)
+
+            exam = Examination(filename, form.date.data,
+                               form.comment.data, form.course.data,
+                               form.education.data, answers=answer_path,
+                               test_type=form.test_type.data)
+            db.session.add(exam)
+            db.session.commit()
+
+            flash(_('Examination successfully uploaded.'), 'success')
+            return redirect(url_for('examination.edit', exam_id=exam.id))
         else:
-            flash(_('No examination uploaded.'), 'danger')
-            error = True
-
-        if error:
-            dummy_exam = Examination(filename, title, int(course_id),
-                                     int(education_id), answers=answer_path,
-                                     test_type=test_type)
-
-            return render_template('examination/edit.htm', courses=courses,
-                                   educations=educations,
-                                   examination=dummy_exam,
-                                   title=_('Examinations'), degrees=degrees,
-                                   test_types=test_types, new_exam=False)
-
-        exam = Examination(filename, title, course_id, education_id,
-                           answers=answer_path, test_type=test_type)
-        db.session.add(exam)
-        db.session.commit()
-
-        flash(_('Examination successfully uploaded.'), 'success')
-
-        return render_template('examination/edit.htm', courses=courses,
-                               educations=educations, examination=exam,
-                               title=_('Examinations'), degrees=degrees,
-                               test_types=test_types, new_exam=False)
+            flash_form_errors(form)
 
     return render_template('examination/edit.htm', courses=courses,
-                           educations=educations,
-                           title=_('Examinations'), degrees=degrees,
-                           test_types=test_types, new_exam=True,
-                           test_type_default=test_type_default)
+                           educations=educations, new_exam=True,
+                           form=form)
+
+
+@blueprint.route('/examination/edit/<int:exam_id>/', methods=['GET', 'POST'])
+@login_required
+def edit(exam_id):
+
+    if not ModuleAPI.can_write('examination', True):
+        session['prev'] = 'examination.edit_examination'
+        return abort(403)
+
+    exam = Examination.query.get(exam_id)
+
+    if not exam:
+        flash(_('Examination could not be found.'), 'danger')
+        return redirect(url_for('examination.view_examination'))
+
+    session['examination_edit_id'] = exam_id
+
+    form = EditForm(request.form, exam)
+
+    courses = Course.query.order_by(Course.name).all()
+    educations = Education.query.order_by(Education.name).all()
+    form.course.choices = [(c.id, c.name) for c in courses]
+    form.education.choices = [(e.id, e.name) for e in educations]
+    form.test_type.choices = test_types.items()
+
+    if request.method == 'POST':
+        if form.validate_on_submit():
+
+            file = request.files['examination']
+            answers = request.files['answers']
+
+            exam.date = form.date.data
+            exam.comment = form.comment.data
+            exam.course_id = form.course.data
+            exam.education_id = form.education.data
+            exam.test_type = form.test_type.data
+
+            new_path = upload_file_real(file, exam.path)
+            if new_path:
+                exam.path = new_path
+            elif new_path is None:
+                flash(_('Wrong format examination.'), 'danger')
+
+            if not new_path:
+                flash(_('Old examination preserved.'), 'info')
+
+            new_answer_path = upload_file_real(answers, exam.answer_path)
+            if new_answer_path:
+                exam.answer_path = new_answer_path
+            elif new_answer_path is None:
+                flash(_('Wrong format answers.'), 'danger')
+
+            if not new_answer_path:
+                flash(_('Old answers preserved.'), 'info')
+
+            db.session.commit()
+            flash(_('Examination succesfully changed.'), 'success')
+
+            return redirect(url_for('examination.edit', exam_id=exam_id))
+        else:
+            flash_form_errors(form)
+
+    path = '/static/uploads/examinations/'
+
+    return render_template('examination/edit.htm',
+                           form=form, path=path,
+                           examination=exam, title=_('Examinations'),
+                           courses=courses, educations=educations,
+                           new_exam=False)
 
 
 @blueprint.route('/examination/', methods=['GET', 'POST'])
@@ -212,14 +279,25 @@ def view_examination(page_nr=1):
 
         for exam in exams:
             course = exam.course.name.lower()
-            title_ratio = fuzz.partial_ratio(search_lower, exam.title.lower())
+            comment_ratio = 0
+            if exam.comment:
+                comment_ratio = fuzz.partial_ratio(search_lower,
+                                                   exam.comment.lower())
             course_ratio = fuzz.partial_ratio(search_lower, course)
             education_ratio = fuzz.partial_ratio(search_lower,
                                                  exam.education.name.lower())
-            if title_ratio > 75 or course_ratio > 75 or education_ratio > 75:
+            date_ratio = 0
+            if exam.date:
+                date_ratio = fuzz.partial_ratio(
+                    search_lower, exam.date.strftime(DATE_FORMAT))
+
+
+            if comment_ratio > 75 or course_ratio > 75 \
+                    or education_ratio > 75 or date_ratio > 75:
                 # Calculate the score for the exam
                 # TODO: maybe use a weighted mean instead of max
-                score = max(title_ratio, course_ratio, education_ratio)
+                score = max(comment_ratio, course_ratio,
+                            education_ratio, date_ratio)
 
                 exam_tuple = (score, exam.id)
 
@@ -266,72 +344,6 @@ def view_examination(page_nr=1):
     return render_template('examination/view.htm', path=path,
                            examinations=examinations, search=search,
                            title=_('Examinations'), test_types=test_types)
-
-
-@blueprint.route('/examination/edit/<int:exam_id>/', methods=['GET', 'POST'])
-@login_required
-def edit(exam_id):
-    if not ModuleAPI.can_write('examination', True):
-        session['prev'] = 'examination.edit_examination'
-        return abort(403)
-
-    exam = Examination.query.get(exam_id)
-
-    if not exam:
-        flash(_('Examination could not be found.'), 'danger')
-        return redirect(url_for('examination.view_examination'))
-
-    session['examination_edit_id'] = exam_id
-
-    if request.method == 'POST':
-        file = request.files['file']
-        answers = request.files['answers']
-        title = request.form.get("title", None)
-        course_id = request.form.get("course", None)
-        education_id = request.form.get("education", None)
-        test_type = request.form.get("test_type", None)
-
-        if not title:
-            flash(_('No title given.'), 'danger')
-        elif not education_id:
-            flash(_('No education given.'), 'danger')
-        else:
-            exam.title = title
-            exam.course_id = course_id
-            exam.education_id = education_id
-            exam.test_type = test_type
-
-            new_path = upload_file_real(file, exam.path)
-            if new_path:
-                exam.path = new_path
-            elif new_path is None:
-                flash(_('Wrong format examination.'), 'danger')
-
-            if not new_path:
-                flash(_('Old examination preserved.'), 'info')
-
-            new_answer_path = upload_file_real(answers, exam.answer_path)
-            if new_answer_path:
-                exam.answer_path = new_answer_path
-            elif new_answer_path is None:
-                flash(_('Wrong format answers.'), 'danger')
-
-            if not new_answer_path:
-                flash(_('Old answers preserved.'), 'info')
-
-            db.session.commit()
-            flash(_('Examination succesfully changed.'), 'success')
-
-            return redirect(url_for('examination.edit', exam_id=exam_id))
-
-    path = '/static/uploads/examinations/'
-    courses = Course.query.order_by(Course.name).all()
-    educations = Education.query.order_by(Education.name).all()
-
-    return render_template(
-        'examination/edit.htm', path=path, examination=exam,
-        title=_('Examinations'), courses=courses, educations=educations,
-        test_types=test_types, new_exam=False)
 
 
 @blueprint.route('/courses/', methods=['GET'])
@@ -395,7 +407,7 @@ def add_course():
             if 'origin' in session:
                 redir = session['origin']
             else:
-                redir = url_for('examination.upload_file')
+                redir = url_for('examination.add')
             return redirect(redir)
         else:
             flash_form_errors(form)
@@ -441,7 +453,7 @@ def edit_course(course_id):
         if 'origin' in session:
             redir = session['origin']
         else:
-            redir = url_for('examination.upload_file')
+            redir = url_for('examination.add')
         return redirect(redir)
 
     if request.method == 'POST':
@@ -468,7 +480,7 @@ def edit_course(course_id):
                 if 'origin' in session:
                     redir = session['origin']
                 else:
-                    redir = url_for('examination.upload_file')
+                    redir = url_for('examination.add')
                 return redirect(redir)
         else:
             flash_form_errors(form)
@@ -548,7 +560,7 @@ def add_education():
             if 'origin' in session:
                 redir = session['origin']
             else:
-                redir = url_for('examination.upload_file')
+                redir = url_for('examination.add')
             return redirect(redir)
 
         else:
@@ -596,7 +608,7 @@ def edit_education(education_id):
         if 'origin' in session:
             redir = session['origin']
         else:
-            redir = url_for('examination.upload_file')
+            redir = url_for('examination.add')
         return redirect(redir)
 
     if request.method == 'POST':
