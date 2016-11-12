@@ -1,4 +1,4 @@
-# Viaduct v2.7.0.3
+# Viaduct v2.7.1.0
 Versioning works as follows: vSYSTEM.FEATURE.IMPROVEMENT.BUG-/HOTFIX
 
 ## Tutorial
@@ -67,7 +67,7 @@ follows:
  - Support branches? [support/] `Hit [enter]`.
  - Version tag prefix? [] `Type 'v' and hit [enter]`.
 
-First checkout master, then start the setup of git-flow with the following 
+First checkout master, then start the setup of git-flow with the following
 commands. Then, go back to develop:
 ```bash
 git checkout master
@@ -92,9 +92,14 @@ Use it by database by installing mysql and running:
     - `python manage.py mysqlinit`
     - `(sudo) mysql -u viaduct -pviaduct < database.sql`
 
+* Add yourself to the administrators group:
+   - `python manage.py admin add <your name>`
+
 Run site with:
 
-    `./watch.sh`
+```bash
+./watch.sh
+```
 
 For troubleshooting tips, see bottom of document.
 

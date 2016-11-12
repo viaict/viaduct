@@ -1,14 +1,15 @@
+from app import db
+from app.models.base_model import BaseEntity
+from app.models.activity import Activity
+from app.models.mollie import Transaction
+from app.models.page import PageRevision, Page
+from app.utils.google import send_email
+from app.utils.page import PageAPI
+
 from flask_login import current_user
 
-from app import db
-from app.models.mollie import Transaction
-from app.models.activity import Activity
-from app.models.base_model import BaseEntity
-
 from collections import OrderedDict
-import datetime as dt
-
-from app.utils.google import send_email
+from datetime import datetime
 
 
 def export_form_data(r):
@@ -80,13 +81,29 @@ class CustomForm(db.Model, BaseEntity):
                 .order_by(Activity.modified.desc())
                 .first())
 
+    def submittable_by(self, user=current_user):
+        # Test if the form is accessable through an activity.
+        if self.has_activity() and user.is_authenticated:
+            return True
+
+        # Query all the page's this form is attached to.
+        pages = Page.query.join(PageRevision, CustomForm)\
+            .filter(Page.id == PageRevision.page_id)\
+            .filter(PageRevision.custom_form_id == self.id).all()
+
+        # Test if we are allowed to read on any on these pages.
+        if any([PageAPI.can_read(page) for page in pages]):
+            return True
+
+        return False
+
     def is_archived(self):
         latest_activity = (self.activities.order_by(Activity.end_time.desc())
                            .first())
 
         return self.archived or (
             latest_activity is not None and
-            dt.datetime.now() < latest_activity.end_time)
+            datetime.now() < latest_activity.end_time)
 
     @classmethod
     def aslist(cls, current=None):

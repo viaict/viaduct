@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, abort
 from flask_babel import _
 from sqlalchemy import desc
 
-from app import db
+from app import db, cache
 from app.models import News
 from app.models.page import Page, PageRevision
 from app.models.activity import Activity
@@ -11,11 +11,8 @@ from app.models.activity import Activity
 blueprint = Blueprint('home', __name__)
 
 
-@blueprint.route('/', methods=['GET'])
-def home():
-    data = ['activities',
-            'contact']
-
+@cache.memoize(timeout=60)
+def get_revisions(data):
     pages = []
     revisions = []
 
@@ -53,6 +50,15 @@ def home():
 
         revisions.append(revision)
 
+    return revisions
+
+
+@blueprint.route('/', methods=['GET'])
+def home():
+    data = ['activities',
+            'contact']
+
+    revisions = get_revisions(data)
     news = News.query.filter(
         db.and_(
             db.or_(

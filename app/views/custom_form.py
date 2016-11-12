@@ -6,7 +6,6 @@ from app import db
 from app.utils import serialize_sqla
 from app.utils.forms import flash_form_errors
 from app.forms.custom_form import CreateForm
-from app.models.user import User
 from app.models.custom_form import CustomForm, CustomFormResult, \
     CustomFormFollower
 from app.utils.module import ModuleAPI
@@ -14,8 +13,6 @@ from app.utils.module import ModuleAPI
 from app.utils import copernica
 from urllib.parse import parse_qsl
 
-import io
-import csv
 
 blueprint = Blueprint('custom_form', __name__, url_prefix='/forms')
 
@@ -59,7 +56,7 @@ def view_single(form_id=None):
         data = parse_qs(entry.data)
 
         # Add the entry date
-        time = entry.created.strftime("%Y-%m-%d %H:%I") if \
+        time = entry.created.strftime("%Y-%m-%d %H:%M") if \
             entry.created is not None else ""
 
         # Append the results with a single entry
@@ -118,9 +115,12 @@ def export(form_id):
     for i in csv_rows:
         label_set.update(list(i.keys()))
 
+    from io import StringIO
+    from csv import DictWriter
+
     # Write all the values to the io field
-    str_io = io.StringIO()
-    wrt = csv.DictWriter(str_io, fieldnames=label_set)
+    str_io = StringIO()
+    wrt = DictWriter(str_io, fieldnames=label_set)
     wrt.writeheader()
     wrt.writerows(csv_rows)
 
@@ -137,7 +137,7 @@ def create(form_id=None):
         return abort(403)
 
     if form_id:
-        custom_form = CustomForm.query.get(form_id)
+        custom_form = CustomForm.query.get_or_404(form_id)
         prev_max = custom_form.max_attendants
         if not custom_form:
             abort(404)
@@ -252,83 +252,79 @@ def remove_response(submit_id=None):
 
 
 @blueprint.route('/submit/<int:form_id>', methods=['POST'])
-def submit(form_id=None):
+def submit(form_id=-1):
     # TODO make sure custom_form rights are set on server
     if not ModuleAPI.can_read('activity') or current_user.is_anonymous:
-        return abort(403)
+        return "error", 403
 
     response = "success"
 
-    if form_id:
-        custom_form = CustomForm.query.get(form_id)
-        user = User.query.get(current_user.id)
+    custom_form = CustomForm.query.get(form_id)
+    if not custom_form:
+        return "error", 404
+    if not custom_form.submittable_by(current_user):
+        return "error", 403
 
-        if not custom_form:
-            abort(404)
+    # These fields might be there
+    try:
+        if request.form['phone_nr']:
+            current_user.phone_nr = request.form['phone_nr']
 
-    if not user:
-        response = "error"
+        if request.form['noodnummer']:
+            current_user.emergency_phone_nr = request.form['noodnummer']
+
+        if request.form['shirt_maat']:
+            current_user.shirt_size = request.form['shirt maat']
+
+        if request.form['dieet[]']:
+            current_user.diet = ', '.join(request.form['dieet[]'])
+
+        if request.form['allergie/medicatie']:
+            current_user.allergy = request.form['allergie/medicatie']
+
+        if request.form['geslacht']:
+            current_user.gender = request.form['geslacht']
+    except Exception:
+        pass
+
+    # Test if current user already signed up
+    duplicate_test = CustomFormResult.query.filter(
+        CustomFormResult.owner_id == current_user.id,
+        CustomFormResult.form_id == form_id
+    ).first()
+
+    if duplicate_test:
+        result = duplicate_test
+        result.data = request.form['data']
+        response = "edit"
     else:
-        # These fields might be there
-        try:
-            if request.form['phone_nr']:
-                user.phone_nr = request.form['phone_nr']
+        entries = CustomFormResult.query\
+            .filter(CustomFormResult.form_id == form_id)
+        num_attendants = entries.count()
 
-            if request.form['noodnummer']:
-                user.emergency_phone_nr = request.form['noodnummer']
+        result = CustomFormResult(current_user.id, form_id,
+                                  request.form['data'])
 
-            if request.form['shirt_maat']:
-                user.shirt_size = request.form['shirt maat']
-
-            if request.form['dieet[]']:
-                user.diet = ', '.join(request.form['dieet[]'])
-
-            if request.form['allergie/medicatie']:
-                user.allergy = request.form['allergie/medicatie']
-
-            if request.form['geslacht']:
-                user.gender = request.form['geslacht']
-        except Exception:
-            pass
-
-        # Test if user already signed up
-        duplicate_test = CustomFormResult.query.filter(
-            CustomFormResult.owner_id == user.id,
-            CustomFormResult.form_id == form_id
-        ).first()
-
-        if duplicate_test:
-            result = duplicate_test
-            result.data = request.form['data']
-            response = "edit"
+        # Check if number attendants allows another registration
+        if num_attendants >= custom_form.max_attendants:
+            # Create "Reserve" signup
+            response = "reserve"
         else:
-            entries = CustomFormResult.query\
-                .filter(CustomFormResult.form_id == form_id)
-            num_attendants = entries.count()
+            copernica_data = {
+                "Naam": custom_form.name,
+                "Betaald": result.has_payed,
+                "Bedrag": custom_form.price,
+                "viaductID": form_id,
+                "Reserve": "Ja" if response is "reserve" else "Nee",
+            }
+            copernica.add_subprofile(copernica.SUBPROFILE_ACTIVITY,
+                                     current_user.id, copernica_data)
 
-            result = CustomFormResult(user.id, form_id,
-                                      request.form['data'])
+    db.session.add(current_user)
+    db.session.commit()
 
-            # Check if number attendants allows another registration
-            if num_attendants >= custom_form.max_attendants:
-                # Create "Reserve" signup
-                response = "reserve"
-            else:
-                copernica_data = {
-                    "Naam": custom_form.name,
-                    "Betaald": result.has_payed,
-                    "Bedrag": custom_form.price,
-                    "viaductID": form_id,
-                    "Reserve": "Ja" if response is "reserve" else "Nee",
-                }
-                copernica.add_subprofile(copernica.SUBPROFILE_ACTIVITY,
-                                         user.id, copernica_data)
-
-        db.session.add(user)
-        db.session.commit()
-
-        db.session.add(result)
-        db.session.commit()
+    db.session.add(result)
+    db.session.commit()
 
     return response
 

@@ -185,10 +185,8 @@ class RequestPassword(Form):
     email = StringField(_('E-mail adress'), validators=[
         InputRequired(message=_('No e-mail adress submitted')),
         Email(message=_('Invalid e-mail adress submitted'))])
-    student_id = StringField(
-        _('Student ID'), validators=[
-            InputRequired(message=_('No studentnumber submitted'))]
-    )
+    recaptcha = RecaptchaField(
+        validators=[Recaptcha(message='Check Recaptcha')])
 
 
 class ResetPassword(Form):
