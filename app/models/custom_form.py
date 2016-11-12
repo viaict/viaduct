@@ -83,7 +83,7 @@ class CustomForm(db.Model, BaseEntity):
 
     def submittable_by(self, user=current_user):
         # Test if the form is accessable through an activity.
-        if self.has_activity():
+        if self.has_activity() and user.is_authenticated:
             return True
 
         # Query all the page's this form is attached to.
