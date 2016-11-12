@@ -342,7 +342,6 @@ def request_password():
 
     def create_hash(bits=96):
         assert bits % 8 == 0
-        print("test")
         required_length = bits / 8 * 2
         s = hex(random.getrandbits(bits)).lstrip('0x').rstrip('L')
         if len(s) < required_length:
@@ -356,36 +355,25 @@ def request_password():
         user = User.query.filter(
             User.email == form.email.data).first()
 
-        if not user.student_id:
-            flash(_('Your account does not seem to have a student id '
-                    'configured, contact the board at bestuur@svia.nl.'),
-                  'danger')
-            return render_template('user/request_password.htm', form=form)
+        _hash = create_hash(256)
 
-        # Check if the user does exist, and if the passwords do match.
-        if (user.student_id != form.student_id.data):
-            flash(_('Your email and student id appear to be incorrect.'),
-                  'danger')
-        else:
-            _hash = create_hash(256)
+        ticket = Password_ticket(user.id, _hash)
+        db.session.add(ticket)
+        db.session.commit()
 
-            ticket = Password_ticket(user.id, _hash)
-            db.session.add(ticket)
-            db.session.commit()
+        reset_link = url_for('user.reset_password',
+                             hash=_hash, _external=True)
 
-            reset_link = url_for('user.reset_password',
-                                 hash=_hash, _external=True)
+        send_email(to=user.email,
+                   subject='Password reset https://svia.nl',
+                   email_template='email/forgot_password.html',
+                   sender='via',
+                   user=user,
+                   reset_link=reset_link)
 
-            send_email(to=user.email,
-                       subject='Password reset https://svia.nl',
-                       email_template='email/forgot_password.html',
-                       sender='via',
-                       user=user,
-                       reset_link=reset_link)
-
-            flash(_('An email has been sent to %(email)s with further '
-                    'instructions.', email=form.email.data), 'success')
-            return redirect(url_for('home.home'))
+        flash(_('An email has been sent to %(email)s with further '
+                'instructions.', email=form.email.data), 'success')
+        return redirect(url_for('home.home'))
     else:
         flash_form_errors(form)
 
@@ -422,11 +410,12 @@ def reset_password(hash=0):
 
         # Actually reset the password of the user
         user.password = bcrypt.hashpw(form.password.data, bcrypt.gensalt())
+        login_user(user)
         db.session.add(user)
         db.session.commit()
 
         flash(_('Your password has been updated.'), 'success')
-        return redirect(url_for('user.view_single'))
+        return redirect(url_for('user.view_single', user_id=user.id))
 
     else:
         flash_form_errors(form)
