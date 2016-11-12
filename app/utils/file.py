@@ -14,8 +14,12 @@ class FileAPI:
     """API for files."""
 
     @staticmethod
-    def upload(f):
+    def upload(f, directory=None):
         filename = f.filename
+
+        # Check if an upload directory is provided
+        if not directory:
+            directory = UPLOAD_DIR
 
         # Check if the file is allowed.
         if filename == '':
@@ -32,7 +36,7 @@ class FileAPI:
         # Add numbers for duplicate filenames.
         filename_noext, filename_ext = FileAPI.split_name(filename)
         counter = 1
-        while FileAPI.exists(filename):
+        while FileAPI.exists(filename, directory):
             filename = '%s_%d.%s' % (filename_noext, counter, filename_ext)
             counter += 1
 
