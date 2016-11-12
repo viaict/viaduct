@@ -142,6 +142,30 @@ class DOMjudgeAPI:
         return None
 
     @staticmethod
+    def get_teamid_for_userid(id, viaduct_user_cat_id, session):
+        r = DOMjudgeAPI.request_get('api/teams?category={}'.format(
+            viaduct_user_cat_id), session=session)
+        if not r:
+            return None
+        for team in r.json():
+            if team['name'] == "via_user_team_" + str(id):
+                return team['id']
+
+        return None
+
+    @staticmethod
+    def get_teamname_for_teamid(teamid, viaduct_user_cat_id, session):
+        r = DOMjudgeAPI.request_get('api/teams?category={}'.format(
+            viaduct_user_cat_id), session=session)
+        if not r:
+            return None
+        for team in r.json():
+            if team['id'] == teamid:
+                return team['name']
+
+        return None
+
+    @staticmethod
     def submit(contest_shortname, language_id, problem_shortname,
                file, session):
         form_data = {
