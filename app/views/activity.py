@@ -84,10 +84,7 @@ def get_activity(activity_id=0):
     if not ModuleAPI.can_read('activity'):
         return abort(403)
 
-    activity = Activity.query.get(activity_id)
-
-    if not activity:
-        return abort(404)
+    activity = Activity.query.get_or_404(activity_id)
 
     form = ActivityForm(request.form, current_user)
 

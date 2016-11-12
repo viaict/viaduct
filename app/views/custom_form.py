@@ -139,8 +139,6 @@ def create(form_id=None):
     if form_id:
         custom_form = CustomForm.query.get_or_404(form_id)
         prev_max = custom_form.max_attendants
-        if not custom_form:
-            abort(404)
     else:
         custom_form = CustomForm()
 
@@ -255,15 +253,13 @@ def remove_response(submit_id=None):
 def submit(form_id=-1):
     # TODO make sure custom_form rights are set on server
     if not ModuleAPI.can_read('activity') or current_user.is_anonymous:
-        return "error", 403
+        return abort(403)
 
     response = "success"
 
-    custom_form = CustomForm.query.get(form_id)
-    if not custom_form:
-        return "error", 404
+    custom_form = CustomForm.query.get_or_404(form_id)
     if not custom_form.submittable_by(current_user):
-        return "error", 403
+        return abort(403)s
 
     # These fields might be there
     try:
@@ -361,9 +357,7 @@ def archive(form_id, page_nr=1):
     if not ModuleAPI.can_write('custom_form') or current_user.is_anonymous:
         return abort(403)
 
-    form = CustomForm.query.get(form_id)
-    if not form:
-        return abort(404)
+    form = CustomForm.query.get_or_404(form_id)
 
     form.archived = True
     db.session.commit()
@@ -380,9 +374,7 @@ def unarchive(form_id, page_nr=1):
     if not ModuleAPI.can_write('custom_form') or current_user.is_anonymous:
         return abort(403)
 
-    form = CustomForm.query.get(form_id)
-    if not form:
-        return abort(404)
+    form = CustomForm.query.get_or_404(form_id)
 
     form.archived = False
     db.session.commit()
