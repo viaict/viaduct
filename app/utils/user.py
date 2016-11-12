@@ -1,8 +1,5 @@
 from flask_login import current_user
 from app.models.page import PagePermission
-from flask import flash
-import os
-import fnmatch
 import urllib.request
 import urllib.parse
 import urllib.error
@@ -11,9 +8,9 @@ import hashlib
 from flask import render_template
 
 from app.models.group import Group
-from app.utils.file import FileAPI
+from app.utils.file import file_exists_pattern, file_remove_pattern, \
+    file_upload, file_split_name
 
-from flask_babel import lazy_gettext as _
 
 ALLOWED_EXTENSIONS = set(['png', 'gif', 'jpg', 'jpeg'])
 UPLOAD_DIR = 'app/static/files/users/'
@@ -23,35 +20,31 @@ class UserAPI:
     @staticmethod
     def has_avatar(user_id):
         """Check if the user has uploaded an avatar."""
-        for file in os.listdir(UPLOAD_DIR):
-            if fnmatch.fnmatch(file, 'avatar_' + str(user_id) + '.*'):
-                return True
-        return False
+        return bool(file_exists_pattern('avatar_' + str(user_id) + '.*',
+                    UPLOAD_DIR))
 
     @staticmethod
-    def remove_avatar(user):
+    def remove_avatar(user_id):
         """Remove avatar of a user."""
         # Find avatar by avatar_<userid>.*
-        for file in os.listdir(UPLOAD_DIR):
-            if fnmatch.fnmatch(file, 'avatar_' + str(user.id) + '.*'):
-                path = UPLOAD_DIR + file
-                os.remove(path)
+        file_remove_pattern('avatar_' + str(user_id) + '.*', UPLOAD_DIR)
 
     @staticmethod
     def avatar(user):
         """Return the avatar of the user.
 
-        If the user uploaded a avatar return it.
+        # If the user uploaded a avatar return it.
         If the user did not upload an avatar checks if the user has an
         gravatar, if so return that.
         If the user neither has an avatar nor an gravatar return default image.
         """
 
         # check if user has avatar if so return it
-        for file in os.listdir(UPLOAD_DIR):
-            if fnmatch.fnmatch(file, 'avatar_' + str(user.id) + '.*'):
-                path = '/static/files/users/' + file
-                return(path)
+        avatar = file_exists_pattern('avatar_' + str(user.id) + '.*',
+                                     UPLOAD_DIR)
+
+        if avatar:
+            return '/static/files/users' + avatar.filename
 
         # Set default values gravatar
         email = user.email or ''
@@ -71,33 +64,15 @@ class UserAPI:
         Checks if the file type is allowed if so removes any
         previous uploaded avatars.
         """
-        filename = f.filename
+        # Remove old avatars
+        UserAPI.remove_avatar(user_id)
 
-        # Check if the file is allowed.
-        if filename == '':
-            return
+        # construct file name
+        filename = 'avatar_' + str(user_id) + '.' + \
+            file_split_name(f.filename)[1]
 
-        if '.' not in filename or not filename.rsplit('.', 1)[1].lower() \
-                in ALLOWED_EXTENSIONS:
-            flash(_('Filetype not allowed'), 'danger')
-            return
-
-        # convert the name.
-        filename = 'avatar_%d.%s' % (user_id, filename.rsplit('.', 1)[1])
-        path = os.path.join(os.getcwd(), UPLOAD_DIR, filename)
-
-        # Check if avatar exists if so remove.
-        filename_noext, filename_ext = FileAPI.split_name(filename)
-
-        for file in os.listdir(UPLOAD_DIR):
-            if fnmatch.fnmatch(file, filename_noext + '.*'):
-                remove_path = os.path.join(os.getcwd(), UPLOAD_DIR, file)
-                os.remove(remove_path)
-
-        # Save file.
-        f.save(path)
-        os.chmod(path, 0o644)
-        return
+        # Save new avatar
+        file_upload(f, UPLOAD_DIR, True, filename)
 
     @staticmethod
     def get_groups_for_user_id(user):

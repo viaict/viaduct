@@ -1,8 +1,8 @@
 """Views for the file module."""
-from flask import Blueprint, render_template, request, jsonify, abort
+from flask import Blueprint, render_template, request, abort
 from app.models.file import File
 from app.forms import FileForm
-from app.utils import FileAPI
+from app.utils.file import file_upload, file_search
 from app.utils.module import ModuleAPI
 
 blueprint = Blueprint('file', __name__, url_prefix='/files')
@@ -17,10 +17,10 @@ def list(page_nr=1):
 
     if request.args.get('search'):
         search = request.args.get('search')
-        filters = FileAPI.search(search)
-        files = File.query.filter(File.name.in_(filters), File.page==None)
+        filters = file_search(search)
+        files = File.query.filter(File.name.in_(filters), File.page is None)
     else:
-        files = File.query.filter(File.page==None)
+        files = File.query.filter(File.page is None)
 
     files = files.order_by(File.name).paginate(1, 30, False)
 
@@ -37,7 +37,7 @@ def upload(page_nr=1):
         return abort(403)
 
     new_file_name = request.files['file']
-    new_file = FileAPI.upload(new_file_name)
+    new_file = file_upload(new_file_name)
 
     files = File.query.filter_by(page=None).order_by(File.name)\
         .paginate(page_nr, 30, False)
