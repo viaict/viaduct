@@ -6,7 +6,7 @@ from app.models.page import PageRevision, Page
 from app.utils.google import send_email
 from app.utils.page import PageAPI
 
-from flask_login import current_user
+from flask_login import current_user, url_for
 
 from collections import OrderedDict
 from datetime import datetime
@@ -200,6 +200,8 @@ class CustomFormResult(db.Model, BaseEntity):
                                                        self.has_payed)
 
     def notify_followers(self):
+        form_url = url_for('custom_form.view_single', form_id=self.form_id,
+                           _external=True)
         followers = CustomFormFollower.query\
             .filter(CustomFormFollower.form_id == self.form_id)
         for follower in followers:
@@ -208,8 +210,7 @@ class CustomFormResult(db.Model, BaseEntity):
                        email_template='email/form.html',
                        sender='via',
                        user=follower.owner,
-                       form_id=self.form_id)
-        return
+                       form_url=form_url)
 
 
 class CustomFormFollower(db.Model, BaseEntity):
