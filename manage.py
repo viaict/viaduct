@@ -318,7 +318,7 @@ def createdb():
         email=email,
         password=passwd,
         education_id=Education.query.first().id)
-    admin.has_payed = True
+    admin.has_paid = True
     _add_user(admin, True,
               "A user with email '{}' already exists".format(email))
 

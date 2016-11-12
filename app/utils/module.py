@@ -16,23 +16,23 @@ def import_module(name, globals=globals(), locals=locals(), fromlist=[],
 class ModuleAPI:
 
     @staticmethod
-    def can_read(module_name, needs_payed=False):
+    def can_read(module_name, needs_paid=False):
         """
         Check if the current user can view the module_name.
 
-        Distinguishes between payed members and regular users
+        Distinguishes between paid members and regular users
         """
-        if needs_payed and\
-                (current_user.is_anonymous or not current_user.has_payed):
+        if needs_paid and\
+                (current_user.is_anonymous or not current_user.has_paid):
             return False
         return ModuleAPI\
             .get_highest_permission_for_module(module_name) >= 1
 
     @staticmethod
-    def can_write(module_name, needs_payed=False):
+    def can_write(module_name, needs_paid=False):
         """Check if the current user can edit the module_name."""
-        if needs_payed and\
-                (current_user.is_anonymous or not current_user.has_payed):
+        if needs_paid and\
+                (current_user.is_anonymous or not current_user.has_paid):
             return False
         return ModuleAPI\
             .get_highest_permission_for_module(module_name) >= 2

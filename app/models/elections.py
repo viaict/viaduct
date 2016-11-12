@@ -14,7 +14,7 @@ class Nominee(db.Model, BaseEntity):
         self.name = name
 
     def nominate(self, user):
-        if not user.has_payed:
+        if not user.has_paid:
             raise Exception('Je moet betaald lid zijn om een docent te '
                             'nomineren')
 
@@ -36,7 +36,7 @@ class Nominee(db.Model, BaseEntity):
         return nomination
 
     def vote(self, user):
-        if not user.has_payed:
+        if not user.has_paid:
             raise Exception('Je moet betaald lid zijn om te stemmen')
 
         if user.vote:

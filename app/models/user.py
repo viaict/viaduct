@@ -23,7 +23,7 @@ class AnonymousUser(AnonymousUserMixin):
     """
 
     id = 0
-    has_payed = False
+    has_paid = False
 
 
 class User(db.Model, UserMixin, BaseEntity):
@@ -38,7 +38,7 @@ class User(db.Model, UserMixin, BaseEntity):
     last_name = db.Column(db.String(256))
     locale = db.Column(db.Enum(*list(app.config['LANGUAGES'].keys())),
                        default="nl")
-    has_payed = db.Column(db.Boolean, default=None)
+    has_paid = db.Column(db.Boolean, default=None)
     shirt_size = db.Column(db.Enum('Small', 'Medium', 'Large'))
     allergy = db.Column(db.String(1024))  # Allergy / medication
     diet = db.Column(db.Enum('Vegetarisch', 'Veganistisch', 'Fruitarier'))
@@ -51,7 +51,7 @@ class User(db.Model, UserMixin, BaseEntity):
     created = db.Column(db.DateTime, default=datetime.now())
     honorary_member = db.Column(db.Boolean, default=False)
     favourer = db.Column(db.Boolean, default=False)
-    payed_date = db.Column(db.DateTime)
+    paid_date = db.Column(db.DateTime)
     birth_date = db.Column(db.Date)
     study_start = db.Column(db.Date)
     receive_information = db.Column(db.Boolean, default=False)
@@ -84,12 +84,12 @@ class User(db.Model, UserMixin, BaseEntity):
 
     def __setattr__(self, name, value):
         """
-        If has_payed is set to true, we want to store the date that happend.
+        If has_paid is set to true, we want to store the date that happend.
 
         Because of legacy code and sqlalchemy we do it this way
         """
-        if name == 'has_payed' and value:
-            super(User, self).__setattr__("payed_date", datetime.now())
+        if name == 'has_paid' and value:
+            super(User, self).__setattr__("paid_date", datetime.now())
         super(User, self).__setattr__(name, value)
 
     def update_email(self, new_email):

@@ -45,7 +45,7 @@ module.exports = function(grunt) {
 
             custom_form_view_results: {
                 src: set_base_path('src/js/custom_form/view_results/',
-                                   ['has_payed.js', '*']),
+                                   ['has_paid.js', '*']),
                 dest: 'dist/js/concat/custom_form/view_results.js'
             },
 

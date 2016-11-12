@@ -126,8 +126,8 @@ class UserAPI:
 
     @staticmethod
     def can_read(page):
-        if page.needs_payed and (current_user.is_anonymous or
-                                 not current_user.has_payed):
+        if page.needs_paid and (current_user.is_anonymous or
+                                not current_user.has_paid):
             return False
 
         return PagePermission.get_user_rights(current_user, page.id) > 0
@@ -138,10 +138,10 @@ class UserAPI:
 
     @staticmethod
     def get_membership_warning():
-        """Render a warning if the current user has not payed."""
+        """Render a warning if the current user has not paid."""
         if current_user.is_anonymous or\
                 (current_user.is_authenticated and
-                    (current_user.has_payed or current_user.alumnus)):
+                    (current_user.has_paid or current_user.alumnus)):
             return ''
 
         return render_template('user/membership_warning.htm')

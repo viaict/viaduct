@@ -575,7 +575,7 @@ msgstr ""
 msgid "Groups"
 msgstr ""
 
-msgid "Has payed"
+msgid "Has paid"
 msgstr ""
 
 #, python-format
