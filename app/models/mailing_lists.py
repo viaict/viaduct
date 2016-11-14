@@ -5,7 +5,7 @@ from app.models import BaseEntity
 class MailingList(db.Model, BaseEntity):
 
     name = db.Column(db.String(64))  # display name
-    copernica_db_id = db.Column(db.Integer())
+    copernica_db_id = db.Column(db.Integer(), unique=True)
     active = db.column(db.Boolean())
     member_only = db.column(db.Boolean())
 
