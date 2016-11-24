@@ -4,8 +4,6 @@ from sqlalchemy.ext.declarative import declared_attr
 
 
 class Transaction(db.Model, BaseEntity):
-    __tablename__ = 'mollie_transaction'
-
     prints = ('id', 'mollie_id', 'status')
 
     mollie_id = db.Column(db.String(256))
