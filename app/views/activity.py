@@ -18,7 +18,7 @@ from app.utils.forms import flash_form_errors
 from app.forms.activity import ActivityForm, CreateForm
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult
-from app.models.mollie import Transaction
+from app.models.mollie import Transaction, TransactionActivity
 from app.utils.module import ModuleAPI
 from app.utils import mollie
 from app.models.education import Education
@@ -256,32 +256,40 @@ def create(activity_id=None):
 
 @blueprint.route('/transaction/<int:result_id>/', methods=['GET', 'POST'])
 def create_mollie_transaction(result_id):
-    form_result = CustomFormResult.query.filter(
-        CustomFormResult.id == result_id).first()
-    transaction = Transaction.query\
-        .filter(Transaction.form_result_id == form_result.id)\
-        .filter(Transaction.status == 'open').first()
-    if not transaction or not transaction.mollie_id:
-        description = form_result.form.transaction_description
-        description = "VIA transaction: " + description
-        print(description)
-        amount = form_result.form.price
-        user = form_result.owner
-        payment_url, transaction = mollie.create_transaction(
-            amount, description, user=user, form_result=form_result)
-        if payment_url:
-            return redirect(payment_url)
-        else:
-            return render_template('mollie/success.htm', message=transaction)
-    else:
-        payment_url, message = mollie.get_payment_url(
-            mollie_id=transaction.mollie_id)
-        if payment_url:
-            return redirect(payment_url)
-        else:
-            return render_template('mollie/success.htm', message=message)
 
-    return False
+    # Find the form_result we are trying to pay.
+    form_result = CustomFormResult.query.get_or_404(result_id)
+
+    # Search open transactions that are still waiting to be paid.
+    transaction = Transaction.query.join(TransactionActivity)\
+        .filter(TransactionActivity.custom_form_result_id == form_result.id)\
+        .filter(Transaction.status == 'open').first()
+
+    # If no such payment exist, create a new one.
+    if not transaction or not transaction.mollie_id:
+        callback = TransactionActivity()
+        callback.custom_form_result_id = result_id
+        db.session.add(callback)
+        db.session.commit()
+
+        description = form_result.form.transaction_description
+        description = "VIA Activity: " + description
+
+        payment_url, msg = mollie.create_transaction(
+            amount=form_result.form.price,
+            description=form_result.form.transaction_description,
+            user=form_result.owner,
+            callbacks=[callback]
+        )
+
+        return redirect(payment_url) if payment_url else \
+            render_template('mollie/success.htm', message=msg)
+    else:
+        payment, msg = mollie.check_transaction(transaction)
+        if payment.is_open():
+            return redirect(payment.get_payment_url())
+        else:
+            render_template('mollie/success.htm', message=msg)
 
 
 @blueprint.route('/export/', methods=['GET'])

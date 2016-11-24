@@ -2,40 +2,36 @@
 
 {% block content %}
 <div class="mainblock">
-<h1>Transactions</h1>
-{% if test: %}
-<h2>Test mode enabled</h2>
-<h3>{{ key }}</h3>
-<h3>{{ message }}</h3>
-{% endif %}
-<table class="table">
-<tr>
-<td>Mollie_ID
-<td>Form name
-<td>User
-<td>Description
-<td>Amount
-<td>Status
-<td>Date
-<td>Recheck
-{% for payment in payments.data: %}
-<tr>
-    <td>{{ payment['id'] }}</td>
-    <td>{{ payment['metadata']['form_name'] }}</td>
-    <td>{{ payment['metadata']['first_name']}} {{ payment['metadata']['last_name'] }}</td>
-    <td>{{ payment['description'] }}</td>
-    <td>{{ payment['amount'] }}</td>
-    <td>{{ payment['status'] }}</td>
-    <td>{{ payment['createdDatetime'] }}</td>
-<td><a href="{{ url_for('mollie.mollie_check', mollie_id=payment['id']) }}" class="btn btn-default">check status</a>
-</tr>
-{% endfor %}
-</table>
-<div class="btn-group">
-    {% if page > 0 %}
-    <a class="btn btn-default" href="{{ url_for('mollie.view_all_transactions', page=page-1) }}">Previous</a>
-    {% endif %}
-    <a class="btn btn-default" href="{{ url_for('mollie.view_all_transactions', page=page+1) }}">Next</a>
-</div>
+    <h1>Mollie transactions</h1>
+
+    <table class="table">
+            {% for payment in payments: %}
+            <tr>
+                <td>{{ payment['createdDatetime']}}</td>
+                <td>{{ payment['id'] }}</td>
+                <td>{{ payment['status'] }}</td>
+                <td>{{ payment['description'] }} - <small>{{payment['details']['consumerName']}}</small></td>
+
+                <td>
+                    <a class="btn btn-default" data-container="body" data-toggle="popover" data-placement="bottom" data-content="<pre>{{payment['metadata']}}</pre>">
+                        Data
+                    </a>
+                </td>
+
+                <td>
+                    <a href="{{ url_for('mollie.check', mollie_id=payment.id) }}" class="btn btn-default">
+                        check status
+                    </a>
+            </tr>
+            {% endfor %}
+    </table>
+    <script>$('a').popover({"html":"true"});</script>
+    <style> div.popover { max-width: 550px; } </style>
+    <div class="btn-group">
+        {% if page > 0 %}
+            <a class="btn btn-default" href="{{ url_for('mollie.list', page=page-1) }}">Previous</a>
+        {% endif %}
+        <a class="btn btn-default" href="{{ url_for('mollie.list', page=page+1) }}">Next</a>
+    </div>
 </div>
 {% endblock %}

@@ -1,77 +1,73 @@
-from flask import Blueprint, abort, render_template, request, url_for
-from app import app
+from flask import (Blueprint, abort, render_template, request, url_for, flash,
+                   redirect)
+from app import db
 from app.utils import mollie
+from app.utils.mollie import MollieClient, check_transaction
 from app.utils.module import ModuleAPI
-from app.models.custom_form import CustomForm
-from app.models.activity import Activity
 from app.models.mollie import Transaction
+
+from mollie.api.error import Error as MollieError
 
 blueprint = Blueprint('mollie', __name__, url_prefix='/mollie')
 
 
-@blueprint.route('/check')
-@blueprint.route('/check/<trans_id>', methods=['GET', 'POST'])
-def mollie_check(trans_id=0, mollie_id=0):
-    if not trans_id:
-        if 'id' not in request.form:
-            return render_template('mollie/success.htm', message='no id given')
-        else:
-            mollie_id = request.form['id']
-            trans_id = mollie.get_other_id(mollie_id=mollie_id)
+@blueprint.route('/return/')
+@blueprint.route('/return/<int:transaction_id>/', methods=['GET'])
+def callback(transaction_id=None):
+    transaction = Transaction.query.get_or_404(transaction_id)
+    (_, message) = check_transaction(transaction)
+    return render_template('mollie/success.htm', message=message)
 
-    transaction = Transaction.query.\
-        filter(Transaction.id == trans_id).first()
-    if not transaction:
-        return render_template('mollie/success.htm',
-                               message='unknown transaction')
-    form_id = transaction.form_result.form.id
-    activity = Activity.query.\
-        filter(Activity.form_id == form_id).first()
-    if activity:
-        link = url_for('activity.get_activity', activity_id=activity.id)
+
+@blueprint.route('/check/', methods=['GET', 'POST'])
+@blueprint.route('/check/<mollie_id>/', methods=['GET', 'POST'])
+@blueprint.route('/check/transaction/<int:transaction_id>/',
+                 methods=['GET', 'POST'])
+def check(mollie_id=None, transaction_id=None):
+
+    if transaction_id:
+        transaction = Transaction.query.filter(
+            Transaction.id == transaction_id).first() or abort(404)
+    elif mollie_id:
+        transaction = Transaction.query.filter(
+            Transaction.mollie_id == mollie_id).first() or abort(404)
     else:
-        link = False
-    success, message = mollie.check_transaction(transaction_id=trans_id,
-                                                mollie_id=mollie_id)
-    CustomForm.update_payment(trans_id, success)
-    return render_template('mollie/success.htm',
-                           message=message,
-                           link=link)
+        abort(404)
+
+    (success, msg) = check_transaction(transaction)
+    flash(msg, 'success') if success else flash(msg, 'danger')
+    return redirect(url_for('mollie.list'))
 
 
-@blueprint.route('/webhook/', methods=['GET', 'POST'])
+@blueprint.route('/webhook/', methods=['POST'])
 def webhook():
-    print(request.form)
-    if request.method == 'GET':
-        return ''
-    if 'id' not in request.form:
-        return ''
-    if request.form['id'] == '':
-        return ''
-    mollie_id = request.form['id']
-    success, message = mollie.check_transaction(mollie_id=mollie_id)
-    trans_id = mollie.get_other_id(mollie_id=mollie_id)
-    CustomForm.update_payment(trans_id, success)
-    return ''
+    try:
+        payment_id = request.form.get('id', None)
+        transaction = Transaction.query.filter(
+            Transaction.mollie_id == payment_id).first()
+
+        if not transaction:
+            raise MollieError('Transaction cannot be found')
+
+        payment = MollieClient.payments.get(payment_id)
+        transaction.status = payment['status']
+        db.session.commit()
+
+        if payment.is_paid():
+            transaction.process_callbacks()
+        return '', 200
+    except MollieError:
+        if request.args.get('testByMollie') == 1:
+            return 'Mollie check error: no id', 200
+        return '', 404
 
 
 @blueprint.route('/')
-@blueprint.route('/view/')
-@blueprint.route('/view/<int:page>')
-def view_all_transactions(page=0):
+@blueprint.route('/<int:page>/')
+def list(page=0):
     if not ModuleAPI.can_read('mollie'):
         return abort(403)
 
-    test = app.config.get('MOLLIE_TEST_MODE', False)
-    key = app.config.get('MOLLIE_TEST_KEY', False)
-    print(key)
-
-    payments, message = mollie.get_transactions(page)
-    print(payments)
-    print(message)
-    if payments:
-        return render_template('mollie/view.htm', payments=payments,
-                               test=test, key=key, message=message, page=page)
-    else:
-        return render_template('mollie/success.htm', message=message,
-                               test=test, key=key)
+    payments, message = mollie.get_payments(page)
+    return render_template('mollie/list.htm', payments=payments,
+                           message=message, page=page)
