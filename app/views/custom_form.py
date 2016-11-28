@@ -253,13 +253,16 @@ def remove_response(submit_id=None):
 def submit(form_id=-1):
     # TODO make sure custom_form rights are set on server
     if not ModuleAPI.can_read('activity') or current_user.is_anonymous:
-        return abort(403)
+        return "error", 403
 
     response = "success"
 
-    custom_form = CustomForm.query.get_or_404(form_id)
+    custom_form = CustomForm.query.get(form_id)
+    if not custom_form:
+        return "error", 404
+
     if not custom_form.submittable_by(current_user):
-        return abort(403)
+        return "error", 403
 
     # These fields might be there
     try:
