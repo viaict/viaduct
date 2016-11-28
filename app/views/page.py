@@ -94,9 +94,9 @@ def edit_page(path=''):
     if page:
         revision = page.get_latest_revision()
 
-        # Add the `needs_payed` option to the revision, so it will be inside
+        # Add the `needs_paid` option to the revision, so it will be inside
         # the form.
-        revision.needs_payed = revision.page.needs_payed
+        revision.needs_paid = revision.page.needs_paid
 
         form = PageForm(form, revision)
     else:
@@ -111,7 +111,7 @@ def edit_page(path=''):
         if not page:
             page = Page(path)
 
-        page.needs_payed = form['needs_payed'].data
+        page.needs_paid = form['needs_paid'].data
 
         db.session.add(page)
         db.session.commit()

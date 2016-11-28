@@ -190,8 +190,8 @@ def view(page_nr=1):
 
 
 @blueprint.route('/add/', methods=['GET', 'POST'])
+@login_required
 def add():
-
     if not ModuleAPI.can_write('summary', True):
         session['prev'] = 'summary.edit_summary'
         return abort(403)

@@ -14,6 +14,8 @@ class DefaultConfig:
     CSRF_ENABLED = True
     CSRF_SESSION_KEY = ''  # Change this for real use
 
+    DEBUG_TB_INTERCEPT_REDIRECTS = False
+
     RECAPTCHA_USE_SSL = False
     RECAPTCHA_PUBLIC_KEY = ''   # Change this for real use
     RECAPTCHA_PRIVATE_KEY = ''  # Change this for real use
@@ -23,6 +25,7 @@ class DefaultConfig:
     SUMMARY_UPLOAD_FOLDER = 'app/static/uploads/summaries'
     UPLOAD_DIR = 'app/static/files/'
     FILE_DIR = '/static/files/'
+
 
     # One date format string to rule them all (use this in strftime)
     DATE_FORMAT = "%Y-%m-%d"

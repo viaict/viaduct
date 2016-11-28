@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-11-03 15:24+0100\n"
+"POT-Creation-Date: 2016-11-12 15:54+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -324,6 +324,9 @@ msgstr "Huidige plaatje"
 msgid "Date"
 msgstr "Datum"
 
+msgid "Date unknown"
+msgstr "Datum onbekend"
+
 msgid "Deeltijd"
 msgstr "Deeltijd"
 
@@ -404,6 +407,9 @@ msgstr "Vak aanpassen"
 
 msgid "Edit education"
 msgstr "Opleiding aanpassen"
+
+msgid "Edit examination"
+msgstr "Tentamen aanpassen"
 
 msgid "Edit news item"
 msgstr "Nieuwsbericht aanpassen"
@@ -514,13 +520,16 @@ msgid "Examination kind"
 msgstr "Tentamen soort"
 
 msgid "Examination succesfully changed."
-msgstr "Tentamen succesvol verandert."
+msgstr "Tentamen succesvol veranderd."
 
 msgid "Examination successfully deleted."
 msgstr "Tentamen succesvol verwijderd."
 
 msgid "Examination successfully uploaded."
 msgstr "Tentamen successvol geüpload."
+
+msgid "Examination type"
+msgstr "Tentamen soort"
 
 msgid "Examinations"
 msgstr "Tentamens"
@@ -579,7 +588,7 @@ msgstr "Groep permissies"
 msgid "Groups"
 msgstr "Groepen"
 
-msgid "Has payed"
+msgid "Has paid"
 msgstr "Heeft betaald"
 
 #, python-format
@@ -774,6 +783,9 @@ msgstr "Geen geboortedag opgegeven"
 msgid "No contests found"
 msgstr "Geen wedstrijden gevonden"
 
+msgid "No course given"
+msgstr "Geen vak opgegeven"
+
 msgid "No description supplied"
 msgstr "Geen omschrijving opgegeven"
 
@@ -783,11 +795,14 @@ msgstr "Geen valide e-mailadres opgegeven"
 msgid "No education degree specified"
 msgstr "Geen opleidinggraad opgegeven"
 
-msgid "No education given."
-msgstr "Geen opleiding opgegeven."
+msgid "No education given"
+msgstr "Geen opleiding opgegeven"
 
 msgid "No education name specified"
 msgstr "Geen opleidinnaam opgegeven"
+
+msgid "No examination kind given"
+msgstr "Geen tentamen soort opgegeven"
 
 msgid "No examination uploaded."
 msgstr "Geen tentamen geüpload."
@@ -845,9 +860,6 @@ msgstr "Geen valide e-mailadres."
 
 msgid "Not found!"
 msgstr "Niet gevonden!"
-
-msgid "Not given"
-msgstr "Niet opgegeven"
 
 msgid "Old answers preserved."
 msgstr "Oude antwoorden behouden."
@@ -1130,7 +1142,7 @@ msgid "Summary required."
 msgstr "Samenvatting vereist"
 
 msgid "Summary succesfully changed."
-msgstr "Samenvatting succesvol verandert."
+msgstr "Samenvatting succesvol veranderd."
 
 msgid "Summary successfully deleted."
 msgstr "Samenvatting succesvol verwijderd."
@@ -1580,4 +1592,10 @@ msgstr ""
 
 #~ msgid "Could not process REMOVE task: "
 #~ msgstr ""
+
+#~ msgid "No education given."
+#~ msgstr "Geen opleiding opgegeven."
+
+#~ msgid "Not given"
+#~ msgstr "Niet opgegeven"
 

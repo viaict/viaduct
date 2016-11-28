@@ -21,7 +21,8 @@ test_type_default = 'Unknown'
 class Examination(db.Model, BaseEntity):
     __tablename__ = 'examination'
 
-    title = db.Column(db.String(128))
+    comment = db.Column(db.String(128))
+    date = db.Column(db.Date)
     path = db.Column(db.String(256))
     answer_path = db.Column(db.String(256))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -41,12 +42,13 @@ class Examination(db.Model, BaseEntity):
                                 backref=db.backref('examinations',
                                                    lazy='dynamic'))
 
-    def __init__(self, path, title, course_id, education_id,
+    def __init__(self, path, date, comment, course_id, education_id,
                  timestamp=datetime.datetime.utcnow(), answers='',
                  test_type=test_type_default):
         self.timestamp = timestamp
         self.path = path
-        self.title = title
+        self.date = date
+        self.comment = comment
         self.course_id = course_id
         self.education_id = education_id
         self.answer_path = answers

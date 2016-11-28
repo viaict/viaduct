@@ -32,7 +32,7 @@ def requires_pos_api_key(func):
 def get_members():
     data = {
         user.id: user.name for user in User.query.filter(
-            or_(User.has_payed == True,  # noqa
+            or_(User.has_paid == True,  # noqa
                 User.honorary_member == True,  # noqa
                 User.favourer == True)  # noqa
         ).all()
