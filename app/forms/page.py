@@ -19,7 +19,7 @@ class SuperPageForm(Form):
     en_title = StringField(_('English title'))
 
     comment = StringField(_('Comment for change'), [Optional()])
-    needs_payed = BooleanField(_('Visible for members only'))
+    needs_paid = BooleanField(_('Visible for members only'))
 
 
 class PageForm(SuperPageForm):

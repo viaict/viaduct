@@ -8,6 +8,7 @@ from app import app
 from app.models.user import User
 
 from app.utils.domjudge import DOMjudgeAPI
+from app.utils.module import ModuleAPI
 
 import datetime as dt
 import re
@@ -66,6 +67,10 @@ def contest_list():
 @blueprint.route('/contest/<int:contest_id>/', defaults={'page': 1})
 @blueprint.route('/contest/<int:contest_id>/<int:page>')
 def contest_view(contest_id, page):
+    link = False
+    if ModuleAPI.can_write('domjudge'):
+        link = True
+
     fullscreen = 'fullscreen' in request.args
     embed = 'embed' in request.args
 
@@ -141,7 +146,8 @@ def contest_view(contest_id, page):
     if teams_dict is None:
         return render_template('domjudge/view.htm', fullscreen=fullscreen)
 
-    return render_template('domjudge/view.htm', teams=teams_dict, **locals())
+    return render_template('domjudge/view.htm', links=link,
+                           teams=teams_dict, **locals())
 
 
 @blueprint.route('/contest/<int:contest_id>/problems/')
@@ -326,9 +332,10 @@ def contest_problem_submit(contest_id, problem_id):
                                **locals())
 
 
+@blueprint.route('/contest/<int:contest_id>/submissions/<int:team_id>/')
 @blueprint.route('/contest/<int:contest_id>/submissions/')
 @login_required
-def contest_submissions_view(contest_id):
+def contest_submissions_view(contest_id, team_id=None):
     r = DOMjudgeAPI.request_get('api/contests')
     if not r:
         return render_template('domjudge/submissions.htm')
@@ -341,6 +348,11 @@ def contest_submissions_view(contest_id):
 
     session = DOMjudgeAPI.login(DOMJUDGE_ADMIN_USERNAME,
                                 DOMJUDGE_ADMIN_PASSWORD)
+
+    if team_id and ModuleAPI.can_write('domjudge'):
+        team = team_id
+    else:
+        team = DOMjudgeAPI.get_teamid_for_userid(current_user.id, 3, session)
 
     # Admin login failed, just give a 'request failed' error flash
     if not session:
@@ -406,6 +418,7 @@ def contest_submissions_view(contest_id):
         else:
             s['userid'] = -1
 
+        s['team_id'] = teams[s['team']]['id']
         s['team'] = teams[s['team']]['name']
         s['problem'] = problems[s['problem']]['name']
         s['language'] = languages[s['language']]['name']
@@ -423,5 +436,6 @@ def contest_submissions_view(contest_id):
 
     submissions.sort(key=lambda x: x['time'], reverse=True)
 
-    return render_template('domjudge/submissions.htm', user=current_user.id,
+    print(team)
+    return render_template('domjudge/submissions.htm', team=team,
                            contest=contest, submissions=submissions)

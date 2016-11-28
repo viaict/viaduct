@@ -84,10 +84,7 @@ def get_activity(activity_id=0):
     if not ModuleAPI.can_read('activity'):
         return abort(403)
 
-    activity = Activity.query.get(activity_id)
-
-    if not activity:
-        return abort(404)
+    activity = Activity.query.get_or_404(activity_id)
 
     form = ActivityForm(request.form, current_user)
 
@@ -104,7 +101,7 @@ def get_activity(activity_id=0):
 
         # Check if the current user has already entered data in this custom
         # form
-        if current_user.is_authenticated and current_user.has_payed:
+        if current_user.is_authenticated and current_user.has_paid:
             all_form_results = CustomFormResult.query \
                 .filter(CustomFormResult.form_id == activity.form_id)
             form_result = all_form_results \
@@ -115,13 +112,13 @@ def get_activity(activity_id=0):
 
             if form_result:
                 activity.form_data = form_result.data.replace('"', "'")
-                if not form_result.has_payed and attending:
+                if not form_result.has_paid and attending:
                     # There is 50 cents administration fee
                     if form_result.form.price - 0.5 > 0:
                         form.show_pay_button = True
                         form.form_result = form_result
 
-                if form_result.has_payed or \
+                if form_result.has_paid or \
                         (attending and activity.price.lower()
                             in ["gratis", "free", "0"]):
                     activity.info = _("Your registration has been completed.")\

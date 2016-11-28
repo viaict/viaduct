@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-11-24 15:40+0100\n"
+"POT-Creation-Date: 2016-11-28 23:10+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -328,6 +328,9 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
+msgid "Date unknown"
+msgstr ""
+
 msgid "Deeltijd"
 msgstr ""
 
@@ -407,6 +410,9 @@ msgid "Edit course"
 msgstr ""
 
 msgid "Edit education"
+msgstr ""
+
+msgid "Edit examination"
 msgstr ""
 
 msgid "Edit news item"
@@ -526,6 +532,9 @@ msgstr ""
 msgid "Examination successfully uploaded."
 msgstr ""
 
+msgid "Examination type"
+msgstr ""
+
 msgid "Examinations"
 msgstr ""
 
@@ -583,7 +592,7 @@ msgstr ""
 msgid "Groups"
 msgstr ""
 
-msgid "Has payed"
+msgid "Has paid"
 msgstr ""
 
 #, python-format
@@ -776,6 +785,9 @@ msgstr ""
 msgid "No contests found"
 msgstr ""
 
+msgid "No course given"
+msgstr ""
+
 msgid "No description supplied"
 msgstr ""
 
@@ -785,10 +797,13 @@ msgstr ""
 msgid "No education degree specified"
 msgstr ""
 
-msgid "No education given."
+msgid "No education given"
 msgstr ""
 
 msgid "No education name specified"
+msgstr ""
+
+msgid "No examination kind given"
 msgstr ""
 
 msgid "No examination uploaded."
@@ -846,9 +861,6 @@ msgid "Not a valid email."
 msgstr ""
 
 msgid "Not found!"
-msgstr ""
-
-msgid "Not given"
 msgstr ""
 
 msgid "Old answers preserved."
@@ -1606,6 +1618,9 @@ msgstr ""
 #~ msgid "Your email and student id appear to be incorrect."
 #~ msgstr ""
 
-#~ msgid "Your payment has status: %sstatus"
+#~ msgid "No education given."
+#~ msgstr ""
+
+#~ msgid "Not given"
 #~ msgstr ""
 

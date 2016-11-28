@@ -19,7 +19,7 @@
         </thead>
         <tbody>
             {% for submission in submissions %}
-            {%- if submission['userid'] == user -%}
+            {%- if submission['team_id'] == team -%}
             <tr>
                 <td>{{ submission.timestr }}</td>
                 <td>{{ submission.team }}</td>

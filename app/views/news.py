@@ -66,9 +66,7 @@ def edit(news_id=None):
         return abort(403)
 
     if news_id:
-        news_item = News.query.get(news_id)
-        if not news_item:
-            return abort(404)
+        news_item = News.query.get_or_404(news_id)
     else:
         news_item = News()
 
@@ -108,7 +106,7 @@ def view(news_id=None):
         flash(_('This news item does not exist'), 'danger')
         return redirect(url_for('news.list'))
 
-    news = News.query.get(news_id) or abort(404)
+    news = News.query.get_or_404(news_id)
 
     return render_template('news/view_single.htm', news=news)
 
@@ -123,8 +121,7 @@ def delete(news_id=None):
         flash(_('This news item does not exist'), 'danger')
         return redirect(url_for('news.list'))
 
-    news = News.query.get(news_id) or abort(404)
-
+    news = News.query.get_or_404(news_id)
     db.session.delete(news)
     db.session.commit()
 

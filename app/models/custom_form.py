@@ -6,7 +6,7 @@ from app.models.page import PageRevision, Page
 from app.utils.google import send_email
 from app.utils.page import PageAPI
 
-from flask_login import current_user
+from flask_login import current_user, url_for
 
 from collections import OrderedDict
 from datetime import datetime
@@ -52,9 +52,9 @@ class CustomForm(db.Model, BaseEntity):
             'label': 'Inschrijfdatum',
             'export': lambda r: r.created,
             'on_by_default': False,
-        }), ('has_payed', {
+        }), ('has_paid', {
             'label': 'Heeft betaald',
-            'export': lambda r: r.has_payed,
+            'export': lambda r: r.has_paid,
             'on_by_default': True,
         }), ('form', {
             'label': 'Form resultaat',
@@ -163,12 +163,12 @@ class CustomForm(db.Model, BaseEntity):
             .order_by(cls.modified.desc()))  # noqa
 
     @staticmethod
-    def update_payment(transaction_id, payed):
+    def update_payment(transaction_id, paid):
         transaction = (Transaction.query
                        .filter(Transaction.id == transaction_id)
                        .first())
         if transaction.form_result:
-            transaction.form_result.has_payed = payed
+            transaction.form_result.has_paid = paid
             db.session.commit()
 
 
@@ -178,7 +178,7 @@ class CustomFormResult(db.Model, BaseEntity):
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     form_id = db.Column(db.Integer, db.ForeignKey('custom_form.id'))
     data = db.Column(db.String(4096))
-    has_payed = db.Column(db.Boolean)
+    has_paid = db.Column(db.Boolean)
 
     owner = db.relationship('User', backref=db.backref('custom_form_results',
                                                        lazy='dynamic'))
@@ -186,20 +186,22 @@ class CustomFormResult(db.Model, BaseEntity):
                            backref=db.backref('custom_form_results',
                                               lazy='dynamic'))
 
-    def __init__(self, owner_id=None, form_id=None, data="", has_payed=False,
+    def __init__(self, owner_id=None, form_id=None, data="", has_paid=False,
                  price=0.0):
         self.owner_id = owner_id
         self.form_id = form_id
         self.data = data
-        self.has_payed = has_payed
+        self.has_paid = has_paid
         self.price = price
         self.notify_followers()
 
     def __repr__(self):
-        return "<FormResult owner:%s has_payed:%s>" % (self.owner.first_name,
-                                                       self.has_payed)
+        return "<FormResult owner:%s has_paid:%s>" % (self.owner.first_name,
+                                                      self.has_paid)
 
     def notify_followers(self):
+        form_url = url_for('custom_form.view_single', form_id=self.form_id,
+                           _external=True)
         followers = CustomFormFollower.query\
             .filter(CustomFormFollower.form_id == self.form_id)
         for follower in followers:
@@ -208,8 +210,7 @@ class CustomFormResult(db.Model, BaseEntity):
                        email_template='email/form.html',
                        sender='via',
                        user=follower.owner,
-                       form_id=self.form_id)
-        return
+                       form_url=form_url)
 
 
 class CustomFormFollower(db.Model, BaseEntity):

@@ -81,7 +81,7 @@ def update_user(user, subscribe=False):
         "Achternaam": user.last_name,
         "Studie": user.education.name if user.education else "Other",
         "Studienummer": user.student_id,
-        "Lid": "Ja" if user.has_payed else "Nee",
+        "Lid": "Ja" if user.has_paid else "Nee",
         "Alumnus": "Ja" if user.alumnus else "Nee",
         "VVV": "Ja" if user.favourer else "Nee",
         "Bedrijfsinformatie": "Ja" if user.receive_information else "Nee",

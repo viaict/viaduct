@@ -64,7 +64,7 @@ def view_single(form_id=None):
             'id': entry.id,
             'owner': entry.owner,
             'data': data,
-            'has_payed': entry.has_payed,
+            'has_paid': entry.has_paid,
             'time': time
         })
 
@@ -139,8 +139,6 @@ def create(form_id=None):
     if form_id:
         custom_form = CustomForm.query.get_or_404(form_id)
         prev_max = custom_form.max_attendants
-        if not custom_form:
-            abort(404)
     else:
         custom_form = CustomForm()
 
@@ -262,6 +260,7 @@ def submit(form_id=-1):
     custom_form = CustomForm.query.get(form_id)
     if not custom_form:
         return "error", 404
+
     if not custom_form.submittable_by(current_user):
         return "error", 403
 
@@ -312,7 +311,7 @@ def submit(form_id=-1):
         else:
             copernica_data = {
                 "Naam": custom_form.name,
-                "Betaald": result.has_payed,
+                "Betaald": result.has_paid,
                 "Bedrag": custom_form.price,
                 "viaductID": form_id,
                 "Reserve": "Ja" if response is "reserve" else "Nee",
@@ -361,9 +360,7 @@ def archive(form_id, page_nr=1):
     if not ModuleAPI.can_write('custom_form') or current_user.is_anonymous:
         return abort(403)
 
-    form = CustomForm.query.get(form_id)
-    if not form:
-        return abort(404)
+    form = CustomForm.query.get_or_404(form_id)
 
     form.archived = True
     db.session.commit()
@@ -380,9 +377,7 @@ def unarchive(form_id, page_nr=1):
     if not ModuleAPI.can_write('custom_form') or current_user.is_anonymous:
         return abort(403)
 
-    form = CustomForm.query.get(form_id)
-    if not form:
-        return abort(404)
+    form = CustomForm.query.get_or_404(form_id)
 
     form.archived = False
     db.session.commit()
@@ -392,8 +387,8 @@ def unarchive(form_id, page_nr=1):
     return redirect(url_for('custom_form.view', page_nr=page_nr))
 
 
-@blueprint.route('/has_payed/<int:submit_id>', methods=['POST'])
-def has_payed(submit_id=None):
+@blueprint.route('/has_paid/<int:submit_id>', methods=['POST'])
+def has_paid(submit_id=None):
     response = "success"
 
     if not ModuleAPI.can_write('custom_form') or current_user.is_anonymous:
@@ -407,17 +402,17 @@ def has_payed(submit_id=None):
     if not submission:
         response = "Error, submission could not be found"
 
-    # Adjust the "has_payed"
-    if submission.has_payed:
-        submission.has_payed = False
+    # Adjust the "has_paid"
+    if submission.has_paid:
+        submission.has_paid = False
     else:
-        submission.has_payed = True
+        submission.has_paid = True
 
     db.session.add(submission)
     db.session.commit()
 
     copernica_data = {
-        "Betaald": "Ja" if submission.has_payed else "Nee",
+        "Betaald": "Ja" if submission.has_paid else "Nee",
     }
 
     copernica.update_subprofile(copernica.SUBPROFILE_ACTIVITY,

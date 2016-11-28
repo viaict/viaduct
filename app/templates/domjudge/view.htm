@@ -93,7 +93,8 @@
                 </td>
                 <td>
                     {%- set team_info = teams[team['team']] -%}
-                    <strong>{{ team_info['name'] }}</strong>
+                    {%- if link -%}<strong><a href="submissions/{{team_info['id']}}">{{ team_info['name'] }}</a></strong>
+                    {%- else %}<strong>{{ team_info['name'] }}</strong>{% endif -%}
                     {%- if team_info['affiliation'] -%}
                     <p>{{ team_info['affiliation'] }}</p>
                     {%- endif -%}

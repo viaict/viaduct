@@ -45,7 +45,7 @@ def nominate():
     if not can_nominate():
         return redirect(url_for('elections.main'))
 
-    if current_user.is_anonymous or not current_user.has_payed:
+    if current_user.is_anonymous or not current_user.has_paid:
         return abort(403)
 
     nominated_ids = [n.nominee.id for n in current_user.nominations.all()]
@@ -73,7 +73,7 @@ def submit_nomination():
     if current_user.is_anonymous:
         return jsonify(error='Je moet ingelogd zijn om een docent te '
                        'nomineren'), 403
-    if not current_user.has_payed:
+    if not current_user.has_paid:
         return jsonify(error='Je moet betaald lid zijn om een docent te '
                        'nomineren'), 403
 
@@ -99,7 +99,7 @@ def remove_nomination():
     if not can_nominate():
         return jsonify(error='Het nomineren is gesloten')
 
-    if current_user.is_anonymous or not current_user.has_payed:
+    if current_user.is_anonymous or not current_user.has_paid:
         return jsonify(error='Je hebt hier helemaal niks te zoeken'), 403
 
     nomination = Nomination.query.get(request.form.get('id'))
@@ -118,7 +118,7 @@ def vote():
     if not can_vote():
         return redirect(url_for('elections.main'))
 
-    if current_user.is_anonymous or not current_user.has_payed:
+    if current_user.is_anonymous or not current_user.has_paid:
         return abort(403)
 
     nominees = Nominee.query.filter(Nominee.valid == True)\
@@ -141,7 +141,7 @@ def submit_vote():
 
     if current_user.is_anonymous:
         return jsonify(error='Je moet ingelogd zijn om te stemmen'), 403
-    if not current_user.has_payed:
+    if not current_user.has_paid:
         return jsonify(error='Je moet betaald lid zijn om te stemmen'), 403
 
     nominee_id = request.form.get('nominee_id')
