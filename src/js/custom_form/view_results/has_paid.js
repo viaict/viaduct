@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    "use strict";
     $(".has_paid").click(function() {
         $.post("/forms/has_paid/" + this.id);
 
