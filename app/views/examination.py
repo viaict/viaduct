@@ -16,7 +16,7 @@ from app.forms.examination import EditForm
 from app.utils.forms import flash_form_errors
 from app.utils import serialize_sqla
 
-from app.models.examination import Examination, test_types, test_type_default
+from app.models.examination import Examination, test_types
 from app.models.course import Course
 from app.models.education import Education
 
@@ -290,7 +290,6 @@ def view_examination(page_nr=1):
             if exam.date:
                 date_ratio = fuzz.partial_ratio(
                     search_lower, exam.date.strftime(DATE_FORMAT))
-
 
             if comment_ratio > 75 or course_ratio > 75 \
                     or education_ratio > 75 or date_ratio > 75:
