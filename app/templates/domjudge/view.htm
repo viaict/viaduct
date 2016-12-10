@@ -28,6 +28,12 @@
             <i class="glyphicon glyphicon-pencil" style="margin-right: 5px"></i>
             <span class="hidden-xs">{{ _('Submissions') }}</span>
         </a>
+        {%- if link -%}
+        <a href="{{ url_for('domjudge.contest_submissions_view_all', contest_id=contest['id']) }}"
+            class="btn btn-primary">
+            <span class="hidden-xs">{{ _('All submissions') }}</span>
+        </a>
+        {%- endif -%}
         {%- if use_pagination -%}
         <a class="btn btn-warning {% if page == 1 %}disabled{% endif %}" href="{{ url_for('domjudge.contest_view', contest_id=contest_id, page=(page-1) ) }}">
             {{ _('Previous') }}
