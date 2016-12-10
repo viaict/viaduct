@@ -30,19 +30,26 @@
         </a>
         {%- if link -%}
         <a href="{{ url_for('domjudge.contest_submissions_view_all', contest_id=contest['id']) }}"
-            class="btn btn-primary">
+            class="btn btn-success">
+            <i class="glyphicon glyphicon-list-alt" style="margin-right: 5px"></i>
             <span class="hidden-xs">{{ _('All submissions') }}</span>
         </a>
         {%- endif -%}
         {%- if use_pagination -%}
         <a class="btn btn-warning {% if page == 1 %}disabled{% endif %}" href="{{ url_for('domjudge.contest_view', contest_id=contest_id, page=(page-1) ) }}">
-            {{ _('Previous') }}
+            <span class="visible-xs">
+                <i class="glyphicon glyphicon-arrow-left " style="margin-right: 5px"></i>
+            </span>
+            <span class="hidden-xs">{{ _('Previous') }}</span>
         </a>
         <a class="btn btn-warning disabled">
             {{ page }}
         </a>
         <a class="btn btn-warning {% if page == amount_pages %}disabled{% endif %}" href="{{ url_for('domjudge.contest_view', contest_id=contest_id, page=(page+1) ) }}">
-            {{ _('Next') }}
+            <span class="visible-xs">
+                <i class="glyphicon glyphicon-arrow-right " style="margin-right: 5px"></i>
+            </span>
+            <span class="hidden-xs">{{ _('Next') }}</span>
         </a>
         {%- endif -%}
     </div>
@@ -58,6 +65,14 @@
                 <td>{{ contest['end'] }}</td>
             </tr>
         </table>
+    </div>
+</div>
+<div class="row" style="margin-top: 30px">
+    <div class="col-md-12">
+    <label>{{ _('Explanation of score:') }}</label> <br />
+    {{ _('The contents of a cell has either the format \'M/N\' on accepted solutions or \'M\' otherwise,
+    where M is the amount attempts, N is the the total time taken (in minutes)') }}
+    </p>
     </div>
 </div>
 {%- if not fullscreen -%}
