@@ -143,7 +143,6 @@ def contest_view(contest_id, page):
         problem['class'] = 'domjudge-problem-solved-first-cell'
 
     teams_dict = get_teams()
-    print(teams_dict)
     if teams_dict is None:
         return render_template('domjudge/view.htm', fullscreen=fullscreen)
 
