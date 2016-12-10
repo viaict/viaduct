@@ -30,7 +30,7 @@ class User(db.Model, UserMixin, BaseEntity):
     __tablename__ = 'user'
 
     prints = ('id', 'email', 'password', 'first_name', 'last_name',
-              'student_id', 'receive_information')
+              'student_id')
 
     email = db.Column(db.String(200), unique=True)
     password = db.Column(db.String(60))
@@ -65,7 +65,7 @@ class User(db.Model, UserMixin, BaseEntity):
 
     def __init__(self, email=None, password=None, first_name=None,
                  last_name=None, student_id=None, education_id=None,
-                 birth_date=None, study_start=None, receive_information=None):
+                 birth_date=None, study_start=None):
         if not email:
             self.id = 0
 
@@ -78,7 +78,6 @@ class User(db.Model, UserMixin, BaseEntity):
 
         self.birth_date = birth_date
         self.study_start = study_start
-        self.receive_information = receive_information
 
     def __setattr__(self, name, value):
         """

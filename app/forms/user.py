@@ -52,8 +52,6 @@ class BaseUserForm(Form):
         InputRequired(message=_('No studentnumber submitted'))]
     )
     education_id = SelectField(_('Education'), coerce=int)
-    receive_information = BooleanField(_('Would you like to recieve '
-                                         'information from companies?'))
 
     address = StringField(_('Address'))
     zip = StringField(_('Zip code'))
