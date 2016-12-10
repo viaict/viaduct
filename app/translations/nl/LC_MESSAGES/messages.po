@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-11-12 15:54+0100\n"
+"POT-Creation-Date: 2016-12-10 13:06+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -1323,6 +1323,9 @@ msgstr "Oort"
 msgid "View"
 msgstr "Weergeven"
 
+msgid "View submission"
+msgstr "Bekijk inzending"
+
 msgid "Visible for members only"
 msgstr "Alleen zichtbaar voor leden"
 
@@ -1414,18 +1417,8 @@ msgstr "Je moet ingelogd zijn om je te registeren voor een activiteit."
 msgid "You need to be logged in to set a permanent language."
 msgstr "Je moet ingelogd zijn om een permanente taal in te stellen."
 
-msgid ""
-"Your account does not seem to have a student id configured, contact the "
-"board at bestuur@svia.nl."
-msgstr ""
-"Je account heeft geen studentnummer geconfigureerd, neem contact op met "
-"het bestuur door te mailen naar bestuur@svia.nl"
-
 msgid "Your account has been disabled, you are not allowed to log in"
 msgstr "Je account is gedeactiveerd, je mag niet inloggen"
-
-msgid "Your email and student id appear to be incorrect."
-msgstr "Je email en studentnummer lijken incorrect."
 
 msgid "Your password has been updated."
 msgstr "Uw wachtwoord is geüpdatet."
@@ -1598,4 +1591,7 @@ msgstr ""
 
 #~ msgid "Not given"
 #~ msgstr "Niet opgegeven"
+
+#~ msgid "Your email and student id appear to be incorrect."
+#~ msgstr "Je email en studentnummer lijken incorrect."
 

@@ -93,8 +93,16 @@
                 </td>
                 <td>
                     {%- set team_info = teams[team['team']] -%}
-                    {%- if link -%}<strong><a href="submissions/{{team_info['id']}}">{{ team_info['name'] }}</a></strong>
-                    {%- else %}<strong>{{ team_info['name'] }}</strong>{% endif -%}
+                    {%- if link -%}
+                    <strong>
+                        <a href="{{ url_for('domjudge.contest_submissions_view',
+                            contest_id=contest.id, team_id=team_info['id']) }}">
+                            {{ team_info['name'] }}
+                        </a>
+                    </strong>
+                    {%- else -%}
+                    <strong>{{ team_info['name'] }}</strong>
+                    {%- endif -%}
                     {%- if team_info['affiliation'] -%}
                     <p>{{ team_info['affiliation'] }}</p>
                     {%- endif -%}

@@ -143,6 +143,7 @@ def contest_view(contest_id, page):
         problem['class'] = 'domjudge-problem-solved-first-cell'
 
     teams_dict = get_teams()
+    print(teams_dict)
     if teams_dict is None:
         return render_template('domjudge/view.htm', fullscreen=fullscreen)
 
@@ -336,9 +337,34 @@ def contest_problem_submit(contest_id, problem_id):
 @blueprint.route('/contest/<int:contest_id>/submissions/')
 @login_required
 def contest_submissions_view(contest_id, team_id=None):
+    # Use DOMjudge team id so the pages also support non via_user teams
+
+    if team_id and not ModuleAPI.can_write('domjudge'):
+        return abort(403)
+
+    session = DOMjudgeAPI.login(DOMJUDGE_ADMIN_USERNAME,
+                                DOMJUDGE_ADMIN_PASSWORD)
+
+    if not team_id:
+        team_id = DOMjudgeAPI.get_teamid_for_userid(
+            current_user.id, 3, session)
+
+    return render_contest_submissions_view(contest_id, team_id=team_id)
+
+
+@blueprint.route('/contest/<int:contest_id>/submissions/all/')
+@login_required
+def contest_submissions_view_all(contest_id, team_id=None):
+    return render_contest_submissions_view(contest_id, view_all=True)
+
+
+def render_contest_submissions_view(contest_id, view_all=False, team_id=None):
+    admin = ModuleAPI.can_write('domjudge')
+
+    if view_all and not admin:
+        return abort(403)
+
     r = DOMjudgeAPI.request_get('api/contests')
-    if not r:
-        return render_template('domjudge/submissions.htm')
 
     if str(contest_id) not in r.json():
         flash(_("Contest does not exist."), 'danger')
@@ -348,15 +374,6 @@ def contest_submissions_view(contest_id, team_id=None):
 
     session = DOMjudgeAPI.login(DOMJUDGE_ADMIN_USERNAME,
                                 DOMJUDGE_ADMIN_PASSWORD)
-
-    if team_id and ModuleAPI.can_write('domjudge'):
-        team = team_id
-    else:
-        team = DOMjudgeAPI.get_teamid_for_userid(current_user.id, 3, session)
-
-    # Admin login failed, just give a 'request failed' error flash
-    if not session:
-        return render_template('domjudge/submissions.htm')
 
     r = DOMjudgeAPI.request_get('api/submissions?cid={}'.format(contest_id),
                                 session=session)
@@ -436,6 +453,7 @@ def contest_submissions_view(contest_id, team_id=None):
 
     submissions.sort(key=lambda x: x['time'], reverse=True)
 
-    print(team)
-    return render_template('domjudge/submissions.htm', team=team,
-                           contest=contest, submissions=submissions)
+    return render_template('domjudge/submissions.htm', view_all=view_all,
+                           team=team_id, domjudge_url=DOMJUDGE_URL,
+                           admin=admin, contest=contest,
+                           submissions=submissions)
