@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2016-11-12 15:54+0100\n"
+"POT-Creation-Date: 2016-12-10 17:24+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -69,6 +69,9 @@ msgstr "Alle contacten"
 
 msgid "All locations"
 msgstr "Alle locaties"
+
+msgid "All submissions"
+msgstr "Alle inzendingen"
 
 msgid "All vacancies"
 msgstr "Alle vacatures"
@@ -536,6 +539,9 @@ msgstr "Tentamens"
 
 msgid "Exams"
 msgstr "Tentamens"
+
+msgid "Explanation of score:"
+msgstr "Uitleg van de score:"
 
 msgid "Export users"
 msgstr "Gebruikers exporteren"
@@ -1182,6 +1188,16 @@ msgstr ""
 msgid "The committee has been saved."
 msgstr "De commissie is opgeslagen."
 
+msgid ""
+"The contents of a cell has either the format 'M/N' on accepted solutions "
+"or 'M' otherwise,\n"
+"    where M is the amount attempts, N is the the total time taken (in "
+"minutes)"
+msgstr ""
+"Het formaat van een cel is ofwel 'M/N' voor geaccepteerde oplossingen of "
+"'M' voor niet-geaccepteerde oplossingen, waarbij M het aantal pogingen is"
+" en N de totale tijd vanaf het begin is (in minuten)"
+
 msgid "The given title does not match the page title."
 msgstr ""
 
@@ -1323,6 +1339,9 @@ msgstr "Oort"
 msgid "View"
 msgstr "Weergeven"
 
+msgid "View submission"
+msgstr "Bekijk inzending"
+
 msgid "Visible for members only"
 msgstr "Alleen zichtbaar voor leden"
 
@@ -1414,18 +1433,8 @@ msgstr "Je moet ingelogd zijn om je te registeren voor een activiteit."
 msgid "You need to be logged in to set a permanent language."
 msgstr "Je moet ingelogd zijn om een permanente taal in te stellen."
 
-msgid ""
-"Your account does not seem to have a student id configured, contact the "
-"board at bestuur@svia.nl."
-msgstr ""
-"Je account heeft geen studentnummer geconfigureerd, neem contact op met "
-"het bestuur door te mailen naar bestuur@svia.nl"
-
 msgid "Your account has been disabled, you are not allowed to log in"
 msgstr "Je account is gedeactiveerd, je mag niet inloggen"
-
-msgid "Your email and student id appear to be incorrect."
-msgstr "Je email en studentnummer lijken incorrect."
 
 msgid "Your password has been updated."
 msgstr "Uw wachtwoord is geüpdatet."
@@ -1598,4 +1607,7 @@ msgstr ""
 
 #~ msgid "Not given"
 #~ msgstr "Niet opgegeven"
+
+#~ msgid "Your email and student id appear to be incorrect."
+#~ msgstr "Je email en studentnummer lijken incorrect."
 

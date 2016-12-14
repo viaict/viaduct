@@ -9,6 +9,7 @@ from flask_sqlalchemy import SQLAlchemy, Model, \
 from flask_cache import Cache
 from flask_debugtoolbar import DebugToolbarExtension
 
+from raven.contrib.flask import Sentry
 from speaklater import _LazyString
 from sqlalchemy import MetaData
 from markdown import markdown
@@ -17,7 +18,7 @@ import json
 from flask_jsglue import JSGlue
 
 
-version = 'v2.7.2.1'
+version = 'v2.7.3.0'
 
 
 def static_url(url):
@@ -64,6 +65,9 @@ app.config['CACHE_DIR'] = 'cache'
 
 cache = Cache(app)
 toolbar = DebugToolbarExtension(app)
+sentry = Sentry(
+    app,
+    dsn='https://a3bfb506a0ae4db592f0972007d0680a:0835a69630954040b46a6b3aff777ccd@sentry.io/122119')  # noqa
 
 
 # Set up Flask Babel, which is used for internationalisation support.
