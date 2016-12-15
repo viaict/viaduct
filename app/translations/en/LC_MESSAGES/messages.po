@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-11-28 23:10+0100\n"
+"POT-Creation-Date: 2016-12-15 11:39+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -72,6 +72,9 @@ msgid "All contacts"
 msgstr ""
 
 msgid "All locations"
+msgstr ""
+
+msgid "All submissions"
 msgstr ""
 
 msgid "All vacancies"
@@ -539,6 +542,9 @@ msgid "Examinations"
 msgstr ""
 
 msgid "Exams"
+msgstr ""
+
+msgid "Explanation of score:"
 msgstr ""
 
 msgid "Export users"
@@ -1182,6 +1188,13 @@ msgstr ""
 msgid "The committee has been saved."
 msgstr ""
 
+msgid ""
+"The contents of a cell has either the format 'M/N' on accepted solutions "
+"or 'M' otherwise,\n"
+"    where M is the amount attempts, N is the the total time taken (in "
+"minutes)"
+msgstr ""
+
 msgid "The given title does not match the page title."
 msgstr ""
 
@@ -1312,6 +1325,9 @@ msgid "Venue"
 msgstr ""
 
 msgid "View"
+msgstr ""
+
+msgid "View submission"
 msgstr ""
 
 msgid "Visible for members only"
