@@ -29,7 +29,7 @@ class TransactionCallbackMixin(BaseEntity):
 
     @declared_attr
     def transaction_id(self):
-        return db.Column(db.Integer, db.ForeignKey('mollie_transaction.id'))
+        return db.Column(db.Integer, db.ForeignKey('transaction.id'))
 
     def payment_complete():
         """Implement in subclasses that handle wares."""
