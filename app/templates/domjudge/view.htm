@@ -36,7 +36,8 @@
         </a>
         {%- endif -%}
         {%- if use_pagination -%}
-        <a class="btn btn-warning {% if page == 1 %}disabled{% endif %}" href="{{ url_for('domjudge.contest_view', contest_id=contest_id, page=(page-1) ) }}">
+        <a class="btn btn-warning {% if page == 1 %}disabled{% endif %}"
+           href="{% if page ==1%}#{% else %}{{ url_for('domjudge.contest_view', contest_id=contest_id, page=(page-1) ) }}{% endif %}">
             <span class="visible-xs">
                 <i class="glyphicon glyphicon-arrow-left " style="margin-right: 5px"></i>
             </span>
@@ -45,7 +46,8 @@
         <a class="btn btn-warning disabled">
             {{ page }}
         </a>
-        <a class="btn btn-warning {% if page == amount_pages %}disabled{% endif %}" href="{{ url_for('domjudge.contest_view', contest_id=contest_id, page=(page+1) ) }}">
+        <a class="btn btn-warning {% if page >= amount_pages %}disabled{% endif %}"
+            href="{% if page >= amount_pages %}#{% else %}{{ url_for('domjudge.contest_view', contest_id=contest_id, page=(page+1) ) }}{% endif %}">
             <span class="visible-xs">
                 <i class="glyphicon glyphicon-arrow-right " style="margin-right: 5px"></i>
             </span>
