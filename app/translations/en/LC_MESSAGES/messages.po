@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-12-10 17:24+0100\n"
+"POT-Creation-Date: 2016-12-15 11:39+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -27,6 +27,10 @@ msgid "A user with this e-mail address already exist."
 msgstr ""
 
 msgid "A user with this e-mail address already exists"
+msgstr ""
+
+#, python-format
+msgid "API call failed: %s"
 msgstr ""
 
 msgid ""
@@ -99,6 +103,10 @@ msgid "An image with this name already exists."
 msgstr ""
 
 msgid "Answers"
+msgstr ""
+
+#, python-format
+msgid "Api call failed: %s"
 msgstr ""
 
 msgid "Archive date"
@@ -888,6 +896,10 @@ msgstr ""
 msgid "Pay (+€0,29 transaction costs)"
 msgstr ""
 
+#, fuzzy
+msgid "Payment successfully received."
+msgstr "."
+
 msgid "Pending"
 msgstr ""
 
@@ -1412,6 +1424,16 @@ msgstr ""
 msgid "Your password has been updated."
 msgstr ""
 
+msgid "Your payment has not been completed."
+msgstr ""
+
+#, python-format
+msgid "Your payment has status: %s"
+msgstr ""
+
+msgid "Your payment is being processed."
+msgstr ""
+
 msgid "Your registration has been completed."
 msgstr ""
 
@@ -1498,9 +1520,6 @@ msgstr ""
 #~ msgid "Geen"
 #~ msgstr ""
 
-#~ msgid ""
-#~ msgstr ""
-
 #~ msgid "Language changed to"
 #~ msgstr ""
 
@@ -1525,9 +1544,6 @@ msgstr ""
 #~ msgid "Minimal password length %d"
 #~ msgstr ""
 
-#~ msgid "Title"
-#~ msgstr ""
-
 #~ msgid "Kind"
 #~ msgstr ""
 
@@ -1535,12 +1551,6 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "You have to reload the page for the result"
-#~ msgstr ""
-
-#~ msgid "No education name specified"
-#~ msgstr ""
-
-#~ msgid "No education degree specified"
 #~ msgstr ""
 
 #~ msgid "Geen opleidinggraad opgegeven"
@@ -1562,42 +1572,6 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Contest does not exist"
-#~ msgstr ""
-
-#~ msgid "Compiler Error"
-#~ msgstr ""
-
-#~ msgid "Correct"
-#~ msgstr ""
-
-#~ msgid "Judging"
-#~ msgstr ""
-
-#~ msgid "No Output"
-#~ msgstr ""
-
-#~ msgid "Pending"
-#~ msgstr ""
-
-#~ msgid "Run Error"
-#~ msgstr ""
-
-#~ msgid "Timelimit"
-#~ msgstr ""
-
-#~ msgid "Too late"
-#~ msgstr ""
-
-#~ msgid "Wrong Answer"
-#~ msgstr ""
-
-#~ msgid "Problem"
-#~ msgstr ""
-
-#~ msgid "Result"
-#~ msgstr ""
-
-#~ msgid "Time"
 #~ msgstr ""
 
 #~ msgid "Total time"
@@ -1645,9 +1619,6 @@ msgstr ""
 #~ msgid "The page you tried to delete does not exist"
 #~ msgstr ""
 
-#~ msgid "Your registration has been completed."
-#~ msgstr ""
-
 #~ msgid "The number of registrations at this moment is"
 #~ msgstr ""
 
@@ -1660,11 +1631,12 @@ msgstr ""
 #~ msgid "Could not process REMOVE task: "
 #~ msgstr ""
 
+#~ msgid "Your email and student id appear to be incorrect."
+#~ msgstr ""
+
 #~ msgid "No education given."
 #~ msgstr ""
 
 #~ msgid "Not given"
 #~ msgstr ""
 
-#~ msgid "Your email and student id appear to be incorrect."
-#~ msgstr ""
