@@ -44,7 +44,7 @@ class TransactionMembership(db.Model, TransactionCallbackMixin):
                                   backref=db.backref('callback_membership'))
 
     def payment_complete(self):
-        self.user.has_payed = True
+        self.user.has_paid = True
         db.session.commit()
 
 
@@ -59,5 +59,6 @@ class TransactionActivity(db.Model, TransactionCallbackMixin):
                                   backref=db.backref('callback_activity'))
 
     def payment_complete(self):
-        self.custom_form_result.has_payed = True
+        self.custom_form_result.has_paid = True
+        print(self.custom_form_result)
         db.session.commit()
