@@ -48,6 +48,16 @@ def get_teams():
     return teams_dict
 
 
+def darken_color(c):
+    """
+    Small utility function to compute the color for the border of
+    the problem name badges.
+    """
+    r, g, b = int(c[1:3], 16), int(c[3:5], 16), int(c[5:], 16)
+    return '#{:0>6s}'.format(
+        hex(int(r * 0.5) << 16 | int(g * 0.5) << 8 | int(b * 0.5))[2:])
+
+
 @blueprint.route('/')
 def contest_list():
     r = DOMjudgeAPI.request_get('api/contests')
@@ -146,7 +156,8 @@ def contest_view(contest_id, page):
     if teams_dict is None:
         return render_template('domjudge/view.htm', fullscreen=fullscreen)
 
-    return render_template('domjudge/view.htm', links=link,
+    return render_template('domjudge/view.htm',
+                           links=link, darken_color=darken_color,
                            teams=teams_dict, **locals())
 
 
@@ -174,7 +185,8 @@ def contest_problems_list(contest_id):
     problems.sort(key=lambda x: x['label'])
 
     return render_template('domjudge/problem/list.htm',
-                           contest=contest, problems=problems)
+                           contest=contest, problems=problems,
+                           darken_color=darken_color)
 
 
 @blueprint.route('/problem/<int:problem_id>/')
@@ -193,6 +205,7 @@ def contest_problem_submit(contest_id, problem_id):
     r = DOMjudgeAPI.request_get('api/languages')
     if not r:
         return render_template('domjudge/problem/submit.htm',
+                               darken_color=darken_color,
                                contest_id=contest_id)
 
     languages = r.json()
@@ -215,6 +228,7 @@ def contest_problem_submit(contest_id, problem_id):
     r = DOMjudgeAPI.request_get('api/problems?cid={}'.format(contest_id))
     if not r:
         return render_template('domjudge/problem/submit.htm',
+                               darken_color=darken_color,
                                contest_id=contest_id)
 
     problem = None
@@ -226,6 +240,7 @@ def contest_problem_submit(contest_id, problem_id):
     if not problem:
         flash(_('Problem does not exist.'), 'danger')
         return redirect(url_for('domjudge.contest_problems_list',
+                                darken_color=darken_color,
                                 contest_id=contest_id))
 
     if request.method == 'POST':
@@ -256,6 +271,7 @@ def contest_problem_submit(contest_id, problem_id):
                                    problem=problem,
                                    contest=contest,
                                    contest_id=contest_id,
+                                   darken_color=darken_color,
                                    languages=languages)
 
         dom_username = "via_user_{}".format(current_user.id)
@@ -273,6 +289,7 @@ def contest_problem_submit(contest_id, problem_id):
             # Admin login failed, just give a 'request failed' error flash
             if not session:
                 return render_template('domjudge/problem/submit.htm',
+                                       darken_color=darken_color,
                                        contest_id=contest_id)
 
             # Get the id of the 'viaduct_user' team category
@@ -281,6 +298,7 @@ def contest_problem_submit(contest_id, problem_id):
                 flash('Team category viaduct_user not found on DOMjudge.',
                       'danger')
                 return render_template('domjudge/problem/submit.htm',
+                                       darken_color=darken_color,
                                        contest_id=contest_id)
 
             # Check if the team already exists. This should normally
@@ -294,6 +312,7 @@ def contest_problem_submit(contest_id, problem_id):
                                          viaduct_user_cat_id, session)
                 if not r:
                     return render_template('domjudge/problem/submit.htm',
+                                           darken_color=darken_color,
                                            contest_id=contest_id)
 
                 # Get the id of the newly created team
@@ -308,6 +327,7 @@ def contest_problem_submit(contest_id, problem_id):
 
             if not r:
                 return render_template('domjudge/problem/submit.htm',
+                                       darken_color=darken_color,
                                        contest_id=contest_id)
 
             DOMjudgeAPI.logout(session)
@@ -317,18 +337,22 @@ def contest_problem_submit(contest_id, problem_id):
 
             if not session:
                 return render_template('domjudge/problem/submit.htm',
+                                       darken_color=darken_color,
                                        contest_id=contest_id)
 
         r = DOMjudgeAPI.submit(contest['shortname'], language,
                                problem['shortname'], file, session)
         if not r:
             return render_template('domjudge/problem/submit.htm',
+                                   darken_color=darken_color,
                                    contest_id=contest_id)
         flash(_("Submission successful."))
         return redirect(url_for('domjudge.contest_view',
+                                darken_color=darken_color,
                                 contest_id=contest_id))
     else:
         return render_template('domjudge/problem/submit.htm',
+                               darken_color=darken_color,
                                **locals())
 
 
@@ -436,7 +460,7 @@ def render_contest_submissions_view(contest_id, view_all=False, team_id=None):
 
         s['team_id'] = teams[s['team']]['id']
         s['team'] = teams[s['team']]['name']
-        s['problem'] = problems[s['problem']]['name']
+        s['problem'] = problems[s['problem']]
         s['language'] = languages[s['language']]['name']
         s_id = s['id']
 
