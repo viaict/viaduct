@@ -32,7 +32,12 @@
                     </a>
                 </td>
                 <td class='{{ submission.result_class }}'>{{ submission.result }}</td>
-                <td>{{ submission.problem }}</td>
+                <td>
+                    <a href="{{ url_for('domjudge.contest_problem_view',
+                        problem_id=submission.problem.id) }}">
+                        {{ submission.problem.name }}
+                    </a>
+                </td>
                 <td>{{ submission.language }}</td>
                 {%- if admin -%}
                 <td>

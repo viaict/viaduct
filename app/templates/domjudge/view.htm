@@ -26,7 +26,7 @@
         <a href="{{ url_for('domjudge.contest_submissions_view', contest_id=contest['id']) }}"
             class="btn btn-primary">
             <i class="glyphicon glyphicon-pencil" style="margin-right: 5px"></i>
-            <span class="hidden-xs">{{ _('Submissions') }}</span>
+            <span class="hidden-xs">{{ _('My submissions') }}</span>
         </a>
         {%- if link -%}
         <a href="{{ url_for('domjudge.contest_submissions_view_all', contest_id=contest['id']) }}"
@@ -36,7 +36,8 @@
         </a>
         {%- endif -%}
         {%- if use_pagination -%}
-        <a class="btn btn-warning {% if page == 1 %}disabled{% endif %}" href="{{ url_for('domjudge.contest_view', contest_id=contest_id, page=(page-1) ) }}">
+        <a class="btn btn-warning {% if page == 1 %}disabled{% endif %}"
+           href="{% if page ==1%}#{% else %}{{ url_for('domjudge.contest_view', contest_id=contest_id, page=(page-1) ) }}{% endif %}">
             <span class="visible-xs">
                 <i class="glyphicon glyphicon-arrow-left " style="margin-right: 5px"></i>
             </span>
@@ -45,7 +46,8 @@
         <a class="btn btn-warning disabled">
             {{ page }}
         </a>
-        <a class="btn btn-warning {% if page == amount_pages %}disabled{% endif %}" href="{{ url_for('domjudge.contest_view', contest_id=contest_id, page=(page+1) ) }}">
+        <a class="btn btn-warning {% if page >= amount_pages %}disabled{% endif %}"
+            href="{% if page >= amount_pages %}#{% else %}{{ url_for('domjudge.contest_view', contest_id=contest_id, page=(page+1) ) }}{% endif %}">
             <span class="visible-xs">
                 <i class="glyphicon glyphicon-arrow-right " style="margin-right: 5px"></i>
             </span>
@@ -95,7 +97,7 @@
                     <a href="{{ url_for('domjudge.contest_problem_submit',
                         contest_id=contest['id'], problem_id=problem['id']) }}"
                         class="domjudge-problem-title"
-                        style="background-color: {{ problem['color'] }}">
+                        style="background-color: {{ problem['color'] }}; border-color: {{ darken_color(problem['color']) }}; ">
                         <i class="glyphicon glyphicon-flag" style="margin-right: 5px"></i>
                         <span class="domjudge-problem-title-name">{{- problem['shortname'] -}}</span>
                     </a>

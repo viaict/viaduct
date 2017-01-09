@@ -69,3 +69,4 @@ class DefaultConfig:
     DOMJUDGE_ADMIN_USERNAME = "viaduct"
     DOMJUDGE_ADMIN_PASSWORD = ""
     DOMJUDGE_URL = "http://localhost:80/"
+    DOMJUDGE_USER_PASSWORD = ""
