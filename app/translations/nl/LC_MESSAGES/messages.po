@@ -106,7 +106,7 @@ msgstr "Er bestaat al een plaatje met deze naam."
 msgid "Answers"
 msgstr "Antwoorden"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Api call failed: %s"
 msgstr "API call mislukt: %s"
 
@@ -1454,9 +1454,8 @@ msgstr "Je account is gedeactiveerd, je mag niet inloggen"
 msgid "Your password has been updated."
 msgstr "Uw wachtwoord is geüpdatet."
 
-#, fuzzy
 msgid "Your payment has not been completed."
-msgstr "Je inschrijving is voltooid."
+msgstr "Je betaling is nog niet voltooid."
 
 #, python-format
 msgid "Your payment has status: %s"

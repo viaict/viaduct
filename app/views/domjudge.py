@@ -18,6 +18,7 @@ import math
 DOMJUDGE_URL = app.config['DOMJUDGE_URL']
 DOMJUDGE_ADMIN_USERNAME = app.config['DOMJUDGE_ADMIN_USERNAME']
 DOMJUDGE_ADMIN_PASSWORD = app.config['DOMJUDGE_ADMIN_PASSWORD']
+DOMJUDGE_USER_PASSWORD = app.config['DOMJUDGE_USER_PASSWORD']
 
 DT_FORMAT = app.config['DT_FORMAT']
 VIA_USER_TEAM = re.compile(r"^via_user_team_(\d+)$")
@@ -50,6 +51,8 @@ def get_teams():
 
 def darken_color(c):
     """
+    Darken a color.
+
     Small utility function to compute the color for the border of
     the problem name badges.
     """
@@ -276,8 +279,8 @@ def contest_problem_submit(contest_id, problem_id):
 
         dom_username = "via_user_{}".format(current_user.id)
         dom_teamname = 'via_user_team_{}'.format(current_user.id)
-        dom_password = current_user.password
-        session = DOMjudgeAPI.login(dom_username, dom_password,
+
+        session = DOMjudgeAPI.login(dom_username, DOMJUDGE_USER_PASSWORD,
                                     flash_on_error=False)
 
         # Check if user exists
@@ -321,7 +324,7 @@ def contest_problem_submit(contest_id, problem_id):
 
             # Create the user
             r = DOMjudgeAPI.add_user(
-                dom_username, dom_password,
+                dom_username, DOMJUDGE_USER_PASSWORD,
                 current_user.first_name + " " + current_user.last_name,
                 current_user.email, user_team_id, session)
 
@@ -333,7 +336,7 @@ def contest_problem_submit(contest_id, problem_id):
             DOMjudgeAPI.logout(session)
 
             # Login as the new user
-            session = DOMjudgeAPI.login(dom_username, dom_password)
+            session = DOMjudgeAPI.login(dom_username, DOMJUDGE_USER_PASSWORD)
 
             if not session:
                 return render_template('domjudge/problem/submit.htm',
