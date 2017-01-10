@@ -70,12 +70,14 @@
     </div>
 </div>
 <div class="row" style="margin-top: 30px">
+{%- if not embed -%}
     <div class="col-md-12">
     <label>{{ _('Explanation of score:') }}</label> <br />
     {{ _('The contents of a cell has either the format \'M/N\' on accepted solutions or \'M\' otherwise,
     where M is the amount attempts, N is the the total time taken (in minutes)') }}
     </p>
     </div>
+{%- endif -%}
 </div>
 {%- if not fullscreen -%}
 <h2>{{ _('Scoreboard') }}:</h2>
@@ -107,7 +109,8 @@
             </tr>
         </thead>
         <tbody>
-        {% for team in scoreboard %}
+        {% for i, team in enumerate(scoreboard) %}
+        {%- if not embed or i < 10 -%}
             <tr>
                 <td>
                     {% if embed -%}<strong>{%- endif %}
@@ -146,6 +149,7 @@
                 {% endfor %}
                 {%- endif -%}
             </tr>
+        {%- endif -%}
         {% endfor %}
         </tbody>
     </table>
