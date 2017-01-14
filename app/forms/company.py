@@ -34,7 +34,9 @@ class NewCompanyForm(Form):
     file = FileField(_('Logo'))
     website = StringField(_('Website'))
     contact_name = StringField(_('Contact Name'))
-    contact_email = StringField(_('Contact Email'))
+    contact_email = StringField(
+        _('Contact email'), validators=[InputRequired(
+            message=_("Contact email is required."))])
     contact_phone_nr = StringField(_('Contact Phone'))
     location_city = StringField(_('City'))
     location_country = StringField(_('Country'))

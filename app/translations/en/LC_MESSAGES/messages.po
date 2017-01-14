@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-01-14 17:01+0100\n"
+"POT-Creation-Date: 2017-01-14 17:29+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -210,9 +210,6 @@ msgstr ""
 msgid "Compiler Error"
 msgstr ""
 
-msgid "Contact Email"
-msgstr ""
-
 msgid "Contact Name"
 msgstr ""
 
@@ -222,8 +219,14 @@ msgstr ""
 msgid "Contact details"
 msgstr ""
 
+msgid "Contact email"
+msgstr ""
+
 #, python-format
 msgid "Contact email \"%s\" is already in use."
+msgstr ""
+
+msgid "Contact email is required."
 msgstr ""
 
 #, python-format
@@ -907,7 +910,6 @@ msgstr ""
 msgid "Pay (+€0,29 transaction costs)"
 msgstr ""
 
-#, fuzzy
 msgid "Payment successfully received."
 msgstr "."
 
@@ -1239,7 +1241,9 @@ msgstr ""
 msgid "There is something wrong with the reset link."
 msgstr ""
 
-msgid "These details are taken from your account."
+msgid ""
+"These details are taken from your account. You can change them on your "
+"account page."
 msgstr ""
 
 msgid ""
@@ -1649,5 +1653,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Not given"
+#~ msgstr ""
+
+#~ msgid "Contact Email"
 #~ msgstr ""
 
