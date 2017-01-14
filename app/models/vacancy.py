@@ -32,3 +32,8 @@ class Vacancy(db.Model, BaseEntity):
         self.workload = workload
         self.date = datetime.now()
         self.company = company
+
+    @property
+    def expired(self):
+        return self.start_date < datetime.date(datetime.utcnow()) and \
+            self.end_date < datetime.date(datetime.utcnow())
