@@ -20,9 +20,6 @@ def file_allowed_extension(filename, image=False):
 
     split = filename.rsplit('.', 1)
 
-    if '.' in split[0]:
-        return False
-
     if image and split[1].lower() not in ALLOWED_IMAGE_EXTENSIONS:
         return False
 

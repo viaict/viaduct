@@ -79,18 +79,25 @@ def add():
             error = False
 
             exam_path = file_upload(file, UPLOAD_FOLDER)
+            answers_path = None
             if file:
                 if not exam_path:
                     flash(_('Wrong format examination.'), 'danger')
                     error = True
 
-                answer_path = file_upload(answers, UPLOAD_FOLDER)
-                if answer_path is False:
+                if answers:
+                    answers_file = file_upload(answers, UPLOAD_FOLDER)
+                    if answers_file is False:
+                        flash(_('No answers uploaded.'), 'warning')
+                        answers_file = None
+                    elif answers_file is None:
+                        flash(_('Wrong format answers.'), 'danger')
+                        error = True
+                    else:
+                        answers_path = answers_file.name
+                else:
                     flash(_('No answers uploaded.'), 'warning')
-                    answer_path = None
-                elif answer_path is None:
-                    flash(_('Wrong format answers.'), 'danger')
-                    error = True
+                    answers_path = None
             else:
                 flash(_('No examination uploaded.'), 'danger')
                 error = True
@@ -116,7 +123,7 @@ def add():
 
             exam = Examination(exam_path.name, form.date.data,
                                form.comment.data, form.course.data,
-                               form.education.data, answers=answer_path.name,
+                               form.education.data, answers=answers_path,
                                test_type=form.test_type.data)
             db.session.add(exam)
             db.session.commit()
