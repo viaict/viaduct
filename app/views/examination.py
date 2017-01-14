@@ -139,7 +139,7 @@ def add():
                 error = True
 
             if error:
-                dummy_exam = Examination(filename, form.date.data, 
+                dummy_exam = Examination(filename, form.date.data,
                                          form.comment.data, form.course.data,
                                          form.education.data,
                                          test_type=form.test_type.data)
