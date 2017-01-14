@@ -168,7 +168,8 @@ def edit(exam_id):
             exam.test_type = form.test_type.data
 
             if file.filename:
-                file_remove(exam.path, UPLOAD_FOLDER)
+                if exam.path:
+                    file_remove(exam.path, UPLOAD_FOLDER)
                 new_path = file_upload(file, UPLOAD_FOLDER)
                 if new_path:
                     exam.path = new_path.name
@@ -177,7 +178,8 @@ def edit(exam_id):
                             'uploading the file.'), 'danger')
 
             if answers.filename:
-                file_remove(answers.path, UPLOAD_FOLDER)
+                if exam.answer_path:
+                    file_remove(exam.answer_path, UPLOAD_FOLDER)
                 new_answer_path = file_upload(answers, UPLOAD_FOLDER)
                 if new_answer_path:
                     exam.answer_path = new_answer_path.name

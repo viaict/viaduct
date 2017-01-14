@@ -12,6 +12,8 @@ ALLOWED_IMAGE_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 UPLOAD_DIR = app.config['UPLOAD_DIR']
 
 
+# Check if the extension is allowed. Set image to True to allow only image-
+# extensions
 def file_allowed_extension(filename, image=False):
     if filename == '':
         return False
@@ -30,6 +32,9 @@ def file_allowed_extension(filename, image=False):
     return True
 
 
+# Upload a file. You can specify a directory, whether or not the file is
+# supposed to be an image (for extension checking) and if the name needs to
+# be forced to be a certain value (used for avatars)
 def file_upload(f, directory=None, image=False, forced_name=None):
     if forced_name:
         filename = forced_name
@@ -59,7 +64,7 @@ def file_upload(f, directory=None, image=False, forced_name=None):
     while file_exists(filename, directory):
         filename = '%s_%d.%s' % (filename_noext, counter, filename_ext)
         counter += 1
-    
+
     # Save file.
     path = os.path.join(os.getcwd(), directory, filename)
     f.save(path)
@@ -81,6 +86,7 @@ def file_upload(f, directory=None, image=False, forced_name=None):
     return new_file
 
 
+# Check if a file exists in a certain optional directory
 def file_exists(filename, directory=None):
     if not directory:
         directory = UPLOAD_DIR
@@ -88,6 +94,7 @@ def file_exists(filename, directory=None):
     return os.path.exists(path)
 
 
+# Check if a file meeting a certain pattern exists in an optional directory
 def file_exists_pattern(pattern, directory=None):
     if not directory:
         directory = UPLOAD_DIR
@@ -97,6 +104,7 @@ def file_exists_pattern(pattern, directory=None):
     return False
 
 
+# Split filename in filename and extension
 def file_split_name(filename):
     filename_split = filename.rsplit('.', 1)
     filename_noext = filename_split[0]
@@ -105,6 +113,7 @@ def file_split_name(filename):
     return filename_noext, filename_ext
 
 
+# Find files in de databases for a certain query
 def file_search(query):
     files = File.query.all()
     filenames = [f.name for f in files]
@@ -113,12 +122,12 @@ def file_search(query):
     return results
 
 
+# Remove a file from an optional directory and from the database if this
+# directory is the default directory
 def file_remove(filename, directory=None):
-    print ("try to remove " + directory + filename)
     if not directory:
         directory = UPLOAD_DIR
     try:
-
         os.remove(os.path.join(directory, filename))
 
         # Remove from database if necessary
@@ -131,6 +140,8 @@ def file_remove(filename, directory=None):
         print(_('Cannot remove file, it does not exist') + ": " + filename)
 
 
+# Remove files meeting a certain pattern from a directory and from the
+# database if we want to remove them from the default directory
 def file_remove_pattern(pattern, directory=None):
     if not directory:
         directory = UPLOAD_DIR
