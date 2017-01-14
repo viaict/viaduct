@@ -14,6 +14,8 @@ class DefaultConfig:
     CSRF_ENABLED = True
     CSRF_SESSION_KEY = ''  # Change this for real use
 
+    DEBUG_TB_INTERCEPT_REDIRECTS = False
+
     RECAPTCHA_USE_SSL = False
     RECAPTCHA_PUBLIC_KEY = ''   # Change this for real use
     RECAPTCHA_PRIVATE_KEY = ''  # Change this for real use
@@ -67,3 +69,4 @@ class DefaultConfig:
     DOMJUDGE_ADMIN_USERNAME = "viaduct"
     DOMJUDGE_ADMIN_PASSWORD = ""
     DOMJUDGE_URL = "http://localhost:80/"
+    DOMJUDGE_USER_PASSWORD = ""

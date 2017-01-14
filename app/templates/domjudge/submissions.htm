@@ -15,17 +15,37 @@
                 <th>{{ _('Result') }}</th>
                 <th>{{ _('Problem') }}</th>
                 <th>{{ _('Language') }}</th>
+                {%- if admin -%}
+                <th></th>
+                {%- endif -%}
             </tr>
         </thead>
         <tbody>
             {% for submission in submissions %}
-            {%- if submission['userid'] == user -%}
+            {%- if view_all or submission['team_id'] == team -%}
             <tr>
                 <td>{{ submission.timestr }}</td>
-                <td>{{ submission.team }}</td>
+                <td>
+                    <a href="{{ url_for('domjudge.contest_submissions_view',
+                    contest_id=contest.id, team_id=submission['team_id']) }}">
+                        {{ submission.team }}
+                    </a>
+                </td>
                 <td class='{{ submission.result_class }}'>{{ submission.result }}</td>
-                <td>{{ submission.problem }}</td>
+                <td>
+                    <a href="{{ url_for('domjudge.contest_problem_view',
+                        problem_id=submission.problem.id) }}">
+                        {{ submission.problem.name }}
+                    </a>
+                </td>
                 <td>{{ submission.language }}</td>
+                {%- if admin -%}
+                <td>
+                    <a href="{{ domjudge_url }}/jury/submission.php?id={{ submission['id'] }}" target="_blank">
+                        {{ _('View submission') }}
+                    </a>
+                </td>
+                {%- endif -%}
             </tr>
             {%- endif -%}
             {% endfor %}

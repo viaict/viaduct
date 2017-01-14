@@ -3,7 +3,7 @@ import datetime
 from app.models import BaseEntity
 
 
-class Password_ticket(db.Model, BaseEntity):
+class PasswordTicket(db.Model, BaseEntity):
     __tablename__ = 'password_ticket'
 
     user = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

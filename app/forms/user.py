@@ -100,7 +100,7 @@ class EditUserForm(BaseUserForm):
     id = IntegerField('ID')
     password = PasswordField(_('Password'))
     repeat_password = PasswordField(_('Repeat password'))
-    has_payed = BooleanField(_('Has payed'))
+    has_paid = BooleanField(_('Has paid'))
     honorary_member = BooleanField(_('Honorary member'))
     favourer = BooleanField(_('Favourer'))
     disabled = BooleanField(_('Disabled'))
@@ -185,10 +185,8 @@ class RequestPassword(Form):
     email = StringField(_('E-mail adress'), validators=[
         InputRequired(message=_('No e-mail adress submitted')),
         Email(message=_('Invalid e-mail adress submitted'))])
-    student_id = StringField(
-        _('Student ID'), validators=[
-            InputRequired(message=_('No studentnumber submitted'))]
-    )
+    recaptcha = RecaptchaField(
+        validators=[Recaptcha(message='Check Recaptcha')])
 
 
 class ResetPassword(Form):

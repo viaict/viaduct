@@ -26,17 +26,32 @@
         <a href="{{ url_for('domjudge.contest_submissions_view', contest_id=contest['id']) }}"
             class="btn btn-primary">
             <i class="glyphicon glyphicon-pencil" style="margin-right: 5px"></i>
-            <span class="hidden-xs">{{ _('Submissions') }}</span>
+            <span class="hidden-xs">{{ _('My submissions') }}</span>
         </a>
+        {%- if link -%}
+        <a href="{{ url_for('domjudge.contest_submissions_view_all', contest_id=contest['id']) }}"
+            class="btn btn-success">
+            <i class="glyphicon glyphicon-list-alt" style="margin-right: 5px"></i>
+            <span class="hidden-xs">{{ _('All submissions') }}</span>
+        </a>
+        {%- endif -%}
         {%- if use_pagination -%}
-        <a class="btn btn-warning {% if page == 1 %}disabled{% endif %}" href="{{ url_for('domjudge.contest_view', contest_id=contest_id, page=(page-1) ) }}">
-            {{ _('Previous') }}
+        <a class="btn btn-warning {% if page == 1 %}disabled{% endif %}"
+           href="{% if page ==1%}#{% else %}{{ url_for('domjudge.contest_view', contest_id=contest_id, page=(page-1) ) }}{% endif %}">
+            <span class="visible-xs">
+                <i class="glyphicon glyphicon-arrow-left " style="margin-right: 5px"></i>
+            </span>
+            <span class="hidden-xs">{{ _('Previous') }}</span>
         </a>
         <a class="btn btn-warning disabled">
             {{ page }}
         </a>
-        <a class="btn btn-warning {% if page == amount_pages %}disabled{% endif %}" href="{{ url_for('domjudge.contest_view', contest_id=contest_id, page=(page+1) ) }}">
-            {{ _('Next') }}
+        <a class="btn btn-warning {% if page >= amount_pages %}disabled{% endif %}"
+            href="{% if page >= amount_pages %}#{% else %}{{ url_for('domjudge.contest_view', contest_id=contest_id, page=(page+1) ) }}{% endif %}">
+            <span class="visible-xs">
+                <i class="glyphicon glyphicon-arrow-right " style="margin-right: 5px"></i>
+            </span>
+            <span class="hidden-xs">{{ _('Next') }}</span>
         </a>
         {%- endif -%}
     </div>
@@ -53,6 +68,16 @@
             </tr>
         </table>
     </div>
+</div>
+<div class="row" style="margin-top: 30px">
+{%- if not embed -%}
+    <div class="col-md-12">
+    <label>{{ _('Explanation of score:') }}</label> <br />
+    {{ _('The contents of a cell has either the format \'M/N\' on accepted solutions or \'M\' otherwise,
+    where M is the amount attempts, N is the the total time taken (in minutes)') }}
+    </p>
+    </div>
+{%- endif -%}
 </div>
 {%- if not fullscreen -%}
 <h2>{{ _('Scoreboard') }}:</h2>
@@ -74,7 +99,7 @@
                     <a href="{{ url_for('domjudge.contest_problem_submit',
                         contest_id=contest['id'], problem_id=problem['id']) }}"
                         class="domjudge-problem-title"
-                        style="background-color: {{ problem['color'] }}">
+                        style="background-color: {{ problem['color'] }}; border-color: {{ darken_color(problem['color']) }}; ">
                         <i class="glyphicon glyphicon-flag" style="margin-right: 5px"></i>
                         <span class="domjudge-problem-title-name">{{- problem['shortname'] -}}</span>
                     </a>
@@ -84,7 +109,8 @@
             </tr>
         </thead>
         <tbody>
-        {% for team in scoreboard %}
+        {% for i, team in enumerate(scoreboard) %}
+        {%- if not embed or i < 10 -%}
             <tr>
                 <td>
                     {% if embed -%}<strong>{%- endif %}
@@ -93,7 +119,16 @@
                 </td>
                 <td>
                     {%- set team_info = teams[team['team']] -%}
+                    {%- if link -%}
+                    <strong>
+                        <a href="{{ url_for('domjudge.contest_submissions_view',
+                            contest_id=contest.id, team_id=team_info['id']) }}">
+                            {{ team_info['name'] }}
+                        </a>
+                    </strong>
+                    {%- else -%}
                     <strong>{{ team_info['name'] }}</strong>
+                    {%- endif -%}
                     {%- if team_info['affiliation'] -%}
                     <p>{{ team_info['affiliation'] }}</p>
                     {%- endif -%}
@@ -114,6 +149,7 @@
                 {% endfor %}
                 {%- endif -%}
             </tr>
+        {%- endif -%}
         {% endfor %}
         </tbody>
     </table>

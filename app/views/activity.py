@@ -15,10 +15,10 @@ from app.utils.forms import flash_form_errors
 from app.forms.activity import ActivityForm, CreateForm
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult
-from app.models.mollie import Transaction
+from app.models.mollie import Transaction, TransactionActivity
 from app.utils.module import ModuleAPI
-from app.utils.mollie import MollieAPI
 from app.utils.file import file_upload, file_remove
+from app.utils import mollie
 from app.models.education import Education
 from app.forms import SignInForm
 
@@ -27,6 +27,7 @@ from app.utils.serialize_sqla import serialize_sqla
 blueprint = Blueprint('activity', __name__, url_prefix='/activities')
 
 PICTURE_DIR = 'app/static/activity_pictures/'
+
 
 # Overview of activities
 @blueprint.route('/', methods=['GET', 'POST'])
@@ -78,10 +79,7 @@ def get_activity(activity_id=0):
     if not ModuleAPI.can_read('activity'):
         return abort(403)
 
-    activity = Activity.query.get(activity_id)
-
-    if not activity:
-        return abort(404)
+    activity = Activity.query.get_or_404(activity_id)
 
     form = ActivityForm(request.form, current_user)
 
@@ -98,7 +96,7 @@ def get_activity(activity_id=0):
 
         # Check if the current user has already entered data in this custom
         # form
-        if current_user.is_authenticated and current_user.has_payed:
+        if current_user.is_authenticated and current_user.has_paid:
             all_form_results = CustomFormResult.query \
                 .filter(CustomFormResult.form_id == activity.form_id)
             form_result = all_form_results \
@@ -109,13 +107,13 @@ def get_activity(activity_id=0):
 
             if form_result:
                 activity.form_data = form_result.data.replace('"', "'")
-                if not form_result.has_payed and attending:
+                if not form_result.has_paid and attending:
                     # There is 50 cents administration fee
                     if form_result.form.price - 0.5 > 0:
                         form.show_pay_button = True
                         form.form_result = form_result
 
-                if form_result.has_payed or \
+                if form_result.has_paid or \
                         (attending and activity.price.lower()
                             in ["gratis", "free", "0"]):
                     activity.info = _("Your registration has been completed.")\
@@ -168,11 +166,7 @@ def create(activity_id=None):
 
     if request.method == 'POST':
 
-        print("TEST!@#$")
-
         if form.validate_on_submit():
-
-            print(activity.picture)
 
             act_picture = activity.picture
 
@@ -183,25 +177,16 @@ def create(activity_id=None):
             print (file.filename)
 
             if file.filename:
-
-                print ("hello")
                 image = file_upload(file, PICTURE_DIR, True)
 
                 if image:
-                    print("a")
                     picture = image.name
 
                 else:
-                    print("b")
                     picture = None
 
-                print("----------------")
-                print(act_picture)
-                print(len(act_picture))
-
                 # Remove old picture
-                if len(act_picture) > 0:
-                    print("test12345")
+                if act_picture:
                     file_remove(act_picture, PICTURE_DIR)
 
             elif not picture:
@@ -254,32 +239,40 @@ def create(activity_id=None):
 
 @blueprint.route('/transaction/<int:result_id>/', methods=['GET', 'POST'])
 def create_mollie_transaction(result_id):
-    form_result = CustomFormResult.query.filter(
-        CustomFormResult.id == result_id).first()
-    transaction = Transaction.query\
-        .filter(Transaction.form_result_id == form_result.id)\
-        .filter(Transaction.status == 'open').first()
-    if not transaction or not transaction.mollie_id:
-        description = form_result.form.transaction_description
-        description = "VIA transaction: " + description
-        print(description)
-        amount = form_result.form.price
-        user = form_result.owner
-        payment_url, transaction = MollieAPI.create_transaction(
-            amount, description, user=user, form_result=form_result)
-        if payment_url:
-            return redirect(payment_url)
-        else:
-            return render_template('mollie/success.htm', message=transaction)
-    else:
-        payment_url, message = MollieAPI.get_payment_url(
-            mollie_id=transaction.mollie_id)
-        if payment_url:
-            return redirect(payment_url)
-        else:
-            return render_template('mollie/success.htm', message=message)
 
-    return False
+    # Find the form_result we are trying to pay.
+    form_result = CustomFormResult.query.get_or_404(result_id)
+
+    # Search open transactions that are still waiting to be paid.
+    transaction = Transaction.query.join(TransactionActivity)\
+        .filter(TransactionActivity.custom_form_result_id == form_result.id)\
+        .filter(Transaction.status == 'open').first()
+
+    # If no such payment exist, create a new one.
+    if not transaction or not transaction.mollie_id:
+        callback = TransactionActivity()
+        callback.custom_form_result_id = result_id
+        db.session.add(callback)
+        db.session.commit()
+
+        description = form_result.form.transaction_description
+        description = "VIA Activity: " + description
+
+        payment_url, msg = mollie.create_transaction(
+            amount=form_result.form.price,
+            description=form_result.form.transaction_description,
+            user=form_result.owner,
+            callbacks=[callback]
+        )
+
+        return redirect(payment_url) if payment_url else \
+            render_template('mollie/success.htm', message=msg)
+    else:
+        payment, msg = mollie.check_transaction(transaction)
+        if payment.is_open():
+            return redirect(payment.get_payment_url())
+        else:
+            render_template('mollie/success.htm', message=msg)
 
 
 @blueprint.route('/export/', methods=['GET'])

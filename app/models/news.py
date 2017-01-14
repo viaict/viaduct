@@ -23,7 +23,7 @@ class News(db.Model, BaseEntity):
     archive_date = db.Column(db.Date)
 
     def __init__(self, nl_title='', nl_content='', en_title='', en_content='',
-                 user_id=None, archive_date=None, publish_date=date.today()):
+                 user_id=None, archive_date=None, publish_date=None):
 
         self.title = None
         self.content = None
@@ -34,7 +34,10 @@ class News(db.Model, BaseEntity):
 
         self.user_id = user_id
         self.archive_date = archive_date
-        self.publish_date = publish_date
+        if publish_date:
+            self.publish_date = publish_date
+        else:
+            self.publish_date = date.today()
 
     def get_short_content(self, characters):
         """Get a shortened version of the total post."""

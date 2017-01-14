@@ -15,7 +15,7 @@ blueprint = Blueprint('jira', __name__)
 
 @blueprint.route('/create-issue/', methods=['GET', 'POST'])
 def create_issue():
-    if current_user.is_anonymous or not current_user.has_payed:
+    if current_user.is_anonymous or not current_user.has_paid:
         abort(403)
 
     form = CreateIssueForm(request.form)

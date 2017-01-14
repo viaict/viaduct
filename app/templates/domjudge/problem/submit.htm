@@ -27,7 +27,9 @@
 <h1>{{ contest['name'] }}</h1>
 <legend id="domjudge-problem-head">
     <p class="domjudge-problem-badge"
-        style="background-color: {{ problem['color'] }}; margin-right: 20px;">
+        style="background-color: {{ problem['color'] }};
+        border-color: {{ darken_color(problem['color']) }};
+        margin-right: 20px;">
         <i class="glyphicon glyphicon-flag"></i>
     </p>
 {# TODO: clean this horrible hacky CSS mess #}

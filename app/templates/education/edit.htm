@@ -47,7 +47,7 @@
                         <a href="{% if 'origin' in session -%}
                             {{ session['origin'] }}
                         {% else -%}
-                           {{url_for('examination.upload_file')}}
+                           {{url_for('examination.add')}}
                         {% endif -%}" class='btn btn-primary'>
                             <i class="glyphicon glyphicon-arrow-left"></i> {{_('Back')}}
                         </a>

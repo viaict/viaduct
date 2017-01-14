@@ -1,0 +1,37 @@
+{% extends "content.htm" %}
+
+{% block content %}
+<div class="mainblock">
+    <h1>Mollie transactions</h1>
+
+    <table class="table">
+            {% for payment in payments: %}
+            <tr>
+                <td>{{ payment['createdDatetime']}}</td>
+                <td>{{ payment['id'] }}</td>
+                <td>{{ payment['status'] }}</td>
+                <td>{{ payment['description'] }} - <small>{{payment['details']['consumerName']}}</small></td>
+
+                <td>
+                    <a class="btn btn-default" data-container="body" data-toggle="popover" data-placement="bottom" data-content="<pre>{{payment['metadata']}}</pre>">
+                        Data
+                    </a>
+                </td>
+
+                <td>
+                    <a href="{{ url_for('mollie.check', mollie_id=payment.id) }}" class="btn btn-default">
+                        check status
+                    </a>
+            </tr>
+            {% endfor %}
+    </table>
+    <script>$('a').popover({"html":"true"});</script>
+    <style> div.popover { max-width: 550px; } </style>
+    <div class="btn-group">
+        {% if page > 0 %}
+            <a class="btn btn-default" href="{{ url_for('mollie.list', page=page-1) }}">Previous</a>
+        {% endif %}
+        <a class="btn btn-default" href="{{ url_for('mollie.list', page=page+1) }}">Next</a>
+    </div>
+</div>
+{% endblock %}

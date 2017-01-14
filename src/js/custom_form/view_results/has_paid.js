@@ -1,6 +1,7 @@
 $(document).ready(function() {
-    $(".has_payed").click(function() {
-        $.post("/forms/has_payed/" + this.id);
+    "use strict";
+    $(".has_paid").click(function() {
+        $.post("/forms/has_paid/" + this.id);
 
         // Adjust the money icon -> change it to "Ok" icon
         $(this).find('i')

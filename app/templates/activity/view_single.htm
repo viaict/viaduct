@@ -80,7 +80,6 @@
                                     </div>
                                 {% endif %}
 
-
                                 {% if activity.info %}
                                     <div class="alert alert-warning">
                                         {{ activity.info }}
@@ -118,7 +117,7 @@
                                         </div>
                                     {% endif %}
                                 </div>
-                                {% if current_user.has_payed %}
+                                {% if current_user.has_paid %}
                                     <button id="custom_form" class="btn btn-success">{{_('Send form')}}</button>
                                 {% endif %}
                             </form>

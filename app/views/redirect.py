@@ -62,10 +62,7 @@ def delete(redirect_id):
     if not ModuleAPI.can_write('redirect'):
         return abort(403)
 
-    redirection = Redirect.query.get(redirect_id)
-
-    if not redirection:
-        return abort(404)
+    redirection = Redirect.query.get_or_404(redirect_id)
 
     db.session.delete(redirection)
     db.session.commit()

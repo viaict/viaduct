@@ -49,7 +49,7 @@
         {% if is_admin %}
         <legend>{{_('Admin data')}}</legend>
         <div class="col-md-5">
-            {{render_checkbox(form.has_payed) }}
+            {{render_checkbox(form.has_paid) }}
             {{render_checkbox(form.honorary_member) }}
         </div>
         <div class="col-md-offset-2 col-md-5">
@@ -57,7 +57,7 @@
             {{render_checkbox(form.disabled) }}
         </div>
         {% endif %}
-        {% if user.has_payed %}
+        {% if user.has_paid %}
         <legend>{{_('I have finished studying')}}</legend>
         <div class="col-md-5">
             {{render_checkbox(form.alumnus) }}
