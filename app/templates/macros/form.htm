@@ -5,6 +5,14 @@
     </div>
 {% endmacro %}
 
+{% macro render_field_disabled(field) %}
+    <div class="form-group">
+        {{ field.label }}
+        {{ field(placeholder=field.label.text, class='form-control', disabled='') }}
+    </div>
+{% endmacro %}
+
+
 {% macro render_button(field, cls='btn btn-default') %}
     {{ field(class=cls) }}
 {% endmacro %}

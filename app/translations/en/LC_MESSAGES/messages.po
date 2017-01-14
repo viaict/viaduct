@@ -7,16 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-01-03 01:25+0100\n"
+"POT-Creation-Date: 2017-01-14 16:50+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language: en\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.4\n"
+"Generated-By: Babel 1.3\n"
 
 msgid "A description is required."
 msgstr ""
@@ -600,6 +599,10 @@ msgid "Groups"
 msgstr ""
 
 msgid "Has paid"
+msgstr ""
+
+#, python-format
+msgid "Het email adres %(email)s is bij ons niet bekend."
 msgstr ""
 
 #, python-format
@@ -1232,7 +1235,9 @@ msgstr ""
 msgid "There is something wrong with the reset link."
 msgstr ""
 
-msgid "These details are taken from your account."
+msgid ""
+"These details are taken from your account. You can change them on your "
+"account page."
 msgstr ""
 
 msgid ""
@@ -1642,5 +1647,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Not given"
+#~ msgstr ""
+
+#~ msgid "These details are taken from your account."
 #~ msgstr ""
 
