@@ -546,7 +546,7 @@ def add_education():
             title = form.title.data
             education = Education.query.filter(Education.name == title).first()
             if not education:
-                new_education = Education(1, title)
+                new_education = Education(title)
 
                 db.session.add(new_education)
                 db.session.commit()
@@ -643,48 +643,3 @@ def edit_education(education_id):
     return render_template('education/edit.htm', new=False,
                            form=form, redir=r, exam_count=exam_count,
                            education=education)
-
-
-@blueprint.route('/examination/api/course/', methods=['POST'])
-def examination_api_course_add():
-    if not ModuleAPI.can_write('examination', True):
-        return abort(403)
-
-    course_name = request.form.get('course_name', '')
-
-    if course_name == '':
-        return jsonify(error='Geen vaknaam opgegeven'), 500
-    if Course.query.filter(Course.name == course_name).first():
-        return jsonify(error=_('There is already a course with this name')), \
-            500
-
-    course = Course(course_name, '')
-    db.session.add(course)
-    db.session.commit()
-
-    courses = Course.query.order_by(Course.name).all()
-
-    return jsonify(course_id=course.id, courses=serialize_sqla(courses))
-
-
-@blueprint.route('/examination/api/education/', methods=['POST'])
-def examination_api_education_add():
-    if not ModuleAPI.can_write('examination', True):
-        return abort(403)
-
-    education_name = request.form.get('education_name', '')
-    degree_id = request.form.get('degree_id', '')
-
-    if education_name == '':
-        return jsonify(error=_('No education name specified')), 500
-    if degree_id == '':
-        return jsonify(error=_('No education degree specified')), 500
-
-    education = Education(degree_id, education_name)
-    db.session.add(education)
-    db.session.commit()
-
-    educations = Education.query.order_by(Education.name).all()
-
-    return jsonify(education_id=education.id,
-                   educations=serialize_sqla(educations))

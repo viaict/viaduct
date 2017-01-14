@@ -5,7 +5,7 @@ from flask import request
 from app import app, db
 from app.utils import Resource
 from app.utils.api import make_api_response
-from app.models import Degree, Education
+from app.models import Education
 
 
 class EducationAPI(Resource):
@@ -39,8 +39,7 @@ class EducationAPI(Resource):
     def post():
         data = request.get_json()
         schema = {'type': 'object',
-                  'properties': {'degree_id': {'type', 'string'},
-                                 'name': {'type': 'string'}}}
+                  'properties': {'name': {'type': 'string'}}}
 
         try:
             validictory.validate(data, schema)
@@ -48,15 +47,11 @@ class EducationAPI(Resource):
             return make_api_response(400,
                                      'Data does not correspond to scheme.')
 
-        if Degree.query.filter(Degree.id == data['degree_id']).count() == 0:
-            return make_api_response(400, 'No object has been associated with '
-                                     'the degree ID that has been specified.')
-
         if Education.query.filter(Education.name == data['name']).count() > 0:
             return make_api_response(400, 'There is already an object with '
                                      'the name that has been specified.')
 
-        education = Education(data['degree_id'], data['name'])
+        education = Education(data['name'])
         db.session.add(education)
         db.session.commit()
 
