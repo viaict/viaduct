@@ -1,3 +1,5 @@
+{% from "macros/custom_form.htm" import custom_form_select %}
+
 {% macro render_field(field) %}
     <div class="form-group">
         {{ field.label }}
@@ -122,6 +124,61 @@
         </span>
     </div>
 </div>
+{% endmacro %}
+
+{% macro render_custom_form_selecter(field) %}
+{{ field.label }}
+{{ custom_form_select(field.name, field.value, field.id) }}
+{% endmacro %}
+
+{% macro render_form(form, action_url, form_id='', form_class='', submit_id='', submit_text='') %}
+<form method="POST" action="{{ action_url }}" enctype="multipart/form-data" class="{{ form_class }}">
+    {{ form.csrf_token }}
+    {%- for f in form -%}
+        {#
+button, submit, checkbox, textarea, datefield, datetimefield_picker, datefield_picker, select, file, education_select, course_select, custom_form_select
+        #}
+
+
+        {%- if f.type == 'BooleanField' -%}
+            {{ render_checkbox(f) }}
+        {%- elif f.type == 'CustomFormSelectField' -%}
+            {{ render_custom_form_selecter(f) }}
+            <script src='{{static_url('/static/js/custom_form/loader.js')}}'></script>
+        {%- elif f.type == 'DateField' -%}
+            {{ render_datefield_picker(f) }}
+        {%- elif f.type == 'DateTimeField' -%}
+            {{ render_datetimefield_picker(f) }}
+        {%- elif f.type == 'DecimalField' -%}
+            {# TODO Create a separate macro #}
+            {{ render_field(f) }}
+        {%- elif f.type == 'FileField' -%}
+            {{ render_file(f) }}
+        {%- elif f.type == 'IntegerField' -%}
+            {# TODO Create a separate macro #}
+            {{ render_field(f) }}
+            <br />
+        {%- elif f.type == 'RadioField' -%}
+            {# TODO This does not work:
+            {{ render_field(f) }}
+            #}
+            RadioField NOT WORKING YET <br>
+        {%- elif f.type == 'SelectField' -%}
+            {{ render_select(f) }}
+        {%- elif f.type == 'SubmitField' -%}
+            {{ render_button(f) }}
+        {%- elif f.type == 'TextAreaField' -%}
+            {{ render_textarea(f) }}
+        {%- elif f.type != 'CSRFTokenField' -%}
+            {{ render_field(f) }}
+        {%- endif -%}
+    {%- endfor -%}
+    {%- if not submit_text or submit_text == '' -%}
+    {%- set submit_text = _('Submit') -%}
+    {%- endif -%}
+    {{ render_submit(submit_text) }}
+    {{ enable_select2() }}
+</form>
 {% endmacro %}
 
 {% macro enable_select2() %}
