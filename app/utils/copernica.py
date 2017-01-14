@@ -26,12 +26,59 @@ def copernica_enabled(f):
 
 
 @copernica_enabled
-def update_newsletter(user, subscribe=True):
-    """Update the newsletter preferences of the user."""
-    url = ("https://api.copernica.com/profile/" + str(user.copernica_id) +
+def update_mailinglist(mailinglist_user, subscribe=True):
+    """Update preferences of the user."""
+    url = ("https://api.copernica.com/profile/" +
+           str(mailinglist_user.copernica_user_id) +
            "/fields?access_token=" + API_TOKEN)
     data = {'Ingeschreven': 'Ja' if subscribe else "Nee"}
     requests.post(url, data)
+    return True
+
+
+@copernica_enabled
+def update_user(mailinglist_user, subscribe=False):
+    user = mailinglist_user.user  # shortcut to the user
+    data = {
+        "Emailadres": user.email,
+        "Voornaam": user.first_name,
+        "Achternaam": user.last_name,
+        "Studie": user.education.name if user.education else "Other",
+        "Studienummer": user.student_id,
+        "Lid": "Ja" if user.has_payed else "Nee",
+        "Alumnus": "Ja" if user.alumnus else "Nee",
+        "VVV": "Ja" if user.favourer else "Nee",
+        "Geboortedatum": (user.birth_date.strftime('%Y-%m-%d')
+                          if user.birth_date else "0000-00-00"),
+        "WebsiteID": user.id
+    }
+    if subscribe:
+        data["Ingeschreven"] = "Ja"
+    else:
+        data["Ingeschreven"] = "Nee"
+
+    if (not mailinglist_user.copernica_user_id or
+            mailinglist_user.copernica_user_id == 0):
+        url = ("https://api.copernica.com/database/" +
+               mailinglist_user.mailing_list.copernica_db_id +
+               "/profiles?access_token=" + API_TOKEN)
+        r = requests.post(url, data)
+
+        # Regex to extract the copernica_id from the Location URL
+        rx = re.compile('\/([0-9]+)\?')
+        mailinglist_user.copernica_user_id = re.search(rx,
+                                                       r.headers['Location'])\
+            .groups()[0]
+        db.session.add(mailinglist_user)
+        db.session.commit()
+    else:
+        url = ("https://api.copernica.com/database/" +
+               mailinglist_user.mailing_list.copernica_db_id +
+               "/profiles?fields[]=ID%3D%3D" +
+               str(mailinglist_user.copernica_user_id) +
+               "&access_token=" + API_TOKEN)
+        requests.put(url, data)
+    return True
 
 
 @copernica_enabled
@@ -44,6 +91,7 @@ def add_subprofile(subprofile, user_id, data):
     url = ("https://api.copernica.com/profile/" + str(user.copernica_id) +
            "/subprofiles/" + subprofile + "?access_token=" + API_TOKEN)
     requests.post(url, data)
+    return True
 
 
 @copernica_enabled
@@ -71,40 +119,3 @@ def update_subprofile(subprofile, user_id, entry_id, data):
         rv.append(requests.post(url, data))
 
     return rv
-
-
-@copernica_enabled
-def update_user(user, subscribe=False):
-    data = {
-        "Emailadres": user.email,
-        "Voornaam": user.first_name,
-        "Achternaam": user.last_name,
-        "Studie": user.education.name if user.education else "Other",
-        "Studienummer": user.student_id,
-        "Lid": "Ja" if user.has_payed else "Nee",
-        "Alumnus": "Ja" if user.alumnus else "Nee",
-        "VVV": "Ja" if user.favourer else "Nee",
-        "Bedrijfsinformatie": "Ja" if user.receive_information else "Nee",
-        "Geboortedatum": (user.birth_date.strftime('%Y-%m-%d')
-                          if user.birth_date else "0000-00-00"),
-        "WebsiteID": user.id
-    }
-    if subscribe:
-        data["Ingeschreven"] = "Ja"
-
-    if not user.copernica_id or user.copernica_id == 0:
-        url = ("https://api.copernica.com/database/" + DATABASE_ID +
-               "/profiles?access_token=" + API_TOKEN)
-        r = requests.post(url, data)
-
-        # Regex to extract the copernica_id from the Location URL
-        rx = re.compile('\/([0-9]+)\?')
-        user.copernica_id = re.search(rx, r.headers['Location']).groups()[0]
-        db.session.add(user)
-        db.session.commit()
-    else:
-        url = ("https://api.copernica.com/database/" + DATABASE_ID +
-               "/profiles?fields[]=ID%3D%3D" + str(user.copernica_id) +
-               "&access_token=" + API_TOKEN)
-        requests.put(url, data)
-    return True
