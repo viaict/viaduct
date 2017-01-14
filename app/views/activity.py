@@ -174,8 +174,6 @@ def create(activity_id=None):
 
             file = request.files['picture']
 
-            print (file.filename)
-
             if file.filename:
                 image = file_upload(file, PICTURE_DIR, True)
 

@@ -15,6 +15,7 @@ from app.forms import CourseForm, EducationForm
 from app.forms.examination import EditForm
 from app.utils.forms import flash_form_errors
 from app.utils import serialize_sqla
+from app.utils.file import file_upload, file_remove
 
 from app.models.examination import Examination, test_types
 from app.models.course import Course
@@ -22,14 +23,11 @@ from app.models.education import Education
 
 from app.utils.module import ModuleAPI
 
-from werkzeug import secure_filename
-
 from fuzzywuzzy import fuzz
 
 blueprint = Blueprint('examination', __name__)
 
 UPLOAD_FOLDER = app.config['EXAMINATION_UPLOAD_FOLDER']
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 REDIR_PAGES = {'view': 'examination.view_examination',
                'add': 'examination.add',
@@ -38,27 +36,6 @@ REDIR_PAGES = {'view': 'examination.view_examination',
                }
 
 DATE_FORMAT = app.config['DATE_FORMAT']
-
-
-def allowed_file(filename):
-    return '.' in filename and \
-        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-def file_exists(filename):
-    return os.path.exists(os.path.join(UPLOAD_FOLDER, filename))
-
-
-def create_unique_file(filename):
-    temp_filename = filename
-
-    i = 0
-    while file_exists(temp_filename):
-        split = filename.split('.')
-        split[0] = split[0] + "(" + str(i) + ")"
-        temp_filename = split[0] + "." + split[len(split) - 1]
-        i += 1
-    return temp_filename
 
 
 def get_education_id(education):
@@ -77,26 +54,6 @@ def get_course_id(course):
     if not course_object:
         return None
     return course_object.id
-
-
-def upload_file_real(file, old_path='1'):
-    if file and (file.filename is not ''):
-        if allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            filename = create_unique_file(filename)
-
-            if old_path != '1':
-                os.remove(os.path.join(UPLOAD_FOLDER, old_path))
-
-            fpath = os.path.join(UPLOAD_FOLDER, filename)
-            file.save(fpath)
-            os.chmod(fpath, 0o644)
-
-            return filename
-        else:
-            return None
-    else:
-        return False
 
 
 @blueprint.route('/examination/add/', methods=['GET', 'POST'])
@@ -121,13 +78,13 @@ def add():
 
             error = False
 
-            filename = upload_file_real(file)
+            exam_path = file_upload(file, UPLOAD_FOLDER)
             if file:
-                if not filename:
+                if not exam_path:
                     flash(_('Wrong format examination.'), 'danger')
                     error = True
 
-                answer_path = upload_file_real(answers)
+                answer_path = file_upload(answers, UPLOAD_FOLDER)
                 if answer_path is False:
                     flash(_('No answers uploaded.'), 'warning')
                     answer_path = None
@@ -139,8 +96,14 @@ def add():
                 error = True
 
             if error:
-                dummy_exam = Examination(filename, form.comment.data,
-                                         form.date.data, form.course.data,
+                # The upload has failed, but a dummy exam is created to
+                # re-populate the form with the data the user provided before
+
+                # Not the complete set of data is displayed again in the newly
+                # rendered form, the course and study are reset. Reported in
+                # Jira as VIA-1637 - DvE, 14-01-2017
+                dummy_exam = Examination(file.name, form.date.data,
+                                         form.comment.data, form.course.data,
                                          form.education.data,
                                          test_type=form.test_type.data)
 
@@ -151,9 +114,9 @@ def add():
                                        form=form,
                                        test_types=test_types, new_exam=False)
 
-            exam = Examination(filename, form.date.data,
+            exam = Examination(exam_path.name, form.date.data,
                                form.comment.data, form.course.data,
-                               form.education.data, answers=answer_path,
+                               form.education.data, answers=answer_path.name,
                                test_type=form.test_type.data)
             db.session.add(exam)
             db.session.commit()
@@ -204,23 +167,23 @@ def edit(exam_id):
             exam.education_id = form.education.data
             exam.test_type = form.test_type.data
 
-            new_path = upload_file_real(file, exam.path)
-            if new_path:
-                exam.path = new_path
-            elif new_path is None:
-                flash(_('Wrong format examination.'), 'danger')
+            if file.filename:
+                file_remove(exam.path, UPLOAD_FOLDER)
+                new_path = file_upload(file, UPLOAD_FOLDER)
+                if new_path:
+                    exam.path = new_path.name
+                else:
+                    flash(_('Wrong format examination or error ' +
+                            'uploading the file.'), 'danger')
 
-            if not new_path:
-                flash(_('Old examination preserved.'), 'info')
-
-            new_answer_path = upload_file_real(answers, exam.answer_path)
-            if new_answer_path:
-                exam.answer_path = new_answer_path
-            elif new_answer_path is None:
-                flash(_('Wrong format answers.'), 'danger')
-
-            if not new_answer_path:
-                flash(_('Old answers preserved.'), 'info')
+            if answers.filename:
+                file_remove(answers.path, UPLOAD_FOLDER)
+                new_answer_path = file_upload(answers, UPLOAD_FOLDER)
+                if new_answer_path:
+                    exam.answer_path = new_answer_path.name
+                else:
+                    flash(_('Wrong format answers or error ' +
+                            'uploading the file.'), 'danger')
 
             db.session.commit()
             flash(_('Examination succesfully changed.'), 'success')
