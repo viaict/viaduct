@@ -15,6 +15,7 @@ from sqlalchemy import MetaData
 from markdown import markdown
 import datetime
 import json
+import logging
 from flask_jsglue import JSGlue
 
 
@@ -168,3 +169,6 @@ from app.utils.template_filters import *  # noqa
 
 from app.models.user import AnonymousUser  # noqa
 login_manager.anonymous_user = AnonymousUser
+
+log = logging.getLogger('werkzeug')
+log.setLevel(app.config['LOG_LEVEL'])

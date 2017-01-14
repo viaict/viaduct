@@ -225,9 +225,15 @@ msgstr "Contact telefoonnummer"
 msgid "Contact details"
 msgstr "Contact gegevens"
 
+msgid "Contact email"
+msgstr "Contact email"
+
 #, python-format
 msgid "Contact email \"%s\" is already in use."
 msgstr "Contact email \" %s \" wordt al gebruikt."
+
+msgid "Contact email is required."
+msgstr "Contact email is vereist"
 
 #, python-format
 msgid "Contact name \"%s\" is already in use."

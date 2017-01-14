@@ -221,8 +221,14 @@ msgstr ""
 msgid "Contact details"
 msgstr ""
 
+msgid "Contact email"
+msgstr ""
+
 #, python-format
 msgid "Contact email \"%s\" is already in use."
+msgstr ""
+
+msgid "Contact email is required."
 msgstr ""
 
 #, python-format
@@ -903,7 +909,6 @@ msgstr ""
 msgid "Pay (+€0,29 transaction costs)"
 msgstr ""
 
-#, fuzzy
 msgid "Payment successfully received."
 msgstr "."
 
@@ -1648,7 +1653,3 @@ msgstr ""
 
 #~ msgid "Not given"
 #~ msgstr ""
-
-#~ msgid "These details are taken from your account."
-#~ msgstr ""
-

@@ -1,5 +1,6 @@
 import os
 from datetime import date
+import logging
 
 
 class DefaultConfig:
@@ -70,3 +71,6 @@ class DefaultConfig:
     DOMJUDGE_ADMIN_PASSWORD = ""
     DOMJUDGE_URL = "http://localhost:80/"
     DOMJUDGE_USER_PASSWORD = ""
+
+    # Log levels: CRITICAL, ERROR, WARNING, INFO, DEBUG, NOTSET
+    LOG_LEVEL = logging.NOTSET
