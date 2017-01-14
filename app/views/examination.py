@@ -371,7 +371,7 @@ def get_courses():
     return json.dumps({"data": courses_list})
 
 
-@blueprint.route('/course/add/', methods=['GET', 'POST'])
+@blueprint.route('/courses/add/', methods=['GET', 'POST'])
 def add_course():
     r = request.args.get('redir')
     if r in REDIR_PAGES:
