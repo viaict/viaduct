@@ -1,5 +1,3 @@
-import os
-
 from flask import Blueprint
 from flask import abort, flash, session, redirect, render_template, request, \
     url_for
@@ -17,9 +15,8 @@ from app.models.summary import Summary
 from app.models.course import Course
 from app.models.education import Education
 
+from app.utils.file import file_upload, file_remove
 from app.utils.module import ModuleAPI
-
-from werkzeug import secure_filename
 
 from fuzzywuzzy import fuzz
 
@@ -29,27 +26,6 @@ UPLOAD_FOLDER = app.config['SUMMARY_UPLOAD_FOLDER']
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 DATE_FORMAT = app.config['DATE_FORMAT']
-
-
-def allowed_file(filename):
-    return '.' in filename and \
-        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-def file_exists(filename):
-    return os.path.exists(os.path.join(UPLOAD_FOLDER, filename))
-
-
-def create_unique_file(filename):
-    temp_filename = filename
-
-    i = 0
-    while file_exists(temp_filename):
-        split = filename.split('.')
-        split[0] = split[0] + "(" + str(i) + ")"
-        temp_filename = split[0] + "." + split[len(split) - 1]
-        i += 1
-    return temp_filename
 
 
 def get_education_id(education):
@@ -68,24 +44,6 @@ def get_course_id(course):
     if not course_object:
         return None
     return course_object.id
-
-
-def upload_file_real(file, old_path='1'):
-    if file and (file.filename is not ''):
-        if allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            filename = create_unique_file(filename)
-
-            if old_path != '1':
-                os.remove(os.path.join(UPLOAD_FOLDER, old_path))
-
-            file.save(os.path.join(UPLOAD_FOLDER, filename))
-
-            return filename
-        else:
-            return None
-    else:
-        return False
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
@@ -109,7 +67,7 @@ def view(page_nr=1):
             flash(_('Specified summary to delete does not exist'), 'danger')
         else:
             try:
-                os.remove(os.path.join(UPLOAD_FOLDER, summary.path))
+                file_remove(summary.path, UPLOAD_FOLDER)
             except:
                 flash(_('File does not exist, summary deleted.'), 'info')
 
@@ -207,9 +165,9 @@ def add():
         if form.validate_on_submit():
             file = request.files['summary']
 
-            new_path = upload_file_real(file)
+            new_path = file_upload(file, UPLOAD_FOLDER)
             if new_path:
-                summary = Summary(form.title.data, new_path,
+                summary = Summary(form.title.data, new_path.name,
                                   form.date.data, form.course.data,
                                   form.education.data)
 
@@ -266,17 +224,16 @@ def edit(summary_id):
             summary.education_id = form.education.data
             summary.date = form.date.data
 
-            new_path = upload_file_real(file, summary.path)
-            if new_path:
-                summary.path = new_path
-            elif new_path is None:
-                flash(_('Wrong format summary.'), 'danger')
+            if file.filename:
+                file_remove(summary.path, UPLOAD_FOLDER)
+                new_path = file_upload(file, UPLOAD_FOLDER)
+                if new_path:
+                    summary.path = new_path.name
+                else:
+                    flash(_('Wrong format summary.'), 'danger')
 
-            if not new_path:
-                flash(_('Old summary preserved.'), 'info')
-
-            db.session.commit()
-            flash(_('Summary succesfully changed.'), 'success')
+                db.session.commit()
+                flash(_('Summary succesfully changed.'), 'success')
 
             return redirect(url_for('summary.edit', summary_id=summary_id))
         else:
