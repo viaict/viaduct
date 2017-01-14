@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-01-03 01:25+0100\n"
+"POT-Creation-Date: 2017-01-14 17:01+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language: nl\n"
@@ -607,6 +607,10 @@ msgid "Has paid"
 msgstr "Heeft betaald"
 
 #, python-format
+msgid "Het email adres %(email)s is bij ons niet bekend."
+msgstr ""
+
+#, python-format
 msgid "Hey %(name)s, you're now logged in!"
 msgstr "Hey %(name)s, je bent ingelogd!"
 
@@ -866,6 +870,9 @@ msgstr "Geen titel opgegeven."
 
 msgid "No title given."
 msgstr "Geen titel opgegeven."
+
+msgid "No vacancies found."
+msgstr "Geen vacatures gevonden."
 
 msgid "No valid ticket found"
 msgstr "Geen valide ticket gevonden"

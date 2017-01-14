@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-01-03 01:25+0100\n"
+"POT-Creation-Date: 2017-01-14 17:01+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -603,6 +603,10 @@ msgid "Has paid"
 msgstr ""
 
 #, python-format
+msgid "Het email adres %(email)s is bij ons niet bekend."
+msgstr ""
+
+#, python-format
 msgid "Hey %(name)s, you're now logged in!"
 msgstr ""
 
@@ -859,6 +863,9 @@ msgid "No title entered"
 msgstr ""
 
 msgid "No title given."
+msgstr ""
+
+msgid "No vacancies found."
 msgstr ""
 
 msgid "No valid ticket found"
