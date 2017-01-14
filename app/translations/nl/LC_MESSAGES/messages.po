@@ -1130,7 +1130,7 @@ msgid "Starting year study"
 msgstr "Beginjaar studie"
 
 msgid "Student ID"
-msgstr "Studentkaartnummer"
+msgstr "Studentnummer"
 
 msgid "Studentnumber"
 msgstr "Studenten ID"
@@ -1645,4 +1645,3 @@ msgstr ""
 
 #~ msgid "These details are taken from your account."
 #~ msgstr "Deze gegevens worden opgehaald uit je account."
-
