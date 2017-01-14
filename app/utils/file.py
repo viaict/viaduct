@@ -119,6 +119,13 @@ def file_remove(filename, directory=None):
         directory = UPLOAD_DIR
     try:
         os.remove(os.path.join(directory, filename))
+
+        # Remove from database if necessary
+        if directory == UPLOAD_DIR:
+                db_entry = File.query.filter(File.name == filename)
+                if db_entry.count() > 0:
+                    db_entry.delete()
+
     except OSError:
         print(_('Cannot remove file, it does not exist') + ": " + filename)
 
