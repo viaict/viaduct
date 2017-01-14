@@ -259,6 +259,14 @@ def create(company_id=None):
                     form.contact_name.data), 'danger')
             return render_template('company/create.htm', company=company,
                                    form=form)
+        if not contact.id and Contact.query.filter(
+                Contact.email == form.contact_email.data).count():
+            flash(_('Contact email "%s" is already in use.' %
+                    form.contact_email.data), 'danger')
+            return render_template('company/create.htm', company=company,
+                                   form=form)
+       
+
         contact.name = form.contact_name.data
         contact.email = form.contact_email.data
         contact.phone_nr = form.contact_phone_nr.data
