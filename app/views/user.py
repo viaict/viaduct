@@ -22,7 +22,7 @@ from app.models import User
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult, CustomForm
 from app.models.group import Group
-from app.models.request_ticket import Password_ticket
+from app.models.request_ticket import PasswordTicket
 from app.models.education import Education
 
 from app.utils import UserAPI
@@ -358,25 +358,29 @@ def request_password():
         user = User.query.filter(
             User.email == form.email.data).first()
 
-        _hash = create_hash(256)
+        if not user:
+            flash(_('Het email adres %(email)s is bij ons niet bekend.',
+                    email=form.email.data), 'danger')
+        else:
+            _hash = create_hash(256)
 
-        ticket = Password_ticket(user.id, _hash)
-        db.session.add(ticket)
-        db.session.commit()
+            ticket = PasswordTicket(user.id, _hash)
+            db.session.add(ticket)
+            db.session.commit()
 
-        reset_link = url_for('user.reset_password',
-                             hash=_hash, _external=True)
+            reset_link = url_for('user.reset_password',
+                                 hash=_hash, _external=True)
 
-        send_email(to=user.email,
-                   subject='Password reset https://svia.nl',
-                   email_template='email/forgot_password.html',
-                   sender='via',
-                   user=user,
-                   reset_link=reset_link)
+            send_email(to=user.email,
+                       subject='Password reset https://svia.nl',
+                       email_template='email/forgot_password.html',
+                       sender='via',
+                       user=user,
+                       reset_link=reset_link)
 
-        flash(_('An email has been sent to %(email)s with further '
-                'instructions.', email=form.email.data), 'success')
-        return redirect(url_for('home.home'))
+            flash(_('An email has been sent to %(email)s with further '
+                    'instructions.', email=form.email.data), 'success')
+            return redirect(url_for('home.home'))
     else:
         flash_form_errors(form)
 
@@ -396,8 +400,8 @@ def reset_password(hash=0):
     form = ResetPassword(request.form)
 
     # Request the ticket to validate the timer
-    ticket = Password_ticket.query.filter(
-        db.and_(Password_ticket.hash == hash)).first()
+    ticket = PasswordTicket.query.filter(
+        db.and_(PasswordTicket.hash == hash)).first()
 
     # Check if the request was followed within a hour
     if ticket is None or ((datetime.now() - ticket.created_on).seconds > 3600):
