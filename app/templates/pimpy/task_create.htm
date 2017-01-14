@@ -1,0 +1,21 @@
+<div layout-padding>
+    <form name='taskForm'>
+    <md-input-container class='md-block' flex>
+        <label>{{ _('Title')}}</label>
+        <input ng-model="taskVm.task.title"></input>
+    </md-input-container>
+    <md-input-container class='md-block'>
+        <label>{{ _('Content') }}</label>
+        <textarea ng-model="taskVm.task.content">
+        </textarea>
+    </md-input-container>
+    <md-input-container class='md-block'>
+        <label>{{ _('Users') }}</label>
+        <input ng-model="taskVm.task.users"></input>
+    </md-input-container>
+    <md-input-container class='md-block'>
+        <label>{{ _('Created') }}</label>
+        <input ng-model="taskVm.task.timestamp" disabled>
+    </md-input-container>
+    </form>
+</div>

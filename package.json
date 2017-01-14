@@ -42,7 +42,8 @@
           "markdown",
           "jade",
           "sprintf",
-          "flash"
+          "flash",
+          "angular"
       ]
   }
 }

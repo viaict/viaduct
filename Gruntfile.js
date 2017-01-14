@@ -3,7 +3,8 @@ function get_global_file_names() {
         'bootstrap.min.js',
         'jquery-ui-1.10.4.custom.min.js',
         'jquery.dataTables.min.js',
-        'dataTables.bootstrap.js'
+        'dataTables.bootstrap.js',
+        'angular.min.js'
     ];
 
     start.push('*');

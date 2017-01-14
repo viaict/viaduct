@@ -1,0 +1,39 @@
+<div layout="column">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2 class="md-flex">Pimpy</h2>
+        </div>
+    </md-toolbar>
+    <md-content class="md-padding">
+        <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
+            <md-nav-item md-nav-sref="pimpy.tasks">Tasks</md-nav-item>
+            <md-nav-item md-nav-sref="pimpy.taskedit">New task</md-nav-item>
+            <md-nav-item md-nav-sref="pimpy.minutes">Minute</md-nav-item>
+            <md-nav-item md-nav-sref="pimpy.minuteedit">New Minute</md-nav-item>
+        </md-nav-bar>
+
+
+        <div layout="row">
+            <div layout="column" layout-margin>
+                <md-checkbox aria-label="Select All"
+                             ng-checked="filterVm.isChecked()"
+                             md-indeterminate="filterVm.isIndeterminate()"
+                             ng-click="filterVm.toggleAll()">
+                    <span ng-if="filterVm.isChecked()">Un-</span>Select All
+                </md-checkbox>
+                <div id="pimpy-filter" layout="column">
+                    <md-checkbox ng-model="filterVm.filter[group]"
+                                 ng-repeat="group in filterVm.groups | orderBy:'toString()'">
+                        {a group a}
+                    </md-checkbox>
+                </div>
+                <md-input-container >
+                    <label>Search</label>
+                    <input placeholder="Search..."
+                           ng-model='filterVm.filterString'/>
+                </md-input-container>
+            </div>
+            <ui-view flex></ui-view>
+        </div>
+    </md-content>
+</div>

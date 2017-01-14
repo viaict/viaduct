@@ -29,24 +29,24 @@ var utils = function() { // jshint ignore:line
     }
 
     utils.datatables.defaults = {
-                "processing": true,
-                "responsive": true,
-                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-                "language": datatable_language,
-                "columnDefs": [ {
-                    "targets": [0],
-                    "visible": false,
-                    "searchable": false
-                }],
-                "order": [
-                    [ 1, "asc"]
-                ],
-                "initComplete": function() {
-                    var api = this.api();
-                    api.$('td.search').click( function() {
-                        api.search( this.innerHTML ).draw();
-                    });
-                }
+        "processing": true,
+        "responsive": true,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "language": datatable_language,
+        "columnDefs": [ {
+            "targets": [0],
+            "visible": false,
+            "searchable": false
+        }],
+        "order": [
+            [ 1, "asc"]
+        ],
+        "initComplete": function() {
+            var api = this.api();
+            api.$('td.search').click( function() {
+                api.search( this.innerHTML ).draw();
+            });
+        }
     };
 
     utils.datatables.enable_select = function ($selector) {
@@ -63,7 +63,7 @@ var utils = function() { // jshint ignore:line
             selected_ids.push(selected_rows.data()[i][0]);
             selected_users += "- " + selected_rows.data()[i][1] + "\n";
         }
-        return { "selected_ids" : selected_ids };
+        return {"selected_ids": selected_ids};
     };
 
     utils.datatables.action_by_url = function(

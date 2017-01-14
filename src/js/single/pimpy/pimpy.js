@@ -1,65 +1,229 @@
-$(function () {
-    'use strict';
+angular
+    .module('pimpyApp',
+        ['angular.filter', 'ui.router', 'ngMaterial', 'ngResource'])
+    .config(config)
+    .factory('ResourceService', ResourceService)
+    .controller('FilterController', FilterController)
+    .controller('TaskListController', TaskListController)
+    .controller('TaskEditController', TaskEditController);
 
-    var btn_stati = 'btn-info btn-warning btn-success btn-danger';
+// .controller('MinuteListController', MinuteListController)
+// .controller('MinuteEditController', MinuteEditController);
 
-    /* updates the task status */
+config.$inject = [
+    '$interpolateProvider',
+    '$urlRouterProvider',
+    '$stateProvider',
+    '$resourceProvider',
+];
 
-    $('.pimpy_status').click(function () {
-        var $this = $(this);
 
-        var task_id = $this.data('task-id');
-        var status = $this.data('status-id');
+function config($interpolateProvider, $urlRouterProvider, $stateProvider,
+    $resourceProvider) {
+        "use strict";
 
-        var $task_rows = $('.pimpy_task_row[data-task-id=' + task_id + ']');
-        var $task_btns = $('.pimpy_task', $task_rows);
+        $interpolateProvider.startSymbol('{a');
+        $interpolateProvider.endSymbol('a}');
 
-        utils.form.button_loading($task_btns);
+        $resourceProvider.defaults.stripTrailingSlashes = false;
 
-        $.getJSON('/pimpy/tasks/update_status', {
-            task_id: task_id,
-            new_status: status
-        }, function (data) {
-            $task_btns.removeClass(btn_stati);
-            $task_rows.removeClass(btn_stati);
+        $urlRouterProvider.otherwise("/tasks");
 
-            $task_btns.addClass(data.status);
-            $task_rows.addClass('pimpy_status_' + data.status);
-        }).fail(function () {
-            flash('Er ging iets mis, =(', 'danger');
-        }).always(function () {
-            $task_btns.button('reset');
+        $stateProvider.state('pimpy', {
+            absolute: true,
+            controller: 'FilterController',
+            controllerAs: 'filterVm',
+            templateUrl: Flask.url_for('apimpy.angular', {
+                template: 'filter.htm'
+            }),
         });
-    });
 
-    /* Editable Setting */
-    $.fn.editable.defaults.mode = 'inline';
+        $stateProvider.state('pimpy.tasks', {
+            controller: 'TaskListController',
+            controllerAs: 'taskVm',
+            templateUrl: Flask.url_for('apimpy.angular', {
+                template: 'tasks.htm'
+            }),
+            url: '/tasks',
+        });
 
-    /* Makes tasks content editable */
-    $('.pimpy_editable').editable();
+        $stateProvider.state('pimpy.taskedit', {
+            controller: 'TaskEditController',
+            controllerAs: 'taskVm',
+            params: {
+                task_id: null
+            },
+            templateUrl: Flask.url_for('apimpy.angular', {
+                template: 'task_create.htm'
+            }),
+            url: '/task/create',
+        });
 
-    $('.pimpy_editable_toggle').click(function () {
-        $('.pimpy_editable').editable('toggleDisabled');
-    });
+        // $stateProvider.state('pimpy.minutes', {
+        //     controller: 'MinuteListController',
+        //     controllerAs: 'minVm',
+        //     templateUrl: Flask.url_for('apimpy.angular', {
+        //         template: 'minutes.htm'
+        //     }),
+        //     url: '/minutes',
+        // });
+        //
+        // $stateProvider.state('pimpy.minutecreate', {
+        //     controller: 'MinuteEditController',
+        //     controllerAs: 'minVm',
+        //     templateUrl: Flask.url_for('apimpy.angular', {
+        //         template: 'minute_create.htm'
+        //     }),
+        //     url: '/minute/create',
+        // });
+}
 
-    $('.pimpy_editable_date').editable({
-        format: 'yyyy-mm-dd',
-        viewformat: 'dd/mm/yyyy',
-        datepicker: {
-            weekStart: 1
+FilterController.$inject = ['$http'];
+function FilterController($http) {
+    "use strict";
+
+    var vm = this;
+    vm.groups = [];
+    vm.filter = {};
+    vm.setFilter = setFilter;
+    vm.isChecked = isChecked;
+    vm.isIndeterminate = isIndeterminate;
+    vm.toggleAll = toggleAll;
+    vm.fabOpen = false;
+
+    activate();
+
+    function activate() {
+        $http.get(Flask.url_for('apimpy.groups')).then(
+            function(response) {
+                vm.groups = response.data;
+                for (var key in vm.groups) {
+                    vm.filter[vm.groups[key]] = true;
+                }
+            }
+        );
+    }
+
+    function isIndeterminate() {
+        var allFalse = Object.keys(vm.filter).every(
+            function(k) { return !vm.filter[k]; }
+        );
+
+        return (!allFalse && !isChecked());
+    }
+
+    function isChecked() {
+        return Object.keys(vm.filter).every(
+            function(k) { return vm.filter[k]; }
+        );
+    }
+
+    function toggleAll() {
+        var bool = !isChecked();
+        angular.forEach(vm.filter, function(val, key) {
+            vm.filter[key] = bool;
+        });
+    }
+
+    function setFilter(bool) {
+        angular.forEach(vm.filter, function(val, key) {
+            vm.filter[key] = bool;
+        });
+    }
+}
+
+ResourceService.$inject = ['$resource'];
+function ResourceService($resource) {
+    "use strict";
+
+    return {
+        Task: $resource(Flask.url_for('apimpy.tasks') + ':id/',
+            {id: '@id'}),
+        // Minute: $resource(Flask.url_for('apimpy.minutes') + ':id/',
+        //     {id: '@id'}),
+    };
+}
+
+TaskListController.$inject = ['$http', 'ResourceService'];
+function TaskListController($http, ResourceService) {
+    "use strict";
+    var vm = this;
+    vm.tasks = [];
+
+    activate();
+
+    function activate() {
+        $http.get(Flask.url_for('apimpy.tasks')).then(
+            function(response) {
+                vm.tasks = response.data;
+                console.log(vm.tasks);
+            }
+        );
+    }
+
+    // TODO
+    function update_status(id, new_status) {
+        var task = ResourceService.Task.get({id: id});
+        gask.status = new_status;
+        task.$save();
+    }
+}
+
+TaskEditController.$inject = ['$http', '$stateParams', 'ResourceService'];
+function TaskEditController($http, $stateParams, ResourceService) {
+    "use strict";
+    var vm = this;
+    vm.task = {};
+    vm.task_id = null;
+
+    activate();
+
+    function activate() {
+        if ($stateParams.task_id) {
+            vm.task_id = $stateParams.task_id;
+            console.log(vm.task_id);
+            $http.get(Flask.url_for('apimpy.get_task', {task_id:vm.task_id})).then(
+                function(response) {
+                    vm.task = response.data;
+                }
+            );
         }
-    });
 
-    $('.pimpy_editable').editable('toggleDisabled');
-
-    $('.btn-filter').on('click', function (){
-      var classes = this.attributes['data-hide'].value;
-
-      if ($(this).hasClass('active')) {
-        $('tr.pimpy_status_' + classes).hide();
-      }
-      else {
-        $('tr.pimpy_status_' + classes).show();
-      }
-    });
-});
+    }
+}
+//
+// MinuteListController.$inject = ['$http'];
+// function MinuteListController($http) {
+//     "use strict";
+//     var vm = this;
+//     vm.tasks = [];
+//
+//     activate();
+//
+//     function activate() {
+//         $http.get(Flask.url_for('apimpy.tasks')).then(
+//             function(response) {
+//                 vm.tasks = response.data;
+//                 console.log(vm.tasks);
+//             }
+//         );
+//     }
+// }
+//
+// MinuteEditController.$inject = ['$http'];
+// function MinuteEditController($http) {
+//     "use strict";
+//     var vm = this;
+//     vm.task = {};
+//
+//     activate();
+//
+//     function activate() {
+//         $http.get(Flask.url_for('apimpy.task')).then(
+//             function(response) {
+//                 vm.tasks = response.data;
+//                 console.log(vm.tasks);
+//             }
+//         );
+//     }
+// }

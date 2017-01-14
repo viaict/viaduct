@@ -1,0 +1,26 @@
+<div flex="grow">
+    <md-content>
+        <md-list>
+            <md-subheader ng-repeat-start="(key, value) in taskVm.tasks | groupBy:'group'"
+                          ng-show='filterVm.filter[key]'
+                          class="md-no-sticky">
+                {a key a}
+            </md-subheader>
+            <md-divider ng-show='filterVm.filter[key]'></md-divider>
+            <md-list-item ng-repeat-end
+                          ng-show='filterVm.filter[key]'
+                          ng-repeat='task in value | filter:filterVm.filterString'>
+
+                <div class="btn-group pimpy-btn-group">
+                    <a ng-class='task.status' class="btn btn-success pimpy-task">
+                        {a task.b32id a}
+                    </a>
+                </div>
+                <a ui-sref="pimpy.taskedit({task_id: task.id})">{a task.title a}</a><br>
+                <span class="pull-right" style="white-space: nowrap">
+                    {a task.users.join(', ') a}
+                </span>
+            </md-list-item>
+        </md-list>
+    </md-content>
+</div>

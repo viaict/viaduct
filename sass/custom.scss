@@ -3,10 +3,11 @@
 @import 'font-awesome-compass';
 @import 'font-awesome';
 @import 'bootstrap-editable';
+@import 'dataTables.responsive';
 @import 'css/select2';
 @import 'css/select2-bootstrap';
 @import 'css/bootstrap-datetimepicker.min';
-@import 'dataTables.responsive';
+@import 'css/_angular-material.min';
 
 body {
     overflow-y: scroll;
@@ -322,7 +323,7 @@ p.report-bug{
     margin: 10px;
 }
 
-.logo.pimpy {
+.logo .pimpy {
     float: right;
     margin-top: 13px;
     height: 100px;
@@ -432,7 +433,7 @@ p.report-bug{
     background: none !important;
 }
 
-.pimpy_task {
+.pimpy-task {
     padding-left: 0;
     padding-right: 0;
     width: 50px;
@@ -461,6 +462,14 @@ p.report-bug{
 .pimpy_minute_styled {
     padding: 10px;
     font-family: sans-serif;
+}
+
+#pimpy-filter {
+    padding-left:30px;
+}
+
+md-button {
+    font: auto;
 }
 
 
