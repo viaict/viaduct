@@ -30,7 +30,8 @@ def file_allowed_extension(filename, image=False):
     return True
 
 
-def file_upload(f, directory=None, image=False, forced_name=None):
+def file_upload(f, push_to_db=True, directory=None, image=False, 
+                forced_name=None):
     if forced_name:
         filename = forced_name
     else:
@@ -59,16 +60,17 @@ def file_upload(f, directory=None, image=False, forced_name=None):
     while file_exists(filename, directory):
         filename = '%s_%d.%s' % (filename_noext, counter, filename_ext)
         counter += 1
-
+    
     # Save file.
-    path = os.path.join(os.getcwd(), UPLOAD_DIR, filename)
+    path = os.path.join(os.getcwd(), directory, filename)
     f.save(path)
     os.chmod(path, 0o644)
 
-    # Add to database.
+    # Add to database if needed
     new_file = File(filename)
-    db.session.add(new_file)
-    db.session.commit()
+    if push_to_db:
+        db.session.add(new_file)
+        db.session.commit()
 
     if new_file:
         flash(_('File created successfully'), 'success')
@@ -90,7 +92,6 @@ def file_exists(filename, directory=None):
 def file_exists_pattern(pattern, directory=None):
     if not directory:
         directory = UPLOAD_DIR
-
     for file in os.listdir(directory):
         if fnmatch.fnmatch(file, pattern):
             return file
@@ -128,5 +129,13 @@ def file_remove_pattern(pattern, directory=None):
 
     for file in os.listdir(directory):
         if fnmatch.fnmatch(file, pattern):
+
+            # If our directory is equal to the upload directory, we check if
+            # we need to remove the file name from the files table
+            if directory == UPLOAD_DIR:
+                db_entry = File.query.filter(File.name == file)
+                if db_entry.count() > 0:
+                    db_entry.delete()
+
             path = directory + file
             os.remove(path)

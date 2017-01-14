@@ -24,10 +24,10 @@ class UserAPI:
                     UPLOAD_DIR))
 
     @staticmethod
-    def remove_avatar(user_id):
+    def remove_avatar(user):
         """Remove avatar of a user."""
         # Find avatar by avatar_<userid>.*
-        file_remove_pattern('avatar_' + str(user_id) + '.*', UPLOAD_DIR)
+        file_remove_pattern('avatar_' + str(user.id) + '.*', UPLOAD_DIR)
 
     @staticmethod
     def avatar(user):
@@ -44,7 +44,7 @@ class UserAPI:
                                      UPLOAD_DIR)
 
         if avatar:
-            return '/static/files/users' + avatar.filename
+            return '/static/files/users/' + avatar
 
         # Set default values gravatar
         email = user.email or ''
@@ -65,14 +65,14 @@ class UserAPI:
         previous uploaded avatars.
         """
         # Remove old avatars
-        UserAPI.remove_avatar(user_id)
+        file_remove_pattern('avatar_' + str(user_id) + '.*', UPLOAD_DIR)
 
         # construct file name
         filename = 'avatar_' + str(user_id) + '.' + \
             file_split_name(f.filename)[1]
 
         # Save new avatar
-        file_upload(f, UPLOAD_DIR, True, filename)
+        file_upload(f, True, UPLOAD_DIR, True, filename)
 
     @staticmethod
     def get_groups_for_user_id(user):
