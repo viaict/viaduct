@@ -1,0 +1,21 @@
+{% from "macros/form.htm" import render_checkbox, render_submit, render_field %}
+
+{% extends "content.htm" %}
+
+{%block content %}
+    <h1>{{_('Change your email preferences')}}</h1>
+    <form action="" method="POST">
+        <div class="col-md-12">
+        {{ form.csrf_token }}
+        {% for subscription in form.subscriptions %}
+        <h3>{{ subscription.mailing_list_name.data }}</h3>
+            {{ subscription.csrf_token }}
+            {{ subscription.mailing_list_id }}
+            {{ render_checkbox(subscription.subscribed) }}
+        {% endfor %}
+        </div>
+        <div class="col-md-12">
+            {{ render_submit(_('Update')) }}
+        </div>
+    </form>
+{% endblock %}
