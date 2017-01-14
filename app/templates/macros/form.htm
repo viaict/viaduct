@@ -81,7 +81,8 @@
     </div>
 {% endmacro %}
 
-{% macro render_education_select(field, educations, selected=None, redir=None) %}
+{# TODO Remove once done #}
+{% macro render_education_select_orig(field, educations, selected=None, redir=None) %}
 <div class='form-group'>
     {{ field.label }}
     <div class='input-group'>
@@ -103,8 +104,8 @@
 </div>
 {% endmacro %}
 
-
-{% macro render_course_select(field, courses, selected=None, redir=None) %}
+{# TODO Remove once done #}
+{% macro render_course_select_orig(field, courses, selected=None, redir=None) %}
 <div class='form-group'>
     {{ field.label }}
     <div class='input-group'>
@@ -126,9 +127,50 @@
 </div>
 {% endmacro %}
 
+
 {% macro render_custom_form_selecter(field) %}
 {{ field.label }}
 {{ custom_form_select(field.name, field.value, field.id) }}
+{% endmacro %}
+
+{% macro render_select_internal(field) %}
+    <select id='{{ field.id }}' name='{{ field.name }}' class='form-control'>
+    {% for value, label, selected in field.iter_choices() %}
+    <option value="{{ value }}" {%- if selected -%}selected="selected"{%- endif -%}>
+        {{ label }}
+    </option>
+    {% endfor %}
+    </select>
+{% endmacro %}
+
+{% macro render_course_select(field) %}
+<div class='form-group'>
+    {{ field.label }}
+    <div class='input-group'>
+        {{ render_select_internal(field) }}
+        <span class="input-group-btn">
+            <a href="{{ url_for('examination.add_course') }}" class="btn btn-default btn-success">
+                <i class="glyphicon glyphicon-pencil"></i>
+                {{_('New course')}}
+            </a>
+        </span>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro render_education_select(field) %}
+<div class='form-group'>
+    {{ field.label }}
+    <div class='input-group'>
+        {{ render_select_internal(field) }}
+        <span class="input-group-btn">
+            <a href="{{ url_for('examination.add_education') }}" class="btn btn-default btn-success">
+                <i class="glyphicon glyphicon-pencil"></i>
+                {{_('New education')}}
+            </a>
+        </span>
+    </div>
+</div>
 {% endmacro %}
 
 {% macro render_form(form, action_url, form_id='', form_class='', submit_id='', submit_text='') %}
@@ -169,6 +211,10 @@ button, submit, checkbox, textarea, datefield, datetimefield_picker, datefield_p
             {{ render_button(f) }}
         {%- elif f.type == 'TextAreaField' -%}
             {{ render_textarea(f) }}
+        {%- elif f.type == 'CourseSelectField' -%}
+            {{ render_course_select(f) }}
+        {%- elif f.type == 'EducationSelectField' -%}
+            {{ render_education_select(f) }}
         {%- elif f.type != 'CSRFTokenField' -%}
             {{ render_field(f) }}
         {%- endif -%}

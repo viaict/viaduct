@@ -1,5 +1,5 @@
 from wtforms import IntegerField, SelectField
-# from wtforms.utils import unset_value
+from app.models import Course, Education
 
 
 class CustomFormSelectField(IntegerField):
@@ -7,11 +7,19 @@ class CustomFormSelectField(IntegerField):
 
 
 class CourseSelectField(SelectField):
-    pass
+    def __init__(self, label='', validators=None, **kwargs):
+        super(CourseSelectField, self).__init__(label, validators, **kwargs)
+        self.coerce = int
+        courses = Course.query.order_by(Course.name).all()
+        self.choices = [(c.id, c.name) for c in courses]
 
 
 class EducationSelectField(SelectField):
-    pass
+    def __init__(self, label='', validators=None, **kwargs):
+        super(EducationSelectField, self).__init__(label, validators, **kwargs)
+        self.coerce = int
+        educations = Education.query.order_by(Education.name).all()
+        self.choices = [(e.id, e.name) for e in educations]
 
 
 class FieldGroup:
