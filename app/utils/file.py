@@ -30,8 +30,7 @@ def file_allowed_extension(filename, image=False):
     return True
 
 
-def file_upload(f, push_to_db=True, directory=None, image=False, 
-                forced_name=None):
+def file_upload(f, directory=None, image=False, forced_name=None):
     if forced_name:
         filename = forced_name
     else:
@@ -68,7 +67,7 @@ def file_upload(f, push_to_db=True, directory=None, image=False,
 
     # Add to database if needed
     new_file = File(filename)
-    if push_to_db:
+    if directory == UPLOAD_DIR:
         db.session.add(new_file)
         db.session.commit()
 
@@ -115,9 +114,11 @@ def file_search(query):
 
 
 def file_remove(filename, directory=None):
+    print ("try to remove " + directory + filename)
     if not directory:
         directory = UPLOAD_DIR
     try:
+
         os.remove(os.path.join(directory, filename))
 
         # Remove from database if necessary

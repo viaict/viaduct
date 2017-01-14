@@ -26,6 +26,7 @@ from app.utils.serialize_sqla import serialize_sqla
 
 blueprint = Blueprint('activity', __name__, url_prefix='/activities')
 
+PICTURE_DIR = 'app/static/activity_pictures/'
 
 # Overview of activities
 @blueprint.route('/', methods=['GET', 'POST'])
@@ -166,27 +167,42 @@ def create(activity_id=None):
     form = CreateForm(request.form, activity)
 
     if request.method == 'POST':
+
+        print("TEST!@#$")
+
         if form.validate_on_submit():
 
-            picture = activity.picture
+            print(activity.picture)
+
+            act_picture = activity.picture
 
             form.populate_obj(activity)
 
             file = request.files['picture']
 
+            print (file.filename)
+
             if file.filename:
-                image = file_upload(file, 'app/static/activity_pictures')
+
+                print ("hello")
+                image = file_upload(file, PICTURE_DIR, True)
 
                 if image:
+                    print("a")
                     picture = image.name
 
                 else:
+                    print("b")
                     picture = None
 
+                print("----------------")
+                print(act_picture)
+                print(len(act_picture))
+
                 # Remove old picture
-                if activity.picture:
-                    file_remove('app/static/activity_pictures',
-                                activity.picture)
+                if len(act_picture) > 0:
+                    print("test12345")
+                    file_remove(act_picture, PICTURE_DIR)
 
             elif not picture:
                 picture = None

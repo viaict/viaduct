@@ -72,7 +72,7 @@ class UserAPI:
             file_split_name(f.filename)[1]
 
         # Save new avatar
-        file_upload(f, True, UPLOAD_DIR, True, filename)
+        file_upload(f, UPLOAD_DIR, True, filename)
 
     @staticmethod
     def get_groups_for_user_id(user):
