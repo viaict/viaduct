@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint, flash, redirect, render_template, request,\
-    url_for, abort, escape
+    url_for, abort
 from flask_login import current_user
 from flask_babel import _  # gettext
 
