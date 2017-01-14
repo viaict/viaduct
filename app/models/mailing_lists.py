@@ -19,7 +19,7 @@ class MailingList(db.Model, BaseEntity):
 
 class MailingListUser(db.Model, BaseEntity):
 
-    prints = ('user_id', 'mailing_list_id', 'copernica_id', 'subscribed')
+    prints = ('user_id', 'mailing_list_id', 'copernica_user_id', 'subscribed')
 
     user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
     user = db.relationship('User',
@@ -37,5 +37,8 @@ class MailingListUser(db.Model, BaseEntity):
                  copernica_id=0, subscribed=False):
         self.user_id = user_id
         self.mailing_list_id = mailing_list_id
-        self.copernica_id = copernica_id
         self.subscribed = subscribed
+        if copernica_id == 0:
+            pass
+        else:
+            self.copernica_user_id = copernica_id
