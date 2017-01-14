@@ -29,8 +29,8 @@ render_course_select, enable_select2 %}
             {{ render_education_select(form.education, educations) }}
             {{ render_course_select(form.course, courses) }}
             {%- else -%}
-            {{ render_education_select(form.education, educations, selected=examination.education) }}
-            {{ render_course_select(form.course, courses, selected=examination.course) }}
+            {{ render_education_select(form.education, educations, selected=examination.education_id) }}
+            {{ render_course_select(form.course, courses, selected=examination.course_id) }}
             {%- endif -%}
 
             {{ render_select(form.test_type) }}

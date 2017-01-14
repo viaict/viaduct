@@ -109,7 +109,7 @@
         <select id='{{ field.id }}' name='{{ field.name }}' class='form-control'>
             {% for course in courses %}
             <option value="{{ course.id }}"
-                {%- if selected and course.id == selected.id %} selected="selected"{% endif -%}>
+                {%- if selected and course.id == selected %} selected="selected"{% endif -%}>
                 {{course.name}}
             </option>
             {% endfor %}
