@@ -66,7 +66,7 @@ app.config['CACHE_DIR'] = 'cache'
 cache = Cache(app)
 toolbar = DebugToolbarExtension(app)
 
-if not app.debug and not app.testing and 'SENTRY_DSN' in app.config:
+if not app.debug and 'SENTRY_DSN' in app.config:
     sentry = Sentry(app)
 
 
