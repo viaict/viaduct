@@ -100,7 +100,7 @@
             {% endfor %}
         </select>
         <span class="input-group-btn">
-            <a href="/education/add{% if redir %}?redir={{ redir }}{% endif %}" class="btn btn-default btn-success">
+            <a href="{{url_for('examination.add_education', redir=redir)}}" class="btn btn-default btn-success">
                 <i class="glyphicon glyphicon-pencil"></i>
                 {{_('New education')}}
             </a>
@@ -123,7 +123,7 @@
             {% endfor %}
         </select>
         <span class="input-group-btn">
-            <a href="/courses/add{% if redir %}?redir={{ redir }}{% endif %}" class="btn btn-default btn-success">
+            <a href="{{url_for('examination.add_course', redir=redir)}}" class="btn btn-default btn-success">
                 <i class="glyphicon glyphicon-pencil"></i>
                 {{_('New course')}}
             </a>
