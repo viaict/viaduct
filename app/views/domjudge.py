@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask import flash, redirect, \
-    render_template, url_for, request, Response, abort
+    render_template, url_for, request, abort
 from flask_login import login_required, current_user
 from flask_babel import _
 
@@ -198,7 +198,10 @@ def contest_problem_view(problem_id):
     if not r:
         return redirect(url_for('domjudge.contest_list'))
 
-    return Response(r.content, mimetype=r.headers['Content-Type'])
+    headers = {'Content-Type': r.headers['Content-Type']}
+    if 'Content-Disposition' in r.headers:
+        headers['Content-Disposition'] = r.headers['Content-Disposition']
+    return r.content, headers
 
 
 @blueprint.route('/contest/<int:contest_id>/problem/<int:problem_id>/submit/',
