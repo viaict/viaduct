@@ -1,3 +1,18 @@
+15-01-2015 v2.7.4.0:
+* Fixed: Profile pictures are now clipped instead of scaled.
+* Fixed: Unable to submit to DOMjudge after changing password.
+* Fixed: Request password of unknown email.
+* Fixed: Crash when unique constrain of contact email.
+* Fixed: Vacancy search on higher pages.
+* Fixed: Wrong URL for creating new course.
+* Fixed: Ambiguity of 'studentkaartnummer'.
+* Fixed: Clipping of 'studievereniging via' header on homepage.
+* Added: Indication of active vacancies for admins.
+* Added: Second activity datepicker syncs with first datepicker after release.
+* Added: Link to profile page to change profile information at activity register.
+* Added: Responsiveness to add buttons of /companies/
+* Removed: Unused degree table with single placeholder entry.
+
 09-10-2016 v2.7.0.0:
 * Added: Option to copy link to clipboard after a file was uploaded.
 * Added: Option to search through uploaded files.
