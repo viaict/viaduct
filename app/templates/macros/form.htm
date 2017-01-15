@@ -173,65 +173,103 @@
 </div>
 {% endmacro %}
 
-{% macro render_form(form, action_url, form_id='', form_class='', submit_id='', submit_text='') %}
-<form method="POST" action="{{ action_url }}" enctype="multipart/form-data" class="{{ form_class }}">
-    {{ form.csrf_token }}
-    {%- for f in form -%}
-        {#
-button, submit, checkbox, textarea, datefield, datetimefield_picker, datefield_picker, select, file, education_select, course_select, custom_form_select
+{% macro render_tabs(field) %}
+{%- set group_id = field.hex_id -%}
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel with-nav-tabs panel-default">
+            <div class="panel-heading">
+                <ul class="nav nav-tabs">
+                    {%- for i, (tab_name, _) in enumerate(field) -%}
+                    <li{% if i == 0 %} class="active"{% endif %}>
+                        <a data-toggle="tab" href="#tab_{{ group_id }}_{{ i }}">
+                            {{ tab_name }}
+                        </a>
+                    </li>
+                    {%- endfor -%}
+                </ul>
+            </div>
+            <div class="panel-body">
+                <div class="tab-content">
+                    {%- for i, (tab_name, tab_fields) in enumerate(field) %}
+                    <div id="tab_{{ group_id }}_{{ i }}" class="tab-pane fade{% if i == 0 %} in active{% endif %}">
+                        {%- for field in tab_fields -%}
+                        {{ render_field_internal(field) }}
+                        {%- endfor -%}
+                    </div>
+                    {%- endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro render_field_internal(f) %}
+    {%- if f.type == 'BooleanField' -%}
+        {{ render_checkbox(f) }}
+    {%- elif f.type == 'CustomFormSelectField' -%}
+        {{ render_custom_form_selecter(f) }}
+    {%- elif f.type == 'DateField' -%}
+        {{ render_datefield_picker(f) }}
+    {%- elif f.type == 'DateTimeField' -%}
+        {{ render_datetimefield_picker(f) }}
+    {%- elif f.type == 'DecimalField' -%}
+        {# TODO Create a separate macro #}
+        {{ render_field(f) }}
+    {%- elif f.type == 'FileField' -%}
+        {{ render_file(f) }}
+    {%- elif f.type == 'IntegerField' -%}
+        {# TODO Create a separate macro #}
+        {{ render_field(f) }}
+        <br />
+    {%- elif f.type == 'RadioField' -%}
+        {# TODO This does not work:
+        {{ render_field(f) }}
         #}
+        RadioField NOT WORKING YET <br>
+    {%- elif f.type == 'SelectField' -%}
+        {{ render_select(f) }}
+    {%- elif f.type == 'SubmitField' -%}
+        {{ render_button(f) }}
+    {%- elif f.type == 'TextAreaField' -%}
+        {{ render_textarea(f) }}
+    {%- elif f.type == 'CourseSelectField' -%}
+        {{ render_course_select(f) }}
+    {%- elif f.type == 'EducationSelectField' -%}
+        {{ render_education_select(f) }}
+    {%- elif f.type == 'FieldTabGroup' -%}
+        {{ render_tabs(f) }}
+    {%- elif f.type != 'CSRFTokenField' -%}
+        {{ render_field(f) }}
+    {%- endif -%}
+{% endmacro %}
 
-
-        {%- if f.type == 'BooleanField' -%}
-            {{ render_checkbox(f) }}
-        {%- elif f.type == 'CustomFormSelectField' -%}
-            {{ render_custom_form_selecter(f) }}
-            <script src='{{static_url('/static/js/custom_form/loader.js')}}'></script>
-        {%- elif f.type == 'DateField' -%}
-            {{ render_datefield_picker(f) }}
-        {%- elif f.type == 'DateTimeField' -%}
-            {{ render_datetimefield_picker(f) }}
-        {%- elif f.type == 'DecimalField' -%}
-            {# TODO Create a separate macro #}
-            {{ render_field(f) }}
-        {%- elif f.type == 'FileField' -%}
-            {{ render_file(f) }}
-        {%- elif f.type == 'IntegerField' -%}
-            {# TODO Create a separate macro #}
-            {{ render_field(f) }}
-            <br />
-        {%- elif f.type == 'RadioField' -%}
-            {# TODO This does not work:
-            {{ render_field(f) }}
-            #}
-            RadioField NOT WORKING YET <br>
-        {%- elif f.type == 'SelectField' -%}
-            {{ render_select(f) }}
-        {%- elif f.type == 'SubmitField' -%}
-            {{ render_button(f) }}
-        {%- elif f.type == 'TextAreaField' -%}
-            {{ render_textarea(f) }}
-        {%- elif f.type == 'CourseSelectField' -%}
-            {{ render_course_select(f) }}
-        {%- elif f.type == 'EducationSelectField' -%}
-            {{ render_education_select(f) }}
-        {%- elif f.type != 'CSRFTokenField' -%}
-            {{ render_field(f) }}
-        {%- endif -%}
+{% macro render_form(form, action_url, form_id='', form_class='', submit_id='', submit_text='') %}
+{%- set form_wrapped = FormWrapper(form) -%}
+<form method="POST" action="{{ action_url }}" enctype="multipart/form-data" class="{{ form_class }}">
+    {{ form_wrapped.csrf_token }}
+    {%- for f in form_wrapped -%}
+    {{ render_field_internal(f) }}
     {%- endfor -%}
     {%- if not submit_text or submit_text == '' -%}
     {%- set submit_text = _('Submit') -%}
     {%- endif -%}
     {{ render_submit(submit_text) }}
+    {%- if form_wrapped.has_select_fields -%}
     {{ enable_select2() }}
+    {%- endif -%}
+    {%- if form_wrapped.has_custom_form_fields -%}
+    <script src='{{static_url('/static/js/custom_form/loader.js')}}'></script>
+    {%- endif -%}
 </form>
 {% endmacro %}
 
 {% macro enable_select2() %}
-        <script type='text/javascript'>
-        $(function () {
-            'use strict';
-            $("select").select2();
-        });
-        </script>
+<script type='text/javascript'>
+    $(function () {
+        'use strict';
+        $("select").select2();
+    });
+</script>
 {% endmacro %}

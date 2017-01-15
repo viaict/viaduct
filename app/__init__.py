@@ -4,8 +4,7 @@ from flask import Flask, request, Markup, render_template, session
 from flask.json import JSONEncoder as BaseEncoder
 from flask_babel import Babel
 from flask_login import LoginManager, current_user
-from flask_sqlalchemy import SQLAlchemy, Model, \
-    _BoundDeclarativeMeta, _QueryProperty, declarative_base
+from flask_sqlalchemy import SQLAlchemy
 from flask_cache import Cache
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -137,6 +136,7 @@ from app.utils.user import UserAPI  # noqa
 from app.utils.company import CompanyAPI  # noqa
 from app.utils.guide import GuideAPI  # noqa
 from app.utils.module import ModuleAPI  # noqa
+from app.forms.util import FormWrapper  # noqa
 # Set jinja global variables
 app.jinja_env.globals.update(enumerate=enumerate)
 app.jinja_env.globals.update(render_template=render_template)
@@ -156,6 +156,7 @@ app.jinja_env.globals.update(list=list)
 app.jinja_env.globals.update(static_url=static_url)
 app.jinja_env.globals.update(get_locale=get_locale)
 app.jinja_env.globals.update(app_config=app.config)
+app.jinja_env.globals.update(FormWrapper=FormWrapper)
 
 # Register the blueprints.
 from . import api  # noqa

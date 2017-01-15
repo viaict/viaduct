@@ -20,8 +20,3 @@ class EducationSelectField(SelectField):
         self.coerce = int
         educations = Education.query.order_by(Education.name).all()
         self.choices = [(e.id, e.name) for e in educations]
-
-
-class FieldGroup:
-    def __init__(self, groups):
-        self.groups = groups
