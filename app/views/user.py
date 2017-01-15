@@ -359,7 +359,7 @@ def request_password():
             User.email == form.email.data).first()
 
         if not user:
-            flash(_('Het email adres %(email)s is bij ons niet bekend.',
+            flash(_('%(email)s is unknown to our system.',
                     email=form.email.data), 'danger')
         else:
             _hash = create_hash(256)

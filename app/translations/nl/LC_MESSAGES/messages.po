@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-01-14 17:51+0100\n"
+"POT-Creation-Date: 2017-01-15 19:49+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
+
+#, python-format
+msgid "%(email)s is unknown to our system."
+msgstr "%(email)s is niet bekend in ons systeem."
 
 msgid "A description is required."
 msgstr "Geen omschrijving opgegeven."
@@ -63,7 +67,7 @@ msgid "Address is required."
 msgstr "Adres is vereist."
 
 msgid "Admin data"
-msgstr ""
+msgstr "Administrator data"
 
 msgid "All companies"
 msgstr "Alle bedrijven"
@@ -606,10 +610,6 @@ msgid "Has paid"
 msgstr "Heeft betaald"
 
 #, python-format
-msgid "Het email adres %(email)s is bij ons niet bekend."
-msgstr ""
-
-#, python-format
 msgid "Hey %(name)s, you're now logged in!"
 msgstr "Hey %(name)s, je bent ingelogd!"
 
@@ -617,7 +617,7 @@ msgid "Honorary member"
 msgstr "Erelid"
 
 msgid "I have finished studying"
-msgstr ""
+msgstr "Ik ben klaar met studeren"
 
 msgid "ID"
 msgstr "ID"
@@ -1214,7 +1214,7 @@ msgstr ""
 " en N de totale tijd vanaf het begin is (in minuten)"
 
 msgid "The given title does not match the page title."
-msgstr ""
+msgstr "The opgegeven titel komt niet overeen met de titel van de pagina."
 
 msgid "The link refers to a page that does not exist, pleasecreate the page!"
 msgstr "De link verwijst naar een pagina die niet bestaat, maak eerst deze pagina!"
@@ -1290,6 +1290,9 @@ msgstr "Titel"
 #, python-format
 msgid "Title \"%s\" is already in use."
 msgstr "Titel \" %s \" wordt al gebruikt."
+
+msgid "To account"
+msgstr "Naar account"
 
 msgid "Too late"
 msgstr "Te laat"
@@ -1412,10 +1415,10 @@ msgid "Wrong format summary."
 msgstr "Fout formaat samenvatting."
 
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 msgid "Yes, I have finished studying"
-msgstr ""
+msgstr "Ja, ik ben klaar met studeren"
 
 msgid "Yes, but only for alumni activity"
 msgstr "Ja, maar alleen voor alumni-activiteiten"
@@ -1436,6 +1439,9 @@ msgid ""
 "You have to be a registered member of via in order to register for "
 "activities. If you believe you are a member, please contact the board."
 msgstr ""
+"Je moet een geregistreerd lid van via zijn om je te kunnen inschrijven "
+"voor activiteiten. Als je denkt dat je toch een lid ben, neem contact op "
+"met het bestuur."
 
 msgid "You have to be logged in to fill in a form"
 msgstr "Je moet ingelogd zijn om een formulier in te vullen."
@@ -1648,4 +1654,7 @@ msgstr ""
 
 #~ msgid "There is already a course with this name"
 #~ msgstr "Er bestaat al een vak met deze naam"
+
+#~ msgid "Het email adres %(email)s is bij ons niet bekend."
+#~ msgstr ""
 

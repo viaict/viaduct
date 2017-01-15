@@ -96,17 +96,16 @@
 
                                         <h3>{{_('Contact details')}}</h3>
                                         <small>{{_("These details are taken from your account. You can change them on your"
-" account page."
-)}}</small>
+                                            " account page.")}}
+                                        </small>
                                         {{ render_field_disabled(form.email) }}
                                         {{ render_field_disabled(form.first_name) }}
                                         {{ render_field_disabled(form.last_name) }}
                                         {{ render_field_disabled(form.student_id) }}
                                         {{ render_field_disabled(form.education_id) }}
-                                        <a href="{{ url_for('user.edit',
-                                        user_id=current_user.id)
-                                          }}" class="btn btn-info">Naar
-                                          accountpagina</a>
+                                        <a href="{{ url_for('user.edit', user_id=current_user.id) }}" class="btn btn-info">
+                                            {{_('To account')}}
+                                        </a>
                                     </div>
                                     <div class="col-md-7">
                                         <h3>{{_('Please fill in :D')}}</h3>
