@@ -174,6 +174,7 @@
 {% endmacro %}
 
 {% macro render_tabs(field) %}
+{# We use this group id in the ids of the tabs, to make them unique for this group #}
 {%- set group_id = field.hex_id -%}
 <div class="row">
     <div class="col-md-12">
@@ -255,7 +256,9 @@
     {%- if not submit_text or submit_text == '' -%}
     {%- set submit_text = _('Submit') -%}
     {%- endif -%}
+    {%- if not form_wrapped.has_submit_field -%}
     {{ render_submit(submit_text) }}
+    {%- endif -%}
     {%- if form_wrapped.has_select_fields -%}
     {{ enable_select2() }}
     {%- endif -%}
