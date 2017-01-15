@@ -4,6 +4,8 @@ from flask import Blueprint, flash, redirect, render_template, request,\
 from flask_login import current_user
 from flask_babel import _  # gettext
 
+from werkzeug.urls import iri_to_uri
+
 from flask_wtf import Form
 from wtforms.fields import StringField
 
@@ -25,8 +27,22 @@ def get_page(path=''):
 
     if not page:
         # Try if this might be a redirect.
+        print("not page")
         redirection = Redirect.query.filter(Redirect.fro == path).first()
         if redirection:
+
+            # get GET parameters so they can be applied to the redirected
+            # URL
+            if request.args:
+                redir_url = redirection.to + '?'
+                for key in request.args:
+                    redir_url += key + '=' + \
+                        request.args[key] + '&'
+                print(redir_url)
+
+                # this is necssary to prevent incorrect escaping
+                return redirect(iri_to_uri(redir_url))
+
             return redirect(redirection.to)
 
         return abort(404)

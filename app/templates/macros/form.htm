@@ -5,6 +5,14 @@
     </div>
 {% endmacro %}
 
+{% macro render_field_disabled(field) %}
+    <div class="form-group">
+        {{ field.label }}
+        {{ field(placeholder=field.label.text, class='form-control', disabled='') }}
+    </div>
+{% endmacro %}
+
+
 {% macro render_button(field, cls='btn btn-default') %}
     {{ field(class=cls) }}
 {% endmacro %}
@@ -92,7 +100,7 @@
             {% endfor %}
         </select>
         <span class="input-group-btn">
-            <a href="/education/add{% if redir %}?redir={{ redir }}{% endif %}" class="btn btn-default btn-success">
+            <a href="{{url_for('examination.add_education', redir=redir)}}" class="btn btn-default btn-success">
                 <i class="glyphicon glyphicon-pencil"></i>
                 {{_('New education')}}
             </a>
@@ -109,13 +117,13 @@
         <select id='{{ field.id }}' name='{{ field.name }}' class='form-control'>
             {% for course in courses %}
             <option value="{{ course.id }}"
-                {%- if selected and course.id == selected.id %} selected="selected"{% endif -%}>
+                {%- if selected and course.id == selected %} selected="selected"{% endif -%}>
                 {{course.name}}
             </option>
             {% endfor %}
         </select>
         <span class="input-group-btn">
-            <a href="/courses/add{% if redir %}?redir={{ redir }}{% endif %}" class="btn btn-default btn-success">
+            <a href="{{url_for('examination.add_course', redir=redir)}}" class="btn btn-default btn-success">
                 <i class="glyphicon glyphicon-pencil"></i>
                 {{_('New course')}}
             </a>

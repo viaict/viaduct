@@ -1,6 +1,5 @@
 from app import app, db, version, js_glue
-from app.models import User, Group, Education, \
-    Degree, GroupPermission, NavigationEntry
+from app.models import User, Group, Education, GroupPermission, NavigationEntry
 
 from flask_script import Manager, Server, prompt, prompt_pass
 from flask_migrate import Migrate, MigrateCommand
@@ -255,12 +254,7 @@ def createdb():
         "Minor Informatica",
         "Minor Kunstmatige Intelligentie"]
 
-    placeholder_degree = Degree("placeholder", "placeholder")
-    db.session.add(placeholder_degree)
-    db.session.commit()
-
-    db.session.bulk_save_objects(
-        Education(placeholder_degree.id, name) for name in education_names)
+    db.session.bulk_save_objects(Education(name) for name in education_names)
     db.session.commit()
 
     # Add some default navigation

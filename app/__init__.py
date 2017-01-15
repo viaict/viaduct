@@ -1,11 +1,8 @@
-import os
-
 from flask import Flask, request, Markup, render_template, session
 from flask.json import JSONEncoder as BaseEncoder
 from flask_babel import Babel
 from flask_login import LoginManager, current_user
-from flask_sqlalchemy import SQLAlchemy, Model, \
-    _BoundDeclarativeMeta, _QueryProperty, declarative_base
+from flask_sqlalchemy import SQLAlchemy
 from flask_cache import Cache
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -13,12 +10,15 @@ from raven.contrib.flask import Sentry
 from speaklater import _LazyString
 from sqlalchemy import MetaData
 from markdown import markdown
-import datetime
-import json
 from flask_jsglue import JSGlue
 
+import datetime
+import json
+import logging
+import os
 
-version = 'v2.7.3.2'
+
+version = 'v2.7.4.0'
 
 
 def static_url(url):
@@ -65,9 +65,9 @@ app.config['CACHE_DIR'] = 'cache'
 
 cache = Cache(app)
 toolbar = DebugToolbarExtension(app)
-sentry = Sentry(
-    app,
-    dsn='https://a3bfb506a0ae4db592f0972007d0680a:0835a69630954040b46a6b3aff777ccd@sentry.io/122119')  # noqa
+
+if not app.debug and not app.testing and 'SENTRY_DSN' in app.config:
+    sentry = Sentry(app)
 
 
 # Set up Flask Babel, which is used for internationalisation support.
@@ -168,3 +168,6 @@ from app.utils.template_filters import *  # noqa
 
 from app.models.user import AnonymousUser  # noqa
 login_manager.anonymous_user = AnonymousUser
+
+log = logging.getLogger('werkzeug')
+log.setLevel(app.config['LOG_LEVEL'])

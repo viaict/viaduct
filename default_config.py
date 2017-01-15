@@ -1,5 +1,6 @@
 import os
 from datetime import date
+import logging
 
 
 class DefaultConfig:
@@ -70,3 +71,9 @@ class DefaultConfig:
     DOMJUDGE_ADMIN_PASSWORD = ""
     DOMJUDGE_URL = "http://localhost:80/"
     DOMJUDGE_USER_PASSWORD = ""
+
+    # Additional user attributes to be send to sentry.io.
+    SENTRY_USER_ATTRS = ['name', 'email']
+
+    # Log levels: CRITICAL, ERROR, WARNING, INFO, DEBUG, NOTSET
+    LOG_LEVEL = logging.NOTSET

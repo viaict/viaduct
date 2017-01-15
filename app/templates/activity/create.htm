@@ -96,4 +96,11 @@
             </div>
         </div>
     </form>
+    <script>
+    // Set start_time date also on end_time datepicker
+    $('.datetimepicker.datetimepicker-dropdown-bottom-right.dropdown-menu:first').click(function(){
+        var date = $('#start_time.form-control').val();
+        $('#end_time.form-control').attr('value', date);
+    });
+    </script>
 {% endblock %}

@@ -2,7 +2,6 @@ from .base_model import BaseEntity  # noqa
 
 from .activity import Activity  # noqa
 from .course import Course  # noqa
-from .degree import Degree  # noqa
 from .education import Education  # noqa
 from .group import Group, user_group  # noqa
 from .mollie import Transaction  # noqa

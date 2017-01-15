@@ -1,6 +1,6 @@
 {% from "macros/maps.htm" import render_map %}
 {% from "macros/custom_form.htm" import user_fields %}
-{% from "macros/form.htm" import render_field, render_checkbox, render_submit %}
+{% from "macros/form.htm" import render_field, render_field_disabled, render_checkbox, render_submit %}
 
 {% extends "content.htm" %}
 
@@ -95,12 +95,17 @@
                                         {% endif %}
 
                                         <h3>{{_('Contact details')}}</h3>
-                                        <small>{{_('These details are taken from your account.')}}</small>
-                                        {{ render_field(form.email) }}
-                                        {{ render_field(form.first_name) }}
-                                        {{ render_field(form.last_name) }}
-                                        {{ render_field(form.student_id) }}
-                                        {{ render_field(form.education_id) }}
+                                        <small>{{_("These details are taken from your account. You can change them on your"
+                                            " account page.")}}
+                                        </small>
+                                        {{ render_field_disabled(form.email) }}
+                                        {{ render_field_disabled(form.first_name) }}
+                                        {{ render_field_disabled(form.last_name) }}
+                                        {{ render_field_disabled(form.student_id) }}
+                                        {{ render_field_disabled(form.education_id) }}
+                                        <a href="{{ url_for('user.edit', user_id=current_user.id) }}" class="btn btn-info">
+                                            {{_('To account')}}
+                                        </a>
                                     </div>
                                     <div class="col-md-7">
                                         <h3>{{_('Please fill in :D')}}</h3>

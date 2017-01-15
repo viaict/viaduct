@@ -33,7 +33,7 @@
     <div class="row">
         <div class="col-md-8">
             <div class="form-group btn-group">
-                <a href='/examination/add' class='btn btn-success'>
+                <a href='{{url_for('examination.add')}}' class='btn btn-success'>
                     <i class='glyphicon glyphicon-pencil'></i>
                     <span>{{ _('New examination') }}</span>
                 </a>
@@ -44,11 +44,11 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href='/course/add?redir=view' class='dropdown-item'>
+                            <a href='{{url_for('examination.add_course', redir='view')}}' class='dropdown-item'>
                                 {{ _('Course') }}
                             </a>
                         </li>
-                        <li><a href='/education/add?redir=view' class='dropdown-item'>
+                        <li><a href='{{url_for('examination.add_education', redir='view')}}' class='dropdown-item'>
                                 {{ _('Education') }}
                             </a>
                         </li>
@@ -61,11 +61,11 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href='/courses' class='dropdown-item'>
+                            <a href='{{url_for('examination.view_courses')}}' class='dropdown-item'>
                                 {{ _('Courses') }}
                             </a>
                         </li>
-                        <li><a href='/educations' class='dropdown-item'>
+                        <li><a href='{{url_for('examination.view_educations')}}' class='dropdown-item'>
                                 {{ _('Educations') }}
                             </a>
                         </li>
@@ -103,10 +103,10 @@
                 {% for examination in examinations.items %}
                     <tr>
                         <td>
-                            <a href='/examination?search={{ (examination.education.name) }}'>{{ examination.education.name }}</a>
+                            <a href='{{url_for('examination.view_examination', search=examination.education.name)}}'>{{ examination.education.name }}</a>
                         </td>
                         <td>
-                            <a href='/examination?search={{ (examination.course.name) }}'>{{ examination.course.name }}</a>
+                            <a href='{{url_for('examination.view_examination', search=examination.course.name) }}'>{{ examination.course.name }}</a>
                         </td>
                         <td>
                             {% if examination.test_type not in test_types %}
@@ -166,10 +166,8 @@ function searchKeyPress(e)
 
 function confirmation(id) {
     var answer = confirm("{{ _("Are you sure you want to delete this exam?") }}")
-    if (answer){
+    if (answer) {
         window.location = '?search={{ search }}&delete='+id;
-    }
-    else{
     }
 }
 </script>

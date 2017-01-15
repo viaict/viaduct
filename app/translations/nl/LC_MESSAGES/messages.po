@@ -7,16 +7,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-01-03 01:25+0100\n"
+"POT-Creation-Date: 2017-01-15 19:49+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
-"Language: nl\n"
 "Language-Team: nl <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.4\n"
+"Generated-By: Babel 1.3\n"
+
+#, python-format
+msgid "%(email)s is unknown to our system."
+msgstr "%(email)s is niet bekend in ons systeem."
 
 msgid "A description is required."
 msgstr "Geen omschrijving opgegeven."
@@ -64,7 +67,7 @@ msgid "Address is required."
 msgstr "Adres is vereist."
 
 msgid "Admin data"
-msgstr ""
+msgstr "Administrator data"
 
 msgid "All companies"
 msgstr "Alle bedrijven"
@@ -214,9 +217,6 @@ msgstr "Vergelijken"
 msgid "Compiler Error"
 msgstr "Compileerfout"
 
-msgid "Contact Email"
-msgstr "Contact email"
-
 msgid "Contact Name"
 msgstr "Contact Naam"
 
@@ -226,9 +226,15 @@ msgstr "Contact telefoonnummer"
 msgid "Contact details"
 msgstr "Contact gegevens"
 
+msgid "Contact email"
+msgstr "Contact email"
+
 #, python-format
 msgid "Contact email \"%s\" is already in use."
 msgstr "Contact email \" %s \" wordt al gebruikt."
+
+msgid "Contact email is required."
+msgstr "Contact email is vereist"
 
 #, python-format
 msgid "Contact name \"%s\" is already in use."
@@ -528,9 +534,6 @@ msgstr "Tentamen"
 msgid "Examination could not be found."
 msgstr "Tentamen kan niet worden gevonden."
 
-msgid "Examination kind"
-msgstr "Tentamen soort"
-
 msgid "Examination succesfully changed."
 msgstr "Tentamen succesvol veranderd."
 
@@ -614,7 +617,7 @@ msgid "Honorary member"
 msgstr "Erelid"
 
 msgid "I have finished studying"
-msgstr ""
+msgstr "Ik ben klaar met studeren"
 
 msgid "ID"
 msgstr "ID"
@@ -810,14 +813,8 @@ msgstr "Geen omschrijving opgegeven"
 msgid "No e-mail adress submitted"
 msgstr "Geen valide e-mailadres opgegeven"
 
-msgid "No education degree specified"
-msgstr "Geen opleidinggraad opgegeven"
-
 msgid "No education given"
 msgstr "Geen opleiding opgegeven"
-
-msgid "No education name specified"
-msgstr "Geen opleidinnaam opgegeven"
 
 msgid "No examination kind given"
 msgstr "Geen tentamen soort opgegeven"
@@ -866,6 +863,9 @@ msgstr "Geen titel opgegeven."
 
 msgid "No title given."
 msgstr "Geen titel opgegeven."
+
+msgid "No vacancies found."
+msgstr "Geen vacatures gevonden."
 
 msgid "No valid ticket found"
 msgstr "Geen valide ticket gevonden"
@@ -1121,7 +1121,7 @@ msgid "Starting year study"
 msgstr "Beginjaar studie"
 
 msgid "Student ID"
-msgstr "Studentkaartnummer"
+msgstr "Studentnummer"
 
 msgid "Studentnumber"
 msgstr "Studenten ID"
@@ -1214,7 +1214,7 @@ msgstr ""
 " en N de totale tijd vanaf het begin is (in minuten)"
 
 msgid "The given title does not match the page title."
-msgstr ""
+msgstr "The opgegeven titel komt niet overeen met de titel van de pagina."
 
 msgid "The link refers to a page that does not exist, pleasecreate the page!"
 msgstr "De link verwijst naar een pagina die niet bestaat, maak eerst deze pagina!"
@@ -1240,14 +1240,15 @@ msgstr "Het opgegeven wachtwoord lijkt incorrect."
 msgid "The seo settings have been saved"
 msgstr "De seo-instellingen zijn opgeslagen"
 
-msgid "There is already a course with this name"
-msgstr "Er bestaat al een vak met deze naam"
-
 msgid "There is something wrong with the reset link."
 msgstr "Er is iets mis met de reset-link."
 
-msgid "These details are taken from your account."
-msgstr "Deze gegevens worden opgehaald uit je account."
+msgid ""
+"These details are taken from your account. You can change them on your "
+"account page."
+msgstr ""
+"Deze gegevens worden opgehaald uit je account. Deze kun je wijzigen op je"
+" account pagina."
 
 msgid ""
 "This is probably due to not having paid your member contribution. You can"
@@ -1289,6 +1290,9 @@ msgstr "Titel"
 #, python-format
 msgid "Title \"%s\" is already in use."
 msgstr "Titel \" %s \" wordt al gebruikt."
+
+msgid "To account"
+msgstr "Naar account"
 
 msgid "Too late"
 msgstr "Te laat"
@@ -1411,10 +1415,10 @@ msgid "Wrong format summary."
 msgstr "Fout formaat samenvatting."
 
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 msgid "Yes, I have finished studying"
-msgstr ""
+msgstr "Ja, ik ben klaar met studeren"
 
 msgid "Yes, but only for alumni activity"
 msgstr "Ja, maar alleen voor alumni-activiteiten"
@@ -1435,6 +1439,9 @@ msgid ""
 "You have to be a registered member of via in order to register for "
 "activities. If you believe you are a member, please contact the board."
 msgstr ""
+"Je moet een geregistreerd lid van via zijn om je te kunnen inschrijven "
+"voor activiteiten. Als je denkt dat je toch een lid ben, neem contact op "
+"met het bestuur."
 
 msgid "You have to be logged in to fill in a form"
 msgstr "Je moet ingelogd zijn om een formulier in te vullen."
@@ -1629,4 +1636,25 @@ msgstr ""
 
 #~ msgid "Not given"
 #~ msgstr "Niet opgegeven"
+
+#~ msgid "These details are taken from your account."
+#~ msgstr "Deze gegevens worden opgehaald uit je account."
+
+#~ msgid "Contact Email"
+#~ msgstr "Contact email"
+
+#~ msgid "Examination kind"
+#~ msgstr "Tentamen soort"
+
+#~ msgid "No education degree specified"
+#~ msgstr "Geen opleidinggraad opgegeven"
+
+#~ msgid "No education name specified"
+#~ msgstr "Geen opleidinnaam opgegeven"
+
+#~ msgid "There is already a course with this name"
+#~ msgstr "Er bestaat al een vak met deze naam"
+
+#~ msgid "Het email adres %(email)s is bij ons niet bekend."
+#~ msgstr ""
 

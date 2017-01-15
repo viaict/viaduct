@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for,\
+from flask import Blueprint, render_template, request, redirect, url_for, \
     abort, flash
 from flask_babel import lazy_gettext as _
 
@@ -19,7 +19,8 @@ FILE_FOLDER = app.config['FILE_DIR']
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
-def list(page_nr=1):
+@blueprint.route('/<int:page_nr>/<search>/', methods=['GET', 'POST'])
+def list(page_nr=1, search=None):
     if not ModuleAPI.can_read('vacancy'):
         return abort(403)
 
@@ -29,49 +30,35 @@ def list(page_nr=1):
         (100 * (func.datediff(Vacancy.start_date, func.current_date()) /
                 func.datediff(Vacancy.start_date, Vacancy.end_date))) - 50)
 
-    if request.args.get('search') is not None:
-        search = request.args.get('search')
-
-        vacancies = Vacancy.query.join(Company).\
+    if search is not None:
+        vacancies = Vacancy.query.join(Company). \
             filter(or_(Vacancy.title.like('%' + search + '%'),
-                   Company.name.like('%' + search + '%'),
-                   Vacancy.workload.like('%' + search + '%'),
-                   Vacancy.contract_of_service.like('%' + search + '%'))).\
-            order_by(order.desc())
+                       Company.name.like('%' + search + '%'),
+                       Vacancy.workload.like('%' + search + '%'),
+                       Vacancy.contract_of_service.like('%' + search + '%'))) \
+            .order_by(order.desc())
 
         if not ModuleAPI.can_write('vacancy'):
-            vacancies = vacancies.filter(and_(Vacancy.start_date <
-                                         datetime.utcnow(), Vacancy.end_date >
-                                         datetime.utcnow())).paginate(page_nr,
-                                                                      15, True)
-        else:
-            for i, vacancy in enumerate(vacancies):
-                if (vacancy.start_date < datetime.date(datetime.utcnow()) and
-                        vacancy.end_date < datetime.date(datetime.utcnow())):
-                    vacancies[i].expired = True
+            vacancies = vacancies.filter(
+                and_(Vacancy.start_date <
+                     datetime.utcnow(), Vacancy.end_date >
+                     datetime.utcnow()))
 
-            vacancies = vacancies.paginate(page_nr, 15, False)
+        vacancies = vacancies.paginate(page_nr, 15, False)
 
         return render_template('vacancy/list.htm', vacancies=vacancies,
                                search=search, path=FILE_FOLDER,
                                title="Vacatures")
 
-    if not ModuleAPI.can_write('vacancy'):
-        vacancies = Vacancy.query.order_by(
-            order.desc()).filter(and_(Vacancy.start_date <
-                                 datetime.utcnow(), Vacancy.end_date >
-                                 datetime.utcnow())).paginate(page_nr,
-                                                              15, True)
+    if ModuleAPI.can_write('vacancy'):
+        vacancies = Vacancy.query.join(Company).order_by(order.desc())
     else:
-        vacancies = Vacancy.query.join(Company).filter().\
-            order_by(order.desc())
+        vacancies = Vacancy.query.order_by(order.desc()) \
+            .filter(and_(Vacancy.start_date <
+                         datetime.utcnow(), Vacancy.end_date >
+                         datetime.utcnow()))
 
-        for i, vacancy in enumerate(vacancies):
-            if (vacancy.start_date < datetime.date(datetime.utcnow()) and
-                    vacancy.end_date < datetime.date(datetime.utcnow())):
-                vacancies[i].expired = True
-
-        vacancies = vacancies.paginate(page_nr, 15, False)
+    vacancies = vacancies.paginate(page_nr, 15, False)
 
     return render_template('vacancy/list.htm', vacancies=vacancies,
                            search="", path=FILE_FOLDER, title="Vacatures")
@@ -93,8 +80,8 @@ def edit(vacancy_id=None):
     form = VacancyForm(request.form, vacancy)
 
     # Add companies.
-    form.company_id.choices = [(c.id, c.name) for c in Company.query.
-                               order_by('name')]
+    form.company_id.choices = [(c.id, c.name) for c in Company.query
+                               .order_by('name')]
 
     if form.validate_on_submit():
         if not vacancy.id and Vacancy.query.filter(

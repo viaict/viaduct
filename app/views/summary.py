@@ -221,6 +221,8 @@ def add():
 
             if not new_path:
                 flash(_('Summary required.'), 'danger')
+                # TODO: Fix dummy summary to show previous information on new
+                # page
                 return render_template(
                     'summary/edit.htm', path=path,
                     courses=courses, educations=educations,

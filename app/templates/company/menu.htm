@@ -12,19 +12,36 @@
     <a class="btn btn-primary" href="{{ url_for('vacancy.list') }}">{{_('All vacancies')}}</a>
     {% endif %}
 </div>
-<div class="pull-right btn-group">
-    {% if ModuleAPI.can_write('location') %}
-    <a class="btn btn-success" href="{{ url_for('location.edit') }}">{{_('New location')}}</a>
-    {% endif %}
-    {% if ModuleAPI.can_write('contact') %}
-    <a class="btn btn-success" href="{{ url_for('contact.edit') }}">{{_('New contact')}}</a>
-    {% endif %}
-    {% if ModuleAPI.can_write('company') %}
-    <a class="btn btn-success" href="{{ url_for('company.edit') }}">{{_('New company')}}</a>
-    {% endif %}
-    {% if ModuleAPI.can_write('vacancy') %}
-    <a class="btn btn-success" href="{{ url_for('vacancy.edit') }}">{{_('New vacancy')}}</a>
-    {% endif %}
+
+{% if ModuleAPI.can_write('vacancy') %}
+<div class="btn-group">
+    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+        <i class='glyphicon glyphicon-plus'></i>
+        <span class="hidden-xs">{{ _('Add') }}</span>
+    </button>
+    <ul class="dropdown-menu">
+        {% if ModuleAPI.can_write('location') %}
+        <li>
+            <a class='dropdown-item' href="{{ url_for('location.edit') }}">{{_('New location')}}</a>
+        </li>
+        {% endif %}
+        {% if ModuleAPI.can_write('contact') %}
+        <li>
+            <a class='dropdown-item' href="{{ url_for('contact.edit') }}">{{_('New contact')}}</a>
+        </li>
+        {% endif %}
+        {% if ModuleAPI.can_write('company') %}
+        <li>
+            <a class='dropdown-item' href="{{ url_for('company.edit') }}">{{_('New company')}}</a>
+        </li>
+        {% endif %}
+        {% if ModuleAPI.can_write('vacancy') %}
+        <li>
+            <a class='dropdown-item' href="{{ url_for('vacancy.edit') }}">{{_('New vacancy')}}</a>
+        </li>
+        {% endif %}
+    </ul>
 </div>
+{% endif %}
 <br/>
 <br/>
