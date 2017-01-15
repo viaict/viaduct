@@ -68,6 +68,7 @@ toolbar = DebugToolbarExtension(app)
 
 if not app.debug and 'SENTRY_DSN' in app.config:
     sentry = Sentry(app)
+    sentry.client.release = version
 
 
 # Set up Flask Babel, which is used for internationalisation support.
