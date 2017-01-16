@@ -173,6 +173,20 @@
 </div>
 {% endmacro %}
 
+{% macro render_radio_buttons(field) %}
+    <div class="form-group">
+        {{ field.label }}
+        {% for value, label, selected in field.iter_choices() %}
+        <div class="radio">
+            <label>
+                <input type="radio" name="{{ field.name }}" value="{{ value }}" {%- if selected -%}checked="checked"{%- endif -%}>
+                {{ label }}
+            </label>
+        </div>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
 {% macro render_tabs(field) %}
 {# We use this group id in the ids of the tabs, to make them unique for this group #}
 {%- set group_id = field.hex_id -%}
@@ -238,10 +252,7 @@
         {{ render_field(f) }}
         <br />
     {%- elif f.type == 'RadioField' -%}
-        {# TODO This does not work:
-        {{ render_field(f) }}
-        #}
-        RadioField NOT WORKING YET <br>
+        {{ render_radio_buttons(f) }}
     {%- elif f.type == 'SelectField' -%}
         {{ render_select(f) }}
     {%- elif f.type == 'SubmitField' -%}
