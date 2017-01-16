@@ -71,12 +71,65 @@ class FieldTab:
         return "<{} '{}'>".format(self.__class__.__name, self.name)
 
 
+class FieldVerticalSplit:
+    """
+    Represents a vertical split of fields, i.e. fields next to eachother
+    """
+
+    def __init__(self, field_names):
+        """
+        field_names should be a list of list of fields to be splitted
+
+        For example,
+            [['X1', 'X2'], ['Y1', 'Y2']]
+        will render as:
+            [   X1   ]  [   Y1   ]
+            [   X2   ]  [   Y2   ]
+        """
+        self.amount_splits = len(field_names)
+        self.type = self.__class__.__name__
+
+        # Allowed amounts of splits which all can be divided evenly
+        allowed_split_amounts = [2, 3, 4]
+
+        if self.amount_splits not in allowed_split_amounts:
+            raise ValueError("Amount of splits should be equal to one of: {}",
+                             ", ".join(map(str, allowed_split_amounts)))
+
+        self.field_names_list = field_names
+
+        # Make a list of all fieldnames (i.e. flatten the field_names list)
+        self._fieldnames = []
+        for fields in self.field_names_list:
+            self._fieldnames.extend(fields)
+
+        # First field is used to determine the place of the vertical split
+        self._firstfield = field_names[0][0]
+
+    def _set_form(self, form):
+        """Internal method used by FormWrapper."""
+        self.form = form
+
+        self._fields = []
+        for field_names in self.field_names_list:
+            fields = []
+            for field_name in field_names:
+                fields.append(getattr(form, field_name))
+            self._fields.append(fields)
+
+    def __iter__(self):
+        if not hasattr(self, 'form'):
+            raise ValueError('_set_form should be called before iterating')
+        return iter(self._fields)
+
+
 class FormWrapper:
     """Helper class for form rendering"""
 
     def __init__(self, form):
         self.form = form
         self.groups = []
+        self.vsplits = []
 
         self.has_select_fields = False
         self.has_custom_form_fields = False
@@ -86,6 +139,10 @@ class FormWrapper:
             # Collect the tab groups in the form
             if isinstance(obj, FieldTabGroup):
                 self.groups.append(obj)
+
+            # Collect the vertical splits in the form
+            elif isinstance(obj, FieldVerticalSplit):
+                self.vsplits.append(obj)
 
             # Check if the form has select fields
             elif isinstance(obj, SelectField) \
@@ -116,6 +173,21 @@ class FormWrapper:
         except TypeError:
             raise TypeError('Group field should be a string')
 
+        try:
+            # Dictionary from first field object of a vertial split
+            # to the vertical split object itself
+            vsplits_firstfields = {
+                getattr(form, v._firstfield): v
+                for v in self.vsplits
+            }
+
+            # List of all fields belonging to a vertical split
+            vsplit_fields = list(map(
+                lambda f: getattr(form, f), itertools.chain(
+                    *map(lambda v: v._fieldnames, self.vsplits))))
+        except TypeError:
+            raise TypeError('Vertical split field should be a string')
+
         self._fields = []
 
         for field in form:
@@ -123,13 +195,18 @@ class FormWrapper:
             if field in groups_firstfields:
                 self._fields.append(groups_firstfields[field])
 
+            # Add the vertical split when the first field
+            # occurs in the field list
+            elif field in vsplits_firstfields:
+                self._fields.append(vsplits_firstfields[field])
+
             # Otherwise, add a field when it does not belong to a group
-            elif field not in groups_fields:
+            elif field not in groups_fields and field not in vsplit_fields:
                 self._fields.append(field)
 
-        # Give every group the form object to make them
+        # Give every group and vsplit the form object to make them
         # iterable over their tabs/fields
-        for g in self.groups:
+        for g in self.groups + self.vsplits:
             g._set_form(form)
 
     def __iter__(self):

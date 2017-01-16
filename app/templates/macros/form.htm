@@ -206,6 +206,19 @@
 </div>
 {% endmacro %}
 
+{% macro render_vsplit(vsplit) %}
+{%- set column_size = 12 // vsplit.amount_splits -%}
+<div class="row">
+{% for field_list in vsplit %}
+    <div class="col-md-{{ column_size }}">
+        {% for field in field_list %}
+        {{ render_field_internal(field) }}
+        {% endfor %}
+    </div>
+{% endfor %}
+</div>
+{% endmacro %}
+
 {% macro render_field_internal(f) %}
     {%- if f.type == 'BooleanField' -%}
         {{ render_checkbox(f) }}
@@ -241,6 +254,8 @@
         {{ render_education_select(f) }}
     {%- elif f.type == 'FieldTabGroup' -%}
         {{ render_tabs(f) }}
+    {%- elif f.type == 'FieldVerticalSplit' -%}
+        {{ render_vsplit(f) }}
     {%- elif f.type != 'CSRFTokenField' -%}
         {{ render_field(f) }}
     {%- endif -%}
