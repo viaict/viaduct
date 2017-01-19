@@ -36,6 +36,20 @@
     </div>
 {% endmacro %}
 
+{% macro render_integer(field) %}
+    <div class="form-group">
+        {{ field.label }}
+        <input class="form-control" type="number" step="1" placeholder="{{ field.label.text }}" name="{{ field.name }}" value="{{ field.data }}" />
+    </div>
+{% endmacro %}
+
+{% macro render_decimal(field) %}
+    <div class="form-group">
+        {{ field.label }}
+        <input class="form-control" type="number" step="any" placeholder="{{ field.label.text }}" name="{{ field.name }}" value="{{ field.data }}" />
+    </div>
+{% endmacro %}
+
 {% macro render_datefield(field) %}
     <div class="form-group">
         {{ field.label }}
@@ -243,14 +257,11 @@
     {%- elif f.type == 'DateTimeField' -%}
         {{ render_datetimefield_picker(f) }}
     {%- elif f.type == 'DecimalField' -%}
-        {# TODO Create a separate macro #}
-        {{ render_field(f) }}
+        {{ render_decimal(f) }}
     {%- elif f.type == 'FileField' -%}
         {{ render_file(f) }}
     {%- elif f.type == 'IntegerField' -%}
-        {# TODO Create a separate macro #}
-        {{ render_field(f) }}
-        <br />
+        {{ render_integer(f) }}
     {%- elif f.type == 'RadioField' -%}
         {{ render_radio_buttons(f) }}
     {%- elif f.type == 'SelectField' -%}
@@ -272,9 +283,9 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_form(form, action_url, form_id='', form_class='', submit_id='', submit_text='') %}
+{% macro render_form(form, action, form_id='', form_class='', submit_id='', submit_text='') %}
 {%- set form_wrapped = FormWrapper(form) -%}
-<form method="POST" action="{{ action_url }}" enctype="multipart/form-data" class="{{ form_class }}">
+<form method="POST" action="{{ action }}" enctype="multipart/form-data" class="{{ form_class }}">
     {{ form_wrapped.csrf_token }}
     {%- for f in form_wrapped -%}
     {{ render_field_internal(f) }}
