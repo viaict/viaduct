@@ -8,7 +8,7 @@ $(document).ready(function() {
     }, utils.datatables.defaults));
 
     $('#datatable').on('click', 'tr', function () {
-        window.location.href = "/education/edit/" +
-            table.row(this).data()[0] + "?redir=educations";
+        window.location.href = Flask.url_for('examination.edit_education', {
+            education_id: table.row(this).data()[0]}) + '?redir=educations';
     });
 });

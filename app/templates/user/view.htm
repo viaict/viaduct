@@ -1,59 +1,51 @@
 {% extends 'content.htm' %}
 
 {% block includes %}
-    <script>
-        var get_users = "{{ url_for('user.get_users') }}"
-        var delete_users = "{{url_for('user.api_delete_user') }}"
-    </script>
-    <script src="{{static_url("/static/js/user/view.js") }}"></script>
+<script src="{{static_url("/static/js/user/view.js") }}"></script>
 {% endblock %}
 
 {% block content %}
 <h1>{{ _('User overview') }}</h1>
-<div class='row'>
-	<div class='col-md-12'>
-        <table id="datatable" class='table table-striped'>
-            <thead>
-                <tr>
-                    <th>{{ _('ID') }}</th>
-                    <th>{{ _('E-mail adress') }}</th>
-                    <th>{{ _('Firstname') }}</th>
-                    <th>{{ _('Last name') }}</th>
-                    <th>{{ _('Student ID') }}</th>
-                    <th>{{ _('Study course') }}</th>
-                    <th>{{ _('Member') }}</th>
-                    <th>{{ _('Honorary member') }}</th>
-                    <th>{{ _('Favourer') }}</th>
-                    <th>{{ _('Alumnus') }}</th>
-                </tr>
-            </thead>
-            <tfoot>
-                <tr>
-                    <th>{{ _('ID') }}</th>
-                    <th>{{ _('E-mail adress') }}</th>
-                    <th>{{ _('Firstname') }}</th>
-                    <th>{{ _('Last name') }}</th>
-                    <th>{{ _('Student ID') }}</th>
-                    <th>{{ _('Study course') }}</th>
-                    <th>{{ _('Member') }}</th>
-                    <th>{{ _('Honorary member') }}</th>
-                    <th>{{ _('Favourer') }}</th>
-                    <th>{{ _('Alumnus') }}</th>
-                </tr>
-            </tfoot>
-        </table>
+<table id="datatable" class='table table-striped'>
+    <thead>
+        <tr>
+            <th>{{ _('ID') }}</th>
+            <th>{{ _('E-mail adress') }}</th>
+            <th>{{ _('Firstname') }}</th>
+            <th>{{ _('Last name') }}</th>
+            <th>{{ _('Student ID') }}</th>
+            <th>{{ _('Study course') }}</th>
+            <th>{{ _('Member') }}</th>
+            <th>{{ _('Honorary member') }}</th>
+            <th>{{ _('Favourer') }}</th>
+            <th>{{ _('Alumnus') }}</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>{{ _('ID') }}</th>
+            <th>{{ _('E-mail adress') }}</th>
+            <th>{{ _('Firstname') }}</th>
+            <th>{{ _('Last name') }}</th>
+            <th>{{ _('Student ID') }}</th>
+            <th>{{ _('Study course') }}</th>
+            <th>{{ _('Member') }}</th>
+            <th>{{ _('Honorary member') }}</th>
+            <th>{{ _('Favourer') }}</th>
+            <th>{{ _('Alumnus') }}</th>
+        </tr>
+    </tfoot>
+</table>
 
-        <div class='btn-group'>
-            <a href='{{ url_for('user.edit') }}' class='btn btn-success'>
-                <i class='glyphicon glyphicon-user'></i> {{ _('Create user') }}
-            </a>
-            <a style='display:none;' id='delete' class='btn btn-danger'>
-                <i class='glyphicon glyphicon-remove'></i> {{ _('Delete') }}
-            </a>
-            <a href='{{ url_for('user.user_export') }}' class='btn btn-success'>
-                <i class='glyphicon glyphicon-export'></i> {{ _('Export users') }}
-            </a>
-        </div>
-	</div>
+<div class='btn-group'>
+    <a href='{{ url_for('user.edit') }}' class='btn btn-success'>
+        <i class='glyphicon glyphicon-user'></i> {{ _('Create user') }}
+    </a>
+    <a style='display:none;' id='delete' class='btn btn-danger'>
+        <i class='glyphicon glyphicon-remove'></i> {{ _('Delete') }}
+    </a>
+    <a href='{{ url_for('user.user_export') }}' class='btn btn-success'>
+        <i class='glyphicon glyphicon-export'></i> {{ _('Export users') }}
+    </a>
 </div>
 {% endblock %}

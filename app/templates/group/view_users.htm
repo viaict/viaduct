@@ -1,44 +1,37 @@
 {% extends "content.htm" %}
 
 {% block includes %}
-    <script>
-        var get_group_users = "{{ url_for('group.get_group_users', group_id=group.id) }}"
-        var delete_group_users = "{{ url_for('group.delete_group_users', group_id=group.id) }}"
-    </script>
+    <script>var group_id = "{{group.id}}";</script>
     <script src="{{static_url("/static/js/group/view_users.js")}}"></script>
 {% endblock %}
 
 {%block content %}
-<h1>{{ group.name }} gebruikers</h1>
-<div class="row">
-	<div class="col-md-12">
-        <table id="datatable" class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Naam</th>
-                </tr>
-            </thead>
-            <tfoot>
-                <tr>
-                    <th>ID</th>
-                    <th>Naam</th>
-                </tr>
-            </tfoot>
-        </table>
+<h1>{{ group.name }} {{_('Users')}}</h1>
+<table id="datatable" class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>{{_('Name')}}</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>ID</th>
+            <th>{{_('Name')}}</th>
+        </tr>
+    </tfoot>
+</table>
 
-        <div class="btn-group">
-            <a href="{{ url_for('group.add_users', group_id=group.id) }}"
-                class="btn btn-success">
-                <i class="glyphicon glyphicon-plus"></i> Add
-            </a>
-            <a id="delete" class="btn btn-danger">
-                <i class="glyphicon glyphicon-remove"></i> Delete
-            </a>
-            <a href="{{ url_for('group.view') }}" class="btn btn-primary">
-                <i class="glyphicon glyphicon-arrow-left"/></i> Back
-            </a>
-        </div>
-    </div>
+<div class="btn-group">
+    <a href="{{ url_for('group.add_users', group_id=group.id) }}"
+       class="btn btn-success">
+        <i class="glyphicon glyphicon-plus"></i> {{_('Add')}}
+    </a>
+    <a id="delete" class="btn btn-danger">
+        <i class="glyphicon glyphicon-remove"></i> {{_('Delete')}}
+    </a>
+    <a href="{{ url_for('group.view') }}" class="btn btn-primary">
+        <i class="glyphicon glyphicon-arrow-left"/></i> {{_('Back')}}
+    </a>
 </div>
 {% endblock %}

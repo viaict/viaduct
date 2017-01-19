@@ -1,12 +1,16 @@
 function format(d, table) {
+    "use strict";
+
     d.table = table;
     return utils.jadetpl('company_list_datatable', d);
 }
 
 $(document).ready(function() {
+    "use strict";
+
     var table = $('#datatable').DataTable(_.defaults({
         "ajax": {
-            "url": get_companies,
+            "url": Flask.url_for('company.get_companies'),
             "type": "get",
         },
         "columns": [
