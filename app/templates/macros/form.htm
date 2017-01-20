@@ -39,14 +39,14 @@
 {% macro render_integer(field) %}
     <div class="form-group">
         {{ field.label }}
-        <input class="form-control" type="number" step="1" placeholder="{{ field.label.text }}" name="{{ field.name }}" value="{{ field.data }}" />
+        <input class="form-control" type="number" step="1" placeholder="{{ field.label.text }}" name="{{ field.name }}"{% if field.data %} value="{{ field.data }}"{%endif%} />
     </div>
 {% endmacro %}
 
 {% macro render_decimal(field) %}
     <div class="form-group">
         {{ field.label }}
-        <input class="form-control" type="number" step="any" placeholder="{{ field.label.text }}" name="{{ field.name }}" value="{{ field.data }}" />
+        <input class="form-control" type="number" step="any" placeholder="{{ field.label.text }}" name="{{ field.name }}"{% if field.data %} value="{{ field.data }}"{% endif %} />
     </div>
 {% endmacro %}
 
