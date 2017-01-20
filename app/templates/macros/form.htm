@@ -144,7 +144,7 @@
 
 {% macro render_custom_form_selecter(field) %}
 {{ field.label }}
-{{ custom_form_select(field.name, field.value, field.id) }}
+{{ custom_form_select(field.name, field.data, field.id) }}
 {% endmacro %}
 
 {% macro render_select_internal(field) %}
