@@ -54,13 +54,13 @@ $(document).ready(function() {
 
                 function(result) {
                     if (result == "success")
-                        flash(msg_success, "success");
+                        utils.flash.new(msg_success, "success");
                     else if (result == "edit")
-                        flash("Je formulier is aangepast", "warning");
+                        utils.flash.new("Je formulier is aangepast", "warning");
                     else if (result == 'reserve')
-                        flash('Je staat op de reserve lijst', 'success');
+                        utils.flash.new('Je staat op de reserve lijst', 'success');
                     else
-                        flash("Er is iets misgegaan bij het invullen :(", "danger");
+                        utils.flash.new("Er is iets misgegaan bij het invullen :(", "danger");
                 }
             ).always(function() {
                 utils.form.submit_button(custom_form).button('reset');

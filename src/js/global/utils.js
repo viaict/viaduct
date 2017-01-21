@@ -119,5 +119,41 @@ var utils = function() { // jshint ignore:line
         $button.button('loading');
     };
 
+
+    utils.flash = {};
+    utils.flash.clear = function () {
+
+        $('#messages .alert').slideUp('slow', function() {
+            $(this).remove();
+        });
+    };
+
+    utils.flash.new = function (message, type, scroll) {
+
+        var $container = $('#messages');
+        var $message = $('<div></div>');
+
+        if (!type) {
+            type = 'info';
+        }
+
+        if (type === 'error') {
+            type = 'danger';
+        }
+
+        $message.addClass('alert').addClass('alert-' + type);
+        $message.text(message);
+        $message.hide();
+
+        $container.prepend($message);
+        $message.slideDown('slow');
+
+        if (scroll !== false) {
+            $('html, body').animate({
+                scrollTop: $('body').offset().top
+            }, 'fast');
+        }
+    };
+
     return utils;
 }();
