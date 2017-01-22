@@ -201,6 +201,12 @@
     </div>
 {% endmacro %}
 
+{% macro render_recaptcha(field) %}
+    <div class='form-group'>
+        {{ field(class='form-control') }}
+    </div>
+{% endmacro %}
+
 {% macro render_tabs(field) %}
 {# We use this group id in the ids of the tabs, to make them unique for this group #}
 {%- set group_id = field.hex_id -%}
@@ -278,6 +284,8 @@
         {{ render_tabs(f) }}
     {%- elif f.type == 'FieldVerticalSplit' -%}
         {{ render_vsplit(f) }}
+    {%- elif f.type == 'RecaptchaField' -%}
+        {{ render_recaptcha(f) }}
     {%- elif f.type != 'CSRFTokenField' -%}
         {{ render_field(f) }}
     {%- endif -%}
