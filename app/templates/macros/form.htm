@@ -207,7 +207,7 @@
     </div>
 {% endmacro %}
 
-{% macro render_tabs(field) %}
+{% macro render_tabs(field, extra_field_renderers) %}
 {# We use this group id in the ids of the tabs, to make them unique for this group #}
 {%- set group_id = field.hex_id -%}
 <div class="row">
@@ -229,7 +229,7 @@
                     {%- for i, (tab_name, tab_fields) in enumerate(field) %}
                     <div id="tab_{{ group_id }}_{{ i }}" class="tab-pane fade{% if i == 0 %} in active{% endif %}">
                         {%- for field in tab_fields -%}
-                        {{ render_field_internal(field) }}
+                        {{ render_field_internal(field, extra_field_renderers) }}
                         {%- endfor -%}
                     </div>
                     {%- endfor %}
@@ -240,21 +240,23 @@
 </div>
 {% endmacro %}
 
-{% macro render_vsplit(vsplit) %}
+{% macro render_vsplit(vsplit, extra_field_renderers) %}
 {%- set column_size = 12 // vsplit.amount_splits -%}
 <div class="row">
 {% for field_list in vsplit %}
     <div class="col-md-{{ column_size }}">
         {% for field in field_list %}
-        {{ render_field_internal(field) }}
+        {{ render_field_internal(field, extra_field_renderers) }}
         {% endfor %}
     </div>
 {% endfor %}
 </div>
 {% endmacro %}
 
-{% macro render_field_internal(f) %}
-    {%- if f.type == 'BooleanField' -%}
+{% macro render_field_internal(f, extra_field_renderers) %}
+    {%- if f.type in extra_field_renderers -%}
+        {{ extra_field_renderers[f.type](f) }}
+    {%- elif f.type == 'BooleanField' -%}
         {{ render_checkbox(f) }}
     {%- elif f.type == 'CustomFormSelectField' -%}
         {{ render_custom_form_selecter(f) }}
@@ -281,9 +283,9 @@
     {%- elif f.type == 'EducationSelectField' -%}
         {{ render_education_select(f) }}
     {%- elif f.type == 'FieldTabGroup' -%}
-        {{ render_tabs(f) }}
+        {{ render_tabs(f, extra_field_renderers) }}
     {%- elif f.type == 'FieldVerticalSplit' -%}
-        {{ render_vsplit(f) }}
+        {{ render_vsplit(f, extra_field_renderers) }}
     {%- elif f.type == 'RecaptchaField' -%}
         {{ render_recaptcha(f) }}
     {%- elif f.type != 'CSRFTokenField' -%}
@@ -291,18 +293,25 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_form(form, action, form_id='', form_class='', submit_id='', submit_text='') %}
+{% macro render_form(form, action,
+                     form_id='', form_class='',
+                     submit_id='', submit_text='',
+                     extra_field_renderers={}, submit_renderer=None) %}
 {%- set form_wrapped = FormWrapper(form) -%}
 <form method="POST" action="{{ action }}" enctype="multipart/form-data" class="{{ form_class }}">
     {{ form_wrapped.csrf_token }}
     {%- for f in form_wrapped -%}
-    {{ render_field_internal(f) }}
+    {{ render_field_internal(f, extra_field_renderers) }}
     {%- endfor -%}
     {%- if not submit_text or submit_text == '' -%}
     {%- set submit_text = _('Submit') -%}
     {%- endif -%}
     {%- if not form_wrapped.has_submit_field -%}
+    {%- if submit_renderer -%}
+    {{ submit_renderer() }}
+    {%- else -%}
     {{ render_submit(submit_text) }}
+    {%- endif -%}
     {%- endif -%}
     {%- if form_wrapped.has_select_fields -%}
     {{ enable_select2() }}
