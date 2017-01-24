@@ -1294,12 +1294,14 @@ $DOMJUDGE_LIGHTGREEN:   #7CD449;
 @media(min-width:992px){
     #domjudge-scoreboard-table {
         width: 980px;
+        overflow-x: scroll;
     }
 }
 
 @media(min-width:1200px){
     #domjudge-scoreboard-table {
         width: 1300px;
+        overflow-x: scroll;
     }
 }
 
