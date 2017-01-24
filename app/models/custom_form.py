@@ -115,7 +115,7 @@ class CustomForm(db.Model, BaseEntity):
         if current is not None:
             cf = cls.query.get(current)
 
-            if cf.is_archived():
+            if cf is not None and cf.is_archived():
                 lst.append(('Gearchiveerd geselecteerd formulier', [cf]))
 
         return lst
