@@ -131,6 +131,8 @@ class FormWrapper:
         self.groups = []
         self.vsplits = []
 
+        self.csrf_token = form.csrf_token
+
         self.has_select_fields = False
         self.has_custom_form_fields = False
         self.has_submit_field = False
