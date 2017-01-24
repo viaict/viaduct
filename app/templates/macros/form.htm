@@ -1,10 +1,26 @@
 {% from "macros/custom_form.htm" import custom_form_select %}
 
-{% macro render_field(field) %}
-    <div class="form-group">
-        {{ field.label }}
-        {{ field(placeholder=field.label.text, class='form-control') }}
+{% macro _render_field_with_errors(field, field_input_html, show_cross=True) %}
+    <div class="form-group{% if field.errors %} has-error has-feedback{% endif %}">
+        <div class="col-sm-12">
+            {{ field.label }}
+        </div>
+        <div class="col-sm-12">
+            {{ field_input_html }}
+            {%- if field.errors -%}
+            {%- if show_cross -%}
+            <i class="glyphicon glyphicon-remove form-control-feedback"></i>
+            {%- endif -%}
+            {%- for error in field.errors -%}
+            <p class="help-block">{{ error }}</p>
+            {%- endfor -%}
+            {%- endif -%}
+        </div>
     </div>
+{% endmacro %}
+
+{% macro render_field(field) %}
+    {{ _render_field_with_errors(field, field(placeholder=field.label.text, class='form-control')) }}
 {% endmacro %}
 
 {% macro render_button(field, cls='btn btn-default') %}
@@ -13,41 +29,41 @@
 
 {% macro render_submit(text) %}
     <div class="form-group">
-        <button class='btn btn-primary' data-loading-text={{_('Loading...')}}
-            type='submit'>{{ text }}</button>
+        <div class="col-sm-12">
+            <button class='btn btn-primary' data-loading-text={{_('Loading...')}}
+                type='submit'>{{ text }}</button>
+        </div>
     </div>
 {% endmacro %}
 
 {% macro render_checkbox(field) %}
     <div class="form-group">
-        <div class="checkbox">
-            <label>
-                {{ field }} {{ field.label.text }}
-            </label>
+        <div class="col-sm-12">
+            <div class="checkbox">
+                <label>
+                    {{ field }}
+                    {{ field.label.text }}
+                </label>
+            </div>
         </div>
     </div>
 {% endmacro %}
 
 {% macro render_textarea(field) %}
-    <div class="form-group">
-        {{ field.label }}
-        {{ field(placeholder=field.label.text, class='form-control',
-        cols='50', rows='50') }}
-    </div>
+    {{ _render_field_with_errors(field, field(placeholder=field.label.text, class='form-control',
+                cols='50', rows='50')) }}
+{% endmacro %}
+
+{% macro _render_number_input(field, step) %}
+<input class="form-control" type="number" step="{{ step }}" placeholder="{{ field.label.text }}" name="{{ field.name }}"{% if field.data %} value="{{ field.data }}"{%endif%} />
 {% endmacro %}
 
 {% macro render_integer(field) %}
-    <div class="form-group">
-        {{ field.label }}
-        <input class="form-control" type="number" step="1" placeholder="{{ field.label.text }}" name="{{ field.name }}"{% if field.data %} value="{{ field.data }}"{%endif%} />
-    </div>
+    {{ _render_field_with_errors(field, _render_number_input(field, 1)) }}
 {% endmacro %}
 
 {% macro render_decimal(field) %}
-    <div class="form-group">
-        {{ field.label }}
-        <input class="form-control" type="number" step="any" placeholder="{{ field.label.text }}" name="{{ field.name }}"{% if field.data %} value="{{ field.data }}"{% endif %} />
-    </div>
+    {{ _render_field_with_errors(field, _render_number_input(field, "any")) }}
 {% endmacro %}
 
 {% macro render_datefield(field) %}
@@ -57,42 +73,32 @@
     </div>
 {% endmacro %}
 
+{% macro _render_datetimefield_inputgroup(field, format) %}
+    <div class='input-group date' id='{{field.id}}'>
+        <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+        {{ field(class='form-control', **{'data-date-format': '{{ format }}'}) }}
+    </div>
+{% endmacro %}
+
 <!-- Render with date and time -->
 {% macro render_datetimefield_picker(field) %}
-    <div class="form-group">
-        {{ field.label }}
-        <div class='input-group date' id='{{field.id}}'>
-            <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-            {{ field(class='form-control', **{'data-date-format': 'yyyy-mm-dd hh:ii'}) }}
-        </div>
-    </div>
-    <script>$('#' + "{{ field.id }}").datetimepicker({ format: 'yyyy-mm-dd hh:ii' });</script>
+{{ _render_field_with_errors(field, _render_datetimefield_inputgroup(field, 'yyyy-mm-dd hh:ii')) }}
+    <script>$("#{{ field.id }}").datetimepicker({ format: 'yyyy-mm-dd hh:ii' });</script>
 {% endmacro %}
 
 <!-- Render with date only -->
 {% macro render_datefield_picker(field) %}
-    <div class="form-group">
-        {{ field.label }}
-        <div class='input-group date' id='{{field.id}}'>
-            <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-            {{ field(class='form-control', **{'data-date-format': 'yyyy-mm-dd'}) }}
-        </div>
-    </div>
-    <script>$('#' + "{{ field.id }}").datetimepicker({ format: 'yyyy-mm-dd' });</script>
+{{ _render_field_with_errors(field, _render_datetimefield_inputgroup(field, 'yyyy-mm-dd')) }}
+    <script>$("#{{ field.id }}").datetimepicker({ format: 'yyyy-mm-dd' });</script>
 {% endmacro %}
 
 {% macro render_select(field) %}
-    <div class="form-group">
-        {{ field.label }}
-        {{ field(class='form-control') }}
-    </div>
+{{ _render_field_with_errors(field, field(class='form-control'), False) }}
 {% endmacro %}
 
+{# TODO Remove once done #}
 {% macro render_file(field) %}
-    <div class="form-group">
-        {{ field.label }}
-        {{ field(class='form-control') }}
-    </div>
+{{ render_field(field) }}
 {% endmacro %}
 
 {# TODO Remove once done #}
@@ -143,11 +149,10 @@
 
 
 {% macro render_custom_form_selecter(field) %}
-{{ field.label }}
-{{ custom_form_select(field.name, field.data, field.id) }}
+{{ _render_field_with_errors(field, custom_form_select(field.name, field.data, field.id), False) }}
 {% endmacro %}
 
-{% macro render_select_internal(field) %}
+{% macro _render_select_options(field) %}
     <select id='{{ field.id }}' name='{{ field.name }}' class='form-control'>
     {% for value, label, selected in field.iter_choices() %}
     <option value="{{ value }}" {%- if selected -%}selected="selected"{%- endif -%}>
@@ -157,11 +162,9 @@
     </select>
 {% endmacro %}
 
-{% macro render_course_select(field) %}
-<div class='form-group'>
-    {{ field.label }}
+{% macro _render_course_select_inputgroup(field) %}
     <div class='input-group'>
-        {{ render_select_internal(field) }}
+        {{ _render_select_options(field) }}
         <span class="input-group-btn">
             <a href="{{ url_for('examination.add_course') }}" class="btn btn-default btn-success">
                 <i class="glyphicon glyphicon-pencil"></i>
@@ -169,14 +172,15 @@
             </a>
         </span>
     </div>
-</div>
 {% endmacro %}
 
-{% macro render_education_select(field) %}
-<div class='form-group'>
-    {{ field.label }}
+{% macro render_course_select(field) %}
+{{ _render_field_with_errors(field, _render_course_select_inputgroup(field), False) }}
+{% endmacro %}
+
+{% macro _render_education_select_inputgroup(field) %}
     <div class='input-group'>
-        {{ render_select_internal(field) }}
+        {{ _render_select_options(field) }}
         <span class="input-group-btn">
             <a href="{{ url_for('examination.add_education') }}" class="btn btn-default btn-success">
                 <i class="glyphicon glyphicon-pencil"></i>
@@ -184,26 +188,35 @@
             </a>
         </span>
     </div>
+{% endmacro %}
+
+{% macro render_education_select(field) %}
+{{ _render_field_with_errors(field, _render_education_select_inputgroup(field), False) }}
+{% endmacro %}
+
+{% macro _render_radiobuttons_list(field) %}
+{% for value, label, selected in field.iter_choices() %}
+<div class="radio">
+    <label>
+        <input type="radio" name="{{ field.name }}" value="{{ value }}" {%- if selected -%}checked="checked"{%- endif -%}>
+        {{ label }}
+    </label>
 </div>
+{% endfor %}
 {% endmacro %}
 
 {% macro render_radio_buttons(field) %}
-    <div class="form-group">
-        {{ field.label }}
-        {% for value, label, selected in field.iter_choices() %}
-        <div class="radio">
-            <label>
-                <input type="radio" name="{{ field.name }}" value="{{ value }}" {%- if selected -%}checked="checked"{%- endif -%}>
-                {{ label }}
-            </label>
-        </div>
-        {% endfor %}
-    </div>
+{{ _render_field_with_errors(field, _render_radiobuttons_list(field), False) }}
 {% endmacro %}
 
 {% macro render_recaptcha(field) %}
-    <div class='form-group'>
-        {{ field(class='form-control') }}
+    <div class="form-group{% if field.errors %} has-error has-feedback{% endif %}">
+        <div class="col-sm-12">
+            {{ field(class='form-control') }}
+            {%- if field.errors -%}
+            <p class="help-block">{{ _("Please verify that you are not a robot.") }}</p>
+            {%- endif -%}
+        </div>
     </div>
 {% endmacro %}
 
@@ -229,7 +242,7 @@
                     {%- for i, (tab_name, tab_fields) in enumerate(field) %}
                     <div id="tab_{{ group_id }}_{{ i }}" class="tab-pane fade{% if i == 0 %} in active{% endif %}">
                         {%- for field in tab_fields -%}
-                        {{ render_field_internal(field, extra_field_renderers) }}
+                        {{ _render_field_internal(field, extra_field_renderers) }}
                         {%- endfor -%}
                     </div>
                     {%- endfor %}
@@ -246,14 +259,14 @@
 {% for field_list in vsplit %}
     <div class="col-md-{{ column_size }}">
         {% for field in field_list %}
-        {{ render_field_internal(field, extra_field_renderers) }}
+        {{ _render_field_internal(field, extra_field_renderers) }}
         {% endfor %}
     </div>
 {% endfor %}
 </div>
 {% endmacro %}
 
-{% macro render_field_internal(f, extra_field_renderers) %}
+{% macro _render_field_internal(f, extra_field_renderers) %}
     {%- if f.type in extra_field_renderers -%}
         {{ extra_field_renderers[f.type](f) }}
     {%- elif f.type == 'BooleanField' -%}
@@ -266,8 +279,6 @@
         {{ render_datetimefield_picker(f) }}
     {%- elif f.type == 'DecimalField' -%}
         {{ render_decimal(f) }}
-    {%- elif f.type == 'FileField' -%}
-        {{ render_file(f) }}
     {%- elif f.type == 'IntegerField' -%}
         {{ render_integer(f) }}
     {%- elif f.type == 'RadioField' -%}
@@ -294,14 +305,14 @@
 {% endmacro %}
 
 {% macro render_form(form, action,
-                     form_id='', form_class='',
+                     form_id='', form_class='form-horizontal',
                      submit_id='', submit_text='',
                      extra_field_renderers={}, submit_renderer=None) %}
 {%- set form_wrapped = FormWrapper(form) -%}
 <form method="POST" action="{{ action }}" enctype="multipart/form-data" class="{{ form_class }}">
     {{ form_wrapped.csrf_token }}
     {%- for f in form_wrapped -%}
-    {{ render_field_internal(f, extra_field_renderers) }}
+    {{ _render_field_internal(f, extra_field_renderers) }}
     {%- endfor -%}
     {%- if not submit_text or submit_text == '' -%}
     {%- set submit_text = _('Submit') -%}
