@@ -76,7 +76,7 @@
 {% macro _render_datetimefield_inputgroup(field, format) %}
     <div class='input-group date' id='{{field.id}}'>
         <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-        {{ field(class='form-control', **{'data-date-format': '{{ format }}'}) }}
+        {{ field(class='form-control', placeholder=format, **{'data-date-format': '{{ format }}'}) }}
     </div>
 {% endmacro %}
 
