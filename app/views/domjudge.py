@@ -115,7 +115,7 @@ def contest_view(contest_id, page):
 
     problems_per_page = 8
     total_problems_amount = len(problems)
-    use_pagination = total_problems_amount > problems_per_page
+    use_pagination = False  # total_problems_amount > problems_per_page
     if use_pagination:
         amount_pages = math.ceil(len(problems) / problems_per_page)
         problems = problems[(page - 1) * problems_per_page:
