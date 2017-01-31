@@ -63,6 +63,8 @@ $(function () {
         function finish() {
             $load.hide();
             $refr.show();
+            if($slct.hasClass("select2-offscreen"))
+                $slct.select2();
             $btn.prop('disabled', false);
         }
     }
