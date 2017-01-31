@@ -66,6 +66,7 @@
     {{ _render_field_with_errors(field, _render_number_input(field, "any")) }}
 {% endmacro %}
 
+{# TODO Remove once done #}
 {% macro render_datefield(field) %}
     <div class="form-group">
         {{ field.label }}
@@ -80,13 +81,23 @@
     </div>
 {% endmacro %}
 
-<!-- Render with date and time -->
 {% macro render_datetimefield_picker(field) %}
-{{ _render_field_with_errors(field, _render_datetimefield_inputgroup(field, 'yyyy-mm-dd hh:ii')) }}
-    <script>$("#{{ field.id }}").datetimepicker({ format: 'yyyy-mm-dd hh:ii' });</script>
+{#  Convert the (most used) fields of the Python date format
+    to the date format of the datetimepicker #}
+{%- set format = field.format
+                    | replace('%Y', 'yyyy')
+                    | replace('%m', 'mm')
+                    | replace('%d', 'dd')
+                    | replace('%H', 'hh')
+                    | replace('%M', 'ii')
+                    | replace('%S', 'ss')
+-%}
+{{ _render_field_with_errors(field, _render_datetimefield_inputgroup(field, format)) }}
+    <script>$("#{{ field.id }}").datetimepicker({ format: '{{ format }}' });</script>
 {% endmacro %}
 
 <!-- Render with date only -->
+{# TODO Remove once done #}
 {% macro render_datefield_picker(field) %}
 {{ _render_field_with_errors(field, _render_datetimefield_inputgroup(field, 'yyyy-mm-dd')) }}
     <script>$("#{{ field.id }}").datetimepicker({ format: 'yyyy-mm-dd' });</script>
@@ -273,9 +284,7 @@
         {{ render_checkbox(f) }}
     {%- elif f.type == 'CustomFormSelectField' -%}
         {{ render_custom_form_selecter(f) }}
-    {%- elif f.type == 'DateField' -%}
-        {{ render_datefield_picker(f) }}
-    {%- elif f.type == 'DateTimeField' -%}
+    {%- elif f.type == 'DateField' or f.type == 'DateTimeField' -%}
         {{ render_datetimefield_picker(f) }}
     {%- elif f.type == 'DecimalField' -%}
         {{ render_decimal(f) }}
