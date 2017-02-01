@@ -2,26 +2,18 @@
 
 {% macro _render_field_with_errors(field, field_input_html, show_cross=True) %}
     <div class="form-group{% if field.errors %} has-error has-feedback{% endif %}">
-        <div class="row">
-            <div class="col-sm-12">
-                {{ field.label }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                {{ field_input_html }}
-                {%- if field.errors -%}
-                {%- if show_cross -%}
-                <i class="glyphicon glyphicon-remove form-control-feedback"></i>
-                {%- endif -%}
-                {%- for error in field.errors -%}
-                <p class="help-block">{{ error }}</p>
-                {%- endfor -%}
-                {%- endif -%}
-            </div>
-        </div>
+        {{ field.label }}
+        {{ field_input_html }}
+    {%- if field.errors -%}
+    {%- if show_cross -%}
+    <i class="glyphicon glyphicon-remove form-control-feedback"></i>
+    {%- endif -%}
+    {%- for error in field.errors -%}
+    <p class="help-block">{{ error }}</p>
+    {%- endfor -%}
+    {%- endif -%}
     </div>
-{% endmacro %}
+    {% endmacro %}
 
 {% macro render_field_disabled(field) %}
     <div class="form-group">
@@ -32,38 +24,35 @@
 
 
 {% macro render_field(field) %}
-    {{ _render_field_with_errors(field, field(placeholder=field.label.text, class='form-control')) }}
+    {{ _render_field_with_errors(field, field(placeholder=field.label.text, class='form-control', **kwargs)) }}
 {% endmacro %}
 
+{# TODO Check if still used #}
 {% macro render_button(field, cls='btn btn-default') %}
     {{ field(class=cls) }}
 {% endmacro %}
 
 {% macro render_submit(text) %}
     <div class="form-group">
-        <div class="col-sm-12">
-            <button class='btn btn-primary' data-loading-text={{_('Loading...')}}
-                type='submit'>{{ text }}</button>
-        </div>
+        <button class='btn btn-primary' data-loading-text={{_('Loading...')}}
+            type='submit'>{{ text }}</button>
     </div>
 {% endmacro %}
 
 {% macro render_checkbox(field) %}
     <div class="form-group">
-        <div class="col-sm-12">
-            <div class="checkbox">
-                <label>
-                    {{ field }}
-                    {{ field.label.text }}
-                </label>
-            </div>
+        <div class="checkbox">
+            <label>
+                {{ field }}
+                {{ field.label.text }}
+            </label>
         </div>
     </div>
 {% endmacro %}
 
 {% macro render_textarea(field) %}
     {{ _render_field_with_errors(field, field(placeholder=field.label.text, class='form-control',
-                cols='50', rows='50')) }}
+                cols='50', rows='50'), **kwargs) }}
 {% endmacro %}
 
 {% macro _render_number_input(field, step) %}
@@ -71,11 +60,11 @@
 {% endmacro %}
 
 {% macro render_integer(field) %}
-    {{ _render_field_with_errors(field, _render_number_input(field, 1)) }}
+    {{ _render_field_with_errors(field, _render_number_input(field, 1), **kwargs) }}
 {% endmacro %}
 
 {% macro render_decimal(field) %}
-    {{ _render_field_with_errors(field, _render_number_input(field, "any")) }}
+    {{ _render_field_with_errors(field, _render_number_input(field, "any"), **kwargs) }}
 {% endmacro %}
 
 {# TODO Remove once done #}
@@ -111,12 +100,12 @@
 <!-- Render with date only -->
 {# TODO Remove once done #}
 {% macro render_datefield_picker(field) %}
-{{ _render_field_with_errors(field, _render_datetimefield_inputgroup(field, 'yyyy-mm-dd')) }}
+{{ _render_field_with_errors(field, _render_datetimefield_inputgroup(field, 'yyyy-mm-dd'), **kwargs) }}
     <script>$("#{{ field.id }}").datetimepicker({ format: 'yyyy-mm-dd' });</script>
 {% endmacro %}
 
 {% macro render_select(field) %}
-{{ _render_field_with_errors(field, field(class='form-control'), False) }}
+{{ _render_field_with_errors(field, field(class='form-control'), False, **kwargs) }}
 {% endmacro %}
 
 {# TODO Remove once done #}
@@ -172,7 +161,7 @@
 
 
 {% macro render_custom_form_selecter(field) %}
-{{ _render_field_with_errors(field, custom_form_select(field.name, field.data, field.id), False) }}
+{{ _render_field_with_errors(field, custom_form_select(field.name, field.data, field.id), False, **kwargs) }}
 {% endmacro %}
 
 {% macro _render_select_options(field) %}
@@ -198,7 +187,7 @@
 {% endmacro %}
 
 {% macro render_course_select(field) %}
-{{ _render_field_with_errors(field, _render_course_select_inputgroup(field), False) }}
+{{ _render_field_with_errors(field, _render_course_select_inputgroup(field), False, **kwargs) }}
 {% endmacro %}
 
 {% macro _render_education_select_inputgroup(field) %}
@@ -214,7 +203,7 @@
 {% endmacro %}
 
 {% macro render_education_select(field) %}
-{{ _render_field_with_errors(field, _render_education_select_inputgroup(field), False) }}
+{{ _render_field_with_errors(field, _render_education_select_inputgroup(field), False, **kwargs) }}
 {% endmacro %}
 
 {% macro _render_radiobuttons_list(field) %}
@@ -229,17 +218,15 @@
 {% endmacro %}
 
 {% macro render_radio_buttons(field) %}
-{{ _render_field_with_errors(field, _render_radiobuttons_list(field), False) }}
+{{ _render_field_with_errors(field, _render_radiobuttons_list(field), False, **kwargs) }}
 {% endmacro %}
 
 {% macro render_recaptcha(field) %}
     <div class="form-group{% if field.errors %} has-error has-feedback{% endif %}">
-        <div class="col-sm-12">
-            {{ field(class='form-control') }}
-            {%- if field.errors -%}
-            <p class="help-block">{{ _("Please verify that you are not a robot.") }}</p>
-            {%- endif -%}
-        </div>
+        {{ field(class='form-control') }}
+        {%- if field.errors -%}
+        <p class="help-block">{{ _("Please verify that you are not a robot.") }}</p>
+        {%- endif -%}
     </div>
 {% endmacro %}
 
@@ -277,10 +264,10 @@
 {% endmacro %}
 
 {% macro render_vsplit(vsplit, extra_field_renderers) %}
-{%- set column_size = 12 // vsplit.amount_splits -%}
 <div class="row">
-{% for field_list in vsplit %}
-    <div class="col-md-{{ column_size }}">
+{% for i, field_list in enumerate(vsplit) %}
+    <div class="col-md-{{ vsplit.column_sizes[i] }}
+        {%- if vsplit.spacing_sizes[i] > 0 %} col-md-offset-{{ vsplit.spacing_sizes[i] }}{% endif %}">
         {% for field in field_list %}
         {{ _render_field_internal(field, extra_field_renderers) }}
         {% endfor %}
@@ -295,42 +282,42 @@
     {%- elif f.type == 'BooleanField' -%}
         {{ render_checkbox(f) }}
     {%- elif f.type == 'CustomFormSelectField' -%}
-        {{ render_custom_form_selecter(f) }}
+        {{ render_custom_form_selecter(f, **kwargs) }}
     {%- elif f.type == 'DateField' or f.type == 'DateTimeField' -%}
         {{ render_datetimefield_picker(f) }}
     {%- elif f.type == 'DecimalField' -%}
-        {{ render_decimal(f) }}
+        {{ render_decimal(f, **kwargs) }}
     {%- elif f.type == 'IntegerField' -%}
-        {{ render_integer(f) }}
+        {{ render_integer(f, **kwargs) }}
     {%- elif f.type == 'RadioField' -%}
-        {{ render_radio_buttons(f) }}
+        {{ render_radio_buttons(f, **kwargs) }}
     {%- elif f.type == 'SelectField' -%}
-        {{ render_select(f) }}
+        {{ render_select(f, **kwargs) }}
     {%- elif f.type == 'SubmitField' -%}
-        {{ render_button(f) }}
+        {{ render_submit(f, **kwargs) }}
     {%- elif f.type == 'TextAreaField' -%}
-        {{ render_textarea(f) }}
+        {{ render_textarea(f, **kwargs) }}
     {%- elif f.type == 'CourseSelectField' -%}
         {{ render_course_select(f) }}
     {%- elif f.type == 'EducationSelectField' -%}
-        {{ render_education_select(f) }}
+        {{ render_education_select(f, **kwargs) }}
     {%- elif f.type == 'FieldTabGroup' -%}
-        {{ render_tabs(f, extra_field_renderers) }}
+        {{ render_tabs(f, extra_field_renderers, **kwargs) }}
     {%- elif f.type == 'FieldVerticalSplit' -%}
-        {{ render_vsplit(f, extra_field_renderers) }}
+        {{ render_vsplit(f, extra_field_renderers, **kwargs) }}
     {%- elif f.type == 'RecaptchaField' -%}
         {{ render_recaptcha(f) }}
     {%- elif f.type != 'CSRFTokenField' -%}
-        {{ render_field(f) }}
+        {{ render_field(f, **kwargs) }}
     {%- endif -%}
 {% endmacro %}
 
 {% macro render_form(form, action,
-                     form_id='', form_class='form-horizontal',
+                     form_id='', form_name='', form_class='',
                      submit_id='', submit_text='',
                      extra_field_renderers={}, submit_renderer=None) %}
 {%- set form_wrapped = FormWrapper(form) -%}
-<form method="POST" action="{{ action }}" enctype="multipart/form-data" class="{{ form_class }}">
+<form method="POST" action="{{ action }}" enctype="multipart/form-data" class="{{ form_class }}" name="{{ form_name }}">
     {{ form_wrapped.csrf_token }}
     {%- for f in form_wrapped -%}
     {{ _render_field_internal(f, extra_field_renderers) }}

@@ -76,7 +76,7 @@ class FieldVerticalSplit:
     Represents a vertical split of fields, i.e. fields next to eachother
     """
 
-    def __init__(self, field_names):
+    def __init__(self, field_names, large_spacing=False):
         """
         field_names should be a list of list of fields to be splitted
 
@@ -105,6 +105,20 @@ class FieldVerticalSplit:
 
         # First field is used to determine the place of the vertical split
         self._firstfield = field_names[0][0]
+
+        if large_spacing:
+            if self.amount_splits == 2:
+                self.column_sizes = [5, 5]
+                self.spacing_sizes = [0, 2]
+            elif self.amount_splits == 3:
+                self.column_sizes = [3, 4, 3]
+                self.spacing_sizes = [0, 1, 1]
+            elif self.amount_splits == 4:
+                self.column_sizes = [2, 2, 2, 2]
+                self.spacing_sizes = [0, 1, 2, 1]
+        else:
+            self.column_sizes = [12 // self.amount_splits] * self.amount_splits
+            self.spacing_sizes = [0] * self.amount_splits
 
     def _set_form(self, form):
         """Internal method used by FormWrapper."""
@@ -192,6 +206,11 @@ class FormWrapper:
 
         self._fields = []
 
+        ignore_fields = []
+
+        if hasattr(form, '_RenderIgnoreFields'):
+            ignore_fields = form._RenderIgnoreFields
+
         for field in form:
             # Add the group when the first field occurs in the field list
             if field in groups_firstfields:
@@ -203,7 +222,9 @@ class FormWrapper:
                 self._fields.append(vsplits_firstfields[field])
 
             # Otherwise, add a field when it does not belong to a group
-            elif field not in groups_fields and field not in vsplit_fields:
+            elif field not in groups_fields and \
+                    field not in vsplit_fields and \
+                    field.name not in ignore_fields:
                 self._fields.append(field)
 
         # Give every group and vsplit the form object to make them
