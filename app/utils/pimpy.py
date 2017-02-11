@@ -377,8 +377,8 @@ class PimpyAPI:
             flash('Huidige gebruiker niet gevonden!', 'danger')
             return redirect(url_for('pimpy.view_minutes'))
 
-        groups = current_user.groups\
-            .filter(Group.name != 'all').order_by(Group.name.asc()).all()
+        groups = [group for group in current_user.groups
+                  if group.name != 'all']
 
         if not type:
             type = 'minutes'
