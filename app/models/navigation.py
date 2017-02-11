@@ -9,6 +9,7 @@ class NavigationEntry(db.Model, BaseEntity):
     prints = ('id', 'parent_id', 'nl_title', 'en_title', 'url', 'external')
 
     parent_id = db.Column(db.Integer, db.ForeignKey('nagivation_entry.id'))
+    page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
     nl_title = db.Column(db.String(256))
     en_title = db.Column(db.String(256))
     url = db.Column(db.String(256))

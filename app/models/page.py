@@ -13,10 +13,6 @@ class Page(db.Model, BaseEntity):
 
     type = db.Column(db.String(256))
 
-    navigation_entry_id = db.Column(db.Integer,
-                                    db.ForeignKey('nagivation_entry.id'))
-    navigation_entry = db.relationship('NavigationEntry', backref='page')
-
     def __init__(self, path, type='page'):
         self.path = path.rstrip('/')
         self.type = type
