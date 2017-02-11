@@ -3,11 +3,9 @@ import datetime
 import re
 
 from flask import render_template, request, url_for
-from urllib.parse import urlparse
-from app import db, cache
+from app import db
 from app.models.activity import Activity
 from app.models.navigation import NavigationEntry
-from app.models.page import Page
 from app.utils.page import PageAPI
 from app.forms import SignInForm
 
@@ -135,32 +133,14 @@ class NavigationAPI:
 
     @staticmethod
     def can_view(entry):
-        '''
-        Check whether the current user can view the entry, so if not it can be
-        removed from the navigation. Note: Currently only working with pages.
-        '''
-        if entry.external or entry.activity_list:
+        """
+        Check whether the current user can view the entry.
+
+        Note: currently only works with pages.
+        """
+        if entry.external or entry.activity_list or not entry.page:
             return True
-
-        url = entry.url
-        if not url[-1:] == '/':
-            path = url
-            url += '/'
-        else:
-            path = url[:-1]
-
-        if path[-1:] == '/':
-            path = path[1:]
-        if path[:-1] == '/':
-            path = path[:1]
-
-        path = path[1:]
-
-        page = Page.query.filter_by(path=path).first()
-        if not page:
-            return True
-
-        return PageAPI.can_read(page)
+        return PageAPI.can_read(entry.page)
 
     @staticmethod
     def remove_unauthorized(entries):
