@@ -44,7 +44,7 @@
                                         >
                                         {% for child in children %}
                                         {% set grandChildren = child.children_fast if not entry.activities %}
-                                        {# set grandChildren = NavigationAPI.remove_unauthorized(grandChildren) #}
+                                        {% set grandChildren = NavigationAPI.remove_unauthorized(grandChildren) %}
 
                                              <li {% if grandChildren %} class="dropdown-submenu" {% endif %}>
                                                 <a {% if child.external %}target="_blank"{% endif %} href="{{ child.href }}" {% if grandChildren %} class="dropdown-toggle" {% endif %} >
