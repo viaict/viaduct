@@ -114,7 +114,7 @@ class User(db.Model, UserMixin, BaseEntity):
         self.email = new_email
 
     def member_of_group(self, group_id):
-        return self.groups.filter(Group.id == group_id).count() != 0
+        return Group.query.get(group_id).has_user(self)
 
     @property
     def name(self):
