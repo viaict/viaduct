@@ -5,37 +5,16 @@ from app.models import User
 from flask_wtf import Form
 from flask_wtf.recaptcha import RecaptchaField, Recaptcha
 from wtforms import StringField, PasswordField, BooleanField, \
-    SelectField, IntegerField, FileField
-from wtforms.widgets import TextInput
+    SelectField, IntegerField, FileField, DateField
 from wtforms.validators import InputRequired, Email, EqualTo, ValidationError,\
     Length, Optional
 
 from flask_babel import lazy_gettext as _, gettext  # noqa
+from app.forms.util import FieldVerticalSplit
 
-import dateutil
 import bcrypt
 
 _min_password_length = app.config['MIN_PASSWORD_LENGTH']
-
-
-class DateField(StringField):
-    widget = TextInput()
-
-    def _value(self):
-        if self.data:
-            return self.data.strftime('%d-%m-%Y')
-
-        return ''
-
-    def process_formdata(self, valuelist):
-        if valuelist:
-            v = ' '.join(valuelist)
-
-            if v:
-                self.data = dateutil.parser.parse(v, dayfirst=True).date()
-                return
-
-        self.data = None
 
 
 class BaseUserForm(Form):
@@ -77,9 +56,10 @@ class SignUpForm(BaseUserForm):
     password = PasswordField(
         _('Password'), validators=[
             InputRequired(message=_('No password submitted')),
-            Length(message=(_('Minimal password length ') +
-                            str(_min_password_length)),
-                   min=_min_password_length)]
+            Length(
+                message=(_('Minimal password length: %(length)d',
+                           length=_min_password_length)),
+                min=_min_password_length)]
     )
     repeat_password = PasswordField(
         _('Repeat password'), validators=[
@@ -93,17 +73,49 @@ class SignUpForm(BaseUserForm):
     recaptcha = RecaptchaField(
         validators=[Recaptcha(message='Check Recaptcha')])
 
+    register_split = FieldVerticalSplit([
+        ['first_name', 'last_name', 'birth_date', 'address', 'zip', 'city',
+         'country', 'recaptcha'],
+        ['email', 'password', 'repeat_password', 'student_id', 'education_id',
+         'study_start', 'receive_information']
+    ], large_spacing=True)
+
+    _RenderIgnoreFields = ['locale', 'phone_nr', 'avatar']
+
 
 class EditUserForm(BaseUserForm):
     """Edit a user as administrator."""
 
     id = IntegerField('ID')
-    password = PasswordField(_('Password'))
+    password = PasswordField(_('Password'), validators=[
+        Length(
+            message=(_('Minimal password length: %(length)d',
+                       length=_min_password_length)),
+            min=_min_password_length),
+        Optional()])
     repeat_password = PasswordField(_('Repeat password'))
     has_paid = BooleanField(_('Has paid'))
     honorary_member = BooleanField(_('Honorary member'))
     favourer = BooleanField(_('Favourer'))
     disabled = BooleanField(_('Disabled'))
+
+    register_split = FieldVerticalSplit([
+        ['first_name', 'last_name', 'birth_date', 'address', 'zip', 'city',
+         'country'],
+        ['email', 'password', 'repeat_password', 'student_id', 'education_id',
+         'study_start', 'receive_information']
+    ], large_spacing=True)
+
+    optional_split = FieldVerticalSplit([
+        ['phone_nr', 'locale'],
+        ['avatar']
+    ], large_spacing=True)
+
+    admin_split = FieldVerticalSplit([
+        ['has_paid', 'honorary_member'],
+        ['favourer', 'disabled']
+    ], large_spacing=True)
+
     alumnus = BooleanField(_('Alumnus'))
 
     def validate_password(self, field):
@@ -120,26 +132,31 @@ class EditUserForm(BaseUserForm):
 class EditUserInfoForm(BaseUserForm):
     """Edit your own user information."""
 
-    id = IntegerField('ID')
     alumnus = BooleanField(_('Yes, I have finished studying'))
-    recieve_information_VIA = \
-        SelectField(_("Would you like to recieve mail from via?"),
-                    choices=[(0, ""),
-                             (1, _("Yes")),
-                             (2, _("Yes, but only for alumni activity")),
-                             (3, _("No"))],
-                    coerce=int)
-    password = PasswordField(
-        _('Password'), validators=[
-            Length(message=(_('Minimal password length ') +
-                            str(_min_password_length)),
-                   min=_min_password_length),
-            Optional()]
-    )
+
+    password = PasswordField(_('Password'), validators=[
+        Length(
+            message=(_('Minimal password length: %(length)d',
+                       length=_min_password_length)),
+            min=_min_password_length),
+        Optional()])
+
     repeat_password = PasswordField(
         _('Repeat password'), validators=[
             EqualTo('password', message=_('Passwords do not match'))]
     )
+
+    register_split = FieldVerticalSplit([
+        ['first_name', 'last_name', 'birth_date', 'address', 'zip', 'city',
+         'country'],
+        ['email', 'password', 'repeat_password', 'student_id', 'education_id',
+         'study_start']
+    ], large_spacing=True)
+
+    optional_split = FieldVerticalSplit([
+        ['phone_nr', 'locale'],
+        ['avatar']
+    ], large_spacing=True)
 
     def validate_password(self, field):
         """Providing a password is only required when creating a new user."""
@@ -193,8 +210,8 @@ class ResetPassword(Form):
     password = PasswordField(
         _('Password'), validators=[
             InputRequired(message=_('No password submitted')),
-            Length(message=(_('Minimal password length ') +
-                            str(_min_password_length)),
+            Length(message=(_('Minimal password length: %(length)d',
+                              length=_min_password_length)),
                    min=_min_password_length)]
     )
     password_repeat = PasswordField(

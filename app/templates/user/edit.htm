@@ -1,71 +1,71 @@
-{% from "macros/form.htm" import render_field, render_checkbox, render_submit %}
+{% from "macros/form.htm" import
+render_form, render_field, render_checkbox,
+render_submit, render_vsplit, render_file %}
 
 {% extends "content.htm" %}
 
+{% macro render_before_hook(f) %}
+{%- if f.name == 'register_split' -%}
+<legend>{{ _('Register') }}</legend>
+{%- elif f.name == 'optional_split' -%}
+<legend>{{ _('Optional data') }}</legend>
+{%- endif -%}
+{% endmacro %}
+
+{% macro check_user_admin(f) %}
+{%- if f.name == 'admin_split' and is_admin -%}
+<legend>{{ _('Admin data') }}</legend>
+{{ render_vsplit(f, **kwargs) }}
+{%- elif f.name != 'admin_split' -%}
+{{ render_vsplit(f, **kwargs) }}
+{%- endif -%}
+{% endmacro %}
+
+{% macro check_user_paid(f) %}
+{%- if f.name == 'alumnus' and user.has_paid -%}
+<legend>{{ _('I have finished studying') }}</legend>
+{{ render_checkbox(f, **kwargs) }}
+{%- elif f.name != 'alumnus' -%}
+{{ render_checkbox(f, **kwargs) }}
+{%- endif -%}
+{% endmacro %}
+
+{% macro render_avatar(f) %}
+{{ render_file(f, **kwargs) }}
+{% if user.avatar %}
+<div id="avatar-container">
+    <label>{{ _('Current avatar') }}:</label>
+    <img src="{{UserAPI.avatar(user)}}"></img>
+    <a id="remove-avatar" class='btn btn-xs btn-danger'>{{_('Delete avatar')}}</a>
+</div>
+<script>
+$('#remove-avatar').click(function() {
+    $.ajax({
+        url: '{{ url_for('user.remove_avatar', user_id=user.id) }}',
+        type: 'DELETE',
+        success: function(result) {
+            $("#avatar-container").remove();
+            utils.flash.new('{{ _('Avatar deleted successfully.') }}', 'success');
+        },
+        error: function(result) {
+            utils.flash.new('{{ _('Something went wrong.') }}', 'error');
+        }
+    });
+});
+</script>
+{% endif %}
+{% endmacro %}
+
 {% block content %}
-<form action="" method="post" name="sign_up" class="form-horizontal" enctype="multipart/form-data" >
-    <fieldset>
-        <legend>{% if user.id %}{{_('Modify')}}{% else %}{{_('Create')}}{% endif %} {{_('Member')}}</legend>
-
-        <div class="col-md-5">
-            {{ form.csrf_token }}
 
 
-            {{ render_field(form.first_name) }}
-            {{ render_field(form.last_name) }}
-            {{ render_field(form.birth_date) }}
-            {{ render_field(form.address) }}
-            {{ render_field(form.zip) }}
-            {{ render_field(form.city) }}
-            {{ render_field(form.country) }}
-        </div>
+{{ render_form(form, form_name="sign_up",
+    render_before_hook=render_before_hook,
+    extra_field_renderers = {
+        'FieldVerticalSplit': check_user_admin,
+        'BooleanField': check_user_paid,
+        'FileField': render_avatar,
+    }
+    ) }}
 
-        <div class="col-md-offset-2 col-md-5">
-            {{ render_field(form.email) }}
-            {{ render_field(form.password) }}
-            {{ render_field(form.repeat_password) }}
-            {{ render_field(form.student_id) }}
-            {{ render_field(form.education_id) }}
-            {{ render_field(form.study_start) }}
-            {{ render_checkbox(form.receive_information) }}
-        </div>
-
-        <legend>{{_('Optional data')}}</legend>
-
-        <div class="col-md-5">
-            {{ render_field(form.phone_nr) }}
-            {{ render_field(form.locale) }}
-        </div>
-
-        <div class="col-md-offset-2 col-md-5">
-            {{ render_field(form.avatar) }}
-            {% if user.avatar %}
-                Current avatar:
-                <img src="{{UserAPI.avatar(user)}}"></img>
-                <a href='/users/remove_avatar/{{ user.id }}' class='btn btn-xs btn-danger'>{{_('Delete avatar')}}</a>
-            {% endif %}
-        </div>
-
-        {% if is_admin %}
-        <legend>{{_('Admin data')}}</legend>
-        <div class="col-md-5">
-            {{render_checkbox(form.has_paid) }}
-            {{render_checkbox(form.honorary_member) }}
-        </div>
-        <div class="col-md-offset-2 col-md-5">
-            {{render_checkbox(form.favourer) }}
-            {{render_checkbox(form.disabled) }}
-        </div>
-        {% endif %}
-        {% if user.has_paid %}
-        <legend>{{_('I have finished studying')}}</legend>
-        <div class="col-md-5">
-            {{render_checkbox(form.alumnus) }}
-        </div>
-        {% endif %}
-        <div class="col-md-12">
-            {{ render_submit(_('Save'))}}
-        </div>
-    </fieldset>
-</form>
 {% endblock %}

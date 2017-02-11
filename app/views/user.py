@@ -105,15 +105,16 @@ def view_single(user_id=None):
                            can_write=can_write)
 
 
-@blueprint.route('/users/remove_avatar/<int:user_id>', methods=['GET'])
+@blueprint.route('/users/remove_avatar/<int:user_id>', methods=['DELETE'])
 @login_required
 def remove_avatar(user_id=None):
     user = User.query.get(user_id)
     if not ModuleAPI.can_write('user') and\
             (current_user.is_anonymous or current_user.id != user_id):
-        return abort(403)
+        return "", 403
+
     UserAPI.remove_avatar(user)
-    return redirect(url_for('user.view_single', user_id=user_id))
+    return "", 200
 
 
 @blueprint.route('/users/create/', methods=['GET', 'POST'])

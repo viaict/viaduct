@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-01-24 10:10+0100\n"
+"POT-Creation-Date: 2017-02-11 15:00+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -58,6 +58,9 @@ msgid "Activitycommittee"
 msgstr ""
 
 msgid "Add"
+msgstr ""
+
+msgid "Add user to"
 msgstr ""
 
 msgid "Address"
@@ -138,6 +141,10 @@ msgid ""
 "Attention: we now use a base32 encoding. Read this module's manual for "
 "more information."
 msgstr ""
+
+#, fuzzy
+msgid "Avatar deleted successfully."
+msgstr "."
 
 msgid "Back"
 msgstr ""
@@ -332,7 +339,7 @@ msgstr ""
 msgid "Current"
 msgstr ""
 
-msgid "Current image"
+msgid "Current avatar"
 msgstr ""
 
 msgid "Date"
@@ -587,6 +594,9 @@ msgstr ""
 msgid "Forgot password?"
 msgstr ""
 
+msgid "Form"
+msgstr ""
+
 msgid "Free"
 msgstr ""
 
@@ -713,7 +723,8 @@ msgstr ""
 msgid "Mid-Term"
 msgstr ""
 
-msgid "Minimal password length "
+#, python-format
+msgid "Minimal password length: %(length)d"
 msgstr ""
 
 msgid "Modified"
@@ -781,9 +792,6 @@ msgid "News item succesfully deleted"
 msgstr ""
 
 msgid "Next"
-msgstr ""
-
-msgid "No"
 msgstr ""
 
 msgid "No Output"
@@ -1041,9 +1049,6 @@ msgstr ""
 msgid "Search for title, contact or company"
 msgstr ""
 
-msgid "Select a time and date by clicking on the clock"
-msgstr ""
-
 msgid "Send"
 msgstr ""
 
@@ -1260,9 +1265,6 @@ msgstr ""
 msgid "Timestamp"
 msgstr ""
 
-msgid "Tip"
-msgstr ""
-
 msgid "Title"
 msgstr ""
 
@@ -1305,6 +1307,9 @@ msgstr ""
 msgid "User tips"
 msgstr ""
 
+msgid "Users"
+msgstr ""
+
 msgid "Using the bookstore requires an account."
 msgstr ""
 
@@ -1327,9 +1332,6 @@ msgid "Valid membership is required for the summary module"
 msgstr ""
 
 msgid "Vancancies"
-msgstr ""
-
-msgid "Venue"
 msgstr ""
 
 msgid "View"
@@ -1370,9 +1372,6 @@ msgstr ""
 msgid "Would you like to recieve information from companies?"
 msgstr ""
 
-msgid "Would you like to recieve mail from via?"
-msgstr ""
-
 msgid "Written by"
 msgstr ""
 
@@ -1388,13 +1387,7 @@ msgstr ""
 msgid "Wrong format summary."
 msgstr ""
 
-msgid "Yes"
-msgstr ""
-
 msgid "Yes, I have finished studying"
-msgstr ""
-
-msgid "Yes, but only for alumni activity"
 msgstr ""
 
 msgid "You can edit your registration by resubmitting the form."
@@ -1646,5 +1639,44 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Not given"
+#~ msgstr ""
+
+#~ msgid "Current image"
+#~ msgstr ""
+
+#~ msgid "Delete avatar"
+#~ msgstr ""
+
+#~ msgid "Select a time and date by clicking on the clock"
+#~ msgstr ""
+
+#~ msgid "Tip"
+#~ msgstr ""
+
+#~ msgid "Venue"
+#~ msgstr ""
+
+#~ msgid "No"
+#~ msgstr ""
+
+#~ msgid "Would you like to recieve mail from via?"
+#~ msgstr ""
+
+#~ msgid "Yes"
+#~ msgstr ""
+
+#~ msgid "Yes, but only for alumni activity"
+#~ msgstr ""
+
+#~ msgid "Something went wrong"
+#~ msgstr ""
+
+#~ msgid "Minimal password length"
+#~ msgstr ""
+
+#~ msgid "Minimal password length: %d"
+#~ msgstr ""
+
+#~ msgid "Minimal password length "
 #~ msgstr ""
 
