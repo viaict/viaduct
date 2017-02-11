@@ -175,7 +175,7 @@ def create(form_id=None):
                 # Update for users that were on the reserve list that they
                 # can now attend.
                 if prev_max < len(all_sub):
-                    for x in range(prev_max, max(cur_max, len(all_sub) - 1)):
+                    for x in range(prev_max, min(cur_max, len(all_sub))):
                         sub = all_sub[x]
                         copernica_data = {
                             "Reserve": "Nee"
