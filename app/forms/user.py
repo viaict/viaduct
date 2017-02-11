@@ -5,7 +5,7 @@ from app.models import User
 from flask_wtf import Form
 from flask_wtf.recaptcha import RecaptchaField, Recaptcha
 from wtforms import StringField, PasswordField, BooleanField, \
-    SelectField, IntegerField, FileField, DateField
+    SelectField, FileField, DateField
 from wtforms.validators import InputRequired, Email, EqualTo, ValidationError,\
     Length, Optional
 
@@ -86,13 +86,7 @@ class SignUpForm(BaseUserForm):
 class EditUserForm(BaseUserForm):
     """Edit a user as administrator."""
 
-    id = IntegerField('ID')
-    password = PasswordField(_('Password'), validators=[
-        Length(
-            message=(_('Minimal password length: %(length)d',
-                       length=_min_password_length)),
-            min=_min_password_length),
-        Optional()])
+    password = PasswordField(_('Password'))
     repeat_password = PasswordField(_('Repeat password'))
     has_paid = BooleanField(_('Has paid'))
     honorary_member = BooleanField(_('Honorary member'))
@@ -118,10 +112,16 @@ class EditUserForm(BaseUserForm):
 
     alumnus = BooleanField(_('Alumnus'))
 
+    new_user = False
+
     def validate_password(self, field):
         """Providing a password is only required when creating a new user."""
-        if self.id.data == 0 and len(field.data) == 0:
-            raise ValidationError(_('No password submitted'))
+        if self.new_user:
+            if len(field.data) == 0:
+                raise ValidationError(_('No password submitted'))
+        if len(field.data) > 0 and len(field.data) < _min_password_length:
+            raise ValidationError(_('Minimal password length: %(length)d',
+                                    length=_min_password_length))
 
     def validate_repeat_password(self, field):
         """Only validate the repeat password if a password is set."""
@@ -134,17 +134,8 @@ class EditUserInfoForm(BaseUserForm):
 
     alumnus = BooleanField(_('Yes, I have finished studying'))
 
-    password = PasswordField(_('Password'), validators=[
-        Length(
-            message=(_('Minimal password length: %(length)d',
-                       length=_min_password_length)),
-            min=_min_password_length),
-        Optional()])
-
-    repeat_password = PasswordField(
-        _('Repeat password'), validators=[
-            EqualTo('password', message=_('Passwords do not match'))]
-    )
+    password = PasswordField(_('Password'))
+    repeat_password = PasswordField(_('Repeat password'))
 
     register_split = FieldVerticalSplit([
         ['first_name', 'last_name', 'birth_date', 'address', 'zip', 'city',
@@ -158,10 +149,16 @@ class EditUserInfoForm(BaseUserForm):
         ['avatar']
     ], large_spacing=True)
 
+    new_user = False
+
     def validate_password(self, field):
         """Providing a password is only required when creating a new user."""
-        if self.id.data == 0 and len(field.data) == 0:
-            raise ValidationError(_('No password submitted'))
+        if self.new_user:
+            if len(field.data) == 0:
+                raise ValidationError(_('No password submitted'))
+        if len(field.data) > 0 and len(field.data) < _min_password_length:
+            raise ValidationError(_('Minimal password length: %(length)d',
+                                    length=_min_password_length))
 
     def validate_repeat_password(self, field):
         """Only validate the repeat password if a password is set."""
@@ -180,19 +177,16 @@ class SignInForm(Form):
     def validate_signin(self):
         user = User.query.filter(User.email == self.email.data.strip()).first()
 
-        if self._errors is None:
-            self._errors = dict()
-
         if user is None:
-            self._errors['email'] = [_(
+            self.email.errors.append(_(
                 'It appears that account does not exist. Try again, or contact'
-                ' the website administration at ict (at) svia (dot) nl.')]
+                ' the website administration at ict (at) svia (dot) nl.'))
             return None
 
         submitted_hash = bcrypt.hashpw(self.password.data, user.password)
         if submitted_hash != user.password:
-            self._errors['password'] = [_(
-                'The password you entered appears to be incorrect.')]
+            self.password.errors.append(_(
+                'The password you entered appears to be incorrect.'))
             return None
 
         return user

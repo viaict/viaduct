@@ -7,6 +7,7 @@ from app.forms.fields import CustomFormSelectField
 
 class FieldTabGroup:
     """Represents a group of fields divided into tabs."""
+
     def __init__(self, tabs):
         """Tabs should be a list of FieldTab's"""
 
@@ -73,7 +74,8 @@ class FieldTab:
 
 class FieldVerticalSplit:
     """
-    Represents a vertical split of fields, i.e. fields next to eachother
+    Represents a vertical split of fields,
+    i.e. fields next to each other.
     """
 
     def __init__(self, field_names, large_spacing=False):
@@ -154,10 +156,12 @@ class FormWrapper:
         for attrname, obj in inspect.getmembers(form):
             # Collect the tab groups in the form
             if isinstance(obj, FieldTabGroup):
+                obj.name = attrname
                 self.groups.append(obj)
 
             # Collect the vertical splits in the form
             elif isinstance(obj, FieldVerticalSplit):
+                obj.name = attrname
                 self.vsplits.append(obj)
 
             # Check if the form has select fields
