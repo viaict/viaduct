@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html xmlns:fb="http://ogp.me/ns/fb#">
     <head>
-        {% set seo_fields = SeoAPI.get_seo_fields(get_locale()) %}
+        {% set seo_fields = get_seo_fields(get_locale()) %}
 
         <title>{{seo_fields.title}}</title>
         <meta description="{{seo_fields.description}}" />
