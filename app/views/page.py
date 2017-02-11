@@ -58,14 +58,15 @@ def get_page(path=''):
 
     # Check if the current user has already entered data in this custom
     # form
-    if current_user.is_authenticated and current_user.has_paid:
-        all_form_results = CustomFormResult.query \
-            .filter(CustomFormResult.form_id == revision.custom_form.id)
-        form_result = all_form_results \
-            .filter(CustomFormResult.owner_id == current_user.id).first()
+    if revision.custom_form:
+        if current_user.is_authenticated and current_user.has_paid:
+            all_form_results = CustomFormResult.query \
+                .filter(CustomFormResult.form_id == revision.custom_form.id)
+            form_result = all_form_results \
+                .filter(CustomFormResult.owner_id == current_user.id).first()
 
-        if form_result:
-            revision.custom_form_data = form_result.data.replace('"', "'")
+            if form_result:
+                revision.custom_form_data = form_result.data.replace('"', "'")
 
     return render_template('%s/view_single.htm' % (page.type), page=page,
                            revision=revision, title=revision.title,
