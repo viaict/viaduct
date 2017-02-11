@@ -23,6 +23,10 @@ class NavigationEntry(db.Model, BaseEntity):
         backref=db.backref('children', lazy='dynamic',
                            order_by='NavigationEntry.position'))
 
+    page = db.relationship('Page', backref=db.backref('navigation_entry',
+                                                      lazy='joined'),
+                           lazy='joined')
+
     def __init__(self, parent, nl_title, en_title, url, external,
                  activity_list, position, subtitle=None):
         if parent:
@@ -43,6 +47,13 @@ class NavigationEntry(db.Model, BaseEntity):
         if ordered:
             childs = childs.order_by(NavigationEntry.position)
         return childs
+
+    @property
+    def href(self):
+        if self.external:
+            return 'https://' + self.url
+        else:
+            return self.url if self.url else '/' + self.page.path
 
 
 @event.listens_for(NavigationEntry, 'load')

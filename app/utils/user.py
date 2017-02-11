@@ -117,7 +117,7 @@ class UserAPI:
                 raise Exception("No group 'guests', this should never happen!")
             return [group]
 
-        return user.groups.order_by(Group.name)
+        return user.groups
 
     @staticmethod
     def get_groups_for_current_user():
@@ -130,11 +130,11 @@ class UserAPI:
                                 not current_user.has_paid):
             return False
 
-        return PagePermission.get_user_rights(current_user, page.id) > 0
+        return PagePermission.get_user_rights(current_user, page) > 0
 
     @staticmethod
     def can_write(page):
-        return PagePermission.get_user_rights(current_user, page.id) > 1
+        return PagePermission.get_user_rights(current_user, page) > 1
 
     @staticmethod
     def get_membership_warning():

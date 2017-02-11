@@ -27,11 +27,11 @@
                             {% for entry in bar_entries %}
 
                                 {% set children = entry.activities if entry.activities else entry.children_fast %}
-                                {# set children = NavigationAPI.remove_unauthorized(children) #}
+                                {% set children = NavigationAPI.remove_unauthorized(children) %}
 
                                 <li class="{% if children %}dropdown{% endif %}">
                                     <a {% if children %}class="dropdown-toggle" data-hover="dropdown" data-delay="200" data-close-others="true"{% endif %} {% if entry.external %}target="_blank"{% endif %}
-                                    href="{% if entry.external %}https://{% endif %}{{ entry.url }}">
+                                    href="{{ entry.href }}">
                                         {{ entry.title }}
                                     </a>
 
@@ -47,7 +47,7 @@
                                         {# set grandChildren = NavigationAPI.remove_unauthorized(grandChildren) #}
 
                                              <li {% if grandChildren %} class="dropdown-submenu" {% endif %}>
-                                                <a {% if child.external %}target="_blank"{% endif %} href="{% if child.external %}https://{% endif %}{{ child.url }}" {% if grandChildren %} class="dropdown-toggle" {% endif %} >
+                                                <a {% if child.external %}target="_blank"{% endif %} href="{{ child.href }}" {% if grandChildren %} class="dropdown-toggle" {% endif %} >
                                                 {% if child.subtitle %}
                                                     <small class="pull-right"> {{ child.subtitle|truncate(40)  }}</small>
                                                 {% endif %}
@@ -58,7 +58,7 @@
                                                 </a>
                                                 <ul class="dropdown-menu">
                                                     {% for grandChild in grandChildren %}
-                                                     <li><a href="{% if grandChild.external %}https://{% endif %}{{ grandChild.url }}">
+                                                     <li><a href="{{ grandChild.href }}">
                                                         <span>{{ grandChild.title }}</span>
                                                     </li></a>
                                                     {% endfor %}
