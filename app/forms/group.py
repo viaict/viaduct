@@ -25,7 +25,7 @@ class EditGroupPermissionEntry(UnsafeForm):
 class EditGroup(Form):
     name = StringField('Naam', validators=[
         InputRequired(message='Geen naam opgegeven')])
-    maillist = StringField('Naam maillijst (zonder @svia.nl)')
+    maillist = StringField('Naam maillijst')
     committee_url = StringField('Commissie-pagina URL (zonder slash)')
 
 
