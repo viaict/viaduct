@@ -14,6 +14,7 @@ from app.forms import PageForm, HistoryPageForm
 from app.utils.forms import flash_form_errors
 from app.utils.htmldiff import htmldiff
 from app.models import Group, Page, PageRevision, PagePermission, Redirect
+from app.models.custom_form import CustomFormResult
 from app.utils.module import ModuleAPI
 from app.utils.page import PageAPI
 
@@ -54,6 +55,13 @@ def get_page(path=''):
 
     if not revision:
         return abort(500)
+
+    all_form_results = CustomFormResult.query \
+        .filter(CustomFormResult.form_id == revision.custom_form.id)
+    form_result = all_form_results \
+        .filter(CustomFormResult.owner_id == current_user.id).first()
+
+    revision.custom_form_data = form_result.data.replace('"', "'")
 
     return render_template('%s/view_single.htm' % (page.type), page=page,
                            revision=revision, title=revision.title,
