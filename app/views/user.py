@@ -76,7 +76,7 @@ def view_single(user_id=None):
     user.avatar = UserAPI.avatar(user)
     user.groups = UserAPI.get_groups_for_user_id(user)
 
-    user.groups_amount = user.groups.count()
+    user.groups_amount = len(user.groups)
 
     if "gravatar" in user.avatar:
         user.avatar = user.avatar + "&s=341"
