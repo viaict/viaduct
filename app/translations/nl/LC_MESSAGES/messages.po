@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-01-24 10:10+0100\n"
+"POT-Creation-Date: 2017-02-11 15:00+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -59,6 +59,9 @@ msgstr "Activiteitencommissie"
 
 msgid "Add"
 msgstr "Toevoegen"
+
+msgid "Add user to"
+msgstr ""
 
 msgid "Address"
 msgstr "Adres"
@@ -140,6 +143,9 @@ msgid ""
 msgstr ""
 "Let op: we gebruiken nu een base32 encoding. Lees de handleiding van deze"
 " module voor meer informatie."
+
+msgid "Avatar deleted successfully."
+msgstr "Avatar succesvol verwijderd."
 
 msgid "Back"
 msgstr "Terug"
@@ -336,8 +342,8 @@ msgstr "Aangemaakt"
 msgid "Current"
 msgstr "Huidig"
 
-msgid "Current image"
-msgstr "Huidige plaatje"
+msgid "Current avatar"
+msgstr "Huidige avatar"
 
 msgid "Date"
 msgstr "Datum"
@@ -591,6 +597,9 @@ msgstr "Voornaam"
 msgid "Forgot password?"
 msgstr "Wachtwoord vergeten?"
 
+msgid "Form"
+msgstr "Formulier"
+
 msgid "Free"
 msgstr "Gratis"
 
@@ -719,8 +728,9 @@ msgstr "Lid"
 msgid "Mid-Term"
 msgstr "Deeltentamen"
 
-msgid "Minimal password length "
-msgstr "Minimum lengte van wachtwoord: "
+#, python-format
+msgid "Minimal password length: %(length)d"
+msgstr "Minimum lengte van wachtwoord: %(length)d "
 
 msgid "Modified"
 msgstr "Aangepast"
@@ -788,9 +798,6 @@ msgstr "Nieuwsbericht succesvol verwijderd"
 
 msgid "Next"
 msgstr "Volgende"
-
-msgid "No"
-msgstr "Nee"
 
 msgid "No Output"
 msgstr "Geen uitvoer"
@@ -1047,9 +1054,6 @@ msgstr "Zoeken"
 msgid "Search for title, contact or company"
 msgstr "Zoeken op titel, contact of bedrijf"
 
-msgid "Select a time and date by clicking on the clock"
-msgstr "Selecteer een tijd en datum door op de klok te klikken"
-
 msgid "Send"
 msgstr "Verzend"
 
@@ -1097,7 +1101,7 @@ msgstr ""
 " je het de volgende keer niet nog eens moet invullen."
 
 msgid "Something went wrong."
-msgstr "Er is its mis gegaan"
+msgstr "Er is iets mis gegaan."
 
 msgid "Source code file"
 msgstr "Broncode bestand"
@@ -1284,9 +1288,6 @@ msgstr "Tijdslimiet"
 msgid "Timestamp"
 msgstr "Tijdstip"
 
-msgid "Tip"
-msgstr "Tip"
-
 msgid "Title"
 msgstr "Titel"
 
@@ -1331,6 +1332,9 @@ msgstr "Gebruikersoverzicht"
 msgid "User tips"
 msgstr "Gebruikerstips"
 
+msgid "Users"
+msgstr "Gebruikers"
+
 msgid "Using the bookstore requires an account."
 msgstr "Voor het gebruik van de boekenwinkel is een account vereist."
 
@@ -1354,9 +1358,6 @@ msgstr "Geldig lidmaatschap is vereist voor de samenvattingsbank"
 
 msgid "Vancancies"
 msgstr "Vacatures"
-
-msgid "Venue"
-msgstr "Oort"
 
 msgid "View"
 msgstr "Weergeven"
@@ -1399,9 +1400,6 @@ msgstr "Werklast"
 msgid "Would you like to recieve information from companies?"
 msgstr "Wil je informatie van bedrijven ontvangen?"
 
-msgid "Would you like to recieve mail from via?"
-msgstr "Wil je email van via ontvangen?"
-
 msgid "Written by"
 msgstr "Geschreven door"
 
@@ -1417,14 +1415,8 @@ msgstr "Fout formaat tentamen."
 msgid "Wrong format summary."
 msgstr "Fout formaat samenvatting."
 
-msgid "Yes"
-msgstr "Ja"
-
 msgid "Yes, I have finished studying"
 msgstr "Ja, ik ben klaar met studeren"
-
-msgid "Yes, but only for alumni activity"
-msgstr "Ja, maar alleen voor alumni-activiteiten"
 
 msgid "You can edit your registration by resubmitting the form."
 msgstr "Je kan je inschrijving aanpassen door opnieuw in te schrijven"
@@ -1661,3 +1653,29 @@ msgstr ""
 #~ msgid "Het email adres %(email)s is bij ons niet bekend."
 #~ msgstr ""
 
+#~ msgid "Current image"
+#~ msgstr "Huidige plaatje"
+
+#~ msgid "Select a time and date by clicking on the clock"
+#~ msgstr "Selecteer een tijd en datum door op de klok te klikken"
+
+#~ msgid "Tip"
+#~ msgstr "Tip"
+
+#~ msgid "Venue"
+#~ msgstr "Oort"
+
+#~ msgid "No"
+#~ msgstr "Nee"
+
+#~ msgid "Would you like to recieve mail from via?"
+#~ msgstr "Wil je email van via ontvangen?"
+
+#~ msgid "Yes"
+#~ msgstr "Ja"
+
+#~ msgid "Yes, but only for alumni activity"
+#~ msgstr "Ja, maar alleen voor alumni-activiteiten"
+
+#~ msgid "Something went wrong"
+#~ msgstr "Er is iets mis gegaan"

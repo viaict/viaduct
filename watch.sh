@@ -11,7 +11,7 @@ PIDS[1]=$!
 python manage.py jade &
 PIDS[2]=$!
 
-python manage.py runserver &
+python run.py &
 PIDS[3]=$!
 
 

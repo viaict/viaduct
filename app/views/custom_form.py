@@ -423,11 +423,11 @@ def has_paid(submit_id=None):
 
 
 # TODO: Move to API.
-@blueprint.route('/loader/', methods=['GET'])
-def loader():
+@blueprint.route('/loader/<int:current>/', methods=['GET'])
+def loader(current):
     try:
-        current = int(request.args.get('current'))
+        current = int(current)
     except ValueError:
-        current = None
+        return abort(404)
 
     return jsonify(forms=serialize_sqla(CustomForm.aslist(current)))
