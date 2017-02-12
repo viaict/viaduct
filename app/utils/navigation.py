@@ -4,8 +4,7 @@ import re
 
 from flask import render_template, request, url_for
 from app import db
-from app.models.activity import Activity
-from app.models.navigation import NavigationEntry
+from app.models import Activity, NavigationEntry, Page
 from app.utils.page import PageAPI
 from app.forms import SignInForm
 
@@ -23,19 +22,20 @@ class NavigationAPI:
     @staticmethod
     def get_navigation_menu():
         my_path = request.path
-
         my_path = re.sub(r'(/[0-9]+)?/$', '', my_path)
+        page = Page.query.filter_by(path=my_path.lstrip('/')).first()
 
-        me = db.session.query(NavigationEntry).filter_by(url=my_path)\
-            .first()
-
-        if me:
+        me = None
+        try:
+            me = page.navigation_entry[0]
             parent = me.parent
-
-        else:
+        except IndexError:
             parent_path = my_path.rsplit('/', 1)[0]
-            parent = db.session.query(NavigationEntry)\
-                .filter_by(url=parent_path).first()
+            page = Page.query.filter_by(path=parent_path).first()
+            try:
+                parent = page.navigation_entry[0].parent
+            except IndexError:
+                parent = None
 
         if parent:
             entries = db.session.query(NavigationEntry)\
