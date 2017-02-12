@@ -38,11 +38,8 @@ class NavigationAPI:
             parent = me.parent
         else:
             parent_path = my_path.rsplit('/', 1)[0]
-            page = Page.query.filter_by(path=parent_path).first()
-            try:
-                parent = page.navigation_entry[0].parent
-            except IndexError:
-                parent = None
+            me = NavigationAPI._get_entry_by_url(parent_path)
+            parent = me.parent if me else None
 
         if parent:
             entries = db.session.query(NavigationEntry)\
