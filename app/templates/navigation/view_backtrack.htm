@@ -1,6 +1,6 @@
 <p>
   {% for tracker in backtrack %}
-    <a href="{{ tracker.url }}">{{ tracker.title }}</a>
+    <a href="{{ tracker.href }}">{{ tracker.title }}</a>
       {% if tracker != backtrack[-1] %}
       <i class="glyphicon glyphicon-chevron-right"></i>
       {% endif %}

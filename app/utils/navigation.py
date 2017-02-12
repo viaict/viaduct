@@ -20,16 +20,23 @@ class NavigationAPI:
                                login_form=login_form)
 
     @staticmethod
+    def _get_entry_by_url(url):
+        page = Page.query.filter_by(path=url.lstrip('/')).first()
+        if page and page.navigation_entry:
+            return page.navigation_entry[0]
+        else:
+            return NavigationEntry.query.filter_by(url=url).first()
+
+    @staticmethod
     def get_navigation_menu():
         my_path = request.path
         my_path = re.sub(r'(/[0-9]+)?/$', '', my_path)
-        page = Page.query.filter_by(path=my_path.lstrip('/')).first()
+        print(my_path)
 
-        me = None
-        try:
-            me = page.navigation_entry[0]
+        me = NavigationAPI._get_entry_by_url(my_path)
+        if me:
             parent = me.parent
-        except IndexError:
+        else:
             parent_path = my_path.rsplit('/', 1)[0]
             page = Page.query.filter_by(path=parent_path).first()
             try:
@@ -52,15 +59,12 @@ class NavigationAPI:
     @staticmethod
     def current_entry():
         my_path = request.path
-
         temp_strip = my_path.rstrip('0123456789')
         if temp_strip.endswith('/'):
             my_path = temp_strip
-
         my_path = my_path.rstrip('/')
 
-        return db.session.query(NavigationEntry).filter_by(url=my_path)\
-            .first()
+        return NavigationAPI._get_entry_by_url(my_path)
 
     @staticmethod
     def parent_entry():
