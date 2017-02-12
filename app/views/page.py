@@ -28,7 +28,6 @@ def get_page(path=''):
 
     if not page:
         # Try if this might be a redirect.
-        print("not page")
         redirection = Redirect.query.filter(Redirect.fro == path).first()
         if redirection:
 
@@ -39,7 +38,6 @@ def get_page(path=''):
                 for key in request.args:
                     redir_url += key + '=' + \
                         request.args[key] + '&'
-                print(redir_url)
 
                 # this is necssary to prevent incorrect escaping
                 return redirect(iri_to_uri(redir_url))

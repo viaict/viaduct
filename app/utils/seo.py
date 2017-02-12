@@ -134,7 +134,6 @@ def get_resources(module_name=None, request_path=None):
         # Find activity
         activity = Activity.query.filter(Activity.id ==
                                          activity_id).first()
-        print("lalalala")
 
     elif module_name == "page":
         # Retrieve the page for its id
@@ -144,7 +143,6 @@ def get_resources(module_name=None, request_path=None):
         # Retrieve the revision by page id
         if page is not None:
             page_id = page.id
-            print("lalala")
     else:
         # Retrieve seo fields based on the module name.
         path = module_name
