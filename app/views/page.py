@@ -58,7 +58,7 @@ def get_page(path=''):
 
     # Check if the current user has already entered data in this custom
     # form
-    if revision.custom_form:
+    if getattr(revision, 'custom_form', False):
         if current_user.is_authenticated and current_user.has_paid:
             all_form_results = CustomFormResult.query \
                 .filter(CustomFormResult.form_id == revision.custom_form.id)
