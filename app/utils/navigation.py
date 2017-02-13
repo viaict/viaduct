@@ -31,7 +31,6 @@ class NavigationAPI:
     def get_navigation_menu():
         my_path = request.path
         my_path = re.sub(r'(/[0-9]+)?/$', '', my_path)
-        print(my_path)
 
         me = NavigationAPI._get_entry_by_url(my_path)
         if me:
