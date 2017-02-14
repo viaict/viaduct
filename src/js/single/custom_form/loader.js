@@ -11,7 +11,7 @@ $(function () {
 
         $spn_refresh.hide();
 
-        $slct.data('value', $slct.val());
+        $slct.data('data-value', $slct.val());
         get_entries($slct, $btn_reload, $spn_refresh, $spn_loading);
 
         $btn_reload.click(function () {
