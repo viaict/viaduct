@@ -11,6 +11,7 @@ $(function () {
 
         $spn_refresh.hide();
 
+        $slct.data('data-value', $slct.val());
         get_entries($slct, $btn_reload, $spn_refresh, $spn_loading);
 
         $btn_reload.click(function () {
@@ -28,7 +29,7 @@ $(function () {
 
         $slct.children(':not(.empty)').remove();
 
-        $.getJSON(Flask.url_for('custom_form.loader'), {'current': current},
+        $.getJSON(Flask.url_for('custom_form.loader', {'current': current}),
                 function (data) {
             var forms = data.forms;
 
@@ -63,6 +64,8 @@ $(function () {
         function finish() {
             $load.hide();
             $refr.show();
+            if($slct.hasClass("select2-offscreen"))
+                $slct.select2();
             $btn.prop('disabled', false);
         }
     }

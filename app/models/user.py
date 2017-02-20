@@ -1,4 +1,4 @@
-from app import db, app
+from app import db, app, cache
 from app.models import BaseEntity, Group
 from app.models.education import Education
 from flask_login import UserMixin, AnonymousUserMixin
@@ -24,6 +24,11 @@ class AnonymousUser(AnonymousUserMixin):
 
     id = 0
     has_paid = False
+
+    @property
+    @cache.cached(timeout=60)
+    def groups(self):
+        return Group.query.filter(Group.name == 'all').all()
 
 
 class User(db.Model, UserMixin, BaseEntity):
@@ -109,7 +114,7 @@ class User(db.Model, UserMixin, BaseEntity):
         self.email = new_email
 
     def member_of_group(self, group_id):
-        return self.groups.filter(Group.id == group_id).count() != 0
+        return Group.query.get(group_id).has_user(self)
 
     @property
     def name(self):

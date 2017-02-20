@@ -195,7 +195,7 @@ def add_task(group_id='all'):
             flash(message, 'danger')
 
     group = Group.query.filter(Group.id == group_id).first()
-    form.load_groups(current_user.groups.order_by(Group.name.asc()).all())
+    form.load_groups(current_user.groups)
 
     return render_template('pimpy/add_task.htm', group=group,
                            group_id=group_id, type='tasks', form=form,
@@ -303,7 +303,7 @@ def add_minute(group_id='all'):
         else:
             flash(message, 'danger')
 
-    form.load_groups(current_user.groups.order_by(Group.name.asc()).all())
+    form.load_groups(current_user.groups)
 
     return render_template('pimpy/add_minute.htm', group=group,
                            group_id=group_id, type='minutes', form=form,

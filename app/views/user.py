@@ -28,7 +28,6 @@ from app.models.education import Education
 from app.utils import UserAPI
 from app.utils import copernica
 from app.utils.module import ModuleAPI
-from app.utils.forms import flash_form_errors
 from app.utils.google import HttpError, send_email
 
 blueprint = Blueprint('user', __name__)
@@ -77,7 +76,7 @@ def view_single(user_id=None):
     user.avatar = UserAPI.avatar(user)
     user.groups = UserAPI.get_groups_for_user_id(user)
 
-    user.groups_amount = user.groups.count()
+    user.groups_amount = len(user.groups)
 
     if "gravatar" in user.avatar:
         user.avatar = user.avatar + "&s=341"
@@ -105,15 +104,16 @@ def view_single(user_id=None):
                            can_write=can_write)
 
 
-@blueprint.route('/users/remove_avatar/<int:user_id>', methods=['GET'])
+@blueprint.route('/users/remove_avatar/<int:user_id>', methods=['DELETE'])
 @login_required
 def remove_avatar(user_id=None):
     user = User.query.get(user_id)
     if not ModuleAPI.can_write('user') and\
             (current_user.is_anonymous or current_user.id != user_id):
-        return abort(403)
+        return "", 403
+
     UserAPI.remove_avatar(user)
-    return redirect(url_for('user.view_single', user_id=user_id))
+    return "", 200
 
 
 @blueprint.route('/users/create/', methods=['GET', 'POST'])
@@ -139,6 +139,8 @@ def edit(user_id=None):
     else:
         form = EditUserInfoForm(request.form, user)
         is_admin = False
+
+    form.new_user = user.id == 0
 
     # Add education.
     educations = Education.query.all()
@@ -218,8 +220,6 @@ def edit(user_id=None):
             copernica.update_user(user, subscribe=True)
             flash(_('Profile succesfully created'))
         return redirect(url_for('user.view_single', user_id=user.id))
-    else:
-        flash_form_errors(form)
 
     return edit_page()
 
@@ -274,8 +274,6 @@ def sign_up():
                 name=current_user.first_name), 'success')
 
         return redirect(url_for('home.home'))
-    else:
-        flash_form_errors(form)
 
     return render_template('user/sign_up.htm', form=form)
 
@@ -315,9 +313,6 @@ def sign_in():
                 return redirect(denied_from)
 
             return redirect(url_for('home.home'))
-
-    if form.errors:
-        flash_form_errors(form)
 
     return render_template('user/sign_in.htm', form=form)
 
@@ -381,8 +376,6 @@ def request_password():
             flash(_('An email has been sent to %(email)s with further '
                     'instructions.', email=form.email.data), 'success')
             return redirect(url_for('home.home'))
-    else:
-        flash_form_errors(form)
 
     return render_template('user/request_password.htm', form=form)
 
@@ -405,7 +398,7 @@ def reset_password(hash=0):
 
     # Check if the request was followed within a hour
     if ticket is None or ((datetime.now() - ticket.created_on).seconds > 3600):
-        flash(_('No valid ticket found'))
+        flash(_('No valid ticket found'), 'danger')
         return redirect(url_for('user.request_password'))
 
     if form.validate_on_submit():
@@ -423,9 +416,6 @@ def reset_password(hash=0):
 
         flash(_('Your password has been updated.'), 'success')
         return redirect(url_for('user.view_single', user_id=user.id))
-
-    else:
-        flash_form_errors(form)
 
     return render_template('user/reset_password.htm', form=form)
 

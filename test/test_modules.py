@@ -1,17 +1,23 @@
 import unittest
 import re
 import app
+import getpass
 
 
 class TestPages(unittest.TestCase):
 
     class U:
         # Regular users should not have admin rights on any pages
-        REGULAR_USERNAME = 'dummy@svia.nl'
-        REGULAR_PASSWORD = 'dummy'
+        print('Regular user details...')
+        REGULAR_USERNAME = input('\tUsername: ')
+        REGULAR_PASSWORD = getpass.getpass(
+            '\t"' + REGULAR_USERNAME + '" password: ')
+
         # Admin users should have admin rights on all pages
-        ADMIN_USERNAME = 'administrator@svia.nl'
-        ADMIN_PASSWORD = 'wachtwoord'
+        print('Administrative user details...')
+        ADMIN_USERNAME = input('\tUsername: ')
+        ADMIN_PASSWORD = getpass.getpass(
+            '\t"' + ADMIN_USERNAME + '" password: ')
 
     class C:
         HEADER = '\033[95m'

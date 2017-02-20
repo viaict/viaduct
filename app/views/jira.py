@@ -6,7 +6,7 @@ from flask_login import current_user
 
 from app.utils.forms import flash_form_errors
 from app.forms.jira import CreateIssueForm
-from app.utils.jira import JiraAPI
+from app.utils import jira as Jira
 
 from flask_babel import lazy_gettext as _
 
@@ -23,8 +23,8 @@ def create_issue():
     if form.validate_on_submit():
 
         # Use JiraAPI to do a POST request to https://viaduct.atlassian.net
-        response = JiraAPI.create_issue(form)
-        print(response, bool(response))
+        response = Jira.create_issue(form)
+
         if response:
             flash('The bug has been reported!', 'success')
             redir = request.args.get('redir')

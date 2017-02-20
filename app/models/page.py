@@ -13,10 +13,6 @@ class Page(db.Model, BaseEntity):
 
     type = db.Column(db.String(256))
 
-    navigation_entry_id = db.Column(db.Integer,
-                                    db.ForeignKey('nagivation_entry.id'))
-    navigation_entry = db.relationship('NavigationEntry', backref='page')
-
     def __init__(self, path, type='page'):
         self.path = path.rstrip('/')
         self.type = type
@@ -28,13 +24,13 @@ class Page(db.Model, BaseEntity):
         return '<Page(%s, "%s")>' % (self.id, self.path)
 
     def can_read(self, user):
-        if PagePermission.get_user_rights(user, self.id) > 0:
+        if PagePermission.get_user_rights(user, self) > 0:
             return True
         else:
             return False
 
     def can_write(self, user):
-        if PagePermission.get_user_rights(user, self.id) > 1:
+        if PagePermission.get_user_rights(user, self) > 1:
             return True
         else:
             return False
@@ -191,7 +187,7 @@ class PagePermission(db.Model):
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
 
     page = db.relationship('Page', backref=db.backref('permissions',
-                           lazy='dynamic'))
+                                                      lazy='joined'))
 
     def __init__(self, group_id, page_id, permission=0):
         self.permission = permission
@@ -204,30 +200,28 @@ class PagePermission(db.Model):
         if not user or not user.is_active:
             return [Group.query.filter(Group.name == 'all').first()]
         else:
-            return user.groups.all()
+            return user.groups
 
     @staticmethod
-    def get_user_rights(user, page_id):
+    def get_user_rights(user, page):
+        if not page:
+            return 0
+
         rights = 0
+        for group in user.groups:
+            if group.name == 'administrators':
+                return 2
 
-        groups = PagePermission.get_groups(user)
-        page = Page.query.filter(Page.id == page_id).first()
+            try:
+                permissions = next(perm for perm in page.permissions
+                                   if perm.group_id == group.id)
 
-        if page:
-            for group in groups:
-                if group.name == 'administrators':
-                    return 2
-
-                permissions = PagePermission.query\
-                    .filter(PagePermission.page_id == page.id,
-                            PagePermission.group_id == group.id).first()
-
-                if permissions:
-                    if (permissions.permission >= 2):
-                        return permissions.permission
-
-                    if (permissions.permission > rights):
-                        rights = permissions.permission
+                if permissions.permission >= 2:
+                    return permissions.permission
+                elif permissions.permission > rights:
+                    rights = permissions.permission
+            except StopIteration:
+                pass
 
         return rights
 

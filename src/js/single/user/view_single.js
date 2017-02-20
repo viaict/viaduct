@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    "use strict";
     var $btnSets = $('#responsive'),
     $btnLinks = $btnSets.find('a');
 

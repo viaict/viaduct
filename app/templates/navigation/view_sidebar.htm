@@ -4,7 +4,7 @@
     <div class="panel-group" id="accordion">
         <div class="panel panel-default">
         	{% for i, page in enumerate(pages) %}
-                <a {% if page.external %}target="_blank"{% endif %} href="{% if page.url == current.url %}#{% else %}{% if page.external %}http://{% endif %}{{ page.url }}{% endif %}">
+                <a {% if page.external %}target="_blank"{% endif %} href="{{ page.href }}">
                     <div class="panel-heading">
                         <h4 class="panel-title">
                            {{ page.title }}
@@ -14,10 +14,10 @@
                 {% set children = page.activities if page.activities else page.get_children() %}
 				{% set children = NavigationAPI.remove_unauthorized(children) %}
 
-				{% if children and page.url == current.url %}
+				{% if children and page.id == current.id %}
                     <div id="{{i}}" class="panel-collapse">
                         {% for child in children %}
-                        <a {% if child.external %}target="_blank"{% endif %} href="{% if child.external %}http://{% endif %}{{ child.url }}">
+                        <a {% if child.external %}target="_blank"{% endif %} href="{{ child.href }}">
                             <div class="panel-heading sub-panel-heading">
                                 <h4 class="panel-title sub-panel-title">
                                     {{ child.title }}

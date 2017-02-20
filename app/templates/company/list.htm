@@ -3,9 +3,6 @@
 {% extends "content.htm" %}
 
 {% block includes %}
-    <script>
-        var get_companies = "{{ url_for('company.get_companies') }}"
-    </script>
     <script src="{{static_url("/static/js/company/view.js")}}"></script>
 {% endblock %}
 

@@ -101,9 +101,8 @@ class CustomForm(db.Model, BaseEntity):
         latest_activity = (self.activities.order_by(Activity.end_time.desc())
                            .first())
 
-        return self.archived or (
-            latest_activity is not None and
-            datetime.now() < latest_activity.end_time)
+        return self.archived or (latest_activity and
+                                 datetime.now() > latest_activity.end_time)
 
     @classmethod
     def aslist(cls, current=None):
@@ -115,7 +114,7 @@ class CustomForm(db.Model, BaseEntity):
         if current is not None:
             cf = cls.query.get(current)
 
-            if cf.is_archived():
+            if cf is not None and cf.is_archived():
                 lst.append(('Gearchiveerd geselecteerd formulier', [cf]))
 
         return lst

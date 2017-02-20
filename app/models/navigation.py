@@ -9,6 +9,7 @@ class NavigationEntry(db.Model, BaseEntity):
     prints = ('id', 'parent_id', 'nl_title', 'en_title', 'url', 'external')
 
     parent_id = db.Column(db.Integer, db.ForeignKey('nagivation_entry.id'))
+    page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
     nl_title = db.Column(db.String(256))
     en_title = db.Column(db.String(256))
     url = db.Column(db.String(256))
@@ -21,6 +22,10 @@ class NavigationEntry(db.Model, BaseEntity):
         primaryjoin=('NavigationEntry.parent_id==NavigationEntry.id'),
         backref=db.backref('children', lazy='dynamic',
                            order_by='NavigationEntry.position'))
+
+    page = db.relationship('Page', backref=db.backref('navigation_entry',
+                                                      lazy='joined'),
+                           lazy='joined')
 
     def __init__(self, parent, nl_title, en_title, url, external,
                  activity_list, position, subtitle=None):
@@ -42,6 +47,13 @@ class NavigationEntry(db.Model, BaseEntity):
         if ordered:
             childs = childs.order_by(NavigationEntry.position)
         return childs
+
+    @property
+    def href(self):
+        if self.external:
+            return 'https://' + self.url
+        else:
+            return self.url if self.url else '/' + self.page.path
 
 
 @event.listens_for(NavigationEntry, 'load')

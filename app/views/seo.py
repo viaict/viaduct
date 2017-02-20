@@ -2,7 +2,7 @@ from app.forms import SeoForm
 
 from app import db
 from app.utils.module import ModuleAPI
-from app.utils.seo import SeoAPI
+from app.utils.seo import get_seo, get_resources
 from app.utils.forms import flash_form_errors
 from app.models import SEO
 
@@ -25,7 +25,7 @@ def edit_seo():
     module = request.args['module']
     path = request.args['path']
 
-    seo = SeoAPI.get_seo(module, path)
+    seo = get_seo(module, path)
 
     # Retrieve form info.
     form = SeoForm(request.form, seo)
@@ -40,13 +40,12 @@ def edit_seo():
             seo.en_description = form.en_description.data.strip()
             seo.nl_tags = form.nl_tags.data.strip()
             seo.en_tags = form.en_tags.data.strip()
-            print("SEO")
 
             db.session.add(seo)
             db.session.commit()
         if not seo:
             # Get seo resources to indentify the seo in the database.
-            res = SeoAPI.get_resources(module, path)
+            res = get_resources(module, path)
 
             # Create the new seo entry
             seo = SEO(res['page'],
@@ -60,7 +59,6 @@ def edit_seo():
                       form.en_description.data.strip(),
                       form.nl_tags.data.strip(),
                       form.en_tags.data.strip())
-            print(vars(seo))
 
             db.session.add(seo)
             db.session.commit()

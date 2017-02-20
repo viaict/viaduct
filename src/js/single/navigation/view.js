@@ -1,17 +1,20 @@
 $(function() {
+    "use strict";
+
     $('.sortable').sortable({
         connectWith: $('.sortable'),
         handle: ".sortable_handler",
         items: '> div[class!="leave-alone"]',
-        stop: function(event, ui) {
+        stop: function() {
             var list = crawl_entries($('#outer'));
+
             $.post(
                 Flask.url_for("navigation.reorder"),
                 {entries: JSON.stringify(list)},
-                function(data) {
-                    clearflash();
-                    flash('De volgorde is succesvol opgeslagen',
-                          'success', false);
+                function() {
+                    utils.flash.clear();
+                    utils.flash.new('De volgorde is succesvol opgeslagen',
+                        'success', false);
                 }
             );
         }
@@ -19,6 +22,8 @@ $(function() {
 });
 
 function crawl_entries($list) {
+    "use strict";
+
     var list = [];
 
     $list.children('div').each(function (index, element) {

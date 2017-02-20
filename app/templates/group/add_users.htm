@@ -3,53 +3,45 @@
 {% extends "content.htm" %}
 
 {% block includes %}
-    <script>
-        var get_users = "{{ url_for('user.get_users') }}"
-        var group_api_add_users  = "{{ url_for('group.group_api_add_users', group_id=group.id) }}"
-        var group_view_users = "{{url_for('group.view_users', group_id=group.id) }}"
-    </script>
+    <script>var group_id = {{group.id}};</script>
     <script src="{{static_url("/static/js/group/add_users.js")}}"></script>
 {% endblock %}
 
 {% block content %}
-<h1>Gebruiker toevoegen aan {{ group.name }}</h1>
-<div class='row'>
-	<div class='col-md-12'>
-        <table id="datatable" class='table table-striped'>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>E-mail adres</th>
-                    <th>Voornaam</th>
-                    <th>Achternaam</th>
-                    <th>Student ID</th>
-                    <th>Studie</th>
-                </tr>
-            </thead>
-            <tfoot>
-                <tr>
-                    <th>ID</th>
-                    <th>E-mail adres</th>
-                    <th>Voornaam</th>
-                    <th>Achternaam</th>
-                    <th>Student ID</th>
-                    <th>Studie</th>
-                </tr>
-            </tfoot>
-        </table>
+<h1>{{_('Add user to') }} {{ group.name }}</h1>
+<table id="datatable" class='table table-striped'>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>{{_('E-mail address')}}</th>
+            <th>{{_('First name')}}</th>
+            <th>{{_('Last name')}}</th>
+            <th>{{_('Student ID')}}</th>
+            <th>{{_('Study')}}</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>ID</th>
+            <th>{{_('E-mail address')}}</th>
+            <th>{{_('First name')}}</th>
+            <th>{{_('Last name')}}</th>
+            <th>{{_('Student ID')}}</th>
+            <th>{{_('Study')}}</th>
+        </tr>
+    </tfoot>
+</table>
 
-        <div class='btn-group'>
-            <a href='#' id='add_users' class='btn btn-success'>
-                <i class='glyphicon glyphicon-plus'></i> Add
-            </a>
-            <a href='{{ url_for('user.sign_up') }}' id="add-users" class='btn btn-success'>
-                <i class='glyphicon glyphicon-user'></i> Gebruiker aanmaken
-            </a>
-            <a href='{{ url_for('group.view_users', group_id=group.id) }}' class='btn btn-primary'>
-                <i class='glyphicon glyphicon-arrow-left'></i> Terug
-            </a>
-        </div>
-	</div>
+<div class='btn-group'>
+    <a href='#' id='add_users' class='btn btn-success'>
+        <i class='glyphicon glyphicon-plus'></i> {{_('Add')}}
+    </a>
+    <a href='{{ url_for('user.sign_up') }}' id="add-users" class='btn btn-success'>
+        <i class='glyphicon glyphicon-user'></i> {{_('Create user')}}
+    </a>
+    <a href='{{ url_for('group.view_users', group_id=group.id) }}' class='btn btn-primary'>
+        <i class='glyphicon glyphicon-arrow-left'></i> {{_('Back')}}
+    </a>
 </div>
 {% endblock %}
 

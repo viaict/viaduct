@@ -26,7 +26,8 @@ $(function () {
             $task_btns.addClass(data.status);
             $task_rows.addClass('pimpy_status_' + data.status);
         }).fail(function () {
-            flash('Er ging iets mis, =(', 'danger');
+            utils.flash.clear();
+            utils.flash.new('Er ging iets mis, =(', 'danger');
         }).always(function () {
             $task_btns.button('reset');
         });

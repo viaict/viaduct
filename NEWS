@@ -1,4 +1,17 @@
-15-01-2015 v2.7.4.0:
+xx-xx-xxxx dev:
+* Added: New form rendering
+
+20-02-2017 v2.7.5.0:
+* Fixed: Custom form submissions are now editable from a page as well as an activity.
+* Fixed: SEO keywords are now displayed in the edit form.
+* Fixed: Increasing max form size when there are people on the reservelist.
+* Fixed: Form loader at activities pages.
+* Fixed: Added Sentry to internal server error page.
+* Fixed: Users can now change password again.
+* Added: Strip @svia.nl when creating new maillist.
+* Update: Rewritten way navigation bar is saved and created.
+
+15-01-2017 v2.7.4.0:
 * Fixed: Profile pictures are now clipped instead of scaled.
 * Fixed: Unable to submit to DOMjudge after changing password.
 * Fixed: Request password of unknown email.

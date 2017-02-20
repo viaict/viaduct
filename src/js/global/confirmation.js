@@ -1,13 +1,9 @@
-$(document).ready(function()
-{
-    $(".confirmation").click(function(ev)
-    {
-        //alert($('#confirmationModal')[0]);
-        //$('#confirmationModal')[0].modal("show");
+$(document).ready(function() {
+    "use strict";
 
-        if (!confirm("Weet je ZEKER dat je dit wilt doen?!")) 
-        {
+    $(".confirmation").click(function(ev) {
+        if (!confirm("Weet je ZEKER dat je dit wilt doen?!")) {
             ev.preventDefault();
         }
     });
-})
+});

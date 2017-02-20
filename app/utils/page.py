@@ -45,8 +45,8 @@ class PageAPI:
                                 not current_user.has_paid):
             return False
 
-        return PagePermission.get_user_rights(current_user, page.id) > 0
+        return PagePermission.get_user_rights(current_user, page) > 0
 
     @staticmethod
     def can_write(page):
-        return PagePermission.get_user_rights(current_user, page.id) > 1
+        return PagePermission.get_user_rights(current_user, page) > 1

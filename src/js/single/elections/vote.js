@@ -25,8 +25,8 @@ $(function() {
         }).fail(function(jqHXR) {
             var error = $.parseJSON(jqHXR.responseText).error;
 
-            clearflash();
-            flash(error, 'danger');
+            utils.flash.clear();
+            utils.flash.new(error, 'danger');
 
             $btn.prop('disabled', false);
         });

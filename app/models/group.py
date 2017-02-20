@@ -1,6 +1,5 @@
 # To prevent circular dependencies with page and committee,
 # CommitteeRevison must be imported inside functions
-import app
 from app import db
 from app.models import BaseEntity
 from app.utils import google
@@ -20,7 +19,8 @@ class Group(db.Model, BaseEntity):
     name = db.Column(db.String(200), unique=True)
 
     users = db.relationship('User', secondary=user_group,
-                            backref=db.backref('groups', lazy='dynamic'),
+                            backref=db.backref('groups', lazy='joined',
+                                               order_by='Group.name'),
                             lazy='dynamic')
 
     maillist = db.Column(db.String(100), unique=True)
@@ -31,7 +31,8 @@ class Group(db.Model, BaseEntity):
 
     def is_committee(self, id):
         from app.models.committee import CommitteeRevision
-        u = db.session.query(CommitteeRevision).filter(CommitteeRevision.group_id == id)
+        u = db.session.query(CommitteeRevision)\
+              .filter(CommitteeRevision.group_id == id)
         return db.session.query(u.exists()).first()[0]
 
     def has_user(self, user):

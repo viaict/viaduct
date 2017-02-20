@@ -119,6 +119,10 @@ def edit(group_id):
             name = form.data['name'].strip()
             maillist = form.data['maillist'].strip().lower()
 
+            suffix = maillist.find('@svia.nl')
+            if suffix > 0:
+                maillist = maillist[:suffix]
+
             valid_form = True
 
             group_with_same_name = Group.query.\
