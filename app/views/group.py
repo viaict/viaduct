@@ -7,14 +7,13 @@ from flask import abort, jsonify
 from flask_login import current_user
 
 from app import app, db
-from app.utils.forms import flash_form_errors
 
 from app.utils.module import ModuleAPI
 from app.utils import google
 
 from app.models import Group, GroupPermission, User
 from app.forms.group import EditGroupPermissionForm, ViewGroupForm, \
-    EditGroup
+    CreateGroup, EditGroup
 
 blueprint = Blueprint('group', __name__)
 
@@ -57,8 +56,6 @@ def view(page_nr=1):
         for group in pagination.items:
             form.entries.append_entry()
 
-        flash_form_errors(form)
-
     return render_template('group/view.htm', form=form, pagination=pagination,
                            groups=zip(pagination.items, form.entries),
                            current_user=current_user, title='Groups')
@@ -69,7 +66,7 @@ def create():
     if not(ModuleAPI.can_write('group')):
         return abort(403)
 
-    form = EditGroup(request.form)
+    form = CreateGroup(request.form)
 
     if form.validate_on_submit():
         name = request.form['name'].strip()
@@ -285,8 +282,6 @@ def edit_permissions(group_id, page_nr=1):
 
         return redirect(url_for('group.edit_permissions', group_id=group_id,
                                 page_nr=page_nr))
-    else:
-        flash_form_errors(form)
 
         # add the permissions as drop down boxes
         for permission in permissions:

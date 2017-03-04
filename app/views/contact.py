@@ -7,7 +7,6 @@ from app.models.contact import Contact
 from app.models.location import Location
 from app.forms import ContactForm
 from app.utils.module import ModuleAPI
-from app.utils.forms import flash_form_errors
 
 blueprint = Blueprint('contact', __name__, url_prefix='/contacts')
 
@@ -37,7 +36,8 @@ def edit(contact_id=None):
 
     form = ContactForm(request.form, contact)
 
-    locations = Location.query.order_by('address').order_by('city')
+    locations = Location.query.order_by(
+        Location.address).order_by(Location.city)
     form.location_id.choices = \
         [(l.id, '%s, %s' % (l.address, l.city)) for l in locations]
 
@@ -53,8 +53,6 @@ def edit(contact_id=None):
         db.session.commit()
         flash(_('Contact person saved.'), 'success')
         return redirect(url_for('contact.edit', contact_id=contact.id))
-    else:
-        flash_form_errors(form)
 
     return render_template('contact/edit.htm', contact=contact, form=form)
 

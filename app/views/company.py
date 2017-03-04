@@ -186,8 +186,6 @@ def edit(company_id=None):
         db.session.commit()
         flash(_('Company "%s" saved.' % company.name), 'success')
         return redirect(url_for('company.view', company_id=company.id))
-    else:
-        flash_form_errors(form)
 
     return render_template('company/edit.htm', company=company, form=form)
 

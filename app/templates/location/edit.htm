@@ -1,25 +1,9 @@
-{% from "macros/form.htm" import render_field, render_button, render_textarea, render_datefield, render_select, render_submit %}
+{% from "macros/form.htm" import render_form %}
 
 {% extends "content.htm" %}
 
 {% block content %}
-    <form method="post">
-        <fieldset>
-            <legend>Locatie {% if location.id %}bewerken{% else %}aanmaken{% endif %}</legend>
-
-            {{ form.csrf_token }}
-
-            {{ render_field(form.city) }}
-            {{ render_field(form.country) }}
-            {{ render_field(form.address) }}
-            {{ render_field(form.zip) }}
-            {{ render_field(form.postoffice_box) }}
-            {{ render_field(form.email) }}
-            {{ render_field(form.phone_nr) }}
-
-            {{ render_submit(_('Submit')) }}
-        </fieldset>
-    </form>
+    {{ render_form(form) }}
 
     {% if location.id and ModuleAPI.can_write('location') %}
         <form action="{{ url_for('location.delete', location_id=location.id) }}" method="post">

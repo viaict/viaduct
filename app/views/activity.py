@@ -14,7 +14,6 @@ from flask_babel import _  # gettext
 from werkzeug import secure_filename
 
 from app import db
-from app.utils.forms import flash_form_errors
 from app.forms.activity import ActivityForm, CreateForm
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult
@@ -185,7 +184,7 @@ def create(activity_id=None):
                         os.path.join('app/static/activity_pictures', picture)):
                     flash(_('An image with this name already exists.'),
                           'danger')
-                    return render_template('activity/create.htm',
+                    return render_template('activity/edit.htm',
                                            activity=activity,
                                            form=form,
                                            title=title)
@@ -244,10 +243,8 @@ def create(activity_id=None):
 
             return redirect(url_for('activity.get_activity',
                                     activity_id=activity.id))
-        else:
-            flash_form_errors(form)
 
-    return render_template('activity/create.htm', activity=activity, form=form,
+    return render_template('activity/edit.htm', activity=activity, form=form,
                            title=title)
 
 

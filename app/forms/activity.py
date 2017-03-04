@@ -1,16 +1,24 @@
 from flask_babel import lazy_gettext as _  # gettext
 from flask_wtf import Form
 from flask_wtf.file import FileField
-from wtforms import (StringField, SelectField, TextAreaField, DateTimeField,
-                     IntegerField)
+from wtforms import StringField, SelectField, TextAreaField, DateTimeField
 from wtforms.validators import InputRequired, Email
+
+from app.forms.fields import CustomFormSelectField
+from app.forms.util import FieldTabGroup, FieldTab, FieldVerticalSplit
 
 
 class CreateForm(Form):
+    form_id = CustomFormSelectField(_('Form'))
     nl_name = StringField(_('Dutch name'))
     nl_description = TextAreaField(_('Dutch description'))
     en_name = StringField(_('English name'))
     en_description = TextAreaField(_('English description'))
+
+    details = FieldTabGroup([
+        FieldTab(_('Dutch details'), ['nl_name', 'nl_description']),
+        FieldTab(_('English details'), ['en_name', 'en_description'])
+    ])
 
     start_time = DateTimeField(
         _('Start time'), validators=[
@@ -18,15 +26,15 @@ class CreateForm(Form):
         format='%Y-%m-%d %H:%M')
     end_time = DateTimeField(
         _('End time'), format='%Y-%m-%d %H:%M')
+
+    timerange = FieldVerticalSplit([['start_time'], ['end_time']])
+
     location = StringField(
         _('Location'), default='Studievereniging VIA, Science Park 904,\
         1098 XH Amsterdam, Nederland')
 
-    privacy = StringField(_('Privacy'))
     price = StringField(_('Price'), default=0)
     picture = FileField(_('Image'))
-    venue = StringField(_('Venue'))
-    form_id = IntegerField()
 
     # Override validate from the Form class
     def validate(self):

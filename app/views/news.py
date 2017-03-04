@@ -11,7 +11,6 @@ from app import db
 from app.forms import NewsForm
 from app.models import News
 from app.utils import ModuleAPI
-from app.utils.forms import flash_form_errors
 
 blueprint = Blueprint('news', __name__, url_prefix='/news')
 
@@ -89,9 +88,6 @@ def edit(news_id=None):
             flash(_('News item saved'), 'success')
 
             return redirect(url_for('news.view', news_id=news_id))
-
-        else:
-            flash_form_errors(form)
 
     return render_template('news/edit.htm', form=form, news_id=news_id)
 

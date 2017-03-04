@@ -2,14 +2,25 @@
 from wtforms import TextAreaField, SelectField, BooleanField
 from flask_babel import lazy_gettext as _
 from app.forms.page import SuperPageForm
+from app.forms.util import FieldTabGroup, FieldTab, FieldVerticalSplit
+from app.forms.fields import GroupSelectField
 
 
 class CommitteeForm(SuperPageForm):
     nl_description = TextAreaField(_('Description'))
     en_description = TextAreaField(_('Description'))
-    group_id = SelectField(_('Group'), coerce=int)
+
+    details = FieldTabGroup([
+        FieldTab(_('Dutch details'), ['nl_title', 'nl_description']),
+        FieldTab(_('English details'), ['en_title', 'en_description'])
+    ])
+
+    group_id = GroupSelectField(_('Group'))
     coordinator_id = SelectField(_('Coördinator'), coerce=int)
     interim = BooleanField(_('Interim coördinator'))
+
+    settings = FieldVerticalSplit(
+        [['group_id'], ['coordinator_id'], ['interim']])
 
     # Override validate from the Form class
     def validate(self):

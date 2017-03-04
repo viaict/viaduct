@@ -5,6 +5,8 @@ from wtforms.validators import InputRequired, Optional
 
 from datetime import date, timedelta
 
+from app.forms.util import FieldTabGroup, FieldTab, FieldVerticalSplit
+
 
 class NewsForm(Form):
     nl_title = TextField(_('Dutch title'))
@@ -12,12 +14,19 @@ class NewsForm(Form):
     en_title = TextField(_('English title'))
     en_content = TextAreaField(_('English content'))
 
+    details = FieldTabGroup([
+        FieldTab(_('Dutch details'), ['nl_title', 'nl_content']),
+        FieldTab(_('English details'), ['en_title', 'en_content'])
+    ])
+
     publish_date = DateField(
         _('Publish date'), default=str(date.today()), validators=[
             InputRequired(_('Publish date') + ' ' + _('is required'))])
     archive_date = DateField(
         _('Archive date'), default=str(date.today() + timedelta(days=31)),
         validators=[Optional()])
+
+    dates = FieldVerticalSplit([['publish_date'], ['archive_date']])
 
     def validate(self):
 

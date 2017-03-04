@@ -1,63 +1,63 @@
-{% from "macros/form.htm" import render_field %}
+{% from "macros/form.htm" import render_form %}
 
 {% extends "base.htm" %}
 
-{%block page %}
-<div class="row">
-    <div class="col-md-6">
-        <form action="" method=post enctype=multipart/form-data>
-            <fieldset>
-                <legend>
-                {%- if new -%}
-                    {{_('New course')}}
+{% macro render_before_hook(field) %}
+{%- if field.name == 'title' and not new -%}
+    <label>{{ _('Amount of examinations:') }}</label>
+    {% if exam_count == 0 %}
+    {{ _('None') }}
+    {% else %}
+    <a href="/examination?search={{ course.name }}" class="view-results btn btn-xs btn-primary" style="margin-left: 20px">
+        <span class="badge badge-inverse">{{ exam_count }}</span>
+        {{ _('view') }}
+    </a>
+    {% endif %}
+{%- endif -%}
+
+{% endmacro %}
+
+{% macro render_submit() %}
+    <div class="control-group">
+        <div class="controls btn-group">
+            <button type="submit" class="btn btn-success">
+                <i class= "glyphicon glyphicon-ok"></i>
+                {% if new -%}
+                {{_('Add')}}
                 {%- else -%}
-                    {{_('Edit course')}}
+                {{_('Save')}}
                 {%- endif -%}
-                </legend>
-                {%- if not new -%}
-                <label>{{ _('Amount of examinations:') }}</label>
-                    {% if exam_count == 0 %}
-                        {{ _('None') }}
-                    {% else %}
-                        <a href="/examination?search={{ course.name }}" class="view-results btn btn-xs btn-primary" style="margin-left: 20px">
-                            <span class="badge badge-inverse">{{ exam_count }}</span>
-                            {{ _('view') }}
-                        </a>
-                    {% endif %}
-                {%- endif -%}
-
-                {{ form.csrf_token }}
-                {{ render_field(form.title) }}
-                {{ render_field(form.description) }}
-
-                <div class="control-group">
-                    <div class="controls btn-group">
-                        <button type="submit" class="btn btn-success">
-                            <i class= "glyphicon glyphicon-ok"></i>
-                            {% if new -%}
-                                {{_('Add')}}
-                            {%- else -%}
-                                {{_('Save')}}
-                            {%- endif -%}
-                        </button>
-                        {% if not new and exam_count == 0 %}
-                        <a onclick="confirmation()" role="button" class="btn btn-danger">
-                            <i class="glyphicon glyphicon-remove"></i> {{ _('Delete' )}}
-                        </a>
-                        {% endif %}
-                        <a href="{% if 'origin' in session -%}
-                            {{ session['origin'] }}
-                        {%- else -%}
-                           {{url_for('examination.add')}}
-                        {%- endif -%}" class='btn btn-primary'>
-                            <i class="glyphicon glyphicon-arrow-left"></i> {{_('Back')}}
-                        </a>
-                    </div>
-                </div>
-            </fieldset>
-        </form>
+            </button>
+            {% if not new and exam_count == 0 %}
+            <a onclick="confirmation()" role="button" class="btn btn-danger">
+                <i class="glyphicon glyphicon-remove"></i> {{ _('Delete' )}}
+            </a>
+            {% endif %}
+            <a href="{% if 'origin' in session -%}
+            {{ session['origin'] }}
+            {%- else -%}
+            {{url_for('examination.add')}}
+            {%- endif -%}" class='btn btn-primary'>
+                <i class="glyphicon glyphicon-arrow-left"></i> {{_('Back')}}
+            </a>
+        </div>
     </div>
-</div>
+{% endmacro %}
+
+
+{%block page %}
+<legend>
+    {%- if new -%}
+    {{_('New course')}}
+    {%- else -%}
+    {{_('Edit course')}}
+    {%- endif -%}
+</legend>
+
+{{ render_form(form, render_before_hook=render_before_hook,
+                submit_renderer=render_submit) }}
+
+
 {% if not new and exam_count == 0 %}
 <script>
 function confirmation() {
@@ -73,5 +73,6 @@ function confirmation() {
 }
 </script>
 {% endif %}
+
 {% endblock %}
 
