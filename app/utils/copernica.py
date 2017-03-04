@@ -73,7 +73,7 @@ def update_user(mailinglist_user, subscribe=False):
         db.session.commit()
     else:
         url = ("https://api.copernica.com/database/" +
-               mailinglist_user.mailing_list.copernica_db_id +
+               str(mailinglist_user.mailing_list.copernica_db_id) +
                "/profiles?fields[]=ID%3D%3D" +
                str(mailinglist_user.copernica_user_id) +
                "&access_token=" + API_TOKEN)
