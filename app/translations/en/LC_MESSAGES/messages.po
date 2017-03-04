@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-02-11 15:00+0100\n"
+"POT-Creation-Date: 2017-03-04 15:10+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -342,6 +342,9 @@ msgstr ""
 msgid "Current avatar"
 msgstr ""
 
+msgid "Current image"
+msgstr ""
+
 msgid "Date"
 msgstr ""
 
@@ -592,9 +595,6 @@ msgid "Firstname"
 msgstr ""
 
 msgid "Forgot password?"
-msgstr ""
-
-msgid "Form"
 msgstr ""
 
 msgid "Free"
@@ -905,7 +905,7 @@ msgstr ""
 msgid "Passwords do not match"
 msgstr ""
 
-msgid "Pay (+€0,29 transaction costs)"
+msgid "Pay (+€0,35 transaction costs)"
 msgstr ""
 
 msgid "Payment successfully received."
@@ -1016,9 +1016,6 @@ msgstr ""
 msgid "Repeat password"
 msgstr ""
 
-msgid "Report bug"
-msgstr ""
-
 msgid "Request to DOMjudge server failed"
 msgstr ""
 
@@ -1046,7 +1043,13 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
+msgid "Search Engine Optimization"
+msgstr ""
+
 msgid "Search for title, contact or company"
+msgstr ""
+
+msgid "Select a time and date by clicking on the clock"
 msgstr ""
 
 msgid "Send"
@@ -1145,9 +1148,6 @@ msgid "Submit"
 msgstr ""
 
 msgid "Submit solution"
-msgstr ""
-
-msgid "Submit!"
 msgstr ""
 
 msgid "Summaries"
@@ -1265,6 +1265,9 @@ msgstr ""
 msgid "Timestamp"
 msgstr ""
 
+msgid "Tip"
+msgstr ""
+
 msgid "Title"
 msgstr ""
 
@@ -1332,6 +1335,9 @@ msgid "Valid membership is required for the summary module"
 msgstr ""
 
 msgid "Vancancies"
+msgstr ""
+
+msgid "Venue"
 msgstr ""
 
 msgid "View"
@@ -1475,9 +1481,6 @@ msgid "page"
 msgstr ""
 
 msgid "required"
-msgstr ""
-
-msgid "seo"
 msgstr ""
 
 msgid "still"
@@ -1678,5 +1681,20 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Minimal password length "
+#~ msgstr ""
+
+#~ msgid "Form"
+#~ msgstr ""
+
+#~ msgid "Pay (+€0,29 transaction costs)"
+#~ msgstr ""
+
+#~ msgid "Report bug"
+#~ msgstr ""
+
+#~ msgid "Submit!"
+#~ msgstr ""
+
+#~ msgid "seo"
 #~ msgstr ""
 

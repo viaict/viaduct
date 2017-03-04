@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-02-11 15:00+0100\n"
+"POT-Creation-Date: 2017-03-04 15:10+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -345,6 +345,10 @@ msgstr "Huidig"
 msgid "Current avatar"
 msgstr "Huidige avatar"
 
+#, fuzzy
+msgid "Current image"
+msgstr "Huidig"
+
 msgid "Date"
 msgstr "Datum"
 
@@ -596,9 +600,6 @@ msgstr "Voornaam"
 
 msgid "Forgot password?"
 msgstr "Wachtwoord vergeten?"
-
-msgid "Form"
-msgstr "Formulier"
 
 msgid "Free"
 msgstr "Gratis"
@@ -910,8 +911,8 @@ msgstr "Wachtwoord"
 msgid "Passwords do not match"
 msgstr "De opgegeven wachtwoorden komen niet overeen"
 
-msgid "Pay (+€0,29 transaction costs)"
-msgstr "Betalen (+€0,29 transactiekosten)"
+msgid "Pay (+€0,35 transaction costs)"
+msgstr "Betalen (+€0,35 transactiekosten)"
 
 msgid "Payment successfully received."
 msgstr "Betaling succesvol ontvangen."
@@ -1021,9 +1022,6 @@ msgstr "Verwijder pagina"
 msgid "Repeat password"
 msgstr "Herhaal wachtwoord"
 
-msgid "Report bug"
-msgstr "Verstuur een bug report"
-
 msgid "Request to DOMjudge server failed"
 msgstr "Request aan de DOMjudge server mislukt"
 
@@ -1051,8 +1049,14 @@ msgstr "Scorebord"
 msgid "Search"
 msgstr "Zoeken"
 
+msgid "Search Engine Optimization"
+msgstr ""
+
 msgid "Search for title, contact or company"
 msgstr "Zoeken op titel, contact of bedrijf"
+
+msgid "Select a time and date by clicking on the clock"
+msgstr ""
 
 msgid "Send"
 msgstr "Verzend"
@@ -1153,9 +1157,6 @@ msgstr "Opslaan"
 
 msgid "Submit solution"
 msgstr "Oplossing insturen"
-
-msgid "Submit!"
-msgstr "Versturen!"
 
 msgid "Summaries"
 msgstr "Samenvattingen"
@@ -1288,6 +1289,9 @@ msgstr "Tijdslimiet"
 msgid "Timestamp"
 msgstr "Tijdstip"
 
+msgid "Tip"
+msgstr ""
+
 msgid "Title"
 msgstr "Titel"
 
@@ -1358,6 +1362,9 @@ msgstr "Geldig lidmaatschap is vereist voor de samenvattingsbank"
 
 msgid "Vancancies"
 msgstr "Vacatures"
+
+msgid "Venue"
+msgstr ""
 
 msgid "View"
 msgstr "Weergeven"
@@ -1507,9 +1514,6 @@ msgstr "pagina"
 
 msgid "required"
 msgstr "vereist"
-
-msgid "seo"
-msgstr "seo"
 
 msgid "still"
 msgstr "nog"
@@ -1679,3 +1683,16 @@ msgstr ""
 
 #~ msgid "Something went wrong"
 #~ msgstr "Er is iets mis gegaan"
+
+#~ msgid "Form"
+#~ msgstr "Formulier"
+
+#~ msgid "Report bug"
+#~ msgstr "Verstuur een bug report"
+
+#~ msgid "Submit!"
+#~ msgstr "Versturen!"
+
+#~ msgid "seo"
+#~ msgstr "seo"
+
