@@ -153,7 +153,6 @@ def create(form_id=None):
         if form.price.data is None:
             form.price.data = 0.0
         custom_form.price = form.price.data
-        custom_form.transaction_description = form.transaction_description.data
         custom_form.terms = form.terms.data
 
         follower = None

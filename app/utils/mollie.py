@@ -45,7 +45,7 @@ def create_transaction(amount, description, user=current_user,
     try:
         payment = MollieClient.payments.create({
             'amount': amount,
-            'description': description if description else 'VIA Transaction',
+            'description': "{}, {}".format(user.name, description),
             'redirectUrl': url_for('mollie.callback',
                                    transaction_id=transaction.id,
                                    _external=True),

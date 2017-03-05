@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-03-04 15:10+0100\n"
+"POT-Creation-Date: 2017-03-04 15:50+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -222,6 +222,10 @@ msgstr "Vergelijken"
 
 msgid "Compiler Error"
 msgstr "Compileerfout"
+
+#, fuzzy
+msgid "Conditions"
+msgstr "Opleidingen"
 
 msgid "Contact Name"
 msgstr "Contact Naam"
@@ -601,6 +605,10 @@ msgstr "Voornaam"
 msgid "Forgot password?"
 msgstr "Wachtwoord vergeten?"
 
+#, fuzzy
+msgid "Form name"
+msgstr "Voornaam"
+
 msgid "Free"
 msgstr "Gratis"
 
@@ -690,6 +698,9 @@ msgstr "Laatste nieuws"
 msgid "Legend"
 msgstr "Legenda"
 
+msgid "Let the dogs out"
+msgstr ""
+
 msgid "Link copied"
 msgstr "Link gekopieerd"
 
@@ -722,6 +733,9 @@ msgstr "Log in"
 
 msgid "Logo"
 msgstr "Logo"
+
+msgid "Max number of attendents"
+msgstr "Maximaal aantal aanwezigen"
 
 msgid "Member"
 msgstr "Lid"
@@ -1158,6 +1172,9 @@ msgstr "Opslaan"
 msgid "Submit solution"
 msgstr "Oplossing insturen"
 
+msgid "Success message: shown when user registers"
+msgstr "Succes bericht: zichtbaar wanneer gebruiker zich inschrijft"
+
 msgid "Summaries"
 msgstr "Samenvattingen"
 
@@ -1400,6 +1417,9 @@ msgid ""
 "Welcome %(name)s! Your profile has been succesfully created and you have "
 "been logged in!"
 msgstr "Welkom %(name)s! Je profiel is aangemaakt en je bent ingelogd!"
+
+msgid "Who"
+msgstr "Wie"
 
 msgid "Workload"
 msgstr "Werklast"

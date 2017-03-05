@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-03-04 15:10+0100\n"
+"POT-Creation-Date: 2017-03-04 15:50+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -218,6 +218,9 @@ msgid "Compare"
 msgstr ""
 
 msgid "Compiler Error"
+msgstr ""
+
+msgid "Conditions"
 msgstr ""
 
 msgid "Contact Name"
@@ -597,6 +600,9 @@ msgstr ""
 msgid "Forgot password?"
 msgstr ""
 
+msgid "Form name"
+msgstr ""
+
 msgid "Free"
 msgstr ""
 
@@ -684,6 +690,9 @@ msgstr ""
 msgid "Legend"
 msgstr ""
 
+msgid "Let the dogs out"
+msgstr ""
+
 msgid "Link copied"
 msgstr ""
 
@@ -715,6 +724,9 @@ msgid "Log in"
 msgstr ""
 
 msgid "Logo"
+msgstr ""
+
+msgid "Max number of attendents"
 msgstr ""
 
 msgid "Member"
@@ -1150,6 +1162,9 @@ msgstr ""
 msgid "Submit solution"
 msgstr ""
 
+msgid "Success message: shown when user registers"
+msgstr ""
+
 msgid "Summaries"
 msgstr ""
 
@@ -1370,6 +1385,9 @@ msgstr ""
 msgid ""
 "Welcome %(name)s! Your profile has been succesfully created and you have "
 "been logged in!"
+msgstr ""
+
+msgid "Who"
 msgstr ""
 
 msgid "Workload"

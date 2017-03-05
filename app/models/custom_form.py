@@ -30,7 +30,6 @@ class CustomForm(db.Model, BaseEntity):
     owner = db.relationship('User', backref=db.backref('custom_forms',
                                                        lazy='dynamic'))
     terms = db.Column(db.String(4096))
-    transaction_description = db.Column(db.String(256))
 
     archived = db.Column(db.Boolean)
 
