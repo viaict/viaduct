@@ -904,6 +904,9 @@ msgstr "Optionele gegevens"
 msgid "Page not found"
 msgstr "Pagina niet gevonden"
 
+msgid "Page"
+msgstr "Pagina"
+
 msgid "Page title"
 msgstr "Pagina titel"
 

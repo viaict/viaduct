@@ -11,7 +11,7 @@
                         </h4>
                     </div>
                 </a>
-                {% set children = page.activities if page.activities else page.get_children() %}
+                {% set children = page.activities if page.activities else page.children_fast %}
 				{% set children = NavigationAPI.remove_unauthorized(children) %}
 
 				{% if children and page.id == current.id %}

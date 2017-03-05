@@ -99,21 +99,18 @@ def edit_committee(committee=''):
             if last_navigation_entry:
                 entry_position = last_navigation_entry.position + 1
 
+            db.session.add(page)
+            db.session.commit()
+
             navigation_entry = NavigationEntry(
-                root_entry, committee_nl_title, committee_en_title, '/' + path,
-                False, False, entry_position)
+                root_entry, committee_nl_title, committee_en_title, None,
+                page.id, False, False, entry_position)
 
             db.session.add(navigation_entry)
             db.session.commit()
 
             # Sort these navigation entries.
             NavigationAPI.alphabeticalize(root_entry)
-
-            # Assign the navigation entry to the new page (committee).
-            page.navigation_entry_id = navigation_entry.id
-
-            db.session.add(page)
-            db.session.commit()
 
             # Assign read rights to all, and edit rights to BC.
             all_group = Group.query.filter(Group.name == 'all').first()
