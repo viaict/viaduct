@@ -1,5 +1,5 @@
 from wtforms import IntegerField, SelectField
-from app.models import Course, Education
+from app.models import Course, Education, Group
 
 
 class CustomFormSelectField(IntegerField):
@@ -20,3 +20,11 @@ class EducationSelectField(SelectField):
         self.coerce = int
         educations = Education.query.order_by(Education.name).all()
         self.choices = [(e.id, e.name) for e in educations]
+
+
+class GroupSelectField(SelectField):
+    def __init__(self, label='', validators=None, **kwargs):
+        super(GroupSelectField, self).__init__(label, validators, **kwargs)
+        self.coerce = int
+        groups = Group.query.order_by(Group.name).all()
+        self.choices = [(g.id, g.name) for g in groups]

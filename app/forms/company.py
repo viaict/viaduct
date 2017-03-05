@@ -3,19 +3,21 @@ from flask_wtf.file import FileField
 from flask_babel import lazy_gettext as _
 from wtforms import StringField, SelectField, TextAreaField, DateField
 from wtforms.validators import InputRequired
+from app.forms.util import FieldVerticalSplit
 
 
 class CompanyForm(Form):
-    name = StringField(_('Name'), validators=[InputRequired(
-        message=_("Name is required."))])
+    name = StringField(_('Name'), validators=[InputRequired()])
     description = TextAreaField('Description')
-    contract_start_date = DateField(
-        _('Contract startdate'), validators=[InputRequired(
-            message=_("Contract startdate is required."))])
-    contract_end_date = DateField(
-        _('Contract enddate'), validators=[InputRequired(
-            message=_("Contract enddate is required."))])
-    location_id = SelectField('Locatie', coerce=int)
+    contract_start_date = DateField(_('Contract startdate'),
+                                    validators=[InputRequired()])
+    contract_end_date = DateField(_('Contract enddate'),
+                                  validators=[InputRequired()])
+
+    daterange = FieldVerticalSplit(
+        [['contract_start_date'], ['contract_end_date']])
+
+    location_id = SelectField(_('Location'), coerce=int)
     file = FileField(_('Logo'))
     contact_id = SelectField(_('Contact person'), coerce=int)
     website = StringField(_('Website'))

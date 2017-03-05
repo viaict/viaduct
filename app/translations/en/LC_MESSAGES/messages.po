@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-03-04 15:50+0100\n"
+"POT-Creation-Date: 2017-03-05 11:46+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -19,12 +19,6 @@ msgstr ""
 
 #, python-format
 msgid "%(email)s is unknown to our system."
-msgstr ""
-
-msgid "A description is required."
-msgstr ""
-
-msgid "A title is required."
 msgstr ""
 
 msgid "A user with this e-mail address already exist."
@@ -142,7 +136,6 @@ msgid ""
 "more information."
 msgstr ""
 
-#, fuzzy
 msgid "Avatar deleted successfully."
 msgstr "."
 
@@ -345,9 +338,6 @@ msgstr ""
 msgid "Current avatar"
 msgstr ""
 
-msgid "Current image"
-msgstr ""
-
 msgid "Date"
 msgstr ""
 
@@ -495,9 +485,6 @@ msgstr ""
 msgid "End date"
 msgstr ""
 
-msgid "End date is required."
-msgstr ""
-
 msgid "End time"
 msgstr ""
 
@@ -585,6 +572,12 @@ msgstr ""
 msgid "File does not exist, summary deleted."
 msgstr ""
 
+msgid "Filename"
+msgstr ""
+
+msgid "Files"
+msgstr ""
+
 msgid "Filetype not allowed"
 msgstr ""
 
@@ -598,6 +591,9 @@ msgid "Firstname"
 msgstr ""
 
 msgid "Forgot password?"
+msgstr ""
+
+msgid "Form"
 msgstr ""
 
 msgid "Form name"
@@ -714,9 +710,6 @@ msgstr ""
 msgid "Location deleted."
 msgstr ""
 
-msgid "Location is required."
-msgstr ""
-
 msgid "Location saved."
 msgstr ""
 
@@ -759,9 +752,6 @@ msgid "Name is required."
 msgstr ""
 
 msgid "Navigation entry"
-msgstr ""
-
-msgid "New Examination"
 msgstr ""
 
 msgid "New activity"
@@ -959,9 +949,6 @@ msgstr ""
 msgid "Price"
 msgstr ""
 
-msgid "Privacy"
-msgstr ""
-
 msgid "Problem"
 msgstr ""
 
@@ -1046,9 +1033,6 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-msgid "Save password"
-msgstr ""
-
 msgid "Scoreboard"
 msgstr ""
 
@@ -1124,9 +1108,6 @@ msgid "Stage"
 msgstr ""
 
 msgid "Start date"
-msgstr ""
-
-msgid "Start date is required."
 msgstr ""
 
 msgid "Start time"
@@ -1316,6 +1297,9 @@ msgstr ""
 msgid "Upload"
 msgstr ""
 
+msgid "Upload file"
+msgstr ""
+
 msgid "User"
 msgstr ""
 
@@ -1350,9 +1334,6 @@ msgid "Valid membership is required for the summary module"
 msgstr ""
 
 msgid "Vancancies"
-msgstr ""
-
-msgid "Venue"
 msgstr ""
 
 msgid "View"
@@ -1662,21 +1643,6 @@ msgstr ""
 #~ msgid "Not given"
 #~ msgstr ""
 
-#~ msgid "Current image"
-#~ msgstr ""
-
-#~ msgid "Delete avatar"
-#~ msgstr ""
-
-#~ msgid "Select a time and date by clicking on the clock"
-#~ msgstr ""
-
-#~ msgid "Tip"
-#~ msgstr ""
-
-#~ msgid "Venue"
-#~ msgstr ""
-
 #~ msgid "No"
 #~ msgstr ""
 
@@ -1701,10 +1667,10 @@ msgstr ""
 #~ msgid "Minimal password length "
 #~ msgstr ""
 
-#~ msgid "Form"
+#~ msgid "Pay (+€0,29 transaction costs)"
 #~ msgstr ""
 
-#~ msgid "Pay (+€0,29 transaction costs)"
+#~ msgid "Privacy"
 #~ msgstr ""
 
 #~ msgid "Report bug"
@@ -1714,5 +1680,35 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "seo"
+#~ msgstr ""
+
+#~ msgid "Location is required."
+#~ msgstr ""
+
+#~ msgid "New Examination"
+#~ msgstr ""
+
+#~ msgid "Search in files"
+#~ msgstr ""
+
+#~ msgid "A description is required."
+#~ msgstr ""
+
+#~ msgid "A title is required."
+#~ msgstr ""
+
+#~ msgid "Current image"
+#~ msgstr ""
+
+#~ msgid "End date is required."
+#~ msgstr ""
+
+#~ msgid "Save password"
+#~ msgstr ""
+
+#~ msgid "Start date is required."
+#~ msgstr ""
+
+#~ msgid "Venue"
 #~ msgstr ""
 

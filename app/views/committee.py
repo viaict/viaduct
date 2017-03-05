@@ -8,7 +8,6 @@ from app.models import CommitteeRevision, Page, Group, User, \
     NavigationEntry, PagePermission
 from app.utils import ModuleAPI, NavigationAPI
 from app.forms import CommitteeForm
-from app.utils.forms import flash_form_errors
 import app.utils.committee as CommitteeAPI
 
 blueprint = Blueprint('committee', __name__)
@@ -42,9 +41,6 @@ def edit_committee(committee=''):
     except:
         url_group_id = None
 
-    form.group_id.choices = [(group.id, group.name) for group in
-                             Group.query.order_by(Group.name).all()]
-
     if len(request.form) == 0:
         if revision:
             selected_group_id = revision.group_id
@@ -61,8 +57,6 @@ def edit_committee(committee=''):
     form.coordinator_id.choices = [
         (user.id, user.name) for user in
         selected_group.users.order_by(User.first_name, User.last_name).all()]
-
-    form.nl_title.data = selected_group.name
 
     if form.validate_on_submit():
         committee_nl_title = form.nl_title.data.strip()
@@ -164,8 +158,6 @@ def edit_committee(committee=''):
         flash(_('The committee has been saved.'), 'success')
 
         return redirect(url_for('page.get_page', path=path))
-    else:
-        flash_form_errors(form)
 
     return render_template('committee/edit.htm', page=page,
                            form=form, path=path)

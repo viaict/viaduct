@@ -7,7 +7,6 @@ from sqlalchemy import or_, and_, func
 from datetime import datetime
 
 from app import app, db
-from app.utils.forms import flash_form_errors
 from app.models.vacancy import Vacancy
 from app.models.company import Company
 from app.forms import VacancyForm
@@ -106,8 +105,6 @@ def edit(vacancy_id=None):
         else:
             flash(_('Vacancy created'), 'success')
         return redirect(url_for('vacancy.list'))
-    else:
-        flash_form_errors(form)
 
     return render_template('vacancy/edit.htm', vacancy=vacancy, form=form,
                            title="Vacatures")

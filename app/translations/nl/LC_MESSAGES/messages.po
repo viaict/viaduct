@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-03-04 15:50+0100\n"
+"POT-Creation-Date: 2017-03-05 11:46+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -20,12 +20,6 @@ msgstr ""
 #, python-format
 msgid "%(email)s is unknown to our system."
 msgstr "%(email)s is niet bekend in ons systeem."
-
-msgid "A description is required."
-msgstr "Geen omschrijving opgegeven."
-
-msgid "A title is required."
-msgstr "Een titel is vereist."
 
 msgid "A user with this e-mail address already exist."
 msgstr "Er bestaat al een gebruiker met dat emailadres."
@@ -223,9 +217,8 @@ msgstr "Vergelijken"
 msgid "Compiler Error"
 msgstr "Compileerfout"
 
-#, fuzzy
 msgid "Conditions"
-msgstr "Opleidingen"
+msgstr "Voorwaarden"
 
 msgid "Contact Name"
 msgstr "Contact Naam"
@@ -348,10 +341,6 @@ msgstr "Huidig"
 
 msgid "Current avatar"
 msgstr "Huidige avatar"
-
-#, fuzzy
-msgid "Current image"
-msgstr "Huidig"
 
 msgid "Date"
 msgstr "Datum"
@@ -500,9 +489,6 @@ msgstr "Email is vereist"
 msgid "End date"
 msgstr "Einddatum"
 
-msgid "End date is required."
-msgstr "Einddatum is vereist"
-
 msgid "End time"
 msgstr "Eindtijd"
 
@@ -590,6 +576,12 @@ msgstr "Bestand bestaat niet, tentamen verwijderd."
 msgid "File does not exist, summary deleted."
 msgstr "Bestand bestaat niet, samenvatting verwijderd."
 
+msgid "Filename"
+msgstr "Bestandsnaam"
+
+msgid "Files"
+msgstr "Bestanden"
+
 msgid "Filetype not allowed"
 msgstr "Bestandstype niet toegestaan"
 
@@ -605,9 +597,11 @@ msgstr "Voornaam"
 msgid "Forgot password?"
 msgstr "Wachtwoord vergeten?"
 
-#, fuzzy
+msgid "Form"
+msgstr "Formulier"
+
 msgid "Form name"
-msgstr "Voornaam"
+msgstr "Formulier naam"
 
 msgid "Free"
 msgstr "Gratis"
@@ -722,9 +716,6 @@ msgstr "Locatie"
 msgid "Location deleted."
 msgstr "Locatie verwijderd"
 
-msgid "Location is required."
-msgstr "Locatie is vereist."
-
 msgid "Location saved."
 msgstr "Location opgeslagen."
 
@@ -768,9 +759,6 @@ msgstr "Naam is vereist"
 
 msgid "Navigation entry"
 msgstr "Menu item"
-
-msgid "New Examination"
-msgstr "Nieuw tentamen"
 
 msgid "New activity"
 msgstr "Nieuwe activiteit"
@@ -967,9 +955,6 @@ msgstr "Vorige"
 msgid "Price"
 msgstr "Prijs"
 
-msgid "Privacy"
-msgstr "Privacy"
-
 msgid "Problem"
 msgstr "Probleem"
 
@@ -1054,9 +1039,6 @@ msgstr "Run Fout"
 msgid "Save"
 msgstr "Opslaan"
 
-msgid "Save password"
-msgstr "Wachtwoord opslaan"
-
 msgid "Scoreboard"
 msgstr "Scorebord"
 
@@ -1070,7 +1052,7 @@ msgid "Search for title, contact or company"
 msgstr "Zoeken op titel, contact of bedrijf"
 
 msgid "Select a time and date by clicking on the clock"
-msgstr ""
+msgstr "Selecteer een tijd en datum door op de klok te klikken"
 
 msgid "Send"
 msgstr "Verzend"
@@ -1135,9 +1117,6 @@ msgstr "Stage"
 
 msgid "Start date"
 msgstr "Startdatum"
-
-msgid "Start date is required."
-msgstr "Startdatum is vereist"
 
 msgid "Start time"
 msgstr "Starttijd"
@@ -1307,7 +1286,7 @@ msgid "Timestamp"
 msgstr "Tijdstip"
 
 msgid "Tip"
-msgstr ""
+msgstr "Tip"
 
 msgid "Title"
 msgstr "Titel"
@@ -1344,6 +1323,9 @@ msgstr "Niet geprobeerd"
 msgid "Upload"
 msgstr "Uploaden"
 
+msgid "Upload file"
+msgstr "Bestand uploaden"
+
 msgid "User"
 msgstr "Gebruiker"
 
@@ -1379,9 +1361,6 @@ msgstr "Geldig lidmaatschap is vereist voor de samenvattingsbank"
 
 msgid "Vancancies"
 msgstr "Vacatures"
-
-msgid "Venue"
-msgstr ""
 
 msgid "View"
 msgstr "Weergeven"
@@ -1677,18 +1656,6 @@ msgstr ""
 #~ msgid "Het email adres %(email)s is bij ons niet bekend."
 #~ msgstr ""
 
-#~ msgid "Current image"
-#~ msgstr "Huidige plaatje"
-
-#~ msgid "Select a time and date by clicking on the clock"
-#~ msgstr "Selecteer een tijd en datum door op de klok te klikken"
-
-#~ msgid "Tip"
-#~ msgstr "Tip"
-
-#~ msgid "Venue"
-#~ msgstr "Oort"
-
 #~ msgid "No"
 #~ msgstr "Nee"
 
@@ -1704,8 +1671,8 @@ msgstr ""
 #~ msgid "Something went wrong"
 #~ msgstr "Er is iets mis gegaan"
 
-#~ msgid "Form"
-#~ msgstr "Formulier"
+#~ msgid "Privacy"
+#~ msgstr "Privacy"
 
 #~ msgid "Report bug"
 #~ msgstr "Verstuur een bug report"
@@ -1715,4 +1682,31 @@ msgstr ""
 
 #~ msgid "seo"
 #~ msgstr "seo"
+
+#~ msgid "Location is required."
+#~ msgstr "Locatie is vereist."
+
+#~ msgid "New Examination"
+#~ msgstr "Nieuw tentamen"
+
+#~ msgid "A description is required."
+#~ msgstr "Geen omschrijving opgegeven."
+
+#~ msgid "A title is required."
+#~ msgstr "Een titel is vereist."
+
+#~ msgid "Current image"
+#~ msgstr "Huidig"
+
+#~ msgid "End date is required."
+#~ msgstr "Einddatum is vereist"
+
+#~ msgid "Save password"
+#~ msgstr "Wachtwoord opslaan"
+
+#~ msgid "Start date is required."
+#~ msgstr "Startdatum is vereist"
+
+#~ msgid "Venue"
+#~ msgstr ""
 

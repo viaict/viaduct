@@ -3,7 +3,7 @@ import json
 
 from flask import Blueprint
 from flask import abort, flash, session, redirect, render_template, request, \
-    url_for, jsonify
+    url_for
 from flask_login import login_required
 from flask_babel import _
 
@@ -13,8 +13,6 @@ from app import app, db
 
 from app.forms import CourseForm, EducationForm
 from app.forms.examination import EditForm
-from app.utils.forms import flash_form_errors
-from app.utils import serialize_sqla
 
 from app.models.examination import Examination, test_types
 from app.models.course import Course
@@ -160,8 +158,6 @@ def add():
 
             flash(_('Examination successfully uploaded.'), 'success')
             return redirect(url_for('examination.edit', exam_id=exam.id))
-        else:
-            flash_form_errors(form)
 
     return render_template('examination/edit.htm', courses=courses,
                            educations=educations, new_exam=True,
@@ -226,8 +222,6 @@ def edit(exam_id):
             flash(_('Examination succesfully changed.'), 'success')
 
             return redirect(url_for('examination.edit', exam_id=exam_id))
-        else:
-            flash_form_errors(form)
 
     path = '/static/uploads/examinations/'
 
@@ -408,8 +402,6 @@ def add_course():
             else:
                 redir = url_for('examination.add')
             return redirect(redir)
-        else:
-            flash_form_errors(form)
 
     return render_template('course/edit.htm', new=True, form=form)
 
@@ -481,8 +473,6 @@ def edit_course(course_id):
                 else:
                     redir = url_for('examination.add')
                 return redirect(redir)
-        else:
-            flash_form_errors(form)
     else:
         form = CourseForm(title=course.name, description=course.description)
 
@@ -562,9 +552,6 @@ def add_education():
                 redir = url_for('examination.add')
             return redirect(redir)
 
-        else:
-            flash_form_errors(form)
-
     return render_template('education/edit.htm',
                            form=form, new=True)
 
@@ -635,8 +622,6 @@ def edit_education(education_id):
                     redir = url_for('examination.view_educations')
                 return redirect(redir)
 
-        else:
-            flash_form_errors(form)
     else:
         form = CourseForm(title=education.name)
 
