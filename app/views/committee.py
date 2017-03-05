@@ -126,12 +126,11 @@ def edit_committee(committee=''):
             # If the committee's title has changed, the navigation needs to be
             # updated. Look for the entry, compare the titles, and change where
             # necessary.
-            entry = NavigationEntry.query\
-                .filter(NavigationEntry.url == '/' + path).first()
-            if entry.title != committee_nl_title:
-                entry.title = committee_nl_title
+            if page.navigation_entry:
+                entry = page.navigation_entry[0]
+                entry.nl_title = committee_nl_title
+                entry.en_title = committee_en_title
                 db.session.add(entry)
-                db.session.commit()
 
         group_id = int(form.group_id.data)
         coordinator_id = int(form.coordinator_id.data)

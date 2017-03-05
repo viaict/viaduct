@@ -63,19 +63,6 @@ class NavigationAPI:
         return NavigationAPI._get_entry_by_url(my_path)
 
     @staticmethod
-    def parent_entry():
-        my_path = request.path
-
-        temp_strip = my_path.rstrip('0123456789')
-        if temp_strip.endswith('/'):
-            my_path = temp_strip
-
-        my_path = my_path.rstrip('/')
-
-        return db.session.query(NavigationEntry).filter_by(url=my_path)\
-            .first()
-
-    @staticmethod
     def order(entries, parent):
         position = 1
 
