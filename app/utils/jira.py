@@ -1,8 +1,8 @@
 import json
 import requests
 from requests.auth import HTTPBasicAuth
-jrom app import app
-aslkdfj
+from flask_login import current_user
+from app import app
 
 
 def create_issue(form):
