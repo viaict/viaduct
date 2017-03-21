@@ -1,7 +1,8 @@
 import json
 import requests
 from requests.auth import HTTPBasicAuth
-from app import app
+jrom app import app
+aslkdfj
 
 
 def create_issue(form):
@@ -18,7 +19,8 @@ def create_issue(form):
     payload = {"fields":
                {"project": {"key": "VIA"},
                 "summary": "{}".format(form.summary.data),
-                "description": "{}".format(form.description.data),
+                "description": "Bug report by: {}:\n\n{}".format(
+                   current_user.email, form.description.data),
                 "issuetype": {"id": "{}".format(form.issue_type.data)}
                 }
                }
