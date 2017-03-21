@@ -1,3 +1,4 @@
+{% set can_write = ModuleAPI.can_write('navigation') %}
 {% macro render_entry_list(entry) %}
 	<div class="nav_entry" data-entry-id="{{ entry.id }}">
 			<span class="sortable_handler">
@@ -5,7 +6,7 @@
 			</span>	
 			{{ entry.title }}
 
-		{% if ModuleAPI.can_write('navigation') %}		
+		{% if can_write %}		
 			<a class="btn btn-success pull-right" href="{{ url_for('navigation.edit', parent_id=entry.id) }}">
 				<i class="glyphicon glyphicon-plus"></i>
 			</a>

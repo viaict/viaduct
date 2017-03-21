@@ -1,4 +1,4 @@
-{% from "macros/form.htm" import render_field, render_checkbox, render_submit %}
+{% from "macros/form.htm" import render_form %}
 
 {% extends "content.htm" %}
 
@@ -17,16 +17,11 @@
 
             {{ form.csrf_token }}
 
-            {{ render_field(form.nl_title) }}
-            {{ render_field(form.en_title) }}
-            {{ render_field(form.url) }}
-            {{ render_checkbox(form.external) }}
-            {{ render_checkbox(form.activity_list) }}
+            {{ render_form(form) }}
 
             <input type="hidden" name="parent_id"
-            value="{{ request.args.get("parent_id") }}">
+                   value="{{ request.args.get("parent_id") }}">
 
-            {{ render_submit(_('Submit'))}}
         </fieldset>
     </form>
 
@@ -43,4 +38,19 @@
         {% endif %}
     {% endif %}
 
+    <script>
+        function updateURLBoxState(pageID) {
+            if (pageID.val() != -1)
+                $('#url').prop('disabled', true).val('');
+            else
+                $('#url').prop('disabled', false);
+        }
+
+        $('#page_id').change(function() {
+            updateURLBoxState($(this));
+        });
+        $(function() {
+            updateURLBoxState($('#page_id'));
+        });
+    </script>
 {% endblock %}

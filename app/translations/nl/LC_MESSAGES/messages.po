@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-02-11 15:00+0100\n"
+"POT-Creation-Date: 2017-03-05 11:46+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -20,12 +20,6 @@ msgstr ""
 #, python-format
 msgid "%(email)s is unknown to our system."
 msgstr "%(email)s is niet bekend in ons systeem."
-
-msgid "A description is required."
-msgstr "Geen omschrijving opgegeven."
-
-msgid "A title is required."
-msgstr "Een titel is vereist."
 
 msgid "A user with this e-mail address already exist."
 msgstr "Er bestaat al een gebruiker met dat emailadres."
@@ -222,6 +216,9 @@ msgstr "Vergelijken"
 
 msgid "Compiler Error"
 msgstr "Compileerfout"
+
+msgid "Conditions"
+msgstr "Voorwaarden"
 
 msgid "Contact Name"
 msgstr "Contact Naam"
@@ -492,9 +489,6 @@ msgstr "Email is vereist"
 msgid "End date"
 msgstr "Einddatum"
 
-msgid "End date is required."
-msgstr "Einddatum is vereist"
-
 msgid "End time"
 msgstr "Eindtijd"
 
@@ -582,6 +576,12 @@ msgstr "Bestand bestaat niet, tentamen verwijderd."
 msgid "File does not exist, summary deleted."
 msgstr "Bestand bestaat niet, samenvatting verwijderd."
 
+msgid "Filename"
+msgstr "Bestandsnaam"
+
+msgid "Files"
+msgstr "Bestanden"
+
 msgid "Filetype not allowed"
 msgstr "Bestandstype niet toegestaan"
 
@@ -599,6 +599,9 @@ msgstr "Wachtwoord vergeten?"
 
 msgid "Form"
 msgstr "Formulier"
+
+msgid "Form name"
+msgstr "Formulier naam"
 
 msgid "Free"
 msgstr "Gratis"
@@ -689,6 +692,9 @@ msgstr "Laatste nieuws"
 msgid "Legend"
 msgstr "Legenda"
 
+msgid "Let the dogs out"
+msgstr ""
+
 msgid "Link copied"
 msgstr "Link gekopieerd"
 
@@ -710,9 +716,6 @@ msgstr "Locatie"
 msgid "Location deleted."
 msgstr "Locatie verwijderd"
 
-msgid "Location is required."
-msgstr "Locatie is vereist."
-
 msgid "Location saved."
 msgstr "Location opgeslagen."
 
@@ -721,6 +724,9 @@ msgstr "Log in"
 
 msgid "Logo"
 msgstr "Logo"
+
+msgid "Max number of attendents"
+msgstr "Maximaal aantal aanwezigen"
 
 msgid "Member"
 msgstr "Lid"
@@ -753,9 +759,6 @@ msgstr "Naam is vereist"
 
 msgid "Navigation entry"
 msgstr "Menu item"
-
-msgid "New Examination"
-msgstr "Nieuw tentamen"
 
 msgid "New activity"
 msgstr "Nieuwe activiteit"
@@ -901,6 +904,9 @@ msgstr "Optionele gegevens"
 msgid "Page not found"
 msgstr "Pagina niet gevonden"
 
+msgid "Page"
+msgstr "Pagina"
+
 msgid "Page title"
 msgstr "Pagina titel"
 
@@ -910,8 +916,8 @@ msgstr "Wachtwoord"
 msgid "Passwords do not match"
 msgstr "De opgegeven wachtwoorden komen niet overeen"
 
-msgid "Pay (+€0,29 transaction costs)"
-msgstr "Betalen (+€0,29 transactiekosten)"
+msgid "Pay (+€0,35 transaction costs)"
+msgstr "Betalen (+€0,35 transactiekosten)"
 
 msgid "Payment successfully received."
 msgstr "Betaling succesvol ontvangen."
@@ -951,9 +957,6 @@ msgstr "Vorige"
 
 msgid "Price"
 msgstr "Prijs"
-
-msgid "Privacy"
-msgstr "Privacy"
 
 msgid "Problem"
 msgstr "Probleem"
@@ -1021,9 +1024,6 @@ msgstr "Verwijder pagina"
 msgid "Repeat password"
 msgstr "Herhaal wachtwoord"
 
-msgid "Report bug"
-msgstr "Verstuur een bug report"
-
 msgid "Request to DOMjudge server failed"
 msgstr "Request aan de DOMjudge server mislukt"
 
@@ -1042,17 +1042,20 @@ msgstr "Run Fout"
 msgid "Save"
 msgstr "Opslaan"
 
-msgid "Save password"
-msgstr "Wachtwoord opslaan"
-
 msgid "Scoreboard"
 msgstr "Scorebord"
 
 msgid "Search"
 msgstr "Zoeken"
 
+msgid "Search Engine Optimization"
+msgstr ""
+
 msgid "Search for title, contact or company"
 msgstr "Zoeken op titel, contact of bedrijf"
+
+msgid "Select a time and date by clicking on the clock"
+msgstr "Selecteer een tijd en datum door op de klok te klikken"
 
 msgid "Send"
 msgstr "Verzend"
@@ -1118,9 +1121,6 @@ msgstr "Stage"
 msgid "Start date"
 msgstr "Startdatum"
 
-msgid "Start date is required."
-msgstr "Startdatum is vereist"
-
 msgid "Start time"
 msgstr "Starttijd"
 
@@ -1154,8 +1154,8 @@ msgstr "Opslaan"
 msgid "Submit solution"
 msgstr "Oplossing insturen"
 
-msgid "Submit!"
-msgstr "Versturen!"
+msgid "Success message: shown when user registers"
+msgstr "Succes bericht: zichtbaar wanneer gebruiker zich inschrijft"
 
 msgid "Summaries"
 msgstr "Samenvattingen"
@@ -1288,6 +1288,9 @@ msgstr "Tijdslimiet"
 msgid "Timestamp"
 msgstr "Tijdstip"
 
+msgid "Tip"
+msgstr "Tip"
+
 msgid "Title"
 msgstr "Titel"
 
@@ -1322,6 +1325,9 @@ msgstr "Niet geprobeerd"
 
 msgid "Upload"
 msgstr "Uploaden"
+
+msgid "Upload file"
+msgstr "Bestand uploaden"
 
 msgid "User"
 msgstr "Gebruiker"
@@ -1393,6 +1399,9 @@ msgid ""
 "Welcome %(name)s! Your profile has been succesfully created and you have "
 "been logged in!"
 msgstr "Welkom %(name)s! Je profiel is aangemaakt en je bent ingelogd!"
+
+msgid "Who"
+msgstr "Wie"
 
 msgid "Workload"
 msgstr "Werklast"
@@ -1507,9 +1516,6 @@ msgstr "pagina"
 
 msgid "required"
 msgstr "vereist"
-
-msgid "seo"
-msgstr "seo"
 
 msgid "still"
 msgstr "nog"
@@ -1653,18 +1659,6 @@ msgstr ""
 #~ msgid "Het email adres %(email)s is bij ons niet bekend."
 #~ msgstr ""
 
-#~ msgid "Current image"
-#~ msgstr "Huidige plaatje"
-
-#~ msgid "Select a time and date by clicking on the clock"
-#~ msgstr "Selecteer een tijd en datum door op de klok te klikken"
-
-#~ msgid "Tip"
-#~ msgstr "Tip"
-
-#~ msgid "Venue"
-#~ msgstr "Oort"
-
 #~ msgid "No"
 #~ msgstr "Nee"
 
@@ -1679,3 +1673,43 @@ msgstr ""
 
 #~ msgid "Something went wrong"
 #~ msgstr "Er is iets mis gegaan"
+
+#~ msgid "Privacy"
+#~ msgstr "Privacy"
+
+#~ msgid "Report bug"
+#~ msgstr "Verstuur een bug report"
+
+#~ msgid "Submit!"
+#~ msgstr "Versturen!"
+
+#~ msgid "seo"
+#~ msgstr "seo"
+
+#~ msgid "Location is required."
+#~ msgstr "Locatie is vereist."
+
+#~ msgid "New Examination"
+#~ msgstr "Nieuw tentamen"
+
+#~ msgid "A description is required."
+#~ msgstr "Geen omschrijving opgegeven."
+
+#~ msgid "A title is required."
+#~ msgstr "Een titel is vereist."
+
+#~ msgid "Current image"
+#~ msgstr "Huidig"
+
+#~ msgid "End date is required."
+#~ msgstr "Einddatum is vereist"
+
+#~ msgid "Save password"
+#~ msgstr "Wachtwoord opslaan"
+
+#~ msgid "Start date is required."
+#~ msgstr "Startdatum is vereist"
+
+#~ msgid "Venue"
+#~ msgstr ""
+

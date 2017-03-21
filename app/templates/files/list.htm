@@ -1,5 +1,5 @@
 {% from "macros/pagination.htm" import render_pagination %}
-{% from "macros/form.htm" import render_file, render_button %}
+{% from "macros/form.htm" import render_form %}
 
 {% extends "base.htm" %}
 
@@ -45,57 +45,78 @@
 
     </script>
 {%- endif -%}
-
-<script>
-function search(){
-  query = document.getElementById('search_input').value;
-  location.href='?search=' + query;
-}
-</script>
 {% endblock %}
 
 {% block page %}
 
-{%- if new_file -%}
-<a id="newfile-url" href="/static/files/{{ new_file.name}}" style="display: none"></a>
-<div class="row">
-    <div class="col-md-12">
-        <b>{{ _('Link to file') }}:</b>
-        <div class="input-group" style="padding-bottom: 5px">
-            <input id="newfile-url-copytext"  title="{{ _('Link copied') }}"
-            class="form-control text-monospace" type="text" readonly></input>
-            <span class="input-group-btn">
-                <button class="btn btn-primary"
-                    id="newfile-url-copy"
-                    data-clipboard-target="#newfile-url-copytext">
-                    <i class="fa fa-clipboard"></i> {{ _('Copy to clipboard') }}
-                </button>
-            </span>
+{%- if ModuleAPI.can_write('file') -%}
+    <div class="panel panel-default">
+        <div class="panel-heading">{{ _('Upload file') }}</div>
+        <div class="panel-body">
+
+        {%- if new_file -%}
+        <a id="newfile-url" href="/static/files/{{ new_file.name}}" style="display: none"></a>
+        <div class="row">
+            <div class="col-md-12">
+                <b>{{ _('Link to file') }}:</b>
+                <div class="input-group" style="padding-bottom: 5px">
+                    <input id="newfile-url-copytext"  title="{{ _('Link copied') }}"
+                    class="form-control text-monospace" type="text" readonly></input>
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary"
+                            id="newfile-url-copy"
+                            data-clipboard-target="#newfile-url-copytext">
+                            <i class="fa fa-clipboard"></i> {{ _('Copy to clipboard') }}
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <hr />
+        {%- endif -%}
+
+        {{ render_form(form, submit_text=_('Upload')) }}
         </div>
     </div>
-</div>
 {%- endif -%}
 
-{%- if ModuleAPI.can_write('file') -%}
-<div class="form-group">
-	<form method="post" enctype="multipart/form-data">
-		{{ render_file(form.file) }}
-		{{ render_button(form.submit) }}
-	</form>
+
+<div class="panel panel-default">
+    <div class="panel-heading">{{ _('Files') }}</div>
+    <div class="panel-body">
+        <form class="form" action="{{ url_for('file.list') }}" method="GET">
+            <div class="form-group">
+                <label>{{ _('Search') }}</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="search"></input><br>
+                    <div class="input-group-btn">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            </form>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>{{ _('Filename') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in files.items %}
+                    <tr>
+                        <td>
+                            <a href="/static/files/{{ file.name }}" target="_blank">{{ file.name }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </ul>
+        </table>
+
+        {{ render_pagination(files, 'file.list') }}
+    </div>
 </div>
-<div class="form-group">
-  <input type="text" class="form-control" id="search_input"></input><br>
-  <button class="btn btn-default" onclick="search()">Search</button>
-</div>
-
-{%- endif -%}
-
-<ul>
-	{% for file in files.items %}
-		<li><a href="/static/files/{{ file.name }}" target="_blank">{{ file.name }}</a></li>
-	{% endfor %}
-</ul>
-
-{{ render_pagination(files, 'file.list') }}
 
 {% endblock %}

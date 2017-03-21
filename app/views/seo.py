@@ -3,7 +3,6 @@ from app.forms import SeoForm
 from app import db
 from app.utils.module import ModuleAPI
 from app.utils.seo import get_seo, get_resources
-from app.utils.forms import flash_form_errors
 from app.models import SEO
 
 
@@ -67,7 +66,5 @@ def edit_seo():
 
         # redirect newly created page
         return redirect(url_for('page.get_page', path=path))
-    else:
-        flash_form_errors(form)
 
-    return render_template('seo/edit_seo.htm', form=form)
+    return render_template('seo/edit.htm', form=form)

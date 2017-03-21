@@ -7,7 +7,6 @@ from app.models.location import Location
 from app.utils import serialize_sqla
 from app.forms import LocationForm
 from app.utils.module import ModuleAPI
-from app.utils.forms import flash_form_errors
 
 blueprint = Blueprint('location', __name__, url_prefix='/locations')
 
@@ -52,8 +51,6 @@ def edit(location_id=None):
         db.session.commit()
         flash(_('Location saved.'), 'success')
         return redirect(url_for('location.edit', location_id=location.id))
-    else:
-        flash_form_errors(form)
     return render_template('location/edit.htm', location=location, form=form)
 
 

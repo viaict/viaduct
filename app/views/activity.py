@@ -14,7 +14,6 @@ from flask_babel import _  # gettext
 from werkzeug import secure_filename
 
 from app import db
-from app.utils.forms import flash_form_errors
 from app.forms.activity import ActivityForm, CreateForm
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult
@@ -113,8 +112,9 @@ def get_activity(activity_id=0):
             if form_result:
                 activity.form_data = form_result.data.replace('"', "'")
                 if not form_result.has_paid and attending:
-                    # There is 50 cents administration fee
-                    if form_result.form.price - 0.5 > 0:
+                    # There is 35 cents administration fee
+                    if form_result.form.price - 0.35 > 0:
+                        print("tesT")
                         form.show_pay_button = True
                         form.form_result = form_result
 
@@ -185,7 +185,7 @@ def create(activity_id=None):
                         os.path.join('app/static/activity_pictures', picture)):
                     flash(_('An image with this name already exists.'),
                           'danger')
-                    return render_template('activity/create.htm',
+                    return render_template('activity/edit.htm',
                                            activity=activity,
                                            form=form,
                                            title=title)
@@ -244,10 +244,8 @@ def create(activity_id=None):
 
             return redirect(url_for('activity.get_activity',
                                     activity_id=activity.id))
-        else:
-            flash_form_errors(form)
 
-    return render_template('activity/create.htm', activity=activity, form=form,
+    return render_template('activity/edit.htm', activity=activity, form=form,
                            title=title)
 
 
@@ -269,12 +267,9 @@ def create_mollie_transaction(result_id):
         db.session.add(callback)
         db.session.commit()
 
-        description = form_result.form.transaction_description
-        description = "VIA Activity: " + description
-
         payment_url, msg = mollie.create_transaction(
             amount=form_result.form.price,
-            description=form_result.form.transaction_description,
+            description=form_result.form.name,
             user=form_result.owner,
             callbacks=[callback]
         )

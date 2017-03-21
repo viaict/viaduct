@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-02-11 15:00+0100\n"
+"POT-Creation-Date: 2017-03-05 11:46+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -19,12 +19,6 @@ msgstr ""
 
 #, python-format
 msgid "%(email)s is unknown to our system."
-msgstr ""
-
-msgid "A description is required."
-msgstr ""
-
-msgid "A title is required."
 msgstr ""
 
 msgid "A user with this e-mail address already exist."
@@ -142,7 +136,6 @@ msgid ""
 "more information."
 msgstr ""
 
-#, fuzzy
 msgid "Avatar deleted successfully."
 msgstr "."
 
@@ -218,6 +211,9 @@ msgid "Compare"
 msgstr ""
 
 msgid "Compiler Error"
+msgstr ""
+
+msgid "Conditions"
 msgstr ""
 
 msgid "Contact Name"
@@ -489,9 +485,6 @@ msgstr ""
 msgid "End date"
 msgstr ""
 
-msgid "End date is required."
-msgstr ""
-
 msgid "End time"
 msgstr ""
 
@@ -579,6 +572,12 @@ msgstr ""
 msgid "File does not exist, summary deleted."
 msgstr ""
 
+msgid "Filename"
+msgstr ""
+
+msgid "Files"
+msgstr ""
+
 msgid "Filetype not allowed"
 msgstr ""
 
@@ -595,6 +594,9 @@ msgid "Forgot password?"
 msgstr ""
 
 msgid "Form"
+msgstr ""
+
+msgid "Form name"
 msgstr ""
 
 msgid "Free"
@@ -684,6 +686,9 @@ msgstr ""
 msgid "Legend"
 msgstr ""
 
+msgid "Let the dogs out"
+msgstr ""
+
 msgid "Link copied"
 msgstr ""
 
@@ -705,9 +710,6 @@ msgstr ""
 msgid "Location deleted."
 msgstr ""
 
-msgid "Location is required."
-msgstr ""
-
 msgid "Location saved."
 msgstr ""
 
@@ -715,6 +717,9 @@ msgid "Log in"
 msgstr ""
 
 msgid "Logo"
+msgstr ""
+
+msgid "Max number of attendents"
 msgstr ""
 
 msgid "Member"
@@ -747,9 +752,6 @@ msgid "Name is required."
 msgstr ""
 
 msgid "Navigation entry"
-msgstr ""
-
-msgid "New Examination"
 msgstr ""
 
 msgid "New activity"
@@ -893,6 +895,9 @@ msgstr ""
 msgid "Optional data"
 msgstr ""
 
+msgid "Page"
+msgstr ""
+
 msgid "Page not found"
 msgstr ""
 
@@ -905,7 +910,7 @@ msgstr ""
 msgid "Passwords do not match"
 msgstr ""
 
-msgid "Pay (+€0,29 transaction costs)"
+msgid "Pay (+€0,35 transaction costs)"
 msgstr ""
 
 msgid "Payment successfully received."
@@ -945,9 +950,6 @@ msgid "Previous"
 msgstr ""
 
 msgid "Price"
-msgstr ""
-
-msgid "Privacy"
 msgstr ""
 
 msgid "Problem"
@@ -1016,9 +1018,6 @@ msgstr ""
 msgid "Repeat password"
 msgstr ""
 
-msgid "Report bug"
-msgstr ""
-
 msgid "Request to DOMjudge server failed"
 msgstr ""
 
@@ -1037,16 +1036,19 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-msgid "Save password"
-msgstr ""
-
 msgid "Scoreboard"
 msgstr ""
 
 msgid "Search"
 msgstr ""
 
+msgid "Search Engine Optimization"
+msgstr ""
+
 msgid "Search for title, contact or company"
+msgstr ""
+
+msgid "Select a time and date by clicking on the clock"
 msgstr ""
 
 msgid "Send"
@@ -1111,9 +1113,6 @@ msgstr ""
 msgid "Start date"
 msgstr ""
 
-msgid "Start date is required."
-msgstr ""
-
 msgid "Start time"
 msgstr ""
 
@@ -1147,7 +1146,7 @@ msgstr ""
 msgid "Submit solution"
 msgstr ""
 
-msgid "Submit!"
+msgid "Success message: shown when user registers"
 msgstr ""
 
 msgid "Summaries"
@@ -1265,6 +1264,9 @@ msgstr ""
 msgid "Timestamp"
 msgstr ""
 
+msgid "Tip"
+msgstr ""
+
 msgid "Title"
 msgstr ""
 
@@ -1296,6 +1298,9 @@ msgid "Untried"
 msgstr ""
 
 msgid "Upload"
+msgstr ""
+
+msgid "Upload file"
 msgstr ""
 
 msgid "User"
@@ -1364,6 +1369,9 @@ msgstr ""
 msgid ""
 "Welcome %(name)s! Your profile has been succesfully created and you have "
 "been logged in!"
+msgstr ""
+
+msgid "Who"
 msgstr ""
 
 msgid "Workload"
@@ -1475,9 +1483,6 @@ msgid "page"
 msgstr ""
 
 msgid "required"
-msgstr ""
-
-msgid "seo"
 msgstr ""
 
 msgid "still"
@@ -1641,21 +1646,6 @@ msgstr ""
 #~ msgid "Not given"
 #~ msgstr ""
 
-#~ msgid "Current image"
-#~ msgstr ""
-
-#~ msgid "Delete avatar"
-#~ msgstr ""
-
-#~ msgid "Select a time and date by clicking on the clock"
-#~ msgstr ""
-
-#~ msgid "Tip"
-#~ msgstr ""
-
-#~ msgid "Venue"
-#~ msgstr ""
-
 #~ msgid "No"
 #~ msgstr ""
 
@@ -1678,5 +1668,50 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Minimal password length "
+#~ msgstr ""
+
+#~ msgid "Pay (+€0,29 transaction costs)"
+#~ msgstr ""
+
+#~ msgid "Privacy"
+#~ msgstr ""
+
+#~ msgid "Report bug"
+#~ msgstr ""
+
+#~ msgid "Submit!"
+#~ msgstr ""
+
+#~ msgid "seo"
+#~ msgstr ""
+
+#~ msgid "Location is required."
+#~ msgstr ""
+
+#~ msgid "New Examination"
+#~ msgstr ""
+
+#~ msgid "Search in files"
+#~ msgstr ""
+
+#~ msgid "A description is required."
+#~ msgstr ""
+
+#~ msgid "A title is required."
+#~ msgstr ""
+
+#~ msgid "Current image"
+#~ msgstr ""
+
+#~ msgid "End date is required."
+#~ msgstr ""
+
+#~ msgid "Save password"
+#~ msgstr ""
+
+#~ msgid "Start date is required."
+#~ msgstr ""
+
+#~ msgid "Venue"
 #~ msgstr ""
 

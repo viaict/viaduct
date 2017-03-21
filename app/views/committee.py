@@ -8,7 +8,6 @@ from app.models import CommitteeRevision, Page, Group, User, \
     NavigationEntry, PagePermission
 from app.utils import ModuleAPI, NavigationAPI
 from app.forms import CommitteeForm
-from app.utils.forms import flash_form_errors
 import app.utils.committee as CommitteeAPI
 
 blueprint = Blueprint('committee', __name__)
@@ -42,9 +41,6 @@ def edit_committee(committee=''):
     except:
         url_group_id = None
 
-    form.group_id.choices = [(group.id, group.name) for group in
-                             Group.query.order_by(Group.name).all()]
-
     if len(request.form) == 0:
         if revision:
             selected_group_id = revision.group_id
@@ -61,8 +57,6 @@ def edit_committee(committee=''):
     form.coordinator_id.choices = [
         (user.id, user.name) for user in
         selected_group.users.order_by(User.first_name, User.last_name).all()]
-
-    form.nl_title.data = selected_group.name
 
     if form.validate_on_submit():
         committee_nl_title = form.nl_title.data.strip()
@@ -105,21 +99,18 @@ def edit_committee(committee=''):
             if last_navigation_entry:
                 entry_position = last_navigation_entry.position + 1
 
+            db.session.add(page)
+            db.session.commit()
+
             navigation_entry = NavigationEntry(
-                root_entry, committee_nl_title, committee_en_title, '/' + path,
-                False, False, entry_position)
+                root_entry, committee_nl_title, committee_en_title, None,
+                page.id, False, False, entry_position)
 
             db.session.add(navigation_entry)
             db.session.commit()
 
             # Sort these navigation entries.
             NavigationAPI.alphabeticalize(root_entry)
-
-            # Assign the navigation entry to the new page (committee).
-            page.navigation_entry_id = navigation_entry.id
-
-            db.session.add(page)
-            db.session.commit()
 
             # Assign read rights to all, and edit rights to BC.
             all_group = Group.query.filter(Group.name == 'all').first()
@@ -135,12 +126,11 @@ def edit_committee(committee=''):
             # If the committee's title has changed, the navigation needs to be
             # updated. Look for the entry, compare the titles, and change where
             # necessary.
-            entry = NavigationEntry.query\
-                .filter(NavigationEntry.url == '/' + path).first()
-            if entry.title != committee_nl_title:
-                entry.title = committee_nl_title
+            if page.navigation_entry:
+                entry = page.navigation_entry[0]
+                entry.nl_title = committee_nl_title
+                entry.en_title = committee_en_title
                 db.session.add(entry)
-                db.session.commit()
 
         group_id = int(form.group_id.data)
         coordinator_id = int(form.coordinator_id.data)
@@ -164,8 +154,6 @@ def edit_committee(committee=''):
         flash(_('The committee has been saved.'), 'success')
 
         return redirect(url_for('page.get_page', path=path))
-    else:
-        flash_form_errors(form)
 
     return render_template('committee/edit.htm', page=page,
                            form=form, path=path)

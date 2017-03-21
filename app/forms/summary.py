@@ -8,11 +8,9 @@ from wtforms.validators import InputRequired
 
 class EditForm(Form):
     title = StringField(
-        _('Title'), validators=[
-            InputRequired(_('Title') + " " + _('required'))])
+        _('Title'), validators=[InputRequired()])
     date = DateField(
-        _('Date'), validators=[
-            InputRequired(_('Date') + " " + _('required'))],
+        _('Date'), validators=[InputRequired()],
         format=app.config['DATE_FORMAT'])
     course = SelectField(_('Course'), coerce=int)
     education = SelectField(_('Education'), coerce=int)

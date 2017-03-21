@@ -1,0 +1,29 @@
+{% from "macros/form.htm" import render_form %}
+
+{% extends "content.htm" %}
+
+{% macro render_before_hook(field) %}
+{%- if field.name == 'timerange' -%}
+    <div class="alert alert-info">
+        <b>{{_('Tip')}}</b>
+        {{_('Select a time and date by clicking on the clock')}}
+    </div>
+{%- endif -%}
+{% endmacro %}
+
+{% block content %}
+
+    {% if activity.id: %}
+        <form method="post" class="pull-right"
+            action="{{ url_for('activity.remove_activity', activity_id=activity.id) }}">
+            <button class="confirmation btn btn-danger btn-xs" type="submit">
+                {{ _("Delete activity") }}
+            </button>
+        </form>
+    {% endif %}
+
+    <h1>{{_('Activity')}}</h1>
+
+    {{ render_form(form, render_before_hook=render_before_hook) }}
+
+{% endblock %}

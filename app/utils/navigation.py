@@ -63,19 +63,6 @@ class NavigationAPI:
         return NavigationAPI._get_entry_by_url(my_path)
 
     @staticmethod
-    def parent_entry():
-        my_path = request.path
-
-        temp_strip = my_path.rstrip('0123456789')
-        if temp_strip.endswith('/'):
-            my_path = temp_strip
-
-        my_path = my_path.rstrip('/')
-
-        return db.session.query(NavigationEntry).filter_by(url=my_path)\
-            .first()
-
-    @staticmethod
     def order(entries, parent):
         position = 1
 
@@ -94,6 +81,11 @@ class NavigationAPI:
             db.session.commit()
 
     @staticmethod
+    def get_root_entries():
+        return NavigationEntry.query.filter_by(parent_id=None)\
+                              .order_by(NavigationEntry.position).all()
+
+    @staticmethod
     def get_entries(inc_activities=False):
         entries_all = NavigationEntry.query.order_by(NavigationEntry.position)\
             .all()
@@ -102,11 +94,7 @@ class NavigationAPI:
         entries = []
         for entry in entries_all:
             if entry.parent_id is not None:
-                parent = entry_dict[entry.parent_id]
-                try:
-                    parent.children_fast.append(entry)
-                except AttributeError:
-                    parent.children_fast = [entry]
+                entry_dict[entry.parent_id].children_fast.append(entry)
             else:
                 entries.append(entry)
 
@@ -118,16 +106,12 @@ class NavigationAPI:
                     .order_by("activity_start_time").all()
 
                 for activity in activities:
+                    url = url_for('activity.get_activity',
+                                  activity_id=activity.id)
                     entry.activities.append(
-                        NavigationEntry(
-                            entry,
-                            activity.nl_name,
-                            activity.en_name,
-                            url_for(
-                                'activity.get_activity',
-                                activity_id=activity.id),
-                            False, False, 0,
-                            activity.till_now()))
+                        NavigationEntry(entry, activity.nl_name,
+                                        activity.en_name, url, None, False,
+                                        False, 0, activity.till_now()))
 
         return entries
 

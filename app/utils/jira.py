@@ -3,8 +3,6 @@ import requests
 from requests.auth import HTTPBasicAuth
 from app import app
 
-from flask_login import current_user
-
 
 def create_issue(form):
     """Method to query JIRA API to create a new issue."""
@@ -20,7 +18,6 @@ def create_issue(form):
     payload = {"fields":
                {"project": {"key": "VIA"},
                 "summary": "{}".format(form.summary.data),
-                "reporter_viaduct": "{}".format(current_user.email),
                 "description": "{}".format(form.description.data),
                 "issuetype": {"id": "{}".format(form.issue_type.data)}
                 }

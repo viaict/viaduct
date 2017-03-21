@@ -1,4 +1,4 @@
-{% from "macros/form.htm" import render_field, render_button %}
+{% from "macros/form.htm" import render_field, render_button, render_submit %}
 
 {% extends "content.htm" %}
 
@@ -20,33 +20,32 @@
 
 
 <form method="post">
-	{{ form.csrf_token }}
+    {{ form.csrf_token }}
 
-	<h1>Eigen formulier</h1>
-	<p><strong>LET OP</strong> automatisch wordt van de gebruiker het volgende
-	gevraagd:
+    <h1>Eigen formulier</h1>
+    <p><strong>LET OP</strong> automatisch wordt van de gebruiker het volgende
+    gevraagd:
 
-	<ol>
-		<li>Naam</li>
-		<li>Email</li>
-		<li>Studentennummer</li>
-		<li>Opleiding</li>
-	</ol>
+    <ol>
+        <li>Naam</li>
+        <li>Email</li>
+        <li>Studentennummer</li>
+        <li>Opleiding</li>
+    </ol>
 
-	<hr>
+    <hr>
 
-	{{ render_field(form.name) }}
-	{{ render_field(form.max_attendants) }}
-	{{ render_field(form.price) }}
-	{{ render_field(form.msg_success) }}
-	{{ render_field(form.transaction_description) }}
+    {{ render_field(form.name) }}
+    {{ render_field(form.max_attendants) }}
+    {{ render_field(form.price) }}
+    {{ render_field(form.msg_success) }}
     {{ render_field(form.terms) }}
 
-	<input type="hidden" name="origin_holder_for_edits" value="{{ form.origin.data }}">
+    <input type="hidden" name="origin_holder_for_edits" value="{{ form.origin.data }}">
 
-	<div id="formbuilder"></div>
+    <div id="formbuilder"></div>
 
-	{{ render_button(form.submit) }}
+    {{ render_submit() }}
 </form>
 
 {% endblock %}

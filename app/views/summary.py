@@ -11,7 +11,6 @@ from sqlalchemy import func
 from app import app, db
 
 from app.forms.summary import EditForm
-from app.utils.forms import flash_form_errors
 
 from app.models.summary import Summary
 from app.models.course import Course
@@ -229,8 +228,6 @@ def add():
                     new_summary=True, form=form)
 
             return redirect(url_for('summary.edit', summary_id=summary.id))
-        else:
-            flash_form_errors(form)
 
     return render_template(
         'summary/edit.htm', path=path,
@@ -281,8 +278,6 @@ def edit(summary_id):
             flash(_('Summary succesfully changed.'), 'success')
 
             return redirect(url_for('summary.edit', summary_id=summary_id))
-        else:
-            flash_form_errors(form)
 
     path = '/static/uploads/summaries/'
 

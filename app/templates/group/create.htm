@@ -1,20 +1,10 @@
+{% from "macros/form.htm" import render_form %}
 {% extends "content.htm" %}
 
 {% block content %}
-{% from "macros/form.htm" import render_field, render_submit %}
-<form action="" method="post" name="add" class="form-horizontal">
-	<fieldset>
-        <legend> {{ title }} </legend>
-        {{ form.csrf_token }}
-        {{ render_field(form.name) }}
-        {{ render_field(form.maillist) }}
 
-        {% if not group %}
-        {{ render_field(form.committee_url) }}
-        {% endif %}
+<legend>{{ title }}</legend>
+{{ render_form(form) }}
 
-        {{ render_submit('Sla op') }}
-	</fieldset>
-</form>
 {% endblock %}
 

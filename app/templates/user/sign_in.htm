@@ -1,25 +1,11 @@
-{% from "macros/form.htm" import render_field, render_checkbox, render_submit %}
+{% from "macros/form.htm" import render_form %}
 
 {% extends "content.htm" %}
 
 {% block content %}
-<h1>{{_('Log in')}}</h1>
+<legend>{{_('Log in')}}</legend>
 
-<div class='row'>
-    <div class='col-md-6'>
-        <form method="post" name="sign-in" id="sign-in">
-            {{ form.csrf_token }}
-            {{ render_field(form.email) }}
-            {{ render_field(form.password) }}
+{{ render_form(form) }}
 
-            {{ render_submit('Log in') }}
-
-        <ul class="list-inline">
-            <li><a href="{{ url_for('user.sign_up') }}">{{_('Register account')}}</a></li>
-            <li><a href="{{ url_for('user.request_password') }}">{{_('Forgot password?')}}</a></li>
-        </ul>
-        </form>
-    </div>
-</div>
 {% endblock %}
 

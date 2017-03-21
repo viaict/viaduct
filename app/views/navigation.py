@@ -31,8 +31,7 @@ def view():
     if not ModuleAPI.can_read('navigation'):
         return abort(403)
 
-    entries = NavigationAPI.get_entries()
-
+    entries = NavigationAPI.get_root_entries()
     return render_template('navigation/view.htm', nav_entries=entries)
 
 
@@ -43,66 +42,50 @@ def edit(entry_id=None, parent_id=None):
     if not ModuleAPI.can_read('navigation'):
         return abort(403)
 
-    if entry_id:
-        entry = db.session.query(NavigationEntry)\
-            .filter_by(id=entry_id).first()
-        if not entry:
-            return abort(404)
-    else:
-        entry = None
+    entry = NavigationEntry.query.get_or_404(entry_id) if entry_id else None
     form = NavigationEntryForm(request.form, entry)
+    form.page_id.choices = [(-1, '-- {} --'.format(_('Custom URL')))] + \
+        db.session.query(Page.id, Page.path).all()
 
-    if parent_id:
-        parent = NavigationEntry.query.filter_by(id=parent_id).first()
-        if not parent:
-            flash(_('Cannot find parent navigation entry.'), 'danger')
-            return redirect(url_for('navigation.view'))
+    parent = NavigationEntry.query.get(parent_id) if parent_id else None
+    if parent_id and not parent:
+        flash(_('Cannot find parent navigation entry.'), 'danger')
+        return redirect(url_for('navigation.view'))
 
     if form.validate_on_submit():
-        url = form.url.data
-        if not re.compile('^/').match(url):
-            url = '/' + url
+        url = None
+        if form.page_id.data == -1:
+            url = form.url.data
+            if not re.compile('^/').match(url):
+                url = '/' + url
+
+        page_id = None if form.page_id.data == -1 else form.page_id.data
 
         if entry:
             entry.nl_title = form.nl_title.data
             entry.en_title = form.en_title.data
             entry.url = url
+            entry.page_id = page_id
             entry.external = form.external.data
             entry.activity_list = form.activity_list.data
         else:
+            last_entry = db.NavigationEntry.query.filter_by(parent_id=None)\
+                           .order_by(NavigationEntry.position.desc()).first()
+
             # If there is no parent position the new entry at the end of the
             # top level entry.
-            if not parent_id:
-                parent = None
+            position = (last_entry.position + 1) if last_entry else 0
 
-                last_entry = db.session.query(NavigationEntry)\
-                    .filter_by(parent_id=None)\
-                    .order_by(NavigationEntry.position.desc()).first()
-
-                position = last_entry.position + 1
-            else:
-                last_entry = db.session.query(NavigationEntry)\
-                    .filter_by(parent_id=parent_id)\
-                    .order_by(NavigationEntry.position.desc()).first()
-                if last_entry:
-                    position = last_entry.position + 1
-                else:
-                    position = 0
-
-            entry = NavigationEntry(parent,
-                                    form.nl_title.data,
-                                    form.en_title.data,
-                                    url,
+            entry = NavigationEntry(parent, form.nl_title.data,
+                                    form.en_title.data, url, page_id,
                                     form.external.data,
-                                    form.activity_list.data,
-                                    position)
+                                    form.activity_list.data, position)
 
         db.session.add(entry)
         db.session.commit()
         flash(_('The navigation entry has been saved.'), 'success')
 
-        if not form.external.data:
-
+        if not page_id and not form.external.data:
             # Check if the page exists, if not redirect to create it
             path = form.url.data.lstrip('/')
             page = Page.get_by_path(path)
@@ -118,15 +101,12 @@ def edit(entry_id=None, parent_id=None):
     else:
         flash_form_errors(form)
 
-    parents = db.session.query(NavigationEntry).filter_by(parent_id=None)
-
+    parents = NavigationEntry.query.filter_by(parent_id=None)
     if entry:
         parents = parents.filter(NavigationEntry.id != entry.id)
 
-    parents = parents.all()
-
     return render_template('navigation/edit.htm', entry=entry, form=form,
-                           parents=parents)
+                           parents=parents.all())
 
 
 @blueprint.route('/delete/<int:entry_id>/', methods=['GET'])

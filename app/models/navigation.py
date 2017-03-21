@@ -1,4 +1,4 @@
-from sqlalchemy import event
+from sqlalchemy import event, orm
 from app import db, get_locale
 from app.models import BaseEntity
 
@@ -27,7 +27,11 @@ class NavigationEntry(db.Model, BaseEntity):
                                                       lazy='joined'),
                            lazy='joined')
 
-    def __init__(self, parent, nl_title, en_title, url, external,
+    @orm.reconstructor
+    def orm_init(self):
+        self.children_fast = []
+
+    def __init__(self, parent, nl_title, en_title, url, page_id, external,
                  activity_list, position, subtitle=None):
         if parent:
             self.parent_id = parent.id
@@ -36,17 +40,16 @@ class NavigationEntry(db.Model, BaseEntity):
         self.nl_title = nl_title
         self.en_title = en_title
         self.url = url
+        self.page_id = page_id
         self.external = external
         self.activity_list = activity_list
         self.position = position
         self.subtitle = subtitle
+        self.children_fast = []
         set_navigation_entry_locale(self, None)
 
-    def get_children(self, ordered=True):
-        childs = self.children
-        if ordered:
-            childs = childs.order_by(NavigationEntry.position)
-        return childs
+    def get_children(self):
+        return self.children_fast
 
     @property
     def href(self):

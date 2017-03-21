@@ -1,27 +1,10 @@
-{% from "macros/form.htm" import render_field, render_button, render_textarea, render_datefield, render_datefield_picker, render_select, render_file, render_submit %}
+{% from "macros/form.htm" import render_form %}
 {% extends "content.htm" %}
 
 {% block content %}
-    <form method="post" enctype="multipart/form-data">
-        <fieldset>
-            <legend>{{_('Company')}} {% if company.id %}{{_('edit')}}{% else %}{{_('create')}}{% endif %}</legend>
 
-            {{ form.csrf_token }}
-
-            {{ render_field(form.name) }}
-            {{ render_textarea(form.description) }}
-            {{ render_textarea(form.website) }}
-            {{ render_file(form.file) }}
-
-            {{ render_datefield_picker(form.contract_start_date) }}
-            {{ render_datefield_picker(form.contract_end_date) }}
-
-            {{ render_select(form.location_id) }}
-            {{ render_select(form.contact_id) }}
-
-            {{ render_submit(_('Submit')) }}
-        </fieldset>
-    </form>
+    <legend>{{_('Company')}} {% if company.id %}{{_('edit')}}{% else %}{{_('create')}}{% endif %}</legend>
+    {{ render_form(form) }}
 
     {% if company.id %}
     <form onsubmit="return confirm('Wilt u {{company.name}} echt verwijderen?');" action="{{ url_for('company.delete', company_id=company.id) }}" method="post">

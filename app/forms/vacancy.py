@@ -6,14 +6,10 @@ from wtforms.validators import InputRequired
 
 
 class VacancyForm(Form):
-    title = StringField(_('Title'), validators=[InputRequired(
-        message=_('A title is required.'))])
-    description = TextAreaField(_('Description'), validators=[InputRequired(
-        message=_('A description is required.'))])
-    start_date = DateField(_('Start date'), validators=[InputRequired(
-        message=_('Start date is required.'))])
-    end_date = DateField(_('End date'), validators=[InputRequired(
-        message=_('End date is required.'))])
+    title = StringField(_('Title'), validators=[InputRequired()])
+    description = TextAreaField(_('Description'), validators=[InputRequired()])
+    start_date = DateField(_('Start date'), validators=[InputRequired()])
+    end_date = DateField(_('End date'), validators=[InputRequired()])
     contract_of_service = SelectField(_('Contract'),
                                       choices=[('voltijd', _('Voltijd')),
                                                ('deeltijd', _('Deeltijd')),

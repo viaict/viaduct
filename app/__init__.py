@@ -18,7 +18,7 @@ import logging
 import os
 
 
-version = 'v2.7.5.0'
+version = 'v2.7.6.0'
 
 
 def static_url(url):

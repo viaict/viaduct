@@ -39,13 +39,13 @@ def create_transaction(amount, description, user=current_user,
     db.session.commit()
 
     # Add transaction costs
-    amount += 0.29
+    amount += 0.35
 
     # Create the mollie payment
     try:
         payment = MollieClient.payments.create({
             'amount': amount,
-            'description': description if description else 'VIA Transaction',
+            'description': "{}, {}".format(user.name, description),
             'redirectUrl': url_for('mollie.callback',
                                    transaction_id=transaction.id,
                                    _external=True),
