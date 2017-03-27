@@ -42,8 +42,8 @@ class Activity(db.Model, BaseEntity):
                  nl_name="", nl_description="", start_time=None,
                  end_time=None,
                  location="Studievereniging VIA, Science Park 904, "
-                 "1098 XH Amsterdam", privacy=_("Public"),
-                 price=_("Free"), picture=None, venue=1, form_id=None):
+                 "1098 XH Amsterdam", privacy="public",
+                 price="free", picture=None, venue=1, form_id=None):
 
         if not start_time:
             today = datetime.now()
