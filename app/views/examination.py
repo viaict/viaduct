@@ -237,72 +237,44 @@ def view_examination(page_nr=1):
     if request.args.get('search'):
         search = request.args.get('search')
 
-        exams = Examination.query.all()
-        exam_matches_per_course = {}
-        course_max_scores = {}
+        courses = Course.query.all()
+        course_scores = {}
 
         search_lower = search.lower().strip()
 
-        for exam in exams:
-            course = exam.course.name.lower()
-            comment_ratio = 0
-            if exam.comment:
-                comment_ratio = fuzz.partial_ratio(search_lower,
-                                                   exam.comment.lower())
-            course_ratio = fuzz.partial_ratio(search_lower, course)
-            education_ratio = fuzz.partial_ratio(search_lower,
-                                                 exam.education.name.lower())
-            date_ratio = 0
-            if exam.date:
-                date_ratio = fuzz.partial_ratio(
-                    search_lower, exam.date.strftime(DATE_FORMAT))
+        # Search in all courses for matches in the course name
+        for course in courses:
+            course_score = fuzz. \
+                partial_ratio(search_lower, course.name.lower())
+            # If score is higher than a certain threshold, display in results
+            if course_score > 75:
+                course_scores[course.id] = course_score
 
-            if comment_ratio > 75 or course_ratio > 75 \
-                    or education_ratio > 75 or date_ratio > 75:
-                # Calculate the score for the exam
-                # TODO: maybe use a weighted mean instead of max
-                score = max(comment_ratio, course_ratio,
-                            education_ratio, date_ratio)
+        # Make a list of all course ids, sorted by their similarity score
+        ranked_courses = sorted(course_scores,
+                                key=course_scores.get, reverse=True)
 
-                exam_tuple = (score, exam.id)
-
-                # If the course did not occur before, add it
-                # to the dictionaries and set the max score
-                # to the score of this exam
-                if course not in exam_matches_per_course:
-                    exam_matches_per_course[course] = [exam_tuple]
-                    course_max_scores[course] = score
-
-                # Otherwise, add the exam to the list of the course
-                # and update the maximum course score
-                else:
-                    exam_matches_per_course[course].append(exam_tuple)
-                    course_max_scores[course] = max(score,
-                                                    course_max_scores[course])
-        if len(course_max_scores) == 0:
+        if len(ranked_courses) == 0:
             examinations = None
         else:
-            # Sort the courses by their max score
-            courses_sorted = sorted(course_max_scores,
-                                    key=course_max_scores.get, reverse=True)
 
-            # Create the list of exam ids. These are ordered by course with
-            # their maximum score, and for each course ordered by exam score
-            exam_matches = []
-            for course in courses_sorted:
-                exam_matches.extend(list(zip(*sorted(
-                    exam_matches_per_course[course], reverse=True)))[1])
-
-            # Query the exams. The order_by clause keeps them in the same
-            # order as the exam_matches list
-            examinations = Examination.query \
-                .filter(Examination.id.in_(exam_matches)) \
-                .order_by(func.field(Examination.id, *exam_matches)) \
+            # Query the exams. The filter part makes sure only the ranked
+            # courses are returned. The order_by clause makes sure the exams
+            # are first sorted by course according to the ranking and then
+            # sorted by date of the exam
+            examinations = Examination.query.join(Course)\
+                .filter(Course.id.in_(ranked_courses)) \
+                .order_by(func.field(Course.id, *ranked_courses)) \
+                .order_by(Examination.date.desc()) \
                 .paginate(page_nr, 15, True)
     else:
         search = ""
+        # Query the exams. The order_by part makes sure the exams are sorted
+        # by course and within a course are sorted by date
         examinations = Examination.query.join(Course)\
-            .order_by(Course.name).paginate(page_nr, 15, True)
+            .order_by(Course.name) \
+            .order_by(Examination.date.desc()) \
+            .paginate(page_nr, 15, True)
 
     path = '/static/uploads/examinations/'
 

@@ -103,7 +103,7 @@
                 {% for examination in examinations.items %}
                     <tr>
                         <td>
-                            <a href='{{url_for('examination.view_examination', search=examination.education.name)}}'>{{ examination.education.name }}</a>
+                            {{ examination.education.name }}
                         </td>
                         <td>
                             <a href='{{url_for('examination.view_examination', search=examination.course.name) }}'>{{ examination.course.name }}</a>
