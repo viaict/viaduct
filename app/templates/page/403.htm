@@ -1,7 +1,8 @@
 {% extends "content.htm" %}
 
 {% block content %}
-    <h1>{{_('Unauthorized!')}}<br>
-        {{_('The Police has been notified.')}}</h1>
+    <h1>{{_('You do not have the rights to view this page.')}}</h1>
+    <p>{{_('If you think you do have the rights to view this page, please send '
+    'an e-mail to: <a href="mailto:bestuur@svia.nl">bestuur@svia.nl</a>')}}</p>
     <img src="/static/img/403.jpg" />
 {% endblock %}

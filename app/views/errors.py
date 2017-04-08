@@ -28,8 +28,8 @@ def permission_denied(e):
     # Save the path you were rejected from.
     session['denied_from'] = request.path
 
-    if current_user.is_authenticated:
-        flash(_('You do not have the rights to view this page.'), 'danger')
+    if current_user.is_anonymous:
+        flash(_('You must be logged in to view this page.'), 'danger')
         return redirect(url_for('user.sign_in'))
 
     return render_template('page/403.htm', content=content, image=image), 403

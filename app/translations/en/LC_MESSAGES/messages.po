@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-03-05 11:46+0100\n"
+"POT-Creation-Date: 2017-04-08 14:25+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -338,6 +338,9 @@ msgstr ""
 msgid "Current avatar"
 msgstr ""
 
+msgid "Custom URL"
+msgstr ""
+
 msgid "Date"
 msgstr ""
 
@@ -599,9 +602,6 @@ msgstr ""
 msgid "Form name"
 msgstr ""
 
-msgid "Free"
-msgstr ""
-
 msgid "Fullscreen"
 msgstr ""
 
@@ -628,6 +628,11 @@ msgid "I have finished studying"
 msgstr ""
 
 msgid "ID"
+msgstr ""
+
+msgid ""
+"If you think you do have the rights to view this page, please send an "
+"e-mail to: <a href=\"mailto:bestuur@svia.nl\">bestuur@svia.nl</a>"
 msgstr ""
 
 msgid "Image"
@@ -693,9 +698,6 @@ msgid "Link copied"
 msgstr ""
 
 msgid "Link to file"
-msgstr ""
-
-msgid "List"
 msgstr ""
 
 msgid "List of activities"
@@ -973,9 +975,6 @@ msgstr ""
 msgid "Profile succesfully updated"
 msgstr ""
 
-msgid "Public"
-msgstr ""
-
 msgid "Publish date"
 msgstr ""
 
@@ -1176,9 +1175,6 @@ msgstr ""
 msgid "Terms"
 msgstr ""
 
-msgid "The Police has been notified."
-msgstr ""
-
 msgid "The activity has been created."
 msgstr ""
 
@@ -1281,9 +1277,6 @@ msgid "Too late"
 msgstr ""
 
 msgid "Total problems"
-msgstr ""
-
-msgid "Unauthorized!"
 msgstr ""
 
 msgid ""
@@ -1713,5 +1706,23 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Venue"
+#~ msgstr ""
+
+#~ msgid "Free"
+#~ msgstr ""
+
+#~ msgid "List"
+#~ msgstr ""
+
+#~ msgid "Public"
+#~ msgstr ""
+
+#~ msgid "The Police has been notified."
+#~ msgstr ""
+
+#~ msgid "Unauthorized!"
+#~ msgstr ""
+
+#~ msgid ""
 #~ msgstr ""
 

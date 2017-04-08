@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-03-05 11:46+0100\n"
+"POT-Creation-Date: 2017-04-08 14:25+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -342,6 +342,9 @@ msgstr "Huidig"
 msgid "Current avatar"
 msgstr "Huidige avatar"
 
+msgid "Custom URL"
+msgstr ""
+
 msgid "Date"
 msgstr "Datum"
 
@@ -603,9 +606,6 @@ msgstr "Formulier"
 msgid "Form name"
 msgstr "Formulier naam"
 
-msgid "Free"
-msgstr "Gratis"
-
 msgid "Fullscreen"
 msgstr "Schermvullend"
 
@@ -633,6 +633,14 @@ msgstr "Ik ben klaar met studeren"
 
 msgid "ID"
 msgstr "ID"
+
+msgid ""
+"If you think you do have the rights to view this page, please send an "
+"e-mail to: <a href=\"mailto:bestuur@svia.nl\">bestuur@svia.nl</a>"
+msgstr ""
+"Als je denkt dat je wel de juiste rechten hebt om deze pagina te "
+"bezoeken, stuur dan een e-mail naar: <a "
+"href=\"mailto:bestuur@svia.nl\">bestuur@svia.nl</a>"
 
 msgid "Image"
 msgstr "Plaatje"
@@ -700,9 +708,6 @@ msgstr "Link gekopieerd"
 
 msgid "Link to file"
 msgstr "Link naar bestand"
-
-msgid "List"
-msgstr "Lijst"
 
 msgid "List of activities"
 msgstr "Activiteiten"
@@ -901,11 +906,11 @@ msgstr "Oude samenvatting behouden."
 msgid "Optional data"
 msgstr "Optionele gegevens"
 
-msgid "Page not found"
-msgstr "Pagina niet gevonden"
-
 msgid "Page"
 msgstr "Pagina"
+
+msgid "Page not found"
+msgstr "Pagina niet gevonden"
 
 msgid "Page title"
 msgstr "Pagina titel"
@@ -978,9 +983,6 @@ msgstr "Profiel aanmaken gelukt"
 
 msgid "Profile succesfully updated"
 msgstr "Profiel bewerken gelukt"
-
-msgid "Public"
-msgstr "Publiek"
 
 msgid "Publish date"
 msgstr "Publiceer datum"
@@ -1184,9 +1186,6 @@ msgstr "Team"
 msgid "Terms"
 msgstr "Voorwaarden"
 
-msgid "The Police has been notified."
-msgstr "De politie is gewaarschuwd."
-
 msgid "The activity has been created."
 msgstr "De activiteit is aangemaakt."
 
@@ -1306,9 +1305,6 @@ msgstr "Te laat"
 
 msgid "Total problems"
 msgstr "Totaal aantal problemen"
-
-msgid "Unauthorized!"
-msgstr "Ongeautoriseerd!"
 
 msgid ""
 "Unfortunately it is currently unclear to us if you are a member of "
@@ -1711,5 +1707,23 @@ msgstr ""
 #~ msgstr "Startdatum is vereist"
 
 #~ msgid "Venue"
+#~ msgstr ""
+
+#~ msgid "Free"
+#~ msgstr "Gratis"
+
+#~ msgid "List"
+#~ msgstr "Lijst"
+
+#~ msgid "Public"
+#~ msgstr "Publiek"
+
+#~ msgid "The Police has been notified."
+#~ msgstr "De politie is gewaarschuwd."
+
+#~ msgid "Unauthorized!"
+#~ msgstr "Ongeautoriseerd!"
+
+#~ msgid ""
 #~ msgstr ""
 
