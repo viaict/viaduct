@@ -1,6 +1,7 @@
 from flask import Blueprint, abort, redirect, url_for
 from flask import flash, render_template, request, jsonify
 from app import db
+from flask_babel import _
 
 from flask_login import current_user
 
@@ -129,18 +130,23 @@ def view_tasks_personal(group_id='all'):
 
 
 @blueprint.route('/tasks/update_status/', methods=['GET', 'POST'])
-@blueprint.route('/tasks/me/update_status/', methods=['GET', 'POST'])
 def update_task_status():
     if not ModuleAPI.can_write('pimpy'):
         return abort(403)
-    task_id = request.args.get('task_id', 0, type=int)
-    new_status = request.args.get('new_status', 0, type=int)
+    task_id = request.form.get('task_id', 0, type=int)
+    new_status = request.form.get('new_status', 0, type=int)
 
-    query = Task.query
-    query = query.filter(Task.id == task_id)
-    list_items = query.all()
-    for task in list_items:
-        task.update_status(new_status)
+    task = Task.query.get(task_id)
+
+    print(task_id)
+
+    if not task:
+        return jsonify(success=False, message="Task does not exist"), 404
+    else:
+        if not task.update_status(new_status):
+            return jsonify(success=False,
+                           message="Invalid data"), 400
+
         # for user in task.users:
         #     copernica_data = {
         #         "Actiepunt": task.title,
@@ -149,8 +155,10 @@ def update_task_status():
         #     copernica.update_subprofile(copernica.SUBPROFILE_TASK,
         #                                 user.id, task.base32_id(),
         #                                 copernica_data)
-    db.session.commit()
-    return jsonify(status=task.get_status_color())
+
+        db.session.commit()
+
+    return jsonify(success=True, status=task.get_status_color())
 
 
 @blueprint.route('/tasks/add/', methods=['GET', 'POST'])
@@ -211,19 +219,20 @@ def edit_task(task_id=-1):
         flash('Taak niet gespecificeerd.')
         return redirect(url_for('pimpy.view_tasks', group_id='all'))
 
-    if request.method == 'POST':
-        name = request.form['name']
-        if name == "content":
-            result, message = PimpyAPI.update_content(task_id,
-                                                      request.form['value'])
-        elif name == "title":
-            result, message = PimpyAPI.update_title(task_id,
-                                                    request.form['value'])
-        elif name == "users":
-            result, message = PimpyAPI.update_users(task_id,
-                                                    request.form['value'])
+    name = request.form['name']
+    if name == "content":
+        result, message = PimpyAPI.update_content(
+            task_id, request.form['value'])
+    elif name == "title":
+        result, message = PimpyAPI.update_title(
+            task_id, request.form['value'])
+    elif name == "users":
+        result, message = PimpyAPI.update_users(
+            task_id, request.form['value'])
 
-        return message
+    status_code = 200 if result else 400
+
+    return jsonify(result=result, message=message), status_code
 
 
 @blueprint.route('/minutes/add/', methods=['GET', 'POST'])
@@ -260,6 +269,10 @@ def add_minute(group_id='all'):
             if result and form.parse_tasks.data:
                 tasks, dones, removes = PimpyAPI.parse_minute(
                     form.content.data, form.group.data, message)
+
+                valid_dones = []
+                valid_removes = []
+
                 for task in tasks:
                     db.session.add(task)
                 # for user in task.users:
@@ -273,7 +286,12 @@ def add_minute(group_id='all'):
                 #         copernica.SUBPROFILE_TASK, user.id, copernica_data)
 
                 for done in dones:
-                    done.update_status(4)
+                    if done.group_id == group.id and done.update_status(4):
+                        valid_dones.append(done)
+                    else:
+                        flash(_("Found invalid DONE task: %s").format(
+                            done.base32_id()), 'danger')
+
                 # for user in done.users:
                 #     copernica_data = {
                 #         "Actiepunt": task.title,
@@ -284,7 +302,12 @@ def add_minute(group_id='all'):
                 #                                 copernica_data)
 
                 for remove in removes:
-                    remove.update_status(5)
+                    if remove.group_id == group.id and remove.update_status(5):
+                        valid_removes.append(remove)
+                    else:
+                        flash(_("Found invalid REMOVE task: %s").format(
+                            remove.base32_id()), 'danger')
+
                 # for user in remove.users:
                 #     copernica_data = {
                 #         "Actiepunt": task.title,
@@ -298,8 +321,8 @@ def add_minute(group_id='all'):
                 flash('De notulen zijn verwerkt!', 'success')
 
                 return render_template('pimpy/view_parsed_tasks.htm',
-                                       tasks=tasks, dones=dones,
-                                       removes=removes, title='PimPy')
+                                       tasks=tasks, dones=valid_dones,
+                                       removes=valid_removes, title='PimPy')
         else:
             flash(message, 'danger')
 

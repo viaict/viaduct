@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-04-08 14:25+0200\n"
+"POT-Creation-Date: 2017-04-08 14:23+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -602,6 +602,17 @@ msgstr ""
 msgid "Form name"
 msgstr ""
 
+<<<<<<< Updated upstream
+=======
+#, python-format
+msgid "Found invalid DONE task: %s"
+msgstr ""
+
+#, python-format
+msgid "Found invalid REMOVE task: %s"
+msgstr ""
+
+>>>>>>> Stashed changes
 msgid "Fullscreen"
 msgstr ""
 
@@ -1721,8 +1732,5 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Unauthorized!"
-#~ msgstr ""
-
-#~ msgid ""
 #~ msgstr ""
 

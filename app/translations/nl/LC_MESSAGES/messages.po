@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-04-08 14:25+0200\n"
+"POT-Creation-Date: 2017-04-08 14:23+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -605,6 +605,14 @@ msgstr "Formulier"
 
 msgid "Form name"
 msgstr "Formulier naam"
+
+#, python-format
+msgid "Found invalid DONE task: %s"
+msgstr "Ongeldige DONE taak: %s"
+
+#, python-format
+msgid "Found invalid REMOVE task: %s"
+msgstr "Ongeldige REMOVE taak: %s"
 
 msgid "Fullscreen"
 msgstr "Schermvullend"
@@ -1726,4 +1734,3 @@ msgstr ""
 
 #~ msgid ""
 #~ msgstr ""
-
