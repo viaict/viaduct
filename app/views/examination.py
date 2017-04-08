@@ -13,8 +13,6 @@ from app import app, db
 
 from app.forms import CourseForm, EducationForm
 from app.forms.examination import EditForm
-from app.utils.forms import flash_form_errors
-from app.utils import serialize_sqla
 from app.utils.file import file_upload, file_remove
 
 from app.models.examination import Examination, test_types
