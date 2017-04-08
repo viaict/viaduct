@@ -83,7 +83,7 @@ class Activity(db.Model, BaseEntity):
         if self.start_time.month == self.end_time.month and \
                 self.start_time.day == self.end_time.day:
             if self.start_time.year == today.year:
-                return format_datetime(self.start_time, 'EEEE d MMM, H:mm - ',
+                return format_datetime(self.start_time, 'EEEE d MMM H:mm - ',
                                        locale=get_locale()).capitalize() + \
                     format_datetime(self.end_time, 'H:mm', locale=get_locale())
             else:
