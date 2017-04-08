@@ -1,4 +1,3 @@
-import os
 import datetime
 
 # this is now uncommented for breaking activity for some reason
@@ -11,14 +10,13 @@ from flask import Blueprint
 from flask_login import current_user
 from flask_babel import _  # gettext
 
-from werkzeug import secure_filename
-
 from app import db
 from app.forms.activity import ActivityForm, CreateForm
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult
 from app.models.mollie import Transaction, TransactionActivity
 from app.utils.module import ModuleAPI
+from app.utils.file import file_upload, file_remove
 from app.utils import mollie
 from app.models.education import Education
 from app.forms import SignInForm
@@ -27,10 +25,7 @@ from app.utils.serialize_sqla import serialize_sqla
 
 blueprint = Blueprint('activity', __name__, url_prefix='/activities')
 
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in \
-        set(['png', 'jpg', 'gif', 'jpeg'])
+PICTURE_DIR = 'app/static/activity_pictures/'
 
 
 # Overview of activities
@@ -170,44 +165,31 @@ def create(activity_id=None):
     form = CreateForm(request.form, activity)
 
     if request.method == 'POST':
+
         if form.validate_on_submit():
 
-            picture = activity.picture
+            act_picture = activity.picture
 
             form.populate_obj(activity)
 
             file = request.files['picture']
 
-            if file.filename and allowed_file(file.filename):
-                picture = secure_filename(file.filename)
-
-                if not activity.picture and os.path.isfile(
-                        os.path.join('app/static/activity_pictures', picture)):
-                    flash(_('An image with this name already exists.'),
-                          'danger')
-                    return render_template('activity/edit.htm',
-                                           activity=activity,
-                                           form=form,
-                                           title=title)
-
-                fpath = os.path.join('app/static/activity_pictures', picture)
-                file.save(fpath)
-                os.chmod(fpath, 0o644)
+            if file.filename:
+                image = file_upload(file, PICTURE_DIR, True)
+                if image:
+                    picture = image.name
+                else:
+                    picture = None
 
                 # Remove old picture
-                if activity.picture:
-                    try:
-                        os.remove(os.path.join(
-                            'app/static/activity_pictures',
-                            activity.picture))
-                    except OSError:
-                        print(_('Cannot delete image, image does not exist') +
-                              ": " + str(activity.picture))
+                if act_picture:
+                    file_remove(act_picture, PICTURE_DIR)
 
             elif not picture:
                 picture = None
 
-            activity.venue = 1  # Facebook ID location, not used yet  # noqa
+            # Facebook ID location, not used yet
+            activity.venue = 1
 
             # Set a custom_form if it actually exists
             form_id = int(form.form_id.data)

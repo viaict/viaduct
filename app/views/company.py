@@ -14,7 +14,7 @@ from app.models.contact import Contact
 from app.forms import CompanyForm, NewCompanyForm
 from app.utils.forms import flash_form_errors
 from app.utils.module import ModuleAPI
-from app.utils.file import FileAPI
+from app.utils.file import file_upload
 
 
 blueprint = Blueprint('company', __name__, url_prefix='/companies')
@@ -178,7 +178,7 @@ def edit(company_id=None):
         company.contact = Contact.query.get(form.contact_id.data)
         company.website = form.website.data
         if request.files['file']:
-            logo = FileAPI.upload(request.files['file'])
+            logo = file_upload(request.files['file'])
             if logo is not None:
                 company.logo_path = logo.name
 
@@ -296,7 +296,7 @@ def create(company_id=None):
         company.contact = contact
         company.website = form.website.data
         if request.files['file']:
-            logo = FileAPI.upload(request.files['file'])
+            logo = file_upload(request.files['file'])
             if logo is not None:
                 company.logo_path = logo.name
 
