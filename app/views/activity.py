@@ -9,6 +9,7 @@ from flask import flash, redirect, render_template, request, url_for, abort,\
 from flask import Blueprint
 from flask_login import current_user
 from flask_babel import _  # gettext
+from werkzeug.contrib.atom import AtomFeed
 
 from app import db
 from app.forms.activity import ActivityForm, CreateForm
@@ -273,3 +274,22 @@ def export_activities():
         (datetime.datetime.now() - datetime.timedelta(hours=12))
     ).order_by(Activity.start_time.asc()).all()
     return jsonify(data=serialize_sqla(activities))
+
+
+@blueprint.route('/rss/', methods=['GET'])
+@blueprint.route('/rss/<string:locale>/')
+def rss(locale='en'):
+    name = 'via activiteiten' if locale == 'nl' else 'via activities'
+    feed = AtomFeed(name, feed_url=request.url, url=request.url_root)
+    activities = Activity.query.filter(
+        Activity.end_time >
+        (datetime.datetime.now() - datetime.timedelta(hours=12))
+    ).order_by(Activity.start_time.asc()).all()
+
+    for activity in activities:
+        name, description = activity.get_localized_name_desc(locale)
+        feed.add(name, description, id=activity.id, content_type='markdown',
+                 updated=activity.updated_time, published=activity.start_time,
+                 url=url_for('activity.get_activity', activity_id=activity.id))
+
+    return feed.get_response()

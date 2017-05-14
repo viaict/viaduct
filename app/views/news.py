@@ -1,9 +1,10 @@
-from datetime import date
+from datetime import date, datetime
 
 from flask import Blueprint, abort, render_template, request, flash, redirect,\
     url_for
 from flask_login import current_user
 from flask_babel import _  # gettext
+from werkzeug.contrib.atom import AtomFeed
 
 from sqlalchemy import desc
 
@@ -124,3 +125,21 @@ def delete(news_id=None):
     flash(_('News item succesfully deleted'), 'success')
 
     return redirect(url_for('news.list'))
+
+
+@blueprint.route('/rss/', methods=['GET'])
+@blueprint.route('/rss/<string:locale>/')
+def rss(locale='en'):
+    name = 'via nieuws' if locale == 'nl' else 'via news'
+    feed = AtomFeed(name, feed_url=request.url, url=request.url_root)
+    items = News.query.order_by(News.publish_date.desc()).limit(20)
+
+    for item in items:
+        published = datetime.combine(item.publish_date, datetime.min.time())
+        title, content = item.get_localized_title_content(locale)
+        feed.add(title, content, id=item.id, content_type='markdown',
+                 published=published, updated=published,
+                 url=url_for('news.view', news_id=item.id),
+                 author=item.user.name)
+
+    return feed.get_response()
