@@ -22,6 +22,7 @@ Thumbs.db
 *.sublime-*
 *.swp
 
+!app/static/img/*.png
 app/static/files/*
 app/static/css/*
 app/static/js
