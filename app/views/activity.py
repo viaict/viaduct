@@ -107,9 +107,9 @@ def get_activity(activity_id=0):
 
             if form_result:
                 activity.form_data = form_result.data.replace('"', "'")
+                print(form_result.form.price)
                 if not form_result.has_paid and attending:
-                    # There is 35 cents administration fee
-                    if form_result.form.price - 0.35 > 0:
+                    if form_result.form.price > 0:
                         print("tesT")
                         form.show_pay_button = True
                         form.form_result = form_result

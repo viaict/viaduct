@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-05-14 12:25+0200\n"
+"POT-Creation-Date: 2017-05-14 13:50+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -158,9 +158,8 @@ msgstr ""
 msgid "Cannot find parent navigation entry."
 msgstr "Het bovenligende menu item kan niet gevonden worden."
 
-#, fuzzy
 msgid "Cannot remove file, it does not exist"
-msgstr "Kan het plaatje niet verwijderen, want het plaatje bestaat niet"
+msgstr "Kan het bestand niet verwijderen, want het bestand bestaat niet"
 
 msgid "Captain's log succesfully ended."
 msgstr "Captain's log afsluiten gelukt."
@@ -918,8 +917,8 @@ msgstr "Wachtwoord"
 msgid "Passwords do not match"
 msgstr "De opgegeven wachtwoorden komen niet overeen"
 
-msgid "Pay (+€0,35 transaction costs)"
-msgstr "Betalen (+€0,35 transactiekosten)"
+msgid "Pay"
+msgstr "Betalen"
 
 msgid "Payment successfully received."
 msgstr "Betaling succesvol ontvangen."
@@ -1421,9 +1420,8 @@ msgstr ""
 msgid "Wrong format answers."
 msgstr "Fout formaat antwoorden."
 
-#, fuzzy
 msgid "Wrong format examination or error uploading the file."
-msgstr "Fout formaat tentamen."
+msgstr "Fout formaat tentamen of een error bij het uploaden van de file."
 
 msgid "Wrong format examination."
 msgstr "Fout formaat tentamen."
@@ -1752,4 +1750,7 @@ msgstr ""
 
 #~ msgid "Old summary preserved."
 #~ msgstr "Oude samenvatting behouden."
+
+#~ msgid "Pay (+€0,35 transaction costs)"
+#~ msgstr "Betalen (+€0,35 transactiekosten)"
 

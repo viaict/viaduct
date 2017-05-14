@@ -38,9 +38,6 @@ def create_transaction(amount, description, user=current_user,
         cb.transaction = transaction
     db.session.commit()
 
-    # Add transaction costs
-    amount += 0.35
-
     # Create the mollie payment
     try:
         payment = MollieClient.payments.create({
