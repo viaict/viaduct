@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint, flash, redirect, render_template, request,\
-    url_for, abort
+    url_for, abort, make_response, current_app
 from flask_login import current_user
 from flask_babel import _  # gettext
 
@@ -9,11 +9,13 @@ from werkzeug.urls import iri_to_uri
 from flask_wtf import Form
 from wtforms.fields import StringField
 
+from datetime import datetime, timedelta
 from app import db
 from app.forms import PageForm, HistoryPageForm
 from app.utils.forms import flash_form_errors
 from app.utils.htmldiff import htmldiff
 from app.models import Group, Page, PageRevision, PagePermission, Redirect
+from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult
 from app.utils.module import ModuleAPI
 from app.utils.page import PageAPI
@@ -231,3 +233,33 @@ def delete(path):
         flash_form_errors(form)
 
     return render_template('page/delete.htm', rev=rev, form=form)
+
+
+# a route for generating sitemap.xml
+@blueprint.route('/sitemap.xml', methods=['GET'])
+def sitemap():
+    """Generate sitemap.xml. Makes a list of urls and date modified."""
+    ten_days_ago = datetime.now() - timedelta(days=10)
+    pages = []
+    only = ['activities', 'athenaeum', 'challenge', 'companies', 'courses',
+            'education', 'examination', 'verkiezing', 'news', 'lidmaatschap']
+    # static pages
+    for rule in current_app.url_map.iter_rules():
+        if "GET" in rule.methods and len(rule.arguments) == 0:
+            rule_split = rule.rule.split('/')
+            if rule_split[1] in only and len(rule_split) <= 3:
+                pages.append([rule.rule, ten_days_ago])
+
+    activities = Activity.query.all()
+    for activity in activities:
+        pages.append(["/activities/%s" % activity.id, activity.modified])
+    standalone_pages = Page.query.all()
+    for page in standalone_pages:
+        if not page.needs_paid:
+            pages.append(["/%s" % page.path,
+                          page.get_latest_revision().modified])
+    sitemap_xml = render_template('page/sitemap.xml', pages=pages)
+    response = make_response(sitemap_xml)
+    response.headers["Content-Type"] = "application/xml"
+
+    return response
