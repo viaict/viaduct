@@ -30,83 +30,12 @@
         }
     }
 }
-.home {
-    h2 {
-        font-size: 36px;
-        margin-bottom: 36px;
+.activities-simple {
+    .activity ul {
+        padding-left: 30px;
     }
-    .newsrole {
-        article {
-            margin-bottom: 50px;
-            h3 {
-                margin: 0;
-            }
-            span {
-                font-size: 15px;
-                color: #777;
-                margin-left: 20px;
-            }
-            .excerpt {
-                margin: 10px 20px;
-                img {
-                    display: none;
-                    float: left;
-                    margin: 0 20px 20px 0;
-                }
-                small {
-                    float: right;
-                }
-            }
-        }
-    }
-    .activities-simple {
-        a {
-            &:hover {
-                text-decoration: none;
-            }
-            h2 {
-                color: #333;
-                text-align: left;
-            }
-        }
-        .activity {
-            h3 {
-                font-size: 16px;
-                a {
-                    height: 17px;
-                    color: #428BCA;
-                }
-            }
-            img {
-                width: 70px;
-                height: 70px;
-                float: left;
-                margin-right: 15px;
-            }
-            span {
-                float: right;
-                font-size: 13.5px;
-                color: #777;
-                line-height: 18px;
-                font-weight: normal;
-                margin-left: 10px;
-            }
-            ul {
-                list-style: none;
-                padding-left: 20px;
-                li {
-                    font-size: 15px;
-                    height: 21px;
-                }
-            }
-        }
-        p {
-            margin-left: 20px;
-        }
 
-        address {
-            margin: 40px;
-            text-align: right;
-        }
+    address {
+        margin-top: 20px;
     }
 }

@@ -3,9 +3,6 @@
 </a>
 {% for activity in activities.items %}
     <div class="activity">
-            <span>
-                {{ activity.till_now() }}
-            </span>
             <h3>
                 <a class="overflow-dots" href="{{ url_for('activity.get_activity', activity_id=activity.id)}}">{{ activity.name }}</a>
             </h3>
@@ -16,6 +13,9 @@
                 <li class="overflow-dots"><i class="glyphicon glyphicon-home"></i>
                 {{ activity.location }}</li>
             </ul>
+            <span>
+                {{ activity.till_now() }}
+            </span>
     </div> {# activity-simple #}
 {% endfor %}
 
