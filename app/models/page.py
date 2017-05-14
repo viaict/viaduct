@@ -50,8 +50,11 @@ class Page(db.Model, BaseEntity):
             return None
 
         class_name = '%sRevision' % (self.type.capitalize())
-        revision_class = getattr(
-            sys.modules['app.models.%s' % (self.type)], class_name)
+        try:
+            revision_class = getattr(
+                sys.modules['app.models.%s' % (self.type)], class_name)
+        except AttributeError:
+            return None
 
         return revision_class
 
