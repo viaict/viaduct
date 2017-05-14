@@ -33,9 +33,10 @@
 {% endmacro %}
 
 
-{% macro render_field(field) %}
+{% macro render_field(field, autocomplete='on') %}
     {{ ignore_kwargs(kwargs) }}
-    {{ _render_field_with_errors(field, field(placeholder=field.label.text, class='form-control')) }}
+    {{ _render_field_with_errors(field, field(placeholder=field.label.text, class='form-control',
+                                              autocomplete=autocomplete)) }}
 {% endmacro %}
 
 {# TODO Check if still used #}
@@ -303,11 +304,14 @@
                      submit_id='', submit_text='',
                      extra_field_renderers={}, submit_renderer=None,
                      render_before_hook=None, render_after_hook=None) %}
+
 {%- set form_wrapped = FormWrapper(form) -%}
 <form method="POST" action="{{ action }}" enctype="multipart/form-data" class="{{ form_class }}" name="{{ form_name }}">
     {{ form_wrapped.csrf_token }}
     {%- for f in form_wrapped -%}
-     {{ _render_field_internal(f, ** {'extra_field_renderers': extra_field_renderers, 'render_before_hook': render_before_hook, 'render_after_hook': render_after_hook}) }}
+    {{ _render_field_internal(f, extra_field_renderers=extra_field_renderers,
+                              render_before_hook=render_before_hook,
+                              render_after_hook=render_after_hook, **kwargs) }}
     {%- endfor -%}
     {%- if not submit_text or submit_text == '' -%}
     {%- set submit_text = _('Submit') -%}

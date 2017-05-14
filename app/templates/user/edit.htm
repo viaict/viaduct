@@ -58,14 +58,13 @@ $('#remove-avatar').click(function() {
 
 {% block content %}
 
-
+{% set autocomplete = 'off' if user.id != current_user.id else 'on' %}
 {{ render_form(form, form_name="sign_up",
-    render_before_hook=render_before_hook,
-    extra_field_renderers = {
-        'FieldVerticalSplit': check_user_admin,
-        'BooleanField': check_user_paid,
-        'FileField': render_avatar,
-    }
-    ) }}
+               render_before_hook=render_before_hook,
+               extra_field_renderers={
+                   'FieldVerticalSplit': check_user_admin,
+                   'BooleanField': check_user_paid,
+                   'FileField': render_avatar,
+               }, autocomplete=autocomplete)}}
 
 {% endblock %}
