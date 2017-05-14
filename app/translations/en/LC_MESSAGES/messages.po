@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-04-08 14:23+0200\n"
+"POT-Creation-Date: 2017-05-14 12:25+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -100,9 +100,6 @@ msgstr ""
 msgid "An error occurred while uploading the file"
 msgstr ""
 
-msgid "An image with this name already exists."
-msgstr ""
-
 msgid "Answers"
 msgstr ""
 
@@ -154,10 +151,10 @@ msgstr ""
 msgid "By registering you agree with the terms above."
 msgstr ""
 
-msgid "Cannot delete image, image does not exist"
+msgid "Cannot find parent navigation entry."
 msgstr ""
 
-msgid "Cannot find parent navigation entry."
+msgid "Cannot remove file, it does not exist"
 msgstr ""
 
 msgid "Captain's log succesfully ended."
@@ -374,6 +371,9 @@ msgstr ""
 msgid "Disabled"
 msgstr ""
 
+msgid "Disclaimer"
+msgstr ""
+
 msgid "Do not filter HTML tags"
 msgstr ""
 
@@ -581,9 +581,6 @@ msgstr ""
 msgid "Files"
 msgstr ""
 
-msgid "Filetype not allowed"
-msgstr ""
-
 msgid "Filter groups"
 msgstr ""
 
@@ -602,8 +599,6 @@ msgstr ""
 msgid "Form name"
 msgstr ""
 
-<<<<<<< Updated upstream
-=======
 #, python-format
 msgid "Found invalid DONE task: %s"
 msgstr ""
@@ -612,7 +607,6 @@ msgstr ""
 msgid "Found invalid REMOVE task: %s"
 msgstr ""
 
->>>>>>> Stashed changes
 msgid "Fullscreen"
 msgstr ""
 
@@ -894,15 +888,6 @@ msgid "Not a valid email."
 msgstr ""
 
 msgid "Not found!"
-msgstr ""
-
-msgid "Old answers preserved."
-msgstr ""
-
-msgid "Old examination preserved."
-msgstr ""
-
-msgid "Old summary preserved."
 msgstr ""
 
 msgid "Optional data"
@@ -1202,6 +1187,11 @@ msgid ""
 " placed on the reserves list."
 msgstr ""
 
+msgid ""
+"The answers provided here are not the official answers and are not "
+"guaranteed to be correct."
+msgstr ""
+
 msgid "The committee has been saved."
 msgstr ""
 
@@ -1390,7 +1380,13 @@ msgstr ""
 msgid "Wrong Answer"
 msgstr ""
 
+msgid "Wrong format answers or error uploading the file."
+msgstr ""
+
 msgid "Wrong format answers."
+msgstr ""
+
+msgid "Wrong format examination or error uploading the file."
 msgstr ""
 
 msgid "Wrong format examination."
@@ -1732,5 +1728,23 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Unauthorized!"
+#~ msgstr ""
+
+#~ msgid "An image with this name already exists."
+#~ msgstr ""
+
+#~ msgid "Cannot delete image, image does not exist"
+#~ msgstr ""
+
+#~ msgid "Filetype not allowed"
+#~ msgstr ""
+
+#~ msgid "Old answers preserved."
+#~ msgstr ""
+
+#~ msgid "Old examination preserved."
+#~ msgstr ""
+
+#~ msgid "Old summary preserved."
 #~ msgstr ""
 
