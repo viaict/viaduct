@@ -185,7 +185,7 @@ def create(activity_id=None):
                 if act_picture:
                     file_remove(act_picture, PICTURE_DIR)
 
-            elif not picture:
+            else:
                 picture = None
 
             # Facebook ID location, not used yet
