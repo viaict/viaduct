@@ -241,8 +241,8 @@ def sitemap():
     """Generate sitemap.xml. Makes a list of urls and date modified."""
     ten_days_ago = datetime.now() - timedelta(days=10)
     pages = []
-    only = ['activities', 'athenaeum', 'challenge', 'companies', 'courses',
-            'education', 'examination', 'verkiezing', 'news', 'lidmaatschap']
+    only = ['activities', 'companies', 'vacancies', 'news']
+
     # static pages
     for rule in current_app.url_map.iter_rules():
         if "GET" in rule.methods and len(rule.arguments) == 0:
