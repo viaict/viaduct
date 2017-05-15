@@ -1,7 +1,8 @@
 from flask_wtf import Form
 from flask_babel import lazy_gettext as _
-from wtforms import StringField, SelectField, SubmitField, DecimalField
+from wtforms import StringField, SelectField
 from wtforms.validators import InputRequired, Email
+from app.forms.fields import DecimalField
 
 
 class CreateForm(Form):

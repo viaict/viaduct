@@ -1,4 +1,5 @@
 from wtforms import IntegerField, SelectField
+from wtforms import DecimalField as WtfDecimalFields
 from app.models import Course, Education, Group
 
 
@@ -28,3 +29,11 @@ class GroupSelectField(SelectField):
         self.coerce = int
         groups = Group.query.order_by(Group.name).all()
         self.choices = [(g.id, g.name) for g in groups]
+
+
+class DecimalField(WtfDecimalFields):
+
+    def process_formdata(self, valuelist):
+        if valuelist:
+            valuelist[0] = valuelist[0].replace(",", ".")
+        return super(DecimalField, self).process_formdata(valuelist)
