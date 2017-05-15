@@ -632,7 +632,13 @@ class PimpyAPI:
     def update_content(task_id, content):
         """Update the content of the task with the given id."""
 
-        task = Task.query.filter(Task.id == task_id).first()
+        task = Task.query.get(task_id)
+        if not task:
+            return False, "Task does not exist"
+
+        if not current_user.member_of_group(task.group_id):
+            return False, "User not member of group of task"
+
         task.content = content
         db.session.commit()
         return True, "De taak is succesvol aangepast."
@@ -641,7 +647,13 @@ class PimpyAPI:
     def update_title(task_id, title):
         """Update the title of the task with the given id."""
 
-        task = Task.query.filter(Task.id == task_id).first()
+        task = Task.query.get(task_id)
+        if not task:
+            return False, "Task does not exist"
+
+        if not current_user.member_of_group(task.group_id):
+            return False, "User not member of group of task"
+
         task.title = title
         db.session.commit()
         # for user in task.users:
@@ -658,7 +670,13 @@ class PimpyAPI:
     def update_users(task_id, comma_sep_users):
         """Update the users of the task with the given id."""
 
-        task = Task.query.filter(Task.id == task_id).first()
+        task = Task.query.get(task_id)
+        if not task:
+            return False, "Task does not exist"
+
+        if not current_user.member_of_group(task.group_id):
+            return False, "User not member of group of task"
+
         # old_users = task.users
         users, message = PimpyAPI.get_list_of_users_from_string(
             task.group_id, comma_sep_users)

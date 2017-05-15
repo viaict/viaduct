@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-03-05 11:46+0100\n"
+"POT-Creation-Date: 2017-05-14 13:50+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -100,9 +100,6 @@ msgstr "Er is een email verstuurd naar %(email)s met verdere instructies."
 msgid "An error occurred while uploading the file"
 msgstr "Er is een fout opgetreden bij het uploaden van het bestand"
 
-msgid "An image with this name already exists."
-msgstr "Er bestaat al een plaatje met deze naam."
-
 msgid "Answers"
 msgstr "Antwoorden"
 
@@ -158,11 +155,11 @@ msgstr ""
 "Door je aan te melden bij deze activiteit ga je akkoord met de "
 "bovenstaande voorwaarden."
 
-msgid "Cannot delete image, image does not exist"
-msgstr "Kan het plaatje niet verwijderen, want het plaatje bestaat niet"
-
 msgid "Cannot find parent navigation entry."
 msgstr "Het bovenligende menu item kan niet gevonden worden."
+
+msgid "Cannot remove file, it does not exist"
+msgstr "Kan het bestand niet verwijderen, want het bestand bestaat niet"
 
 msgid "Captain's log succesfully ended."
 msgstr "Captain's log afsluiten gelukt."
@@ -342,6 +339,9 @@ msgstr "Huidig"
 msgid "Current avatar"
 msgstr "Huidige avatar"
 
+msgid "Custom URL"
+msgstr ""
+
 msgid "Date"
 msgstr "Datum"
 
@@ -374,6 +374,9 @@ msgstr "Beschrijving"
 
 msgid "Disabled"
 msgstr "Uitgeschakeld"
+
+msgid "Disclaimer"
+msgstr "Disclaimer"
 
 msgid "Do not filter HTML tags"
 msgstr "Geen HTML tags filteren"
@@ -582,9 +585,6 @@ msgstr "Bestandsnaam"
 msgid "Files"
 msgstr "Bestanden"
 
-msgid "Filetype not allowed"
-msgstr "Bestandstype niet toegestaan"
-
 msgid "Filter groups"
 msgstr "Filter groepen"
 
@@ -603,8 +603,13 @@ msgstr "Formulier"
 msgid "Form name"
 msgstr "Formulier naam"
 
-msgid "Free"
-msgstr "Gratis"
+#, python-format
+msgid "Found invalid DONE task: %s"
+msgstr "Ongeldige DONE taak: %s"
+
+#, python-format
+msgid "Found invalid REMOVE task: %s"
+msgstr "Ongeldige REMOVE taak: %s"
 
 msgid "Fullscreen"
 msgstr "Schermvullend"
@@ -633,6 +638,14 @@ msgstr "Ik ben klaar met studeren"
 
 msgid "ID"
 msgstr "ID"
+
+msgid ""
+"If you think you do have the rights to view this page, please send an "
+"e-mail to: <a href=\"mailto:bestuur@svia.nl\">bestuur@svia.nl</a>"
+msgstr ""
+"Als je denkt dat je wel de juiste rechten hebt om deze pagina te "
+"bezoeken, stuur dan een e-mail naar: <a "
+"href=\"mailto:bestuur@svia.nl\">bestuur@svia.nl</a>"
 
 msgid "Image"
 msgstr "Plaatje"
@@ -700,9 +713,6 @@ msgstr "Link gekopieerd"
 
 msgid "Link to file"
 msgstr "Link naar bestand"
-
-msgid "List"
-msgstr "Lijst"
 
 msgid "List of activities"
 msgstr "Activiteiten"
@@ -889,23 +899,14 @@ msgstr "Geen valide e-mailadres."
 msgid "Not found!"
 msgstr "Niet gevonden!"
 
-msgid "Old answers preserved."
-msgstr "Oude antwoorden behouden."
-
-msgid "Old examination preserved."
-msgstr "Oude tentamen behouden."
-
-msgid "Old summary preserved."
-msgstr "Oude samenvatting behouden."
-
 msgid "Optional data"
 msgstr "Optionele gegevens"
 
-msgid "Page not found"
-msgstr "Pagina niet gevonden"
-
 msgid "Page"
 msgstr "Pagina"
+
+msgid "Page not found"
+msgstr "Pagina niet gevonden"
 
 msgid "Page title"
 msgstr "Pagina titel"
@@ -916,8 +917,8 @@ msgstr "Wachtwoord"
 msgid "Passwords do not match"
 msgstr "De opgegeven wachtwoorden komen niet overeen"
 
-msgid "Pay (+€0,35 transaction costs)"
-msgstr "Betalen (+€0,35 transactiekosten)"
+msgid "Pay"
+msgstr "Betalen"
 
 msgid "Payment successfully received."
 msgstr "Betaling succesvol ontvangen."
@@ -978,9 +979,6 @@ msgstr "Profiel aanmaken gelukt"
 
 msgid "Profile succesfully updated"
 msgstr "Profiel bewerken gelukt"
-
-msgid "Public"
-msgstr "Publiek"
 
 msgid "Publish date"
 msgstr "Publiceer datum"
@@ -1184,9 +1182,6 @@ msgstr "Team"
 msgid "Terms"
 msgstr "Voorwaarden"
 
-msgid "The Police has been notified."
-msgstr "De politie is gewaarschuwd."
-
 msgid "The activity has been created."
 msgstr "De activiteit is aangemaakt."
 
@@ -1206,6 +1201,13 @@ msgid ""
 msgstr ""
 "De activiteit heeft het maximum aantal inschrijvingen bereikt. Je bent "
 "geplaatst op de reserve lijst."
+
+msgid ""
+"The answers provided here are not the official answers and are not "
+"guaranteed to be correct."
+msgstr ""
+"De antwoorden die hier staan zijn niet officiëel en zijn dus niet "
+"gegarandeerd correct"
 
 msgid "The committee has been saved."
 msgstr "De commissie is opgeslagen."
@@ -1306,9 +1308,6 @@ msgstr "Te laat"
 
 msgid "Total problems"
 msgstr "Totaal aantal problemen"
-
-msgid "Unauthorized!"
-msgstr "Ongeautoriseerd!"
 
 msgid ""
 "Unfortunately it is currently unclear to us if you are a member of "
@@ -1415,8 +1414,14 @@ msgstr "Geschreven door"
 msgid "Wrong Answer"
 msgstr "Verkeerd antwoord"
 
+msgid "Wrong format answers or error uploading the file."
+msgstr ""
+
 msgid "Wrong format answers."
 msgstr "Fout formaat antwoorden."
+
+msgid "Wrong format examination or error uploading the file."
+msgstr "Fout formaat tentamen of een error bij het uploaden van de file."
 
 msgid "Wrong format examination."
 msgstr "Fout formaat tentamen."
@@ -1712,4 +1717,40 @@ msgstr ""
 
 #~ msgid "Venue"
 #~ msgstr ""
+
+#~ msgid "Free"
+#~ msgstr "Gratis"
+
+#~ msgid "List"
+#~ msgstr "Lijst"
+
+#~ msgid "Public"
+#~ msgstr "Publiek"
+
+#~ msgid "The Police has been notified."
+#~ msgstr "De politie is gewaarschuwd."
+
+#~ msgid "Unauthorized!"
+#~ msgstr "Ongeautoriseerd!"
+
+#~ msgid ""
+#~ msgstr ""
+
+#~ msgid "An image with this name already exists."
+#~ msgstr "Er bestaat al een plaatje met deze naam."
+
+#~ msgid "Filetype not allowed"
+#~ msgstr "Bestandstype niet toegestaan"
+
+#~ msgid "Old answers preserved."
+#~ msgstr "Oude antwoorden behouden."
+
+#~ msgid "Old examination preserved."
+#~ msgstr "Oude tentamen behouden."
+
+#~ msgid "Old summary preserved."
+#~ msgstr "Oude samenvatting behouden."
+
+#~ msgid "Pay (+€0,35 transaction costs)"
+#~ msgstr "Betalen (+€0,35 transactiekosten)"
 

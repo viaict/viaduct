@@ -53,6 +53,30 @@ class News(db.Model, BaseEntity):
 
         return self.content
 
+    def get_localized_title_content(news, locale=None):
+        if not locale:
+            locale = get_locale()
+
+        nl_available = news.nl_title and news.nl_content
+        en_available = news.en_title and news.en_content
+        if locale == 'nl' and nl_available:
+            title = news.nl_title
+            content = news.nl_content
+        elif locale == 'en' and en_available:
+            title = news.en_title
+            content = news.en_content
+        elif nl_available:
+            title = news.nl_title + " (" + _('Dutch') + ")"
+            content = news.nl_content
+        elif en_available:
+            title = news.en_title + " (" + _('English') + ")"
+            content = news.en_content
+        else:
+            title = 'N/A'
+            content = 'N/A'
+
+        return title, content
+
 
 @event.listens_for(News, 'load')
 def set_news_locale(news, context):
@@ -67,21 +91,5 @@ def set_news_locale(news, context):
     the alternative language, suffixing the title of the news with the
     displayed language.
     """
-    locale = get_locale()
-    nl_available = news.nl_title and news.nl_content
-    en_available = news.en_title and news.en_content
-    if locale == 'nl' and nl_available:
-        news.title = news.nl_title
-        news.content = news.nl_content
-    elif locale == 'en' and en_available:
-        news.title = news.en_title
-        news.content = news.en_content
-    elif nl_available:
-        news.title = news.nl_title + " (" + _('Dutch') + ")"
-        news.content = news.nl_content
-    elif en_available:
-        news.title = news.en_title + " (" + _('English') + ")"
-        news.content = news.en_content
-    else:
-        news.title = 'N/A'
-        news.content = 'N/A'
+
+    news.title, news.content = news.get_localized_title_content(news)

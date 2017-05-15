@@ -16,16 +16,19 @@ $(function () {
 
         utils.form.button_loading($task_btns);
 
-        $.getJSON('/pimpy/tasks/update_status', {
-            task_id: task_id,
-            new_status: status
-        }, function (data) {
-            $task_btns.removeClass(btn_stati);
-            $task_rows.removeClass(btn_stati);
+        $.post('/pimpy/tasks/update_status/',
+            {
+                task_id: task_id,
+                new_status: status
+            },
+            function (data) {
+                $task_btns.removeClass(btn_stati);
+                $task_rows.removeClass(btn_stati);
 
-            $task_btns.addClass(data.status);
-            $task_rows.addClass('pimpy_status_' + data.status);
-        }).fail(function () {
+                $task_btns.addClass(data.status);
+                $task_rows.addClass('pimpy_status_' + data.status);
+            }
+        ).fail(function () {
             utils.flash.clear();
             utils.flash.new('Er ging iets mis, =(', 'danger');
         }).always(function () {

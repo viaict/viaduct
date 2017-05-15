@@ -83,7 +83,7 @@ class Activity(db.Model, BaseEntity):
         if self.start_time.month == self.end_time.month and \
                 self.start_time.day == self.end_time.day:
             if self.start_time.year == today.year:
-                return format_datetime(self.start_time, 'EEEE d MMM, H:mm - ',
+                return format_datetime(self.start_time, 'EEEE d MMM H:mm - ',
                                        locale=get_locale()).capitalize() + \
                     format_datetime(self.end_time, 'H:mm', locale=get_locale())
             else:
@@ -145,6 +145,30 @@ class Activity(db.Model, BaseEntity):
 
         return _('still') + ' %s' % (self.get_timedelta_to_end())
 
+    def get_localized_name_desc(activity, locale=None):
+        if not locale:
+            locale = get_locale()
+
+        nl_available = activity.nl_name and activity.nl_description
+        en_available = activity.en_name and activity.en_description
+        if locale == 'nl' and nl_available:
+            name = activity.nl_name
+            description = activity.nl_description
+        elif locale == 'en' and en_available:
+            name = activity.en_name
+            description = activity.en_description
+        elif nl_available:
+            name = activity.nl_name + " (" + _('Dutch') + ")"
+            description = activity.nl_description
+        elif en_available:
+            name = activity.en_name + " (" + _('English') + ")"
+            description = activity.en_description
+        else:
+            name = 'N/A'
+            description = 'N/A'
+
+        return name, description
+
 
 @event.listens_for(Activity, 'load')
 def set_activity_locale(activity, context):
@@ -160,21 +184,5 @@ def set_activity_locale(activity, context):
     displayed language.
     """
 
-    locale = get_locale()
-    nl_available = activity.nl_name and activity.nl_description
-    en_available = activity.en_name and activity.en_description
-    if locale == 'nl' and nl_available:
-        activity.name = activity.nl_name
-        activity.description = activity.nl_description
-    elif locale == 'en' and en_available:
-        activity.name = activity.en_name
-        activity.description = activity.en_description
-    elif nl_available:
-        activity.name = activity.nl_name + " (" + _('Dutch') + ")"
-        activity.description = activity.nl_description
-    elif en_available:
-        activity.name = activity.en_name + " (" + _('English') + ")"
-        activity.description = activity.en_description
-    else:
-        activity.name = 'N/A'
-        activity.description = 'N/A'
+    activity.name, activity.description = \
+        activity.get_localized_name_desc(activity)

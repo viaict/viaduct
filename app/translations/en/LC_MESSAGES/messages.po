@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-03-05 11:46+0100\n"
+"POT-Creation-Date: 2017-05-14 13:50+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -100,9 +100,6 @@ msgstr ""
 msgid "An error occurred while uploading the file"
 msgstr ""
 
-msgid "An image with this name already exists."
-msgstr ""
-
 msgid "Answers"
 msgstr ""
 
@@ -154,10 +151,10 @@ msgstr ""
 msgid "By registering you agree with the terms above."
 msgstr ""
 
-msgid "Cannot delete image, image does not exist"
+msgid "Cannot find parent navigation entry."
 msgstr ""
 
-msgid "Cannot find parent navigation entry."
+msgid "Cannot remove file, it does not exist"
 msgstr ""
 
 msgid "Captain's log succesfully ended."
@@ -338,6 +335,9 @@ msgstr ""
 msgid "Current avatar"
 msgstr ""
 
+msgid "Custom URL"
+msgstr ""
+
 msgid "Date"
 msgstr ""
 
@@ -369,6 +369,9 @@ msgid "Description"
 msgstr ""
 
 msgid "Disabled"
+msgstr ""
+
+msgid "Disclaimer"
 msgstr ""
 
 msgid "Do not filter HTML tags"
@@ -578,9 +581,6 @@ msgstr ""
 msgid "Files"
 msgstr ""
 
-msgid "Filetype not allowed"
-msgstr ""
-
 msgid "Filter groups"
 msgstr ""
 
@@ -599,7 +599,12 @@ msgstr ""
 msgid "Form name"
 msgstr ""
 
-msgid "Free"
+#, python-format
+msgid "Found invalid DONE task: %s"
+msgstr ""
+
+#, python-format
+msgid "Found invalid REMOVE task: %s"
 msgstr ""
 
 msgid "Fullscreen"
@@ -628,6 +633,11 @@ msgid "I have finished studying"
 msgstr ""
 
 msgid "ID"
+msgstr ""
+
+msgid ""
+"If you think you do have the rights to view this page, please send an "
+"e-mail to: <a href=\"mailto:bestuur@svia.nl\">bestuur@svia.nl</a>"
 msgstr ""
 
 msgid "Image"
@@ -693,9 +703,6 @@ msgid "Link copied"
 msgstr ""
 
 msgid "Link to file"
-msgstr ""
-
-msgid "List"
 msgstr ""
 
 msgid "List of activities"
@@ -883,15 +890,6 @@ msgstr ""
 msgid "Not found!"
 msgstr ""
 
-msgid "Old answers preserved."
-msgstr ""
-
-msgid "Old examination preserved."
-msgstr ""
-
-msgid "Old summary preserved."
-msgstr ""
-
 msgid "Optional data"
 msgstr ""
 
@@ -910,7 +908,7 @@ msgstr ""
 msgid "Passwords do not match"
 msgstr ""
 
-msgid "Pay (+€0,35 transaction costs)"
+msgid "Pay"
 msgstr ""
 
 msgid "Payment successfully received."
@@ -971,9 +969,6 @@ msgid "Profile succesfully created"
 msgstr ""
 
 msgid "Profile succesfully updated"
-msgstr ""
-
-msgid "Public"
 msgstr ""
 
 msgid "Publish date"
@@ -1176,9 +1171,6 @@ msgstr ""
 msgid "Terms"
 msgstr ""
 
-msgid "The Police has been notified."
-msgstr ""
-
 msgid "The activity has been created."
 msgstr ""
 
@@ -1193,6 +1185,11 @@ msgstr ""
 msgid ""
 "The activity has reached its maximum number of registrations. You will be"
 " placed on the reserves list."
+msgstr ""
+
+msgid ""
+"The answers provided here are not the official answers and are not "
+"guaranteed to be correct."
 msgstr ""
 
 msgid "The committee has been saved."
@@ -1281,9 +1278,6 @@ msgid "Too late"
 msgstr ""
 
 msgid "Total problems"
-msgstr ""
-
-msgid "Unauthorized!"
 msgstr ""
 
 msgid ""
@@ -1386,7 +1380,13 @@ msgstr ""
 msgid "Wrong Answer"
 msgstr ""
 
+msgid "Wrong format answers or error uploading the file."
+msgstr ""
+
 msgid "Wrong format answers."
+msgstr ""
+
+msgid "Wrong format examination or error uploading the file."
 msgstr ""
 
 msgid "Wrong format examination."
@@ -1713,5 +1713,41 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Venue"
+#~ msgstr ""
+
+#~ msgid "Free"
+#~ msgstr ""
+
+#~ msgid "List"
+#~ msgstr ""
+
+#~ msgid "Public"
+#~ msgstr ""
+
+#~ msgid "The Police has been notified."
+#~ msgstr ""
+
+#~ msgid "Unauthorized!"
+#~ msgstr ""
+
+#~ msgid "An image with this name already exists."
+#~ msgstr ""
+
+#~ msgid "Cannot delete image, image does not exist"
+#~ msgstr ""
+
+#~ msgid "Filetype not allowed"
+#~ msgstr ""
+
+#~ msgid "Old answers preserved."
+#~ msgstr ""
+
+#~ msgid "Old examination preserved."
+#~ msgstr ""
+
+#~ msgid "Old summary preserved."
+#~ msgstr ""
+
+#~ msgid "Pay (+€0,35 transaction costs)"
 #~ msgstr ""
 

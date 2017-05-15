@@ -1,5 +1,16 @@
-xx-xx-xxxx dev:
-* Added: New form rendering
+15-05-2017 v2.8.0.0:
+* Added: New form rendering with better error messages.
+* Added: RSS feeds for news and activities.
+* Added: Disclaimer that answers of examinations might contain errors.
+* Added: Disabled autocomplete for editing other users as admin.
+* Added: /sitemap.xml for search engines.
+* Fixed: Bug report bug.
+* Fixed: Input price of form with comma and dot notation.
+* Fixed: Navigation bar entry manipulation.
+* Fixed: Chrome 56 Windows 10 Referer changes.
+* Fixed: Permissions on editing tasks in pimpy interface.
+* Change: Examinations are now sorted by date within courses.
+* Removed: Transaction costs for mollie.
 
 20-02-2017 v2.7.5.0:
 * Fixed: Custom form submissions are now editable from a page as well as an activity.

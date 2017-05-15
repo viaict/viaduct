@@ -13,6 +13,7 @@ from app import app, db
 
 from app.forms import CourseForm, EducationForm
 from app.forms.examination import EditForm
+from app.utils.file import file_upload, file_remove
 
 from app.models.examination import Examination, test_types
 from app.models.course import Course
@@ -20,14 +21,11 @@ from app.models.education import Education
 
 from app.utils.module import ModuleAPI
 
-from werkzeug import secure_filename
-
 from fuzzywuzzy import fuzz
 
 blueprint = Blueprint('examination', __name__)
 
 UPLOAD_FOLDER = app.config['EXAMINATION_UPLOAD_FOLDER']
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 REDIR_PAGES = {'view': 'examination.view_examination',
                'add': 'examination.add',
@@ -36,27 +34,6 @@ REDIR_PAGES = {'view': 'examination.view_examination',
                }
 
 DATE_FORMAT = app.config['DATE_FORMAT']
-
-
-def allowed_file(filename):
-    return '.' in filename and \
-        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-def file_exists(filename):
-    return os.path.exists(os.path.join(UPLOAD_FOLDER, filename))
-
-
-def create_unique_file(filename):
-    temp_filename = filename
-
-    i = 0
-    while file_exists(temp_filename):
-        split = filename.split('.')
-        split[0] = split[0] + "(" + str(i) + ")"
-        temp_filename = split[0] + "." + split[len(split) - 1]
-        i += 1
-    return temp_filename
 
 
 def get_education_id(education):
@@ -75,26 +52,6 @@ def get_course_id(course):
     if not course_object:
         return None
     return course_object.id
-
-
-def upload_file_real(file, old_path='1'):
-    if file and (file.filename is not ''):
-        if allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            filename = create_unique_file(filename)
-
-            if old_path != '1':
-                os.remove(os.path.join(UPLOAD_FOLDER, old_path))
-
-            fpath = os.path.join(UPLOAD_FOLDER, filename)
-            file.save(fpath)
-            os.chmod(fpath, 0o644)
-
-            return filename
-        else:
-            return None
-    else:
-        return False
 
 
 @blueprint.route('/examination/add/', methods=['GET', 'POST'])
@@ -119,25 +76,38 @@ def add():
 
             error = False
 
-            filename = upload_file_real(file)
+            exam_path = file_upload(file, UPLOAD_FOLDER)
+            answers_path = None
             if file:
-                if not filename:
+                if not exam_path:
                     flash(_('Wrong format examination.'), 'danger')
                     error = True
 
-                answer_path = upload_file_real(answers)
-                if answer_path is False:
+                if answers:
+                    answers_file = file_upload(answers, UPLOAD_FOLDER)
+                    if answers_file is False:
+                        flash(_('No answers uploaded.'), 'warning')
+                        answers_file = None
+                    elif answers_file is None:
+                        flash(_('Wrong format answers.'), 'danger')
+                        error = True
+                    else:
+                        answers_path = answers_file.name
+                else:
                     flash(_('No answers uploaded.'), 'warning')
-                    answer_path = None
-                elif answer_path is None:
-                    flash(_('Wrong format answers.'), 'danger')
-                    error = True
+                    answers_path = None
             else:
                 flash(_('No examination uploaded.'), 'danger')
                 error = True
 
             if error:
-                dummy_exam = Examination(filename, form.date.data,
+                # The upload has failed, but a dummy exam is created to
+                # re-populate the form with the data the user provided before
+
+                # Not the complete set of data is displayed again in the newly
+                # rendered form, the course and study are reset. Reported in
+                # Jira as VIA-1637 - DvE, 14-01-2017
+                dummy_exam = Examination(file.name, form.date.data,
                                          form.comment.data, form.course.data,
                                          form.education.data,
                                          test_type=form.test_type.data)
@@ -149,9 +119,9 @@ def add():
                                        form=form,
                                        test_types=test_types, new_exam=False)
 
-            exam = Examination(filename, form.date.data,
+            exam = Examination(exam_path.name, form.date.data,
                                form.comment.data, form.course.data,
-                               form.education.data, answers=answer_path,
+                               form.education.data, answers=answers_path,
                                test_type=form.test_type.data)
             db.session.add(exam)
             db.session.commit()
@@ -200,23 +170,25 @@ def edit(exam_id):
             exam.education_id = form.education.data
             exam.test_type = form.test_type.data
 
-            new_path = upload_file_real(file, exam.path)
-            if new_path:
-                exam.path = new_path
-            elif new_path is None:
-                flash(_('Wrong format examination.'), 'danger')
+            if file.filename:
+                if exam.path:
+                    file_remove(exam.path, UPLOAD_FOLDER)
+                new_path = file_upload(file, UPLOAD_FOLDER)
+                if new_path:
+                    exam.path = new_path.name
+                else:
+                    flash(_('Wrong format examination or error ' +
+                            'uploading the file.'), 'danger')
 
-            if not new_path:
-                flash(_('Old examination preserved.'), 'info')
-
-            new_answer_path = upload_file_real(answers, exam.answer_path)
-            if new_answer_path:
-                exam.answer_path = new_answer_path
-            elif new_answer_path is None:
-                flash(_('Wrong format answers.'), 'danger')
-
-            if not new_answer_path:
-                flash(_('Old answers preserved.'), 'info')
+            if answers.filename:
+                if exam.answer_path:
+                    file_remove(exam.answer_path, UPLOAD_FOLDER)
+                new_answer_path = file_upload(answers, UPLOAD_FOLDER)
+                if new_answer_path:
+                    exam.answer_path = new_answer_path.name
+                else:
+                    flash(_('Wrong format answers or error ' +
+                            'uploading the file.'), 'danger')
 
             db.session.commit()
             flash(_('Examination succesfully changed.'), 'success')
@@ -265,72 +237,44 @@ def view_examination(page_nr=1):
     if request.args.get('search'):
         search = request.args.get('search')
 
-        exams = Examination.query.all()
-        exam_matches_per_course = {}
-        course_max_scores = {}
+        courses = Course.query.all()
+        course_scores = {}
 
         search_lower = search.lower().strip()
 
-        for exam in exams:
-            course = exam.course.name.lower()
-            comment_ratio = 0
-            if exam.comment:
-                comment_ratio = fuzz.partial_ratio(search_lower,
-                                                   exam.comment.lower())
-            course_ratio = fuzz.partial_ratio(search_lower, course)
-            education_ratio = fuzz.partial_ratio(search_lower,
-                                                 exam.education.name.lower())
-            date_ratio = 0
-            if exam.date:
-                date_ratio = fuzz.partial_ratio(
-                    search_lower, exam.date.strftime(DATE_FORMAT))
+        # Search in all courses for matches in the course name
+        for course in courses:
+            course_score = fuzz. \
+                partial_ratio(search_lower, course.name.lower())
+            # If score is higher than a certain threshold, display in results
+            if course_score > 75:
+                course_scores[course.id] = course_score
 
-            if comment_ratio > 75 or course_ratio > 75 \
-                    or education_ratio > 75 or date_ratio > 75:
-                # Calculate the score for the exam
-                # TODO: maybe use a weighted mean instead of max
-                score = max(comment_ratio, course_ratio,
-                            education_ratio, date_ratio)
+        # Make a list of all course ids, sorted by their similarity score
+        ranked_courses = sorted(course_scores,
+                                key=course_scores.get, reverse=True)
 
-                exam_tuple = (score, exam.id)
-
-                # If the course did not occur before, add it
-                # to the dictionaries and set the max score
-                # to the score of this exam
-                if course not in exam_matches_per_course:
-                    exam_matches_per_course[course] = [exam_tuple]
-                    course_max_scores[course] = score
-
-                # Otherwise, add the exam to the list of the course
-                # and update the maximum course score
-                else:
-                    exam_matches_per_course[course].append(exam_tuple)
-                    course_max_scores[course] = max(score,
-                                                    course_max_scores[course])
-        if len(course_max_scores) == 0:
+        if len(ranked_courses) == 0:
             examinations = None
         else:
-            # Sort the courses by their max score
-            courses_sorted = sorted(course_max_scores,
-                                    key=course_max_scores.get, reverse=True)
 
-            # Create the list of exam ids. These are ordered by course with
-            # their maximum score, and for each course ordered by exam score
-            exam_matches = []
-            for course in courses_sorted:
-                exam_matches.extend(list(zip(*sorted(
-                    exam_matches_per_course[course], reverse=True)))[1])
-
-            # Query the exams. The order_by clause keeps them in the same
-            # order as the exam_matches list
-            examinations = Examination.query \
-                .filter(Examination.id.in_(exam_matches)) \
-                .order_by(func.field(Examination.id, *exam_matches)) \
+            # Query the exams. The filter part makes sure only the ranked
+            # courses are returned. The order_by clause makes sure the exams
+            # are first sorted by course according to the ranking and then
+            # sorted by date of the exam
+            examinations = Examination.query.join(Course)\
+                .filter(Course.id.in_(ranked_courses)) \
+                .order_by(func.field(Course.id, *ranked_courses)) \
+                .order_by(Examination.date.desc()) \
                 .paginate(page_nr, 15, True)
     else:
         search = ""
+        # Query the exams. The order_by part makes sure the exams are sorted
+        # by course and within a course are sorted by date
         examinations = Examination.query.join(Course)\
-            .order_by(Course.name).paginate(page_nr, 15, True)
+            .order_by(Course.name) \
+            .order_by(Examination.date.desc()) \
+            .paginate(page_nr, 15, True)
 
     path = '/static/uploads/examinations/'
 

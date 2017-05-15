@@ -17,6 +17,10 @@
                 class="btn btn-default">
                 {{_('Show activities in the archive')}}
             </a>
+            <a href="{{ url_for('activity.rss', locale=get_locale()) }}"
+               class="btn btn-default">
+                {{_('RSS feed')}}
+            </a>
         {% endif %}
     </div>
 

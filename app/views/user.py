@@ -282,6 +282,7 @@ def sign_up():
 def sign_in():
     # Redirect the user to the index page if he or she has been authenticated
     # already.
+
     if current_user.is_authenticated:
         return redirect(url_for('home.home'))
 
@@ -301,6 +302,12 @@ def sign_in():
                         name=current_user.first_name), 'success')
 
             referer = request.headers.get('Referer')
+
+            # If referer is empty for some reason (browser policy, user entered
+            # address in address bar, etc.), use empty string
+            if not referer:
+                referer = ''
+
             denied = (
                 re.match(r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),
                          referer) is not None)

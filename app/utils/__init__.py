@@ -9,7 +9,6 @@ from .serialize_sqla import serialize_sqla  # noqa
 from .navigation import NavigationAPI
 from .category import CategoryAPI
 from .pimpy import PimpyAPI
-from .file import FileAPI
 from .page import PageAPI
 from .seo import get_seo_fields
 from .user import UserAPI

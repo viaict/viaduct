@@ -103,11 +103,10 @@ class User(db.Model, UserMixin, BaseEntity):
 
         old_email = self.email
 
-        groups_with_email = self.groups.filter(
-            Group.maillist != None,
-            Group.maillist != '').all()  # noqa
+        for group in self.groups:
+            if not group.maillist:
+                continue
 
-        for group in groups_with_email:
             group.remove_email_from_maillist(old_email)
             group.add_email_to_maillist(new_email)
 

@@ -3,6 +3,7 @@ import datetime
 from app.models import BaseEntity
 from jinja2 import escape
 import baas32 as b32
+from flask_login import current_user
 
 # many to many relationship tables
 task_user = db.Table(
@@ -73,8 +74,12 @@ class Task(db.Model, BaseEntity):
         return "Onbekend"
 
     def update_status(self, status):
-        if status >= 0 and status <= len(self.status_meanings):
+        if current_user.member_of_group(self.group_id) \
+                and status >= 0 and status <= len(self.status_meanings):
             self.status = status
+            return True
+
+        return False
 
     def get_status_color(self):
         """Return a string representing the status."""
@@ -92,12 +97,13 @@ class Task(db.Model, BaseEntity):
     def get_users(self, include_break_spans=False):
         """
         Return a list of users, comma separated.
-        The usernames are escaped, so the resulting string is safe to render.
 
+        The usernames are escaped, so the resulting string is safe to render.
         When include_break_spans is set to True, each name is
         wrapped inside a span which does not allow breaking, so webbrowsers
         will only break on full names.
         """
+
         users = map(
             lambda x: str(escape("%s %s" % (x.first_name, x.last_name))),
             self.users)

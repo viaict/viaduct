@@ -1,4 +1,3 @@
-import os
 import datetime
 
 # this is now uncommented for breaking activity for some reason
@@ -10,8 +9,7 @@ from flask import flash, redirect, render_template, request, url_for, abort,\
 from flask import Blueprint
 from flask_login import current_user
 from flask_babel import _  # gettext
-
-from werkzeug import secure_filename
+from werkzeug.contrib.atom import AtomFeed
 
 from app import db
 from app.forms.activity import ActivityForm, CreateForm
@@ -19,6 +17,7 @@ from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult
 from app.models.mollie import Transaction, TransactionActivity
 from app.utils.module import ModuleAPI
+from app.utils.file import file_upload, file_remove
 from app.utils import mollie
 from app.models.education import Education
 from app.forms import SignInForm
@@ -27,10 +26,7 @@ from app.utils.serialize_sqla import serialize_sqla
 
 blueprint = Blueprint('activity', __name__, url_prefix='/activities')
 
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in \
-        set(['png', 'jpg', 'gif', 'jpeg'])
+PICTURE_DIR = 'app/static/activity_pictures/'
 
 
 # Overview of activities
@@ -111,9 +107,9 @@ def get_activity(activity_id=0):
 
             if form_result:
                 activity.form_data = form_result.data.replace('"', "'")
+                print(form_result.form.price)
                 if not form_result.has_paid and attending:
-                    # There is 35 cents administration fee
-                    if form_result.form.price - 0.35 > 0:
+                    if form_result.form.price > 0:
                         print("tesT")
                         form.show_pay_button = True
                         form.form_result = form_result
@@ -170,44 +166,31 @@ def create(activity_id=None):
     form = CreateForm(request.form, activity)
 
     if request.method == 'POST':
+
         if form.validate_on_submit():
 
-            picture = activity.picture
+            act_picture = activity.picture
 
             form.populate_obj(activity)
 
             file = request.files['picture']
 
-            if file.filename and allowed_file(file.filename):
-                picture = secure_filename(file.filename)
-
-                if not activity.picture and os.path.isfile(
-                        os.path.join('app/static/activity_pictures', picture)):
-                    flash(_('An image with this name already exists.'),
-                          'danger')
-                    return render_template('activity/edit.htm',
-                                           activity=activity,
-                                           form=form,
-                                           title=title)
-
-                fpath = os.path.join('app/static/activity_pictures', picture)
-                file.save(fpath)
-                os.chmod(fpath, 0o644)
+            if file.filename:
+                image = file_upload(file, PICTURE_DIR, True)
+                if image:
+                    picture = image.name
+                else:
+                    picture = None
 
                 # Remove old picture
-                if activity.picture:
-                    try:
-                        os.remove(os.path.join(
-                            'app/static/activity_pictures',
-                            activity.picture))
-                    except OSError:
-                        print(_('Cannot delete image, image does not exist') +
-                              ": " + str(activity.picture))
+                if act_picture:
+                    file_remove(act_picture, PICTURE_DIR)
 
-            elif not picture:
+            else:
                 picture = None
 
-            activity.venue = 1  # Facebook ID location, not used yet  # noqa
+            # Facebook ID location, not used yet
+            activity.venue = 1
 
             # Set a custom_form if it actually exists
             form_id = int(form.form_id.data)
@@ -291,3 +274,22 @@ def export_activities():
         (datetime.datetime.now() - datetime.timedelta(hours=12))
     ).order_by(Activity.start_time.asc()).all()
     return jsonify(data=serialize_sqla(activities))
+
+
+@blueprint.route('/rss/', methods=['GET'])
+@blueprint.route('/rss/<string:locale>/')
+def rss(locale='en'):
+    name = 'via activiteiten' if locale == 'nl' else 'via activities'
+    feed = AtomFeed(name, feed_url=request.url, url=request.url_root)
+    activities = Activity.query.filter(
+        Activity.end_time >
+        (datetime.datetime.now() - datetime.timedelta(hours=12))
+    ).order_by(Activity.start_time.asc()).all()
+
+    for activity in activities:
+        name, description = activity.get_localized_name_desc(locale)
+        feed.add(name, description, id=activity.id, content_type='markdown',
+                 updated=activity.updated_time, published=activity.start_time,
+                 url=url_for('activity.get_activity', activity_id=activity.id))
+
+    return feed.get_response()

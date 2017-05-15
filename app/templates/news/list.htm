@@ -21,6 +21,10 @@
             <a href='{{ url_for('news.archive') }}' class='btn btn-default'>
                 {{ _('Show news item archive') }}
             </a>
+            <a href="{{ url_for('news.rss', locale=get_locale()) }}"
+               class="btn btn-default">
+                {{ _('RSS feed') }}
+            </a>
         {% endif %}
     </div>
     <hr/>

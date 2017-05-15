@@ -76,6 +76,16 @@
     </div>
     {% endif %}
 
+    <div class='row'>
+        <div class='col-md-12'>
+            <div class="alert alert-warning">
+                    <label>{{ _('Disclaimer') }}</label>:
+            {{ _('The answers provided here are not the official answers and are not guaranteed to be correct.') }}
+            </div>
+        </div>
+    </div>
+
+
     <div class="table-responsive">
         <table class='table table-bordered table-striped'>
             <thead>
@@ -103,7 +113,7 @@
                 {% for examination in examinations.items %}
                     <tr>
                         <td>
-                            <a href='{{url_for('examination.view_examination', search=examination.education.name)}}'>{{ examination.education.name }}</a>
+                            {{ examination.education.name }}
                         </td>
                         <td>
                             <a href='{{url_for('examination.view_examination', search=examination.course.name) }}'>{{ examination.course.name }}</a>
