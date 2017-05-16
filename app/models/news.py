@@ -53,24 +53,24 @@ class News(db.Model, BaseEntity):
 
         return self.content
 
-    def get_localized_title_content(news, locale=None):
+    def get_localized_title_content(self, locale=None):
         if not locale:
             locale = get_locale()
 
-        nl_available = news.nl_title and news.nl_content
-        en_available = news.en_title and news.en_content
+        nl_available = self.nl_title and self.nl_content
+        en_available = self.en_title and self.en_content
         if locale == 'nl' and nl_available:
-            title = news.nl_title
-            content = news.nl_content
+            title = self.nl_title
+            content = self.nl_content
         elif locale == 'en' and en_available:
-            title = news.en_title
-            content = news.en_content
+            title = self.en_title
+            content = self.en_content
         elif nl_available:
-            title = news.nl_title + " (" + _('Dutch') + ")"
-            content = news.nl_content
+            title = self.nl_title + " (" + _('Dutch') + ")"
+            content = self.nl_content
         elif en_available:
-            title = news.en_title + " (" + _('English') + ")"
-            content = news.en_content
+            title = self.en_title + " (" + _('English') + ")"
+            content = self.en_content
         else:
             title = 'N/A'
             content = 'N/A'
@@ -92,4 +92,4 @@ def set_news_locale(news, context):
     displayed language.
     """
 
-    news.title, news.content = news.get_localized_title_content(news)
+    news.title, news.content = news.get_localized_title_content()

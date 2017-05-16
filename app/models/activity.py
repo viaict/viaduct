@@ -145,24 +145,24 @@ class Activity(db.Model, BaseEntity):
 
         return _('still') + ' %s' % (self.get_timedelta_to_end())
 
-    def get_localized_name_desc(activity, locale=None):
+    def get_localized_name_desc(self, locale=None):
         if not locale:
             locale = get_locale()
 
-        nl_available = activity.nl_name and activity.nl_description
-        en_available = activity.en_name and activity.en_description
+        nl_available = self.nl_name and self.nl_description
+        en_available = self.en_name and self.en_description
         if locale == 'nl' and nl_available:
-            name = activity.nl_name
-            description = activity.nl_description
+            name = self.nl_name
+            description = self.nl_description
         elif locale == 'en' and en_available:
-            name = activity.en_name
-            description = activity.en_description
+            name = self.en_name
+            description = self.en_description
         elif nl_available:
-            name = activity.nl_name + " (" + _('Dutch') + ")"
-            description = activity.nl_description
+            name = self.nl_name + " (" + _('Dutch') + ")"
+            description = self.nl_description
         elif en_available:
-            name = activity.en_name + " (" + _('English') + ")"
-            description = activity.en_description
+            name = self.en_name + " (" + _('English') + ")"
+            description = self.en_description
         else:
             name = 'N/A'
             description = 'N/A'
@@ -185,4 +185,4 @@ def set_activity_locale(activity, context):
     """
 
     activity.name, activity.description = \
-        activity.get_localized_name_desc(activity)
+        activity.get_localized_name_desc()
