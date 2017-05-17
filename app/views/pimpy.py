@@ -245,9 +245,10 @@ def add_minute(group_id='all'):
     if group_id != 'all' and not current_user.member_of_group(group_id):
         return abort(403)
 
-    if group_id == '':
-        group_id = 'all'
-    group = Group.query.filter(Group.id == group_id).first()
+    if group_id == 'all':
+        group = Group.query.filter(Group.name == group_id).first()
+    else:
+        group = Group.query.filter(Group.id == group_id).first()
 
     form = AddMinuteForm(request.form, default=group_id)
     if request.method == 'POST':
