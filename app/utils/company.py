@@ -13,6 +13,7 @@ class CompanyAPI:
         companies = Company.query.filter(and_(Company.contract_start_date <
                                               datetime.utcnow(),
                                               Company.contract_end_date >
-                                              datetime.utcnow())).all()
+                                              datetime.utcnow(),
+                                              Company.logo_path != '#')).all()
         random.shuffle(companies)
         return companies
