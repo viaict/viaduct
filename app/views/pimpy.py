@@ -245,13 +245,10 @@ def add_minute(group_id='all'):
     if group_id != 'all' and not current_user.member_of_group(group_id):
         return abort(403)
 
-    if group_id == 'all':
-        group = Group.query.filter(Group.name == group_id).first()
-    else:
-        group = Group.query.filter(Group.id == group_id).first()
-
     form = AddMinuteForm(request.form, default=group_id)
     if request.method == 'POST':
+
+        group = Group.query.get(form.group.data)
 
         # validate still does not work
         message = ""
@@ -285,7 +282,6 @@ def add_minute(group_id='all'):
                 #     }
                 #     copernica.add_subprofile(
                 #         copernica.SUBPROFILE_TASK, user.id, copernica_data)
-
                 for done in dones:
                     if done.group_id == group.id and done.update_status(4):
                         valid_dones.append(done)
@@ -329,6 +325,5 @@ def add_minute(group_id='all'):
 
     form.load_groups(current_user.groups)
 
-    return render_template('pimpy/add_minute.htm', group=group,
-                           group_id=group_id, type='minutes', form=form,
-                           title='PimPy')
+    return render_template('pimpy/add_minute.htm', group_id=group_id,
+                           type='minutes', form=form, title='PimPy')
