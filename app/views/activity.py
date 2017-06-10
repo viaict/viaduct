@@ -34,9 +34,6 @@ PICTURE_DIR = 'app/static/activity_pictures/'
 @blueprint.route('/list/<string:archive>/<int:page_nr>/',
                  methods=['GET', 'POST'])
 def view(archive=None, page_nr=1):
-    if not ModuleAPI.can_read('activity'):
-        return abort(403)
-
     if archive == "archive":
         activities = Activity.query.filter(
             Activity.end_time < datetime.datetime.today()).order_by(

@@ -48,9 +48,6 @@ def get_page(path=''):
 
         return abort(404)
 
-    if not PageAPI.can_read(page):
-        return abort(403)
-
     revision = page.get_latest_revision()
 
     if not revision:
@@ -212,7 +209,6 @@ def delete(path):
     if not page:
         flash(_('The page you tried to delete does not exist.'), 'danger')
         return redirect(url_for('page.get_page', path=path))
-        abort(404)
     rev = page.get_latest_revision()
 
     class DeleteForm(Form):

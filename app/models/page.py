@@ -198,14 +198,6 @@ class PagePermission(db.Model):
         self.page_id = page_id
 
     @staticmethod
-    @cache.memoize(timeout=10)
-    def get_groups(user):
-        if not user or not user.is_active:
-            return [Group.query.filter(Group.name == 'all').first()]
-        else:
-            return user.groups
-
-    @staticmethod
     def get_user_rights(user, page):
         if not page:
             return 0

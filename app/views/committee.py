@@ -112,14 +112,10 @@ def edit_committee(committee=''):
             # Sort these navigation entries.
             NavigationAPI.alphabeticalize(root_entry)
 
-            # Assign read rights to all, and edit rights to BC.
-            all_group = Group.query.filter(Group.name == 'all').first()
+            # Edit the rights for BC
             bc_group = Group.query.filter(Group.name == 'BC').first()
-
-            all_entry = PagePermission(all_group.id, page.id, 1)
             bc_entry = PagePermission(bc_group.id, page.id, 2)
 
-            db.session.add(all_entry)
             db.session.add(bc_entry)
             db.session.commit()
         else:
