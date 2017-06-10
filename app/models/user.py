@@ -24,14 +24,13 @@ class AnonymousUser(AnonymousUserMixin):
 
     id = 0
     has_paid = False
-
-    @property
-    @cache.cached(timeout=60)
-    def groups(self):
-        return Group.query.filter(Group.name == 'all').all()
+    groups = []
 
 
 class User(db.Model, UserMixin, BaseEntity):
+    """
+    The groups property is backreferenced from group.py
+    """
     __tablename__ = 'user'
 
     prints = ('id', 'email', 'password', 'first_name', 'last_name',

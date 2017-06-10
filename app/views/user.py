@@ -169,9 +169,6 @@ def edit(user_id=None):
         if not user_id:
             user = User('_')
 
-        group = Group.query.filter(Group.name == 'all').first()
-        group.add_user(user)
-
         try:
             user.update_email(form.email.data.strip())
         except HttpError as e:
@@ -206,7 +203,6 @@ def edit(user_id=None):
             user.password = bcrypt.hashpw(form.password.data, bcrypt.gensalt())
 
         db.session.add(user)
-        db.session.add(group)
         db.session.commit()
 
         avatar = request.files['avatar']
@@ -259,10 +255,6 @@ def sign_up():
         db.session.add(user)
         db.session.commit()
 
-        group = Group.query.filter(Group.name == 'all').first()
-        group.add_user(user)
-
-        db.session.add(group)
         db.session.commit()
 
         copernica.update_user(user, subscribe=True)

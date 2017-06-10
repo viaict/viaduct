@@ -20,9 +20,6 @@ FILE_FOLDER = app.config['FILE_DIR']
 @blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page_nr>/<search>/', methods=['GET', 'POST'])
 def list(page_nr=1, search=None):
-    if not ModuleAPI.can_read('vacancy'):
-        return abort(403)
-
     # Order the vacancies in such a way that vacancies that are new
     # or almost expired, end up on top.
     order = func.abs(
