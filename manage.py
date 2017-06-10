@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from app import app, db, version, js_glue
 from app.models import User, Group, Education, GroupPermission, NavigationEntry
 
@@ -462,7 +463,7 @@ def _administrators_action(user_search, remove):
             return
 
     print("Found user: {} (ID {})".format(user_found.name, user_found.id))
-    if admin_group in user_found.groups.all():
+    if admin_group in user_found.groups:
         if not remove:
             print("User is already in administrators group")
             return
