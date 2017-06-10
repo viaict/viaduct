@@ -31,7 +31,7 @@ class TransactionCallbackMixin(BaseEntity):
     def transaction_id(self):
         return db.Column(db.Integer, db.ForeignKey('transaction.id'))
 
-    def payment_complete():
+    def payment_complete(self):
         """Implement in subclasses that handle wares."""
         raise NotImplementedError()
 

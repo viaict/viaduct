@@ -261,10 +261,15 @@ def create_mollie_transaction(result_id):
             render_template('mollie/success.htm', message=msg)
     else:
         payment, msg = mollie.check_transaction(transaction)
-        if payment.is_open():
+        if not payment:
+            return render_template('mollie/fail.htm', message=msg)
+        elif payment.is_open():
             return redirect(payment.get_payment_url())
+        elif payment.is_paid():
+            # TODO: redirect back to activity
+            return render_template('mollie/success.htm', message=msg)
         else:
-            render_template('mollie/success.htm', message=msg)
+            return render_template('mollie/success.htm', message=msg)
 
 
 @blueprint.route('/export/', methods=['GET'])
