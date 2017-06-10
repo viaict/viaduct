@@ -1370,6 +1370,9 @@ msgstr "Geldig lidmaatschap is vereist voor de tentamenbank"
 msgid "Valid membership is required for the summary module"
 msgstr "Geldig lidmaatschap is vereist voor de samenvattingsbank"
 
+msgid "Valid membership is required to read this news article"
+msgstr "Geldig lidmaatschap is vereist om dit nieuwsartikel te kunnen lezen"
+
 msgid "Vancancies"
 msgstr "Vacatures"
 

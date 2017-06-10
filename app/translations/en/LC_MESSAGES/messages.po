@@ -1339,6 +1339,9 @@ msgstr ""
 msgid "Valid membership is required for the summary module"
 msgstr ""
 
+msgid "Valid membership is required to read this news article"
+msgstr ""
+
 msgid "Vancancies"
 msgstr ""
 

@@ -3,6 +3,7 @@ from sqlalchemy import event
 
 from flask import url_for
 from flask_babel import lazy_gettext as _
+from flask_login import current_user
 
 from app import db, get_locale
 from app.models import BaseEntity
@@ -18,6 +19,7 @@ class News(db.Model, BaseEntity):
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User', backref=db.backref('news', lazy='dynamic'))
+    needs_paid = db.Column(db.Boolean, default=False)
 
     publish_date = db.Column(db.Date)
     archive_date = db.Column(db.Date)
@@ -39,8 +41,14 @@ class News(db.Model, BaseEntity):
         else:
             self.publish_date = date.today()
 
+    def can_read(self, user=current_user):
+        return not self.needs_paid or user.has_paid
+
     def get_short_content(self, characters):
         """Get a shortened version of the total post."""
+        if not self.can_read():
+            return _('Valid membership is required to read this news article')
+
         if len(self.content) > characters:
             short_content = self.content[:characters].strip()
 

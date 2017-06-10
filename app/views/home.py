@@ -1,6 +1,7 @@
 from datetime import date, datetime
 from flask import Blueprint, render_template, abort
 from flask_babel import _
+from flask_login import current_user
 from sqlalchemy import desc
 
 from app import db, cache
@@ -59,12 +60,12 @@ def home():
             'contact']
 
     revisions = get_revisions(data)
-    news = News.query.filter(
-        db.and_(
-            db.or_(
-                News.archive_date >= date.today(), News.archive_date == None),
-            News.publish_date <= date.today()))\
-        .order_by(desc(News.publish_date)).limit(8).all()  # noqa
+    news = News.query.filter(News.publish_date <= date.today(),
+                             db.or_(News.archive_date >= date.today(),
+                                    News.archive_date == None),  # noqa
+                             db.or_(current_user.has_paid,
+                                    db.not_(News.needs_paid)))\
+                     .order_by(desc(News.publish_date)).limit(8).all()
 
     return render_template('home/home.htm', revisions=revisions,
                            title='Homepage', news=news)

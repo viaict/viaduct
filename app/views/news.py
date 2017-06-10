@@ -22,12 +22,12 @@ def list(page_nr=1):
     if not ModuleAPI.can_read('news'):
         return abort(403)
 
-    items = News.query.filter(
-        db.and_(
-            db.or_(
-                News.archive_date >= date.today(), News.archive_date == None),
-            News.publish_date <= date.today()))\
-        .order_by(desc(News.publish_date))  # noqa
+    items = News.query.filter(News.publish_date <= date.today(),
+                              db.or_(News.archive_date >= date.today(),
+                                     News.archive_date == None),  # noqa
+                              db.or_(current_user.has_paid,
+                                     db.not_(News.needs_paid)))\
+                      .order_by(desc(News.publish_date))
 
     return render_template('news/list.htm',
                            items=items.paginate(page_nr, 10, False),
@@ -104,6 +104,8 @@ def view(news_id=None):
         return redirect(url_for('news.list'))
 
     news = News.query.get_or_404(news_id)
+    if not news.can_read():
+        return abort(403)
 
     return render_template('news/view_single.htm', news=news)
 
@@ -132,7 +134,11 @@ def delete(news_id=None):
 def rss(locale='en'):
     name = 'via nieuws' if locale == 'nl' else 'via news'
     feed = AtomFeed(name, feed_url=request.url, url=request.url_root)
-    items = News.query.order_by(News.publish_date.desc()).limit(20)
+    items = News.query.filter(News.publish_date <= date.today(),
+                              db.or_(News.archive_date >= date.today(),
+                                     News.archive_date == None),  # noqa
+                              db.or_(db.not_(News.needs_paid)))\
+                      .order_by(News.publish_date.desc()).limit(20)
 
     for item in items:
         published = datetime.combine(item.publish_date, datetime.min.time())
