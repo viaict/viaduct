@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-05-14 13:50+0200\n"
+"POT-Creation-Date: 2017-06-10 13:57+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -378,6 +378,9 @@ msgstr "Uitgeschakeld"
 msgid "Disclaimer"
 msgstr "Disclaimer"
 
+msgid "Displayed price"
+msgstr "Weergegeven prijs"
+
 msgid "Do not filter HTML tags"
 msgstr "Geen HTML tags filteren"
 
@@ -638,6 +641,9 @@ msgstr "Ik ben klaar met studeren"
 
 msgid "ID"
 msgstr "ID"
+
+msgid "IDeal price"
+msgstr "IDeal prijs"
 
 msgid ""
 "If you think you do have the rights to view this page, please send an "
@@ -985,6 +991,9 @@ msgstr "Publiceer datum"
 
 msgid "Published at"
 msgstr "Gepubliceerd op"
+
+msgid "RSS feed"
+msgstr ""
 
 msgid "Rank"
 msgstr "Rang"
