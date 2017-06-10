@@ -131,7 +131,7 @@ def edit_page(path=''):
     else:
         form = PageForm()
 
-    groups = Group.query.all()
+    groups = Group.query.order_by(Group.name).all()
 
     # on page submit (edit or create)
     if form.validate_on_submit():
