@@ -1,9 +1,7 @@
 from flask_login import current_user
-from app.models.page import Page, PageRevision, PagePermission
+from app.models.page import Page, PagePermission
 
 from app import db
-
-from flask import render_template
 
 
 class PageAPI:
@@ -17,27 +15,6 @@ class PageAPI:
         db.session.commit()
 
         return True
-
-    @staticmethod
-    def get_footer():
-        footer = Page.query.filter(Page.path == 'footer').first()
-
-        if not footer:
-            footer = Page('footer')
-
-        revision = footer.get_latest_revision()
-
-        if revision:
-            exists = True
-        else:
-            title = 'Footer'
-            content = '<strong>No footer found</strong>'
-            revision = PageRevision(footer, title, title, '', current_user,
-                                    content, content)
-            exists = False
-
-        return render_template('page/get_footer.htm', footer_revision=revision,
-                               footer=footer, exists=exists)
 
     @staticmethod
     def can_read(page):
