@@ -19,7 +19,7 @@ class News(db.Model, BaseEntity):
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User', backref=db.backref('news', lazy='dynamic'))
-    needs_paid = db.Column(db.Boolean, default=False)
+    needs_paid = db.Column(db.Boolean, default=False, nullable=False)
 
     publish_date = db.Column(db.Date)
     archive_date = db.Column(db.Date)
