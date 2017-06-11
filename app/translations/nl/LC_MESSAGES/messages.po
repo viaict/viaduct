@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-06-10 17:01+0200\n"
+"POT-Creation-Date: 2017-08-03 21:41+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
+"Language: nl\n"
 "Language-Team: nl <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 1.3\n"
+"Generated-By: Babel 2.3.4\n"
 
 #, python-format
 msgid "%(email)s is unknown to our system."
@@ -26,6 +27,9 @@ msgstr "Er bestaat al een gebruiker met dat emailadres."
 
 msgid "A user with this e-mail address already exists"
 msgstr "Er bestaat al een gebruiker met dat emailadres"
+
+msgid "ALVs"
+msgstr ""
 
 #, python-format
 msgid "API call failed: %s"
@@ -166,6 +170,9 @@ msgstr "Kan het bestand niet verwijderen, want het bestand bestaat niet"
 
 msgid "Captain's log succesfully ended."
 msgstr "Captain's log afsluiten gelukt."
+
+msgid "Chairman"
+msgstr ""
 
 msgid "Change password"
 msgstr "Verander wachtwoord"
@@ -360,6 +367,9 @@ msgstr "Verwijderen"
 msgid "Delete activity"
 msgstr "Activiteit verwijderen"
 
+msgid "Delete alv"
+msgstr ""
+
 msgid "Delete avatar"
 msgstr "Verwijder avatar"
 
@@ -431,6 +441,9 @@ msgstr "E-mailadres"
 
 msgid "Edit"
 msgstr "Aanpassen"
+
+msgid "Edit alv"
+msgstr ""
 
 msgid "Edit course"
 msgstr "Vak aanpassen"
@@ -776,6 +789,9 @@ msgstr "Naam is vereist"
 msgid "Navigation entry"
 msgstr "Menu item"
 
+msgid "New ALV"
+msgstr ""
+
 msgid "New activity"
 msgstr "Nieuwe activiteit"
 
@@ -875,6 +891,9 @@ msgstr "Geen wachtwoord opgegeven"
 msgid "No permissions to read contacts"
 msgstr "Geen rechten om contacten te bekijken."
 
+msgid "No presidium"
+msgstr ""
+
 msgid "No starting year of study submitted"
 msgstr "Geen beginjaar studie opgegeven"
 
@@ -907,6 +926,9 @@ msgstr "Niet gevonden!"
 
 msgid "Optional data"
 msgstr "Optionele gegevens"
+
+msgid "Other"
+msgstr ""
 
 msgid "Page"
 msgstr "Pagina"
@@ -958,6 +980,18 @@ msgstr "Postbus"
 
 msgid "Postoffice Box"
 msgstr "Postbus"
+
+msgid "Presidium"
+msgstr ""
+
+msgid "Presidium chairman"
+msgstr ""
+
+msgid "Presidium other"
+msgstr ""
+
+msgid "Presidium secretary"
+msgstr ""
 
 msgid "Previous"
 msgstr "Vorige"
@@ -1060,6 +1094,9 @@ msgstr ""
 
 msgid "Search for title, contact or company"
 msgstr "Zoeken op titel, contact of bedrijf"
+
+msgid "Secretary"
+msgstr ""
 
 msgid "Select a time and date by clicking on the clock"
 msgstr "Selecteer een tijd en datum door op de klok te klikken"
@@ -1208,8 +1245,8 @@ msgid ""
 "The activity has reached its maximum number of registrations. You will be"
 " placed on the reserves list."
 msgstr ""
-"De activiteit heeft het maximum aantal inschrijvingen bereikt. Je bent "
-"geplaatst op de reserve lijst."
+"De activiteit heeft het maximum aantal inschrijvingen bereikt. Je zal op "
+"de reserve lijst geplaatst worden."
 
 msgid ""
 "The answers provided here are not the official answers and are not "
@@ -1771,3 +1808,4 @@ msgstr ""
 
 #~ msgid "File created successfully"
 #~ msgstr "Bestand succesvol opgeslagen."
+

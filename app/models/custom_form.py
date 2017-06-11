@@ -18,6 +18,12 @@ def export_form_data(r):
 
 
 class CustomForm(db.Model, BaseEntity):
+    """Custom form model.
+
+    A custom form is a form on which users can register themselves
+    (see CustomFormResult) and can be bound to activities.
+    """
+
     __tablename__ = 'custom_form'
 
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -171,6 +177,11 @@ class CustomForm(db.Model, BaseEntity):
 
 
 class CustomFormResult(db.Model, BaseEntity):
+    """Custom form results model.
+
+    The custom form results are the registrations of users on custom forms.
+    """
+
     __tablename__ = 'custom_form_result'
 
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
