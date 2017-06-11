@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-07-30 21:45+0200\n"
+"POT-Creation-Date: 2017-08-15 14:26+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -29,6 +29,9 @@ msgid "A user with this e-mail address already exist."
 msgstr ""
 
 msgid "A user with this e-mail address already exists"
+msgstr ""
+
+msgid "ALVs"
 msgstr ""
 
 #, python-format
@@ -166,6 +169,9 @@ msgstr ""
 
 msgid "Captain's log succesfully ended."
 msgstr "."
+
+msgid "Chairman"
+msgstr ""
 
 msgid "Change password"
 msgstr ""
@@ -360,6 +366,9 @@ msgstr ""
 msgid "Delete activity"
 msgstr ""
 
+msgid "Delete alv"
+msgstr ""
+
 msgid "Delete avatar"
 msgstr ""
 
@@ -430,6 +439,9 @@ msgid "E-mail adress"
 msgstr ""
 
 msgid "Edit"
+msgstr ""
+
+msgid "Edit alv"
 msgstr ""
 
 msgid "Edit course"
@@ -771,6 +783,9 @@ msgstr ""
 msgid "Navigation entry"
 msgstr ""
 
+msgid "New ALV"
+msgstr ""
+
 msgid "New activity"
 msgstr ""
 
@@ -870,6 +885,9 @@ msgstr ""
 msgid "No permissions to read contacts"
 msgstr ""
 
+msgid "No presidium"
+msgstr ""
+
 msgid "No starting year of study submitted"
 msgstr ""
 
@@ -900,7 +918,13 @@ msgstr ""
 msgid "Not found!"
 msgstr ""
 
+msgid "Open voor nieuwe leden"
+msgstr ""
+
 msgid "Optional data"
+msgstr ""
+
+msgid "Other"
 msgstr ""
 
 msgid "Page"
@@ -952,6 +976,18 @@ msgid "Post address"
 msgstr ""
 
 msgid "Postoffice Box"
+msgstr ""
+
+msgid "Presidium"
+msgstr ""
+
+msgid "Presidium chairman"
+msgstr ""
+
+msgid "Presidium other"
+msgstr ""
+
+msgid "Presidium secretary"
 msgstr ""
 
 msgid "Previous"
@@ -1057,6 +1093,9 @@ msgid "Search Engine Optimization"
 msgstr ""
 
 msgid "Search for title, contact or company"
+msgstr ""
+
+msgid "Secretary"
 msgstr ""
 
 msgid "Select a time and date by clicking on the clock"

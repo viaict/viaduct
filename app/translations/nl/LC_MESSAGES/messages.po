@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-07-30 21:45+0200\n"
+"POT-Creation-Date: 2017-08-15 14:26+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -30,6 +30,9 @@ msgstr "Er bestaat al een gebruiker met dat emailadres."
 
 msgid "A user with this e-mail address already exists"
 msgstr "Er bestaat al een gebruiker met dat emailadres"
+
+msgid "ALVs"
+msgstr ""
 
 #, python-format
 msgid "API call failed: %s"
@@ -170,6 +173,9 @@ msgstr "Kan het bestand niet verwijderen, want het bestand bestaat niet"
 
 msgid "Captain's log succesfully ended."
 msgstr "Captain's log afsluiten gelukt."
+
+msgid "Chairman"
+msgstr ""
 
 msgid "Change password"
 msgstr "Verander wachtwoord"
@@ -364,6 +370,9 @@ msgstr "Verwijderen"
 msgid "Delete activity"
 msgstr "Activiteit verwijderen"
 
+msgid "Delete alv"
+msgstr ""
+
 msgid "Delete avatar"
 msgstr "Verwijder avatar"
 
@@ -435,6 +444,9 @@ msgstr "E-mailadres"
 
 msgid "Edit"
 msgstr "Aanpassen"
+
+msgid "Edit alv"
+msgstr ""
 
 msgid "Edit course"
 msgstr "Vak aanpassen"
@@ -780,6 +792,9 @@ msgstr "Naam is vereist"
 msgid "Navigation entry"
 msgstr "Menu item"
 
+msgid "New ALV"
+msgstr ""
+
 msgid "New activity"
 msgstr "Nieuwe activiteit"
 
@@ -879,6 +894,9 @@ msgstr "Geen wachtwoord opgegeven"
 msgid "No permissions to read contacts"
 msgstr "Geen rechten om contacten te bekijken."
 
+msgid "No presidium"
+msgstr ""
+
 msgid "No starting year of study submitted"
 msgstr "Geen beginjaar studie opgegeven"
 
@@ -909,8 +927,14 @@ msgstr "Geen valide e-mailadres."
 msgid "Not found!"
 msgstr "Niet gevonden!"
 
+msgid "Open voor nieuwe leden"
+msgstr ""
+
 msgid "Optional data"
 msgstr "Optionele gegevens"
+
+msgid "Other"
+msgstr ""
 
 msgid "Page"
 msgstr "Pagina"
@@ -962,6 +986,18 @@ msgstr "Postbus"
 
 msgid "Postoffice Box"
 msgstr "Postbus"
+
+msgid "Presidium"
+msgstr ""
+
+msgid "Presidium chairman"
+msgstr ""
+
+msgid "Presidium other"
+msgstr ""
+
+msgid "Presidium secretary"
+msgstr ""
 
 msgid "Previous"
 msgstr "Vorige"
@@ -1067,6 +1103,9 @@ msgstr ""
 
 msgid "Search for title, contact or company"
 msgstr "Zoeken op titel, contact of bedrijf"
+
+msgid "Secretary"
+msgstr ""
 
 msgid "Select a time and date by clicking on the clock"
 msgstr "Selecteer een tijd en datum door op de klok te klikken"
