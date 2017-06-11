@@ -1,8 +1,8 @@
+{% extends "content.htm" %}
+
 {% from "macros/maps.htm" import render_map %}
 {% from "macros/custom_form.htm" import user_fields %}
 {% from "macros/form.htm" import render_field, render_field_disabled, render_checkbox, render_submit %}
-
-{% extends "content.htm" %}
 
 {% block includes %}
     {% if activity.form_data %}
@@ -54,7 +54,7 @@
         {% if activity.form %}
             <div class="accordion-group">
                 <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="collapse"
+                    <a class="accordion-toggle{% if not auto_open_register %} collapsed{% endif %}" data-toggle="collapse"
                         data-parent="#acc" href="#collapseForm">
                         <i class="glyphicon glyphicon-star"></i>
                         {{_('Register for this activity')}}
@@ -62,13 +62,12 @@
                     </a>
                 </div>
 
-                <div id="collapseForm" class="accordion-body collapse">
+                <div id="collapseForm" class="accordion-body collapse{% if auto_open_register %} in{% endif %}">
                     <div class="accordion-inner">
                         {% if current_user.is_authenticated %}
                             <script>
                                 var msg_success = '{{ activity.form.msg_success }}';
                             </script>
-
 
                             <form id="custom"
                                 action="{{ url_for('custom_form.submit', form_id=activity.form.id) }}"
@@ -114,7 +113,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    {% if activity.form.terms: %}
+                                    {% if activity.form.terms %}
                                         <div class="col-md-7">
                                             <label>{{_('Terms')}}:</label>
                                             {{ activity.form.terms }}

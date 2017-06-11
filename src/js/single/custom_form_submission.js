@@ -29,7 +29,10 @@ $(document).ready(function() {
 
     var msg_success = "Je hebt het formulier succesvol ingevuld";
 
-
+    // TODO: use ajax maybe only when editing the form, the texts below
+    // aren't translated and state-change things like the pay button
+    // only show up after a reload.
+    // We now reload on success and reserve.
     $("form#custom").submit(function() {
         var custom_form = $(this);
         var validated   = true;
@@ -53,14 +56,17 @@ $(document).ready(function() {
                 custom_form.attr('action'), args,
 
                 function(result) {
-                    if (result == "success")
+                    if (result === 'success') {
                         utils.flash.new(msg_success, "success");
-                    else if (result == "edit")
+                        location.reload();
+                    } else if (result === "edit") {
                         utils.flash.new("Je formulier is aangepast", "warning");
-                    else if (result == 'reserve')
+                    } else if (result === 'reserve') {
                         utils.flash.new('Je staat op de reserve lijst', 'success');
-                    else
+                        location.reload();
+                    } else {
                         utils.flash.new("Er is iets misgegaan bij het invullen :(", "danger");
+                    }
                 }
             ).always(function() {
                 utils.form.submit_button(custom_form).button('reset');
