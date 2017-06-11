@@ -52,8 +52,9 @@ class TransactionActivity(db.Model, TransactionCallbackMixin):
 
     custom_form_result = db.relationship('CustomFormResult')
     custom_form_result_id = db.Column(db.Integer(),
-                                      db.ForeignKey('custom_form_result.id'),
-                                      nullable=False)
+                                      db.ForeignKey('custom_form_result.id',
+                                                    ondelete='SET NULL'),
+                                      nullable=True)
 
     transaction = db.relationship("Transaction",
                                   backref=db.backref('callback_activity'))
