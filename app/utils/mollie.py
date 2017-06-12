@@ -23,7 +23,6 @@ else:
 
 def create_transaction(amount, description, user=current_user,
                        callbacks=[]):
-
     # Only create a new transaction if there is a related form result
     if not isinstance(callbacks, list):
         callbacks = [callbacks]
@@ -84,9 +83,9 @@ def check_transaction(transaction):
             return payment, _('Your payment has not been completed.')
         else:
             status = payment['status']
-            return False, _('Your payment has status: %s' % status)
+            return None, _('Your payment has status: %s' % status)
     except MollieError as e:
-        return False, _('API call failed: %s' % e.message)
+        return None, _('API call failed: %s' % e.message)
 
 
 def get_payments(page=0):

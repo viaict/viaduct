@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-05-14 13:50+0200\n"
+"POT-Creation-Date: 2017-06-10 13:57+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -108,10 +108,10 @@ msgid "Api call failed: %s"
 msgstr "API call mislukt: %s"
 
 msgid "Archive date"
-msgstr "Archiveer datum"
+msgstr "Archiveerdatum"
 
 msgid "Archive date needs to be after the publish date."
-msgstr "Archiveer datum moet na de publiceer datum zijn."
+msgstr "Archiveerdatum moet na de publiceer datum zijn."
 
 msgid "Are you sure you want to delete this course?"
 msgstr "Weet je zeker dat je dit vak wilt verwijderen?"
@@ -378,6 +378,9 @@ msgstr "Uitgeschakeld"
 msgid "Disclaimer"
 msgstr "Disclaimer"
 
+msgid "Displayed price"
+msgstr "Weergegeven prijs"
+
 msgid "Do not filter HTML tags"
 msgstr "Geen HTML tags filteren"
 
@@ -638,6 +641,9 @@ msgstr "Ik ben klaar met studeren"
 
 msgid "ID"
 msgstr "ID"
+
+msgid "IDeal price"
+msgstr "IDeal prijs"
 
 msgid ""
 "If you think you do have the rights to view this page, please send an "
@@ -981,10 +987,13 @@ msgid "Profile succesfully updated"
 msgstr "Profiel bewerken gelukt"
 
 msgid "Publish date"
-msgstr "Publiceer datum"
+msgstr "Publiceerdatum"
 
 msgid "Published at"
 msgstr "Gepubliceerd op"
+
+msgid "RSS feed"
+msgstr ""
 
 msgid "Rank"
 msgstr "Rang"
@@ -1360,6 +1369,9 @@ msgstr "Geldig lidmaatschap is vereist voor de tentamenbank"
 
 msgid "Valid membership is required for the summary module"
 msgstr "Geldig lidmaatschap is vereist voor de samenvattingsbank"
+
+msgid "Valid membership is required to read this news article"
+msgstr "Geldig lidmaatschap is vereist om dit nieuwsartikel te kunnen lezen"
 
 msgid "Vancancies"
 msgstr "Vacatures"

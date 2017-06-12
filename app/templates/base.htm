@@ -111,7 +111,7 @@
             {% block page %}
             {% endblock %}
             {%- if not __fullscreen_mode -%}
-            {{ PageAPI.get_footer()|safe }}
+                {% include 'page/get_footer.htm' %}
             {%- endif -%}
         </div>
         <!-- Start guide modal -->

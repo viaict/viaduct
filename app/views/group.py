@@ -283,11 +283,11 @@ def edit_permissions(group_id, page_nr=1):
         return redirect(url_for('group.edit_permissions', group_id=group_id,
                                 page_nr=page_nr))
 
-        # add the permissions as drop down boxes
-        for permission in permissions:
-            data = {}
-            data['select'] = permission.permission
-            form.permissions.append_entry(data)
+    # add the permissions as drop down boxes
+    for permission in permissions:
+        data = {}
+        data['select'] = permission.permission
+        form.permissions.append_entry(data)
 
     return render_template('group/edit_permissions.htm', form=form,
                            can_write=ModuleAPI.can_write('group'),

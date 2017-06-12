@@ -1,6 +1,6 @@
 from flask_babel import lazy_gettext as _
 from flask_wtf import Form
-from wtforms import TextField, TextAreaField, DateField
+from wtforms import TextField, TextAreaField, DateField, BooleanField
 from wtforms.validators import InputRequired, Optional
 
 from datetime import date, timedelta
@@ -18,6 +18,8 @@ class NewsForm(Form):
         FieldTab(_('Dutch details'), ['nl_title', 'nl_content']),
         FieldTab(_('English details'), ['en_title', 'en_content'])
     ])
+
+    needs_paid = BooleanField(_('Visible for members only'))
 
     publish_date = DateField(
         _('Publish date'), default=str(date.today()), validators=[

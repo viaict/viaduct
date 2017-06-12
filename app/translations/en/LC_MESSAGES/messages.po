@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-05-14 13:50+0200\n"
+"POT-Creation-Date: 2017-06-10 13:57+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -374,6 +374,9 @@ msgstr ""
 msgid "Disclaimer"
 msgstr ""
 
+msgid "Displayed price"
+msgstr ""
+
 msgid "Do not filter HTML tags"
 msgstr ""
 
@@ -633,6 +636,9 @@ msgid "I have finished studying"
 msgstr ""
 
 msgid "ID"
+msgstr ""
+
+msgid "IDeal price"
 msgstr ""
 
 msgid ""
@@ -975,6 +981,9 @@ msgid "Publish date"
 msgstr ""
 
 msgid "Published at"
+msgstr ""
+
+msgid "RSS feed"
 msgstr ""
 
 msgid "Rank"
@@ -1328,6 +1337,9 @@ msgid "Valid membership is required for the examination module"
 msgstr ""
 
 msgid "Valid membership is required for the summary module"
+msgstr ""
+
+msgid "Valid membership is required to read this news article"
 msgstr ""
 
 msgid "Vancancies"

@@ -33,7 +33,7 @@ class CreateForm(Form):
         _('Location'), default='Studievereniging VIA, Science Park 904,\
         1098 XH Amsterdam, Nederland')
 
-    price = StringField(_('Price'), default=0)
+    price = StringField(_('Displayed price'), default=0)
     picture = FileField(_('Image'))
 
     # Override validate from the Form class
