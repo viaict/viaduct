@@ -20,7 +20,7 @@
         <br />Email: {{ revision.group.maillist }}@svia.nl
     </p>
     <hr />
-    {{ revision.description | strip_tags('script', 'link', 'style', 'video', 'audio') | markdown }}
+    {{ revision.description | strip_tags('script', 'link', 'style', 'video', 'audio') | strip_attrs('style', 'onclick', 'onload') | markdown }}
     <hr />
     <p>
         {{_('Committee members')}}:
