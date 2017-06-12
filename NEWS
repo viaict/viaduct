@@ -1,5 +1,6 @@
 10-06-2017 v2.8.1.0:
 * Added: Visible for members only button for news.
+* Fixed: Expired mollie payments callback.
 * Change: Sorted the groups on page edit page.
 
 15-05-2017 v2.8.0.0:
