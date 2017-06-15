@@ -1,0 +1,19 @@
+{% from "macros/form.htm" import render_form %}
+{% extends "content.htm" %}
+
+{% block content %}
+{% if newsletter %}
+<h1>{{ _('Edit newsletter') }}</h1>
+{% else %}
+<h1>{{ _('Create newsletter') }}</h1>
+{% endif %}
+
+{{ render_form(form) }}
+
+<script>
+    $(function() {
+        $('select').select2();
+    });
+</script>
+
+{% endblock %}

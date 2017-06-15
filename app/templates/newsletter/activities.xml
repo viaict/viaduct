@@ -1,0 +1,24 @@
+<items>
+    {% for item in items %}
+    {% set nl_title, nl_content = item.get_localized_name_desc('nl') %}
+    {% set en_title, en_content = item.get_localized_name_desc('en') %}
+    <item>
+        <id>{{ item.id }}</id>
+        <sdate>{{ item.start_time.date() }}</sdate>
+        <nl>
+            <title>{{ nl_title }}</title>
+            <desc>
+                {{ nl_content }}
+            </desc>
+            <date>{{ item.start_time }}</date>
+        </nl>
+        <en>
+            <title>{{ en_title }}</title>
+            <desc>
+                {{ en_content }}
+            </desc>
+            <date>{{ item.start_time }}</date>
+        </en>
+    </item>
+    {% endfor %}
+</items>

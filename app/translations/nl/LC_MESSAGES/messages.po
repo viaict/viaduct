@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-06-10 13:57+0200\n"
+"POT-Creation-Date: 2017-06-15 22:31+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -327,6 +327,9 @@ msgstr "Formulier aanmaken"
 msgid "Create news item"
 msgstr "Nieuwsbericht aanmaken"
 
+msgid "Create newsletter"
+msgstr "Nieuwsbrief aanmaken"
+
 msgid "Create user"
 msgstr "Gebruiker aanmaken"
 
@@ -347,6 +350,9 @@ msgstr "Datum"
 
 msgid "Date unknown"
 msgstr "Datum onbekend"
+
+msgid "Datum"
+msgstr ""
 
 msgid "Deeltijd"
 msgstr "Deeltijd"
@@ -440,6 +446,9 @@ msgstr "Tentamen aanpassen"
 
 msgid "Edit news item"
 msgstr "Nieuwsbericht aanpassen"
+
+msgid "Edit newsletter"
+msgstr "Nieuwsbrief aanpassen"
 
 msgid "Edit page"
 msgstr "Pagina aanpassen"
@@ -814,6 +823,15 @@ msgstr "Nieuwsbericht opgeslagen"
 
 msgid "News item succesfully deleted"
 msgstr "Nieuwsbericht succesvol verwijderd"
+
+msgid "News items"
+msgstr "Nieuwsberichten"
+
+msgid "Newsletter saved"
+msgstr "Nieuwsbrief opgeslagen"
+
+msgid "Newsletters"
+msgstr "Nieuwsbrieven"
 
 msgid "Next"
 msgstr "Volgende"
@@ -1525,6 +1543,9 @@ msgstr "over"
 msgid "is required"
 msgstr "is vereist"
 
+msgid "more"
+msgstr "meer"
+
 msgid "news item"
 msgstr "nieuwsbericht"
 
@@ -1765,4 +1786,7 @@ msgstr ""
 
 #~ msgid "Pay (+€0,35 transaction costs)"
 #~ msgstr "Betalen (+€0,35 transactiekosten)"
+
+#~ msgid "Week number"
+#~ msgstr "Weeknummer"
 
