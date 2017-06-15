@@ -41,6 +41,9 @@ class News(db.Model, BaseEntity):
         else:
             self.publish_date = date.today()
 
+    def __str__(self):
+        return '{} ({})'.format(self.title, self.publish_date)
+
     def can_read(self, user=current_user):
         return not self.needs_paid or user.has_paid
 

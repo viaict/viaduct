@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-08-15 14:27+0200\n"
+"POT-Creation-Date: 2017-08-15 15:09+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -29,6 +29,9 @@ msgid "A user with this e-mail address already exist."
 msgstr ""
 
 msgid "A user with this e-mail address already exists"
+msgstr ""
+
+msgid "ALV"
 msgstr ""
 
 msgid "ALVs"
@@ -59,6 +62,9 @@ msgid "Activitycommittee"
 msgstr ""
 
 msgid "Add"
+msgstr ""
+
+msgid "Add document"
 msgstr ""
 
 msgid "Add user to"
@@ -336,6 +342,9 @@ msgstr ""
 msgid "Create news item"
 msgstr ""
 
+msgid "Create newsletter"
+msgstr ""
+
 msgid "Create user"
 msgstr ""
 
@@ -355,6 +364,9 @@ msgid "Date"
 msgstr ""
 
 msgid "Date unknown"
+msgstr ""
+
+msgid "Datum"
 msgstr ""
 
 msgid "Deeltijd"
@@ -384,6 +396,9 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
+msgid "Details"
+msgstr ""
+
 msgid "Disabled"
 msgstr ""
 
@@ -397,6 +412,9 @@ msgid "Do not filter HTML tags"
 msgstr ""
 
 msgid "Do you have an idea for an activity?"
+msgstr ""
+
+msgid "Document"
 msgstr ""
 
 msgid "Dutch"
@@ -454,6 +472,9 @@ msgid "Edit examination"
 msgstr ""
 
 msgid "Edit news item"
+msgstr ""
+
+msgid "Edit newsletter"
 msgstr ""
 
 msgid "Edit page"
@@ -816,6 +837,9 @@ msgstr ""
 msgid "New vacancy"
 msgstr ""
 
+msgid "New version"
+msgstr ""
+
 msgid "News"
 msgstr ""
 
@@ -823,6 +847,15 @@ msgid "News item saved"
 msgstr ""
 
 msgid "News item succesfully deleted"
+msgstr ""
+
+msgid "News items"
+msgstr ""
+
+msgid "Newsletter saved"
+msgstr ""
+
+msgid "Newsletters"
 msgstr ""
 
 msgid "Next"
@@ -924,9 +957,6 @@ msgstr ""
 msgid "Optional data"
 msgstr ""
 
-msgid "Other"
-msgstr ""
-
 msgid "Page"
 msgstr ""
 
@@ -978,16 +1008,7 @@ msgstr ""
 msgid "Postoffice Box"
 msgstr ""
 
-msgid "Presidium"
-msgstr ""
-
-msgid "Presidium chairman"
-msgstr ""
-
-msgid "Presidium other"
-msgstr ""
-
-msgid "Presidium secretary"
+msgid "Presidium: "
 msgstr ""
 
 msgid "Previous"
@@ -1394,6 +1415,9 @@ msgstr ""
 msgid "Vancancies"
 msgstr ""
 
+msgid "Versions"
+msgstr ""
+
 msgid "View"
 msgstr ""
 
@@ -1535,6 +1559,9 @@ msgid "in"
 msgstr ""
 
 msgid "is required"
+msgstr ""
+
+msgid "more"
 msgstr ""
 
 msgid "news item"
@@ -1813,5 +1840,26 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "File created successfully"
+#~ msgstr ""
+
+#~ msgid "Week number"
+#~ msgstr ""
+
+#~ msgid "Newsletter"
+#~ msgstr ""
+
+#~ msgid "Other"
+#~ msgstr ""
+
+#~ msgid "Presidium"
+#~ msgstr ""
+
+#~ msgid "Presidium chairman"
+#~ msgstr ""
+
+#~ msgid "Presidium other"
+#~ msgstr ""
+
+#~ msgid "Presidium secretary"
 #~ msgstr ""
 

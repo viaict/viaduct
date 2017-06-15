@@ -73,7 +73,7 @@ class Activity(db.Model, BaseEntity):
         self.form_id = form_id
 
     def __str__(self):
-        return '%s (%s)' % (self.name, self.start_time)
+        return '{} ({})'.format(self.name, self.start_time)
 
     def get_time(self):
         """

@@ -1,0 +1,66 @@
+{% extends "content.htm" %}
+
+{% block page %}
+<div class="row">
+    <h1>{{ _('Newsletters') }}</h1>
+</div>
+<div class="row">
+    <div class="form-group btn-group">
+        <a href="{{ url_for('.edit') }}" class="btn btn-success">
+            <i class='glyphicon glyphicon-plus'></i>
+            <span>{{ _('Add') }}</span>
+        </a>
+    </div>
+</div>
+<div class="row">
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th style="width: 120px">{{ _('Datum') }}</th>
+                    <th colspan="2">{{ _('Activities') }}</th>
+                    <th colspan="2">{{ _('News items') }}</th>
+                    <th>{{ _('Edit') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for newsletter in newsletters %}
+                <tr>
+                    <td> {{ newsletter.created.date().isoformat() }} </td>
+                    <td>
+                        {{ newsletter.activities[:3]|join(', ') or '-' }}
+                        {% set length = len(newsletter.activities) %}
+                        {%- if length > 3 %}<i>, {{ length - 3 }} {{ _('more') }}</i>{% endif %}
+                    </td>
+                    <td>
+                        <a href='{{ url_for('.activities_xml', newsletter_id=newsletter.id) }}'>
+                            <i class='glyphicon glyphicon-cloud-download'></i>
+                            <small class=".small">XML</span>
+                        </a>
+                    </td>
+                    <td>
+                        {{ newsletter.news_items[:3]|join(', ') or '-' }}
+                        {% set length = len(newsletter.news_items) %}
+                        {%- if length > 3 %}<i>, {{ length - 3 }} {{ _('more') }}</i>{% endif %}
+                    </td>
+                    <td>
+                        <a href='{{ url_for('.news_xml', newsletter_id=newsletter.id) }}'>
+                            <i class='glyphicon glyphicon-cloud-download'></i>
+                            <small class=".small">XML</span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href='{{ url_for('.edit', newsletter_id=newsletter.id) }}'>
+                            <i class='glyphicon glyphicon-pencil'></i>
+                        </a>
+                        <a href='{{ url_for('.delete', newsletter_id=newsletter.id) }}'>
+                            <i class='glyphicon glyphicon-remove'></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-08-15 14:27+0200\n"
+"POT-Creation-Date: 2017-08-15 15:09+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -30,6 +30,9 @@ msgstr "Er bestaat al een gebruiker met dat emailadres."
 
 msgid "A user with this e-mail address already exists"
 msgstr "Er bestaat al een gebruiker met dat emailadres"
+
+msgid "ALV"
+msgstr ""
 
 msgid "ALVs"
 msgstr ""
@@ -60,6 +63,9 @@ msgstr "Activiteitencommissie"
 
 msgid "Add"
 msgstr "Toevoegen"
+
+msgid "Add document"
+msgstr ""
 
 msgid "Add user to"
 msgstr ""
@@ -340,6 +346,9 @@ msgstr "Formulier aanmaken"
 msgid "Create news item"
 msgstr "Nieuwsbericht aanmaken"
 
+msgid "Create newsletter"
+msgstr "Nieuwsbrief aanmaken"
+
 msgid "Create user"
 msgstr "Gebruiker aanmaken"
 
@@ -360,6 +369,9 @@ msgstr "Datum"
 
 msgid "Date unknown"
 msgstr "Datum onbekend"
+
+msgid "Datum"
+msgstr ""
 
 msgid "Deeltijd"
 msgstr "Deeltijd"
@@ -388,6 +400,10 @@ msgstr "Pagina verwijderen:"
 msgid "Description"
 msgstr "Beschrijving"
 
+#, fuzzy
+msgid "Details"
+msgstr "Nederlandse gegevens"
+
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
@@ -402,6 +418,10 @@ msgstr "Geen HTML tags filteren"
 
 msgid "Do you have an idea for an activity?"
 msgstr "Heb je een idee voor een activiteit?"
+
+#, fuzzy
+msgid "Document"
+msgstr "Commentaar"
 
 msgid "Dutch"
 msgstr "Nederlands"
@@ -459,6 +479,9 @@ msgstr "Tentamen aanpassen"
 
 msgid "Edit news item"
 msgstr "Nieuwsbericht aanpassen"
+
+msgid "Edit newsletter"
+msgstr "Nieuwsbrief aanpassen"
 
 msgid "Edit page"
 msgstr "Pagina aanpassen"
@@ -825,6 +848,9 @@ msgstr "Nieuwe samenvatting"
 msgid "New vacancy"
 msgstr "Nieuwe vacature"
 
+msgid "New version"
+msgstr ""
+
 msgid "News"
 msgstr "Nieuws"
 
@@ -833,6 +859,15 @@ msgstr "Nieuwsbericht opgeslagen"
 
 msgid "News item succesfully deleted"
 msgstr "Nieuwsbericht succesvol verwijderd"
+
+msgid "News items"
+msgstr "Nieuwsberichten"
+
+msgid "Newsletter saved"
+msgstr "Nieuwsbrief opgeslagen"
+
+msgid "Newsletters"
+msgstr "Nieuwsbrieven"
 
 msgid "Next"
 msgstr "Volgende"
@@ -933,9 +968,6 @@ msgstr ""
 msgid "Optional data"
 msgstr "Optionele gegevens"
 
-msgid "Other"
-msgstr ""
-
 msgid "Page"
 msgstr "Pagina"
 
@@ -987,16 +1019,7 @@ msgstr "Postbus"
 msgid "Postoffice Box"
 msgstr "Postbus"
 
-msgid "Presidium"
-msgstr ""
-
-msgid "Presidium chairman"
-msgstr ""
-
-msgid "Presidium other"
-msgstr ""
-
-msgid "Presidium secretary"
+msgid "Presidium: "
 msgstr ""
 
 msgid "Previous"
@@ -1425,6 +1448,10 @@ msgstr "Geldig lidmaatschap is vereist om dit nieuwsartikel te kunnen lezen"
 msgid "Vancancies"
 msgstr "Vacatures"
 
+#, fuzzy
+msgid "Versions"
+msgstr "Rechten"
+
 msgid "View"
 msgstr "Weergeven"
 
@@ -1573,6 +1600,9 @@ msgstr "over"
 
 msgid "is required"
 msgstr "is vereist"
+
+msgid "more"
+msgstr "meer"
 
 msgid "news item"
 msgstr "nieuwsbericht"
@@ -1817,4 +1847,22 @@ msgstr ""
 
 #~ msgid "File created successfully"
 #~ msgstr "Bestand succesvol opgeslagen."
+
+#~ msgid "Week number"
+#~ msgstr "Weeknummer"
+
+#~ msgid "Other"
+#~ msgstr ""
+
+#~ msgid "Presidium"
+#~ msgstr ""
+
+#~ msgid "Presidium chairman"
+#~ msgstr ""
+
+#~ msgid "Presidium other"
+#~ msgstr ""
+
+#~ msgid "Presidium secretary"
+#~ msgstr ""
 
