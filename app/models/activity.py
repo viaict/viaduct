@@ -158,10 +158,10 @@ class Activity(db.Model, BaseEntity):
             name = self.en_name
             description = self.en_description
         elif nl_available:
-            name = self.nl_name + " (" + _('Dutch') + ")"
+            name = self.nl_name + " (Dutch)"
             description = self.nl_description
         elif en_available:
-            name = self.en_name + " (" + _('English') + ")"
+            name = self.en_name + " (Engels)"
             description = self.en_description
         else:
             name = 'N/A'

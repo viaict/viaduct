@@ -74,10 +74,10 @@ class News(db.Model, BaseEntity):
             title = self.en_title
             content = self.en_content
         elif nl_available:
-            title = self.nl_title + " (" + _('Dutch') + ")"
+            title = self.nl_title + " (Dutch)"
             content = self.nl_content
         elif en_available:
-            title = self.en_title + " (" + _('English') + ")"
+            title = self.en_title + " (Engels)"
             content = self.en_content
         else:
             title = 'N/A'
