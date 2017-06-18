@@ -14,15 +14,13 @@ def news_factory():
 
 
 def activities_factory():
-    start_date = datetime.date.today().replace(day=1)
+    start_date = datetime.date.today()
     return Activity.query.filter(Activity.start_time > start_date)\
                          .order_by(Activity.start_time).all()
 
 
 class NewsletterForm(Form):
-    # week = IntegerField(_('Week number'))
     activities = QuerySelectMultipleField(
         _('Activities'), query_factory=activities_factory)
     news_items = QuerySelectMultipleField(
         _('News items'), query_factory=news_factory)
-    # greetings = TextAreaField(_('Greetings'))
