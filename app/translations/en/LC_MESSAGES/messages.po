@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-06-10 13:57+0200\n"
+"POT-Creation-Date: 2017-06-10 17:01+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -95,6 +95,9 @@ msgstr ""
 
 #, python-format
 msgid "An email has been sent to %(email)s with further instructions."
+msgstr ""
+
+msgid "An error occurred while uploading "
 msgstr ""
 
 msgid "An error occurred while uploading the file"
@@ -567,9 +570,6 @@ msgid "Favourer"
 msgstr ""
 
 msgid "File"
-msgstr ""
-
-msgid "File created successfully"
 msgstr ""
 
 msgid "File does not exist, examination deleted."
@@ -1306,6 +1306,9 @@ msgstr ""
 msgid "Upload file"
 msgstr ""
 
+msgid "Uploaded files"
+msgstr ""
+
 msgid "User"
 msgstr ""
 
@@ -1763,3 +1766,5 @@ msgstr ""
 #~ msgid "Pay (+€0,35 transaction costs)"
 #~ msgstr ""
 
+#~ msgid "File created successfully"
+#~ msgstr ""

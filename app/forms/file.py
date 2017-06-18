@@ -5,4 +5,4 @@ from flask_babel import lazy_gettext as _
 
 
 class FileForm(Form):
-    file = FileField(_('File'))
+    file = FileField(_('File'), render_kw={'multiple': True})

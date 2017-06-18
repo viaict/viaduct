@@ -4,21 +4,15 @@
 {% extends "base.htm" %}
 
 {% block includes %}
-{%- if new_file -%}
+{%- if new_files -%}
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.tooltipster/4.1.4/css/tooltipster.bundle.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.tooltipster/4.1.4/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-borderless.min.css" />
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.tooltipster/4.1.4/js/tooltipster.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/clipboard.js/1.5.12/clipboard.min.js"></script>
     <script>
         $(document).ready(function() {
-            var url_link = $('#newfile-url');
-
-            // Set the textbox value to the full url of the file
-            $('#newfile-url-copytext').val(url_link[0].href);
-
-
-            // Initialize the 'Link copied' tooltip
-            $('#newfile-url-copytext').tooltipster({
+            //Initialize the 'Link copied' tooltip
+            var options = {
                 theme: 'tooltipster-borderless',
                 trigger: 'custom',
                 animation: 'fade',
@@ -30,19 +24,18 @@
                     tap: true,
                     touchleave: true
                 }
-            });
-            /*
-            */
+            };
 
-            var clipboard = new Clipboard('#newfile-url-copy');
-            clipboard.on('success', function(e) {
-                e.clearSelection();
-                // Show the tooltip
-                $('#newfile-url-copytext').tooltipster('open');
-            });
+            {% for index, _ in enumerate(new_files) %}
+                $('#url-copy-btn-{{ index }}').tooltipster(options);
 
+                var clipboard = new Clipboard('#url-copy-btn-{{ index }}');
+                clipboard.on('success', function(e) {
+                    $(e.trigger).tooltipster('open');
+                    e.clearSelection();
+                });
+            {% endfor %}
         });
-
     </script>
 {%- endif -%}
 {% endblock %}
@@ -50,34 +43,38 @@
 {% block page %}
 
 {%- if ModuleAPI.can_write('file') -%}
-    <div class="panel panel-default">
-        <div class="panel-heading">{{ _('Upload file') }}</div>
-        <div class="panel-body">
-
-        {%- if new_file -%}
-        <a id="newfile-url" href="/static/files/{{ new_file.name}}" style="display: none"></a>
-        <div class="row">
-            <div class="col-md-12">
-                <b>{{ _('Link to file') }}:</b>
-                <div class="input-group" style="padding-bottom: 5px">
-                    <input id="newfile-url-copytext"  title="{{ _('Link copied') }}"
-                    class="form-control text-monospace" type="text" readonly></input>
-                    <span class="input-group-btn">
-                        <button class="btn btn-primary"
-                            id="newfile-url-copy"
-                            data-clipboard-target="#newfile-url-copytext">
-                            <i class="fa fa-clipboard"></i> {{ _('Copy to clipboard') }}
-                        </button>
-                    </span>
+        {%- if new_files -%}
+        <div class="panel panel-default">
+            <div class="panel-heading">{{_('Uploaded files')}}</div>
+            <div class="panel-body">
+            {% for index, new_file in enumerate(new_files) %}
+            <div class="row">
+                <div class="col-md-12">
+                    <b>{{ _('Link to file') }}:</b>
+                    <div class="input-group" style="padding-bottom: 5px">
+                        <input id="file-{{ index }}"
+                        class="form-control text-monospace" type="text" value="{{ hostname }}/static/files/{{ new_file.name }}" readonly></input>
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary"
+                                title="{{ _('Link copied') }}"
+                                id="url-copy-btn-{{ index }}"
+                                data-clipboard-target="#file-{{ index }}">
+                                <i class="fa fa-clipboard"></i> {{ _('Copy to clipboard') }}
+                            </button>
+                        </span>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
+            </div>
         </div>
-        <hr />
         {%- endif -%}
-
-        {{ render_form(form, submit_text=_('Upload')) }}
+        <div class="panel panel-default">
+            <div class="panel-heading">{{ _('Upload file') }}</div>
+            <div class="panel-body">
+                {{ render_form(form, submit_text=_('Upload')) }}
+            </div>
         </div>
-    </div>
 {%- endif -%}
 
 

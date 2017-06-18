@@ -73,11 +73,11 @@ def file_upload(f, directory=None, image=False, forced_name=None):
         db.session.add(new_file)
         db.session.commit()
 
-    if new_file:
-        flash(_('File created successfully'), 'success')
+    # if new_file:
+    #     flash(_('File created successfully'), 'success')
 
     else:
-        flash(_('An error occurred while uploading the file'),
+        flash(_('An error occurred while uploading ' + filename),
               'danger')
 
     return new_file

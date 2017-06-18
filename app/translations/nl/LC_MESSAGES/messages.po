@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-06-10 13:57+0200\n"
+"POT-Creation-Date: 2017-06-10 17:01+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -96,6 +96,9 @@ msgstr "Aantal opgelost"
 #, python-format
 msgid "An email has been sent to %(email)s with further instructions."
 msgstr "Er is een email verstuurd naar %(email)s met verdere instructies."
+
+msgid "An error occurred while uploading "
+msgstr "Er is een fout opgetreden bij het uploaden van het bestand"
 
 msgid "An error occurred while uploading the file"
 msgstr "Er is een fout opgetreden bij het uploaden van het bestand"
@@ -572,9 +575,6 @@ msgstr "Begunstigde"
 
 msgid "File"
 msgstr "Bestand"
-
-msgid "File created successfully"
-msgstr "Bestand succesvol opgeslagen."
 
 msgid "File does not exist, examination deleted."
 msgstr "Bestand bestaat niet, tentamen verwijderd."
@@ -1337,6 +1337,9 @@ msgstr "Uploaden"
 msgid "Upload file"
 msgstr "Bestand uploaden"
 
+msgid "Uploaded files"
+msgstr "Geuploade bestanden"
+
 msgid "User"
 msgstr "Gebruiker"
 
@@ -1766,3 +1769,5 @@ msgstr ""
 #~ msgid "Pay (+€0,35 transaction costs)"
 #~ msgstr "Betalen (+€0,35 transactiekosten)"
 
+#~ msgid "File created successfully"
+#~ msgstr "Bestand succesvol opgeslagen."
