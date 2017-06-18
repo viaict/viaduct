@@ -2,7 +2,7 @@
 {% extends "content.htm" %}
 
 {% block content %}
-{% if newsletter %}
+{% if newsletter.id %}
 <h1>{{ _('Edit newsletter') }}</h1>
 {% else %}
 <h1>{{ _('Create newsletter') }}</h1>
@@ -11,8 +11,23 @@
 {{ render_form(form) }}
 
 <script>
+    function selectAll() {
+        $('select').each(function(index, select) {
+            console.log(select);
+            var selected = [];
+            $(select).find('option').each(function(index, option) {
+                selected.push($(option).attr('value'));
+            });
+            $(select).select2('val', selected);
+        });
+    }
+
     $(function() {
         $('select').select2();
+
+        {% if not newsletter.id %}
+        selectAll();
+        {% endif %}
     });
 </script>
 

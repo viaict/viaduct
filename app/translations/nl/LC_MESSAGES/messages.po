@@ -1824,9 +1824,6 @@ msgstr ""
 #~ msgid "Unauthorized!"
 #~ msgstr "Ongeautoriseerd!"
 
-#~ msgid ""
-#~ msgstr ""
-
 #~ msgid "An image with this name already exists."
 #~ msgstr "Er bestaat al een plaatje met deze naam."
 

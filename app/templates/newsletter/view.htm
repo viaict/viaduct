@@ -4,6 +4,8 @@
 <div class="row">
     <h1>{{ _('Newsletters') }}</h1>
 </div>
+
+{% if ModuleAPI.can_write('newsletter') %}
 <div class="row">
     <div class="form-group btn-group">
         <a href="{{ url_for('.edit') }}" class="btn btn-success">
@@ -12,6 +14,8 @@
         </a>
     </div>
 </div>
+{% endif %}
+
 <div class="row">
     <div class="table-responsive">
         <table class="table table-bordered table-striped">
@@ -20,17 +24,22 @@
                     <th style="width: 120px">{{ _('Datum') }}</th>
                     <th colspan="2">{{ _('Activities') }}</th>
                     <th colspan="2">{{ _('News items') }}</th>
+                    {% if ModuleAPI.can_write('newsletter') %}
                     <th>{{ _('Edit') }}</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
                 {% for newsletter in newsletters %}
                 <tr>
-                    <td> {{ newsletter.created.date().isoformat() }} </td>
+                    <td>{{ newsletter.created.date().isoformat() }}</td>
                     <td>
-                        {{ newsletter.activities[:3]|join(', ') or '-' }}
-                        {% set length = len(newsletter.activities) %}
-                        {%- if length > 3 %}<i>, {{ length - 3 }} {{ _('more') }}</i>{% endif %}
+                        {% for activity in newsletter.activities %}
+                        <a href="{{ url_for('activity.view', activity_id=activity.id) }}">{{ activity.name }}</a>
+                        {%- if activity.en_name and not activity.nl_name %} (EN){% endif %}
+                        {%- if activity.nl_name and not activity.en_name %} (NL){% endif %}
+                        {%- if not loop.last %}, {% endif %}
+                        {% endfor %}
                     </td>
                     <td>
                         <a href='{{ url_for('.activities_xml', newsletter_id=newsletter.id) }}'>
@@ -39,9 +48,12 @@
                         </a>
                     </td>
                     <td>
-                        {{ newsletter.news_items[:3]|join(', ') or '-' }}
-                        {% set length = len(newsletter.news_items) %}
-                        {%- if length > 3 %}<i>, {{ length - 3 }} {{ _('more') }}</i>{% endif %}
+                        {% for item in newsletter.news_items %}
+                        <a href="{{ url_for('news.view', news_id=item.id) }}">{{ item.title }}</a>
+                        {%- if item.en_title and not item.nl_title %} (EN){% endif %}
+                        {%- if item.nl_title and not item.en_title %} (NL){% endif %}
+                        {%- if not loop.last %}, {% endif %}
+                        {% endfor %}
                     </td>
                     <td>
                         <a href='{{ url_for('.news_xml', newsletter_id=newsletter.id) }}'>
@@ -49,6 +61,7 @@
                             <small class=".small">XML</span>
                         </a>
                     </td>
+                    {% if ModuleAPI.can_write('newsletter') %}
                     <td>
                         <a href='{{ url_for('.edit', newsletter_id=newsletter.id) }}'>
                             <i class='glyphicon glyphicon-pencil'></i>
@@ -57,6 +70,7 @@
                             <i class='glyphicon glyphicon-remove'></i>
                         </a>
                     </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
