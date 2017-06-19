@@ -16,7 +16,9 @@ def all():
         return abort(403)
 
     newsletters = Newsletter.query.all()
-    return render_template('newsletter/view.htm', newsletters=newsletters)
+    auth_token = app.config['COPERNICA_NEWSLETTER_TOKEN']
+    return render_template('newsletter/view.htm', newsletters=newsletters,
+                           token=auth_token)
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
