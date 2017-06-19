@@ -13,7 +13,6 @@
 <script>
     function selectAll() {
         $('select').each(function(index, select) {
-            console.log(select);
             var selected = [];
             $(select).find('option').each(function(index, option) {
                 selected.push($(option).attr('value'));
