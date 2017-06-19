@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-06-16 15:47+0200\n"
+"POT-Creation-Date: 2017-06-19 16:35+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -118,6 +118,9 @@ msgstr "Weet je zeker dat je dit vak wilt verwijderen?"
 
 msgid "Are you sure you want to delete this education?"
 msgstr "Weet je zeker dat je deze opleiding wilt verwijderen?"
+
+msgid "Are you sure you want to delete this entry?"
+msgstr "Weet je zeker dat je dit item wilt verwijderen?"
 
 msgid "Are you sure you want to delete this exam?"
 msgstr "Weet je zeker dat je het tentamen wilt verwijderen?"
@@ -836,6 +839,9 @@ msgstr "Nieuwsbrieven"
 msgid "Next"
 msgstr "Volgende"
 
+msgid "No"
+msgstr "Nee"
+
 msgid "No Output"
 msgstr "Geen uitvoer"
 
@@ -934,6 +940,11 @@ msgstr "Pagina niet gevonden"
 
 msgid "Page title"
 msgstr "Pagina titel"
+
+msgid "Pass these URLs to Copernica so they can fetch the latest items."
+msgstr ""
+"Geef deze URL's door aan Copernica, zodat ze de laatste items op kunnen "
+"halen."
 
 msgid "Password"
 msgstr "Wachtwoord"
@@ -1336,6 +1347,9 @@ msgstr "Te laat"
 msgid "Total problems"
 msgstr "Totaal aantal problemen"
 
+msgid "URLs"
+msgstr "URL's"
+
 msgid ""
 "Unfortunately it is currently unclear to us if you are a member of "
 "<strong>via</strong>."
@@ -1459,6 +1473,9 @@ msgstr "Fout formaat tentamen."
 msgid "Wrong format summary."
 msgstr "Fout formaat samenvatting."
 
+msgid "Yes"
+msgstr "Ja"
+
 msgid "Yes, I have finished studying"
 msgstr "Ja, ik ben klaar met studeren"
 
@@ -1542,9 +1559,6 @@ msgstr "over"
 
 msgid "is required"
 msgstr "is vereist"
-
-msgid "more"
-msgstr "meer"
 
 msgid "news item"
 msgstr "nieuwsbericht"
@@ -1789,4 +1803,7 @@ msgstr ""
 
 #~ msgid "Week number"
 #~ msgstr "Weeknummer"
+
+#~ msgid "more"
+#~ msgstr "meer"
 

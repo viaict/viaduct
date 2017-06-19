@@ -1,80 +1,99 @@
 {% extends "content.htm" %}
 
 {% block page %}
-<div class="row">
-    <h1>{{ _('Newsletters') }}</h1>
-</div>
+<div class="container">
+    <div class="row">
+        <h1>{{ _('Newsletters') }}</h1>
+    </div>
 
-{% if ModuleAPI.can_write('newsletter') %}
-<div class="row">
-    <div class="form-group btn-group">
-        <a href="{{ url_for('.edit') }}" class="btn btn-success">
-            <i class='glyphicon glyphicon-plus'></i>
-            <span>{{ _('Add') }}</span>
-        </a>
+    {% if ModuleAPI.can_write('newsletter') %}
+    <div class="row">
+        <div class="form-group btn-group">
+            <a href="{{ url_for('.edit') }}" class="btn btn-success">
+                <i class='glyphicon glyphicon-plus'></i>
+                <span>{{ _('Add') }}</span>
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th style="width: 120px">{{ _('Datum') }}</th>
+                        <th colspan="2">{{ _('Activities') }}</th>
+                        <th colspan="2">{{ _('News items') }}</th>
+                        {% if ModuleAPI.can_write('newsletter') %}
+                        <th>{{ _('Edit') }}</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for newsletter in newsletters %}
+                    <tr>
+                        <td>{{ newsletter.created.date().isoformat() }}</td>
+                        <td>
+                            {% for activity in newsletter.activities %}
+                            <a href="{{ url_for('activity.view', activity_id=activity.id) }}">{{ activity.name }}</a>
+                            {%- if activity.en_name and not activity.nl_name %} (EN){% endif %}
+                            {%- if activity.nl_name and not activity.en_name %} (NL){% endif %}
+                            {%- if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <a href='{{ url_for('.activities_xml', newsletter_id=newsletter.id) }}'>
+                                <i class='glyphicon glyphicon-cloud-download'></i>
+                                <small class=".small">XML</small>
+                            </a>
+                        </td>
+                        <td>
+                            {% for item in newsletter.news_items %}
+                            <a href="{{ url_for('news.view', news_id=item.id) }}">{{ item.title }}</a>
+                            {%- if item.en_title and not item.nl_title %} (EN){% endif %}
+                            {%- if item.nl_title and not item.en_title %} (NL){% endif %}
+                            {%- if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <a href='{{ url_for('.news_xml', newsletter_id=newsletter.id) }}'>
+                                <i class='glyphicon glyphicon-cloud-download'></i>
+                                <small class=".small">XML</small>
+                            </a>
+                        </td>
+                        {% if ModuleAPI.can_write('newsletter') %}
+                        <td>
+                            <a href='{{ url_for('.edit', newsletter_id=newsletter.id) }}'>
+                                <i class='glyphicon glyphicon-pencil'></i>
+                            </a>
+                            <a href='{{ url_for('.delete', newsletter_id=newsletter.id) }}'>
+                                <i class='glyphicon glyphicon-remove'></i>
+                            </a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-{% endif %}
 
-<div class="row">
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th style="width: 120px">{{ _('Datum') }}</th>
-                    <th colspan="2">{{ _('Activities') }}</th>
-                    <th colspan="2">{{ _('News items') }}</th>
-                    {% if ModuleAPI.can_write('newsletter') %}
-                    <th>{{ _('Edit') }}</th>
-                    {% endif %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for newsletter in newsletters %}
-                <tr>
-                    <td>{{ newsletter.created.date().isoformat() }}</td>
-                    <td>
-                        {% for activity in newsletter.activities %}
-                        <a href="{{ url_for('activity.view', activity_id=activity.id) }}">{{ activity.name }}</a>
-                        {%- if activity.en_name and not activity.nl_name %} (EN){% endif %}
-                        {%- if activity.nl_name and not activity.en_name %} (NL){% endif %}
-                        {%- if not loop.last %}, {% endif %}
-                        {% endfor %}
-                    </td>
-                    <td>
-                        <a href='{{ url_for('.activities_xml', newsletter_id=newsletter.id) }}'>
-                            <i class='glyphicon glyphicon-cloud-download'></i>
-                            <small class=".small">XML</span>
-                        </a>
-                    </td>
-                    <td>
-                        {% for item in newsletter.news_items %}
-                        <a href="{{ url_for('news.view', news_id=item.id) }}">{{ item.title }}</a>
-                        {%- if item.en_title and not item.nl_title %} (EN){% endif %}
-                        {%- if item.nl_title and not item.en_title %} (NL){% endif %}
-                        {%- if not loop.last %}, {% endif %}
-                        {% endfor %}
-                    </td>
-                    <td>
-                        <a href='{{ url_for('.news_xml', newsletter_id=newsletter.id) }}'>
-                            <i class='glyphicon glyphicon-cloud-download'></i>
-                            <small class=".small">XML</span>
-                        </a>
-                    </td>
-                    {% if ModuleAPI.can_write('newsletter') %}
-                    <td>
-                        <a href='{{ url_for('.edit', newsletter_id=newsletter.id) }}'>
-                            <i class='glyphicon glyphicon-pencil'></i>
-                        </a>
-                        <a href='{{ url_for('.delete', newsletter_id=newsletter.id) }}'>
-                            <i class='glyphicon glyphicon-remove'></i>
-                        </a>
-                    </td>
-                    {% endif %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+<div class="container">
+    <div class="row">
+        <h2>{{ _('URLs') }}</h2>
+        {{ _('Pass these URLs to Copernica so they can fetch the latest items.') }}
+
+        <h3>{{ _('Activities') }}:</h3>
+        <a href="{{ url_for('.activities_xml', newsletter_id=None, auth_token=token, _external=True) }}">
+            {{ url_for('.activities_xml', newsletter_id=None, auth_token=token, _external=True) }}
+        </a>
+
+        <h3>{{ _('News items') }}:</h3>
+        <a href="{{ url_for('.news_xml', newsletter_id=None, auth_token=token, _external=True) }}">
+            {{ url_for('.news_xml', newsletter_id=None, auth_token=token, _external=True) }}
+        </a>
     </div>
 </div>
 {% endblock %}
