@@ -373,9 +373,6 @@ msgstr "Datum"
 msgid "Date unknown"
 msgstr "Datum onbekend"
 
-msgid "Datum"
-msgstr ""
-
 msgid "Deeltijd"
 msgstr "Deeltijd"
 

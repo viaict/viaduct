@@ -369,9 +369,6 @@ msgstr ""
 msgid "Date unknown"
 msgstr ""
 
-msgid "Datum"
-msgstr ""
-
 msgid "Deeltijd"
 msgstr ""
 
@@ -1873,5 +1870,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Presidium secretary"
+#~ msgstr ""
+
+#~ msgid "Datum"
 #~ msgstr ""
 
