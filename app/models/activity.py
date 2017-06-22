@@ -72,6 +72,9 @@ class Activity(db.Model, BaseEntity):
         self.venue = 1
         self.form_id = form_id
 
+    def __str__(self):
+        return '%s (%s)' % (self.name, self.start_time)
+
     def get_time(self):
         """
         Get a proper representation of all datetime date.
