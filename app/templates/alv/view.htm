@@ -1,0 +1,37 @@
+{% extends 'content.htm' %}
+{% block page %}
+<div class='row'>
+    <div class='col-md-9 col-md-offset-1'>
+        <p>
+            <a href="{{ url_for('alv.list') }}">{{ _('ALVs') }}</a>
+            <i class='fa fa-chevron-right'></i>
+            <a href="{{ url_for('alv.view', alv_id=alv.id) }}">{{ alv.name
+                }}</a>
+        </p>
+    </div>
+    <div class='col-md-9 col-md-offset-1 well'>
+        <div class='page-header'>
+            {% if ModuleAPI.can_write('news') %}
+            <div class='btn-group pull-right'>
+                <a class='btn btn-warning btn-xs' href='
+                            {{ url_for('alv.edit', alv_id=alv.id) }}'>
+                <i class='fa fa-edit'></i> {{ _('Edit alv') }}
+                </a>
+                <a class='btn btn-danger btn-xs' href='
+                            {{ url_for('alv.delete', alv_id=alv.id) }}'>
+                <i class='fa fa-remove'></i> {{ _('Delete alv') }}
+                </a>
+            </div>
+            {% endif %}
+
+            <h1>{{ alv.name }}</h1>
+        </div>
+
+        {{_('Presidium')}}: {{ alv.format_presidium() }}
+        <hr>
+        <div class='row'>
+            <div class='col-md-12 content'>todo</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

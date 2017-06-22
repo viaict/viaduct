@@ -96,6 +96,9 @@ class User(db.Model, UserMixin, BaseEntity):
             super(User, self).__setattr__("paid_date", datetime.now())
         super(User, self).__setattr__(name, value)
 
+    def __str__(self):
+        return self.name
+
     def update_email(self, new_email):
         if self.email == new_email:
             return
