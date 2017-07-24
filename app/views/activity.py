@@ -161,6 +161,12 @@ def get_activity(activity_id=0):
     elif is_attending:
         activity.info = _("You have successfully registered, "
                           "payment is still required!")
+
+        if form_result.form.requires_direct_payment:
+            pay_url = url_for('activity.create_mollie_transaction',
+                              result_id=form.form_result.id)
+
+            return redirect(pay_url)
     else:
         activity.info = _("The activity has reached its maximum "
                           "number of registrations. You have been "

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-08-03 21:41+0200\n"
+"POT-Creation-Date: 2017-08-03 21:42+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -1057,6 +1057,9 @@ msgid "Repeat password"
 msgstr ""
 
 msgid "Request to DOMjudge server failed"
+msgstr ""
+
+msgid "Requires direct payment"
 msgstr ""
 
 msgid "Reset password"

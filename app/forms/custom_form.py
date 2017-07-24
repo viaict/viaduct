@@ -1,6 +1,6 @@
 from flask_babel import lazy_gettext as _
 from flask_wtf import Form
-from wtforms import StringField, SelectField
+from wtforms import StringField, SelectField, BooleanField
 from wtforms.validators import InputRequired, Email
 
 from app.forms.fields import DecimalField
@@ -19,5 +19,7 @@ class CreateForm(Form):
     student_id = StringField('Student ID', validators=[InputRequired()])
     price = DecimalField(_('IDeal price'), places=2,
                          validators=[InputRequired()])
+    requires_direct_payment = BooleanField(_('Requires direct payment'),
+                                           default=False)
     education_id = SelectField('Opleiding', coerce=int)
     terms = StringField(_('Conditions'))
