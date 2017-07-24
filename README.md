@@ -12,7 +12,7 @@ See [tutorial](TUTORIAL.md).
 Ubuntu install packages (other OS's should install similar stuff):
 ```bash
 sudo apt-get install python3 python3-pip python-virtualenv mysql-server git-flow npm \
-nodejs libjpeg-dev libffi-dev ruby python3-dev
+nodejs libjpeg-dev libffi-dev ruby python3-dev libssl-dev
 ln -s /usr/bin/nodejs /usr/bin/node
 ```
 ### Python environment
