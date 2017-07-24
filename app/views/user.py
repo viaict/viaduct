@@ -18,15 +18,15 @@ from app import db, login_manager
 from app.forms import SignUpForm, SignInForm, ResetPassword, RequestPassword
 from app.forms.user import EditUserForm, EditUserInfoForm
 
-from app.models import User
+from app.models.user import User
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult, CustomForm
 from app.models.group import Group
 from app.models.request_ticket import PasswordTicket
 from app.models.education import Education
 
-from app.utils import UserAPI
 from app.utils import copernica
+from app.utils.user import UserAPI
 from app.utils.module import ModuleAPI
 from app.utils.google import HttpError, send_email
 

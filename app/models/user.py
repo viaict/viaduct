@@ -1,6 +1,7 @@
 from app import db, app, cache
-from app.models import BaseEntity, Group
+from app.models.base_model import BaseEntity
 from app.models.education import Education
+from app.models.group import Group
 from flask_login import UserMixin, AnonymousUserMixin
 from datetime import datetime
 

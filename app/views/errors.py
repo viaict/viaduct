@@ -4,7 +4,7 @@ from flask_login import current_user
 from flask_babel import _
 
 from app import app, login_manager
-from app.models import Page
+from app.models.page import Page
 
 
 import re

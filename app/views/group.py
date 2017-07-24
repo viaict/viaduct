@@ -11,7 +11,9 @@ from app import app, db
 from app.utils.module import ModuleAPI
 from app.utils import google
 
-from app.models import Group, GroupPermission, User
+from app.models.user import User
+from app.models.group import Group
+from app.models.permission import GroupPermission
 from app.forms.group import EditGroupPermissionForm, ViewGroupForm, \
     CreateGroup, EditGroup
 

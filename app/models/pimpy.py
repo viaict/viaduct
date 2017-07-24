@@ -1,6 +1,6 @@
 from app import db
 import datetime
-from app.models import BaseEntity
+from app.models.base_model import BaseEntity
 from jinja2 import escape
 import baas32 as b32
 from flask_login import current_user

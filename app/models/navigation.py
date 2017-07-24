@@ -1,6 +1,6 @@
 from sqlalchemy import event, orm
 from app import db, get_locale
-from app.models import BaseEntity
+from app.models.base_model import BaseEntity
 
 
 class NavigationEntry(db.Model, BaseEntity):

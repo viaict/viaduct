@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, abort, redirect, \
     flash, url_for
 from app import db
-from app.models import Redirect
+from app.models.redirect import Redirect
 from app.forms import RedirectForm
 from app.utils.module import ModuleAPI
 

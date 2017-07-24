@@ -2,7 +2,9 @@ import re
 
 from flask import request
 
-from app.models import Page, SEO, Activity
+from app.models.page import Page
+from app.models.seo import SEO
+from app.models.activity import Activity
 
 
 def get_seo_fields(language='nl', module_name=None, request_path=None):

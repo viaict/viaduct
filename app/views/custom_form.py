@@ -3,7 +3,7 @@ from flask import (flash, redirect, render_template, request, url_for, abort,
 from flask_login import current_user
 
 from app import db
-from app.utils import serialize_sqla
+from app.utils.serialize_sqla import serialize_sqla
 from app.utils.forms import flash_form_errors
 from app.forms.custom_form import CreateForm
 from app.models.custom_form import CustomForm, CustomFormResult, \

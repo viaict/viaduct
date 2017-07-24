@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 from app import app, db, version, js_glue
-from app.models import User, Group, Education, GroupPermission, NavigationEntry
+from app.models.user import User
+from app.models.group import Group
+from app.models.education import Education
+from app.models.permission import GroupPermission
+from app.models.navigation import NavigationEntry
 
 from flask_script import Manager, Server, prompt, prompt_pass
 from flask_migrate import Migrate, MigrateCommand

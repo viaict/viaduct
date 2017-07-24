@@ -14,7 +14,9 @@ from app import db
 from app.forms import PageForm, HistoryPageForm
 from app.utils.forms import flash_form_errors
 from app.utils.htmldiff import htmldiff
-from app.models import Group, Page, PageRevision, PagePermission, Redirect
+from app.models.group import Group
+from app.models.page import Page, PageRevision, PagePermission
+from app.models.redirect import Redirect
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult
 from app.utils.module import ModuleAPI

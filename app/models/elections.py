@@ -1,5 +1,6 @@
 from app import db
-from app.models import BaseEntity, User
+from app.models.base_model import BaseEntity
+from app.models.user import User
 
 
 class Nominee(db.Model, BaseEntity):

@@ -60,16 +60,6 @@ def register_views(app, path, extension=''):
 app = Flask(__name__)
 js_glue = JSGlue(app)
 app.config.from_object('config.Config')
-app.config['CACHE_TYPE'] = 'filesystem'
-app.config['CACHE_DIR'] = 'cache'
-
-cache = Cache(app)
-toolbar = DebugToolbarExtension(app)
-
-if not app.debug and 'SENTRY_DSN' in app.config:
-    sentry = Sentry(app)
-    sentry.client.release = version
-
 
 # Set up Flask Babel, which is used for internationalisation support.
 babel = Babel(app)
@@ -88,6 +78,17 @@ def get_locale():
         return current_user.locale
 
     return request.accept_languages.best_match(list(languages), default='nl')
+
+
+app.config['CACHE_TYPE'] = 'filesystem'
+app.config['CACHE_DIR'] = 'cache'
+
+cache = Cache(app)
+toolbar = DebugToolbarExtension(app)
+
+if not app.debug and 'SENTRY_DSN' in app.config:
+    sentry = Sentry(app)
+    sentry.client.release = version
 
 
 class JSONEncoder(BaseEncoder):
@@ -132,13 +133,24 @@ constraint_naming_convention = {
 db = SQLAlchemy(
     app, metadata=MetaData(naming_convention=constraint_naming_convention))
 
-from app.utils import import_module, serialize_sqla  # noqa
+from app.models.user import AnonymousUser  # noqa
+from app.utils.import_module import import_module  # noqa
+from app.utils.serialize_sqla import serialize_sqla  # noqa
 from app.utils.thumb import thumb  # noqa
 from app.utils.user import UserAPI  # noqa
 from app.utils.company import CompanyAPI  # noqa
 from app.utils.guide import GuideAPI  # noqa
+from app.utils.navigation import NavigationAPI  # noqa
+from app.utils.pimpy import PimpyAPI  # noqa
+from app.utils.user import UserAPI  # noqa
+from app.utils.module import ModuleAPI  # noqa
+from app.utils.page import PageAPI  # noqa
+from app.utils.category import CategoryAPI  # noqa
+from app.utils.seo import get_seo_fields  # noqa
+
 from app.utils.module import ModuleAPI  # noqa
 from app.forms.util import FormWrapper  # noqa
+
 # Set jinja global variables
 app.jinja_env.globals.update(enumerate=enumerate)
 app.jinja_env.globals.update(render_template=render_template)
@@ -159,6 +171,13 @@ app.jinja_env.globals.update(static_url=static_url)
 app.jinja_env.globals.update(get_locale=get_locale)
 app.jinja_env.globals.update(app_config=app.config)
 app.jinja_env.globals.update(FormWrapper=FormWrapper)
+app.jinja_env.globals.update(NavigationAPI=NavigationAPI)
+app.jinja_env.globals.update(PimpyAPI=PimpyAPI)
+app.jinja_env.globals.update(UserAPI=UserAPI)
+app.jinja_env.globals.update(ModuleAPI=ModuleAPI)
+app.jinja_env.globals.update(PageAPI=PageAPI)
+app.jinja_env.globals.update(CategoryAPI=CategoryAPI)
+app.jinja_env.globals.update(get_seo_fields=get_seo_fields)
 
 # Register the blueprints.
 from . import api  # noqa
@@ -169,7 +188,6 @@ register_views(app, os.path.join(path, 'views'))
 
 from app.utils.template_filters import *  # noqa
 
-from app.models.user import AnonymousUser  # noqa
 login_manager.anonymous_user = AnonymousUser
 
 log = logging.getLogger('werkzeug')

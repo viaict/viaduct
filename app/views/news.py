@@ -10,8 +10,8 @@ from sqlalchemy import desc
 
 from app import db
 from app.forms import NewsForm
-from app.models import News
-from app.utils import ModuleAPI
+from app.models.news import News
+from app.utils.module import ModuleAPI
 
 blueprint = Blueprint('news', __name__, url_prefix='/news')
 

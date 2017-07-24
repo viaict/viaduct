@@ -2,7 +2,8 @@ import sys
 from sqlalchemy import event
 from flask_babel import lazy_gettext as _
 from app import db, get_locale, cache
-from app.models import BaseEntity, Group
+from app.models.group import Group
+from app.models.base_model import BaseEntity
 
 
 class Page(db.Model, BaseEntity):
