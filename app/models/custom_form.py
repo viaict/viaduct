@@ -1,3 +1,8 @@
+from collections import OrderedDict
+from datetime import datetime
+
+from flask_login import current_user, url_for
+
 from app import db
 from app.models.base_model import BaseEntity
 from app.models.activity import Activity
@@ -5,11 +10,6 @@ from app.models.mollie import Transaction
 from app.models.page import PageRevision, Page
 from app.utils.google import send_email
 from app.utils.page import PageAPI
-
-from flask_login import current_user, url_for
-
-from collections import OrderedDict
-from datetime import datetime
 
 
 def export_form_data(r):
@@ -38,6 +38,8 @@ class CustomForm(db.Model, BaseEntity):
     terms = db.Column(db.String(4096))
 
     archived = db.Column(db.Boolean)
+    requires_direct_payment = db.Column(db.Boolean, default=False,
+                                        nullable=False)
 
     exports = \
         OrderedDict([('user_id', {

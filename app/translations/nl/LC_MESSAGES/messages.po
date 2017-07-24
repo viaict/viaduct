@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-07-24 11:16+0200\n"
+"POT-Creation-Date: 2017-07-24 14:54+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -1033,6 +1033,9 @@ msgstr "Herhaal wachtwoord"
 
 msgid "Request to DOMjudge server failed"
 msgstr "Request aan de DOMjudge server mislukt"
+
+msgid "Requires direct payment"
+msgstr "Vereist meteen betalen"
 
 msgid "Reset password"
 msgstr "Reset wachtwoord"

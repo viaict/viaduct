@@ -154,6 +154,7 @@ def create(form_id=None):
             form.price.data = 0.0
         custom_form.price = form.price.data
         custom_form.terms = form.terms.data
+        custom_form.requires_direct_payment = form.requires_direct_payment.data
 
         follower = None
 
