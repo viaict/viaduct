@@ -60,6 +60,6 @@ class TransactionActivity(db.Model, TransactionCallbackMixin):
                                   backref=db.backref('callback_activity'))
 
     def payment_complete(self):
-        self.custom_form_result.has_paid = True
-        print(self.custom_form_result)
-        db.session.commit()
+        if self.custom_form_result:
+            self.custom_form_result.has_paid = True
+            db.session.commit()
