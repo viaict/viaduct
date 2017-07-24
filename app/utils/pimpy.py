@@ -58,8 +58,6 @@ class PimpyAPI:
         if not ModuleAPI.can_write('pimpy'):
             return abort(403)
 
-        if group_id == 'all':
-            return False, "Groep kan niet 'All' zijn"
         group = Group.query.filter(Group.id == group_id).first()
         if group is None:
             return False, "Er is niet een groep die voldoet opgegeven."
@@ -377,9 +375,6 @@ class PimpyAPI:
             flash('Huidige gebruiker niet gevonden!', 'danger')
             return redirect(url_for('pimpy.view_minutes'))
 
-        groups = [group for group in current_user.groups
-                  if group.name != 'all']
-
         if not type:
             type = 'minutes'
         endpoint = 'pimpy.view_' + type
@@ -394,54 +389,10 @@ class PimpyAPI:
         if personal:
             endpoints['view_tasks_chosenpersonal'] += '_personal'
 
-        if not group_id:
-            group_id = 'all'
-        if group_id != 'all':
-            group_id = int(group_id)
-
-        return Markup(render_template('pimpy/api/side_menu.htm', groups=groups,
+        return Markup(render_template('pimpy/api/side_menu.htm',
+                                      groups=current_user.groups,
                                       group_id=group_id, personal=personal,
                                       type=type, endpoints=endpoints,
-                                      title='PimPy'))
-
-    @staticmethod
-    def get_all_tasks(group_id):
-        """
-        Show all tasks ever made.
-
-        Can specify specific group.
-        No internal permission system made yet.
-        Do not make routes to this module yet.
-        """
-        if not ModuleAPI.can_read('pimpy'):
-            return abort(403)
-        if current_user.is_anonymous:
-            flash('Huidige gebruiker niet gevonden.', 'danger')
-            return redirect(url_for('pimpy.view_tasks'))
-
-        status_meanings = Task.get_status_meanings()
-
-        list_items = {}
-        if group_id == 'all':
-            for group in UserAPI.get_groups_for_current_user():
-                list_users = {}
-                list_users['Iedereen'] = group.tasks
-                list_items[group.name] = list_users
-        else:
-            list_users = {}
-            tasks = Task.query.filter(Task.group_id == group_id).all()
-            group = Group.query.filter(Group.id == group_id).first()
-            if not group:
-                return abort(404)
-            if group not in UserAPI.get_groups_for_current_user():
-                return abort(403)
-            list_users['Iedereen'] = tasks
-            list_items[group.name] = list_users
-
-        return Markup(render_template('pimpy/api/tasks.htm',
-                                      list_items=list_items, type='tasks',
-                                      group_id=group_id, personal=False,
-                                      status_meanings=status_meanings,
                                       title='PimPy'))
 
     @staticmethod
@@ -459,9 +410,8 @@ class PimpyAPI:
         groups = UserAPI.get_groups_for_current_user()
         groups = map(lambda x: x.id, groups)
 
-        if group_id == 'all':
+        if group_id is None:
             tasks_rel = tasks_rel.filter(Task.group_id.in_(groups))
-
         else:
             group_id = int(group_id)
             if group_id not in groups:
@@ -499,13 +449,11 @@ class PimpyAPI:
         tasks_rel = TaskUserRel.query.join(Task).join(User)
 
         groups = UserAPI.get_groups_for_current_user()
-        groups = map(lambda x: x.id, groups)
+        groups = list(map(lambda x: x.id, groups))
 
-        if group_id == 'all':
+        if group_id is None:
             tasks_rel = tasks_rel.filter(Task.group_id.in_(groups))
-
         else:
-            group_id = int(group_id)
             if group_id not in groups:
                 return abort(403)
 
@@ -540,18 +488,20 @@ class PimpyAPI:
 
         list_items = {}
 
-        if group_id != 'all':
-            query = Minute.query.filter(Minute.group_id == group_id).\
-                order_by(Minute.minute_date.desc())
-            list_items[Group.query.filter(Group.id == group_id).first().name]\
-                = query.all()
-        # this should be done with a sql in statement, or something, but meh
-        else:
+        if group_id is None:
+            # Get all minutes for this user's groups
+            # this should be done with a sql in statement, but meh
             for group in current_user.groups:
                 list_items[group.name] = Minute.query\
                     .filter(Minute.group_id == group.id)\
                     .order_by(Minute.minute_date.desc())\
                     .all()
+        else:
+            query = Minute.query.filter(Minute.group_id == group_id).\
+                order_by(Minute.minute_date.desc())
+
+            list_items[Group.query.filter(Group.id == group_id).first().name]\
+                = query.all()
 
         return render_template('pimpy/api/minutes.htm',
                                list_items=list_items, type='minutes',
@@ -559,7 +509,7 @@ class PimpyAPI:
                                title='PimPy')
 
     @staticmethod
-    def get_minute(group_id, minute_id, line_number):
+    def get_minute(minute_id, line_number):
         """Load (and thus view) specifically one minute."""
 
         if not ModuleAPI.can_read('pimpy'):
@@ -567,29 +517,29 @@ class PimpyAPI:
 
         list_items = {}
         minute = Minute.query.filter(Minute.id == minute_id).first()
-        group = Group.query.filter(Group.id == group_id).first()
 
-        if group != minute.group:
+        if minute.group not in current_user.groups:
             return abort(403)
 
-        list_items[group.name] = [minute]
-        tag = "%dln%d" % (list_items[group.name][0].id, int(line_number))
+        list_items[minute.group.name] = [minute]
+        tag = "%dln%d" % (list_items[minute.group.name][0].id,
+                          int(line_number))
 
         return render_template('pimpy/api/minutes.htm', list_items=list_items,
-                               type='minutes', group_id=group_id,
+                               type='minutes', group_id=minute.group.id,
                                line_number=line_number, tag=tag,
                                title='PimPy')
 
     @staticmethod
-    def get_minute_raw(group_id, minute_id):
+    def get_minute_raw(minute_id):
         """Load specifically one minute in raw format (without markup)."""
 
         if not ModuleAPI.can_read('pimpy'):
             return abort(403)
 
         minute = Minute.query.filter(Minute.id == minute_id).first()
-        group = Group.query.filter(Group.id == group_id).first()
-        if group != minute.group:
+
+        if minute.group not in current_user.groups:
             return abort(403)
 
         return minute.content
@@ -609,19 +559,18 @@ class PimpyAPI:
         start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
         end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d")
 
-        if group_id != 'all':
+        if group_id is None:
+            for group in current_user.groups:
+                query = Minute.query.filter(Minute.group_id == group.id)
+                query = query.order_by(Minute.minute_date.desc())
+                list_items[group.name] = query.all()
+        else:
             query = Minute.query.filter(Minute.group_id == group_id).\
                 filter(start_date <= Minute.minute_date,
                        Minute.minute_date <= end_date).\
                 order_by(Minute.minute_date.desc())
             list_items[Group.query.filter(Group.id == group_id).first().name]\
                 = query.all()
-        # this should be done with a sql in statement, or something, but meh
-        else:
-            for group in current_user.groups:
-                query = Minute.query.filter(Minute.group_id == group.id)
-                query = query.order_by(Minute.minute_date.desc())
-                list_items[group.name] = query.all()
 
         return Markup(render_template('pimpy/api/minutes.htm',
                                       list_items=list_items, type='minutes',

@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, request, \
 
 import datetime
 
-from flask_login import current_user
+from flask_login import login_required, current_user
 from app import app
 from app.models.challenge import Challenge
 from app.forms import ChallengeForm
@@ -20,9 +20,6 @@ blueprint = Blueprint('challenge', __name__, url_prefix='/challenge')
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/dashboard/', methods=['GET', 'POST'])
 def view_list(page=1):
-    if not ModuleAPI.can_read('challenge'):
-        return abort(403)
-
     print((app.config['SQLALCHEMY_DATABASE_URI']))
 
     challenge = Challenge()
@@ -56,9 +53,6 @@ def fetch_all():
 
 @blueprint.route('/api/get_ranking', methods=['GET', 'POST'])
 def get_ranking():
-    if not ModuleAPI.can_read('challenge'):
-        abort(403)
-
     ranking = ChallengeAPI.get_ranking()
 
     return jsonify(ranking=[user.serialize for user in ranking])
@@ -144,10 +138,8 @@ def create_challenge(challenge_id=None):
 
 
 @blueprint.route('/api/new_submission', methods=['GET', 'POST'])
+@login_required
 def new_submission(challenge_id=None):
-    if not ModuleAPI.can_read('challenge'):
-        abort(403)
-
     if request.args.get('challenge_id'):
         challenge_id = request.args.get('challenge_id')
     else:
@@ -173,9 +165,6 @@ def new_submission(challenge_id=None):
 
 @blueprint.route('/api/get_points', methods=['GET', 'POST'])
 def get_points(user_id=None):
-    if not ModuleAPI.can_read('challenge'):
-        abort(403)
-
     if request.args.get('user_id'):
         user_id = request.args.get('user_id')
     else:

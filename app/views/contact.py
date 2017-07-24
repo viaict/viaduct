@@ -26,7 +26,7 @@ def list(page_nr=1):
 @blueprint.route('/edit/<int:contact_id>/', methods=['GET', 'POST'])
 def edit(contact_id=None):
     """Create or edit a contact, frontend."""
-    if not ModuleAPI.can_read('contact'):
+    if not ModuleAPI.can_write('contact'):
         return abort(403)
 
     if contact_id:

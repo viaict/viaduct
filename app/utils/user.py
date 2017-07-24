@@ -7,7 +7,6 @@ import hashlib
 
 from flask import render_template
 
-from app.models.group import Group
 from app.utils.file import file_exists_pattern, file_remove_pattern, \
     file_upload, file_split_name
 
@@ -92,10 +91,6 @@ class UserAPI:
 
     @staticmethod
     def can_read(page):
-        if page.needs_paid and (current_user.is_anonymous or
-                                not current_user.has_paid):
-            return False
-
         return PagePermission.get_user_rights(current_user, page) > 0
 
     @staticmethod

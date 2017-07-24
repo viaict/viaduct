@@ -76,10 +76,6 @@ def get_activity(activity_id=0):
     Register and update for an activity, with handling of custom forms
     and payment.
     """
-
-    if not ModuleAPI.can_read('activity'):
-        return abort(403)
-
     activity = Activity.query.get_or_404(activity_id)
 
     form = ActivityForm(request.form, current_user)
