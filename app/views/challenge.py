@@ -20,6 +20,9 @@ blueprint = Blueprint('challenge', __name__, url_prefix='/challenge')
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/dashboard/', methods=['GET', 'POST'])
 def view_list(page=1):
+    if not ModuleAPI.can_read('challenge'):
+        return abort(403)
+
     print((app.config['SQLALCHEMY_DATABASE_URI']))
 
     challenge = Challenge()
