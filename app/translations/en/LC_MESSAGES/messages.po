@@ -22,6 +22,10 @@ msgstr ""
 msgid "%(email)s is unknown to our system."
 msgstr ""
 
+#, python-format
+msgid "%s is not an allowed file type."
+msgstr ""
+
 msgid "A user with this e-mail address already exist."
 msgstr ""
 

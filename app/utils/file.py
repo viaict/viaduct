@@ -44,6 +44,7 @@ def file_upload(f, directory=None, image=False, forced_name=None):
 
     # Check if the file is allowed.
     if not file_allowed_extension(filename, image):
+        flash(_("%s is not an allowed file type." % filename), 'danger')
         return
 
     # Convert the name.
