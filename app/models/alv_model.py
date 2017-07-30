@@ -14,8 +14,15 @@ class Alv(db.Model, BaseEntity):
     activity_id = db.Column(db.Integer, db.ForeignKey('activity.id'),
                             nullable=True)
 
-    def __str__(self):
-        return '%s' % self.alv
+    @classmethod
+    def from_nl_name_en_name_date_activity(cls, nl_name, en_name, date,
+                                           activity):
+        m = Alv()
+        m.nl_name = nl_name
+        m.en_name = en_name
+        m.date = date
+        m.activity_id = activity.id
+        return m
 
     def format_presidium(self):
         if self.presidium:
@@ -23,6 +30,18 @@ class Alv(db.Model, BaseEntity):
             return ', '.join(presidium)
         else:
             return _('No presidium')
+
+    @property
+    def presidium_chairman(self):
+        return next(filter(lambda x: x.role == 0, self.presidium), None)
+
+    @property
+    def presidium_secretary(self):
+        return next(filter(lambda x: x.role == 1, self.presidium), None)
+
+    @property
+    def presidium_other(self):
+        return next(filter(lambda x: x.role == 2, self.presidium), None)
 
     def get_localized_name(self, locale=None):
         if not locale:
@@ -49,14 +68,22 @@ class AlvPresidium(db.Model, BaseEntity):
     alv_id = db.Column(db.Integer(), db.ForeignKey('alv.id'))
     alv = db.relationship("Alv", backref='presidium')
 
+    CHAIRMAN, SECRETARY, OTHER = (0, 1, 2)
     presidium_roles = {
-        0: _('Chairman'),
-        1: _('Secretary'),
-        2: _('Other'),
+        CHAIRMAN: _('Chairman'),
+        SECRETARY: _('Secretary'),
+        OTHER: _('Other'),
     }
 
     def __str__(self):
         return '%s (%s)' % (self.user, self.presidium_roles[self.role])
+
+    @classmethod
+    def from_user_role(cls, user, role):
+        a = cls()
+        a.user = user
+        a.role = role
+        return a
 
 
 class AlvDocument(db.Model, BaseEntity):
