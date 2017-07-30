@@ -72,23 +72,22 @@ def edit(news_id=None):
 
     form = NewsForm(request.form, news_item)
 
-    if request.method == 'POST':
-        if form.validate_on_submit():
+    if form.validate_on_submit():
 
-            # fill the news_item with the form entries.
-            form.populate_obj(news_item)
+        # fill the news_item with the form entries.
+        form.populate_obj(news_item)
 
-            # Only set writer if post is brand new
-            if not news_item.id:
-                news_item.user_id = current_user.id
+        # Only set writer if post is brand new
+        if not news_item.id:
+            news_item.user_id = current_user.id
 
-            db.session.add(news_item)
-            db.session.commit()
+        db.session.add(news_item)
+        db.session.commit()
 
-            news_id = news_item.id
-            flash(_('News item saved'), 'success')
+        news_id = news_item.id
+        flash(_('News item saved'), 'success')
 
-            return redirect(url_for('news.view', news_id=news_id))
+        return redirect(url_for('news.view', news_id=news_id))
 
     return render_template('news/edit.htm', form=form, news_id=news_id)
 

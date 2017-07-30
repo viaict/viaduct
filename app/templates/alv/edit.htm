@@ -1,7 +1,7 @@
 <{% from 'macros/form.htm' import render_form %}
 
 {% extends 'content.htm' %}
-
+z
 {% block content %}
 <h1>
 {% if news_id %}
@@ -11,6 +11,6 @@
 {% endif %}
 ALV</h1>
 
-{{ form.presidium() }}
+{{ render_form(form)}}
 
 {% endblock %}
