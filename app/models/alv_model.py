@@ -1,8 +1,8 @@
-from flask_babel import lazy_gettext as _
 from sqlalchemy import event
 
 from app import db, get_locale
 from app.models import BaseEntity
+from app.service import alv_service
 
 
 class Alv(db.Model, BaseEntity):
@@ -14,34 +14,15 @@ class Alv(db.Model, BaseEntity):
     activity_id = db.Column(db.Integer, db.ForeignKey('activity.id'),
                             nullable=True)
 
-    @classmethod
-    def from_nl_name_en_name_date_activity(cls, nl_name, en_name, date,
-                                           activity):
-        m = Alv()
-        m.nl_name = nl_name
-        m.en_name = en_name
-        m.date = date
-        m.activity_id = activity.id
-        return m
+    chairman_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    chairman = db.relationship('User', foreign_keys=[chairman_user_id])
 
-    def format_presidium(self):
-        if self.presidium:
-            presidium = map(str, sorted(self.presidium, key=lambda x: x.role))
-            return ', '.join(presidium)
-        else:
-            return _('No presidium')
+    secretary_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    secretary = db.relationship('User', foreign_keys=[secretary_user_id])
 
     @property
-    def presidium_chairman(self):
-        return next(filter(lambda x: x.role == 0, self.presidium), None)
-
-    @property
-    def presidium_secretary(self):
-        return next(filter(lambda x: x.role == 1, self.presidium), None)
-
-    @property
-    def presidium_other(self):
-        return next(filter(lambda x: x.role == 2, self.presidium), None)
+    def presidium(self):
+        return alv_service.format_presidium(self)
 
     def get_localized_name(self, locale=None):
         if not locale:
@@ -57,33 +38,6 @@ class Alv(db.Model, BaseEntity):
             return self.en_name + " (Engels)"
         else:
             return 'N/A'
-
-
-class AlvPresidium(db.Model, BaseEntity):
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship('User')
-
-    role = db.Column(db.Integer(), nullable=False)
-
-    alv_id = db.Column(db.Integer(), db.ForeignKey('alv.id'))
-    alv = db.relationship("Alv", backref='presidium')
-
-    CHAIRMAN, SECRETARY, OTHER = (0, 1, 2)
-    presidium_roles = {
-        CHAIRMAN: _('Chairman'),
-        SECRETARY: _('Secretary'),
-        OTHER: _('Other'),
-    }
-
-    def __str__(self):
-        return '%s (%s)' % (self.user, self.presidium_roles[self.role])
-
-    @classmethod
-    def from_user_role(cls, user, role):
-        a = cls()
-        a.user = user
-        a.role = role
-        return a
 
 
 class AlvDocument(db.Model, BaseEntity):
