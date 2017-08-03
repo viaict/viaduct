@@ -12,22 +12,24 @@
     <div class='col-md-9 col-md-offset-1 well'>
         <div class='page-header'>
             {% if ModuleAPI.can_write('news') %}
-            <div class='btn-group pull-right'>
+            <div class='pull-right'>
                 <a class='btn btn-warning btn-xs' href='
-                            {{ url_for('alv.edit', alv_id=alv.id) }}'>
-                <i class='fa fa-edit'></i> {{ _('Edit alv') }}
+                            {{ url_for("alv.create_edit", alv_id=alv.id) }}'>
+                    <i class='fa fa-edit'></i> {{ _('Edit alv') }}
                 </a>
-                <a class='btn btn-danger btn-xs' href='
-                            {{ url_for('alv.delete', alv_id=alv.id) }}'>
-                <i class='fa fa-remove'></i> {{ _('Delete alv') }}
-                </a>
+                <form action="{{ url_for('alv.delete', alv_id=alv.id) }}"
+                      method="POST">
+                    <button class='btn btn-danger btn-xs'>
+                        <i class='fa fa-remove'></i> {{ _('Delete alv') }}
+                    </button>
+                </form>
             </div>
             {% endif %}
 
             <h1>{{ alv.name }}</h1>
         </div>
 
-        {{_('Presidium')}}: {{ alv.format_presidium() }}
+        {{_('Presidium')}}: {{ alv.presidium }}
         <hr>
         <div class='row'>
             <div class='col-md-12 content'>todo</div>

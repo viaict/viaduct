@@ -1,12 +1,18 @@
 import re
 
 from flask import flash, request, url_for, render_template, redirect, \
-    session, jsonify
+    session, jsonify, abort
 from flask_babel import _
 from flask_login import current_user
 
 from app import app, login_manager
 from app.models import Page
+
+
+class ResourceNotFoundException(Exception):
+    def __init__(self, resource, details=None):
+        self.resource = resource
+        self.detail = details
 
 
 @login_manager.unauthorized_handler
@@ -16,6 +22,11 @@ def unauthorized():
 
     flash(_('You must be logged in to view this page.'), 'danger')
     return redirect(url_for('user.sign_in'))
+
+
+@app.errorhandler(ResourceNotFoundException)
+def resource_not_found(e):
+    abort(404)
 
 
 @app.errorhandler(403)

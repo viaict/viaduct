@@ -1,22 +1,20 @@
-from flask import Flask, request, Markup, render_template, session
-from flask.json import JSONEncoder as BaseEncoder
-from flask_babel import Babel
-from flask_login import LoginManager, current_user
-from flask_sqlalchemy import SQLAlchemy
-from flask_cache import Cache
-from flask_debugtoolbar import DebugToolbarExtension
-
-from raven.contrib.flask import Sentry
-from speaklater import _LazyString
-from sqlalchemy import MetaData
-from markdown import markdown
-from flask_jsglue import JSGlue
-
 import datetime
 import json
 import logging
 import os
 
+from flask import Flask, request, Markup, render_template, session
+from flask.json import JSONEncoder as BaseEncoder
+from flask_babel import Babel
+from flask_cache import Cache
+from flask_debugtoolbar import DebugToolbarExtension
+from flask_jsglue import JSGlue
+from flask_login import LoginManager, current_user
+from flask_sqlalchemy import SQLAlchemy
+from markdown import markdown
+from raven.contrib.flask import Sentry
+from speaklater import _LazyString
+from sqlalchemy import MetaData
 
 version = 'v2.8.1.0'
 
@@ -69,7 +67,6 @@ toolbar = DebugToolbarExtension(app)
 if not app.debug and 'SENTRY_DSN' in app.config:
     sentry = Sentry(app)
     sentry.client.release = version
-
 
 # Set up Flask Babel, which is used for internationalisation support.
 babel = Babel(app)
@@ -139,6 +136,7 @@ from app.utils.company import CompanyAPI  # noqa
 from app.utils.guide import GuideAPI  # noqa
 from app.utils.module import ModuleAPI  # noqa
 from app.forms.util import FormWrapper  # noqa
+
 # Set jinja global variables
 app.jinja_env.globals.update(enumerate=enumerate)
 app.jinja_env.globals.update(render_template=render_template)
@@ -165,11 +163,16 @@ from . import api  # noqa
 
 path = os.path.dirname(os.path.abspath(__file__))
 
+from app.converters import AlvConverter  # noqa
+
+app.url_map.converters['alv'] = AlvConverter
+
 register_views(app, os.path.join(path, 'views'))
 
 from app.utils.template_filters import *  # noqa
 
 from app.models.user import AnonymousUser  # noqa
+
 login_manager.anonymous_user = AnonymousUser
 
 log = logging.getLogger('werkzeug')
