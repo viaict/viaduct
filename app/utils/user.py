@@ -1,16 +1,15 @@
-from flask_login import current_user
-from app.models.page import PagePermission
-import urllib.request
-import urllib.parse
-import urllib.error
 import hashlib
 import os
+import urllib.error
+import urllib.parse
+import urllib.request
 
 from flask import render_template
+from flask_login import current_user
 
+from app.models.page import PagePermission
 from app.utils.file import file_exists_pattern, file_remove_pattern, \
     file_upload
-
 
 ALLOWED_EXTENSIONS = set(['png', 'gif', 'jpg', 'jpeg'])
 UPLOAD_DIR = 'app/static/files/users/'
@@ -21,7 +20,7 @@ class UserAPI:
     def has_avatar(user_id):
         """Check if the user has uploaded an avatar."""
         return bool(file_exists_pattern('avatar_' + str(user_id) + '.*',
-                    UPLOAD_DIR))
+                                        UPLOAD_DIR))
 
     @staticmethod
     def remove_avatar(user):
@@ -52,8 +51,9 @@ class UserAPI:
         size = 100
 
         # Construct the url
-        gravatar_url = 'https://www.gravatar.com/avatar/' +\
-            hashlib.md5(email.lower().encode('utf-8')).hexdigest() + '?'
+        gravatar_url = 'https://www.gravatar.com/avatar/' + \
+                       hashlib.md5(
+                           email.lower().encode('utf-8')).hexdigest() + '?'
         gravatar_url += urllib.parse.urlencode({'d': default, 's': str(size)})
         return gravatar_url
 
@@ -69,7 +69,7 @@ class UserAPI:
 
         # construct file name
         filename = 'avatar_' + str(user_id) + '.' + \
-                   os.path.split(f.filename)[1]
+                   os.path.splitext(f.filename)[1]
 
         # Save new avatar
         file_upload(f, UPLOAD_DIR, True, filename)
@@ -101,9 +101,9 @@ class UserAPI:
     @staticmethod
     def get_membership_warning():
         """Render a warning if the current user has not paid."""
-        if current_user.is_anonymous or\
+        if current_user.is_anonymous or \
                 (current_user.is_authenticated and
-                    (current_user.has_paid or current_user.alumnus)):
+                 (current_user.has_paid or current_user.alumnus)):
             return ''
 
         return render_template('user/membership_warning.htm')

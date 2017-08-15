@@ -61,7 +61,6 @@ def upgrade():
         sa.Column('modified', sa.DateTime(), nullable=True),
         sa.Column('file_id', sa.Integer(), nullable=True),
         sa.Column('alv_document_id', sa.Integer(), nullable=True),
-        sa.Column('final', sa.Boolean(), nullable=False),
         sa.ForeignKeyConstraint(['alv_document_id'],
                                 ['alv_document.id'], name=op.f(
                 'fk_alv_document_version_alv_document_id_alv_document')),

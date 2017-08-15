@@ -1,5 +1,6 @@
 from flask_babel import _
 from flask_wtf import Form
+from flask_wtf.file import FileField
 from wtforms import StringField, DateField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import InputRequired
@@ -23,3 +24,10 @@ class AlvForm(Form):
     secretary = QuerySelectField(
         _('Secretary'),
         query_factory=lambda: user_service.find_members())
+
+
+class AlvDocumentForm(Form):
+    nl_name = StringField(_('Dutch name'), validators=[InputRequired()])
+    en_name = StringField(_('English name'), validators=[InputRequired()])
+
+    file = FileField(_('File'))

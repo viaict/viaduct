@@ -1,18 +1,13 @@
 import re
 
 from flask import flash, request, url_for, render_template, redirect, \
-    session, jsonify, abort
+    session, jsonify
 from flask_babel import _
 from flask_login import current_user
 
 from app import app, login_manager
 from app.models.page import Page
-
-
-class ResourceNotFoundException(Exception):
-    def __init__(self, resource, details=None):
-        self.resource = resource
-        self.detail = details
+from app.exceptions import ResourceNotFoundException
 
 
 @login_manager.unauthorized_handler
@@ -26,7 +21,7 @@ def unauthorized():
 
 @app.errorhandler(ResourceNotFoundException)
 def resource_not_found(e):
-    abort(404)
+    return page_not_found(e)
 
 
 @app.errorhandler(403)

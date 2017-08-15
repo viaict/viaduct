@@ -3,13 +3,8 @@
 {% extends 'content.htm' %}
 z
 {% block content %}
-<h1>
-{% if alv %}
-    {{ _('Edit') }}
-{% else %}
-    {{ _('Create')}}
-{% endif %}
-ALV</h1>
+
+<h1>{{_('ALV document for %s' % alv.name) }}</h1>
 
 {{ render_form(form)}}
 
