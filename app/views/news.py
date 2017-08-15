@@ -10,8 +10,8 @@ from sqlalchemy import desc
 
 from app import db
 from app.forms import NewsForm
-from app.models import News
-from app.utils import ModuleAPI
+from app.models.news import News
+from app.utils.module import ModuleAPI
 
 blueprint = Blueprint('news', __name__, url_prefix='/news')
 
@@ -19,9 +19,6 @@ blueprint = Blueprint('news', __name__, url_prefix='/news')
 @blueprint.route('/', methods=['GET'])
 @blueprint.route('/<int:page_nr>/', methods=['GET'])
 def list(page_nr=1):
-    if not ModuleAPI.can_read('news'):
-        return abort(403)
-
     items = News.query.filter(News.publish_date <= date.today(),
                               db.or_(News.archive_date >= date.today(),
                                      News.archive_date == None),  # noqa
@@ -37,9 +34,6 @@ def list(page_nr=1):
 @blueprint.route('/all/', methods=['GET'])
 @blueprint.route('/all/<int:page_nr>/', methods=['GET'])
 def all(page_nr=1):
-    if not ModuleAPI.can_read('news'):
-        return abort(403)
-
     return render_template('news/list.htm',
                            items=News.query.paginate(page_nr, 10, False),
                            archive=False)
@@ -48,9 +42,6 @@ def all(page_nr=1):
 @blueprint.route('/archive/', methods=['GET'])
 @blueprint.route('/archive/<int:page_nr>/', methods=['GET'])
 def archive(page_nr=1):
-    if not ModuleAPI.can_read('news'):
-        return abort(403)
-
     items = News.query.filter(db.and_(News.archive_date < date.today(),
                                      News.archive_date != None))  # noqa
 
@@ -95,9 +86,6 @@ def edit(news_id=None):
 @blueprint.route('/view/', methods=['GET'])
 @blueprint.route('/view/<int:news_id>/', methods=['GET'])
 def view(news_id=None):
-    if not ModuleAPI.can_read('news'):
-        return abort(403)
-
     if not news_id:
         flash(_('This news item does not exist'), 'danger')
         return redirect(url_for('news.list'))

@@ -14,7 +14,9 @@ from app import db
 from app.forms import PageForm, HistoryPageForm
 from app.utils.forms import flash_form_errors
 from app.utils.htmldiff import htmldiff
-from app.models import Group, Page, PageRevision, PagePermission, Redirect
+from app.models.group import Group
+from app.models.page import Page, PageRevision, PagePermission
+from app.models.redirect import Redirect
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult
 from app.utils.module import ModuleAPI
@@ -47,9 +49,6 @@ def get_page(path=''):
             return redirect(redirection.to)
 
         return abort(404)
-
-    if not PageAPI.can_read(page):
-        return abort(403)
 
     revision = page.get_latest_revision()
 
@@ -212,7 +211,6 @@ def delete(path):
     if not page:
         flash(_('The page you tried to delete does not exist.'), 'danger')
         return redirect(url_for('page.get_page', path=path))
-        abort(404)
     rev = page.get_latest_revision()
 
     class DeleteForm(Form):

@@ -7,7 +7,6 @@ import urllib.request
 from flask import render_template
 from flask_login import current_user
 
-from app.models.group import Group
 from app.models.page import PagePermission
 from app.utils.file import file_exists_pattern, file_remove_pattern, \
     file_upload
@@ -79,20 +78,10 @@ class UserAPI:
     def get_groups_for_user_id(user):
         """Return all the groups the current user belongs in.
 
-        If there is no current_user (no sign in), all is returned if guests
-        exists, otherwise it crashes because there can not be no all.
-
-        I believe we cant put this in user because current_user can be None if
-        there is no user currently logged in, but I might be mistaken. (Inja
-        july 10 2013).
+        If there is no current_user (no sign in), an empty list is returned.
         """
         if not user or not user.id:
-            group = Group.query.filter(Group.name == 'all').first()
-
-            if not group:
-                raise Exception("No group 'guests', this should never happen!")
-            return [group]
-
+            return []
         return user.groups
 
     @staticmethod
@@ -102,10 +91,6 @@ class UserAPI:
 
     @staticmethod
     def can_read(page):
-        if page.needs_paid and (current_user.is_anonymous or
-                                not current_user.has_paid):
-            return False
-
         return PagePermission.get_user_rights(current_user, page) > 0
 
     @staticmethod

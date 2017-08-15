@@ -2,7 +2,7 @@ from app import db
 
 from app.models.course import Course
 from app.models.education import Education
-from app.models import BaseEntity
+from app.models.base_model import BaseEntity
 
 
 class Summary(db.Model, BaseEntity):

@@ -1,7 +1,7 @@
 from sqlalchemy import event
 
 from app import db, get_locale
-from app.models import BaseEntity
+from app.models.base_model import BaseEntity
 from app.service import alv_service
 
 

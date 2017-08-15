@@ -1,25 +1,23 @@
 import datetime
 
+from flask import Blueprint
 from flask import flash, redirect, render_template, request, url_for, abort, \
     jsonify
-from flask import Blueprint
-from flask_login import current_user
 from flask_babel import _  # gettext
+from flask_login import current_user
 from werkzeug.contrib.atom import AtomFeed
 
-# this is now uncommented for breaking activity for some reason
-# please some one check out what is happening
 import app.utils.google as google
 from app import db
+from app.forms import SignInForm
 from app.forms.activity import ActivityForm, CreateForm
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult
-from app.models.mollie import Transaction, TransactionActivity
-from app.utils.module import ModuleAPI
-from app.utils.file import file_upload, file_remove
-from app.utils import mollie
 from app.models.education import Education
-from app.forms import SignInForm
+from app.models.mollie import Transaction, TransactionActivity
+from app.utils import mollie
+from app.utils.file import file_upload, file_remove
+from app.utils.module import ModuleAPI
 from app.utils.serialize_sqla import serialize_sqla
 
 blueprint = Blueprint('activity', __name__, url_prefix='/activities')
@@ -34,9 +32,6 @@ PICTURE_DIR = 'app/static/activity_pictures/'
 @blueprint.route('/list/<string:archive>/<int:page_nr>/',
                  methods=['GET', 'POST'])
 def view(archive=None, page_nr=1):
-    if not ModuleAPI.can_read('activity'):
-        return abort(403)
-
     if archive == "archive":
         activities = Activity.query.filter(
             Activity.end_time < datetime.datetime.today()).order_by(
@@ -78,11 +73,13 @@ def get_activity(activity_id=0):
 
     Register and update for an activity, with handling of custom forms
     and payment.
-    """
 
     if not ModuleAPI.can_read('activity'):
         return abort(403)
 
+    Register and update for an activity, with handling of custom forms
+    and payment.
+    """
     activity = Activity.query.get_or_404(activity_id)
 
     form = ActivityForm(request.form, current_user)

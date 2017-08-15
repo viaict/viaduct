@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-from app import app, db, version, js_glue
-from app.models import User, Group, Education, GroupPermission, NavigationEntry
+from app import app, init_app, version
+from app.extensions import db, jsglue
+from app.models.user import User
+from app.models.group import Group
+from app.models.education import Education
+from app.models.permission import GroupPermission
+from app.models.navigation import NavigationEntry
 
 from flask_script import Manager, Server, prompt, prompt_pass
 from flask_migrate import Migrate, MigrateCommand
-from flask_failsafe import failsafe
 
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -25,12 +29,7 @@ import alembic.config
 import sqlalchemy
 import bcrypt
 
-
-@failsafe
-def create_app():
-    from app import app
-
-    return app
+init_app()
 
 migrate = Migrate(app, db)
 versionbump = Manager(
@@ -104,7 +103,7 @@ def routes():
 def flaskjs():
     """Generate the javascript file for url_for in javascript."""
     with open('src/js/global/flask.js', 'w', encoding='utf8') as f:
-        f.write(js_glue.generate_js())
+        f.write(jsglue.generate_js())
 
 
 class EventHandler(FileSystemEventHandler):
@@ -230,8 +229,7 @@ def createdb():
     alembic.command.stamp(config, "head")
 
     # Add required groups
-    print("* Adding 'all','administrators' and 'BC' groups")
-    _add_group('all')
+    print("* Adding administrators' and 'BC' groups")
     _add_group('administrators')
     _add_group('BC')
 

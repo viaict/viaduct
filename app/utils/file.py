@@ -2,6 +2,7 @@ import difflib
 import fnmatch
 import os
 
+import magic
 from flask import flash
 from flask_babel import lazy_gettext as _
 from werkzeug.utils import secure_filename
@@ -9,26 +10,27 @@ from werkzeug.utils import secure_filename
 from app import app, db
 from app.models.file import File
 
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-ALLOWED_IMAGE_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_MIMETYPES = ['text/plain', 'application/pdf']
 UPLOAD_DIR = app.config['UPLOAD_DIR']
 
 
 # Check if the extension is allowed. Set image to True to allow only image-
 # extensions
-def file_allowed_extension(filename, image=False):
-    if filename == '':
-        return False
+def file_allowed_mimetype(file, image=False):
+    mime = magic.from_buffer(file.read(1024), mime=True)
 
-    split = filename.rsplit('.', 1)
+    # Set head of stream back to beginning
+    file.seek(0)
 
-    if image and split[1].lower() not in ALLOWED_IMAGE_EXTENSIONS:
-        return False
+    is_image = mime.find('image/') == 0
 
-    if not image and split[1].lower() not in ALLOWED_EXTENSIONS:
-        return False
+    if image and is_image:
+        return True
 
-    return True
+    if not image and mime in ALLOWED_MIMETYPES or is_image:
+        return True
+
+    return False
 
 
 # Upload a file. You can specify a directory, whether or not the file is
@@ -51,7 +53,7 @@ def file_upload(f, directory=UPLOAD_DIR, image=False, filename=None):
         forced_name = True
 
     # Check if the file is allowed.
-    if not file_allowed_extension(filename, image):
+    if not file_allowed_mimetype(f, image):
         flash(_("%s is not an allowed file type." % filename), 'danger')
         return
 
@@ -82,12 +84,10 @@ def file_upload(f, directory=UPLOAD_DIR, image=False, filename=None):
         db.session.add(new_file)
         db.session.commit()
 
-    # if new_file:
-    #     flash(_('File created successfully'), 'success')
-
-    else:
+    if not new_file:
         flash(_('An error occurred while uploading ' + filename),
               'danger')
+        return None
 
     return new_file
 

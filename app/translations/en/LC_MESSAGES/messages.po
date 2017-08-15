@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-08-03 21:42+0200\n"
+"POT-Creation-Date: 2017-08-15 14:13+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -30,6 +30,9 @@ msgid "A user with this e-mail address already exist."
 msgstr ""
 
 msgid "A user with this e-mail address already exists"
+msgstr ""
+
+msgid "ALV"
 msgstr ""
 
 msgid "ALVs"
@@ -60,6 +63,9 @@ msgid "Activitycommittee"
 msgstr ""
 
 msgid "Add"
+msgstr ""
+
+msgid "Add document"
 msgstr ""
 
 msgid "Add user to"
@@ -385,6 +391,9 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
+msgid "Details"
+msgstr ""
+
 msgid "Disabled"
 msgstr ""
 
@@ -398,6 +407,9 @@ msgid "Do not filter HTML tags"
 msgstr ""
 
 msgid "Do you have an idea for an activity?"
+msgstr ""
+
+msgid "Document"
 msgstr ""
 
 msgid "Dutch"
@@ -817,6 +829,9 @@ msgstr ""
 msgid "New vacancy"
 msgstr ""
 
+msgid "New version"
+msgstr ""
+
 msgid "News"
 msgstr ""
 
@@ -922,9 +937,6 @@ msgstr ""
 msgid "Optional data"
 msgstr ""
 
-msgid "Other"
-msgstr ""
-
 msgid "Page"
 msgstr ""
 
@@ -976,16 +988,7 @@ msgstr ""
 msgid "Postoffice Box"
 msgstr ""
 
-msgid "Presidium"
-msgstr ""
-
-msgid "Presidium chairman"
-msgstr ""
-
-msgid "Presidium other"
-msgstr ""
-
-msgid "Presidium secretary"
+msgid "Presidium: "
 msgstr ""
 
 msgid "Previous"
@@ -1390,6 +1393,9 @@ msgid "Valid membership is required to read this news article"
 msgstr ""
 
 msgid "Vancancies"
+msgstr ""
+
+msgid "Versions"
 msgstr ""
 
 msgid "View"
@@ -1811,5 +1817,20 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "File created successfully"
+#~ msgstr ""
+
+#~ msgid "Other"
+#~ msgstr ""
+
+#~ msgid "Presidium"
+#~ msgstr ""
+
+#~ msgid "Presidium chairman"
+#~ msgstr ""
+
+#~ msgid "Presidium other"
+#~ msgstr ""
+
+#~ msgid "Presidium secretary"
 #~ msgstr ""
 

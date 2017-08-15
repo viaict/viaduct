@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-08-03 21:42+0200\n"
+"POT-Creation-Date: 2017-08-15 14:13+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language: nl\n"
@@ -31,6 +31,9 @@ msgstr "Er bestaat al een gebruiker met dat emailadres."
 
 msgid "A user with this e-mail address already exists"
 msgstr "Er bestaat al een gebruiker met dat emailadres"
+
+msgid "ALV"
+msgstr ""
 
 msgid "ALVs"
 msgstr ""
@@ -61,6 +64,9 @@ msgstr "Activiteitencommissie"
 
 msgid "Add"
 msgstr "Toevoegen"
+
+msgid "Add document"
+msgstr ""
 
 msgid "Add user to"
 msgstr ""
@@ -389,6 +395,9 @@ msgstr "Pagina verwijderen:"
 msgid "Description"
 msgstr "Beschrijving"
 
+msgid "Details"
+msgstr "Details"
+
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
@@ -403,6 +412,9 @@ msgstr "Geen HTML tags filteren"
 
 msgid "Do you have an idea for an activity?"
 msgstr "Heb je een idee voor een activiteit?"
+
+msgid "Document"
+msgstr "Document"
 
 msgid "Dutch"
 msgstr "Nederlands"
@@ -826,6 +838,9 @@ msgstr "Nieuwe samenvatting"
 msgid "New vacancy"
 msgstr "Nieuwe vacature"
 
+msgid "New version"
+msgstr ""
+
 msgid "News"
 msgstr "Nieuws"
 
@@ -931,9 +946,6 @@ msgstr "Niet gevonden!"
 msgid "Optional data"
 msgstr "Optionele gegevens"
 
-msgid "Other"
-msgstr ""
-
 msgid "Page"
 msgstr "Pagina"
 
@@ -985,16 +997,7 @@ msgstr "Postbus"
 msgid "Postoffice Box"
 msgstr "Postbus"
 
-msgid "Presidium"
-msgstr ""
-
-msgid "Presidium chairman"
-msgstr ""
-
-msgid "Presidium other"
-msgstr ""
-
-msgid "Presidium secretary"
+msgid "Presidium: "
 msgstr ""
 
 msgid "Previous"
@@ -1423,6 +1426,9 @@ msgstr "Geldig lidmaatschap is vereist om dit nieuwsartikel te kunnen lezen"
 msgid "Vancancies"
 msgstr "Vacatures"
 
+msgid "Versions"
+msgstr "Versies"
+
 msgid "View"
 msgstr "Weergeven"
 
@@ -1815,4 +1821,19 @@ msgstr ""
 
 #~ msgid "File created successfully"
 #~ msgstr "Bestand succesvol opgeslagen."
+
+#~ msgid "Other"
+#~ msgstr ""
+
+#~ msgid "Presidium"
+#~ msgstr ""
+
+#~ msgid "Presidium chairman"
+#~ msgstr ""
+
+#~ msgid "Presidium other"
+#~ msgstr ""
+
+#~ msgid "Presidium secretary"
+#~ msgstr ""
 

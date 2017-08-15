@@ -4,9 +4,14 @@ from flask_login import current_user
 from flask_babel import _  # gettext
 
 from app import db
-from app.models import CommitteeRevision, Page, Group, User, \
-    NavigationEntry, PagePermission
-from app.utils import ModuleAPI, NavigationAPI
+from app.models.committee import CommitteeRevision
+from app.models.page import Page
+from app.models.group import Group
+from app.models.user import User
+from app.models.navigation import NavigationEntry
+from app.models.page import PagePermission
+from app.utils.module import ModuleAPI
+from app.utils.navigation import NavigationAPI
 from app.forms import CommitteeForm
 import app.utils.committee as CommitteeAPI
 
@@ -112,14 +117,10 @@ def edit_committee(committee=''):
             # Sort these navigation entries.
             NavigationAPI.alphabeticalize(root_entry)
 
-            # Assign read rights to all, and edit rights to BC.
-            all_group = Group.query.filter(Group.name == 'all').first()
+            # Edit the rights for BC
             bc_group = Group.query.filter(Group.name == 'BC').first()
-
-            all_entry = PagePermission(all_group.id, page.id, 1)
             bc_entry = PagePermission(bc_group.id, page.id, 2)
 
-            db.session.add(all_entry)
             db.session.add(bc_entry)
             db.session.commit()
         else:

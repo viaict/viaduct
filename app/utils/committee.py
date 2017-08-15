@@ -1,4 +1,4 @@
-from app.models import Page
+from app.models.page import Page
 
 
 def get_alphabetical():

@@ -25,24 +25,23 @@
     "url": "https://github.com/viaict/viaduct/issues"
   },
   "homepage": "https://github.com/viaict/viaduct",
-
   "jshintConfig": {
-      "undef": true,
-      "unused": true,
-      "browser": true,
-      "devel": true,
-      "jquery": true,
-      "strict": true,
-      "trailing": true,
-      "predef": [
-          "_",
-          "viaduct",
-          "utils",
-          "Flask",
-          "markdown",
-          "jade",
-          "sprintf",
-          "flash"
-      ]
+    "undef": true,
+    "unused": true,
+    "browser": true,
+    "devel": true,
+    "jquery": true,
+    "strict": true,
+    "trailing": true,
+    "predef": [
+      "_",
+      "viaduct",
+      "utils",
+      "Flask",
+      "markdown",
+      "jade",
+      "sprintf",
+      "flash"
+    ]
   }
 }

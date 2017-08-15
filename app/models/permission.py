@@ -1,9 +1,12 @@
 from app import db
-from app.models import BaseEntity
+from app.models.base_model import BaseEntity
 
 
 class GroupPermission(db.Model, BaseEntity):
-    """Modules have names, this is not stored or registered, it is simply the
+    """
+    This class represents a link between a group and a module.
+
+    Modules have names, this is not stored or registered, it is simply the
     name a module uses when it checks for permissions of a certain user. In the
     future we would like that modules register themselves so we can keep track
     of modules in use by the site and perhaps make sure that names of modules

@@ -5,7 +5,7 @@ from flask_login import current_user
 from sqlalchemy import desc
 
 from app import db, cache
-from app.models import News
+from app.models.news import News
 from app.models.page import Page, PageRevision
 from app.models.activity import Activity
 

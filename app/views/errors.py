@@ -7,7 +7,7 @@ from flask_login import current_user
 
 from app import app, login_manager
 from app.exceptions import ResourceNotFoundException
-from app.models import Page
+from app.models.page import Page
 
 
 @login_manager.unauthorized_handler
