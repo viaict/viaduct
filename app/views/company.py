@@ -1,21 +1,19 @@
+import json
+from datetime import datetime
+
 from flask import Blueprint, flash, redirect, render_template, request, \
     url_for, abort
 from flask_babel import lazy_gettext as _
-import json
-
 from sqlalchemy import or_, and_
 
-from datetime import datetime
-
 from app import app, db
-from app.models.company import Company
-from app.models.location import Location
-from app.models.contact import Contact
 from app.forms import CompanyForm, NewCompanyForm
+from app.models.company import Company
+from app.models.contact import Contact
+from app.models.location import Location
+from app.utils.file import file_upload
 from app.utils.forms import flash_form_errors
 from app.utils.module import ModuleAPI
-from app.utils.file import file_upload
-
 
 blueprint = Blueprint('company', __name__, url_prefix='/companies')
 
@@ -122,7 +120,6 @@ def list(page=1):
                            path=FILE_FOLDER)
 
 
-@blueprint.route('/view/', methods=['GET'])
 @blueprint.route('/view/<int:company_id>/', methods=['GET'])
 def view(company_id=None):
     """View a company."""
