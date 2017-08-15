@@ -75,6 +75,8 @@ class FieldTab:
 
 class FieldVerticalSplit:
     """
+    Vertical field splits.
+
     Represents a vertical split of fields,
     i.e. fields next to each other.
     """
@@ -141,7 +143,7 @@ class FieldVerticalSplit:
 
 
 class FormWrapper:
-    """Helper class for form rendering"""
+    """Helper class for form rendering."""
 
     def __init__(self, form):
         self.form = form

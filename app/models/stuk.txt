@@ -1,0 +1,13 @@
+[Warning] on User = Anonymous - [Warning] Error in /forms/loader/
+[Warning] on User = Anonymous - [Warning] Error in /static/1
+[Warning] on User = Anonymous - [Warning] Error in /activities/transaction/1/
+[Warning] on User = dummy@svia.nl - [Warning] Error in /forms/loader/
+[Warning] on User = dummy@svia.nl - [Warning] Error in /static/1
+[Warning] on User = dummy@svia.nl - [Warning] Error in /activities/transaction/1/
+[Warning] on User = loriancoltof@gmail.com - [Warning] Error in /pimpy/tasks/me/update_status/
+[Warning] on User = loriancoltof@gmail.com - [Warning] Error in /forms/loader/
+[Warning] on User = loriancoltof@gmail.com - [Warning] Error in /verkiezing/admin/stemmen/
+[Warning] on User = loriancoltof@gmail.com - [Warning] Error in /static/1
+[Warning] on User = loriancoltof@gmail.com - [Warning] Error in /challenge/dashboard/
+[Warning] on User = loriancoltof@gmail.com - [Warning] Error in /activities/transaction/1/
+[Warning] on User = loriancoltof@gmail.com - [Warning] Error in /vacancies/1/

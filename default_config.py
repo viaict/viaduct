@@ -30,7 +30,8 @@ class DefaultConfig:
 
     # One date format string to rule them all (use this in strftime)
     DATE_FORMAT = "%Y-%m-%d"
-    DT_FORMAT = "%Y-%m-%d %H:%M"
+    TIME_FORMAT = "%H:%M"
+    DT_FORMAT = "{} {}".format(DATE_FORMAT, TIME_FORMAT)
     MIN_PASSWORD_LENGTH = 6
 
     LANGUAGES = {

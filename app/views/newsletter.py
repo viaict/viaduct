@@ -6,6 +6,9 @@ from app import app, db
 from app.utils.module import ModuleAPI
 from app.forms.newsletter import NewsletterForm
 from app.models.newsletter import Newsletter
+from app.models.news import News
+
+import datetime
 
 blueprint = Blueprint('newsletter', __name__, url_prefix='/newsletter')
 
@@ -41,8 +44,20 @@ def edit(newsletter_id=None):
         flash(_('Newsletter saved'), 'success')
         return redirect(url_for('.all'))
 
+    start_date = datetime.date.today().replace(day=1)
+    prev_month = (start_date - datetime.timedelta(days=1)).replace(day=1)
+
+    if not newsletter_id:
+        selected_news_items = News.query.filter(
+            News.created > prev_month, db.or_(
+                News.archive_date >= datetime.date.today(),
+                News.archive_date == None))\
+            .order_by(News.created).all()  # noqa
+    else:
+        selected_news_items = []
+
     return render_template('newsletter/edit.htm', newsletter=newsletter,
-                           form=form)
+                           form=form, selected_news_items=selected_news_items)
 
 
 @blueprint.route('/delete/<int:newsletter_id>/', methods=['GET', 'POST'])
@@ -79,9 +94,10 @@ def activities_xml(newsletter_id=None):
         return abort(403)
 
     newsletter = get_newsletter(newsletter_id)
-    return Response(render_template('newsletter/activities.xml',
-                                    items=newsletter.activities),
-                    mimetype='text/xml')
+    items = newsletter.activities if newsletter else []
+    return Response(
+        render_template('newsletter/activities.xml', items=items),
+        mimetype='text/xml')
 
 
 @blueprint.route('/<int:newsletter_id>/news/', methods=['GET'])
@@ -91,6 +107,7 @@ def news_xml(newsletter_id=None):
         return abort(403)
 
     newsletter = get_newsletter(newsletter_id)
-    return Response(render_template('newsletter/news.xml',
-                                    items=newsletter.news_items),
-                    mimetype='text/xml')
+    items = newsletter.news_items if newsletter else []
+    return Response(
+        render_template('newsletter/news.xml', items=items),
+        mimetype='text/xml')
