@@ -5,7 +5,7 @@ from wtforms import StringField, DateField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import InputRequired
 
-from app.models import Activity
+from app.models.activity import Activity
 from app.service import user_service
 
 

@@ -1,8 +1,7 @@
 from sqlalchemy import event
 
 from app import db, get_locale
-from app.models import BaseEntity
-from app.service import alv_service
+from app.models.base_model import BaseEntity
 
 
 class Alv(db.Model, BaseEntity):
@@ -23,6 +22,7 @@ class Alv(db.Model, BaseEntity):
 
     @property
     def presidium(self):
+        from app.service import alv_service
         return alv_service.format_presidium(self)
 
     def get_localized_name(self, locale=None):

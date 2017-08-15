@@ -1,7 +1,7 @@
 from sqlalchemy.orm import raiseload
 
 from app import db
-from app.models import User
+from app.models.user import User
 
 
 def find_members():

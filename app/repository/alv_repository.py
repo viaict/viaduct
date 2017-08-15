@@ -1,8 +1,9 @@
 from sqlalchemy.orm import joinedload, raiseload
 
 from app import db
-from app.models import Activity, User
+from app.models.activity import Activity
 from app.models.alv_model import Alv, AlvDocument, AlvDocumentVersion
+from app.models.user import User
 
 
 def save(alv):
