@@ -132,7 +132,7 @@
             <div class="col-md-12">
                 <div class="input-group" style="padding-bottom: 5px">
                     <input id="activities-url-copytext"  title="{{ _('Link copied') }}"
-                    class="form-control" type="text"
+                    class="form-control url-copy-textbox" type="text"
                     value="{{ url_for('.activities_xml', newsletter_id=None, auth_token=token, _external=True) }}" readonly>
                     </input>
                     <span class="input-group-btn">
@@ -151,7 +151,7 @@
             <div class="col-md-12">
                 <div class="input-group" style="padding-bottom: 5px">
                     <input id="news-items-url-copytext"  title="{{ _('Link copied') }}"
-                    class="form-control" type="text"
+                    class="form-control url-copy-textbox" type="text"
                     value="{{ url_for('.news_xml', newsletter_id=None, auth_token=token, _external=True) }}" readonly>
                     </input>
                     <span class="input-group-btn">
