@@ -1,19 +1,17 @@
+import datetime as dt
+import math
+import re
+
 from flask import Blueprint
 from flask import flash, redirect, \
     render_template, url_for, request, abort
-from flask_login import login_required, current_user
 from flask_babel import _
+from flask_login import login_required, current_user
 
 from app import app
 from app.models.user import User
-
 from app.utils.domjudge import DOMjudgeAPI
 from app.utils.module import ModuleAPI
-
-import datetime as dt
-import re
-import math
-
 
 DOMJUDGE_URL = app.config['DOMJUDGE_URL']
 DOMJUDGE_ADMIN_USERNAME = app.config['DOMJUDGE_ADMIN_USERNAME']
@@ -55,7 +53,11 @@ def darken_color(c):
 
     Small utility function to compute the color for the border of
     the problem name badges.
+
+    When no color is passed, a dark border is set.
     """
+    if not c:
+        return '#000'  # black
     r, g, b = int(c[1:3], 16), int(c[3:5], 16), int(c[5:], 16)
     return '#{:0>6s}'.format(
         hex(int(r * 0.5) << 16 | int(g * 0.5) << 8 | int(b * 0.5))[2:])
