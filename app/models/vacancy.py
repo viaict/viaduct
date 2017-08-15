@@ -2,7 +2,7 @@ from app import db
 from datetime import datetime
 
 from app.models.company import Company
-from app.models import BaseEntity
+from app.models.base_model import BaseEntity
 
 
 class Vacancy(db.Model, BaseEntity):

@@ -1,6 +1,6 @@
 from app import db
 import datetime
-from app.models import BaseEntity
+from app.models.base_model import BaseEntity
 
 
 class PasswordTicket(db.Model, BaseEntity):

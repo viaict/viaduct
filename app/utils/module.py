@@ -3,15 +3,6 @@ from flask_login import current_user
 from app.utils.user import UserAPI
 from app.models.permission import GroupPermission
 
-import sys
-
-
-def import_module(name, globals=globals(), locals=locals(), fromlist=[],
-                  level=-1):
-    __import__(name)
-
-    return sys.modules[name]
-
 
 class ModuleAPI:
 

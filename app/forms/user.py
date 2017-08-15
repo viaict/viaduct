@@ -1,6 +1,6 @@
 # coding=utf-8
 from app import app
-from app.models import User
+from app.models.user import User
 
 from flask_wtf import Form
 from flask_wtf.recaptcha import RecaptchaField, Recaptcha

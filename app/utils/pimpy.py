@@ -12,9 +12,9 @@ from fuzzywuzzy import fuzz
 
 from app.utils.module import ModuleAPI
 from app.utils.user import UserAPI
-from app.models import Group, User
-from app.models import Minute, Task
-from app.models.pimpy import TaskUserRel
+from app.models.user import User
+from app.models.group import Group
+from app.models.pimpy import Minute, Task, TaskUserRel
 
 # from app.utils import copernica
 

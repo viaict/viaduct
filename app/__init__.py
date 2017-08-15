@@ -1,19 +1,15 @@
-from flask import Flask, request, Markup, render_template, session
+from app.utils.import_module import import_module
+
+from flask import Flask, request, session
 from flask.json import JSONEncoder as BaseEncoder
 from flask_babel import Babel
-from flask_login import LoginManager, current_user
-from flask_sqlalchemy import SQLAlchemy
-from flask_cache import Cache
-from flask_debugtoolbar import DebugToolbarExtension
+from flask_login import current_user
 
-from raven.contrib.flask import Sentry
 from speaklater import _LazyString
-from sqlalchemy import MetaData
-from markdown import markdown
-from flask_jsglue import JSGlue
 
-import datetime
-import json
+from .extensions import db, login_manager, \
+    cache, toolbar, jsglue, sentry
+
 import logging
 import os
 
@@ -58,18 +54,7 @@ def register_views(app, path, extension=''):
 
 # Set up the app and load the configuration file.
 app = Flask(__name__)
-js_glue = JSGlue(app)
 app.config.from_object('config.Config')
-app.config['CACHE_TYPE'] = 'filesystem'
-app.config['CACHE_DIR'] = 'cache'
-
-cache = Cache(app)
-toolbar = DebugToolbarExtension(app)
-
-if not app.debug and 'SENTRY_DSN' in app.config:
-    sentry = Sentry(app)
-    sentry.client.release = version
-
 
 # Set up Flask Babel, which is used for internationalisation support.
 babel = Babel(app)
@@ -90,87 +75,52 @@ def get_locale():
     return request.accept_languages.best_match(list(languages), default='nl')
 
 
-class JSONEncoder(BaseEncoder):
-    """Custom JSON encoding."""
-
-    def default(self, o):
-        if isinstance(o, _LazyString):
-            # Lazy strings need to be evaluation.
-            return str(o)
-
-        return BaseEncoder.default(self, o)
-
-
-@app.context_processor
-def inject_urls():
-    return dict(
-        request_path=request.path,
-        request_base_url=request.base_url,
-        request_url=request.url,
-        request_url_root=request.url_root)
-
-
-app.json_encoder = JSONEncoder
-
-# Set up the login manager, which is used to store the details related to the
-# authentication system.
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'user.sign_in'
-
-# Set up the database.
-constraint_naming_convention = {
-    "ix": 'ix_%(column_0_label)s',
-    "uq": "uq_%(table_name)s_%(column_0_name)s",
-    "ck": "ck_%(table_name)s_%(column_0_name)s",
-    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
-    "pk": "pk_%(table_name)s"
-}
-
-# Custom SQLAlchemy object that uses naming conventions.
-# https://stackoverflow.com/questions/29153930/
-db = SQLAlchemy(
-    app, metadata=MetaData(naming_convention=constraint_naming_convention))
-
-from app.utils import import_module, serialize_sqla  # noqa
-from app.utils.thumb import thumb  # noqa
-from app.utils.user import UserAPI  # noqa
-from app.utils.company import CompanyAPI  # noqa
-from app.utils.guide import GuideAPI  # noqa
-from app.utils.module import ModuleAPI  # noqa
-from app.forms.util import FormWrapper  # noqa
-# Set jinja global variables
-app.jinja_env.globals.update(enumerate=enumerate)
-app.jinja_env.globals.update(render_template=render_template)
-app.jinja_env.globals.update(markdown=markdown)
-app.jinja_env.globals.update(Markup=Markup)
-app.jinja_env.globals.update(UserAPI=UserAPI)
-app.jinja_env.globals.update(CompanyAPI=CompanyAPI)
-app.jinja_env.globals.update(GuideAPI=GuideAPI)
-app.jinja_env.globals.update(ModuleAPI=ModuleAPI)
-app.jinja_env.globals.update(datetime=datetime)
-app.jinja_env.globals.update(json=json)
-app.jinja_env.globals.update(serialize_sqla=serialize_sqla)
-app.jinja_env.globals.update(len=len)
-app.jinja_env.globals.update(thumb=thumb)
-app.jinja_env.globals.update(isinstance=isinstance)
-app.jinja_env.globals.update(list=list)
-app.jinja_env.globals.update(static_url=static_url)
-app.jinja_env.globals.update(get_locale=get_locale)
-app.jinja_env.globals.update(app_config=app.config)
-app.jinja_env.globals.update(FormWrapper=FormWrapper)
-
-# Register the blueprints.
-from . import api  # noqa
-
-path = os.path.dirname(os.path.abspath(__file__))
-
-register_views(app, os.path.join(path, 'views'))
-
-from app.utils.template_filters import *  # noqa
-
+# Has to be imported *after* app is created and Babel is initialised
 from app.models.user import AnonymousUser  # noqa
-login_manager.anonymous_user = AnonymousUser
+from app import jinja_env  # noqa
 
-log = logging.getLogger('werkzeug')
-log.setLevel(app.config['LOG_LEVEL'])
+
+def init_app():
+    app.config['CACHE_TYPE'] = 'filesystem'
+    app.config['CACHE_DIR'] = 'cache'
+
+    cache.init_app(app)
+    toolbar.init_app(app)
+    jsglue.init_app(app)
+
+    login_manager.init_app(app)
+    login_manager.login_view = 'user.sign_in'
+
+    db.init_app(app)
+
+    if not app.debug and 'SENTRY_DSN' in app.config:
+        sentry.init_app(app)
+        sentry.client.release = version
+
+    class JSONEncoder(BaseEncoder):
+        """Custom JSON encoding."""
+
+        def default(self, o):
+            if isinstance(o, _LazyString):
+                # Lazy strings need to be evaluation.
+                return str(o)
+
+            return BaseEncoder.default(self, o)
+
+    @app.context_processor
+    def inject_urls():
+        return dict(
+            request_path=request.path,
+            request_base_url=request.base_url,
+            request_url=request.url,
+            request_url_root=request.url_root)
+
+    app.json_encoder = JSONEncoder
+
+    path = os.path.dirname(os.path.abspath(__file__))
+    register_views(app, os.path.join(path, 'views'))
+
+    login_manager.anonymous_user = AnonymousUser
+
+    log = logging.getLogger('werkzeug')
+    log.setLevel(app.config['LOG_LEVEL'])

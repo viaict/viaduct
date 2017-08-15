@@ -1,5 +1,5 @@
 from app import db
-from app.models import BaseEntity
+from app.models.base_model import BaseEntity
 
 
 """ Meta tags for pages, activities and modules for SEO
