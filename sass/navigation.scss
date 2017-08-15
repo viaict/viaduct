@@ -7,28 +7,30 @@
 }
 
 .panel-group .panel{
-	border-radius: 0px; 
+	border-radius: 0px;
 }
 
 .col-sm-2.col-md-2.side-menu{
 	padding: 0px;
 }
 
-div.panel-heading{
-	border-bottom: 1px solid #e7e7e7 !important;
-	background-color: #f5f5f5;
-	color: #333;
-}
+.side-menu {
+    div.panel-heading{
+        border-bottom: 1px solid #e7e7e7 !important;
+        background-color: #f5f5f5;
+        color: #333;
+    }
 
-div.panel-heading:hover{
-	background-color: #eee;
-}
+    div.panel-heading:hover{
+        background-color: #eee;
+    }
 
-.panel-title.sub-panel-title{
-	padding-left: 5px;
+    .panel-title.sub-panel-title{
+        padding-left: 5px;
 
-}
+    }
 
-.panel-heading.sub-panel-heading{
-	background-color: #fff;
+    .panel-heading.sub-panel-heading{
+        background-color: #fff;
+    }
 }
