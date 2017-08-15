@@ -1,8 +1,7 @@
 from flask import Blueprint, abort, render_template, request, url_for, redirect
 from flask_login import login_required
 
-from app import db
-from app.forms.alv import AlvForm
+from app.forms.alv import AlvForm, AlvDocumentForm
 from app.models.alv_model import Alv
 from app.service import alv_service
 from app.utils.module import ModuleAPI
@@ -21,26 +20,26 @@ def list():
     return render_template('alv/list.htm', alvs=alvs)
 
 
-@blueprint.route('/view/<int:alv_id>/', methods=['GET'])
+@blueprint.route('/<int:alv_id>/', methods=['GET'])
 @login_required
 def view(alv_id=0):
     if not ModuleAPI.can_read('alv'):
         return abort(403)
     if alv_id:
-        alv = alv_service.get_by_id(alv_id)
+        alv = alv_service.get_alv_by_id(alv_id, include_documents=True)
 
     return render_template('alv/view.htm', alv=alv)
 
 
 @blueprint.route("/create/", methods=['GET', 'POST'])
-@blueprint.route("/edit/<int:alv_id>/", methods=['GET', 'POST'])
+@blueprint.route("/<int:alv_id>/edit/", methods=['GET', 'POST'])
 @login_required
 def create_edit(alv_id=None):
     if not ModuleAPI.can_write('alv'):
         return abort(403)
 
     if alv_id:
-        alv = alv_service.get_by_id(alv_id)
+        alv = alv_service.get_alv_by_id(alv_id)
     else:
         alv = Alv()
 
@@ -48,22 +47,60 @@ def create_edit(alv_id=None):
 
     if form.validate_on_submit():
         form.populate_obj(alv)
-        alv_service.save(alv)
+        alv_service.save_alv(alv)
         return redirect(url_for('alv.list'))
 
     return render_template('alv/edit.htm', form=form)
 
 
-@blueprint.route('/delete/<int:alv_id>/', methods=['POST'])
+@blueprint.route('/<int:alv_id>/documents/create/', methods=['GET', 'POST'])
 @login_required
-def delete(alv_id=0):
+def create_document(alv_id=None):
     if not ModuleAPI.can_write('alv'):
         return abort(403)
 
-    if alv_id:
-        alv = alv_service.find_by_id(alv_id)
+    alv = alv_service.get_alv_by_id(alv_id)
+    form = AlvDocumentForm(request.form)
 
-    db.session.delete(alv)
-    db.session.commit()
+    if form.validate_on_submit() and form.file.id in request.files:
+        alv_service.add_document(alv, request.files.get(form.file.id),
+                                 form.nl_name.data, form.en_name.data)
+        return redirect(url_for('alv.view', alv_id=alv.id))
+
+    return render_template('alv/upload_document.htm', form=form, alv=alv)
+
+
+@blueprint.route('/<int:alv_id>/documents/<int:doc_id>/update/',
+                 methods=['GET', 'POST'])
+@login_required
+def update_document(alv_id=None, doc_id=None):
+    if not ModuleAPI.can_write('alv'):
+        return abort(403)
+
+    alv = alv_service.get_alv_by_id(alv_id)
+    alv_document = alv_service.get_alv_document_by_id(doc_id)
+
+    form = AlvDocumentForm(request.form)
+    form.nl_name.data = alv_document.nl_name
+    form.en_name.data = alv_document.en_name
+
+    if form.validate_on_submit():
+        alv_service.update_document(
+            alv_document,
+            request.files.get(form.file.id, None),
+            form.nl_name.data, form.en_name.data)
+        return redirect(url_for('alv.view', alv_id=alv.id))
+
+    return render_template('alv/upload_document.htm', form=form, alv=alv)
+
+
+@blueprint.route('/<int:alv_id>/delete/', methods=['POST'])
+@login_required
+def delete(alv_id=None):
+    if not ModuleAPI.can_write('alv'):
+        return abort(403)
+
+    alv = alv_service.get_alv_by_id(alv_id)
+    alv_service.delete_alv(alv)
 
     return redirect(url_for('alv.list'))

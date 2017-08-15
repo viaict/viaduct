@@ -35,7 +35,7 @@ class AlvConverter(ModelIdConverter):
         # from app import app
         # from app.service import alv_service
         with app.test_request_context():
-            return alv_service.find_by_id(alv_id)
+            return alv_service.find_alv_by_id(alv_id)
 
 
 def init_converters(app):

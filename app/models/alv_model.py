@@ -13,6 +13,7 @@ class Alv(db.Model, BaseEntity):
 
     activity_id = db.Column(db.Integer, db.ForeignKey('activity.id'),
                             nullable=True)
+    activity = db.relationship('Activity')
 
     chairman_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     chairman = db.relationship('User', foreign_keys=[chairman_user_id])
@@ -69,8 +70,6 @@ class AlvDocumentVersion(db.Model, BaseEntity):
 
     alv_document_id = db.Column(db.Integer(), db.ForeignKey('alv_document.id'))
     alv_document = db.relationship('AlvDocument', backref='versions')
-
-    final = db.Column(db.Boolean(), nullable=False)
 
 
 @event.listens_for(Alv, 'load')
