@@ -4,6 +4,8 @@ from app.models.base_model import BaseEntity
 
 class ModulePermission(db.Model, BaseEntity):
     """
+    This class represents a link between a group and a module.
+
     Modules have names, this is not stored or registered, it is simply the name
     a module uses when it checks for permissions of a certain user. In the
     future we would like that modules register themselves so we can keep track

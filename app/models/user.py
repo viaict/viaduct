@@ -1,4 +1,4 @@
-from app import db, app, cache
+from app import db, app
 from app.models.base_model import BaseEntity
 from app.models.education import Education
 from app.models.group import Group
@@ -25,14 +25,12 @@ class AnonymousUser(AnonymousUserMixin):
 
     id = 0
     has_paid = False
-
-    @property
-    @cache.cached(timeout=60)
-    def groups(self):
-        return Group.query.filter(Group.name == 'all').all()
+    groups = []
 
 
 class User(db.Model, UserMixin, BaseEntity):
+    """The groups property is backreferenced from group.py."""
+
     __tablename__ = 'user'
 
     prints = ('id', 'email', 'password', 'first_name', 'last_name',

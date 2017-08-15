@@ -229,8 +229,7 @@ def createdb():
     alembic.command.stamp(config, "head")
 
     # Add required groups
-    print("* Adding 'all','administrators' and 'BC' groups")
-    _add_group('all')
+    print("* Adding administrators' and 'BC' groups")
     _add_group('administrators')
     _add_group('BC')
 

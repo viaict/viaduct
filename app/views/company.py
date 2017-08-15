@@ -24,9 +24,6 @@ FILE_FOLDER = app.config['FILE_DIR']
 
 @blueprint.route('/get_companies/', methods=['GET'])
 def get_companies():
-    if not ModuleAPI.can_read('company'):
-        return abort(403)
-
     if not ModuleAPI.can_write('company'):
         companies = Company.query\
             .filter(and_(Company.contract_start_date < datetime.utcnow(),
@@ -76,9 +73,6 @@ def get_companies():
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page>/', methods=['GET', 'POST'])
 def list(page=1):
-    if not ModuleAPI.can_read('company'):
-        return abort(403)
-
     if request.args.get('search') is not None:
         search = request.args.get('search')
 
@@ -132,8 +126,6 @@ def list(page=1):
 @blueprint.route('/view/<int:company_id>/', methods=['GET'])
 def view(company_id=None):
     """View a company."""
-    if not ModuleAPI.can_read('company'):
-        return abort(403)
 
     company = Company.query.get_or_404(company_id)
     return render_template('company/view.htm', company=company,
@@ -144,7 +136,7 @@ def view(company_id=None):
 @blueprint.route('/edit/<int:company_id>/', methods=['GET', 'POST'])
 def edit(company_id=None):
     """Create, view or edit a company."""
-    if not ModuleAPI.can_read('company'):
+    if not ModuleAPI.can_write('company'):
         return abort(403)
 
     # Select company.

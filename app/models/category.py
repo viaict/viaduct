@@ -18,8 +18,11 @@ category_category = db.Table(
 
 
 class Category(db.Model, BaseEntity):
-    """ Categories for pages similar to
-    https://www.mediawiki.org/wiki/Help:Categories """
+    """
+    Categories for pages similar to mediawiki categories.
+
+    https://www.mediawiki.org/wiki/Help:Categories
+    """
 
     __tablename__ = 'category'
 

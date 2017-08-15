@@ -48,7 +48,7 @@
                             </dd>
                         </dl>
                         {% if list_item.minute_id > 1 %}
-                        <a href="{{ url_for('pimpy.view_minute', group_id=list_item.group_id, minute_id=list_item.minute_id) }}">Ga naar notulen!</a>
+                        <a href="{{ url_for('pimpy.view_minute', minute_id=list_item.minute_id) }}">Ga naar notulen!</a>
                         {% endif %}
                     </div>
                 </div>
@@ -106,7 +106,7 @@
                             </dd>
                         </dl>
                         {% if list_item.minute_id > 1 %}
-                        <a href="{{ url_for('pimpy.view_minute', group_id=list_item.group_id, minute_id=list_item.minute_id) }}">Ga naar notulen!</a>
+                        <a href="{{ url_for('pimpy.view_minute', minute_id=list_item.minute_id) }}">Ga naar notulen!</a>
                         {% endif %}
                     </div>
                 </div>
@@ -162,7 +162,7 @@
                             </dd>
                         </dl>
                         {% if list_item.minute_id > 1 %}
-                        <a href="{{ url_for('pimpy.view_minute', group_id=list_item.group_id, minute_id=list_item.minute_id) }}">Ga naar notulen!</a>
+                        <a href="{{ url_for('pimpy.view_minute', minute_id=list_item.minute_id) }}">Ga naar notulen!</a>
                         {% endif %}
                     </div>
                 </div>

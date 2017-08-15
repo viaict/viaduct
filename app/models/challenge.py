@@ -39,7 +39,7 @@ class Challenge(db.Model, BaseEntity):
 
     @property
     def serialize(self):
-        """Return object data in easily serializeable format"""
+        """Return object data in easily serializeable format."""
         return {
             'id': self.id,
             'name': self.name,
@@ -95,7 +95,7 @@ class Competitor(db.Model, BaseEntity):
 
     @property
     def serialize(self):
-        """Return object data in easily serializeable format"""
+        """Return object data in easily serializeable format."""
         return {
             'name': self.user.name,
             'points': self.points,

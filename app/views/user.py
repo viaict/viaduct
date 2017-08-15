@@ -21,7 +21,6 @@ from app.forms.user import EditUserForm, EditUserInfoForm
 from app.models.user import User
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult, CustomForm
-from app.models.group import Group
 from app.models.request_ticket import PasswordTicket
 from app.models.education import Education
 
@@ -169,9 +168,6 @@ def edit(user_id=None):
         if not user_id:
             user = User('_')
 
-        group = Group.query.filter(Group.name == 'all').first()
-        group.add_user(user)
-
         try:
             user.update_email(form.email.data.strip())
         except HttpError as e:
@@ -206,7 +202,6 @@ def edit(user_id=None):
             user.password = bcrypt.hashpw(form.password.data, bcrypt.gensalt())
 
         db.session.add(user)
-        db.session.add(group)
         db.session.commit()
 
         avatar = request.files['avatar']
@@ -245,8 +240,9 @@ def sign_up():
                   'danger')
             return render_template('user/sign_up.htm', form=form)
 
-        user = User(form.email.data, bcrypt.hashpw(form.password.data,
-                    bcrypt.gensalt()), form.first_name.data,
+        user = User(form.email.data,
+                    bcrypt.hashpw(form.password.data,
+                                  bcrypt.gensalt()), form.first_name.data,
                     form.last_name.data, form.student_id.data,
                     form.education_id.data, form.birth_date.data,
                     form.study_start.data, form.receive_information.data)
@@ -259,10 +255,6 @@ def sign_up():
         db.session.add(user)
         db.session.commit()
 
-        group = Group.query.filter(Group.name == 'all').first()
-        group.add_user(user)
-
-        db.session.add(group)
         db.session.commit()
 
         copernica.update_user(user, subscribe=True)
