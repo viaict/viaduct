@@ -1476,3 +1476,12 @@ $DOMJUDGE_LIGHTGREEN:   #7CD449;
     @extend .domjudge-submission;
     background-color: $DOMJUDGE_RED;
 }
+
+.list-group-item .name {
+    display: inline;
+}
+
+.list-group-item .comment {
+    float: right;
+    font-weight: bold;
+}

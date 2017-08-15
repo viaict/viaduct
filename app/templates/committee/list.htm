@@ -7,7 +7,8 @@
             <ul class="list-group">
                 {% for rev in revisions %}
                     <a href='/{{ rev.page.path }}' class="list-group-item">
-                        {{ rev.title }}
+                        <div class="name"> {{ rev.title }} </div>
+                        {% if rev.open_new_members %}<div class="comment" >zoekt nieuwe leden!</div>{% endif %}
                     </a>
                 {% endfor %}
             </ul>

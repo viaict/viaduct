@@ -16,8 +16,12 @@
         {% if revision.interim %}
             <br />{{_('Interim-coördinator')}}: {{ revision.coordinator.name }}
         {% endif %}
-
-        <br />Email: {{ revision.group.maillist }}@svia.nl
+        {% if revision.group.maillist is not none %}<br />Email: <a href="mailto:{{revision.group.maillist}}@svia.nl">{{ revision.group.maillist }}@svia.nl</a>{% endif %}
+        {% if revision.open_new_members %}
+        <p>
+            <strong> Op zoek naar nieuwe leden! </strong> <br />
+            Wil je bij de commissie? Stuur een mailtje {% if revision.group.maillist is not none %} naar <a href="mailto:{{revision.group.maillist}}@svia.nl">{{revision.group.maillist}}@svia.nl</a> {% endif %} </p>
+        {% endif %}
     </p>
     <hr />
     {{ revision.description | strip_tags('script', 'link', 'style', 'video', 'audio') | strip_attrs('style', 'onclick', 'onload') | markdown }}
