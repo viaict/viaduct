@@ -122,7 +122,3 @@ class User(db.Model, UserMixin, BaseEntity):
         if not self.first_name and not self.last_name:
             return None
         return ' '.join([self.first_name, self.last_name])
-
-    @staticmethod
-    def get_anonymous_user():
-        return User.query.get(0)
