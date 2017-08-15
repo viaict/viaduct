@@ -4,7 +4,7 @@ from flask_babel import lazy_gettext as _
 
 from app import db
 from app.models.location import Location
-from app.utils import serialize_sqla
+from app.utils.serialize_sqla import serialize_sqla
 from app.forms import LocationForm
 from app.utils.module import ModuleAPI
 

@@ -6,7 +6,7 @@ from math import ceil
 from datetime import date
 
 from app import db, app
-from app.models import Nominee, Nomination, Vote
+from app.models.elections import Nominee, Nomination, Vote
 from app.utils.module import ModuleAPI
 
 

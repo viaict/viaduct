@@ -3,9 +3,10 @@ import validictory
 from flask import request
 
 from app import app, db
-from app.utils import Resource
+from app.utils.resource import Resource
 from app.utils.api import make_api_response
-from app.models import Course, Education
+from app.models.course import Course
+from app.models.education import Education
 
 
 class CourseAPI(Resource):

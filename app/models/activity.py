@@ -1,7 +1,7 @@
 from app import db
 from app import get_locale
 from datetime import datetime, timedelta
-from app.models import BaseEntity
+from app.models.base_model import BaseEntity
 from babel.dates import format_timedelta, format_datetime
 from sqlalchemy import event
 from flask_babel import lazy_gettext as _  # gettext

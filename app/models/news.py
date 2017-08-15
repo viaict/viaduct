@@ -6,7 +6,7 @@ from flask_babel import lazy_gettext as _
 from flask_login import current_user
 
 from app import db, get_locale
-from app.models import BaseEntity
+from app.models.base_model import BaseEntity
 
 
 class News(db.Model, BaseEntity):

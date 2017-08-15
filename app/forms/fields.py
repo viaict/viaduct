@@ -1,6 +1,8 @@
 from wtforms import IntegerField, SelectField
 from wtforms import DecimalField as WtfDecimalFields
-from app.models import Course, Education, Group
+from app.models.course import Course
+from app.models.education import Education
+from app.models.group import Group
 
 
 class CustomFormSelectField(IntegerField):

@@ -18,15 +18,14 @@ from app import db, login_manager
 from app.forms import SignUpForm, SignInForm, ResetPassword, RequestPassword
 from app.forms.user import EditUserForm, EditUserInfoForm
 
-from app.models import User
+from app.models.user import User
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult, CustomForm
-from app.models.group import Group
 from app.models.request_ticket import PasswordTicket
 from app.models.education import Education
 
-from app.utils import UserAPI
 from app.utils import copernica
+from app.utils.user import UserAPI
 from app.utils.module import ModuleAPI
 from app.utils.google import HttpError, send_email
 
@@ -241,8 +240,9 @@ def sign_up():
                   'danger')
             return render_template('user/sign_up.htm', form=form)
 
-        user = User(form.email.data, bcrypt.hashpw(form.password.data,
-                    bcrypt.gensalt()), form.first_name.data,
+        user = User(form.email.data,
+                    bcrypt.hashpw(form.password.data,
+                                  bcrypt.gensalt()), form.first_name.data,
                     form.last_name.data, form.student_id.data,
                     form.education_id.data, form.birth_date.data,
                     form.study_start.data, form.receive_information.data)

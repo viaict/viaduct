@@ -4,9 +4,14 @@ from flask_login import current_user
 from flask_babel import _  # gettext
 
 from app import db
-from app.models import CommitteeRevision, Page, Group, User, \
-    NavigationEntry, PagePermission
-from app.utils import ModuleAPI, NavigationAPI
+from app.models.committee import CommitteeRevision
+from app.models.page import Page
+from app.models.group import Group
+from app.models.user import User
+from app.models.navigation import NavigationEntry
+from app.models.page import PagePermission
+from app.utils.module import ModuleAPI
+from app.utils.navigation import NavigationAPI
 from app.forms import CommitteeForm
 import app.utils.committee as CommitteeAPI
 

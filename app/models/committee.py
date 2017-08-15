@@ -2,7 +2,7 @@ from sqlalchemy import event
 
 from app import db, get_locale
 from app.models.page import SuperRevision
-from app.models import User
+from app.models.user import User
 
 from flask_babel import lazy_gettext as _
 

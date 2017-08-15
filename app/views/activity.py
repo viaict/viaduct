@@ -15,12 +15,12 @@ from app.forms.activity import ActivityForm, CreateForm
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult
 from app.models.mollie import Transaction, TransactionActivity
+from app.utils import mollie
 from app.utils.module import ModuleAPI
 from app.utils.file import file_upload, file_remove
-from app.utils import mollie
+from app.utils.serialize_sqla import serialize_sqla
 from app.models.education import Education
 from app.forms import SignInForm
-from app.utils.serialize_sqla import serialize_sqla
 
 blueprint = Blueprint('activity', __name__, url_prefix='/activities')
 
@@ -154,6 +154,12 @@ def get_activity(activity_id=0):
     elif is_attending:
         activity.info = _("You have successfully registered, "
                           "payment is still required!")
+
+        if form_result.form.requires_direct_payment:
+            pay_url = url_for('activity.create_mollie_transaction',
+                              result_id=form.form_result.id)
+
+            return redirect(pay_url)
     else:
         activity.info = _("The activity has reached its maximum "
                           "number of registrations. You have been "

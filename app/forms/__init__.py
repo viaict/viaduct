@@ -3,7 +3,7 @@ import os
 from flask_wtf import Form
 
 from app import app
-from app.utils import import_module
+from app.utils.import_module import import_module
 
 
 def register_forms(path):
@@ -32,5 +32,6 @@ def register_forms(path):
                 continue
 
             globals()[name] = attribute
+
 
 register_forms(os.path.dirname(os.path.abspath(__file__)))

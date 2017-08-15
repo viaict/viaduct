@@ -43,8 +43,6 @@ class DefaultConfig:
     ELECTIONS_VOTE_START = date(2015, 1, 5)
     ELECTIONS_VOTE_END = date(2015, 1, 16)
 
-    POS_API_KEY = ''   # Change this for real use
-
     GOOGLE_API_KEY = ''   # Path to Google p12 key file, change for real use
     GOOGLE_SERVICE_EMAIL = 'test@developer.gserviceaccount.com'  # change this
     GOOGLE_CALENDAR_ID = ''  #

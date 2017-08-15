@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-07-24 11:16+0200\n"
+"POT-Creation-Date: 2017-07-30 21:45+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -20,6 +20,10 @@ msgstr ""
 #, python-format
 msgid "%(email)s is unknown to our system."
 msgstr "%(email)s is niet bekend in ons systeem."
+
+#, python-format
+msgid "%s is not an allowed file type."
+msgstr "%s is niet een toegestaan bestandstype"
 
 msgid "A user with this e-mail address already exist."
 msgstr "Er bestaat al een gebruiker met dat emailadres."
@@ -1033,6 +1037,9 @@ msgstr "Herhaal wachtwoord"
 
 msgid "Request to DOMjudge server failed"
 msgstr "Request aan de DOMjudge server mislukt"
+
+msgid "Requires direct payment"
+msgstr "Vereist meteen betalen"
 
 msgid "Reset password"
 msgstr "Reset wachtwoord"

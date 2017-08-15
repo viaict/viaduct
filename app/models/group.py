@@ -1,7 +1,7 @@
 # To prevent circular dependencies with page and committee,
 # CommitteeRevison must be imported inside functions
 from app import db
-from app.models import BaseEntity
+from app.models.base_model import BaseEntity
 from app.utils import google
 
 user_group = db.Table(
