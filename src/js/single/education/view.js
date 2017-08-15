@@ -2,7 +2,7 @@ $(document).ready(function() {
     "use strict";
     var table = $('#datatable').DataTable(_.defaults({
         "ajax": {
-            "url": Flask.url_for('examination.get_educations'),
+            "url": Flask.url_for('education.get_educations'),
             "type": "get"
         }
     }, utils.datatables.defaults));

@@ -44,11 +44,11 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href='{{url_for('examination.add_course', redir='view')}}' class='dropdown-item'>
+                            <a href='{{url_for('course.add_course', redir='view')}}' class='dropdown-item'>
                                 {{ _('Course') }}
                             </a>
                         </li>
-                        <li><a href='{{url_for('examination.add_education', redir='view')}}' class='dropdown-item'>
+                        <li><a href='{{url_for('education.add_education', redir='view')}}' class='dropdown-item'>
                                 {{ _('Education') }}
                             </a>
                         </li>
@@ -61,11 +61,11 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href='{{url_for('examination.view_courses')}}' class='dropdown-item'>
+                            <a href='{{url_for('course.view_courses')}}' class='dropdown-item'>
                                 {{ _('Courses') }}
                             </a>
                         </li>
-                        <li><a href='{{url_for('examination.view_educations')}}' class='dropdown-item'>
+                        <li><a href='{{url_for('education.view_educations')}}' class='dropdown-item'>
                                 {{ _('Educations') }}
                             </a>
                         </li>
