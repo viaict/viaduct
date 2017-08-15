@@ -6,6 +6,7 @@ from flask_login import current_user, url_for
 from app import db
 from app.models.base_model import BaseEntity
 from app.models.activity import Activity
+from app.models.user import User
 from app.models.mollie import Transaction
 from app.models.page import PageRevision, Page
 from app.utils.google import send_email
@@ -215,13 +216,17 @@ class CustomFormResult(db.Model, BaseEntity):
                            _external=True)
         followers = CustomFormFollower.query\
             .filter(CustomFormFollower.form_id == self.form_id)
+        owner = User.query.get(self.owner_id)
+        form = CustomForm.query.get(self.form_id)
         for follower in followers:
             send_email(to=follower.owner.email,
                        subject='Formulier ingevuld',
                        email_template='email/form.html',
                        sender='via',
                        user=follower.owner,
-                       form_url=form_url)
+                       form_url=form_url,
+                       owner=owner.first_name + " " + owner.last_name,
+                       form=form.name)
 
 
 class CustomFormFollower(db.Model, BaseEntity):

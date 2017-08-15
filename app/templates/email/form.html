@@ -1,6 +1,22 @@
+<!-- The fowllowing script is for a go-to action (view), but will not work
+unless the sender of the email is whitelisted with Google - not done yet.
+See https://developers.google.com/gmail/markup/registering-with-google -->
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "EmailMessage",
+  "potentialAction": {
+    "@type": "ViewAction",
+    "target": "{{form_url}}",
+    "name": "Open tracked form"
+  },
+  "description": "Open tracked form"
+}
+</script>
+
 <strong>Hoi {{user.first_name}}!</strong><br>
 <br>
-Er is een nieuwe reactie op een formulier dat je volgt.
+Er is een nieuwe reactie op een formulier dat je volgt. {{owner}} heeft zich ingeschreven voor {{form}}.
 <br>
 <a href='{{form_url}}'>Bekijk het formulier hier</a><br>
 <br>
