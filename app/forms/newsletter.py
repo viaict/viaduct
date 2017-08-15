@@ -8,17 +8,16 @@ from app.models.news import News
 
 
 def news_factory():
-    start_date = datetime.date.today().replace(day=1)
-    prev_month = (start_date - datetime.timedelta(days=1)).replace(day=1)
-    return News.query.filter(News.created > prev_month,
-                             db.or_(News.archive_date >= datetime.date.today(),
+    now = datetime.date.today()
+
+    return News.query.filter(db.or_(News.archive_date >= now,
                                     News.archive_date == None))\
                      .order_by(News.created).all()  # noqa
 
 
 def activities_factory():
     start_date = datetime.date.today()
-    return Activity.query.filter(Activity.start_time > start_date)\
+    return Activity.query.filter(Activity.end_time > start_date)\
                          .order_by(Activity.start_time).all()
 
 

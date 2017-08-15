@@ -11,23 +11,23 @@
 {{ render_form(form) }}
 
 <script>
-    function selectAll() {
-        $('select').each(function(index, select) {
-            var selected = [];
-            $(select).find('option').each(function(index, option) {
-                selected.push($(option).attr('value'));
-            });
-            $(select).select2('val', selected);
-        });
-    }
-
+    {% if not newsletter.id %}
     $(function() {
-        $('select').select2();
+        activities_select = $('#activities')
+        var selected = [];
+        $(activities_select).find('option').each(function(index, option) {
+            selected.push($(option).attr('value'));
+        });
+        $(activities_select).select2('val', selected);
 
-        {% if not newsletter.id %}
-        selectAll();
-        {% endif %}
+        selected = [
+        {%- for item in selected_news_items -%}
+            {{- item.id -}},
+        {%- endfor -%}
+        ];
+        $('#news_items').select2('val', selected);
     });
+    {% endif %}
 </script>
 
 {% endblock %}

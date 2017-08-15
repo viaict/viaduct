@@ -1,5 +1,4 @@
-from app import db
-from app import get_locale
+from app import app, db, get_locale
 from datetime import datetime, timedelta
 from app.models import BaseEntity
 from babel.dates import format_timedelta, format_datetime
@@ -73,7 +72,15 @@ class Activity(db.Model, BaseEntity):
         self.form_id = form_id
 
     def __str__(self):
-        return '{} ({})'.format(self.name, self.start_time)
+        if self.start_time.date() == self.end_time.date():
+            end_time_fmt = 'TIME_FORMAT'
+        else:
+            end_time_fmt = 'DT_FORMAT'
+
+        return "{} ({} - {})".format(
+            self.name,
+            self.start_time.strftime(app.config['DT_FORMAT']),
+            self.end_time.strftime(app.config[end_time_fmt]))
 
     def get_time(self):
         """

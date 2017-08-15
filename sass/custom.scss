@@ -1278,7 +1278,10 @@ p{line-height: 25px;}
     font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
 }
 
-#newfile-url-copytext {
+#newfile-url-copytext,
+#activities-url-copytext,
+#news-items-url-copytext {
+    @extend .text-monospace;
     cursor: default;
     background-color: initial;
     opacity: initial;
