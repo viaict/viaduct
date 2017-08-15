@@ -168,6 +168,7 @@ def add_task(group_id=None):
 
     group = Group.query.filter(Group.id == group_id).first()
     form.load_groups(current_user.groups)
+    form.load_status(Task.status_meanings)
 
     return render_template('pimpy/add_task.htm', group=group,
                            group_id=group_id, type='tasks', form=form,
