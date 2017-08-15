@@ -4,12 +4,13 @@ import urllib.request
 import urllib.parse
 import urllib.error
 import hashlib
+import os
 
 from flask import render_template
 
 from app.models.group import Group
 from app.utils.file import file_exists_pattern, file_remove_pattern, \
-    file_upload, file_split_name
+    file_upload
 
 
 ALLOWED_EXTENSIONS = set(['png', 'gif', 'jpg', 'jpeg'])
@@ -69,7 +70,7 @@ class UserAPI:
 
         # construct file name
         filename = 'avatar_' + str(user_id) + '.' + \
-            file_split_name(f.filename)[1]
+                   os.path.split(f.filename)[1]
 
         # Save new avatar
         file_upload(f, UPLOAD_DIR, True, filename)

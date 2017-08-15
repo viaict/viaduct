@@ -39,7 +39,9 @@ def upload(page_nr=1):
 
     new_files = []
     for new_file_name in request.files.getlist('file'):
-        new_files.append(file_upload(new_file_name))
+        file = file_upload(new_file_name)
+        if file:
+            new_files.append(file)
 
     # File upload request, but no added files
     if new_files[0] is None:

@@ -6,27 +6,30 @@ import fnmatch
 from app.models.file import File
 from app import app, db
 from flask_babel import lazy_gettext as _
+import magic
 
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-ALLOWED_IMAGE_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_MIMETYPES = ['text/plain', 'application/pdf']
 UPLOAD_DIR = app.config['UPLOAD_DIR']
 
 
 # Check if the extension is allowed. Set image to True to allow only image-
 # extensions
-def file_allowed_extension(filename, image=False):
-    if filename == '':
-        return False
+def file_allowed_mimetype(file, image=False):
 
-    split = filename.rsplit('.', 1)
+    mime = magic.from_buffer(file.read(1024), mime=True)
 
-    if image and split[1].lower() not in ALLOWED_IMAGE_EXTENSIONS:
-        return False
+    # Set head of stream back to beginning
+    file.seek(0)
 
-    if not image and split[1].lower() not in ALLOWED_EXTENSIONS:
-        return False
+    is_image = mime.find('image/') == 0
 
-    return True
+    if image and is_image:
+        return True
+
+    if not image and mime in ALLOWED_MIMETYPES or is_image:
+        return True
+
+    return False
 
 
 # Upload a file. You can specify a directory, whether or not the file is
@@ -43,7 +46,7 @@ def file_upload(f, directory=None, image=False, forced_name=None):
         directory = UPLOAD_DIR
 
     # Check if the file is allowed.
-    if not file_allowed_extension(filename, image):
+    if not file_allowed_mimetype(f, image):
         flash(_("%s is not an allowed file type." % filename), 'danger')
         return
 
@@ -57,7 +60,7 @@ def file_upload(f, directory=None, image=False, forced_name=None):
         return
 
     # Add numbers for duplicate filenames.
-    filename_noext, filename_ext = file_split_name(filename)
+    filename_noext, filename_ext = os.path.split(filename)
     counter = 1
     while file_exists(filename, directory):
         filename = '%s_%d.%s' % (filename_noext, counter, filename_ext)
@@ -74,12 +77,10 @@ def file_upload(f, directory=None, image=False, forced_name=None):
         db.session.add(new_file)
         db.session.commit()
 
-    # if new_file:
-    #     flash(_('File created successfully'), 'success')
-
-    else:
+    if not new_file:
         flash(_('An error occurred while uploading ' + filename),
               'danger')
+        return None
 
     return new_file
 
@@ -100,15 +101,6 @@ def file_exists_pattern(pattern, directory=None):
         if fnmatch.fnmatch(file, pattern):
             return file
     return False
-
-
-# Split filename in filename and extension
-def file_split_name(filename):
-    filename_split = filename.rsplit('.', 1)
-    filename_noext = filename_split[0]
-    filename_ext = filename_split[1]
-
-    return filename_noext, filename_ext
 
 
 # Find files in de databases for a certain query
