@@ -13,6 +13,6 @@ def embed():
         return abort(403)
 
     """Embed the athenaeum website."""
-    url = 'http://mindbus.go2cloud.org/aff_c?offer_id=65&aff_id=501#A-48;36"'
+    url = 'https://mindbus.go2cloud.org/aff_c?offer_id=65&aff_id=501#A-48;36'
 
     return render_template('athenaeum/embed.htm', url=url)
