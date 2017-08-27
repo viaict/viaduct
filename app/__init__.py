@@ -20,7 +20,7 @@ from app.utils.import_module import import_module
 from .extensions import db, login_manager, \
     cache, toolbar, jsglue, sentry
 
-version = 'v2.8.2.0'
+version = 'v2.8.2.1'
 
 
 def static_url(url):
@@ -64,6 +64,8 @@ app.config.from_object('config.Config')
 
 # Set up Flask Babel, which is used for internationalisation support.
 babel = Babel(app)
+
+app.path = os.path.dirname(os.path.abspath(__file__))
 
 
 @babel.localeselector
@@ -123,8 +125,7 @@ def init_app():
 
     app.json_encoder = JSONEncoder
 
-    path = os.path.dirname(os.path.abspath(__file__))
-    register_views(app, os.path.join(path, 'views'))
+    register_views(app, os.path.join(app.path, 'views'))
 
     login_manager.anonymous_user = AnonymousUser
 
