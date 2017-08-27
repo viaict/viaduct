@@ -1,5 +1,6 @@
 from PIL import Image, ImageChops
-import app
+from app import app
+
 import os
 
 
