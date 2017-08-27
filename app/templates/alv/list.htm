@@ -1,0 +1,51 @@
+{% from "macros/pagination.htm" import render_pagination %}
+{% from "macros/form.htm" import render_form %}
+
+{% extends "base.htm" %}
+
+{% block page %}
+
+{% if ModuleAPI.can_write('alv') %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="form-group btn-group">
+            <a href='{{url_for("alv.create_edit")}}' class='btn btn-success'>
+            <i class='glyphicon glyphicon-pencil'></i>
+            <span>{{ _('New ALV') }}</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">ALVs</div>
+    <div class="panel-body">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>{{ _('ALV') }}</th>
+                <th>{{ _('Details') }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for alv in alvs %}
+            <tr>
+                <td>
+                    {{ alv.name }}<br/>
+                    <small>{{ alv.presidium }}</small>
+                </td>
+                <td>
+                    <a href="{{ url_for('alv.view', alv_id=alv.id)}}">
+                        {{alv.date}}
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+{% endblock %}

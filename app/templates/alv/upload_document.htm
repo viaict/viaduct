@@ -1,0 +1,11 @@
+<{% from 'macros/form.htm' import render_form %}
+
+{% extends 'content.htm' %}
+z
+{% block content %}
+
+<h1>{{_('ALV document for %s' % alv.name) }}</h1>
+
+{{ render_form(form)}}
+
+{% endblock %}

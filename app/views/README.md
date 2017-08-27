@@ -32,7 +32,7 @@ the permissions:
 	@blueprint.route('/minutes/', methods=['GET', 'POST'])
 	@blueprint.route('/minutes/<group_id>', methods=['GET', 'POST'])
     @some_other_decorator
-	def view_minutes(group_id='all'):
+	def view_minutes(group_id=None):
         """Generate a list of minutes (for a group)."""
 		if not ModuleAPI.can_read('pimpy'):
 			return abort(403)

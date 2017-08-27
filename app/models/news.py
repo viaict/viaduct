@@ -6,7 +6,7 @@ from flask_babel import lazy_gettext as _
 from flask_login import current_user
 
 from app import db, get_locale
-from app.models import BaseEntity
+from app.models.base_model import BaseEntity
 
 
 class News(db.Model, BaseEntity):
@@ -19,7 +19,7 @@ class News(db.Model, BaseEntity):
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User', backref=db.backref('news', lazy='dynamic'))
-    needs_paid = db.Column(db.Boolean, default=False)
+    needs_paid = db.Column(db.Boolean, default=False, nullable=False)
 
     publish_date = db.Column(db.Date)
     archive_date = db.Column(db.Date)
@@ -40,6 +40,9 @@ class News(db.Model, BaseEntity):
             self.publish_date = publish_date
         else:
             self.publish_date = date.today()
+
+    def __str__(self):
+        return '{} ({})'.format(self.title, self.publish_date)
 
     def can_read(self, user=current_user):
         return not self.needs_paid or user.has_paid
@@ -74,10 +77,10 @@ class News(db.Model, BaseEntity):
             title = self.en_title
             content = self.en_content
         elif nl_available:
-            title = self.nl_title + " (" + _('Dutch') + ")"
+            title = self.nl_title + " (Dutch)"
             content = self.nl_content
         elif en_available:
-            title = self.en_title + " (" + _('English') + ")"
+            title = self.en_title + " (Engels)"
             content = self.en_content
         else:
             title = 'N/A'

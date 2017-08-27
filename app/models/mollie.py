@@ -1,5 +1,5 @@
 from app import db
-from app.models import BaseEntity
+from app.models.base_model import BaseEntity
 from sqlalchemy.ext.declarative import declared_attr
 
 
@@ -52,13 +52,14 @@ class TransactionActivity(db.Model, TransactionCallbackMixin):
 
     custom_form_result = db.relationship('CustomFormResult')
     custom_form_result_id = db.Column(db.Integer(),
-                                      db.ForeignKey('custom_form_result.id'),
-                                      nullable=False)
+                                      db.ForeignKey('custom_form_result.id',
+                                                    ondelete='SET NULL'),
+                                      nullable=True)
 
     transaction = db.relationship("Transaction",
                                   backref=db.backref('callback_activity'))
 
     def payment_complete(self):
-        self.custom_form_result.has_paid = True
-        print(self.custom_form_result)
-        db.session.commit()
+        if self.custom_form_result:
+            self.custom_form_result.has_paid = True
+            db.session.commit()

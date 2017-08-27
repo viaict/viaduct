@@ -1,7 +1,7 @@
 from app import db
 from app.models.location import Location
 from app.models.contact import Contact
-from app.models import BaseEntity
+from app.models.base_model import BaseEntity
 
 
 class Company(db.Model, BaseEntity):

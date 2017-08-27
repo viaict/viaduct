@@ -1278,10 +1278,11 @@ p{line-height: 25px;}
     font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
 }
 
-#newfile-url-copytext {
-    cursor: default;
-    background-color: initial;
-    opacity: initial;
+.url-copy-textbox {
+    @extend .text-monospace;
+    cursor: default !important;
+    background-color: initial !important;
+    opacity: initial !important;
 }
 
 $DOMJUDGE_RED:          #d9534f;
@@ -1475,4 +1476,13 @@ $DOMJUDGE_LIGHTGREEN:   #7CD449;
 .domjudge-submission-wrong-answer {
     @extend .domjudge-submission;
     background-color: $DOMJUDGE_RED;
+}
+
+.list-group-item .name {
+    display: inline;
+}
+
+.list-group-item .comment {
+    float: right;
+    font-weight: bold;
 }

@@ -37,11 +37,20 @@ def upload(page_nr=1):
     if not ModuleAPI.can_write('file'):
         return abort(403)
 
-    new_file_name = request.files['file']
-    new_file = file_upload(new_file_name)
+    new_files = []
+    for new_file_name in request.files.getlist('file'):
+        file = file_upload(new_file_name)
+        if file:
+            new_files.append(file)
+
+    # File upload request, but no added files
+    if new_files[0] is None:
+        return list(page_nr=page_nr)
 
     files = File.query.filter_by(page=None).order_by(File.name)\
         .paginate(page_nr, 30, False)
     form = FileForm()
+
+    hostname = request.headers.get('Origin', '')
 
     return render_template('files/list.htm', **locals())

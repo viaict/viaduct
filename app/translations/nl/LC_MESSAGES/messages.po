@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-06-10 13:57+0200\n"
+"POT-Creation-Date: 2017-08-15 15:09+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -21,11 +21,21 @@ msgstr ""
 msgid "%(email)s is unknown to our system."
 msgstr "%(email)s is niet bekend in ons systeem."
 
+#, python-format
+msgid "%s is not an allowed file type."
+msgstr "%s is niet een toegestaan bestandstype"
+
 msgid "A user with this e-mail address already exist."
 msgstr "Er bestaat al een gebruiker met dat emailadres."
 
 msgid "A user with this e-mail address already exists"
 msgstr "Er bestaat al een gebruiker met dat emailadres"
+
+msgid "ALV"
+msgstr ""
+
+msgid "ALVs"
+msgstr ""
 
 #, python-format
 msgid "API call failed: %s"
@@ -53,6 +63,9 @@ msgstr "Activiteitencommissie"
 
 msgid "Add"
 msgstr "Toevoegen"
+
+msgid "Add document"
+msgstr ""
 
 msgid "Add user to"
 msgstr ""
@@ -97,6 +110,9 @@ msgstr "Aantal opgelost"
 msgid "An email has been sent to %(email)s with further instructions."
 msgstr "Er is een email verstuurd naar %(email)s met verdere instructies."
 
+msgid "An error occurred while uploading "
+msgstr "Er is een fout opgetreden bij het uploaden van het bestand"
+
 msgid "An error occurred while uploading the file"
 msgstr "Er is een fout opgetreden bij het uploaden van het bestand"
 
@@ -118,6 +134,9 @@ msgstr "Weet je zeker dat je dit vak wilt verwijderen?"
 
 msgid "Are you sure you want to delete this education?"
 msgstr "Weet je zeker dat je deze opleiding wilt verwijderen?"
+
+msgid "Are you sure you want to delete this entry?"
+msgstr "Weet je zeker dat je dit item wilt verwijderen?"
 
 msgid "Are you sure you want to delete this exam?"
 msgstr "Weet je zeker dat je het tentamen wilt verwijderen?"
@@ -163,6 +182,9 @@ msgstr "Kan het bestand niet verwijderen, want het bestand bestaat niet"
 
 msgid "Captain's log succesfully ended."
 msgstr "Captain's log afsluiten gelukt."
+
+msgid "Chairman"
+msgstr ""
 
 msgid "Change password"
 msgstr "Verander wachtwoord"
@@ -327,6 +349,9 @@ msgstr "Formulier aanmaken"
 msgid "Create news item"
 msgstr "Nieuwsbericht aanmaken"
 
+msgid "Create newsletter"
+msgstr "Nieuwsbrief aanmaken"
+
 msgid "Create user"
 msgstr "Gebruiker aanmaken"
 
@@ -357,6 +382,9 @@ msgstr "Verwijderen"
 msgid "Delete activity"
 msgstr "Activiteit verwijderen"
 
+msgid "Delete alv"
+msgstr ""
+
 msgid "Delete avatar"
 msgstr "Verwijder avatar"
 
@@ -372,6 +400,10 @@ msgstr "Pagina verwijderen:"
 msgid "Description"
 msgstr "Beschrijving"
 
+#, fuzzy
+msgid "Details"
+msgstr "Nederlandse gegevens"
+
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
@@ -386,6 +418,10 @@ msgstr "Geen HTML tags filteren"
 
 msgid "Do you have an idea for an activity?"
 msgstr "Heb je een idee voor een activiteit?"
+
+#, fuzzy
+msgid "Document"
+msgstr "Commentaar"
 
 msgid "Dutch"
 msgstr "Nederlands"
@@ -429,6 +465,9 @@ msgstr "E-mailadres"
 msgid "Edit"
 msgstr "Aanpassen"
 
+msgid "Edit alv"
+msgstr ""
+
 msgid "Edit course"
 msgstr "Vak aanpassen"
 
@@ -440,6 +479,9 @@ msgstr "Tentamen aanpassen"
 
 msgid "Edit news item"
 msgstr "Nieuwsbericht aanpassen"
+
+msgid "Edit newsletter"
+msgstr "Nieuwsbrief aanpassen"
 
 msgid "Edit page"
 msgstr "Pagina aanpassen"
@@ -572,9 +614,6 @@ msgstr "Begunstigde"
 
 msgid "File"
 msgstr "Bestand"
-
-msgid "File created successfully"
-msgstr "Bestand succesvol opgeslagen."
 
 msgid "File does not exist, examination deleted."
 msgstr "Bestand bestaat niet, tentamen verwijderd."
@@ -776,6 +815,9 @@ msgstr "Naam is vereist"
 msgid "Navigation entry"
 msgstr "Menu item"
 
+msgid "New ALV"
+msgstr ""
+
 msgid "New activity"
 msgstr "Nieuwe activiteit"
 
@@ -806,6 +848,9 @@ msgstr "Nieuwe samenvatting"
 msgid "New vacancy"
 msgstr "Nieuwe vacature"
 
+msgid "New version"
+msgstr ""
+
 msgid "News"
 msgstr "Nieuws"
 
@@ -815,8 +860,20 @@ msgstr "Nieuwsbericht opgeslagen"
 msgid "News item succesfully deleted"
 msgstr "Nieuwsbericht succesvol verwijderd"
 
+msgid "News items"
+msgstr "Nieuwsberichten"
+
+msgid "Newsletter saved"
+msgstr "Nieuwsbrief opgeslagen"
+
+msgid "Newsletters"
+msgstr "Nieuwsbrieven"
+
 msgid "Next"
 msgstr "Volgende"
+
+msgid "No"
+msgstr "Nee"
 
 msgid "No Output"
 msgstr "Geen uitvoer"
@@ -875,6 +932,9 @@ msgstr "Geen wachtwoord opgegeven"
 msgid "No permissions to read contacts"
 msgstr "Geen rechten om contacten te bekijken."
 
+msgid "No presidium"
+msgstr ""
+
 msgid "No starting year of study submitted"
 msgstr "Geen beginjaar studie opgegeven"
 
@@ -905,6 +965,9 @@ msgstr "Geen valide e-mailadres."
 msgid "Not found!"
 msgstr "Niet gevonden!"
 
+msgid "Open voor nieuwe leden"
+msgstr ""
+
 msgid "Optional data"
 msgstr "Optionele gegevens"
 
@@ -916,6 +979,11 @@ msgstr "Pagina niet gevonden"
 
 msgid "Page title"
 msgstr "Pagina titel"
+
+msgid "Pass these URLs to Copernica so they can fetch the latest items."
+msgstr ""
+"Geef deze URL's door aan Copernica, zodat ze de laatste items op kunnen "
+"halen."
 
 msgid "Password"
 msgstr "Wachtwoord"
@@ -958,6 +1026,9 @@ msgstr "Postbus"
 
 msgid "Postoffice Box"
 msgstr "Postbus"
+
+msgid "Presidium: "
+msgstr ""
 
 msgid "Previous"
 msgstr "Vorige"
@@ -1034,6 +1105,9 @@ msgstr "Herhaal wachtwoord"
 msgid "Request to DOMjudge server failed"
 msgstr "Request aan de DOMjudge server mislukt"
 
+msgid "Requires direct payment"
+msgstr "Vereist meteen betalen"
+
 msgid "Reset password"
 msgstr "Reset wachtwoord"
 
@@ -1060,6 +1134,9 @@ msgstr ""
 
 msgid "Search for title, contact or company"
 msgstr "Zoeken op titel, contact of bedrijf"
+
+msgid "Secretary"
+msgstr ""
 
 msgid "Select a time and date by clicking on the clock"
 msgstr "Selecteer een tijd en datum door op de klok te klikken"
@@ -1208,8 +1285,8 @@ msgid ""
 "The activity has reached its maximum number of registrations. You will be"
 " placed on the reserves list."
 msgstr ""
-"De activiteit heeft het maximum aantal inschrijvingen bereikt. Je bent "
-"geplaatst op de reserve lijst."
+"De activiteit heeft het maximum aantal inschrijvingen bereikt. Je zal op "
+"de reserve lijst geplaatst worden."
 
 msgid ""
 "The answers provided here are not the official answers and are not "
@@ -1318,6 +1395,9 @@ msgstr "Te laat"
 msgid "Total problems"
 msgstr "Totaal aantal problemen"
 
+msgid "URLs"
+msgstr "URL's"
+
 msgid ""
 "Unfortunately it is currently unclear to us if you are a member of "
 "<strong>via</strong>."
@@ -1336,6 +1416,9 @@ msgstr "Uploaden"
 
 msgid "Upload file"
 msgstr "Bestand uploaden"
+
+msgid "Uploaded files"
+msgstr "Geuploade bestanden"
 
 msgid "User"
 msgstr "Gebruiker"
@@ -1375,6 +1458,10 @@ msgstr "Geldig lidmaatschap is vereist om dit nieuwsartikel te kunnen lezen"
 
 msgid "Vancancies"
 msgstr "Vacatures"
+
+#, fuzzy
+msgid "Versions"
+msgstr "Rechten"
 
 msgid "View"
 msgstr "Weergeven"
@@ -1440,6 +1527,9 @@ msgstr "Fout formaat tentamen."
 
 msgid "Wrong format summary."
 msgstr "Fout formaat samenvatting."
+
+msgid "Yes"
+msgstr "Ja"
 
 msgid "Yes, I have finished studying"
 msgstr "Ja, ik ben klaar met studeren"
@@ -1745,9 +1835,6 @@ msgstr ""
 #~ msgid "Unauthorized!"
 #~ msgstr "Ongeautoriseerd!"
 
-#~ msgid ""
-#~ msgstr ""
-
 #~ msgid "An image with this name already exists."
 #~ msgstr "Er bestaat al een plaatje met deze naam."
 
@@ -1766,3 +1853,26 @@ msgstr ""
 #~ msgid "Pay (+€0,35 transaction costs)"
 #~ msgstr "Betalen (+€0,35 transactiekosten)"
 
+#~ msgid "File created successfully"
+#~ msgstr "Bestand succesvol opgeslagen."
+
+#~ msgid "Week number"
+#~ msgstr "Weeknummer"
+
+#~ msgid "Other"
+#~ msgstr ""
+
+#~ msgid "Presidium"
+#~ msgstr ""
+
+#~ msgid "Presidium chairman"
+#~ msgstr ""
+
+#~ msgid "Presidium other"
+#~ msgstr ""
+
+#~ msgid "Presidium secretary"
+#~ msgstr ""
+
+#~ msgid "more"
+#~ msgstr "meer"

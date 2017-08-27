@@ -1,0 +1,16 @@
+<{% from 'macros/form.htm' import render_form %}
+
+{% extends 'content.htm' %}
+z
+{% block content %}
+<h1>
+{% if alv %}
+    {{ _('Edit') }}
+{% else %}
+    {{ _('Create')}}
+{% endif %}
+ALV</h1>
+
+{{ render_form(form)}}
+
+{% endblock %}

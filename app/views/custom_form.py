@@ -3,7 +3,7 @@ from flask import (flash, redirect, render_template, request, url_for, abort,
 from flask_login import current_user
 
 from app import db
-from app.utils import serialize_sqla
+from app.utils.serialize_sqla import serialize_sqla
 from app.utils.forms import flash_form_errors
 from app.forms.custom_form import CreateForm
 from app.models.custom_form import CustomForm, CustomFormResult, \
@@ -154,6 +154,7 @@ def create(form_id=None):
             form.price.data = 0.0
         custom_form.price = form.price.data
         custom_form.terms = form.terms.data
+        custom_form.requires_direct_payment = form.requires_direct_payment.data
 
         follower = None
 
@@ -248,6 +249,7 @@ def remove_response(submit_id=None):
     return response
 
 
+# Ajax method
 @blueprint.route('/submit/<int:form_id>', methods=['POST'])
 def submit(form_id=-1):
     # TODO make sure custom_form rights are set on server
@@ -386,10 +388,9 @@ def unarchive(form_id, page_nr=1):
     return redirect(url_for('custom_form.view', page_nr=page_nr))
 
 
+# Ajax endpoint
 @blueprint.route('/has_paid/<int:submit_id>', methods=['POST'])
 def has_paid(submit_id=None):
-    response = "success"
-
     if not ModuleAPI.can_write('custom_form') or current_user.is_anonymous:
         return abort(403)
 
@@ -399,13 +400,11 @@ def has_paid(submit_id=None):
     ).first()
 
     if not submission:
-        response = "Error, submission could not be found"
+        abort(404)
+        return
 
     # Adjust the "has_paid"
-    if submission.has_paid:
-        submission.has_paid = False
-    else:
-        submission.has_paid = True
+    submission.has_paid = not submission.has_paid
 
     db.session.add(submission)
     db.session.commit()
@@ -418,7 +417,7 @@ def has_paid(submit_id=None):
                                 submission.owner_id, submission.form_id,
                                 copernica_data)
 
-    return response
+    return "success"
 
 
 # TODO: Move to API.

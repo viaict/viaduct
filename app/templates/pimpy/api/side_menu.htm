@@ -34,7 +34,7 @@
       <ul>
         Groepen
         <ul class="nav nav-pills nav-stacked pimpy-menu-group">
-          <li {% if group_id == 'all' %} class="active" {% endif %} >
+          <li {% if group_id == None %} class="active" {% endif %} >
             <a href="{{ url_for(endpoints['view_chosentype_chosenpersonal']) }}">Alle</a>
           </li>
           {% for group in groups %}
@@ -50,8 +50,7 @@
       <ul>
         Datum
         <ul class="nav nav-pills nav-stacked pimpy-menu-group">
-          <form action="{{ url_for("pimpy.view_minutes_in_date_range") }}" method="post">
-            <input id="group_id" name="group_id" type="hidden" value="{{ group_id }}">
+          <form action="{{ url_for("pimpy.view_minutes_in_date_range", group_id=group_id) }}" method="post">
             <div class="form-group">
               <label for="start_date">Van</label>
               <div class="input-group date" id="start_date">
@@ -88,8 +87,7 @@
       <ul>
         Datum
         <ul class="nav nav-pills nav-stacked pimpy-menu-group">
-          <form action="{{ url_for("pimpy.view_tasks_in_date_range") }}" method="post">
-            <input id="group_id" name="group_id" type="hidden" value="{{ group_id }}">
+          <form action="{{ url_for("pimpy.view_tasks_in_date_range", group_id=group_id) }}" method="post">
             <!-- <input id="personal_toggle" name="personal_toggle" type="hidden" -->
             <!-- value="{{ personal }}"> -->
             <div class="form-group">

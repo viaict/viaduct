@@ -18,6 +18,7 @@ class CommitteeForm(SuperPageForm):
     group_id = GroupSelectField(_('Group'))
     coordinator_id = SelectField(_('Coördinator'), coerce=int)
     interim = BooleanField(_('Interim coördinator'))
+    open_new_members = BooleanField(_('Open voor nieuwe leden'))
 
     settings = FieldVerticalSplit(
         [['group_id'], ['coordinator_id'], ['interim']])

@@ -1,0 +1,88 @@
+{% extends 'content.htm' %}
+
+{% block page %}
+    <div class='row'>
+        <div class='col-md-9 col-md-offset-1'>
+            <p>
+                <a href="{{ url_for('alv.list') }}">{{ _('ALVs') }}</a>
+                <i class='fa fa-chevron-right'></i>
+                <a href="{{ url_for('alv.view', alv_id=alv.id) }}">{{ alv.name }}</a>
+            </p>
+        </div>
+        <div class='col-md-9 col-md-offset-1 well'>
+            <div class='page-header'>
+                {% if ModuleAPI.can_write('alv') %}
+                    <div class='pull-right'>
+                        <a class='btn btn-warning btn-xs' href='
+                            {{ url_for("alv.create_edit", alv_id=alv.id) }}'>
+                            <i class='fa fa-edit'></i> {{ _('Edit alv') }}
+                        </a>
+                        <form action="{{ url_for('alv.delete', alv_id=alv.id) }}"
+                              method="POST">
+                            <button class='btn btn-danger btn-xs'>
+                                <i class='fa fa-remove'></i> {{ _('Delete alv') }}
+                            </button>
+                        </form>
+                    </div>
+                {% endif %}
+
+                <h1>{{ alv.name }}</h1>
+            </div>
+
+            <p>{{ alv.presidium }}</p>
+            {% if alv.activity %}
+                <p>{{ _('Activity') }}:
+                    <a href="{{ url_for('activity.get_activity', activity_id=alv.activity.id) }}">{{ alv.activity }}</a>
+                </p>
+            {% endif %}
+            <hr>
+            <div class='content'>
+                <h1>Documents</h1>
+                <p>
+                    <a class="btn btn-xs btn-success"
+                       href="{{ url_for('alv.create_document', alv_id=alv.id) }}">
+                        {{ _('Add document') }}
+                    </a>
+                </p>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td>{{ _('Document') }}</td>
+                        <td>{{ _('Versions') }}</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for doc in alv.documents %}
+                        <tr>
+                            <td>{{ doc.name }}</td>
+                            <td>
+                        <span class="dropdown">
+                        <button class="btn btn-xs dropdown-toggle"
+                                type="button"
+                                data-toggle="dropdown">Versions
+                            <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="{{ url_for('alv.update_document',
+                                        alv_id=alv.id, doc_id=doc.id) }}">
+                                    {{ _('New version') }}
+                                </a>
+                            </li>
+                            {%- for i, doc_version in enumerate(doc.versions) -%}
+                                <li>
+                                    <a href="/static/files/{{ doc_version.file.name }}" target="_blank">
+                                        {{ _('Version %d' % (i + 1)) }}: {{ doc_version.created.date() }}
+                                    </a>
+                                </li>
+                            {%- endfor -%}
+                        </ul>
+                    </span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

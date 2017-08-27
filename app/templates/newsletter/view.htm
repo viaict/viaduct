@@ -1,0 +1,169 @@
+{% extends "content.htm" %}
+
+{% block includes %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.tooltipster/4.1.4/css/tooltipster.bundle.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.tooltipster/4.1.4/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-borderless.min.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.tooltipster/4.1.4/js/tooltipster.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/clipboard.js/1.5.12/clipboard.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize the 'Link copied' tooltip
+            $('#activities-url-copytext, #news-items-url-copytext').tooltipster({
+                theme: 'tooltipster-borderless',
+                trigger: 'custom',
+                animation: 'fade',
+                triggerClose: {
+                    click: true,
+                    mouseleave: true,
+                    originClick: true,
+                    scroll: true,
+                    tap: true,
+                    touchleave: true
+                }
+            });
+
+            var activities_clipboard = new Clipboard('#activities-url-copy');
+            activities_clipboard.on('success', function(e) {
+                e.clearSelection();
+                // Show the tooltip
+                $('#activities-url-copytext').tooltipster('open');
+            });
+
+            var news_clipboard = new Clipboard('#news-items-url-copy');
+            news_clipboard.on('success', function(e) {
+                e.clearSelection();
+                // Show the tooltip
+                $('#news-items-url-copytext').tooltipster('open');
+            });
+
+        });
+
+    </script>
+{% endblock %}
+
+{% block page %}
+<div class="container">
+    <div class="row">
+        <h1>{{ _('Newsletters') }}</h1>
+    </div>
+
+    {% if ModuleAPI.can_write('newsletter') %}
+    <div class="row">
+        <div class="form-group btn-group">
+            <a href="{{ url_for('.edit') }}" class="btn btn-success">
+                <i class='glyphicon glyphicon-plus'></i>
+                <span>{{ _('Add') }}</span>
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th style="width: 120px">{{ _('Date') }}</th>
+                        <th colspan="2">{{ _('Activities') }}</th>
+                        <th colspan="2">{{ _('News items') }}</th>
+                        {% if ModuleAPI.can_write('newsletter') %}
+                        <th>{{ _('Edit') }}</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for newsletter in newsletters %}
+                    <tr>
+                        <td>{{ newsletter.created.date().isoformat() }}</td>
+                        <td>
+                            <ul>
+                            {% for activity in newsletter.activities %}
+                                <li><a href="{{ url_for('activity.get_activity', activity_id=activity.id) }}">{{ activity.name }}</a>
+                                {%- if activity.en_name and not activity.nl_name %} (EN){% endif %}
+                                {%- if activity.nl_name and not activity.en_name %} (NL){% endif %}
+                                </li>
+                            {% endfor %}
+                            </ul>
+                        </td>
+                        <td>
+                            <a href='{{ url_for('.activities_xml', newsletter_id=newsletter.id) }}'>
+                                <i class='glyphicon glyphicon-cloud-download'></i>
+                                <small class=".small">XML</small>
+                            </a>
+                        </td>
+                        <td>
+                            <ul>
+                            {% for item in newsletter.news_items %}
+                                <li><a href="{{ url_for('news.view', news_id=item.id) }}">{{ item.title }}</a>
+                                {%- if item.en_title and not item.nl_title %} (EN){% endif %}
+                                {%- if item.nl_title and not item.en_title %} (NL){% endif %}
+                                </li>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <a href='{{ url_for('.news_xml', newsletter_id=newsletter.id) }}'>
+                                <i class='glyphicon glyphicon-cloud-download'></i>
+                                <small class=".small">XML</small>
+                            </a>
+                        </td>
+                        {% if ModuleAPI.can_write('newsletter') %}
+                        <td>
+                            <a href='{{ url_for('.edit', newsletter_id=newsletter.id) }}'>
+                                <i class='glyphicon glyphicon-pencil'></i></a>
+                            <a href='{{ url_for('.delete', newsletter_id=newsletter.id) }}'>
+                                <i class='glyphicon glyphicon-remove'></i></a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <h2>{{ _('URLs') }}</h2>
+        {{ _('Pass these URLs to Copernica so they can fetch the latest items.') }}
+
+        <h3>{{ _('Activities') }}:</h3>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="input-group" style="padding-bottom: 5px">
+                    <input id="activities-url-copytext"  title="{{ _('Link copied') }}"
+                    class="form-control url-copy-textbox" type="text"
+                    value="{{ url_for('.activities_xml', newsletter_id=None, auth_token=token, _external=True) }}" readonly>
+                    </input>
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary"
+                            id="activities-url-copy"
+                            data-clipboard-target="#activities-url-copytext">
+                            <i class="fa fa-clipboard"></i> {{ _('Copy to clipboard') }}
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <h3>{{ _('News items') }}:</h3>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="input-group" style="padding-bottom: 5px">
+                    <input id="news-items-url-copytext"  title="{{ _('Link copied') }}"
+                    class="form-control url-copy-textbox" type="text"
+                    value="{{ url_for('.news_xml', newsletter_id=None, auth_token=token, _external=True) }}" readonly>
+                    </input>
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary"
+                            id="news-items-url-copy"
+                            data-clipboard-target="#news-items-url-copytext">
+                            <i class="fa fa-clipboard"></i> {{ _('Copy to clipboard') }}
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,6 +1,7 @@
-from wtforms import SelectField, RadioField, SubmitField
 import inspect
 import itertools
+
+from wtforms import RadioField, SubmitField, SelectFieldBase
 
 from app.forms.fields import CustomFormSelectField
 
@@ -74,6 +75,8 @@ class FieldTab:
 
 class FieldVerticalSplit:
     """
+    Vertical field splits.
+
     Represents a vertical split of fields,
     i.e. fields next to each other.
     """
@@ -140,7 +143,7 @@ class FieldVerticalSplit:
 
 
 class FormWrapper:
-    """Helper class for form rendering"""
+    """Helper class for form rendering."""
 
     def __init__(self, form):
         self.form = form
@@ -165,7 +168,7 @@ class FormWrapper:
                 self.vsplits.append(obj)
 
             # Check if the form has select fields
-            elif isinstance(obj, SelectField) \
+            elif isinstance(obj, SelectFieldBase) \
                     and not isinstance(obj, RadioField):
                 self.has_select_fields = True
 
@@ -226,9 +229,9 @@ class FormWrapper:
                 self._fields.append(vsplits_firstfields[field])
 
             # Otherwise, add a field when it does not belong to a group
-            elif field not in groups_fields and \
-                    field not in vsplit_fields and \
-                    field.name not in ignore_fields:
+            elif (field not in groups_fields and
+                  field not in vsplit_fields and
+                  field.name not in ignore_fields):
                 self._fields.append(field)
 
         # Give every group and vsplit the form object to make them

@@ -2,7 +2,7 @@ from sqlalchemy import event
 
 from app import db, get_locale
 from app.models.page import SuperRevision
-from app.models import User
+from app.models.user import User
 
 from flask_babel import lazy_gettext as _
 
@@ -10,8 +10,8 @@ from flask_babel import lazy_gettext as _
 class CommitteeRevision(SuperRevision):
     __tablename__ = 'committee_revision'
 
-    prints = ('id', 'title', 'group_id', 'coordinator_id', 'interim')
-
+    prints = ('id', 'title', 'group_id', 'coordinator_id', 'interim',
+              'open_new_members')
     context = {'User': User}
 
     nl_description = db.Column(db.Text)
@@ -19,6 +19,7 @@ class CommitteeRevision(SuperRevision):
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
     coordinator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     interim = db.Column(db.Boolean)
+    open_new_members = db.Column(db.Boolean, nullable=False, default=0)
 
     # Relationships.
     group = db.relationship(
@@ -40,7 +41,8 @@ class CommitteeRevision(SuperRevision):
 
     def __init__(self, page=None, nl_title='', en_title='', comment='',
                  user_id=None, nl_description='', en_description='',
-                 group_id=None, coordinator_id=None, interim=None):
+                 group_id=None, coordinator_id=None, interim=None,
+                 open_new_members=False):
         super(CommitteeRevision, self).__init__(nl_title, en_title, comment)
 
         self.page = page
@@ -52,6 +54,7 @@ class CommitteeRevision(SuperRevision):
         self.group_id = group_id
         self.coordinator_id = coordinator_id
         self.interim = interim
+        self.open_new_members = open_new_members
 
     def get_comparable(self):
         return self.description

@@ -280,6 +280,8 @@
         {{ render_radio_buttons(f, **kwargs) }}
     {%- elif f.type == 'SelectField' -%}
         {{ render_select(f, **kwargs) }}
+    {%- elif f.type == 'QuerySelectField' -%}
+        {{ render_select(f, **kwargs) }}
     {%- elif f.type == 'SubmitField' -%}
         {{ render_submit(f.label.text, **kwargs) }}
     {%- elif f.type == 'TextAreaField' -%}

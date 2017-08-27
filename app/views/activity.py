@@ -1,28 +1,26 @@
 import datetime
 
-# this is now uncommented for breaking activity for some reason
-# please some one check out what is happening
-import app.utils.google as google
-
-from flask import flash, redirect, render_template, request, url_for, abort,\
+from flask import flash, redirect, render_template, request, url_for, abort, \
     jsonify
 from flask import Blueprint
 from flask_login import current_user
 from flask_babel import _  # gettext
 from werkzeug.contrib.atom import AtomFeed
 
+# this is now uncommented for breaking activity for some reason
+# please some one check out what is happening
+import app.utils.google as google
 from app import db
 from app.forms.activity import ActivityForm, CreateForm
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult
 from app.models.mollie import Transaction, TransactionActivity
+from app.utils import mollie
 from app.utils.module import ModuleAPI
 from app.utils.file import file_upload, file_remove
-from app.utils import mollie
+from app.utils.serialize_sqla import serialize_sqla
 from app.models.education import Education
 from app.forms import SignInForm
-
-from app.utils.serialize_sqla import serialize_sqla
 
 blueprint = Blueprint('activity', __name__, url_prefix='/activities')
 
@@ -36,13 +34,10 @@ PICTURE_DIR = 'app/static/activity_pictures/'
 @blueprint.route('/list/<string:archive>/<int:page_nr>/',
                  methods=['GET', 'POST'])
 def view(archive=None, page_nr=1):
-    if not ModuleAPI.can_read('activity'):
-        return abort(403)
-
     if archive == "archive":
         activities = Activity.query.filter(
             Activity.end_time < datetime.datetime.today()).order_by(
-                Activity.start_time.desc())
+            Activity.start_time.desc())
         title = _('Activity archive') + " - " + _('page') + " " + str(page_nr)
     else:
         activities = Activity.query.filter(
@@ -76,8 +71,11 @@ def remove_activity(activity_id=0):
 
 @blueprint.route('/<int:activity_id>/', methods=['GET', 'POST'])
 def get_activity(activity_id=0):
-    if not ModuleAPI.can_read('activity'):
-        return abort(403)
+    """Activity register and update endpoint.
+
+    Register and update for an activity, with handling of custom forms
+    and payment.
+    """
 
     activity = Activity.query.get_or_404(activity_id)
 
@@ -87,61 +85,88 @@ def get_activity(activity_id=0):
     educations = Education.query.all()
     form.education_id.choices = [(e.id, e.name) for e in educations]
 
+    auto_open_register_pane = False
+
+    def render():
+        return render_template('activity/view_single.htm', activity=activity,
+                               form=form, login_form=SignInForm(),
+                               title=activity.name,
+                               auto_open_register=auto_open_register_pane)
+
     # Check if there is a custom_form for this activity
-    if activity.form_id:
-        # Count current attendants for "reserved" message
-        entries = CustomFormResult.query.filter(CustomFormResult.form_id ==
-                                                activity.form_id)
-        activity.num_attendants = entries.count()
+    if not activity.form_id:
+        # No form, so no registering and handling thereof required.
+        return render()
 
-        # Check if the current user has already entered data in this custom
-        # form
-        if current_user.is_authenticated and current_user.has_paid:
-            all_form_results = CustomFormResult.query \
-                .filter(CustomFormResult.form_id == activity.form_id)
-            form_result = all_form_results \
-                .filter(CustomFormResult.owner_id == current_user.id).first()
-            attending = all_form_results.limit(activity.form.max_attendants) \
-                .from_self() \
-                .filter(CustomFormResult.owner_id == current_user.id).first()
+    # You cannot register when you're not a member of via yet.
+    if not current_user.has_paid:
+        activity.info = _("You have to be a registered member of "
+                          "via in order to register for "
+                          "activities. If you believe you are a "
+                          "member, please contact the board.")
+        return render()
 
-            if form_result:
-                activity.form_data = form_result.data.replace('"', "'")
-                print(form_result.form.price)
-                if not form_result.has_paid and attending:
-                    if form_result.form.price > 0:
-                        print("tesT")
-                        form.show_pay_button = True
-                        form.form_result = form_result
+    # Count current attendants for "reserved" message
+    entries = CustomFormResult.query.filter(CustomFormResult.form_id ==
+                                            activity.form_id)
+    activity.num_attendants = entries.count()
+    over_max_registrations = activity.num_attendants >= \
+        activity.form.max_attendants
 
-                if form_result.has_paid or \
-                        (attending and activity.price.lower()
-                            in ["gratis", "free", "0"]):
-                    activity.info = _("Your registration has been completed.")\
-                        + " " \
-                        + _("You can edit your registration by resubmitting"
-                            " the form.")
-                elif attending:
-                    activity.info = _("You have successfully registered"
-                                      ", payment is still required!")
-                else:
-                    activity.info = _("The activity has reached its maximum "
-                                      "number of registrations. You have been "
-                                      "placed on the reserves list.")
-            else:
-                if activity.num_attendants >= activity.form.max_attendants:
-                    activity.info = _("The activity has reached its maximum "
-                                      "number of registrations. You will be "
-                                      "placed on the reserves list.")
-        else:
-            activity.info = _("You have to be a registered member of "
-                              "via in order to register for "
-                              "activities. If you believe you are a "
-                              "member, please contact the board.")
+    all_form_results = CustomFormResult.query \
+        .filter(CustomFormResult.form_id == activity.form_id)
 
-    return render_template('activity/view_single.htm', activity=activity,
-                           form=form, login_form=SignInForm(),
-                           title=activity.name)
+    # Result for the form, may be None if not entered yet.
+    form_result = all_form_results \
+        .filter(CustomFormResult.owner_id == current_user.id).first()
+
+    # Not filled in, show over limit message or not and let the user register.
+    if not form_result:
+        if over_max_registrations:
+            activity.info = _("The activity has reached its maximum "
+                              "number of registrations. You will be "
+                              "placed on the reserves list.")
+        return render()
+
+    activity.form_data = form_result.data.replace('"', "'")
+
+    auto_open_register_pane = True
+
+    # You're attending if you're on the form results list within the
+    # max attendants count.
+    is_attending = bool(all_form_results.limit(activity.form.max_attendants)
+                        .from_self().filter(
+        CustomFormResult.owner_id == current_user.id).first())
+
+    # Payment still required if you're attending, the form says it costs money
+    # and you haven't paid yet.
+    form_costs_money = form_result.form.price > 0
+    payment_required = form_costs_money and is_attending and \
+        not form_result.has_paid
+
+    if payment_required:
+        form.show_pay_button = True
+        form.form_result = form_result
+
+    if not payment_required:
+        activity.info = \
+            _("Your registration has been completed.") + " " + \
+            _("You can edit your registration by resubmitting the form.")
+    elif is_attending:
+        activity.info = _("You have successfully registered, "
+                          "payment is still required!")
+
+        if form_result.form.requires_direct_payment:
+            pay_url = url_for('activity.create_mollie_transaction',
+                              result_id=form.form_result.id)
+
+            return redirect(pay_url)
+    else:
+        activity.info = _("The activity has reached its maximum "
+                          "number of registrations. You have been "
+                          "placed on the reserves list.")
+
+    return render()
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
@@ -234,13 +259,12 @@ def create(activity_id=None):
 
 @blueprint.route('/transaction/<int:result_id>/', methods=['GET', 'POST'])
 def create_mollie_transaction(result_id):
-
     # Find the form_result we are trying to pay.
     form_result = CustomFormResult.query.get_or_404(result_id)
 
     # Search open transactions that are still waiting to be paid.
-    transaction = Transaction.query.join(TransactionActivity)\
-        .filter(TransactionActivity.custom_form_result_id == form_result.id)\
+    transaction = Transaction.query.join(TransactionActivity) \
+        .filter(TransactionActivity.custom_form_result_id == form_result.id) \
         .filter(Transaction.status == 'open').first()
 
     # If no such payment exist, create a new one.

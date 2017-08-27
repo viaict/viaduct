@@ -32,17 +32,20 @@ class AddTaskForm(Form):
                     'minutes.',
         validators=[InputRequired()])
 
-    status = SelectField(
-        'Status',
-        choices=map(lambda x, y: (x, y),
-                    range(0, len(Task.status_meanings)),
-                    Task.status_meanings), validators=[])
+    status = SelectField('Status')
 
     def load_groups(self, groups):
         self.group.choices = map(lambda x: (x.id, x.name), groups)
 
+    def load_status(self, status_meanings):
+        self.status.choices = map(lambda index, status: (index, status),
+                                  range(0, len(status_meanings)),
+                                  Task.status_meanings)
+
     def __init__(self, formdata=None, obj=None, prefix='', **kwargs):
         kwargs.setdefault('group', kwargs.get('default', -1))
+
+        print('>>>1testssdssssad', Task.status_meanings)
 
         Form.__init__(self, formdata, obj, prefix, **kwargs)
 
@@ -53,10 +56,10 @@ class EditTaskForm(Form):
     # timestamp
     line = IntegerField('Line', default=-1,
                         description='Fill in -1 if this is '
-                                    'unknown or impossible.')
+                        'unknown or impossible.')
     minute_id = IntegerField('Minute ID', default=-1,
                              description='Fill in -1 if this is unknown or '
-                                         'impossible.')
+                             'impossible.')
     group = SelectField('Group')
     users = TextAreaField('Users',
                           description='Type comma separated names for whom '

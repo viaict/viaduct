@@ -1,7 +1,6 @@
-from app import db
-from app import get_locale
+from app import app, db, get_locale
 from datetime import datetime, timedelta
-from app.models import BaseEntity
+from app.models.base_model import BaseEntity
 from babel.dates import format_timedelta, format_datetime
 from sqlalchemy import event
 from flask_babel import lazy_gettext as _  # gettext
@@ -71,6 +70,17 @@ class Activity(db.Model, BaseEntity):
         self.picture = picture
         self.venue = 1
         self.form_id = form_id
+
+    def __str__(self):
+        if self.start_time.date() == self.end_time.date():
+            end_time_fmt = 'TIME_FORMAT'
+        else:
+            end_time_fmt = 'DT_FORMAT'
+
+        return "{} ({} - {})".format(
+            self.name,
+            self.start_time.strftime(app.config['DT_FORMAT']),
+            self.end_time.strftime(app.config[end_time_fmt]))
 
     def get_time(self):
         """
@@ -158,10 +168,10 @@ class Activity(db.Model, BaseEntity):
             name = self.en_name
             description = self.en_description
         elif nl_available:
-            name = self.nl_name + " (" + _('Dutch') + ")"
+            name = self.nl_name + " (Dutch)"
             description = self.nl_description
         elif en_available:
-            name = self.en_name + " (" + _('English') + ")"
+            name = self.en_name + " (Engels)"
             description = self.en_description
         else:
             name = 'N/A'

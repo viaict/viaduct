@@ -1,15 +1,16 @@
+from collections import OrderedDict
+from datetime import datetime
+
+from flask_login import current_user, url_for
+
 from app import db
 from app.models.base_model import BaseEntity
 from app.models.activity import Activity
+from app.models.user import User
 from app.models.mollie import Transaction
 from app.models.page import PageRevision, Page
 from app.utils.google import send_email
 from app.utils.page import PageAPI
-
-from flask_login import current_user, url_for
-
-from collections import OrderedDict
-from datetime import datetime
 
 
 def export_form_data(r):
@@ -18,6 +19,12 @@ def export_form_data(r):
 
 
 class CustomForm(db.Model, BaseEntity):
+    """Custom form model.
+
+    A custom form is a form on which users can register themselves
+    (see CustomFormResult) and can be bound to activities.
+    """
+
     __tablename__ = 'custom_form'
 
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -32,6 +39,8 @@ class CustomForm(db.Model, BaseEntity):
     terms = db.Column(db.String(4096))
 
     archived = db.Column(db.Boolean)
+    requires_direct_payment = db.Column(db.Boolean, default=False,
+                                        nullable=False)
 
     exports = \
         OrderedDict([('user_id', {
@@ -171,6 +180,11 @@ class CustomForm(db.Model, BaseEntity):
 
 
 class CustomFormResult(db.Model, BaseEntity):
+    """Custom form results model.
+
+    The custom form results are the registrations of users on custom forms.
+    """
+
     __tablename__ = 'custom_form_result'
 
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -202,13 +216,17 @@ class CustomFormResult(db.Model, BaseEntity):
                            _external=True)
         followers = CustomFormFollower.query\
             .filter(CustomFormFollower.form_id == self.form_id)
+        owner = User.query.get(self.owner_id)
+        form = CustomForm.query.get(self.form_id)
         for follower in followers:
             send_email(to=follower.owner.email,
                        subject='Formulier ingevuld',
                        email_template='email/form.html',
                        sender='via',
                        user=follower.owner,
-                       form_url=form_url)
+                       form_url=form_url,
+                       owner=owner.first_name + " " + owner.last_name,
+                       form=form.name)
 
 
 class CustomFormFollower(db.Model, BaseEntity):

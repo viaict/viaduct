@@ -3,7 +3,7 @@ from app.forms import SeoForm
 from app import db
 from app.utils.module import ModuleAPI
 from app.utils.seo import get_seo, get_resources
-from app.models import SEO
+from app.models.seo import SEO
 
 
 from flask import Blueprint, abort, redirect, url_for

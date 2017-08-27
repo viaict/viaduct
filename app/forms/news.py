@@ -1,6 +1,6 @@
 from flask_babel import lazy_gettext as _
 from flask_wtf import Form
-from wtforms import TextField, TextAreaField, DateField, BooleanField
+from wtforms import StringField, TextAreaField, DateField, BooleanField
 from wtforms.validators import InputRequired, Optional
 
 from datetime import date, timedelta
@@ -9,9 +9,9 @@ from app.forms.util import FieldTabGroup, FieldTab, FieldVerticalSplit
 
 
 class NewsForm(Form):
-    nl_title = TextField(_('Dutch title'))
+    nl_title = StringField(_('Dutch title'))
     nl_content = TextAreaField(_('Dutch content'))
-    en_title = TextField(_('English title'))
+    en_title = StringField(_('English title'))
     en_content = TextAreaField(_('English content'))
 
     details = FieldTabGroup([

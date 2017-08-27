@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-06-10 13:57+0200\n"
+"POT-Creation-Date: 2017-08-15 15:09+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -21,10 +21,20 @@ msgstr ""
 msgid "%(email)s is unknown to our system."
 msgstr ""
 
+#, python-format
+msgid "%s is not an allowed file type."
+msgstr ""
+
 msgid "A user with this e-mail address already exist."
 msgstr ""
 
 msgid "A user with this e-mail address already exists"
+msgstr ""
+
+msgid "ALV"
+msgstr ""
+
+msgid "ALVs"
 msgstr ""
 
 #, python-format
@@ -52,6 +62,9 @@ msgid "Activitycommittee"
 msgstr ""
 
 msgid "Add"
+msgstr ""
+
+msgid "Add document"
 msgstr ""
 
 msgid "Add user to"
@@ -97,6 +110,9 @@ msgstr ""
 msgid "An email has been sent to %(email)s with further instructions."
 msgstr ""
 
+msgid "An error occurred while uploading "
+msgstr ""
+
 msgid "An error occurred while uploading the file"
 msgstr ""
 
@@ -117,6 +133,9 @@ msgid "Are you sure you want to delete this course?"
 msgstr ""
 
 msgid "Are you sure you want to delete this education?"
+msgstr ""
+
+msgid "Are you sure you want to delete this entry?"
 msgstr ""
 
 msgid "Are you sure you want to delete this exam?"
@@ -159,6 +178,9 @@ msgstr ""
 
 msgid "Captain's log succesfully ended."
 msgstr "."
+
+msgid "Chairman"
+msgstr ""
 
 msgid "Change password"
 msgstr ""
@@ -323,6 +345,9 @@ msgstr ""
 msgid "Create news item"
 msgstr ""
 
+msgid "Create newsletter"
+msgstr ""
+
 msgid "Create user"
 msgstr ""
 
@@ -353,6 +378,9 @@ msgstr ""
 msgid "Delete activity"
 msgstr ""
 
+msgid "Delete alv"
+msgstr ""
+
 msgid "Delete avatar"
 msgstr ""
 
@@ -368,6 +396,9 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
+msgid "Details"
+msgstr ""
+
 msgid "Disabled"
 msgstr ""
 
@@ -381,6 +412,9 @@ msgid "Do not filter HTML tags"
 msgstr ""
 
 msgid "Do you have an idea for an activity?"
+msgstr ""
+
+msgid "Document"
 msgstr ""
 
 msgid "Dutch"
@@ -425,6 +459,9 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
+msgid "Edit alv"
+msgstr ""
+
 msgid "Edit course"
 msgstr ""
 
@@ -435,6 +472,9 @@ msgid "Edit examination"
 msgstr ""
 
 msgid "Edit news item"
+msgstr ""
+
+msgid "Edit newsletter"
 msgstr ""
 
 msgid "Edit page"
@@ -567,9 +607,6 @@ msgid "Favourer"
 msgstr ""
 
 msgid "File"
-msgstr ""
-
-msgid "File created successfully"
 msgstr ""
 
 msgid "File does not exist, examination deleted."
@@ -767,6 +804,9 @@ msgstr ""
 msgid "Navigation entry"
 msgstr ""
 
+msgid "New ALV"
+msgstr ""
+
 msgid "New activity"
 msgstr ""
 
@@ -797,6 +837,9 @@ msgstr ""
 msgid "New vacancy"
 msgstr ""
 
+msgid "New version"
+msgstr ""
+
 msgid "News"
 msgstr ""
 
@@ -806,7 +849,19 @@ msgstr ""
 msgid "News item succesfully deleted"
 msgstr ""
 
+msgid "News items"
+msgstr ""
+
+msgid "Newsletter saved"
+msgstr ""
+
+msgid "Newsletters"
+msgstr ""
+
 msgid "Next"
+msgstr ""
+
+msgid "No"
 msgstr ""
 
 msgid "No Output"
@@ -866,6 +921,9 @@ msgstr ""
 msgid "No permissions to read contacts"
 msgstr ""
 
+msgid "No presidium"
+msgstr ""
+
 msgid "No starting year of study submitted"
 msgstr ""
 
@@ -896,6 +954,9 @@ msgstr ""
 msgid "Not found!"
 msgstr ""
 
+msgid "Open voor nieuwe leden"
+msgstr ""
+
 msgid "Optional data"
 msgstr ""
 
@@ -906,6 +967,9 @@ msgid "Page not found"
 msgstr ""
 
 msgid "Page title"
+msgstr ""
+
+msgid "Pass these URLs to Copernica so they can fetch the latest items."
 msgstr ""
 
 msgid "Password"
@@ -948,6 +1012,9 @@ msgid "Post address"
 msgstr ""
 
 msgid "Postoffice Box"
+msgstr ""
+
+msgid "Presidium: "
 msgstr ""
 
 msgid "Previous"
@@ -1025,6 +1092,9 @@ msgstr ""
 msgid "Request to DOMjudge server failed"
 msgstr ""
 
+msgid "Requires direct payment"
+msgstr ""
+
 msgid "Reset password"
 msgstr ""
 
@@ -1050,6 +1120,9 @@ msgid "Search Engine Optimization"
 msgstr ""
 
 msgid "Search for title, contact or company"
+msgstr ""
+
+msgid "Secretary"
 msgstr ""
 
 msgid "Select a time and date by clicking on the clock"
@@ -1289,6 +1362,9 @@ msgstr ""
 msgid "Total problems"
 msgstr ""
 
+msgid "URLs"
+msgstr ""
+
 msgid ""
 "Unfortunately it is currently unclear to us if you are a member of "
 "<strong>via</strong>."
@@ -1304,6 +1380,9 @@ msgid "Upload"
 msgstr ""
 
 msgid "Upload file"
+msgstr ""
+
+msgid "Uploaded files"
 msgstr ""
 
 msgid "User"
@@ -1343,6 +1422,9 @@ msgid "Valid membership is required to read this news article"
 msgstr ""
 
 msgid "Vancancies"
+msgstr ""
+
+msgid "Versions"
 msgstr ""
 
 msgid "View"
@@ -1405,6 +1487,9 @@ msgid "Wrong format examination."
 msgstr ""
 
 msgid "Wrong format summary."
+msgstr ""
+
+msgid "Yes"
 msgstr ""
 
 msgid "Yes, I have finished studying"
@@ -1761,5 +1846,32 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Pay (+€0,35 transaction costs)"
+#~ msgstr ""
+
+#~ msgid "File created successfully"
+#~ msgstr ""
+
+#~ msgid "Week number"
+#~ msgstr ""
+
+#~ msgid "Newsletter"
+#~ msgstr ""
+
+#~ msgid "Other"
+#~ msgstr ""
+
+#~ msgid "Presidium"
+#~ msgstr ""
+
+#~ msgid "Presidium chairman"
+#~ msgstr ""
+
+#~ msgid "Presidium other"
+#~ msgstr ""
+
+#~ msgid "Presidium secretary"
+#~ msgstr ""
+
+#~ msgid "Datum"
 #~ msgstr ""
 

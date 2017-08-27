@@ -7,7 +7,7 @@ from app import db
 from app.models.course import Course
 from app.models.education import Education
 from app.models.user import User
-from app.models import BaseEntity
+from app.models.base_model import BaseEntity
 
 
 test_types = {'Mid-term': _('Mid-Term'),
