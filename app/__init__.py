@@ -65,6 +65,8 @@ app.config.from_object('config.Config')
 # Set up Flask Babel, which is used for internationalisation support.
 babel = Babel(app)
 
+app.path = os.path.dirname(os.path.abspath(__file__))
+
 
 @babel.localeselector
 def get_locale():
@@ -123,8 +125,7 @@ def init_app():
 
     app.json_encoder = JSONEncoder
 
-    path = os.path.dirname(os.path.abspath(__file__))
-    register_views(app, os.path.join(path, 'views'))
+    register_views(app, os.path.join(app.path, 'views'))
 
     login_manager.anonymous_user = AnonymousUser
 
