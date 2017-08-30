@@ -18,8 +18,6 @@ class PageAPI:
 
     @staticmethod
     def can_read(page):
-        if not page.needs_paid:
-            return True
         return PagePermission.get_user_rights(current_user, page) > 0
 
     @staticmethod
