@@ -17,6 +17,7 @@ from app import db, login_manager
 
 from app.forms import SignUpForm, SignInForm, ResetPassword, RequestPassword
 from app.forms.user import EditUserForm, EditUserInfoForm
+from app.models.group import Group
 
 from app.models.user import User
 from app.models.activity import Activity
@@ -201,6 +202,10 @@ def edit(user_id=None):
         if form.password.data != '':
             user.password = bcrypt.hashpw(form.password.data, bcrypt.gensalt())
 
+        group = Group.query.filter(Group.name == 'all').first()
+        group.add_user(user)
+
+        db.session.add(group)
         db.session.add(user)
         db.session.commit()
 
@@ -251,6 +256,12 @@ def sign_up():
         user.zip = form.zip.data
         user.city = form.city.data
         user.country = form.country.data
+
+        group = Group.query.filter(Group.name == 'all').first()
+        group.add_user(user)
+
+        db.session.add(group)
+        db.session.commit()
 
         db.session.add(user)
         db.session.commit()
