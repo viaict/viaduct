@@ -17,7 +17,8 @@ class AlvForm(Form):
 
     activity = QuerySelectField(
         _('Activity'),
-        query_factory=lambda: Activity.query)
+        query_factory=lambda: Activity.query,
+        allow_blank=True)
     chairman = QuerySelectField(
         _('Chairman'),
         query_factory=lambda: user_service.find_members())
