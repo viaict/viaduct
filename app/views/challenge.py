@@ -1,16 +1,17 @@
-from flask import Blueprint, render_template, request, \
-    abort, jsonify
-
 import datetime
 
+from flask import Blueprint, render_template, request, \
+    jsonify
 from flask_login import login_required, current_user
-from app import app
-from app.models.challenge import Challenge
+
+from app.decorators import require_role
 from app.forms import ChallengeForm
-from app.utils.module import ModuleAPI
+from app.models.challenge import Challenge
+from app.roles import Roles
 from app.utils.challenge import ChallengeAPI
 
 blueprint = Blueprint('challenge', __name__, url_prefix='/challenge')
+
 
 # UPLOAD_FOLDER = app.config['UPLOAD_DIR']
 # FILE_FOLDER = app.config['FILE_DIR']
@@ -19,12 +20,8 @@ blueprint = Blueprint('challenge', __name__, url_prefix='/challenge')
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/dashboard/', methods=['GET', 'POST'])
+@require_role(Roles.CHALLENGE_READ)
 def view_list(page=1):
-    if not ModuleAPI.can_read('challenge'):
-        return abort(403)
-
-    print((app.config['SQLALCHEMY_DATABASE_URI']))
-
     challenge = Challenge()
     form = ChallengeForm(request.form, challenge)
 
@@ -44,10 +41,8 @@ def view_list(page=1):
 
 # API's
 @blueprint.route('/api/fetch_all_challenges', methods=['GET', 'POST'])
+@require_role(Roles.CHALLENGE_WRITE)
 def fetch_all():
-    if not ModuleAPI.can_write('challenge'):
-        abort(403)
-
     challenges = ChallengeAPI.fetch_all_challenges()
 
     return jsonify(challenges=[challenge.serialize for challenge in
@@ -63,10 +58,8 @@ def get_ranking():
 
 @blueprint.route('/api/fetch_challenge', methods=['GET', 'POST'])
 @blueprint.route('/api/fetch_challenge/', methods=['GET', 'POST'])
+@require_role(Roles.CHALLENGE_WRITE)
 def fetch_question():
-    if not ModuleAPI.can_write('challenge'):
-        abort(403)
-
     # Gather all arguments
     if request.args.get('challenge_id'):
         challenge_id = request.args.get('challenge_id')
@@ -79,10 +72,8 @@ def fetch_question():
 
 
 @blueprint.route('/api/create_challenge', methods=['GET', 'POST'])
+@require_role(Roles.CHALLENGE_WRITE)
 def create_challenge(challenge_id=None):
-    if not ModuleAPI.can_write('challenge'):
-        abort(403)
-
     # Gather all arguments
     if request.args.get('parent_id'):
         parent_id = request.args.get('parent_id')

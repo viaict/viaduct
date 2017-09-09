@@ -1,41 +1,41 @@
 <div class="btn-group">
-    {% if ModuleAPI.can_read('location') %}
+    {% if current_user.has_role(Roles.LOCATION_READ) %}
     <a class="btn btn-primary" href="{{ url_for('location.list') }}">{{_('All locations')}}</a>
     {% endif %}
-    {% if ModuleAPI.can_read('contact') %}
+    {% if current_user.has_role(Roles.CONTACT_READ) %}
     <a class="btn btn-primary" href="{{ url_for('contact.list') }}">{{_('All contacts')}}</a>
     {% endif %}
-    {% if ModuleAPI.can_read('company') %}
+    {% if current_user.has_role(Roles.COMPANY_READ) %}
     <a class="btn btn-primary" href="{{ url_for('company.list') }}">{{_('All companies')}}</a>
     {% endif %}
-    {% if ModuleAPI.can_read('vacancy') %}
+    {% if current_user.has_role(Roles.VACANCY_READ) %}
     <a class="btn btn-primary" href="{{ url_for('vacancy.list') }}">{{_('All vacancies')}}</a>
     {% endif %}
 </div>
 
-{% if ModuleAPI.can_write('vacancy') %}
+{% if current_user.has_role(Roles.VACANCY_WRITE) %}
 <div class="btn-group">
     <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
         <i class='glyphicon glyphicon-plus'></i>
         <span class="hidden-xs">{{ _('Add') }}</span>
     </button>
     <ul class="dropdown-menu">
-        {% if ModuleAPI.can_write('location') %}
+        {% if current_user.has_role(Roles.LOCATION_WRITE) %}
         <li>
             <a class='dropdown-item' href="{{ url_for('location.edit') }}">{{_('New location')}}</a>
         </li>
         {% endif %}
-        {% if ModuleAPI.can_write('contact') %}
-        <li>
+        {% if current_user.has_role(Roles.CONTACT_WRITE) %}
+            <li>
             <a class='dropdown-item' href="{{ url_for('contact.edit') }}">{{_('New contact')}}</a>
         </li>
         {% endif %}
-        {% if ModuleAPI.can_write('company') %}
+        {% if current_user.has_role(Roles.COMPANY_WRITE) %}
         <li>
             <a class='dropdown-item' href="{{ url_for('company.edit') }}">{{_('New company')}}</a>
         </li>
         {% endif %}
-        {% if ModuleAPI.can_write('vacancy') %}
+        {% if current_user.has_role(Roles.VACANCY_WRITE) %}
         <li>
             <a class='dropdown-item' href="{{ url_for('vacancy.edit') }}">{{_('New vacancy')}}</a>
         </li>

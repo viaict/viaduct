@@ -11,12 +11,13 @@ from werkzeug.contrib.atom import AtomFeed
 # please some one check out what is happening
 import app.utils.google as google
 from app import db
+from app.decorators import require_role
 from app.forms.activity import ActivityForm, CreateForm
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult
 from app.models.mollie import Transaction, TransactionActivity
+from app.roles import Roles
 from app.utils import mollie
-from app.utils.module import ModuleAPI
 from app.utils.file import file_upload, file_remove
 from app.utils.serialize_sqla import serialize_sqla
 from app.models.education import Education
@@ -33,6 +34,7 @@ PICTURE_DIR = 'app/static/activity_pictures/'
 @blueprint.route('/list/<int:page_nr>/', methods=['GET', 'POST'])
 @blueprint.route('/list/<string:archive>/<int:page_nr>/',
                  methods=['GET', 'POST'])
+@require_role(Roles.ACTIVITY_READ)
 def view(archive=None, page_nr=1):
     if archive == "archive":
         activities = Activity.query.filter(
@@ -52,10 +54,8 @@ def view(archive=None, page_nr=1):
 
 
 @blueprint.route('/remove/<int:activity_id>/', methods=['POST'])
+@require_role(Roles.ACTIVITY_WRITE)
 def remove_activity(activity_id=0):
-    if not ModuleAPI.can_write('activity'):
-        return abort(403)
-
     # Get activity
     activity = Activity.query.filter(Activity.id == activity_id).first()
 
@@ -171,11 +171,8 @@ def get_activity(activity_id=0):
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<int:activity_id>/', methods=['GET', 'POST'])
+@require_role(Roles.ACTIVITY_WRITE)
 def create(activity_id=None):
-    # Need to be logged in + actie group or admin etc.
-    if not ModuleAPI.can_write('activity'):
-        return abort(403)
-
     if activity_id:
 
         activity = Activity.query.get(activity_id)

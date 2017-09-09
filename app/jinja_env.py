@@ -5,6 +5,7 @@ from markdown import markdown
 
 from app import app, static_url, get_locale
 from app.models.user import AnonymousUser  # noqa
+from app.roles import Roles
 from app.utils.serialize_sqla import serialize_sqla  # noqa
 from app.utils.thumb import thumb  # noqa
 from app.utils.user import UserAPI  # noqa
@@ -50,3 +51,4 @@ app.jinja_env.globals.update(ModuleAPI=ModuleAPI)
 app.jinja_env.globals.update(PageAPI=PageAPI)
 app.jinja_env.globals.update(CategoryAPI=CategoryAPI)
 app.jinja_env.globals.update(get_seo_fields=get_seo_fields)
+app.jinja_env.globals.update(Roles=Roles)
