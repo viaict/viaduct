@@ -1,0 +1,8 @@
+LOAD database
+    from mysql://root:root@127.0.0.1/viaduct
+    into postgresql:///viaduct
+
+WITH include drop, create tables, no truncate,
+    create indexes, reset sequences, foreign keys
+
+;
