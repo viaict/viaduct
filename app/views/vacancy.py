@@ -1,10 +1,10 @@
+from datetime import datetime
+
 from flask import Blueprint, render_template, request, redirect, url_for, \
     abort, flash
 from flask_babel import lazy_gettext as _
-
-from sqlalchemy import or_, and_, func
-
-from datetime import datetime
+from flask_sqlalchemy import Pagination
+from sqlalchemy import or_, and_
 
 from app import app, db
 from app.models.vacancy import Vacancy
@@ -20,19 +20,13 @@ FILE_FOLDER = app.config['FILE_DIR']
 @blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page_nr>/<search>/', methods=['GET', 'POST'])
 def list(page_nr=1, search=None):
-    # Order the vacancies in such a way that vacancies that are new
-    # or almost expired, end up on top.
-    order = func.abs(
-        (100 * (func.datediff(Vacancy.start_date, func.current_date()) /
-                func.datediff(Vacancy.start_date, Vacancy.end_date))) - 50)
-
     if search is not None:
         vacancies = Vacancy.query.join(Company). \
             filter(or_(Vacancy.title.like('%' + search + '%'),
                        Company.name.like('%' + search + '%'),
                        Vacancy.workload.like('%' + search + '%'),
-                       Vacancy.contract_of_service.like('%' + search + '%'))) \
-            .order_by(order.desc())
+                       Vacancy.contract_of_service.like(
+                           '%' + search + '%')))
 
         if not ModuleAPI.can_write('vacancy'):
             vacancies = vacancies.filter(
@@ -47,17 +41,38 @@ def list(page_nr=1, search=None):
                                title="Vacatures")
 
     if ModuleAPI.can_write('vacancy'):
-        vacancies = Vacancy.query.join(Company).order_by(order.desc())
+        res = Vacancy.query.join(Company)
     else:
-        vacancies = Vacancy.query.order_by(order.desc()) \
-            .filter(and_(Vacancy.start_date <
-                         datetime.utcnow(), Vacancy.end_date >
-                         datetime.utcnow()))
+        res = Vacancy.query.filter(and_(Vacancy.start_date <
+                                        datetime.utcnow(), Vacancy.end_date >
+                                        datetime.utcnow()))
 
-    vacancies = vacancies.paginate(page_nr, 15, False)
+    res = _order_vacancies(res)
+
+    if page_nr is None:
+        try:
+            page_nr = int(request.args.get('page', 1))
+        except (TypeError, ValueError):
+            abort(404)
+
+    index = (page_nr - 1) * 15
+
+    vacancies = Pagination(None, page_nr, 15, len(res), res[index:index + 15])
 
     return render_template('vacancy/list.htm', vacancies=vacancies,
                            search="", path=FILE_FOLDER, title="Vacatures")
+
+
+def _order_vacancies(vacancies):
+    # Order the vacancies in such a way that vacancies that are new
+    # or almost expired, end up on top.
+    def key(vacancy):
+        old = (vacancy.start_date - datetime.now().date()).days
+        new = (vacancy.start_date - vacancy.end_date).days
+
+        return abs((100 * (old / min(1, 1 if new == 0 else new)) - 50))
+
+    return sorted(vacancies, key=key, reverse=True)
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])

@@ -4,8 +4,6 @@ from flask import abort, flash, session, redirect, render_template, request, \
 from flask_login import login_required
 from flask_babel import _
 
-from sqlalchemy import func
-
 from app import app, db
 
 from app.forms.summary import EditForm
@@ -59,7 +57,7 @@ def view(page_nr=1):
     # the search results
     if request.form.get('delete') and request.method == 'POST':
         summary_id = request.form.get('delete')
-        summary = Summary.query.filter(Summary.id == summary_id)\
+        summary = Summary.query.filter(Summary.id == summary_id) \
             .first()
 
         if not summary:
@@ -130,9 +128,9 @@ def view(page_nr=1):
 
             # Query the summaries. The order_by clause keeps them in the same
             # order as the summary_matches list
+            # .order_by(func.field(Summary.id, *summary_matches)) \
             summaries = Summary.query \
                 .filter(Summary.id.in_(summary_matches)) \
-                .order_by(func.field(Summary.id, *summary_matches)) \
                 .paginate(page_nr, 15, True)
     else:
         search = ""
