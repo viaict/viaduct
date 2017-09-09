@@ -6,22 +6,17 @@ from flask import abort, flash, session, redirect, render_template, request, \
     url_for
 from flask_login import login_required
 from flask_babel import _
-
-from sqlalchemy import func
+from flask_sqlalchemy import Pagination
+from fuzzywuzzy import fuzz
 
 from app import app, db
-
 from app.forms import CourseForm, EducationForm
 from app.forms.examination import EditForm
 from app.utils.file import file_upload, file_remove
-
 from app.models.examination import Examination, test_types
 from app.models.course import Course
 from app.models.education import Education
-
 from app.utils.module import ModuleAPI
-
-from fuzzywuzzy import fuzz
 
 blueprint = Blueprint('examination', __name__)
 
@@ -37,7 +32,7 @@ DATE_FORMAT = app.config['DATE_FORMAT']
 
 
 def get_education_id(education):
-    education_object = db.session.query(Education)\
+    education_object = db.session.query(Education) \
         .filter(Education.name == education).first()
 
     if not education_object:
@@ -46,7 +41,7 @@ def get_education_id(education):
 
 
 def get_course_id(course):
-    course_object = db.session.query(Course).filter(Course.name == course)\
+    course_object = db.session.query(Course).filter(Course.name == course) \
         .first()
 
     if not course_object:
@@ -137,7 +132,6 @@ def add():
 @blueprint.route('/examination/edit/<int:exam_id>/', methods=['GET', 'POST'])
 @login_required
 def edit(exam_id):
-
     if not ModuleAPI.can_write('examination', True):
         session['prev'] = 'examination.edit_examination'
         return abort(403)
@@ -222,7 +216,7 @@ def view_examination(page_nr=1):
     # the search results
     if request.args.get('delete'):
         exam_id = request.args.get('delete')
-        examination = Examination.query.filter(Examination.id == exam_id)\
+        examination = Examination.query.filter(Examination.id == exam_id) \
             .first()
 
         if not examination:
@@ -266,16 +260,30 @@ def view_examination(page_nr=1):
             # courses are returned. The order_by clause makes sure the exams
             # are first sorted by course according to the ranking and then
             # sorted by date of the exam
-            examinations = Examination.query.join(Course)\
+            # .order_by(func.field(Course.id, *ranked_courses)) \
+            res = Examination.query.join(Course) \
                 .filter(Course.id.in_(ranked_courses)) \
-                .order_by(func.field(Course.id, *ranked_courses)) \
                 .order_by(Examination.date.desc()) \
-                .paginate(page_nr, 15, True)
+                .all()
+
+            res = sorted(res, key=lambda i: ranked_courses.index(i.course.id))
+
+            if page_nr is None:
+                try:
+                    page_nr = int(request.args.get('page', 1))
+                except (TypeError, ValueError):
+                    abort(404)
+
+            index = (page_nr - 1) * 15
+
+            examinations = Pagination(None, page_nr, 15, len(res),
+                                      res[index:index + 15])
+
     else:
         search = ""
         # Query the exams. The order_by part makes sure the exams are sorted
         # by course and within a course are sorted by date
-        examinations = Examination.query.join(Course)\
+        examinations = Examination.query.join(Course) \
             .order_by(Course.name) \
             .order_by(Examination.date.desc()) \
             .paginate(page_nr, 15, True)
