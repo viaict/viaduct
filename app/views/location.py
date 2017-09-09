@@ -3,7 +3,9 @@ from flask import Blueprint, flash, redirect, render_template, request, \
 from flask_babel import lazy_gettext as _
 
 from app import db
+from app.decorators import require_role
 from app.models.location import Location
+from app.roles import Roles
 from app.utils.serialize_sqla import serialize_sqla
 from app.forms import LocationForm
 from app.utils.module import ModuleAPI
@@ -32,10 +34,9 @@ def list(page_nr=1):
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<int:location_id>/', methods=['GET', 'POST'])
+@require_role(Roles.LOCATION_WRITE)
 def edit(location_id=None):
     """FRONTEND, Create, view or edit a location."""
-    if not ModuleAPI.can_write('location'):
-        return abort(403)
 
     # Select location..
     if location_id:
@@ -55,10 +56,9 @@ def edit(location_id=None):
 
 
 @blueprint.route('/delete/<int:location_id>/', methods=['POST'])
+@require_role(Roles.LOCATION_WRITE)
 def delete(location_id):
     """Delete a location."""
-    if not ModuleAPI.can_write('location'):
-        return abort(403)
 
     location = Location.query.get_or_404(location_id)
     db.session.delete(location)

@@ -11,7 +11,9 @@ from wtforms.fields import StringField
 
 from datetime import datetime, timedelta
 from app import db
+from app.decorators import require_role
 from app.forms import PageForm, HistoryPageForm
+from app.roles import Roles
 from app.utils.forms import flash_form_errors
 from app.utils.htmldiff import htmldiff
 from app.models.group import Group
@@ -19,7 +21,6 @@ from app.models.page import Page, PageRevision, PagePermission
 from app.models.redirect import Redirect
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult
-from app.utils.module import ModuleAPI
 from app.utils.page import PageAPI
 
 blueprint = Blueprint('page', __name__)
@@ -115,9 +116,8 @@ def get_page_history(path=''):
 
 
 @blueprint.route('/edit/<path:path>', methods=['GET', 'POST'])
+@require_role(Roles.PAGE_WRITE)
 def edit_page(path=''):
-    if not ModuleAPI.can_write('page'):
-        return abort(403)
 
     page = Page.get_by_path(path)
     form = request.form
@@ -206,9 +206,8 @@ def edit_page(path=''):
 
 
 @blueprint.route('/delete/<path:path>/', methods=['GET', 'POST'])
+@require_role(Roles.PAGE_WRITE)
 def delete(path):
-    if not ModuleAPI.can_write('page'):
-        return abort(403)
 
     page = Page.get_by_path(path)
     if not page:

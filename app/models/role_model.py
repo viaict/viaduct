@@ -15,3 +15,6 @@ class GroupRole(db.Model, BaseEntity):
 class Role(db.Model, BaseEntity):
     """Role used to secure the application."""
     role = db.Column(db.String(128), nullable=False)
+    groups = db.relationship('Group', secondary='group_role')
+
+    prints = ('role',)
