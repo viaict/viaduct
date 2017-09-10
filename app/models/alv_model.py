@@ -54,7 +54,7 @@ class AlvDocument(db.Model, BaseEntity):
 
         if locale == 'nl' and self.nl_name:
             return self.nl_name
-        elif locale == 'en' and self.name:
+        elif locale == 'en' and self.en_name:
             return self.en_name
         elif self.nl_name:
             return self.nl_name + " (Dutch)"
