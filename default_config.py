@@ -4,7 +4,7 @@ import os
 import logging
 
 
-class DefaultConfig:
+class Config:
     base_path = os.path.abspath(os.path.dirname(__file__))
 
     DEBUG = True
