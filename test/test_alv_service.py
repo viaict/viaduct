@@ -18,7 +18,6 @@ class TestAlvService(unittest.TestCase):
         file_mock.reset_mock()
         alv_repository_mock.reset_mock()
 
-    # @patch(alv_repo + "find_alv_by_id", ALV)
     def test_find_alv_by_id_found(self):
         alv_service.find_alv_by_id(1, False, False)
 
@@ -55,3 +54,6 @@ class TestAlvService(unittest.TestCase):
         alv_repository_mock.save_document.assert_called_once()
         alv_repository_mock.save_document_version.assert_called_once()
         file_mock.file_upload.assert_called_with(file_storage)
+
+        self.assertEqual(doc.nl_name, "nl")
+        self.assertEqual(doc.en_name, "en")
