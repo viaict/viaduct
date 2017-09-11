@@ -29,7 +29,7 @@ def find_alv_document_by_id(alv_document_id):
 def get_alv_document_by_id(alv_document_id):
     alv_document = find_alv_document_by_id(alv_document_id)
     if not alv_document:
-        raise ResourceNotFoundException("alv document")
+        raise ResourceNotFoundException("alv document", alv_document_id)
     return alv_document
 
 
@@ -48,7 +48,7 @@ def format_presidium(alv):
 
 
 def add_document(alv, file_storage, nl_name, en_name):
-    alv_document = alv_repository.create_document
+    alv_document = alv_repository.create_document()
     alv_document.alv = alv
     alv_document.en_name = en_name
     alv_document.nl_name = nl_name

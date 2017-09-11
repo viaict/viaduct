@@ -21,7 +21,6 @@ def save(alv):
 
 
 def save_document(alv_document):
-    print("Should not be called")
     db.session.add(alv_document)
     db.session.commit()
 
