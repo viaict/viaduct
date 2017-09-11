@@ -1,0 +1,534 @@
+/*
+ *  Name:       _header.scss
+ *  Author:     Lennart Kerkvliet
+ *
+ *  This file contains all the css for the navigation header,
+ *  including the dropdown menu. All header css should be placed
+ *  here.
+ */
+
+ $header-height: 80px;
+
+
+ /* ----------------------------------------------------------------------
+  * 1. GENERAL
+  * ----------------------------------------------------------------------
+  */
+
+header {
+    max-height: $header-height;
+    width: 100%;
+    position: fixed;
+    background-color: #fff;
+    border-bottom: 1px #ddd solid;
+    z-index: 999;
+    top: 0;
+
+    .navbar {
+        max-width: 1170px;
+        margin: 0 auto;
+    }
+
+    .navbar-header {
+        height: $header-height;
+        display: table;
+    }
+
+    .navbar-brand {
+        display: table-cell;
+        vertical-align: middle;
+        padding-bottom: 8px;
+        width: 70px;
+    }
+
+    .navbar-nav {
+        margin-left: 10px;
+        float: left;
+        height: 60px;
+        text-align: center;
+
+        > li > a {
+            text-transform: lowercase;
+            font-weight: 400;
+            color: #777;
+        }
+
+        .dropdown-menu,
+        .dropdown-submenu {
+            margin: 0;
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            border: 0;
+            border-radius: 0;
+        }
+    }
+
+    @media (min-width: $grid-float-breakpoint) {
+        .col-sm-12 {
+            display: table;
+            .navbar-collapse {
+                display: table-cell;
+            }
+        }
+    }
+
+    #loginImage{
+        position: absolute;
+        right: 0;
+        top: 20px;
+        border: 1px solid #eee;
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        border-radius: 20px;
+    }
+
+    #loginImageMobile{
+        position: relative;
+        right: 0;
+        top: 0;
+        float: right;
+        margin-top: 8px;
+        border: 1px solid #eee;
+        width: 40px;
+        height: 40px;
+        border-radius: 4px;
+        cursor: pointer;
+        object-fit: cover;
+    }
+
+    #loginContainer {
+        color: #555;
+        position: absolute;
+        right: 0;
+        left: auto;
+        top: $header-height;
+        border: 0;
+        padding: 20px;
+        overflow: hidden;
+        text-transform: none;
+        font-size: 12px;
+        line-height: 14px;
+        margin-top: -1px;
+        border-radius:0;
+    }
+
+    #logoutButtonContainer{
+       width: 100%;
+   }
+}
+
+header #loginContainer p{
+    line-height: 14px;
+}
+
+header #userImage{
+    width: 96px;
+    height: 96px;
+    border: 1px solid #eee;
+    float: left;
+    position: relative;
+    object-fit: cover;
+    border-radius: 48px;
+}
+
+header #userInformation{
+    float: left;
+    margin: 0 20px;
+    position: relative;
+    min-width: 100px;
+
+    .username {
+        font-weight: 600;
+        margin: 4px 0;
+    }
+}
+
+header #loginContainer .fullWidth{
+    width: 100%;
+    margin-top: 20px;
+    position: relative;
+    float: left;
+}
+
+header ul.navbar-nav>li{
+    text-transform: uppercase;
+}
+
+header ul.navbar-nav>li>ul{
+    text-transform: none;
+}
+
+.navbar-collapse {
+    overflow-x: visible;
+    padding-right: $navbar-padding-horizontal;
+    padding-left:  $navbar-padding-horizontal;
+    border-top: 1px solid transparent;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.1);
+    @include clearfix();
+    -webkit-overflow-scrolling: touch;
+
+    &.in {
+        overflow-y: auto;
+    }
+
+    @media (min-width: $grid-float-breakpoint) {
+        width: auto;
+        border-top: 0;
+        box-shadow: none;
+
+        &.collapse {
+            height: auto !important;
+            padding-bottom: 0; // Override default setting
+            overflow: visible !important;
+        }
+
+        &.in {
+            overflow-y: visible;
+        }
+
+        // Undo the collapse side padding for navbars with containers to ensure
+        // alignment of right-aligned contents.
+        .navbar-fixed-top &,
+        .navbar-static-top &,
+        .navbar-fixed-bottom & {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+}
+
+.navbar-nav {
+  margin: ($navbar-padding-vertical / 2) (-$navbar-padding-horizontal);
+
+  > li > a {
+    padding-top:    10px;
+    padding-bottom: 10px;
+    line-height: $line-height-computed;
+  }
+
+  @media (max-width: $grid-float-breakpoint-max) {
+    // Dropdowns get custom display when collapsed
+    .open .dropdown-menu {
+      position: static;
+      float: none;
+      width: auto;
+      margin-top: 0;
+      background-color: transparent;
+      border: 0;
+      box-shadow: none;
+      > li > a,
+      .dropdown-header {
+        padding: 5px 15px 5px 25px;
+      }
+      > li > a {
+        line-height: $line-height-computed;
+        &:hover,
+        &:focus {
+          background-image: none;
+        }
+      }
+    }
+  }
+
+  // Uncollapse the nav
+  @media (min-width: $grid-float-breakpoint) {
+    float: left;
+    margin: 0;
+
+    > li {
+      display: inline-block;
+      > a {
+        padding-top:    $navbar-padding-vertical;
+        padding-bottom: $navbar-padding-vertical;
+      }
+    }
+
+    &.navbar-right:last-child {
+      margin-right: -$navbar-padding-horizontal;
+    }
+  }
+}
+
+/* ----------------------------------------------------------------------
+ * 3. DROPDOWN
+ * ----------------------------------------------------------------------
+ */
+
+ .dropdown-submenu {
+     position: relative;
+ }
+
+ .dropdown-submenu>.dropdown-menu {
+     top: 0;
+     left: 100%;
+     margin-top: -6px;
+     margin-left: -1px;
+     -webkit-border-radius: 0 6px 6px 6px;
+     -moz-border-radius: 0 6px 6px;
+     border-radius: 0 6px 6px 6px;
+ }
+
+ .dropdown-submenu:hover>.dropdown-menu {
+     display: block;
+ }
+
+ .dropdown-submenu>a:after {
+     display: block;
+     content: " ";
+     float: right;
+     width: 0;
+     height: 0;
+     border-color: transparent;
+     border-style: solid;
+     border-width: 5px 0 5px 5px;
+     border-left-color: #ccc;
+     margin-top: 5px;
+     margin-right: -10px;
+ }
+
+@media (max-width: $grid-float-breakpoint) {
+    .dropdown>a:after {
+        display: block;
+        content: " ";
+        float: right;
+        width: 0;
+        height: 0;
+        border-color: transparent;
+        border-style: solid;
+        border-width: 5px 0 5px 5px;
+        border-left-color: #ccc;
+        margin-top: 5px;
+        margin-right: -10px;
+    }
+}
+
+ .dropdown-submenu:hover>a:after {
+     border-left-color: #fff;
+ }
+
+ .dropdown-submenu.pull-left {
+     float: none;
+ }
+
+ .dropdown-submenu.pull-left>.dropdown-menu {
+     left: -100%;
+     margin-left: 10px;
+     -webkit-border-radius: 6px 0 6px 6px;
+     -moz-border-radius: 6px 0 6px 6px;
+     border-radius: 6px 0 6px 6px;
+ }
+
+/* ----------------------------------------------------------------------
+ * 4. RESPONSIVE
+ * ----------------------------------------------------------------------
+ */
+
+@media(max-width:$grid-float-breakpoint){
+
+    header{
+        max-height: none;
+    }
+
+    header .navbar-brand img {
+        width:60px;
+    }
+
+    header .navbar-collapse{
+        max-height: none;
+    }
+
+    header .navbar-nav>li>a {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    header .navbar-nav{
+        margin: 0;
+        height: auto;
+        position: relative;
+    }
+
+    header .navbar-fixed-top{
+        position: relative;
+    }
+
+    header .navbar-default .navbar-toggle{
+        padding: 12px 10px;
+        border-color:#eee;
+    }
+
+    header #logoutButtonContainerMobile{
+        width: 100%;
+    }
+
+    header #logoutButtonContainerMobile button{
+        width: 100%;
+        margin-bottom: 20px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+    header .navbar-collapse{
+        padding: 20px 0;
+    }
+
+    header #sign-in-menu-mobile{
+        padding-bottom: 20px;
+    }
+
+    header #sign-in-menu-mobile button{
+        width: 100%;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    header #userImageMobile{
+        width: 20%;
+        max-width: 100px;
+        margin-right: 5%;
+        float: left;
+        margin-bottom: 20px;
+    }
+
+    header #userInformationMobile{
+        width: 65%;
+        float: left;
+    }
+}
+
+@media(min-width:768px){
+    header .navbar-default .navbar-nav>li>a {
+        padding: 30px 0px 10px 8px;
+        font-size: 12px;
+    }
+
+    header .navbar-brand {
+        padding-right: 0;
+    }
+
+    header .navbar-nav{
+        width: 580px;
+    }
+
+    header .navbar-collapse.collapse.loginForMobile{
+        display: none !important;
+    }
+}
+
+@media(min-width:992px){
+    header .navbar-default .navbar-nav>li>a {
+        padding: 30px 10px 30px 10px;
+        font-size: 14px;
+    }
+
+    header .navbar-nav{
+        width: 800px;
+    }
+}
+
+@media(min-width:1200px){
+    header .navbar-default .navbar-nav>li>a {
+        padding: 30px 15px 30px 15px;
+        font-size:16px;
+    }
+
+    header .navbar-nav{
+        width: 1000px;
+    }
+}
+
+header {
+    @media (max-width: $grid-float-breakpoint) {
+        position: relative;
+        margin-bottom: 20px;
+
+        .navbar-header {
+            width: 100%;
+            height: auto;
+            text-align: center;
+        }
+
+        .navbar-nav {
+            width: 100%;
+            text-align: left;
+        }
+
+        .navbar-brand {
+            display: inline;
+
+            img {
+                width: 50px;
+                margin-top: 12px;
+            }
+        }
+
+        #loginImageMobile {
+            float: right;
+            border-radius: 20px;
+        }
+    }
+
+    @media (min-width: $grid-float-breakpoint) {
+        .navbar ul {
+            .dropdown-submenu:hover > ul,
+            .dropdown:hover > ul {
+                display:block;
+                margin-top: -1px;
+            }
+
+            .dropdown-submenu:hover,
+            .dropdown:hover:hover {
+	            background: #eee;
+            }
+        }
+    }
+}
+
+/* ----------------------------------------------------------------------
+ * 4. NAVBAR TOGGLE
+ * ----------------------------------------------------------------------
+ */
+
+ .navbar-toggle {
+    position: relative;
+    float: left;
+    padding: 9px 10px;
+    @include navbar-vertical-align(34px);
+    background-color: transparent;
+    background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
+    border: 0;
+    border-radius: 2px;
+
+    // We remove the `outline` here, but later compensate by attaching `:hover`
+    // styles to `:focus`.
+    &:focus {
+        outline: 0;
+    }
+
+    // Bars
+    .icon-bar {
+        display: block;
+        width: 22px;
+        height: 2px;
+        border-radius: 1px;
+    }
+    .icon-bar + .icon-bar {
+        margin-top: 4px;
+    }
+
+    @media (min-width: $grid-float-breakpoint) {
+        display: none;
+    }
+}
+
+.navbar-toggle {
+    border-color: $navbar-default-toggle-border-color;
+    &:hover,
+    &:focus {
+        background-color: $navbar-default-toggle-hover-bg;
+    }
+    .icon-bar {
+        background-color: $navbar-default-toggle-icon-bar-bg;
+    }
+}

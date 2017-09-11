@@ -30,7 +30,7 @@
                                 {% set children = NavigationAPI.remove_unauthorized(children) %}
 
                                 <li class="{% if children %}dropdown{% endif %}">
-                                    <a {% if children %}class="dropdown-toggle" data-hover="dropdown" data-delay="200" data-close-others="true"{% endif %} {% if entry.external %}target="_blank"{% endif %}
+                                    <a {% if children %}class="dropdown-toggle" {% endif %} {% if entry.external %}target="_blank"{% endif %}
                                     href="{{ entry.href }}">
                                         {{ entry.title }}
                                     </a>
@@ -96,7 +96,7 @@
                           <div class="dropdown-menu" id="loginContainer">
                             <img src="{{ UserAPI.avatar(current_user) }}" alt="..." id="userImage" class="img-rounded hidden-xs">
                             <div id="userInformation">
-                                <p>{{ current_user.name }}</p>
+                                <h4 class="username">{{ current_user.name }}</h4>
                                 <p>{{ current_user.email }}</p>
                                 <p><a href="{{ url_for('user.view_single', user_id=current_user.id) }}">Profiel weergeven</a></p>
                             </div>
@@ -144,4 +144,3 @@
         </div>
     </nav>
     </header>
-
