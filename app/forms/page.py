@@ -1,10 +1,18 @@
 from flask_babel import lazy_gettext as _
 from flask_wtf import Form
 from wtforms import Form as UnsafeForm
-from wtforms import BooleanField, StringField, TextAreaField, FieldList, \
-    SelectField, SubmitField, RadioField, FormField, IntegerField
+from wtforms import BooleanField, StringField, TextAreaField, \
+    SelectField, SubmitField, RadioField
 
 from wtforms.validators import InputRequired, Regexp, Optional
+from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField
+from app.models.group import Group
+from app.forms.fields import CustomFormSelectField
+from app.forms.util import FieldTabGroup, FieldTab, FieldVerticalSplit
+
+
+def permission_query_factory():
+    return Group.query.order_by(Group.name).all()
 
 
 class EditGroupPagePermissionEntry(UnsafeForm):
@@ -24,18 +32,31 @@ class SuperPageForm(Form):
 class PageForm(SuperPageForm):
     nl_content = TextAreaField(_('Dutch content'))
     en_content = TextAreaField(_('English content'))
-    filter_html = BooleanField(_('Do not filter HTML tags'))
-    custom_form_id = IntegerField()
-    permissions = FieldList(FormField(EditGroupPagePermissionEntry))
 
+    details = FieldTabGroup([
+        FieldTab(_('Dutch details'), ['nl_title', 'nl_content']),
+        FieldTab(_('English details'), ['en_title', 'en_content'])
+    ])
+
+    custom_form_id = CustomFormSelectField(_('Form'))
+
+    filter_html = BooleanField(_('Do not filter HTML tags'))
     needs_paid = BooleanField(_('Visible for members only'))
 
-    def validate(self):
+    checks = FieldVerticalSplit([['filter_html'], ['needs_paid']])
 
+    permission_read = QuerySelectMultipleField(
+        _('Groups with read permission'),
+        query_factory=permission_query_factory)
+
+    permission_write = QuerySelectMultipleField(
+        _('Groups with read and write permission'),
+        query_factory=permission_query_factory)
+
+    def validate(self):
         # Validate all other fields with default validators
-        if not SuperPageForm.validate(self):
+        if not Form.validate(self):
             return False
-        result = True
 
         # Test if either english or dutch is entered
         result = True
@@ -50,6 +71,8 @@ class PageForm(SuperPageForm):
 
         # XOR the results to test if both of a language was given
         if bool(self.nl_title.data) != bool(self.nl_content.data):
+            print('>>>', self.nl_title.errors, type(self.nl_title.errors))
+
             self.nl_title.errors.append(
                 _('Dutch title requires Dutch content and vice versa'))
             result = False

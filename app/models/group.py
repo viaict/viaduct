@@ -29,6 +29,9 @@ class Group(db.Model, BaseEntity):
         self.name = name
         self.maillist = maillist
 
+    def __str__(self):
+        return self.name
+
     def is_committee(self, id):
         from app.models.committee import CommitteeRevision
         u = db.session.query(CommitteeRevision)\

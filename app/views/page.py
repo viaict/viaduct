@@ -16,7 +16,6 @@ from app.forms import PageForm, HistoryPageForm
 from app.roles import Roles
 from app.utils.forms import flash_form_errors
 from app.utils.htmldiff import htmldiff
-from app.models.group import Group
 from app.models.page import Page, PageRevision, PagePermission
 from app.models.redirect import Redirect
 from app.models.activity import Activity
@@ -130,8 +129,6 @@ def edit_page(path=''):
     else:
         form = PageForm()
 
-    groups = Group.query.order_by(Group.name).all()
-
     # on page submit (edit or create)
     if form.validate_on_submit():
         # if there was no page we want to create an entire new page (and not
@@ -161,45 +158,45 @@ def edit_page(path=''):
         db.session.add(new_revision)
         db.session.commit()
 
-        # Enter permission in db
-        for form_entry, group in zip(form.permissions, groups):
+        permission_dict = {}
+        for group in form.permission_read.data:
             permission_entry = PagePermission.query\
                 .filter(PagePermission.group_id == group.id,
                         PagePermission.page_id == page.id).first()
 
-            permission_level = form_entry.select.data
+            if permission_entry:
+                permission_entry.permission = 1
+            else:
+                permission_entry = PagePermission(group.id, page.id, 1)
+
+            permission_dict[group.id] = permission_entry
+
+        for group in form.permission_write.data:
+            if group.id in permission_dict:
+                permission_dict[group.id].permission = 2
+                continue
+
+            permission_entry = PagePermission.query\
+                .filter(PagePermission.group_id == group.id,
+                        PagePermission.page_id == page.id).first()
 
             if permission_entry:
-                permission_entry.permission = permission_level
+                permission_entry.permission = 2
             else:
-                permission_entry = PagePermission(group.id, page.id,
-                                                  permission_level)
+                permission_entry = PagePermission(group.id, page.id, 2)
 
-            db.session.add(permission_entry)
-            db.session.commit()
+        for key, value in permission_dict.items():
+            db.session.add(value)
+
+        db.session.commit()
 
         flash(_('The page has been saved'), 'success')
 
         # redirect newly created page
         return redirect(url_for('page.get_page', path=path))
-    else:
-        flash_form_errors(form)
-        for group in groups:
-            permission = None
-            if page:
-                permission = PagePermission.query\
-                    .filter(PagePermission.group_id == group.id,
-                            PagePermission.page_id == page.id)\
-                    .first()
-
-            if permission:
-                form.permissions\
-                    .append_entry({'select': permission.permission})
-            else:
-                form.permissions.append_entry({})
 
     return render_template('page/edit_page.htm', page=page, form=form,
-                           path=path, groups=zip(groups, form.permissions))
+                           path=path)
 
 
 @blueprint.route('/delete/<path:path>/', methods=['GET', 'POST'])

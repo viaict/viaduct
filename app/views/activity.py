@@ -34,7 +34,6 @@ PICTURE_DIR = 'app/static/activity_pictures/'
 @blueprint.route('/list/<int:page_nr>/', methods=['GET', 'POST'])
 @blueprint.route('/list/<string:archive>/<int:page_nr>/',
                  methods=['GET', 'POST'])
-@require_role(Roles.ACTIVITY_READ)
 def view(archive=None, page_nr=1):
     if archive == "archive":
         activities = Activity.query.filter(

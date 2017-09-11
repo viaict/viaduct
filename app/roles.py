@@ -4,12 +4,12 @@ from enum import Enum, unique
 @unique
 class Roles(Enum):
     """
-    Roles used to secure the application
+    Roles used to secure the application.
 
     Note: When updating the list of roles, also insert them in the roles
     table.
     """
-    ACTIVITY_READ = 'ACTIVITY_READ'
+
     ACTIVITY_WRITE = 'ACTIVITY_WRITE'
     ALV_READ = 'ALV_READ'
     ALV_WRITE = 'ALV_WRITE'

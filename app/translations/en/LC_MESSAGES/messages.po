@@ -411,6 +411,12 @@ msgstr ""
 msgid "Do not filter HTML tags"
 msgstr ""
 
+msgid "Groups with read permission"
+msgstr ""
+
+msgid "Groups with read and write permission"
+msgstr ""
+
 msgid "Do you have an idea for an activity?"
 msgstr ""
 

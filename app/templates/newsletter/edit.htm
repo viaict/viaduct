@@ -1,33 +1,28 @@
-{% from "macros/form.htm" import render_form %}
-{% extends "content.htm" %}
-
-{% block content %}
-{% if newsletter.id %}
+{% from "macros/form.htm" import render_form %} {% extends "content.htm" %} {% block content %} {% if newsletter.id %}
 <h1>{{ _('Edit newsletter') }}</h1>
 {% else %}
 <h1>{{ _('Create newsletter') }}</h1>
-{% endif %}
-
-{{ render_form(form) }}
+{% endif %} {{ render_form(form) }}
 
 <script>
     {% if not newsletter.id %}
-    $(function() {
+    $(function () {
         activities_select = $('#activities')
         var selected = [];
-        $(activities_select).find('option').each(function(index, option) {
+        $(activities_select).find('option').each(function (index, option) {
             selected.push($(option).attr('value'));
         });
         $(activities_select).select2('val', selected);
 
         selected = [
-        {%- for item in selected_news_items -%}
+            {%- for item in selected_news_items -%}
             {{- item.id -}},
         {%- endfor -%}
         ];
-        $('#news_items').select2('val', selected);
+    $('#news_items').select2('val', selected);
     });
     {% endif %}
+
 </script>
 
 {% endblock %}

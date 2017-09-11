@@ -416,6 +416,12 @@ msgstr "Weergegeven prijs"
 msgid "Do not filter HTML tags"
 msgstr "Geen HTML tags filteren"
 
+msgid "Groups with read permission"
+msgstr "Groepen met lees rechten"
+
+msgid "Groups with read and write permission"
+msgstr "Groepen met lees en schrijf rechten"
+
 msgid "Do you have an idea for an activity?"
 msgstr "Heb je een idee voor een activiteit?"
 
