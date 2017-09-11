@@ -69,7 +69,11 @@ def contest_list():
     if not r:
         return render_template('domjudge/list.htm')
 
-    data = list(r.json().values())
+    json_data = r.json()
+    if json_data == []:
+        data = []
+    else:
+        data = list(json_data.values())
     for c in data:
         c['start'] = dt.datetime.fromtimestamp(c['start']) \
             .strftime(DT_FORMAT)
@@ -396,6 +400,8 @@ def render_contest_submissions_view(contest_id, view_all=False, team_id=None):
         return abort(403)
 
     r = DOMjudgeAPI.request_get('api/contests')
+    if not r:
+        return redirect(url_for('domjudge.contest_list'))
 
     if str(contest_id) not in r.json():
         flash(_("Contest does not exist."), 'danger')
