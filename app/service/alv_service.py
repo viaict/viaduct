@@ -1,6 +1,5 @@
 from flask_babel import _
 
-from app.models.alv_model import AlvDocument, AlvDocumentVersion
 from app.repository import alv_repository
 from app.utils import file
 from app.views.errors import ResourceNotFoundException
@@ -19,7 +18,7 @@ def find_alv_by_id(alv_id, include_presidium, include_documents):
 def get_alv_by_id(alv_id, include_presidium=True, include_documents=False):
     alv = find_alv_by_id(alv_id, include_presidium, include_documents)
     if not alv:
-        raise ResourceNotFoundException("alv")
+        raise ResourceNotFoundException("alv", alv_id)
     return alv
 
 
@@ -49,7 +48,7 @@ def format_presidium(alv):
 
 
 def add_document(alv, file_storage, nl_name, en_name):
-    alv_document = AlvDocument()
+    alv_document = alv_repository.create_document
     alv_document.alv = alv
     alv_document.en_name = en_name
     alv_document.nl_name = nl_name
@@ -62,7 +61,7 @@ def add_document(alv, file_storage, nl_name, en_name):
 def add_document_version(alv_document, file_storage):
     _file = file.file_upload(file_storage)
 
-    alv_doc_version = AlvDocumentVersion()
+    alv_doc_version = alv_repository.create_document_version()
     alv_doc_version.alv_document = alv_document
     alv_doc_version.file = _file
 

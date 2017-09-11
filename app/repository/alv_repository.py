@@ -6,6 +6,14 @@ from app.models.alv_model import Alv, AlvDocument, AlvDocumentVersion
 from app.models.user import User
 
 
+def create_document():
+    return AlvDocument()
+
+
+def create_document_version():
+    return AlvDocumentVersion()
+
+
 def save(alv):
     db.session.add(alv)
     db.session.commit()
