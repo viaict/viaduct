@@ -24,7 +24,7 @@ class TestAlvService(unittest.TestCase):
         user_repository_mock.find_by_id.assert_called_once()
         user_repository_mock.find_by_id.assert_called_with(1)
 
-    def test_find_members():
+    def test_find_members(self):
         user_service.find_members()
 
         user_repository_mock.find_members.assert_called_once()
