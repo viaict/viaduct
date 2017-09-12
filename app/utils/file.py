@@ -47,6 +47,7 @@ def file_upload(f, directory=UPLOAD_DIR, image=False, filename=None):
     :param filename: Save file using this filename, ignore FileStorage name
     :return:
     """
+
     if not filename:
         filename = f.filename
         forced_name = False

@@ -400,9 +400,8 @@ msgstr "Pagina verwijderen:"
 msgid "Description"
 msgstr "Beschrijving"
 
-#, fuzzy
 msgid "Details"
-msgstr "Nederlandse gegevens"
+msgstr "Details"
 
 msgid "Disabled"
 msgstr "Uitgeschakeld"
@@ -419,9 +418,8 @@ msgstr "Geen HTML tags filteren"
 msgid "Do you have an idea for an activity?"
 msgstr "Heb je een idee voor een activiteit?"
 
-#, fuzzy
 msgid "Document"
-msgstr "Commentaar"
+msgstr "Document"
 
 msgid "Dutch"
 msgstr "Nederlands"
@@ -1459,9 +1457,8 @@ msgstr "Geldig lidmaatschap is vereist om dit nieuwsartikel te kunnen lezen"
 msgid "Vancancies"
 msgstr "Vacatures"
 
-#, fuzzy
 msgid "Versions"
-msgstr "Rechten"
+msgstr "Versies"
 
 msgid "View"
 msgstr "Weergeven"
