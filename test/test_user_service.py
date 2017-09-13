@@ -9,7 +9,7 @@ user_repository_mock = mock.MagicMock()
 
 
 @patch.object(user_service, 'user_repository', user_repository_mock)
-class TestAlvService(unittest.TestCase):
+class TestUserService(unittest.TestCase):
 
     def setUp(self):
         user_repository_mock.reset_mock()
@@ -21,8 +21,7 @@ class TestAlvService(unittest.TestCase):
         a = user_service.find_by_id(user_id)
 
         self.assertEqual(a, user_id)
-        user_repository_mock.find_by_id.assert_called_once()
-        user_repository_mock.find_by_id.assert_called_with(1)
+        user_repository_mock.find_by_id.assert_called_once_with(1)
 
     def test_find_members(self):
         user_service.find_members()
