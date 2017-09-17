@@ -4,11 +4,12 @@ variables:
 cache:
     paths:
     - "$CI_PROJECT_DIR/pip-cache"
-    
+
 test:
     image: python:3.6
 
     script:
     - pip install -r requirements.txt
     - cp default_config.py config.py
-    - python -m unittest discover -v
+    - coverage run --source=./app/service -m unittest discover -vs test/
+    - coverage report -m
