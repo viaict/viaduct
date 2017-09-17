@@ -13,3 +13,8 @@ test:
     - cp default_config.py config.py
     - coverage run --source=./app/service -m unittest discover -vs test/
     - coverage report -m
+    - coverage html
+    artifacts:
+        paths:
+        - htmlcov/
+        expire_in: 1 week
