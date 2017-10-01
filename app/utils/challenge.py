@@ -15,7 +15,7 @@ class ChallengeAPI:
     @staticmethod
     def create_challenge(name, description, hint, start_date, end_date,
                          parent_id, weight, type, answer):
-        """ Create a new challenge """
+        """Create a new challenge."""
         new_challenge = Challenge(name, description, hint, start_date,
                                   end_date, parent_id, weight, type, answer)
         db.session.add(new_challenge)
@@ -27,7 +27,7 @@ class ChallengeAPI:
     @staticmethod
     def edit_challenge(id, name, description, hint, start_date, end_date,
                        parent_id, weight, type, answer):
-        """ Create a new challenge """
+        """Create a new challenge."""
         challenge = ChallengeAPI.fetch_challenge(id)
         challenge.name = name
         challenge.description = description
@@ -46,15 +46,18 @@ class ChallengeAPI:
 
     @staticmethod
     def fetch_challenge(id):
-        """ Update a challenge, only give the id and new values that have to
-        change. """
+        """Fetch a challenge by id."""
         challenge = Challenge.query.filter_by(id=id).first()
         return challenge
 
     @staticmethod
     def challenge_exists(name):
-        """ Update a challenge, only give the id and new values that have to
-        change. """
+        """
+        Update a challenge.
+
+        Only give the id and new values that have to
+        change.
+        """
         challenge = Challenge.query.filter_by(name=name).first()
 
         if challenge is None:
@@ -64,18 +67,14 @@ class ChallengeAPI:
 
     @staticmethod
     def update_challenge(challenge):
-        """
-        Give the altered challenge object
-        """
+        """Give the altered challenge object."""
         db.session.add(challenge)
         db.session.commit()
 
     @staticmethod
     def create_submission(challenge_id=None, user_id=None, submission=None,
                           image_path=None):
-        """
-        Create a submission for a challenge and user
-        """
+        """Create a submission for a challenge and user."""
         if ChallengeAPI.is_approved(challenge_id, user_id) or \
                 not ChallengeAPI.is_open_challenge(challenge_id):
             return False
@@ -92,10 +91,7 @@ class ChallengeAPI:
 
     @staticmethod
     def can_auto_validate(challenge):
-        """
-        Check if a challenge can be auto validated.
-
-        """
+        """Check if a challenge can be auto validated."""
         if challenge.type == 'Text':
             return True
         else:
@@ -104,14 +100,15 @@ class ChallengeAPI:
     @staticmethod
     def validate_question(submission, challenge):
         """
-        Check if a question is valid
+        Check if a question is valid.
+
         Submission: String to be validated
         Challenge: Challenge object
         """
         if not ChallengeAPI.can_auto_validate(challenge):
             return 'Not validated'
 
-        if submission.submission == challenge.answer:
+        if submission.answer.lower() == challenge.answer.lower():
             submission.approved = True
             ChallengeAPI.assign_points_to_user(challenge.weight,
                                                submission.user_id)
@@ -127,7 +124,7 @@ class ChallengeAPI:
 
     @staticmethod
     def fetch_all_challenges():
-        """ Fetch all challenges, no filters applied. """
+        """Fetch all challenges, no filters applied."""
         return Challenge.query.all()
 
     @staticmethod
