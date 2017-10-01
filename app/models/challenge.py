@@ -71,12 +71,12 @@ class Submission(db.Model, BaseEntity):
 
     def __init__(self, challenge_id=None,
                  challenge=None, user_id=None, user=None,
-                 submission=None, image_path=None, approved=False):
+                 answer=None, image_path=None, approved=False):
         self.challenge_id = challenge_id
         self.challenge = challenge
         self.user_id = user_id
         self.user = user
-        self.submission = submission
+        self.answer = answer
         self.image_path = image_path
         self.approved = approved
 
