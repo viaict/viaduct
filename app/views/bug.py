@@ -22,7 +22,6 @@ def report():
     if form.validate_on_submit():
         response = gitlab_service.create_gitlab_issue(
             form.summary.data, current_user.email, form.description.data)
-        print(response)
         if response:
             flash('The bug has been reported!', 'success')
             redir = request.args.get('redir')
