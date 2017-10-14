@@ -5,6 +5,8 @@ from app.forms.alv import AlvForm, AlvDocumentForm
 from app.models.alv_model import Alv
 from app.service import alv_service
 from app.utils.module import ModuleAPI
+from app.models.page import Page
+from app.utils.page import PageAPI
 
 blueprint = Blueprint('alv', __name__, url_prefix='/alv')
 
@@ -17,7 +19,13 @@ def list():
         return abort(403)
 
     alvs = Alv.query.all()
-    return render_template('alv/list.htm', alvs=alvs)
+
+    old_alv_page = Page.query.filter(Page.path == 'alv1').first()
+    can_read_old_page = PageAPI.can_read(old_alv_page)
+
+    return render_template('alv/list.htm', alvs=alvs,
+                           old_alv_page=old_alv_page,
+                           can_read_old_page=can_read_old_page)
 
 
 @blueprint.route('/<int:alv_id>/', methods=['GET'])
