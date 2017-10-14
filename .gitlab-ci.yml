@@ -4,7 +4,7 @@ variables:
 cache:
     paths:
     - "$CI_PROJECT_DIR/pip-cache"
-    
+
 test:
     image: python:3.6
 
@@ -12,3 +12,10 @@ test:
     - pip install -r requirements.txt
     - cp default_config.py config.py
     - python -m unittest discover -v
+
+flake8:
+    image: python:3.6
+
+    script:
+     - pip install flake8
+     - flake8 ./app
