@@ -5,8 +5,12 @@ cache:
     paths:
     - "$CI_PROJECT_DIR/pip-cache"
 
-test:
+stages:
+    - test
+
+unittest:
     image: python:3.6
+    stage: test
 
     script:
     - pip install -r requirements.txt
@@ -15,7 +19,13 @@ test:
 
 flake8:
     image: python:3.6
-
+    stage: test
     script:
      - pip install flake8
      - flake8 ./app
+
+translations:
+    image: python:3.6
+    stage: test
+    script:
+     - "[ -z $(grep -R fuzzy app/translations/) ]"
