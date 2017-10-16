@@ -80,7 +80,7 @@ def insert_activity(title="", description='', location="VIA kamer", start="",
             'description': description,
             'location': location,
             'start': {'dateTime': start, 'timeZone': 'Europe/Amsterdam'},
-            'end': {'dateTime': end,     'timeZone': 'Europe/Amsterdam'}
+            'end': {'dateTime': end, 'timeZone': 'Europe/Amsterdam'}
         }
 
         try:
@@ -105,7 +105,7 @@ def update_activity(event_id, title="", description='', location="VIA Kamer",
             'description': description,
             'location': location,
             'start': {'dateTime': start, 'timeZone': 'Europe/Amsterdam'},
-            'end': {'dateTime': end,     'timeZone': 'Europe/Amsterdam'}
+            'end': {'dateTime': end, 'timeZone': 'Europe/Amsterdam'}
         }
 
         try:
