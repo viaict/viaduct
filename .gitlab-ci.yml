@@ -15,7 +15,13 @@ unittest:
     script:
     - pip install -r requirements.txt
     - cp default_config.py config.py
-    - python -m unittest discover -v
+    - coverage run --source=./app/service -m unittest discover -vs test/
+    - coverage report -m
+    - coverage html
+    artifacts:
+        paths:
+        - htmlcov/
+        expire_in: 1 week
 
 flake8:
     image: python:3.6
