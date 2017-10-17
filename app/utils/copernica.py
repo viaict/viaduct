@@ -85,7 +85,7 @@ def update_user(user, subscribe=False):
         "Alumnus": "Ja" if user.alumnus else "Nee",
         "VVV": "Ja" if user.favourer else "Nee",
         "Bedrijfsinformatie": "Ja" if user.receive_information else "Nee",
-        "Geboortedatum": (user.birth_date.strftime('%Y-%m-%d')
+        "Geboortedatum": (user.birth_date.strftime(app.config['DATE_FORMAT'])
                           if user.birth_date else "0000-00-00"),
         "WebsiteID": user.id
     }

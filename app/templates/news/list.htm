@@ -38,7 +38,7 @@
                     </a>
                 </div>
                 <div class='col-md-4 text-right'>
-                    {{_('Published at')}}: <em>{{ item.publish_date.strftime('%Y-%m-%d') }}</em><br />
+                    {{_('Published at')}}: <em>{{ item.publish_date.strftime(app_config['DATE_FORMAT']) }}</em><br />
                     {{_('Written by')}}: <em>{{ item.user.name }}</em>
                 </div>
             </div>

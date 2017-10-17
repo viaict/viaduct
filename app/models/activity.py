@@ -108,8 +108,9 @@ class Activity(db.Model, BaseEntity):
                     format_datetime(self.end_time, 'EEE d MMM (H:mm)',
                                     locale=get_locale()).capitalize()
             else:
-                return self.start_time.strftime("%a. %d %b %Y (%H:%M) - ") + \
-                    self.end_time.strftime("%a. %d %b %Y (%H:%M)")
+                return "%s - %s" % (
+                       self.start_time.strftime(app.config['ACT_DT_FORMAT']),
+                       self.end_time.strftime(app.config['ACT_DT_FORMAT']))
 
     def is_in_future(self):
         return datetime.now() < self.start_time
@@ -143,7 +144,7 @@ class Activity(db.Model, BaseEntity):
                                 locale=get_locale())
 
     def format_form_time(self, time):
-        return time.strftime("%Y-%m-%d %H:%M")
+        return time.strftime(app.config['DT_FORMAT'])
 
     def till_now(self):
         """Locale based description of datetimedelta till now."""
