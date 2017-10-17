@@ -3,28 +3,25 @@ from flask import abort, flash, render_template, request, redirect, url_for
 from flask import Blueprint
 
 from flask_login import current_user
-
-from app.utils.forms import flash_form_errors
-from app.forms.jira import CreateIssueForm
-from app.utils import jira as Jira
-
 from flask_babel import lazy_gettext as _
 
-blueprint = Blueprint('jira', __name__)
+from app.forms.bug import CreateIssueForm
+from app.service import gitlab_service
 
 
-@blueprint.route('/create-issue/', methods=['GET', 'POST'])
-def create_issue():
+blueprint = Blueprint('bug', __name__, url_prefix='/bug')
+
+
+@blueprint.route('/report/', methods=['GET', 'POST'])
+def report():
     if current_user.is_anonymous or not current_user.has_paid:
         abort(403)
 
     form = CreateIssueForm(request.form)
 
     if form.validate_on_submit():
-
-        # Use JiraAPI to do a POST request to https://viaduct.atlassian.net
-        response = Jira.create_issue(form)
-
+        response = gitlab_service.create_gitlab_issue(
+            form.summary.data, current_user.email, form.description.data)
         if response:
             flash('The bug has been reported!', 'success')
             redir = request.args.get('redir')
@@ -35,7 +32,4 @@ def create_issue():
         else:
             flash(_('Something went wrong.'), 'danger'), 500
 
-    else:
-        flash_form_errors(form)
-
-    return render_template('jira/create_issue.htm', form=form)
+    return render_template('bug/report.htm', form=form)

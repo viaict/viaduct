@@ -51,10 +51,7 @@ class Config:
     GOOGLE_CALENDAR_ID = ''  #
 
     # ict@svia.nl
-    JIRA_ACCOUNT = {
-        'username': 'ictvia',
-        'password': ''  # super secret password
-    }
+    GITLAB_TOKEN = "Insert GitLab API access"
 
     # Mollie config
     MOLLIE_URL = 'https://api.mollie.nl/v1/payments/'
