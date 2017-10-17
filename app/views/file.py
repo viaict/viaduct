@@ -1,5 +1,5 @@
 """Views for the file module."""
-from flask import Blueprint, render_template, request, abort
+from flask import Blueprint, render_template, request, abort, flash
 from app.models.file import File
 from app.forms import FileForm
 from app.utils.file import file_upload, file_search
@@ -39,13 +39,13 @@ def upload(page_nr=1):
 
     new_files = []
     for new_file_name in request.files.getlist('file'):
+        # File upload request, but no added files
+        if new_file_name.filename == '':
+            flash("No files selected", 'danger')
+            return list(page_nr=page_nr)
         file = file_upload(new_file_name)
         if file:
             new_files.append(file)
-
-    # File upload request, but no added files
-    if new_files[0] is None:
-        return list(page_nr=page_nr)
 
     files = File.query.filter_by(page=None).order_by(File.name)\
         .paginate(page_nr, 30, False)
