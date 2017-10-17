@@ -810,9 +810,6 @@ msgstr ""
 msgid "New GA"
 msgstr ""
 
-msgid "Old GAs"
-msgstr ""
-
 msgid "New activity"
 msgstr ""
 

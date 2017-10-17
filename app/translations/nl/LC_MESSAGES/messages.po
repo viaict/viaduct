@@ -819,9 +819,6 @@ msgstr "Menu item"
 msgid "New GA"
 msgstr "Nieuw ALV"
 
-msgid "Old GAs"
-msgstr "Oude ALVs"
-
 msgid "New activity"
 msgstr "Nieuwe activiteit"
 
