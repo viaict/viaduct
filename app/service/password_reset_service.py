@@ -20,7 +20,7 @@ def get_valid_ticket(hash_):
 
 
 def reset_password(ticket, new_password):
-    return user_service.set_password(ticket.user, new_password)
+    return user_service.set_password(ticket.user_id, new_password)
 
 
 def create_password_ticket(email):
@@ -40,4 +40,4 @@ def create_password_ticket(email):
         email_template='email/forgot_password.html',
         sender='via',
         user_name=user.name,
-        hash=hash_)
+        hash_=hash_)

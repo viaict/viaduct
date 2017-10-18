@@ -62,7 +62,7 @@ class TestPasswordResetService(unittest.TestCase):
         password_reset_service.reset_password(ticket, "password")
 
         user_service_mock.set_password.\
-            assert_called_once_with(ticket.user, "password")
+            assert_called_once_with(ticket.user_id, "password")
 
     def test_create_password_ticket(self):
         # Facts

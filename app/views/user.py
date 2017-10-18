@@ -360,9 +360,8 @@ def request_password():
     return render_template('user/request_password.htm', form=form)
 
 
-@blueprint.route('/reset_password/', methods=['GET', 'POST'])
-@blueprint.route('/reset_password/<string:hash>', methods=['GET', 'POST'])
-def reset_password(hash=0):
+@blueprint.route('/reset_password/<string:hash_>', methods=['GET', 'POST'])
+def reset_password(hash_):
     """
     Reset form existing of two fields, password and password_repeat.
 
@@ -370,7 +369,7 @@ def reset_password(hash=0):
     has not expired.
     """
     try:
-        ticket = password_reset_service.get_valid_ticket(hash)
+        ticket = password_reset_service.get_valid_ticket(hash_)
     except ResourceNotFoundException:
         flash(_('No valid ticket found'), 'danger')
         return redirect(url_for('user.request_password'))
