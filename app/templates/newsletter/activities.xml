@@ -8,14 +8,14 @@
         <nl>
             <title>{{ nl_title }}</title>
             <desc>
-                {{ nl_content }}
+                {{ nl_content|markdown_escaped }}
             </desc>
             <date>{{ item.start_time }}</date>
         </nl>
         <en>
             <title>{{ en_title }}</title>
             <desc>
-                {{ en_content }}
+                {{ en_content|markdown_escaped }}
             </desc>
             <date>{{ item.start_time }}</date>
         </en>
