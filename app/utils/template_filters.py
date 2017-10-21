@@ -11,15 +11,20 @@ markdown_extensions = [
 ]
 
 
-@app.template_filter('markdown')
-def markdown_filter(data, filter_html=True):
+@app.template_filter('markdown_escaped')
+def markdown_escaped_filter(data, filter_html=True):
     if filter_html:
         safe_mode = False
     else:
         safe_mode = 'escape'
 
-    return Markup(markdown(data, safe_mode=safe_mode, enable_attributes=False,
-                           extensions=markdown_extensions))
+    return markdown(data, safe_mode=safe_mode, enable_attributes=False,
+                    extensions=markdown_extensions)
+
+
+@app.template_filter('markdown')
+def markdown_filter(data, filter_html=True):
+    return Markup(markdown_escaped_filter(data, filter_html=True))
 
 
 @app.template_filter('strip_tags')
