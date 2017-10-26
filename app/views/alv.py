@@ -16,7 +16,8 @@ def list():
     if not ModuleAPI.can_read('alv'):
         return abort(403)
 
-    alvs = Alv.query.all()
+    alvs = Alv.query.order_by(Alv.date.desc()).all()
+
     return render_template('alv/list.htm', alvs=alvs)
 
 
