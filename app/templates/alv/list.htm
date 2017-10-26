@@ -5,18 +5,18 @@
 
 {% block page %}
 
+{% if ModuleAPI.can_write('alv') %}
 <div class="row">
     <div class="col-md-8">
-        {% if ModuleAPI.can_write('alv') %}
         <div class="form-group btn-group">
             <a href='{{url_for("alv.create_edit")}}' class='btn btn-success'>
             <i class='glyphicon glyphicon-pencil'></i>
             <span>{{ _('New GA') }}</span>
             </a>
         </div>
-        {% endif %}
     </div>
 </div>
+{% endif %}
 
 <div class="panel panel-default">
     <div class="panel-heading">ALVs</div>
