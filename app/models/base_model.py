@@ -4,6 +4,7 @@ extra functions."""
 from app import db
 from app.utils.serialize_sqla import serialize_sqla
 from datetime import datetime
+from sqlalchemy.exc import SQLAlchemyError
 import dateutil.parser
 
 
@@ -55,7 +56,7 @@ class BaseEntity(object):
     def by_ids(cls, ids):
         try:
             return db.session.query(cls).filter(cls.id.in_(ids)).all()
-        except:
+        except SQLAlchemyError:
             return []
 
     # Function used by print to print a model at server side.

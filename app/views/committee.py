@@ -43,7 +43,7 @@ def edit_committee(committee=''):
 
     try:
         url_group_id = int(request.args.get('group_id', None))
-    except:
+    except (TypeError, ValueError):
         url_group_id = None
 
     if len(request.form) == 0:
