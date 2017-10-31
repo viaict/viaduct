@@ -26,6 +26,10 @@ class TestAlvService(unittest.TestCase):
         alv_repository_mock.save.assert_called_with(alv)
         alv_repository_mock.save.assert_called_once()
 
+    def test_find_all_alv(self):
+        alv_service.find_all_alv()
+        alv_repository_mock.find_all_alv.assert_called_once()
+
     def test_find_alv_by_id(self):
         alv_service.find_alv_by_id(1, False, False)
 
