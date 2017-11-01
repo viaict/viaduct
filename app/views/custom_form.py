@@ -2,7 +2,7 @@ from flask import (flash, redirect, render_template, request, url_for, abort,
                    jsonify, Blueprint, Response)
 from flask_login import current_user
 
-from app import db
+from app import app, db
 from app.utils.serialize_sqla import serialize_sqla
 from app.utils.forms import flash_form_errors
 from app.forms.custom_form import CreateForm
@@ -56,7 +56,7 @@ def view_single(form_id=None):
         data = parse_qs(entry.data)
 
         # Add the entry date
-        time = entry.created.strftime("%Y-%m-%d %H:%M") if \
+        time = entry.created.strftime(app.config['DT_FORMAT']) if \
             entry.created is not None else ""
 
         # Append the results with a single entry

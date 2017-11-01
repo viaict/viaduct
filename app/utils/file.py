@@ -7,7 +7,7 @@ from flask import flash
 from flask_babel import lazy_gettext as _
 from werkzeug.utils import secure_filename
 
-from app import app, db
+from app import app, db, sentry
 from app.models.file import File
 
 ALLOWED_MIMETYPES = ['text/plain', 'application/pdf']
@@ -47,6 +47,7 @@ def file_upload(f, directory=UPLOAD_DIR, image=False, filename=None):
     :param filename: Save file using this filename, ignore FileStorage name
     :return:
     """
+
     if not filename:
         filename = f.filename
         forced_name = False
@@ -129,6 +130,7 @@ def file_remove(filename, directory=UPLOAD_DIR):
                 db_entry.delete()
 
     except OSError:
+        sentry.captureException()
         print(_('Cannot remove file, it does not exist') + ": " + filename)
 
 

@@ -75,3 +75,7 @@ crashlytics-build.properties
 fabric.properties
 
 tags
+
+# Coverage
+.coverage
+htmlcov/

@@ -226,7 +226,7 @@ def view_examination(page_nr=1):
         else:
             try:
                 os.remove(os.path.join(UPLOAD_FOLDER, examination.path))
-            except:
+            except OSError:
                 flash(_('File does not exist, examination deleted.'), 'info')
 
             db.session.delete(examination)

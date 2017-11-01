@@ -1,34 +1,31 @@
 # -*- coding: utf-8 -*-
-import bcrypt
-import random
-import re
 import json
+import re
 from csv import writer
-from io import StringIO
 from datetime import datetime
+from io import StringIO
 
-from flask import flash, redirect, render_template, request, url_for, abort,\
-    session
+import bcrypt
 from flask import Blueprint
-from flask_login import current_user, login_user, logout_user, login_required
+from flask import flash, redirect, render_template, request, url_for, abort, \
+    session
 from flask_babel import _
+from flask_login import current_user, login_user, logout_user, login_required
 
 from app import db, login_manager
-
+from app.exceptions import ResourceNotFoundException
 from app.forms import SignUpForm, SignInForm, ResetPassword, RequestPassword
 from app.forms.user import EditUserForm, EditUserInfoForm
-from app.models.group import Group
-
-from app.models.user import User
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult, CustomForm
-from app.models.request_ticket import PasswordTicket
 from app.models.education import Education
-
+from app.models.group import Group
+from app.models.user import User
+from app.service import password_reset_service
 from app.utils import copernica
-from app.utils.user import UserAPI
+from app.utils.google import HttpError
 from app.utils.module import ModuleAPI
-from app.utils.google import HttpError, send_email
+from app.utils.user import UserAPI
 
 blueprint = Blueprint('user', __name__)
 
@@ -83,18 +80,18 @@ def view_single(user_id=None):
 
     # Get all activity entrees from these forms, order by start_time of
     # activity.
-    activities = Activity.query.join(CustomForm).join(CustomFormResult).\
+    activities = Activity.query.join(CustomForm).join(CustomFormResult). \
         filter(CustomFormResult.owner_id == user_id and
                CustomForm.id == CustomFormResult.form_id and
                Activity.form_id == CustomForm.id)
 
     user.activities_amount = activities.count()
 
-    new_activities = activities\
-        .filter(Activity.end_time > datetime.today()).distinct()\
+    new_activities = activities \
+        .filter(Activity.end_time > datetime.today()).distinct() \
         .order_by(Activity.start_time)
-    old_activities = activities\
-        .filter(Activity.end_time < datetime.today()).distinct()\
+    old_activities = activities \
+        .filter(Activity.end_time < datetime.today()).distinct() \
         .order_by(Activity.start_time.desc())
 
     return render_template('user/view_single.htm', user=user,
@@ -108,7 +105,7 @@ def view_single(user_id=None):
 @login_required
 def remove_avatar(user_id=None):
     user = User.query.get(user_id)
-    if not ModuleAPI.can_write('user') and\
+    if not ModuleAPI.can_write('user') and \
             (current_user.is_anonymous or current_user.id != user_id):
         return "", 403
 
@@ -121,7 +118,7 @@ def remove_avatar(user_id=None):
 @login_required
 def edit(user_id=None):
     """Create user for admins and edit for admins and users."""
-    if not ModuleAPI.can_write('user') and\
+    if not ModuleAPI.can_write('user') and \
             (current_user.is_anonymous or current_user.id != user_id):
         return abort(403)
 
@@ -176,7 +173,7 @@ def edit(user_id=None):
                 flash(_('According to Google this email does not exist. '
                         'Please use an email that does.'), 'danger')
                 return edit_page()
-            raise(e)
+            raise (e)
 
         user.first_name = form.first_name.data.strip()
         user.last_name = form.last_name.data.strip()
@@ -344,88 +341,45 @@ def sign_out():
 @blueprint.route('/request_password/', methods=['GET', 'POST'])
 def request_password():
     """Create a ticket and send a email with link to reset_password page."""
-
     if current_user.is_authenticated:
         return redirect(url_for('user.view_single', user_id=current_user.id))
-
-    def create_hash(bits=96):
-        assert bits % 8 == 0
-        required_length = bits / 8 * 2
-        s = hex(random.getrandbits(bits)).lstrip('0x').rstrip('L')
-        if len(s) < required_length:
-            return create_hash(bits)
-        else:
-            return s
 
     form = RequestPassword(request.form)
 
     if form.validate_on_submit():
-        user = User.query.filter(
-            User.email == form.email.data).first()
-
-        if not user:
-            flash(_('%(email)s is unknown to our system.',
-                    email=form.email.data), 'danger')
-        else:
-            _hash = create_hash(256)
-
-            ticket = PasswordTicket(user.id, _hash)
-            db.session.add(ticket)
-            db.session.commit()
-
-            reset_link = url_for('user.reset_password',
-                                 hash=_hash, _external=True)
-
-            send_email(to=user.email,
-                       subject='Password reset https://svia.nl',
-                       email_template='email/forgot_password.html',
-                       sender='via',
-                       user=user,
-                       reset_link=reset_link)
-
+        try:
+            password_reset_service.create_password_ticket(form.email.data)
             flash(_('An email has been sent to %(email)s with further '
                     'instructions.', email=form.email.data), 'success')
             return redirect(url_for('home.home'))
 
+        except ResourceNotFoundException:
+            flash(_('%(email)s is unknown to our system.',
+                    email=form.email.data), 'danger')
+
     return render_template('user/request_password.htm', form=form)
 
 
-@blueprint.route('/reset_password/', methods=['GET', 'POST'])
-@blueprint.route('/reset_password/<string:hash>', methods=['GET', 'POST'])
-def reset_password(hash=0):
+@blueprint.route('/reset_password/<string:hash_>', methods=['GET', 'POST'])
+def reset_password(hash_):
     """
     Reset form existing of two fields, password and password_repeat.
 
     Checks if the hash in the url is found in the database and timestamp
     has not expired.
     """
-
-    form = ResetPassword(request.form)
-
-    # Request the ticket to validate the timer
-    ticket = PasswordTicket.query.filter(
-        db.and_(PasswordTicket.hash == hash)).first()
-
-    # Check if the request was followed within a hour
-    if ticket is None or ((datetime.now() - ticket.created_on).seconds > 3600):
+    try:
+        ticket = password_reset_service.get_valid_ticket(hash_)
+    except ResourceNotFoundException:
         flash(_('No valid ticket found'), 'danger')
         return redirect(url_for('user.request_password'))
 
+    form = ResetPassword(request.form)
+
     if form.validate_on_submit():
-        user = User.query.filter(User.id == ticket.user).first()
-
-        if not user:
-            flash(_('There is something wrong with the reset link.'), 'danger')
-            return redirect(url_for('user.request_password'))
-
-        # Actually reset the password of the user
-        user.password = bcrypt.hashpw(form.password.data, bcrypt.gensalt())
-        login_user(user)
-        db.session.add(user)
-        db.session.commit()
-
+        password_reset_service.reset_password(ticket, form.password.data)
         flash(_('Your password has been updated.'), 'success')
-        return redirect(url_for('user.view_single', user_id=user.id))
+        return redirect(url_for('user.sign_in'))
 
     return render_template('user/reset_password.htm', form=form)
 
@@ -470,15 +424,15 @@ def get_users():
              user.last_name,
              user.student_id,
              user.education.name
-                if user.education else "",
+             if user.education else "",
              "<i class='glyphicon glyphicon-ok'></i>"
-                if user.has_paid else "",
+             if user.has_paid else "",
              "<i class='glyphicon glyphicon-ok'></i>"
-                if user.honorary_member else "",
+             if user.honorary_member else "",
              "<i class='glyphicon glyphicon-ok'></i>"
-                if user.favourer else "",
+             if user.favourer else "",
              "<i class='glyphicon glyphicon-ok'></i>"
-                if user.alumnus else ""
+             if user.alumnus else ""
              ])
     return json.dumps({"data": user_list})
 

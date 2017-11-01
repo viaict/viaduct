@@ -6,6 +6,14 @@ from app.models.alv_model import Alv, AlvDocument, AlvDocumentVersion
 from app.models.user import User
 
 
+def create_document():
+    return AlvDocument()
+
+
+def create_document_version():
+    return AlvDocumentVersion()
+
+
 def save(alv):
     db.session.add(alv)
     db.session.commit()
@@ -20,6 +28,10 @@ def save_document(alv_document):
 def save_document_version(alv_doc_version):
     db.session.add(alv_doc_version)
     db.session.commit()
+
+
+def find_all_alv():
+    return db.session.query(Alv).order_by(Alv.date.desc()).all()
 
 
 def find_alv_by_id(alv_id, include_presidium=True, include_documents=False):

@@ -4,7 +4,7 @@ import os
 import logging
 
 
-class DefaultConfig:
+class Config:
     base_path = os.path.abspath(os.path.dirname(__file__))
 
     DEBUG = True
@@ -29,9 +29,11 @@ class DefaultConfig:
     FILE_DIR = '/static/files/'
 
     # One date format string to rule them all (use this in strftime)
-    DATE_FORMAT = "%Y-%m-%d"
+    DATE_FORMAT = "%d-%m-%Y"
     TIME_FORMAT = "%H:%M"
     DT_FORMAT = "{} {}".format(DATE_FORMAT, TIME_FORMAT)
+    # Activity datetime format used in activity.py
+    ACT_DT_FORMAT = "%a. %d %b %Y (%H:%M)"
     MIN_PASSWORD_LENGTH = 6
 
     LANGUAGES = {
@@ -49,10 +51,7 @@ class DefaultConfig:
     GOOGLE_CALENDAR_ID = ''  #
 
     # ict@svia.nl
-    JIRA_ACCOUNT = {
-        'username': 'ictvia',
-        'password': ''  # super secret password
-    }
+    GITLAB_TOKEN = "Insert GitLab API access"
 
     # Mollie config
     MOLLIE_URL = 'https://api.mollie.nl/v1/payments/'

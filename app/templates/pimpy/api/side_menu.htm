@@ -59,7 +59,7 @@
                                             id="start_date"
                                             name="start_date"
                                             type="text"
-                                            value="{{ datetime.date.today().strftime("%Y-%m-%d" )}}">
+                                            value="{{ datetime.date.today().strftime(app_config['DATE_FORMAT'] )}}">
               </div>
             </div>
             <div class="form-group">
@@ -70,7 +70,7 @@
                                             id="end_date"
                                             name="end_date"
                                             type="text"
-                                            value="{{ datetime.date.today().strftime("%Y-%m-%d" )}}">
+                                            value="{{ datetime.date.today().strftime(app_config['DATE_FORMAT'] )}}">
               </div>
             </div>
             <button type="submit" class="btn btn-primary">Zoeken</button>
@@ -98,7 +98,7 @@
                                             id="start_date"
                                             name="start_date"
                                             type="text"
-                                            value="{{ datetime.date.today().strftime("%Y-%m-%d" )}}">
+                                            value="{{ datetime.date.today().strftime(app_config['DATE_FORMAT'] )}}">
               </div>
             </div>
             <div class="form-group">
@@ -110,7 +110,7 @@
                                             name="end_date"
                                             type="text"
                                             value="{{ (datetime.date.today() +
-                                            datetime.timedelta(days=1)).strftime("%Y-%m-%d" )}}">
+                                            datetime.timedelta(days=1)).strftime(app_config['DATE_FORMAT'] )}}">
               </div>
             </div>
             <button type="submit" class="btn btn-primary">Zoeken</button>

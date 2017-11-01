@@ -1,0 +1,37 @@
+variables:
+    PIP_CACHE_DIR: "$CI_PROJECT_DIR/pip-cache"
+
+cache:
+    paths:
+    - "$CI_PROJECT_DIR/pip-cache"
+
+stages:
+    - test
+
+unittest:
+    image: python:3.6
+    stage: test
+
+    script:
+    - pip install -r requirements.txt
+    - cp default_config.py config.py
+    - coverage run --source=./app/service -m unittest discover -vs test/
+    - coverage report -m
+    - coverage html
+    artifacts:
+        paths:
+        - htmlcov/
+        expire_in: 1 week
+
+flake8:
+    image: python:3.6
+    stage: test
+    script:
+     - pip install flake8
+     - flake8 ./app
+
+translations:
+    image: python:3.6
+    stage: test
+    script:
+     - "[ -z $(grep -R fuzzy app/translations/) ]"

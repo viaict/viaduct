@@ -17,23 +17,24 @@ class GuideAPI:
         user_guide = Page.get_by_path('guides/user/' + module_name)
 
         if not user_guide:
-            user_revision = PageRevision(None, None, None, None, None, None, None)
-            user_revision.title = 'Er is geen user handleiding beschikbaar voor ' +\
-                module_name
+            user_revision = PageRevision(None, None, None, None, None, None,
+                                         None)
+            user_revision.title = \
+                'Er is geen user handleiding beschikbaar voor ' + module_name
 
             if ModuleAPI.can_write('page') and\
                     ModuleAPI.can_write(module_name):
                 user_revision.content = 'Voeg ' +\
-                    '<a href="/edit/guides/user/' + module_name + '"> hier </a>' +\
-                    ' een user handleiding toe.'
+                    '<a href="/edit/guides/user/' + module_name + \
+                    '"> hier </a> een user handleiding toe.'
             else:
                 user_revision.content = ''
         else:
             user_revision = user_guide.get_latest_revision()
             if ModuleAPI.can_write('page') and\
                     ModuleAPI.can_write(module_name):
-                user_revision.title += '<a href="/edit/guides/user/' + module_name +\
-                    '"> (bewerk) </a>'
+                user_revision.title += '<a href="/edit/guides/user/' +\
+                    module_name + '"> (bewerk) </a>'
 
         return user_revision
 
@@ -44,14 +45,16 @@ class GuideAPI:
         admin_guide = Page.get_by_path('guides/admin/' + module_name)
 
         if not admin_guide or not ModuleAPI.can_write(module_name):
-            admin_revision = PageRevision(None, None, None, None, None, None, None)
+            admin_revision = PageRevision(None, None, None, None, None, None,
+                                          None)
             if ModuleAPI.can_write(module_name):
-                admin_revision.title = 'Er is geen admin handleiding beschikbaar voor ' +\
+                admin_revision.title = \
+                    'Er is geen admin handleiding beschikbaar voor ' + \
                     module_name
                 if ModuleAPI.can_write('page'):
                     admin_revision.content = 'Voeg ' +\
-                        '<a href="/edit/guides/admin/' + module_name + '"> hier </a>' +\
-                        ' een admin handleiding toe.'
+                        '<a href="/edit/guides/admin/' + module_name +\
+                        '"> hier </a> een admin handleiding toe.'
                 else:
                     admin_revision.content = ''
             else:
@@ -61,7 +64,7 @@ class GuideAPI:
             admin_revision = admin_guide.get_latest_revision()
             if ModuleAPI.can_write('page') and\
                     ModuleAPI.can_write(module_name):
-                admin_revision.title += '<a href="/edit/guides/admin/' + module_name +\
-                    '"> (bewerk) </a>'
+                admin_revision.title += '<a href="/edit/guides/admin/' + \
+                    module_name + '"> (bewerk) </a>'
 
         return admin_revision
