@@ -6,7 +6,7 @@ from app.utils.mollie import MollieClient, check_transaction
 from app.utils.module import ModuleAPI
 from app.models.mollie import Transaction
 
-from mollie.api.error import Error as MollieError
+from Mollie.API.Error import Error as MollieError
 
 blueprint = Blueprint('mollie', __name__, url_prefix='/mollie')
 
