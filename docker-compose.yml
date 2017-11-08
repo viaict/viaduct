@@ -1,2 +1,20 @@
-app:
+version: "2"
+services:
+  app:
     build: .
+    ports:
+      - "9090:9090"
+    depends_on:
+      - database
+    volumes:
+      - .:/app
+      - /tmp/viaduct-master:/tmp/viaduct-master
+    command: "bash -c 'cd /app && python manage.py db upgrade && uwsgi --ini /app/viaduct-master.ini'"
+
+  database:
+    image: postgres:latest
+    ports:
+      - "5400:5432"
+    environment:
+      POSTGRES_USER: viaduct
+      POSTGRES_DB: viaduct
