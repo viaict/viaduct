@@ -1,5 +1,5 @@
 from app import db
-from datetime import datetime
+from datetime import datetime, timezone
 
 from app.models.company import Company
 from app.models.base_model import BaseEntity
@@ -30,7 +30,7 @@ class Vacancy(db.Model, BaseEntity):
         self.end_date = end_date
         self.contract_of_service = contract_of_service
         self.workload = workload
-        self.date = datetime.now()
+        self.date = datetime.now(timezone.utc)
         self.company = company
 
     @property
