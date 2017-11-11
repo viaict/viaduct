@@ -41,9 +41,7 @@ def add_task(name, content, group_id, users_text, line, minute_id, status):
         raise ValidationException(
             'Er is niet een groep die voldoet opgegeven.')
 
-    users, message = get_list_of_users_from_string(group_id, users_text)
-    if not users:
-        raise ValidationException(message)
+    users = get_list_of_users_from_string(group_id, users_text)
 
     if minute_id <= 0:
         minute_id = 1
@@ -56,8 +54,7 @@ def add_task(name, content, group_id, users_text, line, minute_id, status):
     if task:
         raise ValidationException('Deze taak bestaat al in de database')
     else:
-        task = Task(name, content, group_id,
-                    users, minute_id, line, status)
+        task = Task(name, content, group_id, users, minute_id, line, status)
 
     pimpy_repository.add_task(task)
 
