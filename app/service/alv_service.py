@@ -9,6 +9,10 @@ def save_alv(alv):
     alv_repository.save(alv)
 
 
+def find_all_alv():
+    return alv_repository.find_all_alv()
+
+
 def find_alv_by_id(alv_id, include_presidium, include_documents):
     return alv_repository.find_alv_by_id(alv_id,
                                          include_presidium=include_presidium,

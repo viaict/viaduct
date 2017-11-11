@@ -7,7 +7,7 @@ from flask import flash
 from flask_babel import lazy_gettext as _
 from werkzeug.utils import secure_filename
 
-from app import app, db
+from app import app, db, sentry
 from app.models.file import File
 
 ALLOWED_MIMETYPES = ['text/plain', 'application/pdf']
@@ -130,6 +130,7 @@ def file_remove(filename, directory=UPLOAD_DIR):
                 db_entry.delete()
 
     except OSError:
+        sentry.captureException()
         print(_('Cannot remove file, it does not exist') + ": " + filename)
 
 

@@ -4,6 +4,7 @@ from flask import flash
 from flask_babel import _
 
 import requests
+from requests.exceptions import RequestException
 import datetime as dt
 
 DOMJUDGE_URL = app.config['DOMJUDGE_URL']
@@ -24,7 +25,7 @@ class DOMjudgeAPI:
             session = requests
         try:
             r = session.get(DOMJUDGE_URL + url, timeout=(5, 5))
-        except:
+        except RequestException:
             DOMjudgeAPI.flash_error()
             return None
 
@@ -42,7 +43,7 @@ class DOMjudgeAPI:
         try:
             r = session.post(DOMJUDGE_URL + url, data=data,
                              files=files, timeout=(5, 5))
-        except Exception as e:
+        except RequestException as e:
             if flash_on_error:
                 DOMjudgeAPI.flash_error()
             return (False, e, session)

@@ -15,4 +15,4 @@ def create_password_ticket():
 
 def find_password_ticket_by_hash(hash_):
     return db.session.query(PasswordTicket) \
-        .filter_by(hash == hash_).options(raiseload('*')).one_or_none()
+        .filter_by(hash=hash_).options(raiseload('*')).one_or_none()

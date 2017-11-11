@@ -30,6 +30,10 @@ def save_document_version(alv_doc_version):
     db.session.commit()
 
 
+def find_all_alv():
+    return db.session.query(Alv).order_by(Alv.date.desc()).all()
+
+
 def find_alv_by_id(alv_id, include_presidium=True, include_documents=False):
     """Retrieve ALV from the database, with the minimal foreign key info."""
     q = db.session.query(Alv) \

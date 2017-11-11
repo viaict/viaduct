@@ -1,21 +1,17 @@
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 from app.service import mail_service
 
-google_mock = MagicMock()
 
-
-@patch.object(mail_service, 'google', google_mock)
+@patch.object(mail_service, 'google', autospec=True)
 class TestMailService(unittest.TestCase):
-    def setUp(self):
-        google_mock.reset_mock()
 
-    def test_send_mail(self):
+    def test_send_mail(self, google_mock):
         to = "to"
         subject = "subject"
         template = "sometemplate"
 
         mail_service.send_mail(to=to, subject=subject, email_template=template)
 
-        google_mock.send_mail.assert_called_once_with(to, subject, template)
+        google_mock.send_email.assert_called_once_with(to, subject, template)

@@ -35,7 +35,7 @@ class PimpyAPI:
 
         try:
             date = datetime.datetime.strptime(date, DATE_FORMAT)
-        except:
+        except Exception:
             if date != "":
                 return False, "De datum kon niet worden verwerkt."
             date = None
@@ -186,7 +186,7 @@ class PimpyAPI:
             for action in matches:
                 try:
                     listed_users, title = action.split(":", 1)
-                except:
+                except Exception:
                     print("could not split the line on ':'.\nSkipping hit.")
                     flash("Kon niet verwerken: " + str(action), 'danger')
                     continue
@@ -200,7 +200,7 @@ class PimpyAPI:
                 try:
                     task = Task(title, "", group_id, users,
                                 minute_id, i, 0)
-                except:
+                except Exception:
                     print("wasnt given the right input to create a task")
                     continue
                 tasks_found.append(task)
@@ -212,7 +212,7 @@ class PimpyAPI:
             for action in matches:
                 try:
                     listed_users, title = action.split(":", 1)
-                except:
+                except Exception:
                     print("could not split the line on ':'.\nSkipping hit.")
                     flash("Kon niet verwerken: " + action, 'danger')
                     continue
@@ -227,7 +227,7 @@ class PimpyAPI:
                     try:
                         task = Task(title, "", group_id, [user],
                                     minute_id, i, 0)
-                    except:
+                    except Exception:
                         print("wasnt given the right input to create a task")
                         continue
                     tasks_found.append(task)
