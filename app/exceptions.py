@@ -4,8 +4,8 @@ class ResourceNotFoundException(Exception):
         self.identifier = identifier
 
     def __str__(self):
-        return ("Could not find resource " + self.resource +
-                " identified by " + self.identifier)
+        return ("Could not find resource " + str(self.resource) +
+                " identified by " + str(self.identifier))
 
 
 class BusinessRuleException(Exception):

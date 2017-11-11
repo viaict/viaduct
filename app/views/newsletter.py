@@ -8,6 +8,8 @@ from app.forms.newsletter import NewsletterForm
 from app.models.newsletter import Newsletter
 from app.models.news import News
 
+import app.utils.committee as CommitteeAPI
+
 import datetime
 
 blueprint = Blueprint('newsletter', __name__, url_prefix='/newsletter')
@@ -85,6 +87,19 @@ def get_newsletter(newsletter_id=None):
         return Newsletter.query.get_or_404(newsletter_id)
     else:
         return Newsletter.query.order_by(Newsletter.id.desc()).first()
+
+
+@blueprint.route('/latest/committees/', methods=['GET'])
+def committees_xml():
+    if not ModuleAPI.can_read('newsletter') and not correct_token_provided():
+        return abort(403)
+
+    committees = CommitteeAPI.get_alphabetical()
+    new_members = [c for c in committees if c.open_new_members]
+
+    return Response(
+        render_template('newsletter/committees.xml', items=new_members),
+        mimetype='text/xml')
 
 
 @blueprint.route('/<int:newsletter_id>/activities/', methods=['GET'])

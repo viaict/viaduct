@@ -736,6 +736,9 @@ msgstr ""
 msgid "Latest news"
 msgstr ""
 
+msgid "Latest"
+msgstr ""
+
 msgid "Legend"
 msgstr ""
 
@@ -804,7 +807,7 @@ msgstr ""
 msgid "Navigation entry"
 msgstr ""
 
-msgid "New ALV"
+msgid "New GA"
 msgstr ""
 
 msgid "New activity"
@@ -837,7 +840,7 @@ msgstr ""
 msgid "New vacancy"
 msgstr ""
 
-msgid "New version"
+msgid "Add new version"
 msgstr ""
 
 msgid "News"

@@ -65,10 +65,7 @@ def view(page_nr=1):
         if not summary:
             flash(_('Specified summary to delete does not exist'), 'danger')
         else:
-            try:
-                file_remove(summary.path, UPLOAD_FOLDER)
-            except:
-                flash(_('File does not exist, summary deleted.'), 'info')
+            file_remove(summary.path, UPLOAD_FOLDER)
 
             db.session.delete(summary)
             db.session.commit()

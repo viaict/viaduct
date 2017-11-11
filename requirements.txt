@@ -6,6 +6,7 @@ baas32==0.3.2
 blinker==1.4
 cffi==1.7.0
 click==6.6
+coverage==4.4.1
 cryptography==1.4
 ez-setup==0.9
 flake8==2.5.4
@@ -66,3 +67,5 @@ watchdog==0.8.3
 Werkzeug==0.11.11
 WTForms==2.1
 python-magic==0.4.13
+PyPDF2==1.26.0
+reportlab==3.4.0

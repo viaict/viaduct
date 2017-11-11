@@ -4,7 +4,6 @@ from flask import Blueprint, render_template, request, \
 import datetime
 
 from flask_login import login_required, current_user
-from app import app
 from app.models.challenge import Challenge
 from app.forms import ChallengeForm
 from app.utils.module import ModuleAPI
@@ -22,8 +21,6 @@ blueprint = Blueprint('challenge', __name__, url_prefix='/challenge')
 def view_list(page=1):
     if not ModuleAPI.can_read('challenge'):
         return abort(403)
-
-    print((app.config['SQLALCHEMY_DATABASE_URI']))
 
     challenge = Challenge()
     form = ChallengeForm(request.form, challenge)

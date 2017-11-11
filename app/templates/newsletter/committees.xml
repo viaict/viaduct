@@ -1,0 +1,13 @@
+<items>
+    {% for item in items %}
+    <item>
+        <id>{{ item.group_id }}</id>
+        <nl>
+            <name>{{ item.nl_title }}</name>
+        </nl>
+        <en>
+            <name>{{ item.en_title }}</name>
+        </en>
+    </item>
+    {% endfor %}
+</items>

@@ -1,4 +1,4 @@
-from app import db
+from app import app, db
 import datetime
 from app.models.base_model import BaseEntity
 from jinja2 import escape
@@ -152,7 +152,7 @@ class Minute(db.Model, BaseEntity):
 
     def get_minute_day(self):
         """Return the date of when the meeting took place in ryyy-mm-dd."""
-        return self.minute_date.strftime('%Y-%m-%d')
+        return self.minute_date.strftime(app.config['DATE_FORMAT'])
 
     def get_title(self):
         return "Van %s" % self.get_minute_day()

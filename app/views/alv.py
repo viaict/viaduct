@@ -16,7 +16,7 @@ def list():
     if not ModuleAPI.can_read('alv'):
         return abort(403)
 
-    alvs = Alv.query.all()
+    alvs = alv_service.find_all_alv()
     return render_template('alv/list.htm', alvs=alvs)
 
 

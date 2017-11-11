@@ -65,7 +65,7 @@ msgid "Add"
 msgstr "Toevoegen"
 
 msgid "Add document"
-msgstr ""
+msgstr "Voeg document toe"
 
 msgid "Add user to"
 msgstr ""
@@ -400,9 +400,8 @@ msgstr "Pagina verwijderen:"
 msgid "Description"
 msgstr "Beschrijving"
 
-#, fuzzy
 msgid "Details"
-msgstr "Nederlandse gegevens"
+msgstr "Details"
 
 msgid "Disabled"
 msgstr "Uitgeschakeld"
@@ -419,9 +418,8 @@ msgstr "Geen HTML tags filteren"
 msgid "Do you have an idea for an activity?"
 msgstr "Heb je een idee voor een activiteit?"
 
-#, fuzzy
 msgid "Document"
-msgstr "Commentaar"
+msgstr "Document"
 
 msgid "Dutch"
 msgstr "Nederlands"
@@ -466,7 +464,10 @@ msgid "Edit"
 msgstr "Aanpassen"
 
 msgid "Edit alv"
-msgstr ""
+msgstr "ALV aanpassen"
+
+msgid "Latest"
+msgstr "Nieuwste"
 
 msgid "Edit course"
 msgstr "Vak aanpassen"
@@ -815,8 +816,8 @@ msgstr "Naam is vereist"
 msgid "Navigation entry"
 msgstr "Menu item"
 
-msgid "New ALV"
-msgstr ""
+msgid "New GA"
+msgstr "Nieuw ALV"
 
 msgid "New activity"
 msgstr "Nieuwe activiteit"
@@ -848,8 +849,8 @@ msgstr "Nieuwe samenvatting"
 msgid "New vacancy"
 msgstr "Nieuwe vacature"
 
-msgid "New version"
-msgstr ""
+msgid "Add new version"
+msgstr "Nieuwe versie toevoegen"
 
 msgid "News"
 msgstr "Nieuws"
@@ -1459,9 +1460,8 @@ msgstr "Geldig lidmaatschap is vereist om dit nieuwsartikel te kunnen lezen"
 msgid "Vancancies"
 msgstr "Vacatures"
 
-#, fuzzy
 msgid "Versions"
-msgstr "Rechten"
+msgstr "Versies"
 
 msgid "View"
 msgstr "Weergeven"

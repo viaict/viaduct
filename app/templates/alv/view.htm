@@ -38,12 +38,14 @@
             <hr>
             <div class='content'>
                 <h1>Documents</h1>
+                {% if ModuleAPI.can_write('alv') %}
                 <p>
                     <a class="btn btn-xs btn-success"
                        href="{{ url_for('alv.create_document', alv_id=alv.id) }}">
                         {{ _('Add document') }}
                     </a>
                 </p>
+                {% endif %}
                 <table class="table">
                     <thead>
                     <tr>
@@ -62,13 +64,15 @@
                                 data-toggle="dropdown">Versions
                             <span class="caret"></span></button>
                         <ul class="dropdown-menu">
+                            {% if ModuleAPI.can_write('alv') %}
                             <li>
                                 <a href="{{ url_for('alv.update_document',
                                         alv_id=alv.id, doc_id=doc.id) }}">
-                                    {{ _('New version') }}
+                                    {{ _('Add new version') }}
                                 </a>
                             </li>
-                            {%- for i, doc_version in enumerate(doc.versions) -%}
+                            {% endif %}
+                            {%- for i, doc_version in enumerate(doc.versions) | reverse -%}
                                 <li>
                                     <a href="/static/files/{{ doc_version.file.name }}" target="_blank">
                                         {{ _('Version %d' % (i + 1)) }}: {{ doc_version.created.date() }}
@@ -76,6 +80,12 @@
                                 </li>
                             {%- endfor -%}
                         </ul>
+                        {% if doc.versions[-1] and doc.versions[-1].file.name %}
+                            <a class='btn btn-info btn-xs' 
+                                href='/static/files/{{ doc.versions[-1].file.name }}'> 
+                                {{ _('Latest') }}
+                            </a> 
+                        {% endif %}
                     </span>
                             </td>
                         </tr>
