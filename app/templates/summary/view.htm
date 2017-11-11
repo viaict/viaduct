@@ -29,7 +29,7 @@
         </div>
     </div>
 
-    {% if ModuleAPI.can_write('summary') %}
+    {% if current_user.has_role(Roles.EXAMINATION_WRITE) %}
     <div class="row">
         <div class="col-md-8">
             <div class="form-group btn-group">

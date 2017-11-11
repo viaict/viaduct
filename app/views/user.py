@@ -13,18 +13,19 @@ from flask_babel import _
 from flask_login import current_user, login_user, logout_user, login_required
 
 from app import db, login_manager
+from app.decorators import require_role
 from app.exceptions import ResourceNotFoundException
-from app.forms import SignUpForm, SignInForm, ResetPassword, RequestPassword
-from app.forms.user import EditUserForm, EditUserInfoForm
+from app.forms.user import (SignUpForm, SignInForm, ResetPassword,
+                            RequestPassword, EditUserForm, EditUserInfoForm)
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult, CustomForm
 from app.models.education import Education
 from app.models.group import Group
 from app.models.user import User
-from app.service import password_reset_service
+from app.roles import Roles
+from app.service import password_reset_service, role_service
 from app.utils import copernica
 from app.utils.google import HttpError
-from app.utils.module import ModuleAPI
 from app.utils.user import UserAPI
 
 blueprint = Blueprint('user', __name__)
@@ -52,9 +53,6 @@ def view_single(user_id=None):
     can_read = False
     can_write = False
 
-    # Only logged in users can view profiles
-    if current_user.is_anonymous:
-        return abort(403)
     # Unpaid members cannot view other profiles
     if current_user.id != user_id and not current_user.has_paid:
         return abort(403)
@@ -63,9 +61,9 @@ def view_single(user_id=None):
         can_write = True
         can_read = True
     # group rights
-    if ModuleAPI.can_read('user'):
+    if role_service.user_has_role(Roles.USER_READ):
         can_read = True
-    if ModuleAPI.can_write('user'):
+    if role_service.user_has_role(Roles.USER_WRITE):
         can_write = True
         can_read = True
 
@@ -103,10 +101,10 @@ def view_single(user_id=None):
 
 @blueprint.route('/users/remove_avatar/<int:user_id>', methods=['DELETE'])
 @login_required
+@require_role(Roles.USER_WRITE)
 def remove_avatar(user_id=None):
     user = User.query.get(user_id)
-    if not ModuleAPI.can_write('user') and \
-            (current_user.is_anonymous or current_user.id != user_id):
+    if current_user.is_anonymous or current_user.id != user_id:
         return "", 403
 
     UserAPI.remove_avatar(user)
@@ -116,10 +114,10 @@ def remove_avatar(user_id=None):
 @blueprint.route('/users/create/', methods=['GET', 'POST'])
 @blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
 @login_required
+@require_role(Roles.USER_WRITE)
 def edit(user_id=None):
     """Create user for admins and edit for admins and users."""
-    if not ModuleAPI.can_write('user') and \
-            (current_user.is_anonymous or current_user.id != user_id):
+    if current_user.is_anonymous or current_user.id != user_id:
         return abort(403)
 
     # Select user
@@ -130,7 +128,7 @@ def edit(user_id=None):
 
     user.avatar = UserAPI.has_avatar(user_id)
 
-    if ModuleAPI.can_write('user'):
+    if role_service.user_has_role(Roles.USER_WRITE):
         form = EditUserForm(request.form, user)
         is_admin = True
     else:
@@ -178,7 +176,7 @@ def edit(user_id=None):
         user.first_name = form.first_name.data.strip()
         user.last_name = form.last_name.data.strip()
         user.locale = form.locale.data
-        if ModuleAPI.can_write('user'):
+        if role_service.user_has_role(Roles.USER_WRITE):
             user.has_paid = form.has_paid.data
             user.honorary_member = form.honorary_member.data
             user.favourer = form.favourer.data
@@ -385,17 +383,14 @@ def reset_password(hash_):
 
 
 @blueprint.route('/users/', methods=['GET', 'POST'])
+@require_role(Roles.USER_READ)
 def view():
-    if not ModuleAPI.can_read('user'):
-        return abort(403)
     return render_template('user/view.htm')
 
 
 @blueprint.route('/users/export', methods=['GET'])
+@require_role(Roles.USER_READ)
 def user_export():
-    if not ModuleAPI.can_read('user'):
-        return abort(403)
-
     users = User.query.all()
     si = StringIO()
     cw = writer(si)
@@ -409,10 +404,8 @@ def user_export():
 # Here starts the public api for users
 ###
 @blueprint.route('/users/get_users/', methods=['GET'])
+@require_role(Roles.USER_READ)
 def get_users():
-    if not ModuleAPI.can_read('user'):
-        return abort(403)
-
     users = User.query.all()
     user_list = []
 
@@ -439,10 +432,8 @@ def get_users():
 
 # Not used at the moment due to integrity problems in the database
 @blueprint.route('/users/delete_users/', methods=['DELETE'])
+@require_role(Roles.USER_WRITE)
 def api_delete_user():
-    if not ModuleAPI.can_write('user'):
-        return abort(403)
-
     user_ids = request.get_json()['selected_ids']
     del_users = User.query.filter(User.id.in_(user_ids)).all()
 

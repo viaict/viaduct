@@ -1,26 +1,21 @@
-from app.forms import SeoForm
-
-from app import db
-from app.utils.module import ModuleAPI
-from app.utils.seo import get_seo, get_resources
-from app.models.seo import SEO
-
-
-from flask import Blueprint, abort, redirect, url_for
+from flask import Blueprint, redirect, url_for
 from flask import flash, render_template, request
 from flask_babel import _  # gettext
 
+from app import db
+from app.decorators import require_role
+from app.forms import SeoForm
+from app.models.seo import SEO
+from app.roles import Roles
+from app.utils.seo import get_seo, get_resources
 
 blueprint = Blueprint('seo', __name__, url_prefix='/seo')
 
 
 @blueprint.route('/edit', methods=['GET', 'POST'])
 @blueprint.route('/edit/', methods=['GET', 'POST'])
+@require_role(Roles.SEO_WRITE)
 def edit_seo():
-    # TODO CHANGE THIS TO SEO
-    if not ModuleAPI.can_write('seo'):
-        return abort(403)
-
     module = request.args['module']
     path = request.args['path']
 

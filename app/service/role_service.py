@@ -4,8 +4,8 @@ from app import app
 from app.repository import role_repository
 
 
-def user_has_role(user, role):
-    return role.value in user.roles
+def user_has_role(user, *roles):
+    return all(role.value in user.roles for role in roles)
 
 
 @app.before_request

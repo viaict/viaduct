@@ -126,6 +126,6 @@ class User(db.Model, UserMixin, BaseEntity):
             return None
         return ' '.join([self.first_name, self.last_name])
 
-    def has_role(self, role):
+    def has_role(self, *roles):
         from app.service import role_service
-        return role_service.user_has_role(self, role)
+        return role_service.user_has_role(self, *roles)

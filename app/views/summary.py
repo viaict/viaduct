@@ -1,23 +1,17 @@
 from flask import Blueprint
-from flask import abort, flash, session, redirect, render_template, request, \
-    url_for
-from flask_login import login_required
+from flask import flash, session, redirect, render_template, request, url_for
 from flask_babel import _
-
+from fuzzywuzzy import fuzz
 from sqlalchemy import func
 
 from app import app, db
-
+from app.decorators import require_membership, require_role
 from app.forms.summary import EditForm
-
-from app.models.summary import Summary
 from app.models.course import Course
 from app.models.education import Education
-
+from app.models.summary import Summary
+from app.roles import Roles
 from app.utils.file import file_upload, file_remove
-from app.utils.module import ModuleAPI
-
-from fuzzywuzzy import fuzz
 
 blueprint = Blueprint('summary', __name__, url_prefix='/summary')
 
@@ -47,14 +41,9 @@ def get_course_id(course):
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
-# @login_required
+@require_role(Roles.EXAMINATION_READ)
+@require_membership
 def view(page_nr=1):
-    if not ModuleAPI.can_read('summary', True):
-        flash(_('Valid membership is required for the summary module'),
-              'warning')
-        session['prev'] = 'summary.view'
-        return abort(403)
-
     # First check if the delete argument is set before loading
     # the search results
     if request.form.get('delete') and request.method == 'POST':
@@ -144,12 +133,9 @@ def view(page_nr=1):
 
 
 @blueprint.route('/add/', methods=['GET', 'POST'])
-@login_required
+@require_role(Roles.EXAMINATION_WRITE)
+@require_membership
 def add():
-    if not ModuleAPI.can_write('summary', True):
-        session['prev'] = 'summary.edit_summary'
-        return abort(403)
-
     form = EditForm(request.form)
     courses = Course.query.order_by(Course.name).all()
     educations = Education.query.order_by(Education.name).all()
@@ -191,12 +177,9 @@ def add():
 
 
 @blueprint.route('/edit/<int:summary_id>/', methods=['GET', 'POST'])
-@login_required
+@require_role(Roles.EXAMINATION_WRITE)
+@require_membership
 def edit(summary_id):
-    if not ModuleAPI.can_write('summary', True):
-        session['prev'] = 'summary.edit_summary'
-        return abort(403)
-
     summary = Summary.query.get(summary_id)
 
     if not summary:

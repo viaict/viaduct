@@ -1,25 +1,24 @@
-from flask import Blueprint, request, render_template, redirect, url_for,\
+import datetime
+from functools import wraps
+
+from flask import Blueprint, request, render_template, redirect, url_for, \
     flash, Response, abort
 from flask_babel import _
 
-from app import app, db
-from app.utils.module import ModuleAPI
-from app.forms.newsletter import NewsletterForm
-from app.models.newsletter import Newsletter
-from app.models.news import News
-
 import app.utils.committee as CommitteeAPI
-
-import datetime
+from app import app, db
+from app.decorators import require_role
+from app.forms.newsletter import NewsletterForm
+from app.models.news import News
+from app.models.newsletter import Newsletter
+from app.roles import Roles
 
 blueprint = Blueprint('newsletter', __name__, url_prefix='/newsletter')
 
 
 @blueprint.route('/', methods=['GET'])
+@require_role(Roles.NEWSLETTER_READ)
 def all():
-    if not ModuleAPI.can_read('newsletter'):
-        return abort(403)
-
     newsletters = Newsletter.query.all()
     auth_token = app.config['COPERNICA_NEWSLETTER_TOKEN']
     return render_template('newsletter/view.htm', newsletters=newsletters,
@@ -28,10 +27,8 @@ def all():
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<int:newsletter_id>/', methods=['GET', 'POST'])
+@require_role(Roles.NEWSLETTER_WRITE)
 def edit(newsletter_id=None):
-    if not ModuleAPI.can_write('newsletter'):
-        return abort(403)
-
     if newsletter_id:
         newsletter = Newsletter.query.get_or_404(newsletter_id)
     else:
@@ -63,10 +60,8 @@ def edit(newsletter_id=None):
 
 
 @blueprint.route('/delete/<int:newsletter_id>/', methods=['GET', 'POST'])
+@require_role(Roles.NEWSLETTER_READ)
 def delete(newsletter_id):
-    if not ModuleAPI.can_write('newsletter'):
-        return abort(403)
-
     if request.method == 'GET':
         return render_template('newsletter/confirm.htm')
 
@@ -77,9 +72,15 @@ def delete(newsletter_id):
     return redirect(url_for('.all'))
 
 
-def correct_token_provided():
-    token = request.args.get('auth_token')
-    return app.config['COPERNICA_NEWSLETTER_TOKEN'] == token
+def correct_token_provided(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        token = request.args.get('auth_token')
+        if token and app.config['COPERNICA_NEWSLETTER_TOKEN'] == token:
+            f(*args, **kwargs)
+        else:
+            abort(403)
+    return wrapper
 
 
 def get_newsletter(newsletter_id=None):
@@ -90,10 +91,9 @@ def get_newsletter(newsletter_id=None):
 
 
 @blueprint.route('/latest/committees/', methods=['GET'])
+@require_role(Roles.NEWSLETTER_READ)
+@correct_token_provided
 def committees_xml():
-    if not ModuleAPI.can_read('newsletter') and not correct_token_provided():
-        return abort(403)
-
     committees = CommitteeAPI.get_alphabetical()
     new_members = [c for c in committees if c.open_new_members]
 
@@ -104,10 +104,9 @@ def committees_xml():
 
 @blueprint.route('/<int:newsletter_id>/activities/', methods=['GET'])
 @blueprint.route('/latest/activities/', methods=['GET'])
+@require_role(Roles.NEWSLETTER_READ)
+@correct_token_provided
 def activities_xml(newsletter_id=None):
-    if not ModuleAPI.can_read('newsletter') and not correct_token_provided():
-        return abort(403)
-
     newsletter = get_newsletter(newsletter_id)
     items = newsletter.activities if newsletter else []
     return Response(
@@ -117,10 +116,9 @@ def activities_xml(newsletter_id=None):
 
 @blueprint.route('/<int:newsletter_id>/news/', methods=['GET'])
 @blueprint.route('/latest/news/', methods=['GET'])
+@require_role(Roles.NEWSLETTER_READ)
+@correct_token_provided
 def news_xml(newsletter_id=None):
-    if not ModuleAPI.can_read('newsletter') and not correct_token_provided():
-        return abort(403)
-
     newsletter = get_newsletter(newsletter_id)
     items = newsletter.news_items if newsletter else []
     return Response(

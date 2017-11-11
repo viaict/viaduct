@@ -25,7 +25,7 @@
 </script>
 	<div class="container">
 	<div class="col-md-12">
-	{% if ModuleAPI.can_write('challenge') %}
+	{% if current_user.has_role(Roles.COMPANY_WRITE) %}
 	<form id="edit_challenge">
 		<fieldset>
 			<legend>Create challenge</legend>

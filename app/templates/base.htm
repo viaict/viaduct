@@ -1,7 +1,7 @@
 {% from "macros/flash.htm" import render_flash %}
 
 <!DOCTYPE html>
-<html xmlns:fb="http://ogp.me/ns/fb#">
+<html>
     <head>
         {% set seo_fields = get_seo_fields(get_locale()) %}
 
@@ -91,7 +91,7 @@
                     <i class="fa fa-question-circle"></i> Help
                 </a>
                 |
-                {% if ModuleAPI.can_write('seo') %}
+                {% if current_user.has_role(Roles.SEO_WRITE) %}
                 <a href="{{ url_for('seo.edit_seo', module=request.blueprint, path=request.path) }}"  data-icon="glyphicon-search" class="btn btn-sm">
                     <i class="fa fa-search"></i> SEO
                 </a>

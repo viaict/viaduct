@@ -1,16 +1,17 @@
-from flask import Blueprint, render_template, request, redirect, url_for, \
-    abort, flash
-from flask_babel import lazy_gettext as _
-
-from sqlalchemy import or_, and_, func
-
 from datetime import datetime
 
+from flask import Blueprint, render_template, request, redirect, url_for, \
+    flash
+from flask_babel import lazy_gettext as _
+from sqlalchemy import or_, and_, func
+
 from app import app, db
-from app.models.vacancy import Vacancy
+from app.decorators import require_role
+from app.forms.vacancy import VacancyForm
 from app.models.company import Company
-from app.forms import VacancyForm
-from app.utils.module import ModuleAPI
+from app.models.vacancy import Vacancy
+from app.roles import Roles
+from app.service import role_service
 
 blueprint = Blueprint('vacancy', __name__, url_prefix='/vacancies')
 FILE_FOLDER = app.config['FILE_DIR']
@@ -34,7 +35,7 @@ def list(page_nr=1, search=None):
                        Vacancy.contract_of_service.like('%' + search + '%'))) \
             .order_by(order.desc())
 
-        if not ModuleAPI.can_write('vacancy'):
+        if not role_service.has_role(Roles.VACANCY_WRITE):
             vacancies = vacancies.filter(
                 and_(Vacancy.start_date <
                      datetime.utcnow(), Vacancy.end_date >
@@ -46,7 +47,7 @@ def list(page_nr=1, search=None):
                                search=search, path=FILE_FOLDER,
                                title="Vacatures")
 
-    if ModuleAPI.can_write('vacancy'):
+    if not role_service.has_role(Roles.VACANCY_WRITE):
         vacancies = Vacancy.query.join(Company).order_by(order.desc())
     else:
         vacancies = Vacancy.query.order_by(order.desc()) \
@@ -62,11 +63,9 @@ def list(page_nr=1, search=None):
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<int:vacancy_id>/', methods=['GET', 'POST'])
+@require_role(Roles.VACANCY_WRITE)
 def edit(vacancy_id=None):
     """Create, view or edit a vacancy."""
-    if not ModuleAPI.can_write('vacancy'):
-        return abort(403)
-
     # Select vacancy.
     if vacancy_id:
         vacancy = Vacancy.query.get(vacancy_id)
@@ -108,11 +107,9 @@ def edit(vacancy_id=None):
 
 
 @blueprint.route('/delete/<int:vacancy_id>/', methods=['POST'])
+@require_role(Roles.VACANCY_WRITE)
 def delete(vacancy_id=None):
     """Delete a vacancy."""
-    if not ModuleAPI.can_write('vacancy'):
-        return abort(403)
-
     vacancy = Vacancy.query.get_or_404(vacancy_id)
     db.session.delete(vacancy)
     db.session.commit()

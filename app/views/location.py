@@ -1,33 +1,28 @@
 from flask import Blueprint, flash, redirect, render_template, request, \
-    url_for, jsonify, abort
+    url_for, jsonify
 from flask_babel import lazy_gettext as _
 
 from app import db
 from app.decorators import require_role
+from app.forms.location import LocationForm
 from app.models.location import Location
 from app.roles import Roles
 from app.utils.serialize_sqla import serialize_sqla
-from app.forms import LocationForm
-from app.utils.module import ModuleAPI
 
 blueprint = Blueprint('location', __name__, url_prefix='/locations')
 
 
 @blueprint.route('/<int:location_id>/contacts/', methods=['GET'])
+@require_role(Roles.VACANCY_READ)
 def get_contacts(location_id):
-    if not ModuleAPI.can_read('contacts'):
-        return jsonify(error=_('No permissions to read contacts'))
-
     location = Location.query.get(location_id)
     return jsonify(contacts=serialize_sqla(location.contacts.all()))
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
+@require_role(Roles.VACANCY_READ)
 def list(page_nr=1):
-    if not ModuleAPI.can_read('location'):
-        return abort(403)
-
     locations = Location.query.paginate(page_nr, 15, False)
     return render_template('location/list.htm', locations=locations)
 

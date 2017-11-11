@@ -1,34 +1,30 @@
-from flask import Blueprint, flash, redirect, render_template, request, \
-    url_for, abort
+from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_babel import lazy_gettext as _
 
 from app import db
+from app.decorators import require_role
+from app.forms.contact import ContactForm
 from app.models.contact import Contact
 from app.models.location import Location
-from app.forms import ContactForm
-from app.utils.module import ModuleAPI
+from app.roles import Roles
 
 blueprint = Blueprint('contact', __name__, url_prefix='/contacts')
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
+@require_role(Roles.VACANCY_READ)
 def list(page_nr=1):
     """Show a paginated list of contacts."""
-    if not ModuleAPI.can_read('contact'):
-        return abort(403)
-
     contacts = Contact.query.paginate(page_nr, 15, False)
     return render_template('contact/list.htm', contacts=contacts)
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<int:contact_id>/', methods=['GET', 'POST'])
+@require_role(Roles.VACANCY_WRITE)
 def edit(contact_id=None):
     """Create or edit a contact, frontend."""
-    if not ModuleAPI.can_write('contact'):
-        return abort(403)
-
     if contact_id:
         contact = Contact.query.get(contact_id)
     else:
@@ -58,11 +54,9 @@ def edit(contact_id=None):
 
 
 @blueprint.route('/delete/<int:contact_id>/', methods=['POST'])
+@require_role(Roles.VACANCY_WRITE)
 def delete(contact_id):
     """Delete a contact."""
-    if not ModuleAPI.can_write('contact'):
-        return abort(403)
-
     contact = Contact.query.get_or_404(contact_id)
     db.session.delete(contact)
     db.session.commit()

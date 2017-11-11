@@ -1,30 +1,25 @@
-from flask import Blueprint, abort, render_template, request, url_for, redirect
-from flask_login import login_required
+from flask import Blueprint, render_template, request, url_for, redirect
 
+from app.decorators import require_role
 from app.forms.alv import AlvForm, AlvDocumentForm
 from app.models.alv_model import Alv
+from app.roles import Roles
 from app.service import alv_service
-from app.utils.module import ModuleAPI
 
 blueprint = Blueprint('alv', __name__, url_prefix='/alv')
 
 
 @blueprint.route('/', methods=['GET'])
 @blueprint.route('/list/', methods=['GET'])
-@login_required
+@require_role(Roles.ALV_READ)
 def list():
-    if not ModuleAPI.can_read('alv'):
-        return abort(403)
-
     alvs = alv_service.find_all_alv()
     return render_template('alv/list.htm', alvs=alvs)
 
 
 @blueprint.route('/<int:alv_id>/', methods=['GET'])
-@login_required
+@require_role(Roles.ALV_READ)
 def view(alv_id=0):
-    if not ModuleAPI.can_read('alv'):
-        return abort(403)
     if alv_id:
         alv = alv_service.get_alv_by_id(alv_id, include_documents=True)
 
@@ -33,11 +28,8 @@ def view(alv_id=0):
 
 @blueprint.route("/create/", methods=['GET', 'POST'])
 @blueprint.route("/<int:alv_id>/edit/", methods=['GET', 'POST'])
-@login_required
+@require_role(Roles.ALV_WRITE)
 def create_edit(alv_id=None):
-    if not ModuleAPI.can_write('alv'):
-        return abort(403)
-
     if alv_id:
         alv = alv_service.get_alv_by_id(alv_id)
     else:
@@ -54,11 +46,8 @@ def create_edit(alv_id=None):
 
 
 @blueprint.route('/<int:alv_id>/documents/create/', methods=['GET', 'POST'])
-@login_required
+@require_role(Roles.ALV_WRITE)
 def create_document(alv_id=None):
-    if not ModuleAPI.can_write('alv'):
-        return abort(403)
-
     alv = alv_service.get_alv_by_id(alv_id)
     form = AlvDocumentForm(request.form)
 
@@ -72,11 +61,8 @@ def create_document(alv_id=None):
 
 @blueprint.route('/<int:alv_id>/documents/<int:doc_id>/update/',
                  methods=['GET', 'POST'])
-@login_required
+@require_role(Roles.ALV_WRITE)
 def update_document(alv_id=None, doc_id=None):
-    if not ModuleAPI.can_write('alv'):
-        return abort(403)
-
     alv = alv_service.get_alv_by_id(alv_id)
     alv_document = alv_service.get_alv_document_by_id(doc_id)
 
@@ -95,11 +81,8 @@ def update_document(alv_id=None, doc_id=None):
 
 
 @blueprint.route('/<int:alv_id>/delete/', methods=['POST'])
-@login_required
+@require_role(Roles.ALV_WRITE)
 def delete(alv_id=None):
-    if not ModuleAPI.can_write('alv'):
-        return abort(403)
-
     alv = alv_service.get_alv_by_id(alv_id)
     alv_service.delete_alv(alv)
 

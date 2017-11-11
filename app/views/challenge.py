@@ -3,20 +3,14 @@ import datetime
 from flask import Blueprint, render_template, request, \
     jsonify
 from flask_login import login_required, current_user
-from app.models.challenge import Challenge
 
 from app.decorators import require_role
-from app.forms import ChallengeForm
+from app.forms.challenge import ChallengeForm
 from app.models.challenge import Challenge
 from app.roles import Roles
 from app.utils.challenge import ChallengeAPI
 
 blueprint = Blueprint('challenge', __name__, url_prefix='/challenge')
-
-
-# UPLOAD_FOLDER = app.config['UPLOAD_DIR']
-# FILE_FOLDER = app.config['FILE_DIR']
-# ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
