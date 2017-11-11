@@ -1,7 +1,7 @@
 from flask_wtf import Form
 from wtforms import StringField, TextAreaField, DateTimeField, IntegerField, \
     SelectField, BooleanField
-from wtforms.validators import InputRequired, Optional
+from wtforms.validators import InputRequired, Optional, DataRequired
 
 import datetime
 
@@ -13,7 +13,7 @@ DATE_FORMAT = app.config['DATE_FORMAT']
 
 
 class AddTaskForm(Form):
-    name = StringField('Name', validators=[InputRequired()])
+    name = StringField('Name', validators=[DataRequired()])
     content = TextAreaField('Content', validators=[Optional()])
     # timestamp
     line = IntegerField(
@@ -30,7 +30,7 @@ class AddTaskForm(Form):
         description='Type comma separated names for whom this task is, in a '
                     'similar manner as you are familiar with whilst taking '
                     'minutes.',
-        validators=[InputRequired()])
+        validators=[DataRequired()])
 
     status = SelectField('Status')
 
@@ -44,8 +44,6 @@ class AddTaskForm(Form):
 
     def __init__(self, formdata=None, obj=None, prefix='', **kwargs):
         kwargs.setdefault('group', kwargs.get('default', -1))
-
-        print('>>>1testssdssssad', Task.status_meanings)
 
         Form.__init__(self, formdata, obj, prefix, **kwargs)
 

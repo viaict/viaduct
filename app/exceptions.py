@@ -9,5 +9,12 @@ class ResourceNotFoundException(Exception):
 
 
 class BusinessRuleException(Exception):
-    def __init__(self, detail):
-        self.detail = detail
+    def __init__(self, *args):
+        Exception.__init__(self, *args)
+        self.detail = args[0] if args else ''
+
+
+class ValidationException(Exception):
+    def __init__(self, *args):
+        Exception.__init__(self, *args)
+        self.detail = args[0] if args else ''

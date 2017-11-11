@@ -10,7 +10,7 @@
         </div>
         <table class="table table-hover">
         <tbody>
-        {% for i, tr in enumerate(tasks_rel): %}
+        {% for i, tr in enumerate(tasks_rel) %}
 
             {% if prev_group != tr.task.group_id %}
                 {% set prev_group = tr.task.group_id %}
