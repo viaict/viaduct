@@ -41,15 +41,6 @@
 
 .activities-simple {
     .activity {
-        /*padding: 20px;
-        margin: 12px 0;
-
-        box-shadow: 0 1px 4px 0 rgba(0,0,0,0.07);
-        border-radius: 8px;
-
-        h3 {
-            font-weight: 500;
-        }*/
 
         ul {
             padding-left: 0;
@@ -58,79 +49,5 @@
 
     address {
         margin-top: 20px;
-    }
-}
-
-#home #introductiong{
-    background: #fff;
-    padding: 20px;
-    box-shadow: 1px 2px 10px 0px rgba(50, 50, 50, 0.7);
-}
-
-#home #introduction h1{
-    margin: 0 0 20px 0;
-    font-weight: 400;
-    color: #000;
-    font-size: 80px;
-    text-align: left;
-}
-
-#home #introduction p{
-    font-size: 22px;
-    line-height: 26px;
-    font-weight: 400;
-    color:#000;
-    padding-right: 20px;
-
-
-}
-
-#home #activityNewsTab{
-    background: grey;
-    border-bottom: 0px;
-}
-
-#home #activityNewsTab li{
-    margin: 0;
-}
-
-#home #activityNewsTab a{
-    border-radius: 0;
-    background: grey;
-    color:#fff;
-    border:0;
-    margin: 0;
-
-}
-
-#activityNewsTab .active a{
-    background: #004B99;
-}
-
-#activityNewsContainer{
-    box-shadow: 1px 2px 10px 0px rgba(50, 50, 50, 0.7);
-
-}
-
-#activityNewsContent {
-    padding: 20px;
-    background: rgba(255,255,255,0.8);
-
-    a {
-        color: #004B99;
-    }
-
-    p {
-        font-size: 14px;
-        line-height: 20px;
-    }
-
-    h3 {
-        margin: 5px 0 5px 0;
-    }
-
-    hr {
-        border-top: 2px solid #004B99;
-        margin: 5px 0 5px 0;
     }
 }
