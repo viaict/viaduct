@@ -42,7 +42,7 @@
 
 {% block page %}
 
-{%- if ModuleAPI.can_write('file') -%}
+{%- if can_upload -%}
         {%- if new_files -%}
         <div class="panel panel-default">
             <div class="panel-heading">{{_('Uploaded files')}}</div>

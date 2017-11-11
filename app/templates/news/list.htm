@@ -5,7 +5,7 @@
 {% block content %}
 
     <div class='btn-group'>
-        {% if ModuleAPI.can_write('news') %}
+        {% if can_write %}
             <a href='{{ url_for('news.edit') }}' class='btn btn-success'>
                 {{ _('Create news item') }}
             </a>

@@ -128,8 +128,9 @@ def view(company_id=None):
     """View a company."""
 
     company = Company.query.get_or_404(company_id)
+    can_write = role_service.user_has_role(Roles.VACANCY_WRITE)
     return render_template('company/view.htm', company=company,
-                           path=FILE_FOLDER)
+                           path=FILE_FOLDER, can_write=can_write)
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])

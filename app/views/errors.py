@@ -6,8 +6,10 @@ from flask_babel import _
 from flask_login import current_user
 
 from app import app, login_manager
-from app.models.page import Page
 from app.exceptions import ResourceNotFoundException
+from app.models.page import Page
+from app.roles import Roles
+from app.service import role_service
 
 
 @login_manager.unauthorized_handler
@@ -60,4 +62,5 @@ def page_not_found(e):
         return '', 404
 
     page = Page(request.path.lstrip('/'))
-    return render_template('page/404.htm', page=page), 404
+    can_write = role_service.user_has_role(Roles.PAGE_WRITE)
+    return render_template('page/404.htm', page=page, can_write=can_write), 404

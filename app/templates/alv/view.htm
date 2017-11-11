@@ -11,7 +11,7 @@
         </div>
         <div class='col-md-9 col-md-offset-1 well'>
             <div class='page-header'>
-                {% if ModuleAPI.can_write('alv') %}
+                {% if can_write %}
                     <div class='pull-right'>
                         <a class='btn btn-warning btn-xs' href='
                             {{ url_for("alv.create_edit", alv_id=alv.id) }}'>
@@ -38,7 +38,7 @@
             <hr>
             <div class='content'>
                 <h1>Documents</h1>
-                {% if ModuleAPI.can_write('alv') %}
+                {% if can_write %}
                 <p>
                     <a class="btn btn-xs btn-success"
                        href="{{ url_for('alv.create_document', alv_id=alv.id) }}">
@@ -64,7 +64,7 @@
                                 data-toggle="dropdown">Versions
                             <span class="caret"></span></button>
                         <ul class="dropdown-menu">
-                            {% if ModuleAPI.can_write('alv') %}
+                            {% if can_write %}
                             <li>
                                 <a href="{{ url_for('alv.update_document',
                                         alv_id=alv.id, doc_id=doc.id) }}">

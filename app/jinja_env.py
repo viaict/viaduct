@@ -10,7 +10,6 @@ from app.roles import Roles
 from app.utils.category import CategoryAPI  # noqa
 from app.utils.company import CompanyAPI  # noqa
 from app.utils.guide import GuideAPI  # noqa
-from app.utils.module import ModuleAPI  # noqa
 from app.utils.navigation import NavigationAPI  # noqa
 from app.utils.page import PageAPI  # noqa
 from app.utils.pimpy import PimpyAPI  # noqa
@@ -27,7 +26,6 @@ app.jinja_env.globals.update(Markup=Markup)
 app.jinja_env.globals.update(UserAPI=UserAPI)
 app.jinja_env.globals.update(CompanyAPI=CompanyAPI)
 app.jinja_env.globals.update(GuideAPI=GuideAPI)
-app.jinja_env.globals.update(ModuleAPI=ModuleAPI)
 app.jinja_env.globals.update(datetime=datetime)
 app.jinja_env.globals.update(json=json)
 app.jinja_env.globals.update(serialize_sqla=serialize_sqla)

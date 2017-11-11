@@ -1,26 +1,26 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, flash, redirect, render_template, request,\
+from datetime import datetime, timedelta
+
+from flask import Blueprint, flash, redirect, render_template, request, \
     url_for, abort, make_response, current_app
-from flask_login import current_user
 from flask_babel import _  # gettext
-
-from werkzeug.urls import iri_to_uri
-
+from flask_login import current_user
 from flask_wtf import Form
+from werkzeug.urls import iri_to_uri
 from wtforms.fields import StringField
 
-from datetime import datetime, timedelta
 from app import db
 from app.decorators import require_role
 from app.forms import PageForm, HistoryPageForm
-from app.roles import Roles
-from app.utils.forms import flash_form_errors
-from app.utils.htmldiff import htmldiff
+from app.models.activity import Activity
+from app.models.custom_form import CustomFormResult
 from app.models.group import Group
 from app.models.page import Page, PageRevision, PagePermission
 from app.models.redirect import Redirect
-from app.models.activity import Activity
-from app.models.custom_form import CustomFormResult
+from app.roles import Roles
+from app.service import role_service
+from app.utils.forms import flash_form_errors
+from app.utils.htmldiff import htmldiff
 from app.utils.page import PageAPI
 
 blueprint = Blueprint('page', __name__)
@@ -70,10 +70,11 @@ def get_page(path=''):
 
             if form_result:
                 revision.custom_form_data = form_result.data.replace('"', "'")
-
+    can_write = role_service.user_has_role(Roles.PAGE_WRITE)
     return render_template('%s/view_single.htm' % (page.type), page=page,
                            revision=revision, title=revision.title,
-                           context=revision.__class__.context)
+                           context=revision.__class__.context,
+                           can_write=can_write)
 
 
 @blueprint.route('/history/<path:path>', methods=['GET', 'POST'])

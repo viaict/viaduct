@@ -10,6 +10,7 @@ from app.forms.custom_form import CreateForm
 from app.models.custom_form import CustomForm, CustomFormResult, \
     CustomFormFollower
 from app.roles import Roles
+from app.service import role_service
 from app.utils import copernica
 from app.utils.forms import flash_form_errors
 from app.utils.serialize_sqla import serialize_sqla
@@ -25,11 +26,13 @@ def view(page_nr=1):
     active_forms = CustomForm.qry_active().all()
     archived_paginate = CustomForm.qry_archived().paginate(page_nr, 10)
 
+    can_write = role_service.user_has_role(Roles.ACTIVITY_WRITE)
     return render_template('custom_form/overview.htm',
                            followed_forms=followed_forms,
                            active_forms=active_forms,
                            archived_paginate=archived_paginate,
-                           page_nr=page_nr)
+                           page_nr=page_nr,
+                           can_write=can_write)
 
 
 @blueprint.route('/view/<int:form_id>', methods=['GET', 'POST'])
@@ -41,7 +44,7 @@ def view_single(form_id=None):
         return abort(403)
 
     results = []
-    entries = CustomFormResult.query\
+    entries = CustomFormResult.query \
         .filter(CustomFormResult.form_id == form_id).order_by("created")
 
     from urllib.parse import unquote_plus
@@ -74,7 +77,6 @@ def view_single(form_id=None):
 
 @blueprint.route('/export/<int:form_id>/', methods=['POST'])
 def export(form_id):
-
     # Create the headers
     xp = CustomForm.exports
     xp_names = list(xp.keys())
@@ -288,7 +290,7 @@ def submit(form_id=-1):
         result.data = request.form['data']
         response = "edit"
     else:
-        entries = CustomFormResult.query\
+        entries = CustomFormResult.query \
             .filter(CustomFormResult.form_id == form_id)
         num_attendants = entries.count()
 

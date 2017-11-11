@@ -12,6 +12,7 @@ from app.decorators import require_role
 from app.forms.news import NewsForm
 from app.models.news import News
 from app.roles import Roles
+from app.service import role_service
 
 blueprint = Blueprint('news', __name__, url_prefix='/news')
 
@@ -26,9 +27,10 @@ def list(page_nr=1):
                                      db.not_(News.needs_paid))) \
         .order_by(desc(News.publish_date))
 
+    can_write = role_service.user_has_role(Roles.NEWS_WRITE)
     return render_template('news/list.htm',
                            items=items.paginate(page_nr, 10, False),
-                           archive=False)
+                           archive=False, can_write=can_write)
 
 
 @blueprint.route('/all/', methods=['GET'])
@@ -92,7 +94,10 @@ def view(news_id=None):
     if not news.can_read():
         return abort(403)
 
-    return render_template('news/view_single.htm', news=news)
+    show_edit_delete = role_service.user_has_role(Roles.NEWS_WRITE)
+
+    return render_template('news/view_single.htm', news=news,
+                           show_edit_delete=show_edit_delete)
 
 
 @blueprint.route('/delete/', methods=['GET'])

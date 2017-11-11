@@ -5,6 +5,7 @@ from app.decorators import require_role
 from app.forms.file import FileForm
 from app.models.file import File
 from app.roles import Roles
+from app.service import role_service
 from app.utils.file import file_upload, file_search
 
 blueprint = Blueprint('file', __name__, url_prefix='/files')
@@ -27,7 +28,10 @@ def list(page_nr=1):
 
     form = FileForm()
 
-    return render_template('files/list.htm', files=files, form=form)
+    can_upload = role_service.user_has_role(Roles.FILE_WRITE)
+
+    return render_template('files/list.htm', files=files, form=form,
+                           can_upload=can_upload)
 
 
 @blueprint.route('/', methods=['POST'])
@@ -50,5 +54,5 @@ def upload(page_nr=1):
     form = FileForm()
 
     hostname = request.headers.get('Origin', '')
-
+    can_upload = True
     return render_template('files/list.htm', **locals())

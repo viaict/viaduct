@@ -12,6 +12,7 @@ from app.forms.newsletter import NewsletterForm
 from app.models.news import News
 from app.models.newsletter import Newsletter
 from app.roles import Roles
+from app.service import role_service
 
 blueprint = Blueprint('newsletter', __name__, url_prefix='/newsletter')
 
@@ -21,8 +22,9 @@ blueprint = Blueprint('newsletter', __name__, url_prefix='/newsletter')
 def all():
     newsletters = Newsletter.query.all()
     auth_token = app.config['COPERNICA_NEWSLETTER_TOKEN']
+    can_write = role_service.user_has_role()
     return render_template('newsletter/view.htm', newsletters=newsletters,
-                           token=auth_token)
+                           token=auth_token, can_write=can_write)
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])

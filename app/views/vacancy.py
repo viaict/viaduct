@@ -43,9 +43,12 @@ def list(page_nr=1, search=None):
 
         vacancies = vacancies.paginate(page_nr, 15, False)
 
+        show_edit_delete = role_service.user_has_role(Roles.VACANCY_WRITE)
+
         return render_template('vacancy/list.htm', vacancies=vacancies,
                                search=search, path=FILE_FOLDER,
-                               title="Vacatures")
+                               title="Vacatures",
+                               show_edit_delete=show_edit_delete)
 
     if not role_service.has_role(Roles.VACANCY_WRITE):
         vacancies = Vacancy.query.join(Company).order_by(order.desc())
@@ -56,9 +59,11 @@ def list(page_nr=1, search=None):
                          datetime.utcnow()))
 
     vacancies = vacancies.paginate(page_nr, 15, False)
+    show_edit_delete = role_service.user_has_role(Roles.VACANCY_WRITE)
 
     return render_template('vacancy/list.htm', vacancies=vacancies,
-                           search="", path=FILE_FOLDER, title="Vacatures")
+                           search="", path=FILE_FOLDER, title="Vacatures",
+                           show_edit_delete=show_edit_delete)
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])

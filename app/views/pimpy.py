@@ -1,27 +1,23 @@
 from flask import Blueprint, abort, redirect, url_for
 from flask import flash, render_template, request, jsonify
-from app import db
 from flask_babel import _
-
 from flask_login import current_user
 
+from app import db
+from app.decorators import require_role
 from app.forms.pimpy import AddTaskForm, AddMinuteForm
-from app.utils.pimpy import PimpyAPI
-from app.utils.module import ModuleAPI
-from app.models.pimpy import Task
 from app.models.group import Group
-
-# from app.utils import copernica
-
+from app.models.pimpy import Task
+from app.roles import Roles
+from app.utils.pimpy import PimpyAPI
 
 blueprint = Blueprint('pimpy', __name__, url_prefix='/pimpy')
 
 
 @blueprint.route('/minutes/', methods=['GET', 'POST'])
 @blueprint.route('/minutes/<int:group_id>', methods=['GET', 'POST'])
+@require_role(Roles.PIMPY_READ)
 def view_minutes(group_id=None):
-    if not ModuleAPI.can_read('pimpy'):
-        return abort(403)
     if group_id is not None and not current_user.member_of_group(group_id):
         return abort(403)
 
@@ -30,10 +26,8 @@ def view_minutes(group_id=None):
 
 @blueprint.route('/archive/', methods=['GET', 'POST'])
 @blueprint.route('/archive/<int:group_id>', methods=['GET', 'POST'])
+@require_role(Roles.PIMPY_READ)
 def view_minutes_in_date_range(group_id=None):
-    if not ModuleAPI.can_read('pimpy'):
-        return abort(403)
-
     if group_id is not None and not current_user.member_of_group(group_id):
         return abort(403)
 
@@ -44,9 +38,8 @@ def view_minutes_in_date_range(group_id=None):
 
 @blueprint.route('/task_archive/', methods=['GET', 'POST'])
 @blueprint.route('/task_archive/<int:group_id>', methods=['GET', 'POST'])
+@require_role(Roles.PIMPY_READ)
 def view_tasks_in_date_range(group_id=None):
-    if not ModuleAPI.can_read('pimpy'):
-        return abort(403)
     if group_id is not None and not current_user.member_of_group(group_id):
         return abort(403)
 
@@ -59,27 +52,22 @@ def view_tasks_in_date_range(group_id=None):
 
 @blueprint.route('/minutes/single/<int:minute_id>/')
 @blueprint.route('/minutes/single/<int:minute_id>/<int:line_number>')
+@require_role(Roles.PIMPY_READ)
 def view_minute(minute_id=0, line_number=-1):
-    if not ModuleAPI.can_read('pimpy'):
-        return abort(403)
-
     return PimpyAPI.get_minute(minute_id, line_number)
 
 
 @blueprint.route('/minutes/single/<int:minute_id>/raw')
+@require_role(Roles.PIMPY_READ)
 def view_minute_raw(minute_id):
-    if not ModuleAPI.can_read('pimpy'):
-        return abort(403)
-
     return (PimpyAPI.get_minute_raw(minute_id),
             {'Content-Type': 'text/plain; charset=utf-8'})
 
 
 @blueprint.route('/tasks/', methods=['GET', 'POST'])
 @blueprint.route('/tasks/<int:group_id>/', methods=['GET', 'POST'])
+@require_role(Roles.PIMPY_READ)
 def view_tasks(group_id=None):
-    if not ModuleAPI.can_read('pimpy'):
-        return abort(403)
     if group_id is not None and not current_user.member_of_group(group_id):
         return abort(403)
 
@@ -89,9 +77,8 @@ def view_tasks(group_id=None):
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/tasks/me/', methods=['GET', 'POST'])
 @blueprint.route('/tasks/me/<int:group_id>/', methods=['GET', 'POST'])
+@require_role(Roles.PIMPY_READ)
 def view_tasks_personal(group_id=None):
-    if not ModuleAPI.can_read('pimpy'):
-        return abort(403)
     if group_id is not None and not current_user.member_of_group(group_id):
         return abort(403)
 
@@ -99,15 +86,12 @@ def view_tasks_personal(group_id=None):
 
 
 @blueprint.route('/tasks/update_status/', methods=['GET', 'POST'])
+@require_role(Roles.PIMPY_WRITE)
 def update_task_status():
-    if not ModuleAPI.can_write('pimpy'):
-        return abort(403)
     task_id = request.form.get('task_id', 0, type=int)
     new_status = request.form.get('new_status', 0, type=int)
 
     task = Task.query.get(task_id)
-
-    print(task_id)
 
     if not task:
         return jsonify(success=False, message="Task does not exist"), 404
@@ -132,9 +116,8 @@ def update_task_status():
 
 @blueprint.route('/tasks/add/', methods=['GET', 'POST'])
 @blueprint.route('/tasks/add/<int:group_id>', methods=['GET', 'POST'])
+@require_role(Roles.PIMPY_WRITE)
 def add_task(group_id=None):
-    if not ModuleAPI.can_write('pimpy'):
-        return abort(403)
     if group_id is not None and not current_user.member_of_group(group_id):
         return abort(403)
 
@@ -177,9 +160,8 @@ def add_task(group_id=None):
 
 @blueprint.route('/tasks/edit/', methods=['POST'])
 @blueprint.route('/tasks/edit/<string:task_id>', methods=['POST'])
+@require_role(Roles.PIMPY_WRITE)
 def edit_task(task_id=-1):
-    if not ModuleAPI.can_write('pimpy'):
-        return abort(403)
     if task_id is '' or task_id is -1:
         flash('Taak niet gespecificeerd.')
         return redirect(url_for('pimpy.view_tasks', group_id=None))
@@ -202,9 +184,8 @@ def edit_task(task_id=-1):
 
 @blueprint.route('/minutes/add/', methods=['GET', 'POST'])
 @blueprint.route('/minutes/add/<int:group_id>', methods=['GET', 'POST'])
+@require_role(Roles.PIMPY_WRITE)
 def add_minute(group_id=None):
-    if not ModuleAPI.can_write('pimpy'):
-        return abort(403)
     if group_id is not None and not current_user.member_of_group(group_id):
         return abort(403)
 

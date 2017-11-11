@@ -1,47 +1,39 @@
+import json
+import re
+
 from flask import Blueprint, render_template, abort, request, flash, \
     redirect, url_for
 from flask_babel import _
 
 from app import db
-from app.utils.forms import flash_form_errors
-from app.utils.resource import get_all_routes
-from app.forms import NavigationEntryForm
-from app.utils.navigation import NavigationAPI
-from app.utils.module import ModuleAPI
-from app.utils.page import PageAPI
+from app.decorators import require_role
+from app.forms.navigation import NavigationEntryForm
 from app.models.navigation import NavigationEntry
 from app.models.page import Page
-
-import json
-import re
+from app.roles import Roles
+from app.service import role_service
+from app.utils.forms import flash_form_errors
+from app.utils.navigation import NavigationAPI
+from app.utils.page import PageAPI
+from app.utils.resource import get_all_routes
 
 blueprint = Blueprint('navigation', __name__, url_prefix='/navigation')
 
 
-@blueprint.route('/edit/')
-def edit_back():
-    if not ModuleAPI.can_read('navigation'):
-        return abort(403)
-
-    return redirect(url_for('navigation.view'))
-
-
 @blueprint.route('/')
+@require_role(Roles.NAVIGATION_WRITE)
 def view():
-    if not ModuleAPI.can_read('navigation'):
-        return abort(403)
-
     entries = NavigationAPI.get_root_entries()
-    return render_template('navigation/view.htm', nav_entries=entries)
+    can_write = role_service.user_has_role(Roles.NAVIGATION_WRITE)
+    return render_template('navigation/view.htm', nav_entries=entries,
+                           can_write=can_write)
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
 @blueprint.route('/create/<int:parent_id>/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<int:entry_id>/', methods=['GET', 'POST'])
+@require_role(Roles.NAVIGATION_WRITE)
 def edit(entry_id=None, parent_id=None):
-    if not ModuleAPI.can_read('navigation'):
-        return abort(403)
-
     entry = NavigationEntry.query.get_or_404(entry_id) if entry_id else None
     form = NavigationEntryForm(request.form, entry)
     form.page_id.choices = [(-1, '-- {} --'.format(_('Custom URL')))] + \
@@ -111,11 +103,9 @@ def edit(entry_id=None, parent_id=None):
 
 @blueprint.route('/delete/<int:entry_id>/', methods=['GET'])
 @blueprint.route('/delete/<int:entry_id>/<int:inc_page>', methods=['GET'])
+@require_role(Roles.NAVIGATION_WRITE)
 def delete(entry_id, inc_page=0):
-    if not ModuleAPI.can_write('navigation'):
-        return abort(403)
-
-    if inc_page and not ModuleAPI.can_write('page'):
+    if inc_page and not role_service.user_has_role(Roles.PAGE_WRITE):
         flash(_('You do not have rights to remove pages'))
         return abort(403)
 
@@ -149,10 +139,8 @@ def delete(entry_id, inc_page=0):
 
 
 @blueprint.route('/navigation/reorder', methods=['POST'])
+@require_role(Roles.NAVIGATION_WRITE)
 def reorder():
-    if not ModuleAPI.can_write('navigation'):
-        return abort(403)
-
     entries = json.loads(request.form['entries'])
     NavigationAPI.order(entries, None)
 

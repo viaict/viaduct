@@ -4,7 +4,7 @@ from app.decorators import require_role
 from app.forms.alv import AlvForm, AlvDocumentForm
 from app.models.alv_model import Alv
 from app.roles import Roles
-from app.service import alv_service
+from app.service import alv_service, role_service
 
 blueprint = Blueprint('alv', __name__, url_prefix='/alv')
 
@@ -14,7 +14,8 @@ blueprint = Blueprint('alv', __name__, url_prefix='/alv')
 @require_role(Roles.ALV_READ)
 def list():
     alvs = alv_service.find_all_alv()
-    return render_template('alv/list.htm', alvs=alvs)
+    can_write = role_service.user_has_role(Roles.ALV_WRITE)
+    return render_template('alv/list.htm', alvs=alvs, can_write=can_write)
 
 
 @blueprint.route('/<int:alv_id>/', methods=['GET'])
@@ -23,7 +24,8 @@ def view(alv_id=0):
     if alv_id:
         alv = alv_service.get_alv_by_id(alv_id, include_documents=True)
 
-    return render_template('alv/view.htm', alv=alv)
+    can_write = role_service.user_has_role(Roles.ALV_WRITE)
+    return render_template('alv/view.htm', alv=alv, can_write=can_write)
 
 
 @blueprint.route("/create/", methods=['GET', 'POST'])

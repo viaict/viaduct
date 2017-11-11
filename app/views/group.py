@@ -56,9 +56,12 @@ def view(page_nr=1):
         for group in pagination.items:
             form.entries.append_entry()
 
+    can_write = role_service.user_has_role(Roles.GROUP_WRITE)
+
     return render_template('group/view.htm', form=form, pagination=pagination,
                            groups=zip(pagination.items, form.entries),
-                           current_user=current_user, title='Groups')
+                           current_user=current_user, title='Groups',
+                           can_write=can_write)
 
 
 @blueprint.route('/groups/create/', methods=['GET', 'POST'])

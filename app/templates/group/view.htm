@@ -43,7 +43,7 @@
 			</tbody>
 		</table>
         <div class="btn-group">
-            {% if ModuleAPI.can_write('group') %}
+            {% if can_write %}
             <a href="{{ url_for('group.create') }}" class="btn btn-success">
                 Creëer groep
             </a>

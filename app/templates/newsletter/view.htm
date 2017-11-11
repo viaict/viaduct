@@ -47,7 +47,7 @@
         <h1>{{ _('Newsletters') }}</h1>
     </div>
 
-    {% if ModuleAPI.can_write('newsletter') %}
+    {% if can_write %}
     <div class="row">
         <div class="form-group btn-group">
             <a href="{{ url_for('.edit') }}" class="btn btn-success">
@@ -66,7 +66,7 @@
                         <th style="width: 120px">{{ _('Date') }}</th>
                         <th colspan="2">{{ _('Activities') }}</th>
                         <th colspan="2">{{ _('News items') }}</th>
-                        {% if ModuleAPI.can_write('newsletter') %}
+                        {% if can_write %}
                         <th>{{ _('Edit') }}</th>
                         {% endif %}
                     </tr>
@@ -106,7 +106,7 @@
                                 <small class=".small">XML</small>
                             </a>
                         </td>
-                        {% if ModuleAPI.can_write('newsletter') %}
+                        {% if can_write %}
                         <td>
                             <a href='{{ url_for('.edit', newsletter_id=newsletter.id) }}'>
                                 <i class='glyphicon glyphicon-pencil'></i></a>

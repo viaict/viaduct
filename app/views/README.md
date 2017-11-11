@@ -32,10 +32,9 @@ the permissions:
 	@blueprint.route('/minutes/', methods=['GET', 'POST'])
 	@blueprint.route('/minutes/<group_id>', methods=['GET', 'POST'])
     @some_other_decorator
+    @require_role(Roles.PIMPY_READ)
 	def view_minutes(group_id=None):
         """Generate a list of minutes (for a group)."""
-		if not ModuleAPI.can_read('pimpy'):
-			return abort(403)
 		return PimpyAPI.get_minutes(group_id)
 
 When someone visits a page the url is parsed to see if a route can be found.
@@ -54,8 +53,9 @@ make use of an utility function from `app/utils/*.py`. Whenever the data is
 reused in different locations/functions, do create a utils function!
 
 Our current system works in such a manner that the permissions are checked in
-all view functions. This is what the `ModuleAPI` does. Our example function uses
-the `PimpyAPI` to render a page. An example of how a template can be called:
+all view functions. This is what the `require_role` does. Our example function
+uses the `PimpyAPI` to render a page. An example of how a template can be
+called:
 
 	render_template('pimpy/add_task.htm', group=group,
 			group_id=group_id, type='tasks', form=form)

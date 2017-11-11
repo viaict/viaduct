@@ -15,6 +15,7 @@ from app.models.course import Course
 from app.models.education import Education
 from app.models.examination import Examination, test_types
 from app.roles import Roles
+from app.service import role_service
 from app.utils.file import file_upload, file_remove
 
 blueprint = Blueprint('examination', __name__)
@@ -260,9 +261,12 @@ def view_examination(page_nr=1):
 
     path = '/static/uploads/examinations/'
 
+    show_edit = role_service.user_has_role(Roles.EXAMINATION_WRITE)
+
     return render_template('examination/view.htm', path=path,
                            examinations=examinations, search=search,
-                           title=_('Examinations'), test_types=test_types)
+                           title=_('Examinations'), test_types=test_types,
+                           show_edit=show_edit)
 
 
 @blueprint.route('/courses/', methods=['GET'])
