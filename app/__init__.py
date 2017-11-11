@@ -6,6 +6,7 @@ from flask.json import JSONEncoder as BaseEncoder
 from flask_babel import Babel
 from flask_login import current_user
 from speaklater import _LazyString
+
 from app.utils.import_module import import_module
 from .extensions import db, login_manager, \
     cache, toolbar, jsglue, sentry
@@ -81,6 +82,8 @@ from app import jinja_env  # noqa
 def init_app():
     app.config['CACHE_TYPE'] = 'filesystem'
     app.config['CACHE_DIR'] = 'cache'
+
+    logging.basicConfig()
 
     cache.init_app(app)
     toolbar.init_app(app)
