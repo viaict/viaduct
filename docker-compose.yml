@@ -9,12 +9,20 @@ services:
     volumes:
       - .:/app
       - /tmp/viaduct-master:/tmp/viaduct-master
-    command: "bash -c 'cd /app && python manage.py db upgrade && uwsgi --ini /app/viaduct-master.ini'"
+    command: "sh docker-entrypoint.sh"
 
   database:
-    image: postgres:latest
+    image: postgres:10-alpine
     ports:
       - "5400:5432"
     environment:
       POSTGRES_USER: viaduct
       POSTGRES_DB: viaduct
+
+  adminer:
+    image: dehy/adminer
+    restart: always
+    depends_on:
+      - database
+    ports:
+      - "8080:80"
