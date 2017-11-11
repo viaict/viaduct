@@ -1,11 +1,11 @@
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.validators import InputRequired, Email
 
 from flask_babel import lazy_gettext as _
 
 
-class LocationForm(Form):
+class LocationForm(FlaskForm):
     city = StringField(_('City'), validators=[InputRequired(
         message=_("City is required."))])
     country = StringField(_('Country'), validators=[InputRequired(

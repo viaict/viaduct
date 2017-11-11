@@ -61,7 +61,7 @@ def add():
         session['prev'] = 'examination.add'
         return abort(403)
 
-    form = EditForm(request.form, )
+    form = EditForm(request.form)
 
     courses = Course.query.order_by(Course.name).all()
     educations = Education.query.order_by(Education.name).all()
@@ -150,7 +150,7 @@ def edit(exam_id):
 
     session['examination_edit_id'] = exam_id
 
-    form = EditForm(request.form, exam)
+    form = EditForm(request.form, obj=exam)
 
     courses = Course.query.order_by(Course.name).all()
     educations = Education.query.order_by(Education.name).all()

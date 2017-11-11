@@ -79,7 +79,7 @@ def get_activity(activity_id=0):
 
     activity = Activity.query.get_or_404(activity_id)
 
-    form = ActivityForm(request.form, current_user)
+    form = ActivityForm(request.form, obj=current_user)
 
     # Add education for activity form
     educations = Education.query.all()
@@ -188,7 +188,7 @@ def create(activity_id=None):
         activity = Activity()
         title = _('Create activity')
 
-    form = CreateForm(request.form, activity)
+    form = CreateForm(request.form, obj=activity)
 
     if request.method == 'POST':
 

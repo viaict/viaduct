@@ -6,7 +6,7 @@ from flask_babel import _  # gettext
 
 from werkzeug.urls import iri_to_uri
 
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms.fields import StringField
 
 from datetime import datetime, timedelta
@@ -129,7 +129,7 @@ def edit_page(path=''):
         # the form.
         revision.needs_paid = revision.page.needs_paid
 
-        form = PageForm(form, revision)
+        form = PageForm(form, obj=revision)
     else:
         form = PageForm()
 
@@ -216,7 +216,7 @@ def delete(path):
         return redirect(url_for('page.get_page', path=path))
     rev = page.get_latest_revision()
 
-    class DeleteForm(Form):
+    class DeleteForm(FlaskForm):
         title = StringField(_('Page title'))
 
     form = DeleteForm(request.form)

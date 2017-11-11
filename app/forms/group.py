@@ -1,4 +1,4 @@
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 
 from wtforms import BooleanField, FormField, FieldList, SubmitField, \
     SelectField, StringField
@@ -12,7 +12,7 @@ class ViewGroupEntry(UnsafeForm):
     select = BooleanField(None)
 
 
-class ViewGroupForm(Form):
+class ViewGroupForm(FlaskForm):
     entries = FieldList(FormField(ViewGroupEntry))
     delete_group = SubmitField('Verwijder groep')
 
@@ -22,7 +22,7 @@ class EditGroupPermissionEntry(UnsafeForm):
                                                     (2, "Lees/Schrijf")])
 
 
-class EditGroup(Form):
+class EditGroup(FlaskForm):
     name = StringField('Naam', validators=[
         InputRequired(message='Geen naam opgegeven')])
     maillist = StringField('Naam maillijst')
@@ -32,7 +32,7 @@ class CreateGroup(EditGroup):
     committee_url = StringField('Commissie-pagina URL (zonder slash)')
 
 
-class EditGroupPermissionForm(Form):
+class EditGroupPermissionForm(FlaskForm):
     permissions = FieldList(FormField(EditGroupPermissionEntry))
     add_module_name = SelectField('Module')
     add_module_permission = SelectField(None, coerce=int,

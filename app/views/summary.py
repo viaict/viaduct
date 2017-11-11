@@ -205,7 +205,7 @@ def edit(summary_id):
 
     session['summary_edit_id'] = summary_id
 
-    form = EditForm(request.form, summary)
+    form = EditForm(request.form, obj=summary)
     courses = Course.query.order_by(Course.name).all()
     educations = Education.query.order_by(Education.name).all()
     form.course.choices = [(c.id, c.name) for c in courses]

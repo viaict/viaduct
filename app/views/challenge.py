@@ -23,7 +23,7 @@ def view_list(page=1):
         return abort(403)
 
     challenge = Challenge()
-    form = ChallengeForm(request.form, challenge)
+    form = ChallengeForm(request.form, obj=challenge)
 
     challenges = ChallengeAPI.fetch_all_challenges_user(current_user.id)
     approved_challenges = \

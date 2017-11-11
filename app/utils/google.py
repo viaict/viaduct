@@ -3,7 +3,7 @@ import base64
 import traceback
 from apiclient.discovery import build
 from apiclient.errors import HttpError
-from oauth2client.client import SignedJwtAssertionCredentials
+from oauth2client.service_account import ServiceAccountCredentials
 from app import app
 from flask import flash, render_template
 from email.mime.text import MIMEText
@@ -18,21 +18,15 @@ service_email = app.config['GOOGLE_SERVICE_EMAIL']
 # name of the private key file
 private_key = app.config['GOOGLE_API_KEY']
 
-domain = 'via.uvastudent.org'
+domain = 'svia.nl'
 
 
 def build_service(service_type, api_version, scope):
     try:
-        f = open(private_key, "rb")
-        key = f.read()
-        f.close()
-
-        credentials = SignedJwtAssertionCredentials(
-            service_email,
-            key,
-            scope=scope,
-            sub='bestuur@via.uvastudent.org'  # "Log in" as the admin account
-        )
+        credentials = ServiceAccountCredentials.from_p12_keyfile(
+            service_account_email=service_email,
+            filename=private_key,
+            scopes=[scope]).create_delegated("bestuur@svia.nl")
 
         # Create an authorized http instance
         http = httplib2.Http()
@@ -214,12 +208,12 @@ def send_email(to, subject, email_template,
     content: The text of the email message.
     """
     service = build_gmail_service()
-    user_id = 'bestuur@via.uvastudent.org'
+    user_id = 'bestuur@svia.nl'
 
     msg = MIMEText(render_template(email_template, **kwargs), 'html')
-    msg['to'] = to
-    msg['from'] = sender
-    msg['subject'] = subject
+    msg['To'] = to
+    msg['From'] = sender
+    msg['Subject'] = subject
 
     body = {'raw': base64.urlsafe_b64encode(msg.as_bytes()).decode()}
 
@@ -228,5 +222,6 @@ def send_email(to, subject, email_template,
                  .execute())
         print('Sent e-mailmessage Id: %s' % email['id'])
         return email
-    except errors.HttpError:
-        flash('Er is iets mis gegaan met het versturen van de e-mail')
+    except errors.HttpError as e:
+        flash('Er is iets mis gegaan met het versturen van de e-mail',
+              'danger')
