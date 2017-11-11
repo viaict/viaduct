@@ -36,7 +36,6 @@ def get_courses():
         return abort(403)
 
     courses = examination_service.find_all_courses()
-
     courses_list = []
 
     for course in courses:
