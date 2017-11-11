@@ -1,5 +1,5 @@
 from app import app, db, get_locale
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from app.models.base_model import BaseEntity
 from babel.dates import format_timedelta, format_datetime
 from sqlalchemy import event
@@ -24,7 +24,7 @@ class Activity(db.Model, BaseEntity):
     price = db.Column(db.String(16))
     picture = db.Column(db.String(255))
     venue = db.Column(db.Integer)  # venue ID
-    updated_time = db.Column(db.DateTime, default=datetime.now())
+    updated_time = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     form_id = db.Column(db.Integer, db.ForeignKey('custom_form.id'))
 
     form = db.relationship('CustomForm',
@@ -45,7 +45,7 @@ class Activity(db.Model, BaseEntity):
                  price="free", picture=None, venue=1, form_id=None):
 
         if not start_time:
-            today = datetime.now()
+            today = datetime.now(timezone.utc)
             start_time = datetime(today.year, today.month, today.day, 17)
             end_time = start_time + timedelta(hours=5)
 
@@ -89,7 +89,7 @@ class Activity(db.Model, BaseEntity):
         Based on the time the event is gonna take/when it is going to
         start/when it's gonna end.
         """
-        today = datetime.now()
+        today = datetime.now(timezone.utc)
         if self.start_time.month == self.end_time.month and \
                 self.start_time.day == self.end_time.day:
             if self.start_time.year == today.year:
@@ -113,10 +113,10 @@ class Activity(db.Model, BaseEntity):
                        self.end_time.strftime(app.config['ACT_DT_FORMAT']))
 
     def is_in_future(self):
-        return datetime.now() < self.start_time
+        return datetime.now(timezone.utc) < self.start_time
 
     def is_in_past(self):
-        return datetime.now() >= self.end_time
+        return datetime.now(timezone.utc) >= self.end_time
 
     def get_short_description(self, characters):
         """Get a description cut a number of characters, with suffixed dots."""
@@ -130,17 +130,17 @@ class Activity(db.Model, BaseEntity):
 
     def get_timedelta_to_start(self):
         """Leturn locale based description of time left to start."""
-        return format_timedelta(datetime.now() - self.start_time,
+        return format_timedelta(datetime.now(timezone.utc) - self.start_time,
                                 locale=get_locale())
 
     def get_timedelta_from_end(self):
         """Locale based description of time in the past."""
-        return format_timedelta(datetime.now() - self.end_time,
+        return format_timedelta(datetime.now(timezone.utc) - self.end_time,
                                 locale=get_locale())
 
     def get_timedelta_to_end(self):
         """Locale based description of time until the end of the activity."""
-        return format_timedelta(self.end_time - datetime.now(),
+        return format_timedelta(self.end_time - datetime.now(timezone.utc),
                                 locale=get_locale())
 
     def format_form_time(self, time):

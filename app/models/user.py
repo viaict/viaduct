@@ -3,7 +3,7 @@ from app.models.base_model import BaseEntity
 from app.models.education import Education
 from app.models.group import Group
 from flask_login import UserMixin, AnonymousUserMixin
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class AnonymousUser(AnonymousUserMixin):
@@ -52,7 +52,7 @@ class User(db.Model, UserMixin, BaseEntity):
     description = db.Column(db.String(1024))  # Description of user
     student_id = db.Column(db.String(256))
     education_id = db.Column(db.Integer, db.ForeignKey('education.id'))
-    created = db.Column(db.DateTime, default=datetime.now())
+    created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     honorary_member = db.Column(db.Boolean, default=False)
     favourer = db.Column(db.Boolean, default=False)
     paid_date = db.Column(db.DateTime)
@@ -93,7 +93,9 @@ class User(db.Model, UserMixin, BaseEntity):
         Because of legacy code and sqlalchemy we do it this way
         """
         if name == 'has_paid' and value:
-            super(User, self).__setattr__("paid_date", datetime.now())
+            super(User, self).__setattr__(
+                "paid_date", datetime.now(timezone.utc))
+
         super(User, self).__setattr__(name, value)
 
     def __str__(self):

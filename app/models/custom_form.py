@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from datetime import datetime
+from datetime import datetime, timezone
 
 from flask_login import current_user, url_for
 
@@ -106,11 +106,12 @@ class CustomForm(db.Model, BaseEntity):
         return False
 
     def is_archived(self):
-        latest_activity = (self.activities.order_by(Activity.end_time.desc())
-                           .first())
+        if self.archived:
+            return True
 
-        return self.archived or (latest_activity and
-                                 datetime.now() > latest_activity.end_time)
+        latest_activity = \
+            self.activities.order_by(Activity.end_time.desc()).first()
+        return datetime.now(timezone.utc) > latest_activity.end_time
 
     @classmethod
     def aslist(cls, current=None):
