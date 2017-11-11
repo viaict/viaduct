@@ -11,3 +11,13 @@ class ResourceNotFoundException(Exception):
 class BusinessRuleException(Exception):
     def __init__(self, detail):
         self.detail = detail
+
+
+class DuplicateResourceException(Exception):
+    def __init__(self, resource, identifier):
+        self.identifier = identifier
+        self.resource = resource
+
+    def __str__(self):
+        return "Duplicate resource" + str(self.resource) + \
+               "identified by " + str(self.identifier)

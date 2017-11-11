@@ -7,6 +7,7 @@ from app import db
 from app.forms import CourseForm
 from app.models.examination import Examination
 from app.models.course import Course
+from app.service import examination_service
 from app.utils.module import ModuleAPI
 
 import json
@@ -34,7 +35,8 @@ def get_courses():
     if not ModuleAPI.can_write('examination', True):
         return abort(403)
 
-    courses = Course.query.all()
+    courses = examination_service.find_all_courses()
+
     courses_list = []
 
     for course in courses:
@@ -69,8 +71,7 @@ def add_course():
             if not course:
                 description = form.description.data
                 new_course = Course(title, description)
-                db.session.add(new_course)
-                db.session.commit()
+                examination_service.create_course(new_course)
                 flash("'%s': " % title + _('Course succesfully added.'),
                       'success')
             else:

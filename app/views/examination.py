@@ -10,8 +10,11 @@ from app.forms.examination import EditForm
 from app.utils.file import file_upload, file_remove
 from app.models.examination import Examination, test_types
 from app.models.course import Course
-from app.models.education import Education
+# from app.models.education import Education
 from app.utils.module import ModuleAPI
+
+# new
+from app.service import examination_service
 
 import os
 from fuzzywuzzy import fuzz
@@ -40,8 +43,9 @@ def add():
 
     form = EditForm(request.form, )
 
-    courses = Course.query.order_by(Course.name).all()
-    educations = Education.query.order_by(Education.name).all()
+    courses = examination_service.find_all_courses()
+    educations = examination_service.find_all_educations()
+
     form.course.choices = [(c.id, c.name) for c in courses]
     form.education.choices = [(e.id, e.name) for e in educations]
     form.test_type.choices = test_types.items()
@@ -100,8 +104,8 @@ def add():
                                form.comment.data, form.course.data,
                                form.education.data, answers=answers_path,
                                test_type=form.test_type.data)
-            db.session.add(exam)
-            db.session.commit()
+
+            examination_service.create_examination(exam)
 
             flash(_('Examination successfully uploaded.'), 'success')
             return redirect(url_for('examination.edit', exam_id=exam.id))
@@ -129,8 +133,8 @@ def edit(exam_id):
 
     form = EditForm(request.form, exam)
 
-    courses = Course.query.order_by(Course.name).all()
-    educations = Education.query.order_by(Education.name).all()
+    courses = examination_service.find_all_courses()
+    educations = examination_service.find_all_educations()
     form.course.choices = [(c.id, c.name) for c in courses]
     form.education.choices = [(e.id, e.name) for e in educations]
     form.test_type.choices = test_types.items()
