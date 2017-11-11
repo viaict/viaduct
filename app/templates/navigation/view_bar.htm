@@ -126,7 +126,7 @@
 
                             <img src="{{ UserAPI.avatar(current_user) }}" alt="..." id="userImageMobile" class="img-rounded">
                             <div id="userInformationMobile">
-                                <p>{{ current_user.name }}</p>
+                                <h4 class="username">{{ current_user.name }}</h4>
                                 <p>{{ current_user.email }}</p>
                                 <p><a href="{{ url_for('user.view_single', user_id=current_user.id) }}">Profiel weergeven</a></p>
                             </div>
