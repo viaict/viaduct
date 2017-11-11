@@ -29,7 +29,7 @@
         </div>
     </div>
 
-    {% if show_edit %}
+    {% if can_write %}
     <div class="row">
         <div class="col-md-8">
             <div class="form-group btn-group">
@@ -96,7 +96,7 @@
                     <th>{{ _('Date') }}</th>
                     <th>{{ _('Comment') }}</th>
                     <th>{{ _('Answers') }}</th>
-                    {% if show_edit %}
+                    {% if can_write %}
                     <th>{{ _('Edit') }}</th>
                     {% endif %}
                 </tr>
@@ -147,7 +147,7 @@
                                 N/A
                             {% endif %}
                         </td>
-                        {% if show_edit %}
+                        {% if can_write %}
                             <td>
                                 <a href='{{ url_for('examination.edit', exam_id=examination.id) }}'><i class='glyphicon glyphicon-pencil'></i></a>
                                 <a onclick='confirmation({{examination.id}})' role='button' data-toggle='modal' style='cursor: pointer;'><i class='glyphicon glyphicon-remove'></i></a>

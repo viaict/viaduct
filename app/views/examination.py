@@ -261,12 +261,12 @@ def view_examination(page_nr=1):
 
     path = '/static/uploads/examinations/'
 
-    show_edit = role_service.user_has_role(Roles.EXAMINATION_WRITE)
+    can_write = role_service.user_has_role(Roles.EXAMINATION_WRITE)
 
     return render_template('examination/view.htm', path=path,
                            examinations=examinations, search=search,
                            title=_('Examinations'), test_types=test_types,
-                           show_edit=show_edit)
+                           can_write=can_write)
 
 
 @blueprint.route('/courses/', methods=['GET'])

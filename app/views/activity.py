@@ -1,10 +1,10 @@
 import datetime
 
+from flask import Blueprint
 from flask import flash, redirect, render_template, request, url_for, abort, \
     jsonify
-from flask import Blueprint
-from flask_login import current_user
 from flask_babel import _  # gettext
+from flask_login import current_user
 from werkzeug.contrib.atom import AtomFeed
 
 # this is now uncommented for breaking activity for some reason
@@ -12,16 +12,17 @@ from werkzeug.contrib.atom import AtomFeed
 import app.utils.google as google
 from app import db
 from app.decorators import require_role
+from app.forms import SignInForm
 from app.forms.activity import ActivityForm, CreateForm
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult
+from app.models.education import Education
 from app.models.mollie import Transaction, TransactionActivity
 from app.roles import Roles
+from app.service import role_service
 from app.utils import mollie
 from app.utils.file import file_upload, file_remove
 from app.utils.serialize_sqla import serialize_sqla
-from app.models.education import Education
-from app.forms import SignInForm
 
 blueprint = Blueprint('activity', __name__, url_prefix='/activities')
 
@@ -48,9 +49,10 @@ def view(archive=None, page_nr=1):
             .order_by(Activity.start_time.asc())
         title = _('Activities') + ' - ' + _('page') + ' ' + str(page_nr)
 
+    can_write = role_service.user_has_role(Roles.ACTIVITY_WRITE)
     return render_template('activity/view.htm',
                            activities=activities.paginate(page_nr, 10, False),
-                           archive=archive, title=title)
+                           archive=archive, title=title, can_write=can_write)
 
 
 @blueprint.route('/remove/<int:activity_id>/', methods=['POST'])
@@ -88,10 +90,12 @@ def get_activity(activity_id=0):
     auto_open_register_pane = False
 
     def render():
+        can_write = role_service.user_has_role(Roles.ACTIVITY_WRITE)
         return render_template('activity/view_single.htm', activity=activity,
                                form=form, login_form=SignInForm(),
                                title=activity.name,
-                               auto_open_register=auto_open_register_pane)
+                               auto_open_register=auto_open_register_pane,
+                               can_write=can_write)
 
     # Check if there is a custom_form for this activity
     if not activity.form_id:

@@ -7,6 +7,7 @@ from app.decorators import require_role
 from app.forms.location import LocationForm
 from app.models.location import Location
 from app.roles import Roles
+from app.service import role_service
 from app.utils.serialize_sqla import serialize_sqla
 
 blueprint = Blueprint('location', __name__, url_prefix='/locations')
@@ -24,12 +25,14 @@ def get_contacts(location_id):
 @require_role(Roles.VACANCY_READ)
 def list(page_nr=1):
     locations = Location.query.paginate(page_nr, 15, False)
-    return render_template('location/list.htm', locations=locations)
+    can_write = role_service.user_has_role(Roles.VACANCY_WRITE)
+    return render_template('location/list.htm', locations=locations,
+                           can_write=can_write)
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<int:location_id>/', methods=['GET', 'POST'])
-@require_role(Roles.LOCATION_WRITE)
+@require_role(Roles.VACANCY_WRITE)
 def edit(location_id=None):
     """FRONTEND, Create, view or edit a location."""
 
@@ -47,11 +50,14 @@ def edit(location_id=None):
         db.session.commit()
         flash(_('Location saved.'), 'success')
         return redirect(url_for('location.edit', location_id=location.id))
-    return render_template('location/edit.htm', location=location, form=form)
+
+    can_write = role_service.user_has_role(Roles.VACANCY_WRITE)
+    return render_template('location/edit.htm', location=location, form=form,
+                           can_write=can_write)
 
 
 @blueprint.route('/delete/<int:location_id>/', methods=['POST'])
-@require_role(Roles.LOCATION_WRITE)
+@require_role(Roles.VACANCY_WRITE)
 def delete(location_id):
     """Delete a location."""
 

@@ -91,7 +91,7 @@
                     <i class="fa fa-question-circle"></i> Help
                 </a>
                 |
-                {% if current_user.has_role(Roles.SEO_WRITE) %}
+                {% if can_write_seo %}
                 <a href="{{ url_for('seo.edit_seo', module=request.blueprint, path=request.path) }}"  data-icon="glyphicon-search" class="btn btn-sm">
                     <i class="fa fa-search"></i> SEO
                 </a>

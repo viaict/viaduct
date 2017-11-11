@@ -10,7 +10,7 @@
         </div>
         <div class='col-md-9 col-md-offset-1 well'>
             <div class='page-header'>
-                {% if show_edit_delete %}
+                {% if can_write %}
                     <div class='btn-group pull-right'>
                         <a class='btn btn-warning btn-xs' href='
                             {{ url_for('news.edit', news_id=news.id) }}'>

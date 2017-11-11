@@ -105,7 +105,7 @@
                                 </a>
                                 <br>
 
-                                {% if vacancy.id and show_edit_delete %}
+                                {% if vacancy.id and can_write %}
                                     <a class="btn btn-warning"
                                        href="{{ url_for('vacancy.edit', vacancy_id=vacancy.id) }}">
                                         <i class="glyphicon glyphicon-pencil"></i>

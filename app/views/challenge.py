@@ -8,6 +8,7 @@ from app.decorators import require_role
 from app.forms.challenge import ChallengeForm
 from app.models.challenge import Challenge
 from app.roles import Roles
+from app.service import role_service
 from app.utils.challenge import ChallengeAPI
 
 blueprint = Blueprint('challenge', __name__, url_prefix='/challenge')
@@ -28,10 +29,13 @@ def view_list(page=1):
 
     challenge_description = ChallengeAPI.get_challenge_description()
 
+    can_write = role_service.user_has_role(Roles.CHALLENGE_WRITE)
+
     return render_template('challenge/dashboard.htm', challenges=challenges,
                            user_points=user_points, ranking=ranking,
                            approved_challenges=approved_challenges, form=form,
-                           challenge_description=challenge_description)
+                           challenge_description=challenge_description,
+                           can_write=can_write)
 
 
 # API's

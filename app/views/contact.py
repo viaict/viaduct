@@ -7,6 +7,7 @@ from app.forms.contact import ContactForm
 from app.models.contact import Contact
 from app.models.location import Location
 from app.roles import Roles
+from app.service import role_service
 
 blueprint = Blueprint('contact', __name__, url_prefix='/contacts')
 
@@ -17,7 +18,9 @@ blueprint = Blueprint('contact', __name__, url_prefix='/contacts')
 def list(page_nr=1):
     """Show a paginated list of contacts."""
     contacts = Contact.query.paginate(page_nr, 15, False)
-    return render_template('contact/list.htm', contacts=contacts)
+    can_write = role_service.user_has_role(Roles.VACANCY_WRITE)
+    return render_template('contact/list.htm', contacts=contacts,
+                           can_write=can_write)
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])

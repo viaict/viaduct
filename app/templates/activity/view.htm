@@ -3,7 +3,7 @@
 {% extends "content.htm" %}
 {% block content %}
     <div class="btn-group">
-        {% if current_user.has_role(Roles.ACTIVITY_WRITE) %}
+        {% if can_write %}
             <a href="/activities/create/"
                 class="btn btn-success">{{_('New activity')}}</a>
         {% endif %}

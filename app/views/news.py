@@ -94,10 +94,10 @@ def view(news_id=None):
     if not news.can_read():
         return abort(403)
 
-    show_edit_delete = role_service.user_has_role(Roles.NEWS_WRITE)
+    can_write = role_service.user_has_role(Roles.NEWS_WRITE)
 
     return render_template('news/view_single.htm', news=news,
-                           show_edit_delete=show_edit_delete)
+                           can_write=can_write)
 
 
 @blueprint.route('/delete/', methods=['GET'])

@@ -6,7 +6,6 @@ from markdown import markdown
 
 from app import app, static_url, get_locale
 from app.forms.util import FormWrapper  # noqa
-from app.roles import Roles
 from app.utils.category import CategoryAPI  # noqa
 from app.utils.company import CompanyAPI  # noqa
 from app.utils.guide import GuideAPI  # noqa
@@ -42,4 +41,3 @@ app.jinja_env.globals.update(PimpyAPI=PimpyAPI)
 app.jinja_env.globals.update(PageAPI=PageAPI)
 app.jinja_env.globals.update(CategoryAPI=CategoryAPI)
 app.jinja_env.globals.update(get_seo_fields=get_seo_fields)
-app.jinja_env.globals.update(Roles=Roles)
