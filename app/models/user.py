@@ -17,9 +17,9 @@ class AnonymousUser(AnonymousUserMixin):
     not logged in.
 
     Check logged in using:
-
-    >>> if current_user.is_anonymous:
-    >>>     abort(403)
+    >>> from flask_login import login_required
+    >>> @blueprint.route("/someroute")
+    >>> @login_required
 
     Keep in mind, all the user attributes are not available when the user is
     not logged in.
@@ -125,7 +125,3 @@ class User(db.Model, UserMixin, BaseEntity):
         if not self.first_name and not self.last_name:
             return None
         return ' '.join([self.first_name, self.last_name])
-
-    def has_role(self, *roles):
-        from app.service import role_service
-        return role_service.user_has_role(self, *roles)
