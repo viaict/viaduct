@@ -146,42 +146,46 @@ def edit(exam_id):
     form.education.choices = [(e.id, e.name) for e in educations]
     form.test_type.choices = test_types.items()
 
-    if request.method == 'POST':
-        if form.validate_on_submit():
+    if form.validate_on_submit():
+        file = request.files['examination']
+        answers = request.files['answers']
 
-            file = request.files['examination']
-            answers = request.files['answers']
+        exam.date = form.date.data
+        exam.comment = form.comment.data
+        exam.course_id = form.course.data
+        exam.education_id = form.education.data
+        exam.test_type = form.test_type.data
 
-            exam.date = form.date.data
-            exam.comment = form.comment.data
-            exam.course_id = form.course.data
-            exam.education_id = form.education.data
-            exam.test_type = form.test_type.data
+        if file.filename:
+            if exam.path:
+                file_remove(exam.path, UPLOAD_FOLDER)
+            new_path = file_upload(file, UPLOAD_FOLDER)
+            if new_path:
+                exam.path = new_path.name
+            else:
+                flash(_('Wrong format examination or error ' +
+                        'uploading the file.'), 'danger')
 
-            if file.filename:
-                if exam.path:
-                    file_remove(exam.path, UPLOAD_FOLDER)
-                new_path = file_upload(file, UPLOAD_FOLDER)
-                if new_path:
-                    exam.path = new_path.name
-                else:
-                    flash(_('Wrong format examination or error ' +
-                            'uploading the file.'), 'danger')
+        if answers.filename:
+            if exam.answer_path:
+                file_remove(exam.answer_path, UPLOAD_FOLDER)
+            new_answer_path = file_upload(answers, UPLOAD_FOLDER)
+            if new_answer_path:
+                exam.answer_path = new_answer_path.name
+            else:
+                flash(_('Wrong format answers or error ' +
+                        'uploading the file.'), 'danger')
 
-            if answers.filename:
-                if exam.answer_path:
-                    file_remove(exam.answer_path, UPLOAD_FOLDER)
-                new_answer_path = file_upload(answers, UPLOAD_FOLDER)
-                if new_answer_path:
-                    exam.answer_path = new_answer_path.name
-                else:
-                    flash(_('Wrong format answers or error ' +
-                            'uploading the file.'), 'danger')
+        db.session.commit()
+        flash(_('Examination succesfully changed.'), 'success')
 
-            db.session.commit()
-            flash(_('Examination succesfully changed.'), 'success')
-
-            return redirect(url_for('examination.edit', exam_id=exam_id))
+        return redirect(url_for('examination.edit', exam_id=exam_id))
+    else:
+        # Load the existing field values
+        form.course.data = exam.course_id
+        form.education.data = exam.education_id
+        form.test_type.data = exam.test_type
+        form.comment.data = exam.comment
 
     path = '/static/uploads/examinations/'
 

@@ -1,0 +1,47 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,700);
+
+html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    padding-top: 100px;
+    background-size: cover;
+    overflow-y: scroll;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 300;
+}
+
+p {
+    line-height: 25px;
+}
+
+img {
+    max-width: 100%;
+}
+
+
+form label {
+    font-weight: bold;
+}
+
+form p {
+    margin:20px 0;
+}
+
+@media(max-width: 767px){
+    body {
+        padding: 0;
+    }
+}

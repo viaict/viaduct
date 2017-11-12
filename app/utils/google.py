@@ -1,13 +1,15 @@
-import httplib2
 import base64
-import traceback
+import logging
+from email.mime.text import MIMEText
+
+import httplib2
+from apiclient import errors
 from apiclient.discovery import build
 from apiclient.errors import HttpError
-from oauth2client.client import SignedJwtAssertionCredentials
-from app import app
 from flask import flash, render_template
-from email.mime.text import MIMEText
-from apiclient import errors
+from oauth2client.client import SignedJwtAssertionCredentials
+
+from app import app, sentry
 
 # google calendar Settings > via_events > id
 calendar_id = app.config['GOOGLE_CALENDAR_ID']
@@ -18,7 +20,9 @@ service_email = app.config['GOOGLE_SERVICE_EMAIL']
 # name of the private key file
 private_key = app.config['GOOGLE_API_KEY']
 
-domain = 'via.uvastudent.org'
+domain = 'svia.nl'
+
+_logger = logging.getLogger(__name__)
 
 
 def build_service(service_type, api_version, scope):
@@ -31,7 +35,7 @@ def build_service(service_type, api_version, scope):
             service_email,
             key,
             scope=scope,
-            sub='bestuur@via.uvastudent.org'  # "Log in" as the admin account
+            sub='bestuur@svia.nl'  # "Log in" as the admin account
         )
 
         # Create an authorized http instance
@@ -39,8 +43,9 @@ def build_service(service_type, api_version, scope):
         http = credentials.authorize(http)
 
         return build(service_type, api_version, http=http)
-    except Exception:
-        traceback.print_exc()
+    except Exception as e:
+        _logger.error(e)
+        sentry.captureException(e)
         return None
 
 
@@ -87,8 +92,9 @@ def insert_activity(title="", description='', location="VIA kamer", start="",
             return service.events() \
                 .insert(calendarId=calendar_id, body=event) \
                 .execute()
-        except Exception:
-            traceback.print_exc()
+        except Exception as e:
+            _logger.error(e)
+            sentry.captureException(e)
             flash('Er ging iets mis met het toevogen van het event aan de'
                   'Google Calender')
             return None
@@ -112,8 +118,9 @@ def update_activity(event_id, title="", description='', location="VIA Kamer",
             return service.events() \
                 .update(calendarId=calendar_id, eventId=event_id, body=event) \
                 .execute()
-        except Exception:
-            traceback.print_exc()
+        except Exception as e:
+            _logger.error(e)
+            sentry.captureException(e)
             return insert_activity(title, description, location, start, end)
 
 
@@ -126,8 +133,9 @@ def delete_activity(event_id):
             return service.events() \
                 .delete(calendarId=calendar_id, eventId=event_id) \
                 .execute()
-        except Exception:
-            traceback.print_exc()
+        except Exception as e:
+            sentry.captureException(e)
+            _logger.error(e)
             flash('Er ging iets mis met het verwijderen van het event uit de'
                   'Google Calender, het kan zijn dat ie al verwijderd was')
 
@@ -204,8 +212,9 @@ def remove_email_from_group_if_exists(email, listname):
 
 
 def send_email(to, subject, email_template,
-               sender='bestuur@via.uvastudent.org', **kwargs):
-    """ Send an e-mail from the via-gmail
+               sender='no-reply@svia.nl', **kwargs):
+    """
+    Send an e-mail from the via-gmail.
 
     Args:
     sender: Email address of the sender.
@@ -214,7 +223,7 @@ def send_email(to, subject, email_template,
     content: The text of the email message.
     """
     service = build_gmail_service()
-    user_id = 'bestuur@via.uvastudent.org'
+    user_id = 'bestuur@svia.nl'
 
     msg = MIMEText(render_template(email_template, **kwargs), 'html')
     msg['to'] = to
@@ -226,7 +235,9 @@ def send_email(to, subject, email_template,
     try:
         email = (service.users().messages().send(userId=user_id, body=body)
                  .execute())
-        print('Sent e-mailmessage Id: %s' % email['id'])
+        _logger.info('Sent e-mailmessage Id: %s' % email['id'])
         return email
-    except errors.HttpError:
+    except errors.HttpError as e:
+        _logger.warning(e)
+        sentry.captureException(e)
         flash('Er is iets mis gegaan met het versturen van de e-mail')

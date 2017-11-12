@@ -12,7 +12,7 @@ from app.utils.import_module import import_module
 from .extensions import db, login_manager, \
     cache, toolbar, jsglue, sentry
 
-version = 'v2.8.4.0'
+version = 'v2.8.5.0'
 
 
 def static_url(url):
@@ -83,6 +83,8 @@ from app import jinja_env  # noqa
 def init_app():
     app.config['CACHE_TYPE'] = 'filesystem'
     app.config['CACHE_DIR'] = 'cache'
+
+    logging.basicConfig()
 
     cache.init_app(app)
     toolbar.init_app(app)
