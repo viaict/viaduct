@@ -12,24 +12,22 @@ from app.forms.newsletter import NewsletterForm
 from app.models.news import News
 from app.models.newsletter import Newsletter
 from app.roles import Roles
-from app.service import role_service
 
 blueprint = Blueprint('newsletter', __name__, url_prefix='/newsletter')
 
 
 @blueprint.route('/', methods=['GET'])
-@require_role(Roles.NEWSLETTER_READ)
+@require_role(Roles.NEWS_WRITE)
 def all():
     newsletters = Newsletter.query.all()
     auth_token = app.config['COPERNICA_NEWSLETTER_TOKEN']
-    can_write = role_service.user_has_role()
     return render_template('newsletter/view.htm', newsletters=newsletters,
-                           token=auth_token, can_write=can_write)
+                           token=auth_token)
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<int:newsletter_id>/', methods=['GET', 'POST'])
-@require_role(Roles.NEWSLETTER_WRITE)
+@require_role(Roles.NEWS_WRITE)
 def edit(newsletter_id=None):
     if newsletter_id:
         newsletter = Newsletter.query.get_or_404(newsletter_id)
@@ -62,7 +60,7 @@ def edit(newsletter_id=None):
 
 
 @blueprint.route('/delete/<int:newsletter_id>/', methods=['GET', 'POST'])
-@require_role(Roles.NEWSLETTER_READ)
+@require_role(Roles.NEWS_WRITE)
 def delete(newsletter_id):
     if request.method == 'GET':
         return render_template('newsletter/confirm.htm')
@@ -93,7 +91,6 @@ def get_newsletter(newsletter_id=None):
 
 
 @blueprint.route('/latest/committees/', methods=['GET'])
-@require_role(Roles.NEWSLETTER_READ)
 @correct_token_provided
 def committees_xml():
     committees = CommitteeAPI.get_alphabetical()
@@ -106,7 +103,6 @@ def committees_xml():
 
 @blueprint.route('/<int:newsletter_id>/activities/', methods=['GET'])
 @blueprint.route('/latest/activities/', methods=['GET'])
-@require_role(Roles.NEWSLETTER_READ)
 @correct_token_provided
 def activities_xml(newsletter_id=None):
     newsletter = get_newsletter(newsletter_id)
@@ -118,7 +114,6 @@ def activities_xml(newsletter_id=None):
 
 @blueprint.route('/<int:newsletter_id>/news/', methods=['GET'])
 @blueprint.route('/latest/news/', methods=['GET'])
-@require_role(Roles.NEWSLETTER_READ)
 @correct_token_provided
 def news_xml(newsletter_id=None):
     newsletter = get_newsletter(newsletter_id)

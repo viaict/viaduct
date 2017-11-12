@@ -47,7 +47,6 @@
         <h1>{{ _('Newsletters') }}</h1>
     </div>
 
-    {% if can_write %}
     <div class="row">
         <div class="form-group btn-group">
             <a href="{{ url_for('.edit') }}" class="btn btn-success">
@@ -56,7 +55,6 @@
             </a>
         </div>
     </div>
-    {% endif %}
 
     <div class="row">
         <div class="table-responsive">
@@ -66,9 +64,7 @@
                         <th style="width: 120px">{{ _('Date') }}</th>
                         <th colspan="2">{{ _('Activities') }}</th>
                         <th colspan="2">{{ _('News items') }}</th>
-                        {% if can_write %}
                         <th>{{ _('Edit') }}</th>
-                        {% endif %}
                     </tr>
                 </thead>
                 <tbody>
@@ -106,14 +102,12 @@
                                 <small class=".small">XML</small>
                             </a>
                         </td>
-                        {% if can_write %}
                         <td>
                             <a href='{{ url_for('.edit', newsletter_id=newsletter.id) }}'>
                                 <i class='glyphicon glyphicon-pencil'></i></a>
                             <a href='{{ url_for('.delete', newsletter_id=newsletter.id) }}'>
                                 <i class='glyphicon glyphicon-remove'></i></a>
                         </td>
-                        {% endif %}
                     </tr>
                     {% endfor %}
                 </tbody>

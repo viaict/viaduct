@@ -11,7 +11,7 @@ from wtforms.fields import StringField
 
 from app import db
 from app.decorators import require_role
-from app.forms import PageForm, HistoryPageForm
+from app.forms.page import PageForm, HistoryPageForm
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult
 from app.models.group import Group

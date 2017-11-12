@@ -26,7 +26,7 @@ def list():
 
 
 @blueprint.route('/edit/commissie/<string:committee>', methods=['GET', 'POST'])
-@require_role(Roles.COMMITTEE_WRITE)
+@require_role(Roles.PAGE_WRITE)
 def edit_committee(committee=''):
     path = 'commissie/' + committee
 

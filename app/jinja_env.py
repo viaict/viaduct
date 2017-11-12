@@ -1,11 +1,13 @@
 import datetime
 import json
+import logging
 
 from flask import Markup, render_template
 from markdown import markdown
 
 from app import app, static_url, get_locale
 from app.forms.util import FormWrapper  # noqa
+from app.utils import template_filters  # noqa
 from app.utils.category import CategoryAPI  # noqa
 from app.utils.company import CompanyAPI  # noqa
 from app.utils.guide import GuideAPI  # noqa
@@ -16,6 +18,9 @@ from app.utils.seo import get_seo_fields  # noqa
 from app.utils.serialize_sqla import serialize_sqla  # noqa
 from app.utils.thumb import thumb  # noqa
 from app.utils.user import UserAPI  # noqa
+
+_logger = logging.getLogger(__name__)
+_logger.info("Imported {}", template_filters)
 
 # Set jinja global variables
 app.jinja_env.globals.update(enumerate=enumerate)

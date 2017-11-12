@@ -4,7 +4,7 @@ from flask_babel import _  # gettext
 
 from app import db
 from app.decorators import require_role
-from app.forms import SeoForm
+from app.forms.seo import SeoForm
 from app.models.seo import SEO
 from app.roles import Roles
 from app.utils.seo import get_seo, get_resources

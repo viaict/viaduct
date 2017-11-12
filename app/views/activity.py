@@ -12,8 +12,8 @@ from werkzeug.contrib.atom import AtomFeed
 import app.utils.google as google
 from app import db
 from app.decorators import require_role
-from app.forms import SignInForm
 from app.forms.activity import ActivityForm, CreateForm
+from app.forms.user import SignInForm
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult
 from app.models.education import Education

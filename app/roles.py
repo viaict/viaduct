@@ -15,7 +15,6 @@ class Roles(Enum):
     ALV_WRITE = 'ALV_WRITE'
     CHALLENGE_READ = 'CHALLENGE_READ'
     CHALLENGE_WRITE = 'CHALLENGE_WRITE'
-    COMMITTEE_WRITE = 'COMMITTEE_WRITE'
     DOMJUDGE_WRITE = 'DOMJUDGE_WRITE'
     ELECTIONS_READ = 'ELECTIONS_READ'
     ELECTIONS_WRITE = 'ELECTIONS_WRITE'
@@ -27,10 +26,7 @@ class Roles(Enum):
     GROUP_WRITE = 'GROUP_WRITE'
     MOLLIE_READ = 'MOLLIE_READ'
     NAVIGATION_WRITE = 'NAVIGATION_WRITE'
-    NEWSLETTER_READ = 'NEWSLETTER_READ'
-    NEWSLETTER_WRITE = 'NEWSLETTER_WRITE'
     NEWS_WRITE = 'NEWS_WRITE'
-    PAGE_READ = 'PAGE_READ'
     PAGE_WRITE = 'PAGE_WRITE'
     PIMPY_READ = 'PIMPY_READ'
     PIMPY_WRITE = 'PIMPY_WRITE'
@@ -39,3 +35,14 @@ class Roles(Enum):
     USER_WRITE = 'USER_WRITE'
     VACANCY_READ = 'VACANCY_READ'
     VACANCY_WRITE = 'VACANCY_WRITE'
+
+    @classmethod
+    def choices(cls):
+        return [(choice, choice.name) for choice in cls]
+
+    @classmethod
+    def coerce(cls, item):
+        return cls(item) if not isinstance(item, cls) else item
+
+    def __str__(self):
+        return str(self.value)

@@ -6,7 +6,7 @@ from flask_login import current_user
 from app.service import role_service
 
 
-def require_role(roles):
+def require_role(*roles):
     def real_decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
