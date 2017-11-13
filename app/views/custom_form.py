@@ -5,7 +5,7 @@ from flask import (flash, redirect, render_template, request, url_for, abort,
 from flask_login import current_user
 
 from app import app, db
-from app.decorators import require_role
+from app.decorators import require_role, require_membership
 from app.forms.custom_form import CreateForm
 from app.models.custom_form import CustomForm, CustomFormResult, \
     CustomFormFollower
@@ -20,7 +20,7 @@ blueprint = Blueprint('custom_form', __name__, url_prefix='/forms')
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
-@require_role(Roles.ACTIVITY_READ)
+@require_role(Roles.ACTIVITY_WRITE)
 def view(page_nr=1):
     followed_forms = CustomForm.qry_followed().all()
     active_forms = CustomForm.qry_active().all()
@@ -36,7 +36,7 @@ def view(page_nr=1):
 
 
 @blueprint.route('/view/<int:form_id>', methods=['GET', 'POST'])
-@require_role(Roles.ACTIVITY_READ)
+@require_role(Roles.ACTIVITY_WRITE)
 def view_single(form_id=None):
     custom_form = CustomForm.query.get(form_id)
 
@@ -76,6 +76,7 @@ def view_single(form_id=None):
 
 
 @blueprint.route('/export/<int:form_id>/', methods=['POST'])
+@require_role(Roles.ACTIVITY_WRITE)
 def export(form_id):
     # Create the headers
     xp = CustomForm.exports
@@ -209,7 +210,7 @@ def create(form_id=None):
 
 
 @blueprint.route('/remove/<int:submit_id>', methods=['POST'])
-@require_role(Roles.ACTIVITY_READ)
+@require_role(Roles.ACTIVITY_WRITE)
 def remove_response(submit_id=None):
     response = "success"
 
@@ -245,7 +246,7 @@ def remove_response(submit_id=None):
 
 # Ajax method
 @blueprint.route('/submit/<int:form_id>', methods=['POST'])
-@require_role(Roles.ACTIVITY_READ)
+@require_membership
 def submit(form_id=-1):
     # TODO make sure custom_form rights are set on server
     response = "success"

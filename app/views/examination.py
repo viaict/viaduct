@@ -199,7 +199,6 @@ def edit(exam_id):
 @blueprint.route('/examination/', methods=['GET', 'POST'])
 @blueprint.route('/examination/<int:page_nr>/', methods=['GET', 'POST'])
 @require_membership
-@require_role(Roles.EXAMINATION_READ)
 def view_examination(page_nr=1):
     # First check if the delete argument is set before loading
     # the search results

@@ -28,10 +28,10 @@ def list(page_nr=1):
 
     form = FileForm()
 
-    can_upload = role_service.user_has_role(Roles.FILE_WRITE)
+    can_write = role_service.user_has_role(Roles.FILE_WRITE)
 
     return render_template('files/list.htm', files=files, form=form,
-                           can_upload=can_upload)
+                           can_write=can_write)
 
 
 @blueprint.route('/', methods=['POST'])

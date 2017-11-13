@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, request, \
     jsonify
 from flask_login import login_required, current_user
 
-from app.decorators import require_role
+from app.decorators import require_role, require_membership
 from app.forms.challenge import ChallengeForm
 from app.models.challenge import Challenge
 from app.roles import Roles
@@ -16,7 +16,7 @@ blueprint = Blueprint('challenge', __name__, url_prefix='/challenge')
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/dashboard/', methods=['GET', 'POST'])
-@require_role(Roles.CHALLENGE_READ)
+@require_membership
 def view_list(page=1):
     challenge = Challenge()
     form = ChallengeForm(request.form, challenge)

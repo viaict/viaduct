@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, url_for, redirect
 
-from app.decorators import require_role
+from app.decorators import require_role, require_membership
 from app.forms.alv import AlvForm, AlvDocumentForm
 from app.models.alv_model import Alv
 from app.roles import Roles
@@ -11,7 +11,7 @@ blueprint = Blueprint('alv', __name__, url_prefix='/alv')
 
 @blueprint.route('/', methods=['GET'])
 @blueprint.route('/list/', methods=['GET'])
-@require_role(Roles.ALV_READ)
+@require_membership
 def list():
     alvs = alv_service.find_all_alv()
     can_write = role_service.user_has_role(Roles.ALV_WRITE)
@@ -19,7 +19,7 @@ def list():
 
 
 @blueprint.route('/<int:alv_id>/', methods=['GET'])
-@require_role(Roles.ALV_READ)
+@require_membership
 def view(alv_id=0):
     if alv_id:
         alv = alv_service.get_alv_by_id(alv_id, include_documents=True)
