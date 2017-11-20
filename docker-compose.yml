@@ -1,20 +1,21 @@
-version: "2"
+version: "3.2"
 services:
   app:
     build: .
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT}
     ports:
-      - "9090:9090"
+      - "127.0.0.1:${UWSGI_PORT}:3031"
     depends_on:
       - database
     volumes:
-      - .:/app
-      - /tmp/viaduct-master:/tmp/viaduct-master
-    command: "sh docker-entrypoint.sh"
+      - ".:/app"
+    command: "sh /app/docker-entrypoint.sh"
 
   database:
-    image: postgres:10-alpine
+    image: postgres:alpine
     ports:
-      - "5400:5432"
+      - "127.0.0.1:5400:5432"
     environment:
       POSTGRES_USER: viaduct
       POSTGRES_DB: viaduct
@@ -25,4 +26,4 @@ services:
     depends_on:
       - database
     ports:
-      - "8080:80"
+      - "${ADMINER_PORT}:80"
