@@ -43,7 +43,7 @@ def edit(location_id=None):
     else:
         location = Location()
 
-    form = LocationForm(request.form, location)
+    form = LocationForm(request.form, obj=location)
 
     if form.validate_on_submit():
         form.populate_obj(location)

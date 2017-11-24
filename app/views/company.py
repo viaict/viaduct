@@ -142,7 +142,7 @@ def edit(company_id=None):
     else:
         company = Company()
 
-    form = CompanyForm(request.form, company)
+    form = CompanyForm(request.form, obj=company)
 
     # Add locations.
     locations = Location.query.order_by('address').order_by('city')

@@ -1,5 +1,5 @@
 from flask_babel import lazy_gettext as _
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, DateField, BooleanField
 from wtforms.validators import InputRequired, Optional
 
@@ -8,7 +8,7 @@ from datetime import date, timedelta
 from app.forms.util import FieldTabGroup, FieldTab, FieldVerticalSplit
 
 
-class NewsForm(Form):
+class NewsForm(FlaskForm):
     nl_title = StringField(_('Dutch title'))
     nl_content = TextAreaField(_('Dutch content'))
     en_title = StringField(_('English title'))
@@ -33,7 +33,7 @@ class NewsForm(Form):
     def validate(self):
 
         # Validate all other fields with default validators
-        if not Form.validate(self):
+        if not FlaskForm.validate(self):
             return False
         result = True
 

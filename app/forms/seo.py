@@ -1,11 +1,11 @@
 from flask_babel import lazy_gettext as _
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import TextAreaField
 
 from app.forms.util import FieldTab, FieldTabGroup
 
 
-class SeoForm(Form):
+class SeoForm(FlaskForm):
     nl_title = TextAreaField(_('Dutch title'))
     en_title = TextAreaField(_('English title'))
     nl_description = TextAreaField(

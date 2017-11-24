@@ -36,7 +36,7 @@ def edit_committee(committee=''):
     form = request.form
     if page:
         revision = page.get_latest_revision()
-        form = CommitteeForm(form, revision)
+        form = CommitteeForm(form, obj=revision)
     else:
         revision = None
         form = CommitteeForm()

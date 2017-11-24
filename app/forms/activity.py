@@ -1,5 +1,5 @@
 from flask_babel import lazy_gettext as _  # gettext
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import StringField, SelectField, TextAreaField, DateTimeField
 from wtforms.validators import InputRequired, Email
@@ -8,7 +8,7 @@ from app.forms.fields import CustomFormSelectField
 from app.forms.util import FieldTabGroup, FieldTab, FieldVerticalSplit
 
 
-class CreateForm(Form):
+class CreateForm(FlaskForm):
     form_id = CustomFormSelectField(_('Form'))
     nl_name = StringField(_('Dutch name'))
     nl_description = TextAreaField(_('Dutch description'))
@@ -40,7 +40,7 @@ class CreateForm(Form):
     def validate(self):
 
         # Validate all other fields with default validators
-        if not Form.validate(self):
+        if not FlaskForm.validate(self):
             return False
 
         # Test if either english or dutch is entered
@@ -67,7 +67,7 @@ class CreateForm(Form):
         return result
 
 
-class ActivityForm(Form):
+class ActivityForm(FlaskForm):
     email = StringField(
         _('E-mail address'), validators=[
             InputRequired(_('E-mail address') + " " + _('required')),

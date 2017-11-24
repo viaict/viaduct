@@ -27,7 +27,7 @@ def edit_seo():
     seo = get_seo(module, path)
 
     # Retrieve form info.
-    form = SeoForm(request.form, seo)
+    form = SeoForm(request.form, obj=seo)
 
     # On Seo submit (edit or create)
     if form.validate_on_submit():

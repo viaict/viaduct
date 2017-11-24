@@ -19,7 +19,7 @@ def view(redirect_id=None):
     redirection = Redirect.query.get(redirect_id) if redirect_id else None
 
     if redirection:
-        form = RedirectForm(request.form, redirection)
+        form = RedirectForm(request.form, obj=redirection)
     else:
         form = RedirectForm(request.form)
 

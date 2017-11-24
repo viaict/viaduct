@@ -38,6 +38,5 @@ def create_password_ticket(email):
         to=user.email,
         subject='Password reset https://svia.nl',
         email_template='email/forgot_password.html',
-        sender='via',
         user_name=user.name,
         hash_=hash_)

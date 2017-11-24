@@ -43,7 +43,7 @@ def create_edit(alv_id=None):
     else:
         alv = Alv()
 
-    form = AlvForm(request.form, alv)
+    form = AlvForm(request.form, obj=alv)
 
     if form.validate_on_submit():
         form.populate_obj(alv)

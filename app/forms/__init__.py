@@ -1,6 +1,6 @@
 import os
 
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 
 from app import app
 from app.utils.import_module import import_module
@@ -26,7 +26,7 @@ def register_forms(path):
             attribute = getattr(module, name)
 
             try:
-                if not issubclass(attribute, Form):
+                if not issubclass(attribute, FlaskForm):
                     continue
             except TypeError:
                 continue

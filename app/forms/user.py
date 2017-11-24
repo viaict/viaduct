@@ -2,7 +2,7 @@
 from app import app
 from app.models.user import User
 
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from flask_wtf.recaptcha import RecaptchaField, Recaptcha
 from wtforms import StringField, PasswordField, BooleanField, \
     SelectField, FileField, DateField
@@ -17,7 +17,7 @@ import bcrypt
 _min_password_length = app.config['MIN_PASSWORD_LENGTH']
 
 
-class BaseUserForm(Form):
+class BaseUserForm(FlaskForm):
     email = StringField(_('E-mail adress'), validators=[
         InputRequired(message=_('No e-mail adress submitted')),
         Email(message=_('Invalid e-mail adress submitted'))])
@@ -166,7 +166,7 @@ class EditUserInfoForm(BaseUserForm):
             raise ValidationError(_('Passwords do not match'))
 
 
-class SignInForm(Form):
+class SignInForm(FlaskForm):
     email = StringField(_('E-mail adress'), validators=[
         InputRequired(message=_('No e-mail adress submitted')),
         Email(message=_('Invalid e-mail adress submitted'))])
@@ -192,7 +192,7 @@ class SignInForm(Form):
         return user
 
 
-class RequestPassword(Form):
+class RequestPassword(FlaskForm):
     email = StringField(_('E-mail adress'), validators=[
         InputRequired(message=_('No e-mail adress submitted')),
         Email(message=_('Invalid e-mail adress submitted'))])
@@ -200,7 +200,7 @@ class RequestPassword(Form):
         validators=[Recaptcha(message='Check Recaptcha')])
 
 
-class ResetPassword(Form):
+class ResetPassword(FlaskForm):
     password = PasswordField(
         _('Password'), validators=[
             InputRequired(message=_('No password submitted')),

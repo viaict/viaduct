@@ -34,7 +34,7 @@ def edit(contact_id=None):
     else:
         contact = Contact()
 
-    form = ContactForm(request.form, contact)
+    form = ContactForm(request.form, obj=contact)
 
     locations = Location.query.order_by(
         Location.address).order_by(Location.city)

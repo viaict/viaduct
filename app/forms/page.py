@@ -1,5 +1,5 @@
 from flask_babel import lazy_gettext as _
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import Form as UnsafeForm
 from wtforms import BooleanField, StringField, TextAreaField, FieldList, \
     SelectField, SubmitField, RadioField, FormField, IntegerField
@@ -12,7 +12,7 @@ class EditGroupPagePermissionEntry(UnsafeForm):
         (0, _('None')), (1, _('Read')), (2, _('Read/Write'))])
 
 
-class SuperPageForm(Form):
+class SuperPageForm(FlaskForm):
     """TODO."""
 
     nl_title = StringField(_('Dutch title'))
@@ -61,14 +61,14 @@ class PageForm(SuperPageForm):
         return result
 
 
-class HistoryPageForm(Form):
+class HistoryPageForm(FlaskForm):
     previous = RadioField(_('Previous'), coerce=int)
     current = RadioField(_('Current'), coerce=int)
     compare = SubmitField(_('Compare'))
 
 
 # TODO: This is not used anywhere...
-class ChangePathForm(Form):
+class ChangePathForm(FlaskForm):
     path = StringField('Path', [InputRequired(),
                                 Regexp(r'^ */?[\w-]+(/[\w-]+)*/? *$',
                                        message='You suck at typing '
