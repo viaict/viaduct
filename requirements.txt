@@ -28,6 +28,7 @@ flask-failsafe==0.2
 flask-jsglue==0.3.1
 flask-login==0.4.0
 flask-migrate==2.1.1
+flask-oauthlib==0.9.4
 flask-script==2.0.6
 flask-sqlalchemy==2.3.2
 flask-wtf==0.14.2
@@ -43,6 +44,7 @@ markdown==2.6.9
 markupsafe==1.0           # via jinja2, mako
 mccabe==0.5.3             # via flake8
 oauth2client==4.1.2       # via google-api-python-client
+oauthlib==2.0.6           # via flask-oauthlib, requests-oauthlib
 olefile==0.44             # via pillow
 packaging==16.8           # via flake8-putty
 pathtools==0.1.2          # via watchdog
@@ -50,14 +52,14 @@ pep8-naming==0.4.1
 pep8==1.7.1
 pillow==4.3.0             # via reportlab
 py-bcrypt==0.4
-pyasn1-modules==0.1.5     # via oauth2client
-pyasn1==0.3.7             # via oauth2client, pyasn1-modules, rsa
+pyasn1-modules==0.2.1     # via oauth2client
+pyasn1==0.4.2             # via oauth2client, pyasn1-modules, rsa
 pycodestyle==2.0.0        # via flake8
 pycparser==2.18           # via cffi
 pydocstyle==2.1.1         # via flake8-docstrings
 pyflakes==1.2.3
 pymysql==0.7.11
-pyopenssl==17.3.0
+pyopenssl==17.4.0
 pyparsing==2.2.0          # via packaging
 pypdf2==1.26.0
 python-dateutil==2.6.1
@@ -68,6 +70,7 @@ pytz==2017.3              # via babel
 pyyaml==3.12              # via watchdog
 raven==6.3.0
 reportlab==3.4.0
+requests-oauthlib==0.8.0  # via flask-oauthlib
 requests==2.18.4
 rsa==3.4.2                # via oauth2client
 six==1.11.0               # via cryptography, google-api-python-client, oauth2client, packaging, pydocstyle, pyopenssl, python-dateutil

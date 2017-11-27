@@ -1,19 +1,15 @@
 # coding=utf-8
-from app import app
-from app.models.user import User
-from app.forms.fields import EmailField
-
+from flask_babel import lazy_gettext as _  # noqa
 from flask_wtf import FlaskForm
 from flask_wtf.recaptcha import RecaptchaField, Recaptcha
 from wtforms import StringField, PasswordField, BooleanField, \
     SelectField, FileField, DateField
-from wtforms.validators import InputRequired, EqualTo, ValidationError,\
-    Length, Optional
+from wtforms.validators import (InputRequired, EqualTo, ValidationError,
+                                Length, Optional)
 
-from flask_babel import lazy_gettext as _, gettext  # noqa
+from app import app
+from app.forms.fields import EmailField
 from app.forms.util import FieldVerticalSplit
-
-import bcrypt
 
 _min_password_length = app.config['MIN_PASSWORD_LENGTH']
 
@@ -161,23 +157,6 @@ class EditUserInfoForm(BaseUserForm):
 class SignInForm(FlaskForm):
     email = EmailField(_('E-mail adress'), validators=[InputRequired()])
     password = PasswordField(_('Password'), validators=[InputRequired()])
-
-    def validate_signin(self):
-        user = User.query.filter(User.email == self.email.data.strip()).first()
-
-        if user is None:
-            self.email.errors.append(_(
-                'It appears that account does not exist. Try again, or contact'
-                ' the website administration at ict (at) svia (dot) nl.'))
-            return None
-
-        submitted_hash = bcrypt.hashpw(self.password.data, user.password)
-        if submitted_hash != user.password:
-            self.password.errors.append(_(
-                'The password you entered appears to be incorrect.'))
-            return None
-
-        return user
 
 
 class RequestPassword(FlaskForm):

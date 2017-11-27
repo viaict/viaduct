@@ -11,3 +11,18 @@ class ResourceNotFoundException(Exception):
 class BusinessRuleException(Exception):
     def __init__(self, detail):
         self.detail = detail
+
+
+class InvalidArgumentsException(Exception):
+    def __init__(self, details):
+        self.details = details
+
+
+class ValidationException(Exception):
+    def __init__(self, details):
+        self.details = details
+
+
+class AuthorizationException(Exception):
+    def __init__(self, details):
+        self.details = details

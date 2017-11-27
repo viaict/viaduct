@@ -10,7 +10,7 @@ from speaklater import _LazyString
 from app.roles import Roles
 from app.utils.import_module import import_module
 from .extensions import db, login_manager, \
-    cache, toolbar, jsglue, sentry
+    cache, toolbar, jsglue, sentry, oauth
 
 version = 'v2.9.0.5'
 
@@ -89,6 +89,7 @@ def init_app():
     cache.init_app(app)
     toolbar.init_app(app)
     jsglue.init_app(app)
+    oauth.init_app(app)
 
     login_manager.init_app(app)
     login_manager.login_view = 'user.sign_in'

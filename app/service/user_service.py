@@ -1,7 +1,18 @@
 import bcrypt
 
-from app.exceptions import ResourceNotFoundException
+from app import oauth
+from app.exceptions import ResourceNotFoundException, ValidationException, \
+    AuthorizationException
 from app.repository import user_repository
+
+
+@oauth.usergetter
+def oauth_usergetter(email, password, *_, **__):
+    try:
+        return get_user_by_login(email=email, password=password)
+    except (ResourceNotFoundException, AuthorizationException,
+            ValidationException):
+        return None
 
 
 def set_password(user_id, password):
@@ -37,3 +48,18 @@ def find_by_id(user_id):
 def find_members():
     """Find all users which are marked as member."""
     return user_repository.find_members()
+
+
+def get_user_by_login(email, password):
+    user = user_repository.find_user_by_email(email)
+    if not user:
+        raise ResourceNotFoundException('user', email)
+
+    if user.disabled:
+        raise AuthorizationException("User is disabled.")
+
+    submitted_hash = bcrypt.hashpw(password, user.password)
+    if submitted_hash != user.password:
+        raise ValidationException("Invalid password.")
+
+    return user
