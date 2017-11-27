@@ -32,3 +32,7 @@ class AlvDocumentForm(FlaskForm):
     en_name = StringField(_('English name'), validators=[InputRequired()])
 
     file = FileField(_('File'))
+
+
+class AlvMinutesForm(FlaskForm):
+    file = FileField(_('File'))

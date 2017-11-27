@@ -9,6 +9,13 @@ def save_alv(alv):
     alv_repository.save(alv)
 
 
+def add_minutes(alv, minutes_file):
+    _file = file.file_upload(minutes_file)
+    alv.minutes_file_id = _file.id
+
+    alv_repository.save(alv)
+
+
 def find_all_alv():
     return alv_repository.find_all_alv()
 

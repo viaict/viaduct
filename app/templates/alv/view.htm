@@ -4,7 +4,7 @@
     <div class='row'>
         <div class='col-md-9 col-md-offset-1'>
             <p>
-                <a href="{{ url_for('alv.list') }}">{{ _('ALVs') }}</a>
+                <a href="{{ url_for('alv.list') }}">{{ _('GAs') }}</a>
                 <i class='fa fa-chevron-right'></i>
                 <a href="{{ url_for('alv.view', alv_id=alv.id) }}">{{ alv.name }}</a>
             </p>
@@ -15,12 +15,12 @@
                     <div class='pull-right'>
                         <a class='btn btn-warning btn-xs' href='
                             {{ url_for("alv.create_edit", alv_id=alv.id) }}'>
-                            <i class='fa fa-edit'></i> {{ _('Edit alv') }}
+                            <i class='fa fa-edit'></i> {{ _('Edit GA') }}
                         </a>
                         <form action="{{ url_for('alv.delete', alv_id=alv.id) }}"
                               method="POST">
                             <button class='btn btn-danger btn-xs'>
-                                <i class='fa fa-remove'></i> {{ _('Delete alv') }}
+                                <i class='fa fa-remove'></i> {{ _('Delete GA') }}
                             </button>
                         </form>
                     </div>
@@ -35,6 +35,22 @@
                     <a href="{{ url_for('activity.get_activity', activity_id=alv.activity.id) }}">{{ alv.activity }}</a>
                 </p>
             {% endif %}
+            {% if alv.minutes_file %}
+                <p>{{ _('Minutes') }}:
+                    <a href="/static/files/{{ alv.minutes_file.name }}">{{ alv.minutes_file.name }}</a> 
+                    {% if ModuleAPI.can_write('alv') %}
+                    <a class='btn btn-warning btn-xs' href='{{ url_for("alv.add_minute", alv_id=alv.id) }}'>
+                        <i class='fa fa-edit'></i> {{ _('Update minutes') }}
+                    </a>
+                {% endif %}
+                </p>
+            {% endif %}
+            {% if ModuleAPI.can_write('alv') and not alv.minutes_file %}
+                <a class='btn btn-success btn-xs' href='{{ url_for("alv.add_minute", alv_id=alv.id) }}'>
+                    <i class='fa fa-edit'></i> {{ _('Add minutes') }}
+                </a>
+            {% endif %}
+
             <hr>
             <div class='content'>
                 <h1>Documents</h1>
