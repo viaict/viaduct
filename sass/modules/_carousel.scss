@@ -1,8 +1,14 @@
 .carousel {
+    margin: 20px 0;
+
     .item {
         height: 80px;
         min-width: 190px;
         background-color: #fff;
+
+        div {
+            text-align: center;
+        }
 
         .company-logo {
                 max-height: 80px;
