@@ -1,18 +1,8 @@
 import bcrypt
 
-from app import oauth
 from app.exceptions import ResourceNotFoundException, ValidationException, \
     AuthorizationException
 from app.repository import user_repository
-
-
-@oauth.usergetter
-def oauth_usergetter(email, password, *_, **__):
-    try:
-        return get_user_by_login(email=email, password=password)
-    except (ResourceNotFoundException, AuthorizationException,
-            ValidationException):
-        return None
 
 
 def set_password(user_id, password):

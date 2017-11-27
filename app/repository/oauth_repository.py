@@ -16,10 +16,10 @@ def get_grant_by_client_id_and_code(client_id, code):
         .one_or_none()
 
 
-def create_grant(client_id, code, redirect_uri, scopes, user, expires):
+def create_grant(client_id, code, redirect_uri, scopes, user_id, expires):
     grant = OAuthGrant(client_id=client_id, code=code,
                        redirect_uri=redirect_uri,
-                       _scopes=scopes, user=user, expires=expires)
+                       _scopes=scopes, user_id=user_id, expires=expires)
     db.session.add(grant)
     db.session.commit()
     return grant
