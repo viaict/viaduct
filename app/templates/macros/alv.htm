@@ -1,0 +1,7 @@
+{% macro format_presidium(alv) %}
+    {% if not alv.chairman and not alv.secretary %}
+        {{ _("No presidium") }}
+    {% else %}
+        {{ _("Presidium:") }} {{ [alv.chairman, alv.secretary] | select() | join(", ") }}
+    {% endif %}
+{% endmacro %}
