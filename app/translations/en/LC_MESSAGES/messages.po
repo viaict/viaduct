@@ -1167,6 +1167,9 @@ msgstr ""
 msgid "Source code file"
 msgstr ""
 
+msgid "Spaces are not allowed in email list name"
+msgstr ""
+
 msgid "Specified examination does not exist"
 msgstr ""
 

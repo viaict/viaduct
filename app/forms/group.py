@@ -22,10 +22,18 @@ class EditGroupPermissionEntry(UnsafeForm):
                                                     (2, "Lees/Schrijf")])
 
 
+class EmailListField(StringField):
+    def process_formdata(self, valuelist):
+        self.data = valuelist[0].strip().lower()
+        if " " in self.data:
+            raise ValueError(
+                _("Spaces are not allowed in email list name"))
+
+
 class EditGroup(FlaskForm):
     name = StringField('Naam', validators=[
         InputRequired(message='Geen naam opgegeven')])
-    maillist = StringField('Naam maillijst')
+    maillist = EmailListField("Naam maillijst")
 
 
 class CreateGroup(EditGroup):

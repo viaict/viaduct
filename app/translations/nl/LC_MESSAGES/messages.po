@@ -1180,6 +1180,9 @@ msgstr "Er is iets mis gegaan."
 msgid "Source code file"
 msgstr "Broncode bestand"
 
+msgid "Spaces are not allowed in email list name"
+msgstr "Maillijst mag geen spaties bevatten"
+
 msgid "Specified examination does not exist"
 msgstr "Opgegeven tentamen bestaat niet"
 
