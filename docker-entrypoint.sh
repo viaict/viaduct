@@ -5,6 +5,8 @@ set -e
 
 cd /app
 
+pip-sync
+
 rm -f config.py
 if [ $ENVIRONMENT = "prod" ]; then
 	ln -s 'secrets/master.py' 'config.py'
