@@ -67,7 +67,7 @@ def add_course():
         description = form.description.data
         try:
             examination_service.add_course(name, description)
-            flash("'%s': " % form.title.data + _('Course succesfully added.'),
+            flash("'%s': " % form.title.data + _('Course successfully added.'),
                   'success')
         except DuplicateResourceException as e:
             flash('Course \'%s\'' % e.resource + ' already in database.',
@@ -102,7 +102,7 @@ def edit_course(course_id):
     if 'delete' in request.args:
         try:
             examination_service.delete_course(course_id)
-            flash(_('Course succesfully deleted.'), 'success')
+            flash(_('Course successfully deleted.'), 'success')
         except BusinessRuleException as e:
             flash(_(e.detail), 'danger')
 
@@ -125,7 +125,7 @@ def edit_course(course_id):
         description = form.description.data
         try:
             examination_service.update_course(course_id, name, description)
-            flash(_('Course succesfully saved.'), 'success')
+            flash(_('Course successfully saved.'), 'success')
             return render_template('course/edit.htm', new=False,
                                    form=form, redir=r,
                                    course=course,
