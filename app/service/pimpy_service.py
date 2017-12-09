@@ -3,7 +3,7 @@ from fuzzywuzzy import fuzz
 from app.exceptions import ValidationException
 from app.models.group import Group
 from app.models.pimpy import Task
-from app.repository import pimpy_repository
+from app.repository import pimpy_repository, group_repository, task_repository
 
 
 def find_minute_by_id(minute_id):
@@ -36,8 +36,8 @@ def update_status(user, task, status):
 
 
 def add_task(name, content, group_id, users_text, line, minute_id, status):
-    group = Group.query.filter(Group.id == group_id).first()
-    if group is None:
+    group = group_repository.find_group_by_id(group_id)
+    if not group:
         raise ValidationException(
             'Er is niet een groep die voldoet opgegeven.')
 
@@ -46,10 +46,8 @@ def add_task(name, content, group_id, users_text, line, minute_id, status):
     if minute_id <= 0:
         minute_id = 1
 
-    task = Task.query.filter(
-        Task.title == name,
-        Task.content == content,
-        Task.group_id == group_id).first()
+    task = task_repository.find_task_by_name_content_group(
+        name, content, group)
 
     if task:
         raise ValidationException('Deze taak bestaat al in de database')
@@ -63,7 +61,7 @@ def edit_task_property(user, task_id, property, value):
     task = find_task_by_id(task_id)
 
     if not user.member_of_group(task.group_id):
-        return False, "User not member of group of task"
+        return ValidationException('User not member of group of task')
 
     if property == 'content':
         pimpy_repository.edit_task_content(task, value)

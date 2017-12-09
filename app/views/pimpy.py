@@ -307,30 +307,13 @@ def add_minute(group_id=None):
 
                 for task in tasks:
                     db.session.add(task)
-                # for user in task.users:
-                #     copernica_data = {
-                #         "viaductID": task.base32_id(),
-                #         "Actiepunt": task.title,
-                #         "Status": task.get_status_string(),
-                #         "Groep": task.group.name,
-                #     }
-                #     copernica.add_subprofile(
-                #         copernica.SUBPROFILE_TASK, user.id, copernica_data)
+
                 for done in dones:
                     if done.group_id == group.id and done.update_status(4):
                         valid_dones.append(done)
                     else:
                         flash(_("Found invalid DONE task: %s").format(
                             done.base32_id()), 'danger')
-
-                # for user in done.users:
-                #     copernica_data = {
-                #         "Actiepunt": task.title,
-                #         "Status": task.get_status_string(),
-                #     }
-                #     copernica.update_subprofile(copernica.SUBPROFILE_TASK,
-                #                                 user.id, task.base32_id(),
-                #                                 copernica_data)
 
                 for remove in removes:
                     if remove.group_id == group.id and remove.update_status(5):
@@ -339,14 +322,6 @@ def add_minute(group_id=None):
                         flash(_("Found invalid REMOVE task: %s").format(
                             remove.base32_id()), 'danger')
 
-                # for user in remove.users:
-                #     copernica_data = {
-                #         "Actiepunt": task.title,
-                #         "Status": task.get_status_string(),
-                #     }
-                #     copernica.update_subprofile(copernica.SUBPROFILE_TASK,
-                #                                 user.id, task.base32_id(),
-                #                                 copernica_data)
                 db.session.commit()
 
                 flash('De notulen zijn verwerkt!', 'success')
