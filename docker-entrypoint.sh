@@ -6,6 +6,7 @@ set -e
 cd /app
 
 pip-sync
+pip install uwsgi
 
 rm -f config.py
 if [ $ENVIRONMENT = "prod" ]; then

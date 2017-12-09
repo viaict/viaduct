@@ -10,8 +10,8 @@ _logger = logging.getLogger(__name__)
 
 def load_user_roles(user_id):
     roles = db.session.query(GroupRole).join(GroupRole.group, Group.users) \
-        .filter(User.id == user_id).group_by(GroupRole.role).all()
-    return [Roles(role.role) for role in roles]
+        .filter(User.id == user_id).group_by(GroupRole.id, GroupRole.role)
+    return [Roles(role.role) for role in roles.all()]
 
 
 def find_all_roles_by_group_id(group_id):
