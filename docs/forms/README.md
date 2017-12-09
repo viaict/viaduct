@@ -12,8 +12,8 @@ This can be done with the `render_form` macro contained in [`macros/form.htm`](.
 Form definition:
 ```python
 class ExampleForm(Form):
-    name = StringField(_('Name'), validators=[InputRequired()])
     date = DateField(_('Date'))
+    name = StringField(_('Name'), validators=[InputRequired()])
     person = QuerySelectField(
         _('Person select field'),
         query_factory=lambda: user_service.find_members())
@@ -80,7 +80,7 @@ Optional parameters
                                   The function / macro is called with the field that was just rendered as
                                   an argument.
 
-#### `kwargs`
+#### kwargs
 
 Every (custom) render macro must take `**kwargs`,
 but sometimes there is no use for it.
@@ -173,6 +173,26 @@ This will render:
 
 This will render:
 ![Form example with a before/after render hook](img/form_before_after_render_hook.png)
+
+Since the render hooks get the field as an argument,
+this makes it is easy to render something before or after a specific field:
+```jinja
+{% extends 'content.htm' %}
+{% from 'macros/form.htm' import render_form  %}
+
+{% macro my_render_after_hook(f) %}
+{% if f.name == 'date' %}
+    <hr />
+{% endif %}
+{% endmacro %}
+
+
+{% block content %}
+{{ render_form(form, render_after_hook=my_render_after_hook) }}
+{% endblock %}
+```
+This will render:
+![Form example with a after render hook](img/form_render_hook_one_field.png)
 
 ### Tabs
 
