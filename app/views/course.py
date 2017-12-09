@@ -3,12 +3,11 @@ from flask import abort, flash, session, redirect, render_template, request, \
     url_for
 from flask_babel import _
 
-from app import db
 from app.forms import CourseForm
-from app.models.examination import Examination
-from app.models.course import Course
+# from app.models.course import Course
 from app.service import examination_service
 from app.utils.module import ModuleAPI
+from app.exceptions import BusinessRuleException, DuplicateResourceException
 
 import json
 
@@ -63,27 +62,24 @@ def add_course():
 
     form = CourseForm(request.form)
 
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            title = form.title.data
-            course = Course.query.filter(Course.name == title).first()
-            if not course:
-                description = form.description.data
-                new_course = Course(title, description)
-                examination_service.create_course(new_course)
-                flash("'%s': " % title + _('Course succesfully added.'),
-                      'success')
-            else:
-                flash("'%s': " % title + _('Already exists in the database'),
-                      'danger')
+    if form.validate_on_submit():
+        name = form.title.data
+        description = form.description.data
+        try:
+            examination_service.add_course(name, description)
+            flash("'%s': " % form.title.data + _('Course succesfully added.'),
+                  'success')
+        except DuplicateResourceException as e:
+            flash('Course \'%s\'' % e.resource + ' already in database.',
+                  'danger')
 
-                return render_template('course/edit.htm', new=True, form=form)
+            return render_template('course/edit.htm', new=True, form=form)
 
-            if 'origin' in session:
-                redir = session['origin']
-            else:
-                redir = url_for('examination.add')
-            return redirect(redir)
+        if 'origin' in session:
+            redir = session['origin']
+        else:
+            redir = url_for('examination.add')
+        return redirect(redir)
 
     return render_template('course/edit.htm', new=True, form=form)
 
@@ -101,17 +97,15 @@ def edit_course(course_id):
         session['prev'] = 'examination.edit_course'
         return abort(403)
 
-    course = Course.query.get(course_id)
-
-    if not course:
-        flash(_('Course could not be found.'), 'danger')
-        return redirect(url_for('examination.view_courses'))
-
-    exam_count = Examination.query.filter(Examination.course == course).count()
+    course = examination_service.get_course_by_id(course_id)
+    exam_count = examination_service.count_examinations_by_course(course_id)
     if 'delete' in request.args:
-        if exam_count > 0:
-            flash(_('Course still has examinations in the database.'),
-                  'danger')
+        try:
+            examination_service.delete_course(course_id)
+            flash(_('Course succesfully deleted.'), 'success')
+        except BusinessRuleException as e:
+            flash(_(e.detail), 'danger')
+
             form = CourseForm(title=course.name,
                               description=course.description)
             return render_template('course/edit.htm', new=False,
@@ -119,42 +113,26 @@ def edit_course(course_id):
                                    course=course, redir=r,
                                    exam_count=exam_count)
 
-        Course.query.filter_by(id=course_id).delete()
-        db.session.commit()
-
-        flash(_('Course succesfully deleted.'), 'success')
         if 'origin' in session:
             redir = session['origin']
         else:
             redir = url_for('examination.add')
         return redirect(redir)
 
-    if request.method == 'POST':
-        form = CourseForm(request.form)
-        if form.validate_on_submit():
-            title = form.title.data
-            if title != course.name and Course.query.filter(
-                    Course.name == title).count() >= 1:
-                flash("'%s': " % title + _('Already exists in the database'),
-                      'danger')
-                return render_template('course/edit.htm', new=False,
-                                       form=form, redir=r,
-                                       course=course,
-                                       exam_count=exam_count)
-            else:
-                description = form.description.data
-                course.name = title
-                course.description = description
+    form = CourseForm(request.form)
+    if form.validate_on_submit():
+        name = form.title.data
+        description = form.description.data
+        try:
+            examination_service.update_course(course_id, name, description)
+            flash(_('Course succesfully saved.'), 'success')
+            return render_template('course/edit.htm', new=False,
+                                   form=form, redir=r,
+                                   course=course,
+                                   exam_count=exam_count)
+        except DuplicateResourceException as e:
+            flash("%s: " % e, 'danger')
 
-                db.session.commit()
-                flash(_('Course succesfully saved.'),
-                      'success')
-
-                if 'origin' in session:
-                    redir = session['origin']
-                else:
-                    redir = url_for('examination.add')
-                return redirect(redir)
     else:
         form = CourseForm(title=course.name, description=course.description)
 

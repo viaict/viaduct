@@ -19,5 +19,5 @@ class DuplicateResourceException(Exception):
         self.resource = resource
 
     def __str__(self):
-        return "Duplicate resource" + str(self.resource) + \
-               "identified by " + str(self.identifier)
+        return "Duplicate resource '" + str(self.resource) + \
+               "' identified by '" + str(self.identifier) + "'"
