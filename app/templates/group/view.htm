@@ -31,7 +31,7 @@
 						</td>
 
 						<td>
-                            <a href="{{ url_for('group.edit_permissions', group_id=group.id) }}">
+                            <a href="{{ url_for('group.roles', group_id=group.id) }}">
                                 <i class="fa fa-key"></i> Wijzig permissies</a>
 						</td>
 						<td>
@@ -43,7 +43,7 @@
 			</tbody>
 		</table>
         <div class="btn-group">
-            {% if ModuleAPI.can_write('group') %}
+            {% if can_write %}
             <a href="{{ url_for('group.create') }}" class="btn btn-success">
                 Creëer groep
             </a>

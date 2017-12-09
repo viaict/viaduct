@@ -1,7 +1,8 @@
 from flask import request
 
 from app.models.page import Page, PageRevision
-from app.utils.module import ModuleAPI
+from app.roles import Roles
+from app.service import role_service
 
 
 # Get the guide page for a specific module
@@ -22,8 +23,7 @@ class GuideAPI:
             user_revision.title = \
                 'Er is geen user handleiding beschikbaar voor ' + module_name
 
-            if ModuleAPI.can_write('page') and\
-                    ModuleAPI.can_write(module_name):
+            if role_service.user_has_role(Roles.PAGE_WRITE):
                 user_revision.content = 'Voeg ' +\
                     '<a href="/edit/guides/user/' + module_name + \
                     '"> hier </a> een user handleiding toe.'
@@ -31,8 +31,7 @@ class GuideAPI:
                 user_revision.content = ''
         else:
             user_revision = user_guide.get_latest_revision()
-            if ModuleAPI.can_write('page') and\
-                    ModuleAPI.can_write(module_name):
+            if role_service.user_has_role(Roles.PAGE_WRITE):
                 user_revision.title += '<a href="/edit/guides/user/' +\
                     module_name + '"> (bewerk) </a>'
 
@@ -44,26 +43,22 @@ class GuideAPI:
 
         admin_guide = Page.get_by_path('guides/admin/' + module_name)
 
-        if not admin_guide or not ModuleAPI.can_write(module_name):
+        if not admin_guide:
             admin_revision = PageRevision(None, None, None, None, None, None,
                                           None)
-            if ModuleAPI.can_write(module_name):
-                admin_revision.title = \
-                    'Er is geen admin handleiding beschikbaar voor ' + \
-                    module_name
-                if ModuleAPI.can_write('page'):
-                    admin_revision.content = 'Voeg ' +\
-                        '<a href="/edit/guides/admin/' + module_name +\
-                        '"> hier </a> een admin handleiding toe.'
-                else:
-                    admin_revision.content = ''
+            admin_revision.title = \
+                'Er is geen admin handleiding beschikbaar voor ' + \
+                module_name
+            if role_service.user_has_role(Roles.PAGE_WRITE):
+                admin_revision.content = 'Voeg ' +\
+                    '<a href="/edit/guides/admin/' + module_name +\
+                    '"> hier </a> een admin handleiding toe.'
             else:
-                admin_revision.title = ''
                 admin_revision.content = ''
+
         else:
             admin_revision = admin_guide.get_latest_revision()
-            if ModuleAPI.can_write('page') and\
-                    ModuleAPI.can_write(module_name):
+            if role_service.user_has_role(Roles.PAGE_WRITE):
                 admin_revision.title += '<a href="/edit/guides/admin/' + \
                     module_name + '"> (bewerk) </a>'
 

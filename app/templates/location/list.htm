@@ -4,25 +4,25 @@
 
 {% block content %}
     {% include 'company/menu.htm' %}
-                <table class="table table-striped table-condensed">
-                    <thead>
-                        <tr>
-                            <th>{{_('Address')}}</th>
-                            <th>{{_('Post address')}}</th>
-                            <th>{{_('Phone')}}</th>
-                            <th>{{_('Email')}}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for location in locations.items %}
-                        <tr>
-                            <td><a href="{{ url_for('location.edit', location_id=location.id) }}">{{ location.address }}, {{location.zip}} {{ location.city }}</a></td>
-                            <td>{{location.postoffice_box}}</td>
-                            <td>{{location.phone_nr}}</td>
-                            <td><a target="blank_" href="mailto:{{location.email}}">{{location.email}}</a></td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+    <table class="table table-striped table-condensed">
+        <thead>
+            <tr>
+                <th>{{_('Address')}}</th>
+                <th>{{_('Post address')}}</th>
+                <th>{{_('Phone')}}</th>
+                <th>{{_('Email')}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for location in locations.items %}
+            <tr>
+                <td><a href="{{ url_for('location.edit', location_id=location.id) }}">{{ location.address }}, {{location.zip}} {{ location.city }}</a></td>
+                <td>{{location.postoffice_box}}</td>
+                <td>{{location.phone_nr}}</td>
+                <td><a target="blank_" href="mailto:{{location.email}}">{{location.email}}</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     {{ render_pagination(locations, 'location.list') }}
 {% endblock %}

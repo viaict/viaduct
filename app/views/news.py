@@ -1,17 +1,18 @@
 from datetime import date, datetime
 
-from flask import Blueprint, abort, render_template, request, flash, redirect,\
-    url_for
-from flask_login import current_user
+from flask import Blueprint, abort, render_template, request, flash, \
+    redirect, url_for
 from flask_babel import _  # gettext
+from flask_login import current_user
+from sqlalchemy import desc
 from werkzeug.contrib.atom import AtomFeed
 
-from sqlalchemy import desc
-
 from app import db
-from app.forms import NewsForm
+from app.decorators import require_role
+from app.forms.news import NewsForm
 from app.models.news import News
-from app.utils.module import ModuleAPI
+from app.roles import Roles
+from app.service import role_service
 
 blueprint = Blueprint('news', __name__, url_prefix='/news')
 
@@ -23,12 +24,13 @@ def list(page_nr=1):
                               db.or_(News.archive_date >= date.today(),
                                      News.archive_date == None),  # noqa
                               db.or_(current_user.has_paid,
-                                     db.not_(News.needs_paid)))\
-                      .order_by(desc(News.publish_date))
+                                     db.not_(News.needs_paid))) \
+        .order_by(desc(News.publish_date))
 
+    can_write = role_service.user_has_role(Roles.NEWS_WRITE)
     return render_template('news/list.htm',
                            items=items.paginate(page_nr, 10, False),
-                           archive=False)
+                           archive=False, can_write=can_write)
 
 
 @blueprint.route('/all/', methods=['GET'])
@@ -43,7 +45,7 @@ def all(page_nr=1):
 @blueprint.route('/archive/<int:page_nr>/', methods=['GET'])
 def archive(page_nr=1):
     items = News.query.filter(db.and_(News.archive_date < date.today(),
-                                     News.archive_date != None))  # noqa
+                                      News.archive_date != None))  # noqa
 
     return render_template('news/list.htm',
                            items=items.paginate(page_nr, 10, False),
@@ -52,10 +54,8 @@ def archive(page_nr=1):
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<int:news_id>/', methods=['GET', 'POST'])
+@require_role(Roles.NEWS_WRITE)
 def edit(news_id=None):
-    if not ModuleAPI.can_write('news'):
-        return abort(403)
-
     if news_id:
         news_item = News.query.get_or_404(news_id)
     else:
@@ -94,15 +94,16 @@ def view(news_id=None):
     if not news.can_read():
         return abort(403)
 
-    return render_template('news/view_single.htm', news=news)
+    can_write = role_service.user_has_role(Roles.NEWS_WRITE)
+
+    return render_template('news/view_single.htm', news=news,
+                           can_write=can_write)
 
 
 @blueprint.route('/delete/', methods=['GET'])
 @blueprint.route('/delete/<int:news_id>/', methods=['GET'])
+@require_role(Roles.NEWS_WRITE)
 def delete(news_id=None):
-    if not ModuleAPI.can_write('news'):
-        return abort(403)
-
     if not news_id:
         flash(_('This news item does not exist'), 'danger')
         return redirect(url_for('news.list'))
@@ -124,8 +125,8 @@ def rss(locale='en'):
     items = News.query.filter(News.publish_date <= date.today(),
                               db.or_(News.archive_date >= date.today(),
                                      News.archive_date == None),  # noqa
-                              db.or_(db.not_(News.needs_paid)))\
-                      .order_by(News.publish_date.desc()).limit(20)
+                              db.or_(db.not_(News.needs_paid))) \
+        .order_by(News.publish_date.desc()).limit(20)
 
     for item in items:
         published = datetime.combine(item.publish_date, datetime.min.time())

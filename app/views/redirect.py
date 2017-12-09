@@ -1,21 +1,19 @@
-from flask import Blueprint, render_template, request, abort, redirect, \
+from flask import Blueprint, render_template, request, redirect, \
     flash, url_for
+
 from app import db
+from app.decorators import require_role
+from app.forms.redirect import RedirectForm
 from app.models.redirect import Redirect
-from app.forms import RedirectForm
-from app.utils.module import ModuleAPI
+from app.roles import Roles
 
 blueprint = Blueprint('redirect', __name__, url_prefix='/redirect')
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<int:redirect_id>/', methods=['GET', 'POST'])
+@require_role(Roles.NAVIGATION_WRITE)
 def view(redirect_id=None):
-    if not ModuleAPI.can_read('redirect'):
-        return abort(403)
-
-    can_write = ModuleAPI.can_write('redirect')
-
     redirection = Redirect.query.get(redirect_id) if redirect_id else None
 
     if redirection:
@@ -24,8 +22,6 @@ def view(redirect_id=None):
         form = RedirectForm(request.form)
 
     if form.validate_on_submit():
-        if not can_write:
-            return abort(403)
 
         fro = form.data['fro'].rstrip('/')
         to = form.data['to']
@@ -53,15 +49,12 @@ def view(redirect_id=None):
     redirections = Redirect.query.order_by(Redirect.fro).all()
 
     return render_template('redirect.htm', redirections=redirections,
-                           redirection=redirection, form=form,
-                           can_write=can_write)
+                           redirection=redirection, form=form)
 
 
 @blueprint.route('/delete/<int:redirect_id>/', methods=['GET', 'POST'])
+@require_role(Roles.NAVIGATION_WRITE)
 def delete(redirect_id):
-    if not ModuleAPI.can_write('redirect'):
-        return abort(403)
-
     redirection = Redirect.query.get_or_404(redirect_id)
 
     db.session.delete(redirection)

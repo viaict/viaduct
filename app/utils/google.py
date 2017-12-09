@@ -207,7 +207,8 @@ def remove_email_from_group_if_exists(email, listname):
 
 def send_email(to, subject, email_template,
                sender='no-reply@svia.nl', **kwargs):
-    """ Send an e-mail from the via-gmail
+    """
+    Send an e-mail from the via-gmail.
 
     Args:
     sender: Email address of the sender.

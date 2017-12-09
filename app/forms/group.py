@@ -1,11 +1,11 @@
+from flask_babel import lazy_gettext as _
 from flask_wtf import FlaskForm
-
 from wtforms import BooleanField, FormField, FieldList, SubmitField, \
-    SelectField, StringField
-
+    StringField, SelectMultipleField, SelectField
+from wtforms import Form as UnsafeForm
 from wtforms.validators import InputRequired
 
-from wtforms import Form as UnsafeForm
+from app import Roles
 
 
 class ViewGroupEntry(UnsafeForm):
@@ -30,6 +30,11 @@ class EditGroup(FlaskForm):
 
 class CreateGroup(EditGroup):
     committee_url = StringField('Commissie-pagina URL (zonder slash)')
+
+
+class GroupRolesForm(FlaskForm):
+    roles = SelectMultipleField(_("Roles"), choices=Roles.choices(),
+                                coerce=Roles.coerce)
 
 
 class EditGroupPermissionForm(FlaskForm):
