@@ -76,6 +76,31 @@ class TestPimpyService(unittest.TestCase):
         pimpy_repository_mock.get_all_minutes_for_user.assert_called_with(
             mock_user)
 
+    def test_get_all_minutes_for_group(self):
+        pimpy_service.get_all_minutes_for_group(existing_group_id, (1, 2))
+        pimpy_repository_mock.get_all_minutes_for_group.assert_called_with(
+            existing_group_id, (1, 2))
+
+    def test_get_all_tasks_for_groups(self):
+        pimpy_service.get_all_tasks_for_groups([existing_group_id], (1, 2))
+        pimpy_repository_mock.get_all_tasks_for_groups.assert_called_with(
+            [existing_group_id], (1, 2), None)
+
+    def test_update_status(self):
+        mock_user = Mock(User)
+        mock_task = Mock(Task)
+
+        status = 0
+
+        pimpy_service.update_status(mock_user, mock_task, status)
+        pimpy_repository_mock.update_status.assert_called_with(
+            mock_task, status)
+
+        mock_user.member_of_group.return_value = False
+
+        res = pimpy_service.update_status(mock_user, mock_task, status)
+        self.assertFalse(res)
+
     @patch.object(pimpy_service, 'get_list_of_users_from_string',
                   mock_get_list_of_users_from_string)
     def test_add_existing_task(self):
