@@ -201,8 +201,10 @@ def update_task_status():
     if not task:
         return jsonify(success=False, message="Task does not exist"), 404
     else:
-        if not pimpy_service.update_status(current_user, task, new_status):
-            return jsonify(success=False, message="Invalid data"), 400
+        try:
+            pimpy_service.update_status(current_user, task, new_status)
+        except ValidationException as e:
+            return jsonify(success=False, message=e.detail), 400
 
     return jsonify(success=True, status=task.get_status_color())
 

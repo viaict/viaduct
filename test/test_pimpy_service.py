@@ -15,6 +15,7 @@ task_repository_mock = Mock(task_repository)
 existing_minute_id = 45
 existing_task_id = 22
 existing_group_id = 20
+nonexisting_group_id = 21
 existing_task_name = 'existing task'
 nonexisting_task_name = 'nonexisting task'
 existing_user_name1 = 'Foo'
@@ -96,10 +97,16 @@ class TestPimpyService(unittest.TestCase):
         pimpy_repository_mock.update_status.assert_called_with(
             mock_task, status)
 
-        mock_user.member_of_group.return_value = False
+        with self.assertRaises(ValidationException):
+            mock_user.member_of_group.return_value = False
+            res = pimpy_service.update_status(mock_user, mock_task, status)
+            self.assertFalse(res)
+            pimpy_repository_mock.update_status.assert_not_called()
 
-        res = pimpy_service.update_status(mock_user, mock_task, status)
-        self.assertFalse(res)
+    def test_add_task_invalid_group(self):
+        with self.assertRaises(ValidationException):
+            pimpy_service.add_task('foo', 'content', -1, nonexisting_group_id,
+                                   1, existing_minute_id, 0)
 
     @patch.object(pimpy_service, 'get_list_of_users_from_string',
                   mock_get_list_of_users_from_string)
@@ -145,3 +152,14 @@ class TestPimpyService(unittest.TestCase):
         pimpy_service.edit_task_property(
             user, task_id, content, value)
         func.assert_called_with(task, resvalue)
+
+    def test_edit_task_property_invalid_group(self):
+        mock_user = Mock(User)
+        mock_task = Mock(Task)
+        pimpy_repository_mock.find_task_by_id.return_value = mock_task
+
+        mock_user.member_of_group = Mock(return_value=False)
+
+        with self.assertRaises(ValidationException):
+            pimpy_service.edit_task_property(
+                mock_user, existing_task_id, 'content', 'val')

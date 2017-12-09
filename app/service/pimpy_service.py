@@ -30,12 +30,14 @@ def get_all_tasks_for_groups(group_ids, date_range=None, user=None):
 
 
 def update_status(user, task, status):
-    if user.member_of_group(task.group_id):
-        return pimpy_repository.update_status(task, status)
-    return False
+    if not user.member_of_group(task.group_id):
+        raise ValidationException('User not member of group of task')
+
+    return pimpy_repository.update_status(task, status)
 
 
 def add_task(name, content, group_id, users_text, line, minute_id, status):
+    # TODO: get group here and use that to query the repo
     group = group_repository.find_group_by_id(group_id)
     if not group:
         raise ValidationException(
@@ -43,6 +45,7 @@ def add_task(name, content, group_id, users_text, line, minute_id, status):
 
     users = get_list_of_users_from_string(group_id, users_text)
 
+    # TODO: remove
     if minute_id <= 0:
         minute_id = 1
 
@@ -61,7 +64,7 @@ def edit_task_property(user, task_id, property, value):
     task = find_task_by_id(task_id)
 
     if not user.member_of_group(task.group_id):
-        return ValidationException('User not member of group of task')
+        raise ValidationException('User not member of group of task')
 
     if property == 'content':
         pimpy_repository.edit_task_content(task, value)
