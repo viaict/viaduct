@@ -1,12 +1,12 @@
 from flask_babel import lazy_gettext as _
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, BooleanField
 from wtforms.validators import InputRequired, Email
 
 from app.forms.fields import DecimalField
 
 
-class CreateForm(Form):
+class CreateForm(FlaskForm):
     name = StringField(_('Form name'), validators=[InputRequired()])
     max_attendants = StringField(_('Max number of attendents'))
     msg_success = StringField(

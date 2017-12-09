@@ -1,24 +1,19 @@
+import os
+
 from flask import Blueprint
-from flask import abort, flash, session, redirect, render_template, request, \
-    url_for
-from flask_login import login_required
-from flask_babel import _
+from flask import flash, session, redirect, render_template, request, url_for
+from flask_babel import gettext as _
+from fuzzywuzzy import fuzz
 from sqlalchemy import func
 
 from app import app, db
+from app.decorators import require_role
 from app.forms.examination import EditForm
-from app.utils.file import file_upload, file_remove
-from app.models.examination import Examination, test_types
 from app.models.course import Course
-# from app.models.education import Education
-from app.utils.module import ModuleAPI
-
-# new
-from app.service import examination_service
-
-import os
-from fuzzywuzzy import fuzz
-
+from app.models.examination import Examination, test_types
+from app.roles import Roles
+from app.service import role_service, examination_service
+from app.utils.file import file_upload, file_remove
 
 blueprint = Blueprint('examination', __name__, url_prefix='/examination')
 
@@ -35,13 +30,10 @@ DATE_FORMAT = app.config['DATE_FORMAT']
 
 
 @blueprint.route('/add/', methods=['GET', 'POST'])
-@login_required
+# @require_membership
+@require_role(Roles.EXAMINATION_WRITE)
 def add():
-    if not ModuleAPI.can_write('examination', True):
-        session['prev'] = 'examination.add'
-        return abort(403)
-
-    form = EditForm(request.form, )
+    form = EditForm(request.form)
 
     courses = examination_service.find_all_courses()
     educations = examination_service.find_all_educations()
@@ -116,13 +108,9 @@ def add():
 
 
 @blueprint.route('/edit/<int:exam_id>/', methods=['GET', 'POST'])
-@login_required
+@require_role(Roles.EXAMINATION_WRITE)
+# @require_membership
 def edit(exam_id):
-
-    if not ModuleAPI.can_write('examination', True):
-        session['prev'] = 'examination.edit_examination'
-        return abort(403)
-
     exam = Examination.query.get(exam_id)
 
     if not exam:
@@ -131,7 +119,7 @@ def edit(exam_id):
 
     session['examination_edit_id'] = exam_id
 
-    form = EditForm(request.form, exam)
+    form = EditForm(request.form, obj=exam)
 
     courses = examination_service.find_all_courses()
     educations = examination_service.find_all_educations()
@@ -191,14 +179,8 @@ def edit(exam_id):
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
-@login_required
+# @require_membership
 def view_examination(page_nr=1):
-    if not ModuleAPI.can_read('examination', True):
-        flash(_('Valid membership is required for the examination module'),
-              'warning')
-        session['prev'] = 'examination.view_examination'
-        return abort(403)
-
     # First check if the delete argument is set before loading
     # the search results
     if request.args.get('delete'):
@@ -263,6 +245,9 @@ def view_examination(page_nr=1):
 
     path = '/static/uploads/examinations/'
 
+    can_write = role_service.user_has_role(Roles.EXAMINATION_WRITE)
+
     return render_template('examination/view.htm', path=path,
                            examinations=examinations, search=search,
-                           title=_('Examinations'), test_types=test_types)
+                           title=_('Examinations'), test_types=test_types,
+                           can_write=can_write)

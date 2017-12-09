@@ -1,9 +1,11 @@
+from datetime import datetime
+
+from flask_login import UserMixin, AnonymousUserMixin
+
 from app import db, app
 from app.models.base_model import BaseEntity
 from app.models.education import Education
 from app.models.group import Group
-from flask_login import UserMixin, AnonymousUserMixin
-from datetime import datetime
 
 
 class AnonymousUser(AnonymousUserMixin):
@@ -15,9 +17,9 @@ class AnonymousUser(AnonymousUserMixin):
     not logged in.
 
     Check logged in using:
-
-    >>> if current_user.is_anonymous:
-    >>>     abort(403)
+    >>> from flask_login import login_required
+    >>> @blueprint.route("/someroute")
+    >>> @login_required
 
     Keep in mind, all the user attributes are not available when the user is
     not logged in.
@@ -119,7 +121,6 @@ class User(db.Model, UserMixin, BaseEntity):
 
     @property
     def name(self):
-        """The user's name."""
         if not self.first_name and not self.last_name:
             return None
         return ' '.join([self.first_name, self.last_name])

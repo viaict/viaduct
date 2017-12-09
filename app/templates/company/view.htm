@@ -33,7 +33,7 @@
                 <br/>
                 <br/>
 
-                {% if company.id and ModuleAPI.can_write('company') %}
+                {% if company.id and can_write %}
                 <a class="btn btn-warning"
                     href="{{ url_for('company.edit', company_id=company.id) }}" >
                     <i class="glyphicon glyphicon-pencil"></i>

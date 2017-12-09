@@ -1,0 +1,7 @@
+{% from "macros/form.htm" import render_form %}
+{% extends "content.htm" %}
+
+{% block content %}
+    <h1>{{ _('Edit roles for %s' % group.name) }}</h1>
+    {{ render_form(form) }}
+{% endblock %}

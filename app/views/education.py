@@ -1,13 +1,14 @@
 from flask import Blueprint
-from flask import abort, flash, session, redirect, render_template, request, \
+from flask import flash, session, redirect, render_template, request, \
     url_for
 from flask_babel import _
 
 from app import app, db
-from app.forms import CourseForm, EducationForm
+from app.forms.examination import CourseForm, EducationForm
 from app.models.examination import Examination
 from app.models.education import Education
-from app.utils.module import ModuleAPI
+from app.roles import Roles
+from app.decorators import require_membership, require_role
 
 import json
 
@@ -25,18 +26,16 @@ DATE_FORMAT = app.config['DATE_FORMAT']
 
 
 @blueprint.route('/', methods=['GET'])
+@require_role(Roles.EXAMINATION_WRITE)
+@require_membership
 def view_educations():
-    if not ModuleAPI.can_write('examination', True):
-        return abort(403)
-
     return render_template('education/view.htm')
 
 
 @blueprint.route('/api/get/', methods=['GET'])
+@require_role(Roles.EXAMINATION_WRITE)
+@require_membership
 def get_educations():
-    if not ModuleAPI.can_write('examination', True):
-        return abort(403)
-
     educations = Education.query.all()
     educations_list = []
 
@@ -60,6 +59,8 @@ def get_educations():
 
 
 @blueprint.route('/add/', methods=['GET', 'POST'])
+@require_membership
+@require_role(Roles.EXAMINATION_WRITE)
 def add_education():
     r = request.args.get('redir', True)
     if r in REDIR_PAGES:
@@ -67,10 +68,6 @@ def add_education():
     elif r == 'edit' and 'examination_edit_id' in session:
         session['origin'] = '/examination/edit/{}'.format(
             session['examination_edit_id'])
-
-    if not ModuleAPI.can_write('examination', True):
-        session['prev'] = 'examination.add_education'
-        return abort(403)
 
     form = EducationForm(request.form)
 
@@ -100,6 +97,8 @@ def add_education():
 
 
 @blueprint.route('/edit/<int:education_id>', methods=['GET', 'POST'])
+@require_membership
+@require_role(Roles.EXAMINATION_WRITE)
 def edit_education(education_id):
     r = request.args.get('redir')
     if r in REDIR_PAGES:
@@ -107,10 +106,6 @@ def edit_education(education_id):
     elif r == 'edit' and 'examination_edit_id' in session:
         session['origin'] = '/examination/edit/{}'.format(
             session['examination_edit_id'])
-
-    if not ModuleAPI.can_write('examination', True):
-        session['prev'] = 'examination.edit_education'
-        return abort(403)
 
     education = Education.query.get(education_id)
 

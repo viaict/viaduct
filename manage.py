@@ -1,33 +1,30 @@
 #!/usr/bin/env python3
-from app import app, init_app, version
-from app.extensions import db, jsglue
-from app.models.user import User
-from app.models.group import Group
-from app.models.education import Education
-from app.models.permission import GroupPermission
-from app.models.navigation import NavigationEntry
-
-from flask_script import Manager, Server, prompt, prompt_pass
-from flask_migrate import Migrate, MigrateCommand
-
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
-
 import os
-import time
-import re
-import sys
-import subprocess
 import platform
+import re
+import subprocess
+import sys
+import time
 
-from fuzzywuzzy import fuzz
-from unidecode import unidecode
-
-from flask import current_app
 import alembic
 import alembic.config
-import sqlalchemy
 import bcrypt
+import sqlalchemy
+from flask import current_app
+from flask_migrate import Migrate, MigrateCommand
+from flask_script import Manager, Server, prompt, prompt_pass
+from fuzzywuzzy import fuzz
+from unidecode import unidecode
+from watchdog.events import FileSystemEventHandler
+from watchdog.observers import Observer
+
+from app import app, init_app, version, Roles
+from app.extensions import db, jsglue
+from app.models.education import Education
+from app.models.group import Group
+from app.models.navigation import NavigationEntry
+from app.models.role_model import GroupRole
+from app.models.user import User
 
 init_app()
 
@@ -320,10 +317,15 @@ def createdb():
     admin_group.add_user(admin)
     db.session.commit()
 
+    roles = []
+    for role in Roles:
+        group_role = GroupRole()
+        group_role.group_id = admin_group.id
+        group_role.role = role
+        roles.append(group_role)
+
     # Grant read/write privilege to administrators group on every module
-    db.session.bulk_save_objects(
-        GroupPermission(module, admin_group.id, 2) for module in
-        app.blueprints.keys())
+    db.session.bulk_save_objects(roles)
     db.session.commit()
 
     print("Done!")
@@ -416,7 +418,7 @@ def system():
 
 
 def _administrators_action(user_search, remove):
-    """Method for adding or removing users in the administrators group."""
+    """Add or remove users in the administrators group."""
     admin_group = Group.query.filter(Group.name == "administrators").first()
     if admin_group is None:
         print("Administrators group does not exist.")
@@ -450,9 +452,8 @@ def _administrators_action(user_search, remove):
             full_name = first_name + ' ' + last_name
             rate_full = fuzz.ratio(full_name, user_search)
 
-            if rate_first > maximum or \
-                    rate_last > maximum or \
-                    rate_full > maximum:
+            if (rate_first > maximum or rate_last > maximum or
+                    rate_full > maximum):
                 maximum = max(rate_first, max(rate_last, rate_full))
                 user_found = user
 

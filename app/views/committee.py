@@ -1,19 +1,20 @@
-from flask import Blueprint, abort, request, flash, redirect, url_for, \
+from flask import Blueprint, request, flash, redirect, url_for, \
     render_template
-from flask_login import current_user
 from flask_babel import _  # gettext
+from flask_login import current_user
 
-from app import db
-from app.models.committee import CommitteeRevision
-from app.models.page import Page
-from app.models.group import Group
-from app.models.user import User
-from app.models.navigation import NavigationEntry
-from app.models.page import PagePermission
-from app.utils.module import ModuleAPI
-from app.utils.navigation import NavigationAPI
-from app.forms import CommitteeForm
 import app.utils.committee as CommitteeAPI
+from app import db
+from app.decorators import require_role
+from app.forms.committee import CommitteeForm
+from app.models.committee import CommitteeRevision
+from app.models.group import Group
+from app.models.navigation import NavigationEntry
+from app.models.page import Page
+from app.models.page import PagePermission
+from app.models.user import User
+from app.roles import Roles
+from app.utils.navigation import NavigationAPI
 
 blueprint = Blueprint('committee', __name__)
 
@@ -25,10 +26,8 @@ def list():
 
 
 @blueprint.route('/edit/commissie/<string:committee>', methods=['GET', 'POST'])
+@require_role(Roles.PAGE_WRITE)
 def edit_committee(committee=''):
-    if not ModuleAPI.can_write('committee'):
-        return abort(403)
-
     path = 'commissie/' + committee
 
     page = Page.get_by_path(path)
@@ -36,7 +35,7 @@ def edit_committee(committee=''):
     form = request.form
     if page:
         revision = page.get_latest_revision()
-        form = CommitteeForm(form, revision)
+        form = CommitteeForm(form, obj=revision)
     else:
         revision = None
         form = CommitteeForm()

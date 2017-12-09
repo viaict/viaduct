@@ -1,9 +1,9 @@
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import InputRequired
 
 
-class RedirectForm(Form):
+class RedirectForm(FlaskForm):
     fro = StringField(
         'Van', validators=[InputRequired(message='Van pad vereist')])
     to = StringField(

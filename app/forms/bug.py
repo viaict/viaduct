@@ -1,12 +1,12 @@
 from flask_babel import lazy_gettext as _
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from flask_wtf.recaptcha import RecaptchaField
 from wtforms import StringField, TextAreaField
 from wtforms.validators import InputRequired
 from werkzeug.datastructures import MultiDict
 
 
-class CreateIssueForm(Form):
+class CreateIssueForm(FlaskForm):
     summary = StringField(
         _('Title'),
         validators=[

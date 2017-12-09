@@ -1,4 +1,4 @@
-# Viaduct v2.8.4.0
+# Viaduct v2.8.5.0
 Versioning works as follows: vSYSTEM.FEATURE.IMPROVEMENT.BUG-/HOTFIX
 
 ## Tutorial
@@ -17,16 +17,17 @@ ln -s /usr/bin/nodejs /usr/bin/node
 ```
 ### Python environment
 
-Python dependencies are in `requirements.txt`. Install all the requirements
-through pip. Usage of virtual environments is recommended. Running the `pip
-install` command twice is needed to correctly install the translation binaries
-of the Babel package.:
+For the Python dependencies, usage of virtual environments is recommended.
+All dependencies are listed in `requirements.in`.
+Using `pip-tools` we compile a list of the dependencies with pinned versions,
+which are contained in `requirements.txt`.
+To install the dependencies in a virtual environment, run the following commands:
 
 ```bash
 virtualenv venv/ -p /usr/bin/python3
 . venv/bin/activate
-pip install -r requirements.txt
-pip install -r requirements.txt  # YES DO IT TWICE
+pip install pip-tools
+pip-sync
 ```
 
 ### Configuration files

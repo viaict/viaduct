@@ -1,13 +1,14 @@
 from flask import Blueprint, redirect, render_template, url_for, request, \
-    jsonify, abort
+    jsonify
 from flask_login import current_user
 
 from math import ceil
 from datetime import date
 
 from app import db, app
+from app.decorators import require_role, require_membership
 from app.models.elections import Nominee, Nomination, Vote
-from app.utils.module import ModuleAPI
+from app.roles import Roles
 
 
 blueprint = Blueprint('elections', __name__, url_prefix='/verkiezing')
@@ -41,12 +42,10 @@ def closed():
 
 
 @blueprint.route('/nomineren/', methods=['GET'])
+@require_membership
 def nominate():
     if not can_nominate():
         return redirect(url_for('elections.main'))
-
-    if current_user.is_anonymous or not current_user.has_paid:
-        return abort(403)
 
     nominated_ids = [n.nominee.id for n in current_user.nominations.all()]
 
@@ -66,16 +65,10 @@ def nominate():
 
 
 @blueprint.route('/nomineren/', methods=['POST'])
+@require_membership
 def submit_nomination():
     if not can_nominate():
         return jsonify(error='Het nomineren is gesloten')
-
-    if current_user.is_anonymous:
-        return jsonify(error='Je moet ingelogd zijn om een docent te '
-                       'nomineren'), 403
-    if not current_user.has_paid:
-        return jsonify(error='Je moet betaald lid zijn om een docent te '
-                       'nomineren'), 403
 
     nominee_id = request.form.get('id')
 
@@ -95,12 +88,10 @@ def submit_nomination():
 
 
 @blueprint.route('/nomineren/remove/', methods=['POST'])
+@require_membership
 def remove_nomination():
     if not can_nominate():
         return jsonify(error='Het nomineren is gesloten')
-
-    if current_user.is_anonymous or not current_user.has_paid:
-        return jsonify(error='Je hebt hier helemaal niks te zoeken'), 403
 
     nomination = Nomination.query.get(request.form.get('id'))
 
@@ -114,12 +105,10 @@ def remove_nomination():
 
 
 @blueprint.route('/stemmen/', methods=['GET'])
+@require_membership
 def vote():
     if not can_vote():
         return redirect(url_for('elections.main'))
-
-    if current_user.is_anonymous or not current_user.has_paid:
-        return abort(403)
 
     nominees = Nominee.query.filter(Nominee.valid == True)\
         .order_by(Nominee.name).all()  # noqa
@@ -135,14 +124,10 @@ def vote():
 
 
 @blueprint.route('/stemmen/', methods=['POST'])
+@require_membership
 def submit_vote():
     if not can_vote():
         return jsonify(error='Het stemmen is gesloten')
-
-    if current_user.is_anonymous:
-        return jsonify(error='Je moet ingelogd zijn om te stemmen'), 403
-    if not current_user.has_paid:
-        return jsonify(error='Je moet betaald lid zijn om te stemmen'), 403
 
     nominee_id = request.form.get('nominee_id')
     nominee = Nominee.query.get(nominee_id)
@@ -164,9 +149,8 @@ def admin_main():
 
 
 @blueprint.route('/admin/nomineren/', methods=['GET'])
+@require_role(Roles.ELECTIONS_WRITE)
 def admin_nominate():
-    if not ModuleAPI.can_write('elections'):
-        return abort(403)
 
     nominees = Nominee.query.order_by(Nominee.name)
 
@@ -184,9 +168,8 @@ def admin_nominate():
 
 
 @blueprint.route('/admin/nomineren/', methods=['POST'])
+@require_role(Roles.ELECTIONS_WRITE)
 def validate_nominate():
-    if not ModuleAPI.can_write('elections'):
-        return jsonify(error='Hey, dit mag jij helemaal niet doen!'), 403
 
     nominee = Nominee.query.get(request.form.get('id'))
     valid = request.form.get('valid') == 'true'
@@ -198,10 +181,10 @@ def validate_nominate():
 
 
 @blueprint.route('/admin/stemmen/', methods=['GET'])
+@require_role(Roles.ELECTIONS_WRITE)
 def admin_vote():
-    if not ModuleAPI.can_write('elections'):
-        return abort(403)
 
+    # TODO convert to proper SQLalchemy.
     rp = db.engine.execute('SELECT a.*, (SELECT COUNT(*) FROM dvhj_vote b '
                            'WHERE b.nominee_id=a.id) AS votes '
                            'FROM dvhj_nominee a WHERE a.valid=1 '

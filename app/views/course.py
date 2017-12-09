@@ -1,14 +1,13 @@
 from flask import Blueprint
-from flask import abort, flash, session, redirect, render_template, request, \
+from flask import flash, session, redirect, render_template, request, \
     url_for
 from flask_babel import _
 
-from app.forms import CourseForm
-# from app.models.course import Course
+from app.forms.examination import CourseForm
 from app.service import examination_service
-from app.utils.module import ModuleAPI
 from app.exceptions import BusinessRuleException, DuplicateResourceException
-
+from app.roles import Roles
+from app.decorators import require_role
 import json
 
 
@@ -22,18 +21,14 @@ REDIR_PAGES = {'view': 'examination.view_examination',
 
 
 @blueprint.route('/', methods=['GET'])
+@require_role(Roles.EXAMINATION_WRITE)
 def view_courses():
-    if not ModuleAPI.can_write('examination', True):
-        return abort(403)
-
     return render_template('course/view.htm')
 
 
 @blueprint.route('/api/get/', methods=['GET'])
+@require_role(Roles.EXAMINATION_WRITE)
 def get_courses():
-    if not ModuleAPI.can_write('examination', True):
-        return abort(403)
-
     courses = examination_service.find_all_courses()
     courses_list = []
 
@@ -48,6 +43,8 @@ def get_courses():
 
 
 @blueprint.route('/add/', methods=['GET', 'POST'])
+@require_role(Roles.EXAMINATION_WRITE)
+# @require_membership
 def add_course():
     r = request.args.get('redir')
     if r in REDIR_PAGES:
@@ -55,10 +52,6 @@ def add_course():
     elif r == 'edit' and 'examination_edit_id' in session:
         session['origin'] = '/examination/edit/{}'.format(
             session['examination_edit_id'])
-
-    if not ModuleAPI.can_write('examination', True):
-        session['prev'] = 'examination.add_course'
-        return abort(403)
 
     form = CourseForm(request.form)
 
@@ -85,6 +78,8 @@ def add_course():
 
 
 @blueprint.route('/edit/<int:course_id>', methods=['GET', 'POST'])
+@require_role(Roles.EXAMINATION_WRITE)
+# @require_membership
 def edit_course(course_id):
     r = request.args.get('redir')
     if r in REDIR_PAGES:
@@ -92,10 +87,6 @@ def edit_course(course_id):
     elif r == 'edit' and 'examination_edit_id' in session:
         session['origin'] = '/examination/edit/{}'.format(
             session['examination_edit_id'])
-
-    if not ModuleAPI.can_write('examination', True):
-        session['prev'] = 'examination.edit_course'
-        return abort(403)
 
     course = examination_service.get_course_by_id(course_id)
     exam_count = examination_service.count_examinations_by_course(course_id)
