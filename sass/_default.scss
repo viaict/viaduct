@@ -14,6 +14,15 @@ body {
     overflow-y: scroll;
 }
 
+html,
+body {
+    max-width: 100%;
+
+    /* Viewport fix. */
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
 h1,
 h2,
 h3,
@@ -38,6 +47,10 @@ form label {
 
 form p {
     margin:20px 0;
+}
+
+iframe {
+    max-width: 100%;
 }
 
 @media(max-width: 767px){
