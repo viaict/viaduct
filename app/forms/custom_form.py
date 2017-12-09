@@ -1,9 +1,9 @@
 from flask_babel import lazy_gettext as _
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, BooleanField
-from wtforms.validators import InputRequired, Email
+from wtforms.validators import InputRequired
 
-from app.forms.fields import DecimalField
+from app.forms.fields import DecimalField, EmailField
 
 
 class CreateForm(FlaskForm):
@@ -13,7 +13,7 @@ class CreateForm(FlaskForm):
         _('Success message: shown when user registers'))
     origin = StringField(_('Who'))
     html = StringField(_('Let the dogs out'))
-    email = StringField('E-mail', validators=[InputRequired(), Email()])
+    email = EmailField('E-mail', validators=[InputRequired()])
     first_name = StringField('Voornaam', validators=[InputRequired()])
     last_name = StringField('Achternaam', validators=[InputRequired()])
     student_id = StringField('Student ID', validators=[InputRequired()])
