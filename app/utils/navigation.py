@@ -3,12 +3,13 @@ import datetime
 import re
 
 from flask import render_template, request, url_for
+
 from app import db
+from app.forms.user import SignInForm
 from app.models.activity import Activity
 from app.models.navigation import NavigationEntry
 from app.models.page import Page
 from app.utils.page import PageAPI
-from app.forms import SignInForm
 
 
 class NavigationAPI:

@@ -1,12 +1,13 @@
 from flask import (Blueprint, abort, render_template, request, url_for, flash,
                    redirect)
+from mollie.api.error import Error as MollieError
+
 from app import db
+from app.decorators import require_role
+from app.models.mollie import Transaction
+from app.roles import Roles
 from app.utils import mollie
 from app.utils.mollie import MollieClient, check_transaction
-from app.utils.module import ModuleAPI
-from app.models.mollie import Transaction
-
-from Mollie.API.Error import Error as MollieError
 
 blueprint = Blueprint('mollie', __name__, url_prefix='/mollie')
 
@@ -64,10 +65,8 @@ def webhook():
 
 @blueprint.route('/')
 @blueprint.route('/<int:page>/')
+@require_role(Roles.MOLLIE_READ)
 def list(page=0):
-    if not ModuleAPI.can_read('mollie'):
-        return abort(403)
-
     payments, message = mollie.get_payments(page)
     return render_template('mollie/list.htm', payments=payments,
                            message=message, page=page)

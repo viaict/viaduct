@@ -1,22 +1,22 @@
-import os
 import json
+import os
 
-from flask import Blueprint
-from flask import abort, flash, session, redirect, render_template, request, \
-    url_for
-from flask_login import login_required
-from flask_babel import _
+from flask import flash, session, redirect, render_template, request, \
+    url_for, Blueprint, abort
 from flask_sqlalchemy import Pagination
+from flask_babel import gettext as _
 from fuzzywuzzy import fuzz
 
 from app import app, db
-from app.forms import CourseForm, EducationForm
+from app.decorators import require_membership, require_role
+from app.forms.examination import CourseForm, EducationForm
 from app.forms.examination import EditForm
-from app.utils.file import file_upload, file_remove
-from app.models.examination import Examination, test_types
 from app.models.course import Course
 from app.models.education import Education
-from app.utils.module import ModuleAPI
+from app.models.examination import Examination, test_types
+from app.roles import Roles
+from app.service import role_service
+from app.utils.file import file_upload, file_remove
 
 blueprint = Blueprint('examination', __name__)
 
@@ -50,13 +50,10 @@ def get_course_id(course):
 
 
 @blueprint.route('/examination/add/', methods=['GET', 'POST'])
-@login_required
+@require_membership
+@require_role(Roles.EXAMINATION_WRITE)
 def add():
-    if not ModuleAPI.can_write('examination', True):
-        session['prev'] = 'examination.add'
-        return abort(403)
-
-    form = EditForm(request.form, )
+    form = EditForm(request.form)
 
     courses = Course.query.order_by(Course.name).all()
     educations = Education.query.order_by(Education.name).all()
@@ -130,12 +127,9 @@ def add():
 
 
 @blueprint.route('/examination/edit/<int:exam_id>/', methods=['GET', 'POST'])
-@login_required
+@require_role(Roles.EXAMINATION_WRITE)
+@require_membership
 def edit(exam_id):
-    if not ModuleAPI.can_write('examination', True):
-        session['prev'] = 'examination.edit_examination'
-        return abort(403)
-
     exam = Examination.query.get(exam_id)
 
     if not exam:
@@ -144,7 +138,7 @@ def edit(exam_id):
 
     session['examination_edit_id'] = exam_id
 
-    form = EditForm(request.form, exam)
+    form = EditForm(request.form, obj=exam)
 
     courses = Course.query.order_by(Course.name).all()
     educations = Education.query.order_by(Education.name).all()
@@ -204,14 +198,8 @@ def edit(exam_id):
 
 @blueprint.route('/examination/', methods=['GET', 'POST'])
 @blueprint.route('/examination/<int:page_nr>/', methods=['GET', 'POST'])
-@login_required
+@require_membership
 def view_examination(page_nr=1):
-    if not ModuleAPI.can_read('examination', True):
-        flash(_('Valid membership is required for the examination module'),
-              'warning')
-        session['prev'] = 'examination.view_examination'
-        return abort(403)
-
     # First check if the delete argument is set before loading
     # the search results
     if request.args.get('delete'):
@@ -290,24 +278,23 @@ def view_examination(page_nr=1):
 
     path = '/static/uploads/examinations/'
 
+    can_write = role_service.user_has_role(Roles.EXAMINATION_WRITE)
+
     return render_template('examination/view.htm', path=path,
                            examinations=examinations, search=search,
-                           title=_('Examinations'), test_types=test_types)
+                           title=_('Examinations'), test_types=test_types,
+                           can_write=can_write)
 
 
 @blueprint.route('/courses/', methods=['GET'])
+@require_role(Roles.EXAMINATION_WRITE)
 def view_courses():
-    if not ModuleAPI.can_write('examination', True):
-        return abort(403)
-
     return render_template('course/view.htm')
 
 
 @blueprint.route('/courses/api/get/', methods=['GET'])
+@require_role(Roles.EXAMINATION_WRITE)
 def get_courses():
-    if not ModuleAPI.can_write('examination', True):
-        return abort(403)
-
     courses = Course.query.all()
     courses_list = []
 
@@ -322,6 +309,8 @@ def get_courses():
 
 
 @blueprint.route('/courses/add/', methods=['GET', 'POST'])
+@require_role(Roles.EXAMINATION_WRITE)
+@require_membership
 def add_course():
     r = request.args.get('redir')
     if r in REDIR_PAGES:
@@ -329,10 +318,6 @@ def add_course():
     elif r == 'edit' and 'examination_edit_id' in session:
         session['origin'] = '/examination/edit/{}'.format(
             session['examination_edit_id'])
-
-    if not ModuleAPI.can_write('examination', True):
-        session['prev'] = 'examination.add_course'
-        return abort(403)
 
     form = CourseForm(request.form)
 
@@ -363,6 +348,8 @@ def add_course():
 
 
 @blueprint.route('/course/edit/<int:course_id>', methods=['GET', 'POST'])
+@require_role(Roles.EXAMINATION_WRITE)
+@require_membership
 def edit_course(course_id):
     r = request.args.get('redir')
     if r in REDIR_PAGES:
@@ -370,10 +357,6 @@ def edit_course(course_id):
     elif r == 'edit' and 'examination_edit_id' in session:
         session['origin'] = '/examination/edit/{}'.format(
             session['examination_edit_id'])
-
-    if not ModuleAPI.can_write('examination', True):
-        session['prev'] = 'examination.edit_course'
-        return abort(403)
 
     course = Course.query.get(course_id)
 
@@ -438,18 +421,16 @@ def edit_course(course_id):
 
 
 @blueprint.route('/educations/', methods=['GET'])
+@require_role(Roles.EXAMINATION_WRITE)
+@require_membership
 def view_educations():
-    if not ModuleAPI.can_write('examination', True):
-        return abort(403)
-
     return render_template('education/view.htm')
 
 
 @blueprint.route('/educations/api/get/', methods=['GET'])
+@require_role(Roles.EXAMINATION_WRITE)
+@require_membership
 def get_educations():
-    if not ModuleAPI.can_write('examination', True):
-        return abort(403)
-
     educations = Education.query.all()
     educations_list = []
 
@@ -473,6 +454,8 @@ def get_educations():
 
 
 @blueprint.route('/education/add/', methods=['GET', 'POST'])
+@require_membership
+@require_role(Roles.EXAMINATION_WRITE)
 def add_education():
     r = request.args.get('redir', True)
     if r in REDIR_PAGES:
@@ -480,10 +463,6 @@ def add_education():
     elif r == 'edit' and 'examination_edit_id' in session:
         session['origin'] = '/examination/edit/{}'.format(
             session['examination_edit_id'])
-
-    if not ModuleAPI.can_write('examination', True):
-        session['prev'] = 'examination.add_education'
-        return abort(403)
 
     form = EducationForm(request.form)
 
@@ -513,6 +492,8 @@ def add_education():
 
 
 @blueprint.route('/education/edit/<int:education_id>', methods=['GET', 'POST'])
+@require_membership
+@require_role(Roles.EXAMINATION_WRITE)
 def edit_education(education_id):
     r = request.args.get('redir')
     if r in REDIR_PAGES:
@@ -520,10 +501,6 @@ def edit_education(education_id):
     elif r == 'edit' and 'examination_edit_id' in session:
         session['origin'] = '/examination/edit/{}'.format(
             session['examination_edit_id'])
-
-    if not ModuleAPI.can_write('examination', True):
-        session['prev'] = 'examination.edit_education'
-        return abort(403)
 
     education = Education.query.get(education_id)
 

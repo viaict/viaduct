@@ -1,16 +1,17 @@
 from datetime import datetime
 
 from flask import Blueprint, render_template, request, redirect, url_for, \
-    abort, flash
+    flash
 from flask_babel import lazy_gettext as _
-from flask_sqlalchemy import Pagination
 from sqlalchemy import or_, and_
 
 from app import app, db
-from app.models.vacancy import Vacancy
+from app.decorators import require_role
+from app.forms.vacancy import VacancyForm
 from app.models.company import Company
-from app.forms import VacancyForm
-from app.utils.module import ModuleAPI
+from app.models.vacancy import Vacancy
+from app.roles import Roles
+from app.service import role_service
 
 blueprint = Blueprint('vacancy', __name__, url_prefix='/vacancies')
 FILE_FOLDER = app.config['FILE_DIR']
@@ -28,7 +29,7 @@ def list(page_nr=1, search=None):
                        Vacancy.contract_of_service.like(
                            '%' + search + '%')))
 
-        if not ModuleAPI.can_write('vacancy'):
+        if not role_service.has_role(Roles.VACANCY_WRITE):
             vacancies = vacancies.filter(
                 and_(Vacancy.start_date <
                      datetime.utcnow(), Vacancy.end_date >
@@ -36,12 +37,16 @@ def list(page_nr=1, search=None):
 
         vacancies = vacancies.paginate(page_nr, 15, False)
 
+        can_write = role_service.user_has_role(Roles.VACANCY_WRITE)
+
         return render_template('vacancy/list.htm', vacancies=vacancies,
                                search=search, path=FILE_FOLDER,
-                               title="Vacatures")
+                               title="Vacatures",
+                               can_write=can_write)
 
-    if ModuleAPI.can_write('vacancy'):
-        res = Vacancy.query.join(Company)
+    if not role_service.has_role(Roles.VACANCY_WRITE):
+        vacancies = Vacancy.query.join(Company) \
+                                 .order_by(Vacancy.start_date.desc())
     else:
         res = Vacancy.query.filter(and_(Vacancy.start_date <
                                         datetime.utcnow(), Vacancy.end_date >
@@ -49,18 +54,12 @@ def list(page_nr=1, search=None):
 
     res = _order_vacancies(res)
 
-    if page_nr is None:
-        try:
-            page_nr = int(request.args.get('page', 1))
-        except (TypeError, ValueError):
-            abort(404)
-
-    index = (page_nr - 1) * 15
-
-    vacancies = Pagination(None, page_nr, 15, len(res), res[index:index + 15])
+    vacancies = vacancies.paginate(page_nr, 15, False)
+    can_write = role_service.user_has_role(Roles.VACANCY_WRITE)
 
     return render_template('vacancy/list.htm', vacancies=vacancies,
-                           search="", path=FILE_FOLDER, title="Vacatures")
+                           search="", path=FILE_FOLDER, title="Vacatures",
+                           can_write=can_write)
 
 
 def _order_vacancies(vacancies):
@@ -77,18 +76,16 @@ def _order_vacancies(vacancies):
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<int:vacancy_id>/', methods=['GET', 'POST'])
+@require_role(Roles.VACANCY_WRITE)
 def edit(vacancy_id=None):
     """Create, view or edit a vacancy."""
-    if not ModuleAPI.can_write('vacancy'):
-        return abort(403)
-
     # Select vacancy.
     if vacancy_id:
         vacancy = Vacancy.query.get(vacancy_id)
     else:
         vacancy = Vacancy()
 
-    form = VacancyForm(request.form, vacancy)
+    form = VacancyForm(request.form, obj=vacancy)
 
     # Add companies.
     form.company_id.choices = [(c.id, c.name) for c in Company.query
@@ -123,11 +120,9 @@ def edit(vacancy_id=None):
 
 
 @blueprint.route('/delete/<int:vacancy_id>/', methods=['POST'])
+@require_role(Roles.VACANCY_WRITE)
 def delete(vacancy_id=None):
     """Delete a vacancy."""
-    if not ModuleAPI.can_write('vacancy'):
-        return abort(403)
-
     vacancy = Vacancy.query.get_or_404(vacancy_id)
     db.session.delete(vacancy)
     db.session.commit()

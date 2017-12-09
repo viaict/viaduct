@@ -1,7 +1,8 @@
 from collections import OrderedDict
 from datetime import datetime, timezone
 
-from flask_login import current_user, url_for
+from flask import url_for
+from flask_login import current_user
 
 from app import db
 from app.models.base_model import BaseEntity

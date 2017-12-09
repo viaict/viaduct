@@ -1,20 +1,21 @@
-from app import db, app
-from flask import render_template, Markup, redirect, url_for, abort,\
-    flash
-from flask_login import current_user
-from flask_babel import _
-from unidecode import unidecode
 import datetime
 import re
+
 import baas32 as b32
-
+from flask import render_template, Markup, redirect, url_for, abort, \
+    flash
+from flask_babel import _
+from flask_login import current_user
 from fuzzywuzzy import fuzz
+from unidecode import unidecode
 
-from app.utils.module import ModuleAPI
-from app.utils.user import UserAPI
-from app.models.user import User
+from app import db, app
+from app.decorators import require_role
 from app.models.group import Group
 from app.models.pimpy import Minute, Task, TaskUserRel
+from app.models.user import User
+from app.roles import Roles
+from app.utils.user import UserAPI
 
 # from app.utils import copernica
 
@@ -23,6 +24,7 @@ DATE_FORMAT = app.config['DATE_FORMAT']
 
 class PimpyAPI:
     @staticmethod
+    @require_role(Roles.PIMPY_WRITE)
     def commit_minute_to_db(content, date, group_id):
         """
         Enter minute into the database.
@@ -30,9 +32,6 @@ class PimpyAPI:
         Return succes (boolean, message (string). Message is the new minute.id
         if succes is true, otherwise it contains an error message.
         """
-        if not ModuleAPI.can_write('pimpy'):
-            return abort(403)
-
         try:
             date = datetime.datetime.strptime(date, DATE_FORMAT)
         except Exception:
@@ -47,6 +46,7 @@ class PimpyAPI:
         return True, minute.id
 
     @staticmethod
+    @require_role(Roles.PIMPY_WRITE)
     def commit_task_to_db(name, content, group_id, filled_in_users,
                           line, minute_id, status):
         """
@@ -55,9 +55,6 @@ class PimpyAPI:
         Return succes (boolean), message (string). Message is the new task.id
         if succes is true, otherwise it contains an error message.
         """
-        if not ModuleAPI.can_write('pimpy'):
-            return abort(403)
-
         group = Group.query.filter(Group.id == group_id).first()
         if group is None:
             return False, "Er is niet een groep die voldoet opgegeven."
@@ -100,6 +97,7 @@ class PimpyAPI:
         return True, task.id
 
     @staticmethod
+    @require_role(Roles.PIMPY_WRITE)
     def edit_task(task_id, name, content, group_id,
                   filled_in_users, line):
         """
@@ -110,9 +108,6 @@ class PimpyAPI:
 
         In case of succes the task is edited in the database.
         """
-        if not ModuleAPI.can_write('pimpy'):
-            return abort(403)
-
         if task_id == -1:
             return False, "Geen taak ID opgegeven."
 
@@ -286,6 +281,7 @@ class PimpyAPI:
         return tasks_found, dones_found, removes_found
 
     @staticmethod
+    @require_role(Roles.PIMPY_READ)
     def get_list_of_users_from_string(group_id, comma_sep):
         """
         Get the list of users from a comma seperated string of usernames.
@@ -301,9 +297,6 @@ class PimpyAPI:
         where group_id is the group's id
         and comma_sep is a string with comma seperated users.
         """
-        if not ModuleAPI.can_read('pimpy'):
-            return abort(403)
-
         group = Group.query.filter(Group.id == group_id).first()
         if group is None:
             return False, "Kan groep niet vinden."
@@ -368,9 +361,8 @@ class PimpyAPI:
         return found_users, ""
 
     @staticmethod
+    @require_role(Roles.PIMPY_READ)
     def get_navigation_menu(group_id, personal, type):
-        if not ModuleAPI.can_read('pimpy'):
-            return abort(403)
         if current_user.is_anonymous:
             flash('Huidige gebruiker niet gevonden!', 'danger')
             return redirect(url_for('pimpy.view_minutes'))
@@ -396,9 +388,8 @@ class PimpyAPI:
                                       title='PimPy'))
 
     @staticmethod
+    @require_role(Roles.PIMPY_READ)
     def get_tasks(group_id, personal):
-        if not ModuleAPI.can_read('pimpy'):
-            return abort(403)
         if current_user.is_anonymous:
             flash('Huidige gebruiker niet gevonden', 'danger')
             return redirect(url_for('pimpy.view_tasks'))
@@ -435,11 +426,10 @@ class PimpyAPI:
                                       title='PimPy'))
 
     @staticmethod
+    @require_role(Roles.PIMPY_READ)
     def get_tasks_in_date_range(group_id, personal, start_date, end_date):
         """Load all tasks for a given group in a daterange."""
 
-        if not ModuleAPI.can_read('pimpy'):
-            return abort(403)
         if current_user.is_anonymous:
             flash('Huidige gebruiker niet gevonden', 'danger')
             return redirect(url_for('pimpy.view_tasks'))
@@ -477,11 +467,10 @@ class PimpyAPI:
                                       title='PimPy'))
 
     @staticmethod
+    @require_role(Roles.PIMPY_READ)
     def get_minutes(group_id):
         """Load all minutes in the given group."""
 
-        if not ModuleAPI.can_read('pimpy'):
-            return abort(403)
         if current_user.is_anonymous:
             flash('Huidige gebruiker niet gevonden', 'danger')
             return redirect(url_for('pimpy.view_minutes'))
@@ -509,11 +498,9 @@ class PimpyAPI:
                                title='PimPy')
 
     @staticmethod
+    @require_role(Roles.PIMPY_READ)
     def get_minute(minute_id, line_number):
         """Load (and thus view) specifically one minute."""
-
-        if not ModuleAPI.can_read('pimpy'):
-            return abort(403)
 
         list_items = {}
         minute = Minute.query.filter(Minute.id == minute_id).first()
@@ -531,11 +518,9 @@ class PimpyAPI:
                                title='PimPy')
 
     @staticmethod
+    @require_role(Roles.PIMPY_READ)
     def get_minute_raw(minute_id):
         """Load specifically one minute in raw format (without markup)."""
-
-        if not ModuleAPI.can_read('pimpy'):
-            return abort(403)
 
         minute = Minute.query.filter(Minute.id == minute_id).first()
 
@@ -545,11 +530,10 @@ class PimpyAPI:
         return minute.content
 
     @staticmethod
+    @require_role(Roles.PIMPY_READ)
     def get_minutes_in_date_range(group_id, start_date, end_date):
         """Load all minutes in the given group."""
 
-        if not ModuleAPI.can_read('pimpy'):
-            return abort(403)
         if current_user.is_anonymous:
             flash('Huidige gebruiker niet gevonden', 'danger')
             return redirect(url_for('pimpy.view_minutes'))

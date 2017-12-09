@@ -14,10 +14,27 @@ See [tutorial](TUTORIAL.md).
  - Clone the repository from `git@svia.nl:viaduct`.
 
 
+### Python environment
+
+For the Python dependencies, usage of virtual environments is recommended.
+All dependencies are listed in `requirements.in`.
+Using `pip-tools` we compile a list of the dependencies with pinned versions,
+which are contained in `requirements.txt`.
+To install the dependencies in a virtual environment, run the following commands:
+
+```bash
+virtualenv venv/ -p /usr/bin/python3
+. venv/bin/activate
+pip install pip-tools
+pip-sync
+```
+
+
 ### Configuration files
 
 The config of viaduct is a private repository that is not pushed to the
 github.com servers. Get the submodule with the secret API keys from the server:
+
 ```bash
 git submodule init
 git submodule update

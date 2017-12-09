@@ -1,51 +1,50 @@
+from urllib.parse import parse_qsl
+
 from flask import (flash, redirect, render_template, request, url_for, abort,
                    jsonify, Blueprint, Response)
 from flask_login import current_user
 
 from app import app, db
-from app.utils.serialize_sqla import serialize_sqla
-from app.utils.forms import flash_form_errors
+from app.decorators import require_role, require_membership
 from app.forms.custom_form import CreateForm
 from app.models.custom_form import CustomForm, CustomFormResult, \
     CustomFormFollower
-from app.utils.module import ModuleAPI
-
+from app.roles import Roles
+from app.service import role_service
 from app.utils import copernica
-from urllib.parse import parse_qsl
-
+from app.utils.forms import flash_form_errors
+from app.utils.serialize_sqla import serialize_sqla
 
 blueprint = Blueprint('custom_form', __name__, url_prefix='/forms')
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
+@require_role(Roles.ACTIVITY_WRITE)
 def view(page_nr=1):
-    if not ModuleAPI.can_read('custom_form'):
-        return abort(403)
-
     followed_forms = CustomForm.qry_followed().all()
     active_forms = CustomForm.qry_active().all()
     archived_paginate = CustomForm.qry_archived().paginate(page_nr, 10)
 
+    can_write = role_service.user_has_role(Roles.ACTIVITY_WRITE)
     return render_template('custom_form/overview.htm',
                            followed_forms=followed_forms,
                            active_forms=active_forms,
                            archived_paginate=archived_paginate,
-                           page_nr=page_nr)
+                           page_nr=page_nr,
+                           can_write=can_write)
 
 
 @blueprint.route('/view/<int:form_id>', methods=['GET', 'POST'])
+@require_role(Roles.ACTIVITY_WRITE)
 def view_single(form_id=None):
-    if not ModuleAPI.can_read('custom_form'):
-        return abort(403)
-
     custom_form = CustomForm.query.get(form_id)
 
     if not custom_form:
         return abort(403)
 
     results = []
-    entries = CustomFormResult.query\
+    entries = CustomFormResult.query \
         .filter(CustomFormResult.form_id == form_id).order_by("created")
 
     from urllib.parse import unquote_plus
@@ -77,8 +76,8 @@ def view_single(form_id=None):
 
 
 @blueprint.route('/export/<int:form_id>/', methods=['POST'])
+@require_role(Roles.ACTIVITY_WRITE)
 def export(form_id):
-
     # Create the headers
     xp = CustomForm.exports
     xp_names = list(xp.keys())
@@ -132,17 +131,15 @@ def export(form_id):
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<int:form_id>', methods=['GET', 'POST'])
+@require_role(Roles.ACTIVITY_WRITE)
 def create(form_id=None):
-    if not ModuleAPI.can_write('custom_form') or current_user.is_anonymous:
-        return abort(403)
-
     if form_id:
         custom_form = CustomForm.query.get_or_404(form_id)
         prev_max = custom_form.max_attendants
     else:
         custom_form = CustomForm()
 
-    form = CreateForm(request.form, custom_form)
+    form = CreateForm(request.form, obj=custom_form)
 
     if request.method == 'POST':
         custom_form.name = form.name.data
@@ -213,11 +210,9 @@ def create(form_id=None):
 
 
 @blueprint.route('/remove/<int:submit_id>', methods=['POST'])
+@require_role(Roles.ACTIVITY_WRITE)
 def remove_response(submit_id=None):
     response = "success"
-
-    if not ModuleAPI.can_read('custom_form'):
-        return abort(403)
 
     # Test if user already signed up
     submission = CustomFormResult.query.filter(
@@ -251,11 +246,9 @@ def remove_response(submit_id=None):
 
 # Ajax method
 @blueprint.route('/submit/<int:form_id>', methods=['POST'])
+@require_membership
 def submit(form_id=-1):
     # TODO make sure custom_form rights are set on server
-    if not ModuleAPI.can_read('activity') or current_user.is_anonymous:
-        return "error", 403
-
     response = "success"
 
     custom_form = CustomForm.query.get(form_id)
@@ -298,7 +291,7 @@ def submit(form_id=-1):
         result.data = request.form['data']
         response = "edit"
     else:
-        entries = CustomFormResult.query\
+        entries = CustomFormResult.query \
             .filter(CustomFormResult.form_id == form_id)
         num_attendants = entries.count()
 
@@ -332,10 +325,8 @@ def submit(form_id=-1):
 @blueprint.route('/follow/<int:form_id>/', methods=['GET', 'POST'])
 @blueprint.route('/follow/<int:form_id>/<int:page_nr>/',
                  methods=['GET', 'POST'])
+@require_role(Roles.ACTIVITY_WRITE)
 def follow(form_id, page_nr=1):
-    if not ModuleAPI.can_write('custom_form') or current_user.is_anonymous:
-        return abort(403)
-
     # Unfollow if re-submitted
     follows = (current_user.custom_forms_following
                .filter(CustomFormFollower.form_id == form_id)
@@ -357,10 +348,8 @@ def follow(form_id, page_nr=1):
 @blueprint.route('/archive/<int:form_id>/', methods=['GET', 'POST'])
 @blueprint.route('/archive/<int:form_id>/<int:page_nr>/',
                  methods=['GET', 'POST'])
+@require_role(Roles.ACTIVITY_WRITE)
 def archive(form_id, page_nr=1):
-    if not ModuleAPI.can_write('custom_form') or current_user.is_anonymous:
-        return abort(403)
-
     form = CustomForm.query.get_or_404(form_id)
 
     form.archived = True
@@ -374,10 +363,8 @@ def archive(form_id, page_nr=1):
 @blueprint.route('/unarchive/<int:form_id>/', methods=['GET', 'POST'])
 @blueprint.route('/unarchive/<int:form_id>/<int:page_nr>/',
                  methods=['GET', 'POST'])
+@require_role(Roles.ACTIVITY_WRITE)
 def unarchive(form_id, page_nr=1):
-    if not ModuleAPI.can_write('custom_form') or current_user.is_anonymous:
-        return abort(403)
-
     form = CustomForm.query.get_or_404(form_id)
 
     form.archived = False
@@ -390,10 +377,8 @@ def unarchive(form_id, page_nr=1):
 
 # Ajax endpoint
 @blueprint.route('/has_paid/<int:submit_id>', methods=['POST'])
+@require_role(Roles.ACTIVITY_WRITE)
 def has_paid(submit_id=None):
-    if not ModuleAPI.can_write('custom_form') or current_user.is_anonymous:
-        return abort(403)
-
     # Test if user already signed up
     submission = CustomFormResult.query.filter(
         CustomFormResult.id == submit_id

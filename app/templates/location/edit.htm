@@ -5,7 +5,7 @@
 {% block content %}
     {{ render_form(form) }}
 
-    {% if location.id and ModuleAPI.can_write('location') %}
+    {% if location.id and can_write %}
         <form action="{{ url_for('location.delete', location_id=location.id) }}" method="post">
             <fieldset>
                 <button class="btn btn-danger" type="submit">Verwijderen</button>
