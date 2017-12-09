@@ -19,17 +19,11 @@ _min_password_length = app.config['MIN_PASSWORD_LENGTH']
 
 class BaseUserForm(FlaskForm):
     email = StringField(_('E-mail adress'), validators=[
-        InputRequired(message=_('No e-mail adress submitted')),
+        InputRequired(),
         Email(message=_('Invalid e-mail adress submitted'))])
-    first_name = StringField(_('First name'), validators=[
-        InputRequired(message=_('No first name sunmitted'))]
-    )
-    last_name = StringField(_('Last name'), validators=[
-        InputRequired(message=_('No last name submitted'))]
-    )
-    student_id = StringField(_('Student ID'), validators=[
-        InputRequired(message=_('No studentnumber submitted'))]
-    )
+    first_name = StringField(_('First name'), validators=[InputRequired()])
+    last_name = StringField(_('Last name'), validators=[InputRequired()])
+    student_id = StringField(_('Student ID'), validators=[InputRequired()])
     education_id = SelectField(_('Education'), coerce=int)
     receive_information = BooleanField(_('Would you like to recieve '
                                          'information from companies?'))
@@ -40,10 +34,9 @@ class BaseUserForm(FlaskForm):
     country = StringField(_('Country'), default='Nederland')
 
     # Dates
-    birth_date = DateField(_('Birthdate'), validators=[
-        InputRequired(message=_('No birthdate submitted'))])
-    study_start = DateField(_('Starting year study'), validators=[
-        InputRequired(message=_('No starting year of study submitted'))])
+    birth_date = DateField(_('Birthdate'), validators=[InputRequired()])
+    study_start = DateField(_('Starting year study'),
+                            validators=[InputRequired()])
 
     # Optional fields
     locale = SelectField(_('Language'), validators=[
@@ -55,7 +48,7 @@ class BaseUserForm(FlaskForm):
 class SignUpForm(BaseUserForm):
     password = PasswordField(
         _('Password'), validators=[
-            InputRequired(message=_('No password submitted')),
+            InputRequired(),
             Length(
                 message=(_('Minimal password length: %(length)d',
                            length=_min_password_length)),
@@ -63,13 +56,13 @@ class SignUpForm(BaseUserForm):
     )
     repeat_password = PasswordField(
         _('Repeat password'), validators=[
-            InputRequired(message=_('Passwords do not match')),
+            InputRequired(),
             EqualTo('password', message=_('Passwords do not match'))]
     )
     birth_date = DateField(_('Birthdate'), validators=[
-        InputRequired(message=_('No birthdate submitted'))])
+        InputRequired()])
     study_start = DateField(_('Starting year study'), validators=[
-        InputRequired(message=_('No starting year of study submitted'))])
+        InputRequired()])
     recaptcha = RecaptchaField(
         validators=[Recaptcha(message='Check Recaptcha')])
 
@@ -168,11 +161,10 @@ class EditUserInfoForm(BaseUserForm):
 
 class SignInForm(FlaskForm):
     email = StringField(_('E-mail adress'), validators=[
-        InputRequired(message=_('No e-mail adress submitted')),
+        InputRequired(),
         Email(message=_('Invalid e-mail adress submitted'))])
     password = PasswordField(
-        _('Password'), validators=[
-            InputRequired(message=_('No password submitted'))])
+        _('Password'), validators=[InputRequired()])
 
     def validate_signin(self):
         user = User.query.filter(User.email == self.email.data.strip()).first()
@@ -194,7 +186,7 @@ class SignInForm(FlaskForm):
 
 class RequestPassword(FlaskForm):
     email = StringField(_('E-mail adress'), validators=[
-        InputRequired(message=_('No e-mail adress submitted')),
+        InputRequired(),
         Email(message=_('Invalid e-mail adress submitted'))])
     recaptcha = RecaptchaField(
         validators=[Recaptcha(message='Check Recaptcha')])
@@ -203,13 +195,13 @@ class RequestPassword(FlaskForm):
 class ResetPassword(FlaskForm):
     password = PasswordField(
         _('Password'), validators=[
-            InputRequired(message=_('No password submitted')),
+            InputRequired(),
             Length(message=(_('Minimal password length: %(length)d',
                               length=_min_password_length)),
                    min=_min_password_length)]
     )
     password_repeat = PasswordField(
         _('Repeat password'), validators=[
-            InputRequired(message=_('Passwords do not match')),
+            InputRequired(),
             EqualTo('password', message=_('Passwords do not match'))]
     )
