@@ -1,7 +1,4 @@
-# from flask_babel import _
-
 from app.repository import examination_repository
-# from app.utils import file
 from app.exceptions import ResourceNotFoundException, BusinessRuleException, \
     DuplicateResourceException
 
@@ -11,13 +8,16 @@ def get_examination_by_id(examination_id):
 
 
 def get_education_by_id(education_id):
-    return examination_repository.find_education_by_id(education_id)
+    education = examination_repository.find_education_by_id(education_id)
+    if not education:
+        raise ResourceNotFoundException("Education", education_id)
+    return education
 
 
 def get_course_by_id(course_id):
     course = examination_repository.find_course_by_id(course_id)
     if not course:
-        raise ResourceNotFoundException("Course not found", course_id)
+        raise ResourceNotFoundException("Course", course_id)
     return course
 
 
@@ -30,17 +30,14 @@ def find_all_educations():
 
 
 def find_all_examinations_by_course(course_id):
-    exams = examination_repository.find_all_examinations_by_course(course_id)
-    if not exams:
-        raise ResourceNotFoundException("Examinations")
-    return exams
+    get_course_by_id(course_id)
+    return examination_repository.find_all_examinations_by_course(course_id)
 
 
 def find_all_examinations_by_education(education_id):
-    e = examination_repository.find_all_examinations_by_education(education_id)
-    if not e:
-        raise ResourceNotFoundException("Examinations")
-    return e
+    get_education_by_id(education_id)
+    return examination_repository.\
+        find_all_examinations_by_education(education_id)
 
 
 def add_course(name, description):
@@ -55,11 +52,19 @@ def add_course(name, description):
     examination_repository.save_course(course)
 
 
-def add_examination(title, description):
-    pass
+def add_education(name):
+    existing_education = examination_repository.find_education_by_name(name)
+    if existing_education:
+        raise DuplicateResourceException(name, existing_education.id)
+
+    education = examination_repository.create_education()
+    education.name = name
+
+    examination_repository.save_education(education)
 
 
-def create_education():
+def create_education(exam):
+    examination_repository.create_education(exam)
     pass
 
 
@@ -72,8 +77,14 @@ def update_examination(examination_id, exam_file, answer_file,
     pass
 
 
-def update_education():
-    pass
+def update_education(education_id, name):
+    education = examination_repository.find_education_by_id(education_id)
+    if education.name != name and \
+            examination_repository.find_course_by_name(name):
+        raise DuplicateResourceException("Education", name)
+    education.name = name
+
+    examination_repository.save_education(education)
 
 
 def update_course(course_id, name, description):
@@ -103,10 +114,10 @@ def count_examinations_by_education(education_id):
 
 
 def delete_education(education_id):
-    if count_examinations_by_course(education_id) >= 1:
+    if count_examinations_by_education(education_id) >= 1:
         raise BusinessRuleException("Education has examinations")
     else:
-        examination_repository.delete_course(education_id)
+        examination_repository.delete_education(education_id)
 
 
 def delete_course(course_id):

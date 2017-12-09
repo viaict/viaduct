@@ -1,5 +1,5 @@
 from app import app
-from flask_babel import lazy_gettext as _  # gettext
+from flask_babel import lazy_gettext as _
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import StringField, SelectField, DateField

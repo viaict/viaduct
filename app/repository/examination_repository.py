@@ -12,7 +12,9 @@ def find_examination_by_id(examination_id):
 
 
 def find_education_by_id(education_id):
-    pass
+    return db.session.query(Education) \
+        .filter_by(id=education_id) \
+        .one_or_none()
 
 
 def find_course_by_id(course_id):
@@ -21,9 +23,15 @@ def find_course_by_id(course_id):
         .one_or_none()
 
 
-def find_course_by_name(course_name):
+def find_education_by_name(name):
+    return db.session.query(Education) \
+        .filter_by(name=name) \
+        .one_or_none()
+
+
+def find_course_by_name(name):
     return db.session.query(Course) \
-        .filter_by(name=course_name) \
+        .filter_by(name=name) \
         .one_or_none()
 
 
@@ -56,7 +64,7 @@ def create_examination():
 
 
 def create_education():
-    pass
+    return Education()
 
 
 def create_course():
@@ -67,8 +75,11 @@ def delete_examination():
     pass
 
 
-def delete_education():
-    pass
+def delete_education(education_id):
+    education = db.session.query(Education) \
+        .filter_by(id=education_id).first()
+    db.session.delete(education)
+    db.session.commit()
 
 
 def delete_course(course_id):
@@ -82,8 +93,9 @@ def save_examination():
     pass
 
 
-def save_education():
-    pass
+def save_education(education):
+    db.session.add(education)
+    db.session.commit()
 
 
 def save_course(course):

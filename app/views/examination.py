@@ -21,7 +21,6 @@ UPLOAD_FOLDER = app.config['EXAMINATION_UPLOAD_FOLDER']
 
 REDIR_PAGES = {'view': 'examination.view_examination',
                'add': 'examination.add',
-               'educations': 'examination.view_educations',
                'courses': 'course.view_courses'
                }
 
@@ -30,7 +29,6 @@ DATE_FORMAT = app.config['DATE_FORMAT']
 
 
 @blueprint.route('/add/', methods=['GET', 'POST'])
-# @require_membership
 @require_role(Roles.EXAMINATION_WRITE)
 def add():
     form = EditForm(request.form)

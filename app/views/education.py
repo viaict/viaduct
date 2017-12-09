@@ -3,12 +3,12 @@ from flask import flash, session, redirect, render_template, request, \
     url_for
 from flask_babel import _
 
-from app import app, db
-from app.forms.examination import CourseForm, EducationForm
-from app.models.examination import Examination
-from app.models.education import Education
+from app import app
+from app.forms.examination import EducationForm
+from app.exceptions import BusinessRuleException, DuplicateResourceException
 from app.roles import Roles
-from app.decorators import require_membership, require_role
+from app.decorators import require_role
+from app.service import examination_service
 
 import json
 
@@ -27,16 +27,14 @@ DATE_FORMAT = app.config['DATE_FORMAT']
 
 @blueprint.route('/', methods=['GET'])
 @require_role(Roles.EXAMINATION_WRITE)
-@require_membership
 def view_educations():
     return render_template('education/view.htm')
 
 
 @blueprint.route('/api/get/', methods=['GET'])
 @require_role(Roles.EXAMINATION_WRITE)
-@require_membership
 def get_educations():
-    educations = Education.query.all()
+    educations = examination_service.find_all_educations()
     educations_list = []
 
     for education in educations:
@@ -59,7 +57,6 @@ def get_educations():
 
 
 @blueprint.route('/add/', methods=['GET', 'POST'])
-@require_membership
 @require_role(Roles.EXAMINATION_WRITE)
 def add_education():
     r = request.args.get('redir', True)
@@ -71,33 +68,27 @@ def add_education():
 
     form = EducationForm(request.form)
 
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            title = form.title.data
-            education = Education.query.filter(Education.name == title).first()
-            if not education:
-                new_education = Education(title)
+    if form.validate_on_submit():
+        name = form.title.data
+        try:
+            examination_service.add_education(name)
+            flash("'%s': " % name + _('Education successfully added.'),
+                  'success')
+        except DuplicateResourceException as e:
+            flash("'%s': " % name + _('Already exists in the database'),
+                  'danger')
 
-                db.session.add(new_education)
-                db.session.commit()
-                flash("'%s': " % title + _('Education succesfully added.'),
-                      'success')
-            else:
-                flash("'%s': " % title + _('Already exists in the database'),
-                      'danger')
-
-            if 'origin' in session:
-                redir = session['origin']
-            else:
-                redir = url_for('examination.add')
-            return redirect(redir)
+        if 'origin' in session:
+            redir = session['origin']
+        else:
+            redir = url_for('examination.add')
+        return redirect(redir)
 
     return render_template('education/edit.htm',
                            form=form, new=True)
 
 
 @blueprint.route('/edit/<int:education_id>', methods=['GET', 'POST'])
-@require_membership
 @require_role(Roles.EXAMINATION_WRITE)
 def edit_education(education_id):
     r = request.args.get('redir')
@@ -107,61 +98,46 @@ def edit_education(education_id):
         session['origin'] = '/examination/edit/{}'.format(
             session['examination_edit_id'])
 
-    education = Education.query.get(education_id)
-
-    if not education:
-        flash(_('Education could not be found.'), 'danger')
-        return redirect(url_for('examination.view_educations'))
-
-    exam_count = Examination.query.filter(
-        Examination.education == education).count()
+    education = examination_service.get_education_by_id(education_id)
+    exam_count = examination_service.\
+        count_examinations_by_education(education_id)
 
     if 'delete' in request.args:
-        if exam_count > 0:
-            flash(_('Education still has examinations in the database.'),
-                  'danger')
-            form = CourseForm(title=education.name)
+        try:
+            examination_service.delete_education(education_id)
+            flash(_('Education successfully deleted.'), 'success')
+        except BusinessRuleException as e:
+            flash(_(e.detail), 'danger')
+            form = EducationForm(title=education.name)
             return render_template('education/edit.htm', new=False,
                                    form=form, education=education,
                                    redir=r, exam_count=exam_count)
 
-        Education.query.filter_by(id=education_id).delete()
-        db.session.commit()
-
-        flash(_('Education succesfully deleted.'), 'success')
         if 'origin' in session:
             redir = session['origin']
         else:
             redir = url_for('examination.add')
         return redirect(redir)
 
-    if request.method == 'POST':
-        form = EducationForm(request.form)
-        if form.validate_on_submit():
-            name = form.title.data
-            if name != education.name and Education.query.filter(
-                    Education.name == name).count() >= 1:
-                flash("'%s': " % name + _('Already exists in the database'),
-                      'danger')
-                return render_template('education/edit.htm', new=False,
-                                       form=form, redir=r,
-                                       exam_count=exam_count,
-                                       education=education)
-            else:
-                education.name = name
+    form = EducationForm(request.form)
 
-                db.session.commit()
-                flash("'%s': " % name + _('Education succesfully saved.'),
-                      'success')
+    if form.validate_on_submit():
+        name = form.title.data
+        try:
+            examination_service.update_education(education_id, name)
+            flash("'%s': " % name + _('Education successfully saved.'),
+                  'success')
+        except DuplicateResourceException as e:
+            flash("%s: " % e, 'danger')
 
-                if 'origin' in session:
-                    redir = session['origin']
-                else:
-                    redir = url_for('examination.view_educations')
-                return redirect(redir)
+        if 'origin' in session:
+            redir = session['origin']
+        else:
+            redir = url_for('education.view_educations')
+        return redirect(redir)
 
     else:
-        form = CourseForm(title=education.name)
+        form = EducationForm(title=education.name)
 
     return render_template('education/edit.htm', new=False,
                            form=form, redir=r, exam_count=exam_count,

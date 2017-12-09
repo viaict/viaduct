@@ -44,7 +44,6 @@ def get_courses():
 
 @blueprint.route('/add/', methods=['GET', 'POST'])
 @require_role(Roles.EXAMINATION_WRITE)
-# @require_membership
 def add_course():
     r = request.args.get('redir')
     if r in REDIR_PAGES:
@@ -63,7 +62,7 @@ def add_course():
             flash("'%s': " % form.title.data + _('Course successfully added.'),
                   'success')
         except DuplicateResourceException as e:
-            flash('Course \'%s\'' % e.resource + ' already in database.',
+            flash(_('Course \'%s\'' % e.resource + ' already in database.'),
                   'danger')
 
             return render_template('course/edit.htm', new=True, form=form)
@@ -79,7 +78,6 @@ def add_course():
 
 @blueprint.route('/edit/<int:course_id>', methods=['GET', 'POST'])
 @require_role(Roles.EXAMINATION_WRITE)
-# @require_membership
 def edit_course(course_id):
     r = request.args.get('redir')
     if r in REDIR_PAGES:
