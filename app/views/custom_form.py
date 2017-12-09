@@ -139,7 +139,7 @@ def create(form_id=None):
     else:
         custom_form = CustomForm()
 
-    form = CreateForm(request.form, custom_form)
+    form = CreateForm(request.form, obj=custom_form)
 
     if request.method == 'POST':
         custom_form.name = form.name.data

@@ -1,11 +1,11 @@
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField
 from wtforms.validators import InputRequired, Email
 
 from flask_babel import lazy_gettext as _
 
 
-class ContactForm(Form):
+class ContactForm(FlaskForm):
     name = StringField(_('Name'), validators=[InputRequired()])
     email = StringField(_('Email'), validators=[InputRequired(), Email()])
     phone_nr = StringField(_('Phone'), validators=[InputRequired()])

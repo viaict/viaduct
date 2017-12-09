@@ -77,7 +77,7 @@ def edit(vacancy_id=None):
     else:
         vacancy = Vacancy()
 
-    form = VacancyForm(request.form, vacancy)
+    form = VacancyForm(request.form, obj=vacancy)
 
     # Add companies.
     form.company_id.choices = [(c.id, c.name) for c in Company.query

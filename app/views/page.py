@@ -5,7 +5,7 @@ from flask import Blueprint, flash, redirect, render_template, request, \
     url_for, abort, make_response, current_app
 from flask_babel import _  # gettext
 from flask_login import current_user
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from werkzeug.urls import iri_to_uri
 from wtforms.fields import StringField
 
@@ -130,7 +130,7 @@ def edit_page(path=''):
         # the form.
         revision.needs_paid = revision.page.needs_paid
 
-        form = PageForm(form, revision)
+        form = PageForm(form, obj=revision)
     else:
         form = PageForm()
 
@@ -216,7 +216,7 @@ def delete(path):
         return redirect(url_for('page.get_page', path=path))
     rev = page.get_latest_revision()
 
-    class DeleteForm(Form):
+    class DeleteForm(FlaskForm):
         title = StringField(_('Page title'))
 
     form = DeleteForm(request.form)

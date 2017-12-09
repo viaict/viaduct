@@ -4,6 +4,7 @@ from app import db
 from app.models.activity import Activity
 from app.models.alv_model import Alv, AlvDocument, AlvDocumentVersion
 from app.models.user import User
+from app.models.file import File
 
 
 def create_document():
@@ -51,7 +52,9 @@ def find_alv_by_id(alv_id, include_presidium=True, include_documents=False):
     if include_documents:
         q = q.options(joinedload(Alv.documents)
                       .joinedload(AlvDocument.versions)
-                      .subqueryload(AlvDocumentVersion.file))
+                      .subqueryload(AlvDocumentVersion.file)) \
+             .options(joinedload(Alv.minutes_file)
+                      .load_only(File.name))
 
     q = q.options(raiseload('*'))
     return q.one_or_none()

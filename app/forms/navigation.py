@@ -1,10 +1,10 @@
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from flask_babel import lazy_gettext as _
 from wtforms import StringField, BooleanField, SelectField
 from wtforms.validators import InputRequired, ValidationError
 
 
-class NavigationEntryForm(Form):
+class NavigationEntryForm(FlaskForm):
     nl_title = StringField(_('Dutch title'), validators=[
         InputRequired(_('Dutch title') + " " + ('is required'))
     ])

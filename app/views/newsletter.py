@@ -34,7 +34,7 @@ def edit(newsletter_id=None):
     else:
         newsletter = Newsletter()
 
-    form = NewsletterForm(request.form, newsletter)
+    form = NewsletterForm(request.form, obj=newsletter)
     if request.method == 'POST' and form.validate_on_submit():
         form.populate_obj(newsletter)
         db.session.add(newsletter)

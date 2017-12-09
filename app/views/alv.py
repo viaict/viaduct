@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, url_for, redirect
 
 from app.decorators import require_role, require_membership
-from app.forms.alv import AlvForm, AlvDocumentForm
+from app.forms.alv import AlvForm, AlvDocumentForm, AlvMinutesForm
 from app.models.alv_model import Alv
 from app.roles import Roles
 from app.service import alv_service, role_service
@@ -37,7 +37,7 @@ def create_edit(alv_id=None):
     else:
         alv = Alv()
 
-    form = AlvForm(request.form, alv)
+    form = AlvForm(request.form, obj=alv)
 
     if form.validate_on_submit():
         form.populate_obj(alv)
@@ -45,6 +45,19 @@ def create_edit(alv_id=None):
         return redirect(url_for('alv.list'))
 
     return render_template('alv/edit.htm', form=form)
+
+
+@blueprint.route('/<int:alv_id>/documents/minute/', methods=['GET', 'POST'])
+@require_role(Roles.ALV_WRITE)
+def add_minute(alv_id=None):
+    alv = alv_service.get_alv_by_id(alv_id)
+    form = AlvMinutesForm(request.form)
+
+    if form.validate_on_submit() and form.file.id in request.files:
+        alv_service.add_minutes(alv, request.files.get(form.file.id))
+        return redirect(url_for('alv.view', alv_id=alv.id))
+
+    return render_template('alv/upload_document.htm', form=form, alv=alv)
 
 
 @blueprint.route('/<int:alv_id>/documents/create/', methods=['GET', 'POST'])

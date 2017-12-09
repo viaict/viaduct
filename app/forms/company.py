@@ -1,4 +1,4 @@
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from flask_babel import lazy_gettext as _
 from wtforms import StringField, SelectField, TextAreaField, DateField
@@ -6,7 +6,7 @@ from wtforms.validators import InputRequired
 from app.forms.util import FieldVerticalSplit
 
 
-class CompanyForm(Form):
+class CompanyForm(FlaskForm):
     name = StringField(_('Name'), validators=[InputRequired()])
     description = TextAreaField('Description')
     contract_start_date = DateField(_('Contract startdate'),
@@ -23,7 +23,7 @@ class CompanyForm(Form):
     website = StringField(_('Website'))
 
 
-class NewCompanyForm(Form):
+class NewCompanyForm(FlaskForm):
     name = StringField(_('Name'), validators=[InputRequired(
         message=_("Name is required."))])
     description = TextAreaField('Description')

@@ -35,7 +35,7 @@ def view():
 @require_role(Roles.NAVIGATION_WRITE)
 def edit(entry_id=None, parent_id=None):
     entry = NavigationEntry.query.get_or_404(entry_id) if entry_id else None
-    form = NavigationEntryForm(request.form, entry)
+    form = NavigationEntryForm(request.form, obj=entry)
     form.page_id.choices = [(-1, '-- {} --'.format(_('Custom URL')))] + \
         db.session.query(Page.id, Page.path).all()
 

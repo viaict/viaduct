@@ -129,10 +129,10 @@ def edit(user_id=None):
     user.avatar = UserAPI.has_avatar(user_id)
 
     if role_service.user_has_role(Roles.USER_WRITE):
-        form = EditUserForm(request.form, user)
+        form = EditUserForm(request.form, obj=user)
         is_admin = True
     else:
-        form = EditUserInfoForm(request.form, user)
+        form = EditUserInfoForm(request.form, obj=user)
         is_admin = False
 
     form.new_user = user.id == 0

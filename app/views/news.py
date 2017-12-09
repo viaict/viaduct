@@ -61,7 +61,7 @@ def edit(news_id=None):
     else:
         news_item = News()
 
-    form = NewsForm(request.form, news_item)
+    form = NewsForm(request.form, obj=news_item)
 
     if form.validate_on_submit():
 
