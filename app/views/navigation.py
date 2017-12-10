@@ -123,8 +123,7 @@ def delete(entry_id, inc_page=0):
             flash('Deze item verwijst niet naar een pagina op deze website.',
                   'danger')
         else:
-            path = entry.url.lstrip('/')
-            if PageAPI.remove_page(path):
+            if entry.url is None or PageAPI.remove_page(entry.url.lstrip('/')):
                 flash('De pagina is verwijderd.', 'success')
             else:
                 flash('De te verwijderen pagina kon niet worden gevonden.',
