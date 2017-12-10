@@ -1,12 +1,13 @@
 # coding=utf-8
 from app import app
 from app.models.user import User
+from app.forms.fields import EmailField
 
 from flask_wtf import FlaskForm
 from flask_wtf.recaptcha import RecaptchaField, Recaptcha
 from wtforms import StringField, PasswordField, BooleanField, \
     SelectField, FileField, DateField
-from wtforms.validators import InputRequired, Email, EqualTo, ValidationError,\
+from wtforms.validators import InputRequired, EqualTo, ValidationError,\
     Length, Optional
 
 from flask_babel import lazy_gettext as _, gettext  # noqa
@@ -18,9 +19,7 @@ _min_password_length = app.config['MIN_PASSWORD_LENGTH']
 
 
 class BaseUserForm(FlaskForm):
-    email = StringField(_('E-mail adress'), validators=[
-        InputRequired(),
-        Email(message=_('Invalid e-mail adress submitted'))])
+    email = EmailField(_('E-mail adress'), validators=[InputRequired()])
     first_name = StringField(_('First name'), validators=[InputRequired()])
     last_name = StringField(_('Last name'), validators=[InputRequired()])
     student_id = StringField(_('Student ID'), validators=[InputRequired()])
@@ -160,11 +159,8 @@ class EditUserInfoForm(BaseUserForm):
 
 
 class SignInForm(FlaskForm):
-    email = StringField(_('E-mail adress'), validators=[
-        InputRequired(),
-        Email(message=_('Invalid e-mail adress submitted'))])
-    password = PasswordField(
-        _('Password'), validators=[InputRequired()])
+    email = EmailField(_('E-mail adress'), validators=[InputRequired()])
+    password = PasswordField(_('Password'), validators=[InputRequired()])
 
     def validate_signin(self):
         user = User.query.filter(User.email == self.email.data.strip()).first()
@@ -185,9 +181,7 @@ class SignInForm(FlaskForm):
 
 
 class RequestPassword(FlaskForm):
-    email = StringField(_('E-mail adress'), validators=[
-        InputRequired(),
-        Email(message=_('Invalid e-mail adress submitted'))])
+    email = EmailField(_('E-mail adress'), validators=[InputRequired()])
     recaptcha = RecaptchaField(
         validators=[Recaptcha(message='Check Recaptcha')])
 
