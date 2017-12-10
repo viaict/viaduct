@@ -28,9 +28,6 @@ class PimpyAPI:
         Return succes (boolean, message (string). Message is the new minute.id
         if succes is true, otherwise it contains an error message.
         """
-        if not ModuleAPI.can_write('pimpy'):
-            return abort(403)
-
         try:
             date = datetime.datetime.strptime(date, DATE_FORMAT)
         except Exception:
@@ -196,8 +193,6 @@ class PimpyAPI:
         where group_id is the group's id
         and comma_sep is a string with comma seperated users.
         """
-        if not ModuleAPI.can_read('pimpy'):
-            return abort(403)
 
         group = Group.query.filter(Group.id == group_id).first()
         if group is None:
@@ -294,8 +289,6 @@ class PimpyAPI:
     def get_minutes_in_date_range(group_id, start_date, end_date):
         """Load all minutes in the given group."""
 
-        if not ModuleAPI.can_read('pimpy'):
-            return abort(403)
         if current_user.is_anonymous:
             flash('Huidige gebruiker niet gevonden', 'danger')
             return redirect(url_for('pimpy.view_minutes'))

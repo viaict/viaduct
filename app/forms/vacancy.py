@@ -1,11 +1,11 @@
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from flask_babel import lazy_gettext as _  # noqa
 from wtforms import StringField, SubmitField, TextAreaField, \
     DateField, SelectField
 from wtforms.validators import InputRequired
 
 
-class VacancyForm(Form):
+class VacancyForm(FlaskForm):
     title = StringField(_('Title'), validators=[InputRequired()])
     description = TextAreaField(_('Description'), validators=[InputRequired()])
     start_date = DateField(_('Start date'), validators=[InputRequired()])

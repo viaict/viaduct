@@ -1,4 +1,4 @@
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, DateTimeField, IntegerField, \
     SelectField, BooleanField
 from wtforms.validators import InputRequired, Optional, DataRequired
@@ -12,8 +12,8 @@ from app import app
 DATE_FORMAT = app.config['DATE_FORMAT']
 
 
-class AddTaskForm(Form):
-    name = StringField('Name', validators=[DataRequired()])
+class AddTaskForm(FlaskForm):
+    name = StringField('Name', validators=[InputRequired()])
     content = TextAreaField('Content', validators=[Optional()])
     # timestamp
     line = IntegerField(
@@ -45,10 +45,10 @@ class AddTaskForm(Form):
     def __init__(self, formdata=None, obj=None, prefix='', **kwargs):
         kwargs.setdefault('group', kwargs.get('default', -1))
 
-        Form.__init__(self, formdata, obj, prefix, **kwargs)
+        FlaskForm.__init__(self, formdata, obj, prefix, **kwargs)
 
 
-class EditTaskForm(Form):
+class EditTaskForm(FlaskForm):
     name = StringField('Name', validators=[InputRequired()])
     content = TextAreaField('Content', validators=[Optional()])
     # timestamp
@@ -72,10 +72,10 @@ class EditTaskForm(Form):
     def __init__(self, formdata=None, obj=None, prefix='', **kwargs):
         kwargs.setdefault('group', kwargs.get('default', -1))
 
-        Form.__init__(self, formdata, obj, prefix, **kwargs)
+        FlaskForm.__init__(self, formdata, obj, prefix, **kwargs)
 
 
-class AddMinuteForm(Form):
+class AddMinuteForm(FlaskForm):
     # TODO: should try and resize stuff, especially the content field
     content = TextAreaField('Content', validators=[InputRequired()])
     group = SelectField('Group', validators=[InputRequired()])
@@ -91,4 +91,4 @@ class AddMinuteForm(Form):
     def __init__(self, formdata=None, obj=None, prefix='', **kwargs):
         kwargs.setdefault('group', kwargs.get('default', -1))
 
-        Form.__init__(self, formdata, obj, prefix, **kwargs)
+        FlaskForm.__init__(self, formdata, obj, prefix, **kwargs)

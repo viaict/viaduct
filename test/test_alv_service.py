@@ -5,6 +5,7 @@ from unittest.mock import patch
 
 from app.service import alv_service
 from app.exceptions import ResourceNotFoundException
+from app.models.alv_model import Alv
 
 alv_repository_mock = mock.MagicMock()
 file_mock = mock.MagicMock()
@@ -64,6 +65,15 @@ class TestAlvService(unittest.TestCase):
 
         alv_repository_mock.find_alv_document_by_id.assert_called_with(1)
         alv_repository_mock.find_alv_document_by_id.assert_called_once()
+
+    def test_add_minute(self):
+        alv = mock.MagicMock(spec=dir(Alv))
+        minutes_file = mock.MagicMock()
+        minutes_file.id = 1
+
+        alv_service.add_minutes(alv, minutes_file)
+
+        file_mock.file_upload.assert_called_once_with(minutes_file)
 
     def test_add_document(self):
         alv = mock.MagicMock()

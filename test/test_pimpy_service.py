@@ -47,7 +47,7 @@ def mock_find_task_by_name_content_group(name, content, group):
         return None
 
 
-group_repository_mock.find_group_by_id.side_effect = mock_find_group_id
+group_repository_mock.find_by_id.side_effect = mock_find_group_id
 
 task_repository_mock.find_task_by_name_content_group.side_effect = \
     mock_find_task_by_name_content_group

@@ -1,13 +1,14 @@
 {% from "macros/flash.htm" import render_flash %}
 
 <!DOCTYPE html>
-<html xmlns:fb="http://ogp.me/ns/fb#">
+<html>
     <head>
         {% set seo_fields = get_seo_fields(get_locale()) %}
 
         <title>{{seo_fields.title}}</title>
         <meta description="{{seo_fields.description}}" />
         <meta name="keywords" content="{{seo_fields.tags}}" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <meta property="og:title" content="{{seo_fields.title}}" />
         <meta property="og:description" content="{{seo_fields.description}}" />
@@ -91,7 +92,7 @@
                     <i class="fa fa-question-circle"></i> Help
                 </a>
                 |
-                {% if ModuleAPI.can_write('seo') %}
+                {% if can_write_seo %}
                 <a href="{{ url_for('seo.edit_seo', module=request.blueprint, path=request.path) }}"  data-icon="glyphicon-search" class="btn btn-sm">
                     <i class="fa fa-search"></i> SEO
                 </a>

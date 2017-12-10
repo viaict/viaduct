@@ -1,66 +1,41 @@
+.carousel {
+    margin: 20px 0;
 
-#carousel {
-    padding: 0px;
-    margin: 0px;
+    .item {
+        height: 80px;
+        min-width: 190px;
+        background-color: #fff;
 
-    div {
-        text-align: center;
-        position: relative;
-        float: left;
-        display: block;
-        width: 200px;
-        padding: 0 20px;
+        div {
+            background-color: #fff;
+            text-align: center;
+        }
 
-        img {
-            border: none;
-            width: auto;
-            max-height: 160px;
+        .company-logo {
+                max-height: 80px;
         }
     }
 
-    div:before {
-        content: '';
-        display: inline-block;
-        vertical-align: middle;
-    }
+}
 
-    img {
-        display: inline-block;
-        vertical-align: middle;
-        width: 100%;
-    }
+@media (max-width: 767px) {
+	.carousel-inner .active.left { left: -100%; }
+	.carousel-inner .next        { left:  100%; }
+	.carousel-inner .prev		 { left: -100%; }
+	.active > div { display:none; }
+	.active > div:first-child { display:block; }
 
-    div span {
-        display: none;
-    }
-
-    div:hover span {
-        background-color: #333;
-        color: #fff;
-        font-family: Arial, Geneva, SunSans-Regular, sans-serif;
-        font-size: 14px;
-        line-height: 22px;
-        display: inline-block;
-        width: 100px;
-        padding: 2px 0;
-        margin: 0 0 0 -50px;
-        position: absolute;
-        bottom: 30px;
-        left: 50%;
-        border-radius: 3px;
-    }
-
-    div:hover span,
-    div.hover span {
-        background-color: #333;
-        color: #fff;
-        display: inline-block;
-        width: 100px;
-        padding: 2px 0;
-        margin: 0 0 0 -50px;
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        border-radius: 3px;
-    }
+}
+@media (min-width: 767px) and (max-width: 992px ) {
+	.carousel-inner .active.left { left: -50%; }
+	.carousel-inner .next        { left:  50%; }
+	.carousel-inner .prev		 { left: -50%; }
+	.active > div { display:none; }
+	.active > div:first-child { display:block; }
+	.active > div:first-child + div { display:block; }
+}
+@media (min-width: 992px ) {
+	.carousel-inner .active.left { left: -16.7%; }
+	.carousel-inner .next        { left:  16.7%; }
+	.carousel-inner .prev		 { left: -16.7%; }
 }

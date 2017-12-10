@@ -299,6 +299,9 @@
     {%- elif f.type != 'CSRFTokenField' -%}
         {{ render_field(f, **kwargs) }}
     {%- endif -%}
+    {%- if render_after_hook -%}
+    {{ render_after_hook(f) }}
+    {%- endif -%}
 {% endmacro %}
 
 {% macro render_form(form, action,

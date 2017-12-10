@@ -2,18 +2,20 @@ import json
 from datetime import datetime
 
 from flask import Blueprint, flash, redirect, render_template, request, \
-    url_for, abort
+    url_for
 from flask_babel import lazy_gettext as _
 from sqlalchemy import or_, and_
 
 from app import app, db
-from app.forms import CompanyForm, NewCompanyForm
+from app.decorators import require_role
+from app.forms.company import CompanyForm, NewCompanyForm
 from app.models.company import Company
 from app.models.contact import Contact
 from app.models.location import Location
+from app.roles import Roles
+from app.service import role_service
 from app.utils.file import file_upload
 from app.utils.forms import flash_form_errors
-from app.utils.module import ModuleAPI
 
 blueprint = Blueprint('company', __name__, url_prefix='/companies')
 
@@ -22,7 +24,8 @@ FILE_FOLDER = app.config['FILE_DIR']
 
 @blueprint.route('/get_companies/', methods=['GET'])
 def get_companies():
-    if not ModuleAPI.can_write('company'):
+    vacancy_write = role_service.user_has_role(Roles.VACANCY_WRITE)
+    if not vacancy_write:
         companies = Company.query\
             .filter(and_(Company.contract_start_date < datetime.utcnow(),
                          Company.contract_end_date > datetime.utcnow()))\
@@ -61,7 +64,7 @@ def get_companies():
                     "email": company.contact.email,
                     "phone_nr": company.contact.phone_nr
                 },
-                "can_write": ModuleAPI.can_write('company'),
+                "can_write": vacancy_write,
                 "edit": url_for('company.edit', company_id=company.id),
                 "remove": url_for('company.delete', company_id=company.id),
             })
@@ -79,7 +82,7 @@ def list(page=1):
                         Location.city.like('%' + search + '%')))\
             .order_by(Company.name).order_by(Company.rank)
 
-        if not ModuleAPI.can_write('company'):
+        if not role_service.user_has_role(Roles.VACANCY_WRITE):
             companies = companies\
                 .filter(and_(Company.contract_start_date < datetime.utcnow(),
                              Company.contract_end_date > datetime.utcnow()))\
@@ -97,7 +100,7 @@ def list(page=1):
         return render_template('company/list.htm', companies=companies,
                                search=search, path=FILE_FOLDER)
 
-    if not ModuleAPI.can_write('company'):
+    if not role_service.user_has_role(Roles.VACANCY_WRITE):
         companies = Company.query\
             .filter(and_(Company.contract_start_date < datetime.utcnow(),
                          Company.contract_end_date > datetime.utcnow()))\
@@ -125,24 +128,23 @@ def view(company_id=None):
     """View a company."""
 
     company = Company.query.get_or_404(company_id)
+    can_write = role_service.user_has_role(Roles.VACANCY_WRITE)
     return render_template('company/view.htm', company=company,
-                           path=FILE_FOLDER)
+                           path=FILE_FOLDER, can_write=can_write)
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<int:company_id>/', methods=['GET', 'POST'])
+@require_role(Roles.VACANCY_WRITE)
 def edit(company_id=None):
     """Create, view or edit a company."""
-    if not ModuleAPI.can_write('company'):
-        return abort(403)
-
     # Select company.
     if company_id:
         company = Company.query.get(company_id)
     else:
         company = Company()
 
-    form = CompanyForm(request.form, company)
+    form = CompanyForm(request.form, obj=company)
 
     # Add locations.
     locations = Location.query.order_by('address').order_by('city')
@@ -180,11 +182,9 @@ def edit(company_id=None):
 
 
 @blueprint.route('/delete/<int:company_id>/', methods=['GET', 'POST'])
+@require_role(Roles.VACANCY_WRITE)
 def delete(company_id):
     """Delete a company."""
-    if not ModuleAPI.can_write('company'):
-        return abort(403)
-
     company = Company.query.get_or_404(company_id)
     db.session.delete(company)
     db.session.commit()
@@ -194,10 +194,8 @@ def delete(company_id):
 
 @blueprint.route('/create_new/', methods=['GET', 'POST'])
 @blueprint.route('/edit_new/<int:company_id>/', methods=['GET', 'POST'])
+@require_role(Roles.VACANCY_WRITE)
 def create(company_id=None):
-    if not ModuleAPI.can_write('company'):
-        return abort(403)
-
     # Select company.
     if company_id:
         company = Company.query.get_or_404(company_id)

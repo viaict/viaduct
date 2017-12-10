@@ -56,7 +56,7 @@ def update_status(user, task, status):
 
 def add_task(name, content, group_id, users_text, line, minute_id, status):
     # TODO: get group here and use that to query the repo
-    group = group_repository.find_group_by_id(group_id)
+    group = group_repository.find_by_id(group_id)
     if not group:
         raise ValidationException(
             'Er is niet een groep die voldoet opgegeven.')
