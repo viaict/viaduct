@@ -712,6 +712,9 @@ msgstr "Geen valide e-mailadres"
 msgid "Invalid e-mail adress submitted"
 msgstr "Geen valide e-mailadres opgegeven"
 
+msgid "Invalid email list name."
+msgstr "Geen geldige naam van e-maillijst"
+
 msgid "Invalid language."
 msgstr "Ongeldige taal"
 
@@ -1179,9 +1182,6 @@ msgstr "Er is iets mis gegaan."
 
 msgid "Source code file"
 msgstr "Broncode bestand"
-
-msgid "Spaces are not allowed in email list name"
-msgstr "Maillijst mag geen spaties bevatten"
 
 msgid "Specified examination does not exist"
 msgstr "Opgegeven tentamen bestaat niet"

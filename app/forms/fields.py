@@ -58,7 +58,7 @@ class EmailListField(StringField):
             if " " in self.data:
                 raise ValidationError()
         except ValidationError:
-            raise ValidationError(self.gettext('Invalid email list name.'))
+            raise ValidationError(_('Invalid email list name.'))
         finally:
             self.data = origdata
 

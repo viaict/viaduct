@@ -705,6 +705,9 @@ msgstr ""
 msgid "Invalid e-mail adress submitted"
 msgstr ""
 
+msgid "Invalid email list name."
+msgstr ""
+
 msgid "Invalid language."
 msgstr ""
 
