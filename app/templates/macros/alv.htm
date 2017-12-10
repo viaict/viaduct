@@ -1,4 +1,4 @@
-{% macro format_presidium(alv) %}
+{% macro render_presidium(alv) %}
     {% if not alv.chairman and not alv.secretary %}
         {{ _("No presidium") }}
     {% else %}

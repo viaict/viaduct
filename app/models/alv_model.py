@@ -24,11 +24,6 @@ class Alv(db.Model, BaseEntity):
                                 nullable=True)
     minutes_file = db.relationship('File')
 
-    @property
-    def presidium(self):
-        from app.service import alv_service
-        return alv_service.format_presidium(self)
-
     def get_localized_name(self, locale=None):
         if not locale:
             locale = get_locale()
