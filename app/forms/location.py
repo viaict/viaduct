@@ -13,6 +13,6 @@ class LocationForm(FlaskForm):
     address = StringField(_('Address'), validators=[InputRequired()])
     zip = StringField(_('Zip code'), validators=[InputRequired()])
     postoffice_box = StringField('Postbus')
-    
+
     email = EmailField(_('Email'), validators=[InputRequired()])
     phone_nr = StringField(_('Phone'), validators=[InputRequired()])
