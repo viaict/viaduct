@@ -6,6 +6,7 @@ from wtforms import Form as UnsafeForm
 from wtforms.validators import InputRequired
 
 from app import Roles
+from app.forms.fields import EmailListField
 
 
 class ViewGroupEntry(UnsafeForm):
@@ -20,14 +21,6 @@ class ViewGroupForm(FlaskForm):
 class EditGroupPermissionEntry(UnsafeForm):
     select = SelectField(None, coerce=int, choices=[(0, "Geen"), (1, "Lees"),
                                                     (2, "Lees/Schrijf")])
-
-
-class EmailListField(StringField):
-    def process_formdata(self, valuelist):
-        self.data = valuelist[0].strip().lower()
-        if " " in self.data:
-            raise ValueError(
-                _("Spaces are not allowed in email list name"))
 
 
 class EditGroup(FlaskForm):
