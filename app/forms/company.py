@@ -24,21 +24,17 @@ class CompanyForm(FlaskForm):
 
 
 class NewCompanyForm(FlaskForm):
-    name = StringField(_('Name'), validators=[InputRequired(
-        message=_("Name is required."))])
+    name = StringField(_('Name'), validators=[InputRequired()])
     description = TextAreaField('Description')
     contract_start_date = DateField(
-        _('Contract startdate'), validators=[InputRequired(
-            message=_("Contract startdate is required."))])
+        _('Contract startdate'), validators=[InputRequired()])
     contract_end_date = DateField(
-        _('Contract enddate'), validators=[InputRequired(
-            message=_("Contract enddate is required."))])
+        _('Contract enddate'), validators=[InputRequired()])
     file = FileField(_('Logo'))
     website = StringField(_('Website'))
     contact_name = StringField(_('Contact Name'))
     contact_email = StringField(
-        _('Contact email'), validators=[InputRequired(
-            message=_("Contact email is required."))])
+        _('Contact email'), validators=[InputRequired()])
     contact_phone_nr = StringField(_('Contact Phone'))
     location_city = StringField(_('City'))
     location_country = StringField(_('Country'))

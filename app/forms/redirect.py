@@ -4,9 +4,7 @@ from wtforms.validators import InputRequired
 
 
 class RedirectForm(FlaskForm):
-    fro = StringField(
-        'Van', validators=[InputRequired(message='Van pad vereist')])
-    to = StringField(
-        'Naar', validators=[InputRequired(message='Naar pad vereist')])
+    fro = StringField('Van', validators=[InputRequired()])
+    to = StringField('Naar', validators=[InputRequired()])
 
     submit = SubmitField('Opslaan')
