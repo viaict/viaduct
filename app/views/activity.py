@@ -48,7 +48,8 @@ def view(archive=None, page_nr=1):
             .order_by(Activity.start_time.asc())
         title = _('Activities') + ' - ' + _('page') + ' ' + str(page_nr)
 
-    can_write = role_service.user_has_role(Roles.ACTIVITY_WRITE)
+    can_write = role_service.user_has_role(current_user,
+                                           Roles.ACTIVITY_WRITE)
     return render_template('activity/view.htm',
                            activities=activities.paginate(page_nr, 10, False),
                            archive=archive, title=title, can_write=can_write)
@@ -89,7 +90,8 @@ def get_activity(activity_id=0):
     auto_open_register_pane = False
 
     def render():
-        can_write = role_service.user_has_role(Roles.ACTIVITY_WRITE)
+        can_write = role_service.user_has_role(current_user,
+                                               Roles.ACTIVITY_WRITE)
         return render_template('activity/view_single.htm', activity=activity,
                                form=form, login_form=SignInForm(),
                                title=activity.name,

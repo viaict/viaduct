@@ -1,5 +1,6 @@
 """Views for the file module."""
 from flask import Blueprint, render_template, request, flash
+from flask_login import current_user
 
 from app.decorators import require_role
 from app.forms.file import FileForm
@@ -28,7 +29,7 @@ def list(page_nr=1):
 
     form = FileForm()
 
-    can_write = role_service.user_has_role(Roles.FILE_WRITE)
+    can_write = role_service.user_has_role(current_user, Roles.FILE_WRITE)
 
     return render_template('files/list.htm', files=files, form=form,
                            can_write=can_write)

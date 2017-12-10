@@ -4,6 +4,7 @@ import re
 from flask import Blueprint, render_template, abort, request, flash, \
     redirect, url_for
 from flask_babel import _
+from flask_login import current_user
 
 from app import db
 from app.decorators import require_role
@@ -24,7 +25,8 @@ blueprint = Blueprint('navigation', __name__, url_prefix='/navigation')
 @require_role(Roles.NAVIGATION_WRITE)
 def view():
     entries = NavigationAPI.get_root_entries()
-    can_write = role_service.user_has_role(Roles.NAVIGATION_WRITE)
+    can_write = role_service.user_has_role(current_user,
+                                           Roles.NAVIGATION_WRITE)
     return render_template('navigation/view.htm', nav_entries=entries,
                            can_write=can_write)
 
@@ -105,7 +107,8 @@ def edit(entry_id=None, parent_id=None):
 @blueprint.route('/delete/<int:entry_id>/<int:inc_page>', methods=['GET'])
 @require_role(Roles.NAVIGATION_WRITE)
 def delete(entry_id, inc_page=0):
-    if inc_page and not role_service.user_has_role(Roles.PAGE_WRITE):
+    if inc_page and not role_service.user_has_role(current_user,
+                                                   Roles.PAGE_WRITE):
         flash(_('You do not have rights to remove pages'))
         return abort(403)
 

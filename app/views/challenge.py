@@ -29,7 +29,7 @@ def view_list(page=1):
 
     challenge_description = ChallengeAPI.get_challenge_description()
 
-    can_write = role_service.user_has_role(Roles.CHALLENGE_WRITE)
+    can_write = role_service.user_has_role(current_user, Roles.CHALLENGE_WRITE)
 
     return render_template('challenge/dashboard.htm', challenges=challenges,
                            user_points=user_points, ranking=ranking,
