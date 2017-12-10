@@ -91,7 +91,7 @@ class TestPimpyService(unittest.TestCase):
         mock_user = Mock(User)
         mock_task = Mock(Task)
 
-        status = 0
+        status = Task.STATUS_NOT_STARTED
 
         pimpy_service.update_status(mock_user, mock_task, status)
         pimpy_repository_mock.update_status.assert_called_with(
@@ -99,14 +99,14 @@ class TestPimpyService(unittest.TestCase):
 
         with self.assertRaises(ValidationException):
             mock_user.member_of_group.return_value = False
-            res = pimpy_service.update_status(mock_user, mock_task, status)
-            self.assertFalse(res)
+            pimpy_service.update_status(mock_user, mock_task, status)
             pimpy_repository_mock.update_status.assert_not_called()
 
     def test_add_task_invalid_group(self):
         with self.assertRaises(ValidationException):
-            pimpy_service.add_task('foo', 'content', -1, nonexisting_group_id,
-                                   1, existing_minute_id, 0)
+            pimpy_service.add_task('foo', 'content', -1,
+                                   nonexisting_group_id, 1, existing_minute_id,
+                                   Task.STATUS_NOT_STARTED)
 
     @patch.object(pimpy_service, 'get_list_of_users_from_string',
                   mock_get_list_of_users_from_string)
@@ -115,7 +115,8 @@ class TestPimpyService(unittest.TestCase):
             userlist = existing_user_name1 + ',' + existing_user_name2
             pimpy_service.add_task(
                 existing_task_name, 'test content', existing_group_id,
-                userlist, 1, existing_minute_id, 0)
+                userlist, 1, existing_minute_id,
+                Task.STATUS_NOT_STARTED)
 
     @patch.object(pimpy_service, 'get_list_of_users_from_string',
                   mock_get_list_of_users_from_string)
@@ -123,35 +124,43 @@ class TestPimpyService(unittest.TestCase):
         userlist = existing_user_name1 + ',' + existing_user_name2
         pimpy_service.add_task(
             nonexisting_task_name, 'test content', existing_group_id,
-            userlist, 1, existing_minute_id, 0)
+            userlist, 1, existing_minute_id,
+            Task.STATUS_NOT_STARTED)
 
-    def test_edit_task_property(self):
+    def test_edit_task_property_content(self):
+        self._test_edit_task_property_with_type(
+            'content', pimpy_repository_mock.edit_task_content)
+
+    def test_edit_task_property_title(self):
+        self._test_edit_task_property_with_type(
+            'title', pimpy_repository_mock.edit_task_title)
+
+    def test_edit_task_property_invalid(self):
+        with self.assertRaises(ValidationException):
+            self._test_edit_task_property_with_type(
+                'invalid_property', None)
+
+    def _test_edit_task_property_with_type(
+            self, content, func):
+        mock_task = Mock(Task)
+        pimpy_repository_mock.find_task_by_id.return_value = mock_task
+        value = 'val'
+        pimpy_service.edit_task_property(
+            Mock(User), existing_task_id, content, value)
+        if func:
+            func.assert_called_with(mock_task, value)
+
+    def test_edit_task_users(self):
         mock_user = Mock(User)
         mock_task = Mock(Task)
-
         pimpy_repository_mock.find_task_by_id.return_value = mock_task
-
-        value = 'val'
-
-        self._test_edit_task_property_with_type(
-            mock_user, mock_task, existing_task_id, 'content', value, value,
-            pimpy_repository_mock.edit_task_content)
-
-        self._test_edit_task_property_with_type(
-            mock_user, mock_task, existing_task_id, 'title', value, value,
-            pimpy_repository_mock.edit_task_title)
 
         with patch.object(pimpy_service, 'get_list_of_users_from_string',
                           lambda group_id, userlist: [mock_user]):
-            self._test_edit_task_property_with_type(
-                mock_user, mock_task, existing_task_id, 'users', value,
-                [mock_user], pimpy_repository_mock.edit_task_users)
-
-    def _test_edit_task_property_with_type(
-            self, user, task, task_id, content, value, resvalue, func):
-        pimpy_service.edit_task_property(
-            user, task_id, content, value)
-        func.assert_called_with(task, resvalue)
+            pimpy_service.edit_task_property(
+                mock_user, existing_task_id, 'users', [mock_user])
+            pimpy_repository_mock.edit_task_users.assert_called_with(
+                mock_task, [mock_user])
 
     def test_edit_task_property_invalid_group(self):
         mock_user = Mock(User)

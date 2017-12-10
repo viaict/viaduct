@@ -1,9 +1,11 @@
-from app import app, db
 import datetime
-from app.models.base_model import BaseEntity
+
 from jinja2 import escape
 import baas32 as b32
 from flask_login import current_user
+
+from app import app, db
+from app.models.base_model import BaseEntity
 
 # many to many relationship tables
 task_user = db.Table(
@@ -23,6 +25,13 @@ class TaskUserRel(db.Model):
 
 
 class Task(db.Model, BaseEntity):
+    STATUS_NOT_STARTED = 0
+    STATUS_STARTED = 1
+    STATUS_DONE = 2
+    STATUS_NOT_DONE = 3
+    STATUS_CHECKED = 4
+    STATUS_DELETED = 5
+
     __tablename__ = 'pimpy_task'
 
     prints = ('id', 'title')
@@ -32,6 +41,7 @@ class Task(db.Model, BaseEntity):
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow())
     line = db.Column(db.Integer)
 
+    # TODO: why is the deletion of a task cascading to a minute
     minute_id = db.Column(db.Integer,
                           db.ForeignKey('pimpy_minute.id', ondelete='cascade'))
     minute = db.relationship('Minute',
@@ -50,6 +60,8 @@ class Task(db.Model, BaseEntity):
     status_meanings = [
         "Niet begonnen", "Begonnen", "Done",
         "Niet Done", "Gecheckt", "Verwijderd"]
+
+    # TODO: no view related code here
     status_colors = [
         "btn-info", "btn-warning", "btn-success",
         "btn-danger", "btn-success", "btn-inverse"]
@@ -94,6 +106,7 @@ class Task(db.Model, BaseEntity):
             statusi[i] = [Task.status_meanings[i], Task.status_colors[i], i]
         return statusi
 
+    # TODO: view code
     def get_users(self, include_break_spans=False):
         """
         Return a list of users, comma separated.
@@ -110,7 +123,7 @@ class Task(db.Model, BaseEntity):
 
         if include_break_spans:
             users = map(lambda x: "<span style='white-space: nowrap'>" +
-                        x + "</span>", users)
+                                  x + "</span>", users)
         return ", ".join(users)
 
 
