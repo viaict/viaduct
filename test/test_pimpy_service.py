@@ -53,38 +53,47 @@ task_repository_mock.find_task_by_name_content_group.side_effect = \
     mock_find_task_by_name_content_group
 
 
+# TODO: replace with the two argumennts to reset_mock when we're using py 3.6
+def reset_mock(mock):
+    mock.reset_mock()
+    mock.return_value = None
+    mock.side_effect = None
+
+
 @patch.object(pimpy_service, 'pimpy_repository', pimpy_repository_mock)
 @patch.object(pimpy_service, 'group_repository', group_repository_mock)
 @patch.object(pimpy_service, 'task_repository', task_repository_mock)
 @patch.object(pimpy_service, 'Task', Mock(spec=Task))
 class TestPimpyService(unittest.TestCase):
     def setUp(self):
-        pass
+        reset_mock(pimpy_repository_mock)
+        reset_mock(group_repository_mock)
+        reset_mock(task_repository_mock)
 
     def test_find_minute_by_id(self):
         pimpy_service.find_minute_by_id(existing_minute_id)
-        pimpy_repository_mock.find_minute_by_id.assert_called_with(
+        pimpy_repository_mock.find_minute_by_id.assert_called_once_with(
             existing_minute_id)
 
     def test_find_task_by_id(self):
         pimpy_service.find_task_by_id(existing_task_id)
-        pimpy_repository_mock.find_task_by_id.assert_called_with(
+        pimpy_repository_mock.find_task_by_id.assert_called_once_with(
             existing_task_id)
 
     def test_get_all_minutes_for_user(self):
         mock_user = Mock()
         pimpy_service.get_all_minutes_for_user(mock_user)
-        pimpy_repository_mock.get_all_minutes_for_user.assert_called_with(
+        pimpy_repository_mock.get_all_minutes_for_user.assert_called_once_with(
             mock_user)
 
     def test_get_all_minutes_for_group(self):
         pimpy_service.get_all_minutes_for_group(existing_group_id, (1, 2))
-        pimpy_repository_mock.get_all_minutes_for_group.assert_called_with(
-            existing_group_id, (1, 2))
+        pimpy_repository_mock.get_all_minutes_for_group. \
+            assert_called_once_with(existing_group_id, (1, 2))
 
     def test_get_all_tasks_for_groups(self):
         pimpy_service.get_all_tasks_for_groups([existing_group_id], (1, 2))
-        pimpy_repository_mock.get_all_tasks_for_groups.assert_called_with(
+        pimpy_repository_mock.get_all_tasks_for_groups.assert_called_once_with(
             [existing_group_id], (1, 2), None)
 
     def test_update_status(self):
@@ -94,7 +103,7 @@ class TestPimpyService(unittest.TestCase):
         status = Task.STATUS_NOT_STARTED
 
         pimpy_service.update_status(mock_user, mock_task, status)
-        pimpy_repository_mock.update_status.assert_called_with(
+        pimpy_repository_mock.update_status.assert_called_once_with(
             mock_task, status)
 
         with self.assertRaises(ValidationException):
@@ -148,7 +157,7 @@ class TestPimpyService(unittest.TestCase):
         pimpy_service.edit_task_property(
             Mock(User), existing_task_id, content, value)
         if func:
-            func.assert_called_with(mock_task, value)
+            func.assert_called_once_with(mock_task, value)
 
     def test_edit_task_users(self):
         mock_user = Mock(User)
@@ -159,7 +168,7 @@ class TestPimpyService(unittest.TestCase):
                           lambda group_id, userlist: [mock_user]):
             pimpy_service.edit_task_property(
                 mock_user, existing_task_id, 'users', [mock_user])
-            pimpy_repository_mock.edit_task_users.assert_called_with(
+            pimpy_repository_mock.edit_task_users.assert_called_once_with(
                 mock_task, [mock_user])
 
     def test_edit_task_property_invalid_group(self):
