@@ -1,6 +1,6 @@
 from wtforms import IntegerField, SelectField, StringField
 from wtforms import DecimalField as WtfDecimalFields
-from wtforms.validators import Email
+from wtforms.validators import Email, ValidationError
 from flask_babel import lazy_gettext as _, gettext  # noqa
 from app.models.course import Course
 from app.models.education import Education
@@ -50,6 +50,11 @@ class EmailField(StringField):
 
     def pre_validate(self, form):
         self._email_validator(form, self)
+        # The current version of WTForms does not check for spaces
+        # this is fixed but not released yet, so we do it ourselves
+        if " " in self.data:
+            raise ValidationError(self.gettext('Invalid email address.'))
+
         super().pre_validate(form)
 
     def process_formdata(self, valuelist):
