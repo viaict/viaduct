@@ -7,7 +7,7 @@ from flask_login import current_user
 
 from app import db
 from app.decorators import require_role
-from app.forms.group import (ViewGroupForm, CreateGroup, EditGroup,
+from app.forms.group import (ViewGroupForm, CreateGroupForm, EditGroupForm,
                              GroupRolesForm)
 from app.models.group import Group
 from app.models.user import User
@@ -65,7 +65,7 @@ def view(page_nr=1):
 @blueprint.route('/groups/create/', methods=['GET', 'POST'])
 @require_role(Roles.GROUP_WRITE)
 def create():
-    form = CreateGroup(request.form)
+    form = CreateGroupForm(request.form)
 
     if form.validate_on_submit():
         name = request.form['name'].strip()
@@ -105,9 +105,9 @@ def create():
 def edit(group_id):
     group = Group.by_id(group_id)
 
-    form = EditGroup(request.form, group)
+    form = EditGroupForm(request.form, obj=group)
     if request.method == 'POST':
-        form = EditGroup(request.form)
+        form = EditGroupForm(request.form)
 
         if form.validate_on_submit():
             name = form.data['name'].strip()
