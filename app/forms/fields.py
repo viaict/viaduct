@@ -43,6 +43,29 @@ class DecimalField(WtfDecimalFields):
         return super(DecimalField, self).process_formdata(valuelist)
 
 
+class EmailListField(StringField):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._email_validator = Email()
+
+    def pre_validate(self, form):
+        origdata = self.data
+        self.data += "@svia.nl"
+        try:
+            self._email_validator(form, self)
+            # The current version of WTForms does not check for spaces
+            # this is fixed but not released yet, so we do it ourselves
+            if " " in self.data:
+                raise ValidationError()
+        except ValidationError:
+            raise ValidationError(_('Invalid email list name.'))
+        finally:
+            self.data = origdata
+
+    def process_formdata(self, valuelist):
+        super().process_formdata([d.strip().lower() for d in valuelist])
+
+
 class EmailField(StringField):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -712,6 +712,9 @@ msgstr "Geen valide e-mailadres"
 msgid "Invalid e-mail adress submitted"
 msgstr "Geen valide e-mailadres opgegeven"
 
+msgid "Invalid email list name."
+msgstr "Geen geldige naam van e-maillijst"
+
 msgid "Invalid language."
 msgstr "Ongeldige taal"
 

@@ -705,6 +705,9 @@ msgstr ""
 msgid "Invalid e-mail adress submitted"
 msgstr ""
 
+msgid "Invalid email list name."
+msgstr ""
+
 msgid "Invalid language."
 msgstr ""
 
@@ -1165,6 +1168,9 @@ msgid "Something went wrong."
 msgstr ""
 
 msgid "Source code file"
+msgstr ""
+
+msgid "Spaces are not allowed in email list name"
 msgstr ""
 
 msgid "Specified examination does not exist"

@@ -6,6 +6,7 @@ from wtforms import Form as UnsafeForm
 from wtforms.validators import InputRequired
 
 from app import Roles
+from app.forms.fields import EmailListField
 
 
 class ViewGroupEntry(UnsafeForm):
@@ -24,7 +25,7 @@ class EditGroupPermissionEntry(UnsafeForm):
 
 class EditGroup(FlaskForm):
     name = StringField('Naam', validators=[InputRequired()])
-    maillist = StringField('Naam maillijst')
+    maillist = EmailListField('Naam maillijst')
 
 
 class CreateGroup(EditGroup):
