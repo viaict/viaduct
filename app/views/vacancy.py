@@ -36,7 +36,7 @@ def list(page_nr=1, search=None):
                        Vacancy.contract_of_service.like('%' + search + '%'))) \
             .order_by(order.desc())
 
-        if not role_service.has_role(Roles.VACANCY_WRITE):
+        if not role_service.user_has_role(current_user, Roles.VACANCY_WRITE):
             vacancies = vacancies.filter(
                 and_(Vacancy.start_date <
                      datetime.utcnow(), Vacancy.end_date >
@@ -52,7 +52,7 @@ def list(page_nr=1, search=None):
                                title="Vacatures",
                                can_write=can_write)
 
-    if not role_service.has_role(Roles.VACANCY_WRITE):
+    if not role_service.user_has_role(current_user, Roles.VACANCY_WRITE):
         vacancies = Vacancy.query.join(Company).order_by(order.desc())
     else:
         vacancies = Vacancy.query.order_by(order.desc()) \
