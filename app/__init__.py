@@ -120,7 +120,8 @@ def init_app():
     @app.context_processor
     def inject_seo_write_permission():
         from app.service import role_service
-        can_write_seo = role_service.user_has_role(Roles.SEO_WRITE)
+        can_write_seo = role_service.user_has_role(current_user,
+                                                   Roles.SEO_WRITE)
         return dict(can_write_seo=can_write_seo)
 
     app.json_encoder = JSONEncoder

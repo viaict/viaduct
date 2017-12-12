@@ -61,9 +61,9 @@ def view_single(user_id=None):
         can_write = True
         can_read = True
     # group rights
-    if role_service.user_has_role(Roles.USER_READ):
+    if role_service.user_has_role(current_user, Roles.USER_READ):
         can_read = True
-    if role_service.user_has_role(Roles.USER_WRITE):
+    if role_service.user_has_role(current_user, Roles.USER_WRITE):
         can_write = True
         can_read = True
 
@@ -128,7 +128,7 @@ def edit(user_id=None):
 
     user.avatar = UserAPI.has_avatar(user_id)
 
-    if role_service.user_has_role(Roles.USER_WRITE):
+    if role_service.user_has_role(current_user, Roles.USER_WRITE):
         form = EditUserForm(request.form, obj=user)
         is_admin = True
     else:
@@ -176,7 +176,7 @@ def edit(user_id=None):
         user.first_name = form.first_name.data.strip()
         user.last_name = form.last_name.data.strip()
         user.locale = form.locale.data
-        if role_service.user_has_role(Roles.USER_WRITE):
+        if role_service.user_has_role(current_user, Roles.USER_WRITE):
             user.has_paid = form.has_paid.data
             user.honorary_member = form.honorary_member.data
             user.favourer = form.favourer.data

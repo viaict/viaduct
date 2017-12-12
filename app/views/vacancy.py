@@ -3,6 +3,7 @@ from datetime import datetime
 from flask import Blueprint, render_template, request, redirect, url_for, \
     flash
 from flask_babel import lazy_gettext as _
+from flask_login import current_user
 from sqlalchemy import or_, and_, func
 
 from app import app, db
@@ -43,7 +44,8 @@ def list(page_nr=1, search=None):
 
         vacancies = vacancies.paginate(page_nr, 15, False)
 
-        can_write = role_service.user_has_role(Roles.VACANCY_WRITE)
+        can_write = role_service.user_has_role(current_user,
+                                               Roles.VACANCY_WRITE)
 
         return render_template('vacancy/list.htm', vacancies=vacancies,
                                search=search, path=FILE_FOLDER,
@@ -59,7 +61,7 @@ def list(page_nr=1, search=None):
                          datetime.utcnow()))
 
     vacancies = vacancies.paginate(page_nr, 15, False)
-    can_write = role_service.user_has_role(Roles.VACANCY_WRITE)
+    can_write = role_service.user_has_role(current_user, Roles.VACANCY_WRITE)
 
     return render_template('vacancy/list.htm', vacancies=vacancies,
                            search="", path=FILE_FOLDER, title="Vacatures",

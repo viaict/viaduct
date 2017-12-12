@@ -27,7 +27,7 @@ def view(page_nr=1):
 
     if form.validate_on_submit():
         if form.delete_group.data:
-            if role_service.user_has_role(Roles.GROUP_WRITE):
+            if role_service.user_has_role(current_user, Roles.GROUP_WRITE):
                 group_ids = []
 
                 for group, form_entry in zip(pagination.items, form.entries):
@@ -54,7 +54,7 @@ def view(page_nr=1):
         for group in pagination.items:
             form.entries.append_entry()
 
-    can_write = role_service.user_has_role(Roles.GROUP_WRITE)
+    can_write = role_service.user_has_role(current_user, Roles.GROUP_WRITE)
 
     return render_template('group/view.htm', form=form, pagination=pagination,
                            groups=zip(pagination.items, form.entries),

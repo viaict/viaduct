@@ -62,5 +62,5 @@ def page_not_found(e):
         return '', 404
 
     page = Page(request.path.lstrip('/'))
-    can_write = role_service.user_has_role(Roles.PAGE_WRITE)
+    can_write = role_service.user_has_role(current_user, Roles.PAGE_WRITE)
     return render_template('page/404.htm', page=page, can_write=can_write), 404

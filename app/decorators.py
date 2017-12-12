@@ -26,6 +26,6 @@ def require_membership(f):
         if current_user.is_anonymous or not current_user.has_paid:
             abort(403)
         else:
-            f(*args, **kwargs)
+            return f(*args, **kwargs)
 
     return wrapper
