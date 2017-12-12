@@ -24,9 +24,8 @@ class EditGroupPermissionEntry(UnsafeForm):
 
 
 class EditGroup(FlaskForm):
-    name = StringField('Naam', validators=[
-        InputRequired(message='Geen naam opgegeven')])
-    maillist = EmailListField("Naam maillijst")
+    name = StringField('Naam', validators=[InputRequired()])
+    maillist = EmailListField('Naam maillijst')
 
 
 class CreateGroup(EditGroup):
