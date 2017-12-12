@@ -39,7 +39,7 @@ def build_service(service_type, api_version, scope):
         return build(service_type, api_version, http=http)
     except Exception as e:
         _logger.error(e)
-        sentry.captureException(e)
+        sentry.captureException()
         return None
 
 
@@ -88,7 +88,7 @@ def insert_activity(title="", description='', location="VIA kamer", start="",
                 .execute()
         except Exception as e:
             _logger.error(e)
-            sentry.captureException(e)
+            sentry.captureException()
             flash('Er ging iets mis met het toevogen van het event aan de'
                   'Google Calender')
             return None
@@ -114,7 +114,7 @@ def update_activity(event_id, title="", description='', location="VIA Kamer",
                 .execute()
         except Exception as e:
             _logger.error(e)
-            sentry.captureException(e)
+            sentry.captureException()
             return insert_activity(title, description, location, start, end)
 
 
@@ -128,7 +128,7 @@ def delete_activity(event_id):
                 .delete(calendarId=calendar_id, eventId=event_id) \
                 .execute()
         except Exception as e:
-            sentry.captureException(e)
+            sentry.captureException()
             _logger.error(e)
             flash('Er ging iets mis met het verwijderen van het event uit de'
                   'Google Calender, het kan zijn dat ie al verwijderd was')
@@ -232,7 +232,5 @@ def send_email(to, subject, email_template,
         _logger.info('Sent e-mailmessage Id: %s' % email['id'])
         return email
     except errors.HttpError as e:
-        flash('Er is iets mis gegaan met het versturen van de e-mail',
-              'danger')
         _logger.warning(e)
         sentry.captureException()
