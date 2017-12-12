@@ -4,7 +4,7 @@
 {% block includes %}
 {% endblock %}
 
-{%block content %}
+{% block content %}
 
 <p>
 {% if can_write %}
@@ -98,7 +98,7 @@ Hier is het overzicht van alle gemaakte formulieren. Je kunt formulieren volgen 
     </td>
 
 	<td class="form-buttons">
-		{% can_write %}
+		{% if can_write %}
         <a href="{{ url_for('custom_form.view_single', form_id=form.id) }}" class="view-results btn btn-xs btn-primary">
             <span class="badge badge-inverse">{{ form.custom_form_results.count() }}</span> bekijken
         </a>

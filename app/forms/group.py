@@ -23,12 +23,12 @@ class EditGroupPermissionEntry(UnsafeForm):
                                                     (2, "Lees/Schrijf")])
 
 
-class EditGroup(FlaskForm):
+class EditGroupForm(FlaskForm):
     name = StringField('Naam', validators=[InputRequired()])
     maillist = EmailListField('Naam maillijst')
 
 
-class CreateGroup(EditGroup):
+class CreateGroupForm(EditGroupForm):
     committee_url = StringField('Commissie-pagina URL (zonder slash)')
 
 
