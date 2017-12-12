@@ -1,4 +1,4 @@
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from flask_babel import lazy_gettext as _
 from wtforms import StringField, SelectField, TextAreaField, DateField
@@ -6,7 +6,7 @@ from wtforms.validators import InputRequired
 from app.forms.util import FieldVerticalSplit
 
 
-class CompanyForm(Form):
+class CompanyForm(FlaskForm):
     name = StringField(_('Name'), validators=[InputRequired()])
     description = TextAreaField('Description')
     contract_start_date = DateField(_('Contract startdate'),
@@ -23,22 +23,18 @@ class CompanyForm(Form):
     website = StringField(_('Website'))
 
 
-class NewCompanyForm(Form):
-    name = StringField(_('Name'), validators=[InputRequired(
-        message=_("Name is required."))])
+class NewCompanyForm(FlaskForm):
+    name = StringField(_('Name'), validators=[InputRequired()])
     description = TextAreaField('Description')
     contract_start_date = DateField(
-        _('Contract startdate'), validators=[InputRequired(
-            message=_("Contract startdate is required."))])
+        _('Contract startdate'), validators=[InputRequired()])
     contract_end_date = DateField(
-        _('Contract enddate'), validators=[InputRequired(
-            message=_("Contract enddate is required."))])
+        _('Contract enddate'), validators=[InputRequired()])
     file = FileField(_('Logo'))
     website = StringField(_('Website'))
     contact_name = StringField(_('Contact Name'))
     contact_email = StringField(
-        _('Contact email'), validators=[InputRequired(
-            message=_("Contact email is required."))])
+        _('Contact email'), validators=[InputRequired()])
     contact_phone_nr = StringField(_('Contact Phone'))
     location_city = StringField(_('City'))
     location_country = StringField(_('Country'))

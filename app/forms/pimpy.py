@@ -1,4 +1,4 @@
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, DateTimeField, IntegerField, \
     SelectField, BooleanField
 from wtforms.validators import InputRequired, Optional
@@ -12,7 +12,7 @@ from app import app
 DATE_FORMAT = app.config['DATE_FORMAT']
 
 
-class AddTaskForm(Form):
+class AddTaskForm(FlaskForm):
     name = StringField('Name', validators=[InputRequired()])
     content = TextAreaField('Content', validators=[Optional()])
     # timestamp
@@ -42,15 +42,13 @@ class AddTaskForm(Form):
                                   range(0, len(status_meanings)),
                                   Task.status_meanings)
 
-    def __init__(self, formdata=None, obj=None, prefix='', **kwargs):
+    def __init__(self, formdata=None, *args, **kwargs):
         kwargs.setdefault('group', kwargs.get('default', -1))
 
-        print('>>>1testssdssssad', Task.status_meanings)
-
-        Form.__init__(self, formdata, obj, prefix, **kwargs)
+        FlaskForm.__init__(self, formdata, *args, **kwargs)
 
 
-class EditTaskForm(Form):
+class EditTaskForm(FlaskForm):
     name = StringField('Name', validators=[InputRequired()])
     content = TextAreaField('Content', validators=[Optional()])
     # timestamp
@@ -71,13 +69,13 @@ class EditTaskForm(Form):
         self.group.choices = map(lambda x: (x.id, x.name), groups)
         self.group.default = default
 
-    def __init__(self, formdata=None, obj=None, prefix='', **kwargs):
+    def __init__(self, formdata=None, *args, **kwargs):
         kwargs.setdefault('group', kwargs.get('default', -1))
 
-        Form.__init__(self, formdata, obj, prefix, **kwargs)
+        FlaskForm.__init__(self, formdata, *args, **kwargs)
 
 
-class AddMinuteForm(Form):
+class AddMinuteForm(FlaskForm):
     # TODO: should try and resize stuff, especially the content field
     content = TextAreaField('Content', validators=[InputRequired()])
     group = SelectField('Group', validators=[InputRequired()])
@@ -90,7 +88,7 @@ class AddMinuteForm(Form):
         self.group.choices = map(lambda x: (x.id, x.name), groups)
         self.group.default = default
 
-    def __init__(self, formdata=None, obj=None, prefix='', **kwargs):
+    def __init__(self, formdata=None, *args, **kwargs):
         kwargs.setdefault('group', kwargs.get('default', -1))
 
-        Form.__init__(self, formdata, obj, prefix, **kwargs)
+        FlaskForm.__init__(self, formdata, *args, **kwargs)

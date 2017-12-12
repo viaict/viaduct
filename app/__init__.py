@@ -7,11 +7,12 @@ from flask_babel import Babel
 from flask_login import current_user
 from speaklater import _LazyString
 
+from app.roles import Roles
 from app.utils.import_module import import_module
 from .extensions import db, login_manager, \
     cache, toolbar, jsglue, sentry
 
-version = 'v2.8.5.0'
+version = 'v2.9.0.0'
 
 
 def static_url(url):
@@ -115,6 +116,13 @@ def init_app():
             request_base_url=request.base_url,
             request_url=request.url,
             request_url_root=request.url_root)
+
+    @app.context_processor
+    def inject_seo_write_permission():
+        from app.service import role_service
+        can_write_seo = role_service.user_has_role(current_user,
+                                                   Roles.SEO_WRITE)
+        return dict(can_write_seo=can_write_seo)
 
     app.json_encoder = JSONEncoder
 

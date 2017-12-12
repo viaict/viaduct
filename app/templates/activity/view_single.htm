@@ -19,7 +19,7 @@
 
 {% block content %}
     <div class="page-header">
-        {% if ModuleAPI.can_write('activity') %}
+        {% if can_write %}
             <a href="{{ url_for('activity.create',activity_id=activity.id) }}"
                 class="btn btn-warning pull-right">
                 <i class="glyphicon glyphicon-pencil"></i>

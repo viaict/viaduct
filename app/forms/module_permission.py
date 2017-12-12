@@ -1,4 +1,4 @@
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import FormField, FieldList, SubmitField, SelectField
 
 from wtforms import Form as UnsafeForm
@@ -9,6 +9,6 @@ class ModuleEditGroupPermissionEntry(UnsafeForm):
                                                     (2, "Lees/Schrijf")])
 
 
-class ModuleEditGroupPermissionForm(Form):
+class ModuleEditGroupPermissionForm(FlaskForm):
     permissions = FieldList(FormField(ModuleEditGroupPermissionEntry))
     save_changes = SubmitField('Sla veranderingen op')

@@ -1,29 +1,25 @@
-from flask import Blueprint, render_template, request, \
-    abort, jsonify
-
 import datetime
 
+from flask import Blueprint, render_template, request, \
+    jsonify
 from flask_login import login_required, current_user
+
+from app.decorators import require_role, require_membership
+from app.forms.challenge import ChallengeForm
 from app.models.challenge import Challenge
-from app.forms import ChallengeForm
-from app.utils.module import ModuleAPI
+from app.roles import Roles
+from app.service import role_service
 from app.utils.challenge import ChallengeAPI
 
 blueprint = Blueprint('challenge', __name__, url_prefix='/challenge')
 
-# UPLOAD_FOLDER = app.config['UPLOAD_DIR']
-# FILE_FOLDER = app.config['FILE_DIR']
-# ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
-
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/dashboard/', methods=['GET', 'POST'])
+@require_membership
 def view_list(page=1):
-    if not ModuleAPI.can_read('challenge'):
-        return abort(403)
-
     challenge = Challenge()
-    form = ChallengeForm(request.form, challenge)
+    form = ChallengeForm(request.form, obj=challenge)
 
     challenges = ChallengeAPI.fetch_all_challenges_user(current_user.id)
     approved_challenges = \
@@ -33,18 +29,19 @@ def view_list(page=1):
 
     challenge_description = ChallengeAPI.get_challenge_description()
 
+    can_write = role_service.user_has_role(current_user, Roles.CHALLENGE_WRITE)
+
     return render_template('challenge/dashboard.htm', challenges=challenges,
                            user_points=user_points, ranking=ranking,
                            approved_challenges=approved_challenges, form=form,
-                           challenge_description=challenge_description)
+                           challenge_description=challenge_description,
+                           can_write=can_write)
 
 
 # API's
 @blueprint.route('/api/fetch_all_challenges', methods=['GET', 'POST'])
+@require_role(Roles.CHALLENGE_WRITE)
 def fetch_all():
-    if not ModuleAPI.can_write('challenge'):
-        abort(403)
-
     challenges = ChallengeAPI.fetch_all_challenges()
 
     return jsonify(challenges=[challenge.serialize for challenge in
@@ -60,10 +57,8 @@ def get_ranking():
 
 @blueprint.route('/api/fetch_challenge', methods=['GET', 'POST'])
 @blueprint.route('/api/fetch_challenge/', methods=['GET', 'POST'])
+@require_role(Roles.CHALLENGE_WRITE)
 def fetch_question():
-    if not ModuleAPI.can_write('challenge'):
-        abort(403)
-
     # Gather all arguments
     if request.args.get('challenge_id'):
         challenge_id = request.args.get('challenge_id')
@@ -76,10 +71,8 @@ def fetch_question():
 
 
 @blueprint.route('/api/create_challenge', methods=['GET', 'POST'])
+@require_role(Roles.CHALLENGE_WRITE)
 def create_challenge(challenge_id=None):
-    if not ModuleAPI.can_write('challenge'):
-        abort(403)
-
     # Gather all arguments
     if request.args.get('parent_id'):
         parent_id = request.args.get('parent_id')

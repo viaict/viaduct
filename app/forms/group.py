@@ -1,18 +1,19 @@
-from flask_wtf import Form
-
+from flask_babel import lazy_gettext as _
+from flask_wtf import FlaskForm
 from wtforms import BooleanField, FormField, FieldList, SubmitField, \
-    SelectField, StringField
-
+    StringField, SelectMultipleField, SelectField
+from wtforms import Form as UnsafeForm
 from wtforms.validators import InputRequired
 
-from wtforms import Form as UnsafeForm
+from app import Roles
+from app.forms.fields import EmailListField
 
 
 class ViewGroupEntry(UnsafeForm):
     select = BooleanField(None)
 
 
-class ViewGroupForm(Form):
+class ViewGroupForm(FlaskForm):
     entries = FieldList(FormField(ViewGroupEntry))
     delete_group = SubmitField('Verwijder groep')
 
@@ -22,17 +23,21 @@ class EditGroupPermissionEntry(UnsafeForm):
                                                     (2, "Lees/Schrijf")])
 
 
-class EditGroup(Form):
-    name = StringField('Naam', validators=[
-        InputRequired(message='Geen naam opgegeven')])
-    maillist = StringField('Naam maillijst')
+class EditGroup(FlaskForm):
+    name = StringField('Naam', validators=[InputRequired()])
+    maillist = EmailListField('Naam maillijst')
 
 
 class CreateGroup(EditGroup):
     committee_url = StringField('Commissie-pagina URL (zonder slash)')
 
 
-class EditGroupPermissionForm(Form):
+class GroupRolesForm(FlaskForm):
+    roles = SelectMultipleField(_("Roles"), choices=Roles.choices(),
+                                coerce=Roles.coerce)
+
+
+class EditGroupPermissionForm(FlaskForm):
     permissions = FieldList(FormField(EditGroupPermissionEntry))
     add_module_name = SelectField('Module')
     add_module_permission = SelectField(None, coerce=int,

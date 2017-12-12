@@ -18,6 +18,8 @@ class Config:
 
     DEBUG_TB_INTERCEPT_REDIRECTS = False
 
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
     RECAPTCHA_USE_SSL = False
     RECAPTCHA_PUBLIC_KEY = ''   # Change this for real use
     RECAPTCHA_PRIVATE_KEY = ''  # Change this for real use

@@ -1,15 +1,39 @@
 <br />
 <div class="row">
-    <div class="col-md-12"  style="overflow:hidden;">
-        <div id="carousel">
-            {% for company in CompanyAPI.get_carousel() %}
-                <div class="col-md-2 logo_wrapper">
-                    <a href="{{company.website}}">
-                        <img class="logo_img" src="/static/files/{{company.logo_path}}" alt="{{company.name}}" />
-                    </a>
-                    <a href="{{company.website}}">
-                        <span>{{company.name}}</span>
-                    </a>
+    <script>
+        $(document).ready(function(){
+            $('.carousel[data-type="multi"] .item').each(function(){
+                var next = $(this).next();
+                if (!next.length) {
+                    next = $(this).siblings(':first');
+                }
+                next.children(':first-child').clone().appendTo($(this));
+
+                for (var i = 0; i < 4; i++) {
+                    next=next.next();
+                    if (!next.length) {
+                        next = $(this).siblings(':first');
+                    }
+
+                    next.children(':first-child').clone().appendTo($(this));
+                }
+            });
+        });
+    </script>
+
+    <div class="carousel slide" data-ride="carousel" data-type="multi" data-interval="4000">
+        <div class="carousel-inner">
+            {% for i, company in  enumerate(CompanyAPI.get_carousel()) %}
+                {% if i == 0 %}
+                    <div class="item active">
+                {% else %}
+                    <div class="item">
+                {% endif %}
+                    <div class="col-md-2 col-sm-6 col-xs-12">
+                        <a href="{{company.website}}">
+                            <img alt="{{company.name}}" src="/static/files/{{company.logo_path}}" class="company-logo">
+                        </a>
+                    </div>
                 </div>
             {% endfor %}
         </div>

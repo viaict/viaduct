@@ -1,11 +1,12 @@
 {% from "macros/pagination.htm" import render_pagination %}
 {% from "macros/form.htm" import render_form %}
+{% from "macros/alv.htm" import render_presidium %}
 
 {% extends "base.htm" %}
 
 {% block page %}
 
-{% if ModuleAPI.can_write('alv') %}
+{% if can_write %}
 <div class="row">
     <div class="col-md-8">
         <div class="form-group btn-group">
@@ -33,7 +34,7 @@
             <tr>
                 <td>
                     {{ alv.name }}<br/>
-                    <small>{{ alv.presidium }}</small>
+                    <small>{{ render_presidium(alv) }}</small>
                 </td>
                 <td>
                     <a href="{{ url_for('alv.view', alv_id=alv.id)}}">

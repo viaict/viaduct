@@ -1,37 +1,33 @@
 # coding: utf-8
-import copy
 import json
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
-from flask import abort, jsonify
+from flask import jsonify
 from flask_login import current_user
 
-from app import app, db
-
-from app.utils.module import ModuleAPI
-from app.utils import google
-
-from app.models.user import User
+from app import db
+from app.decorators import require_role
+from app.forms.group import (ViewGroupForm, CreateGroup, EditGroup,
+                             GroupRolesForm)
 from app.models.group import Group
-from app.models.permission import GroupPermission
-from app.forms.group import EditGroupPermissionForm, ViewGroupForm, \
-    CreateGroup, EditGroup
+from app.models.user import User
+from app.roles import Roles
+from app.service import role_service, group_service
+from app.utils import google
 
 blueprint = Blueprint('group', __name__)
 
 
 @blueprint.route('/groups/', methods=['GET', 'POST'])
 @blueprint.route('/groups/<int:page_nr>/', methods=['GET', 'POST'])
+@require_role(Roles.GROUP_READ)
 def view(page_nr=1):
-    if not(ModuleAPI.can_read('group')):
-        return abort(403)
-
     form = ViewGroupForm(request.form)
     pagination = Group.query.order_by(Group.name).paginate(page_nr, 15, False)
 
     if form.validate_on_submit():
         if form.delete_group.data:
-            if ModuleAPI.can_write('group'):
+            if role_service.user_has_role(current_user, Roles.GROUP_WRITE):
                 group_ids = []
 
                 for group, form_entry in zip(pagination.items, form.entries):
@@ -58,16 +54,17 @@ def view(page_nr=1):
         for group in pagination.items:
             form.entries.append_entry()
 
+    can_write = role_service.user_has_role(current_user, Roles.GROUP_WRITE)
+
     return render_template('group/view.htm', form=form, pagination=pagination,
                            groups=zip(pagination.items, form.entries),
-                           current_user=current_user, title='Groups')
+                           current_user=current_user, title='Groups',
+                           can_write=can_write)
 
 
 @blueprint.route('/groups/create/', methods=['GET', 'POST'])
+@require_role(Roles.GROUP_WRITE)
 def create():
-    if not(ModuleAPI.can_write('group')):
-        return abort(403)
-
     form = CreateGroup(request.form)
 
     if form.validate_on_submit():
@@ -104,10 +101,8 @@ def create():
 
 
 @blueprint.route('/groups/<int:group_id>/edit/', methods=['GET', 'POST'])
+@require_role(Roles.GROUP_WRITE)
 def edit(group_id):
-    if not(ModuleAPI.can_write('group')):
-        return abort(403)
-
     group = Group.by_id(group_id)
 
     form = EditGroup(request.form, group)
@@ -124,7 +119,7 @@ def edit(group_id):
 
             valid_form = True
 
-            group_with_same_name = Group.query.\
+            group_with_same_name = Group.query. \
                 filter(Group.name == name, Group.id != group_id).first()
             if group_with_same_name is not None:
                 flash('The naam van de groep wordt al gebruikt', 'danger')
@@ -151,17 +146,15 @@ def edit(group_id):
 
 
 @blueprint.route('/groups/<int:group_id>/users/', methods=['GET', 'POST'])
+@require_role(Roles.GROUP_READ)
 def view_users(group_id):
-    if not(ModuleAPI.can_read('group')):
-        return abort(403)
-
     group = Group.query.filter(Group.id == group_id).first()
 
     if not group:
         flash('There is no such group.')
         return redirect(url_for('group.view'))
 
-    users = group.users.order_by(User.first_name)\
+    users = group.users.order_by(User.first_name) \
         .order_by(User.last_name).all()
 
     return render_template('group/view_users.htm', group=group, users=users,
@@ -169,9 +162,8 @@ def view_users(group_id):
 
 
 @blueprint.route('/groups/<int:group_id>/get_users/', methods=['GET'])
+@require_role(Roles.GROUP_READ)
 def get_group_users(group_id):
-    if not(ModuleAPI.can_read('group')):
-        return abort(403)
     group = Group.query.filter(Group.id == group_id).first()
     if not group:
         flash('There is no such group.')
@@ -187,10 +179,8 @@ def get_group_users(group_id):
 
 
 @blueprint.route('/groups/<int:group_id>/delete_users/', methods=['DELETE'])
+@require_role(Roles.GROUP_WRITE)
 def delete_group_users(group_id):
-    if not(ModuleAPI.can_write('group')):
-        return abort(403)
-
     group = Group.query.filter(Group.id == group_id).first()
     if not group:
         flash('There is no such group.')
@@ -198,7 +188,7 @@ def delete_group_users(group_id):
 
     user_ids = request.get_json()['selected_ids']
 
-    users = group.get_users().filter(User.id.in_(user_ids))\
+    users = group.get_users().filter(User.id.in_(user_ids)) \
         .order_by(User.first_name).order_by(User.last_name).all()
 
     for user in users:
@@ -211,10 +201,8 @@ def delete_group_users(group_id):
 
 
 @blueprint.route('/groups/<int:group_id>/users/add/', methods=['GET', 'POST'])
+@require_role(Roles.GROUP_WRITE)
 def add_users(group_id, page_nr=1):
-    if not(ModuleAPI.can_write('group')):
-        return abort(403)
-
     group = Group.query.filter(Group.id == group_id).first()
 
     if not group:
@@ -225,82 +213,23 @@ def add_users(group_id, page_nr=1):
                            group=group, title='Add users')
 
 
-@blueprint.route('/groups/edit-permissions/<int:group_id>/',
-                 methods=['GET', 'POST'])
-@blueprint.route('/groups/edit-permissions/<int:group_id>/<int:page_nr>/',
-                 methods=['GET', 'POST'])
-def edit_permissions(group_id, page_nr=1):
-    if not(ModuleAPI.can_read('group')):
-        return abort(403)
-
-    group = Group.query.filter(Group.id == group_id).first()
-
-    if not group:
-        flash('There is no group with id {}'.format(group_id), 'danger')
-        return redirect(url_for('group.view'))
-
-    permissions = GroupPermission.query.order_by(GroupPermission.module_name)\
-        .filter(GroupPermission.group_id == group_id).all()
-
-    form = EditGroupPermissionForm()
-
-    # The app's blueprints are stored as a dict, with key
-    # 'blueprint.name' and value '<Blueprint object>'.
-    modules = list(app.blueprints.keys())
-
-    # Remove current permission.
-    for permission in permissions:
-        try:
-            modules.remove(permission.module_name)
-        except ValueError:
-            continue
-
-    form.add_module_name.choices = [('', '')] + list(zip(modules, modules))
+@blueprint.route("/groups/<int:group_id>/roles/", methods=['GET', 'POST'])
+@require_role(Roles.GROUP_WRITE)
+def roles(group_id):
+    form = GroupRolesForm(request.form)
+    form.roles.choices = role_service.find_all_roles()
 
     if form.validate_on_submit():
-        for form_entry, permission in zip(form.permissions, permissions):
-            if permission.permission != form_entry.select.data:
-                permission.permission = form_entry.select.data
-                db.session.add(permission)
-                db.session.commit()
+        role_service.set_roles_for_group(group_id, form.roles.data)
 
-        # If a permission is empty, remove it.
-        permissions_cpy = copy.copy(permissions)
-        for permission in permissions_cpy:
-            if permission.permission == 0:
-                permissions.remove(permission)
-                db.session.delete(permission)
-
-        db.session.commit()
-
-        if form.add_module_name.data:
-            new_permission = GroupPermission(form.add_module_name.data,
-                                             group_id,
-                                             form.add_module_permission.data)
-            db.session.add(new_permission)
-            db.session.commit()
-            flash("Permission for module %s created!" %
-                  (form.add_module_name.data))
-
-        return redirect(url_for('group.edit_permissions', group_id=group_id,
-                                page_nr=page_nr))
-
-    # add the permissions as drop down boxes
-    for permission in permissions:
-        data = {}
-        data['select'] = permission.permission
-        form.permissions.append_entry(data)
-
-    return render_template('group/edit_permissions.htm', form=form,
-                           can_write=ModuleAPI.can_write('group'),
-                           group_name=group.name, title='Module permissions',
-                           permissions=zip(permissions, form.permissions))
+    form.roles.data = role_service.find_all_roles_by_group_id(group_id)
+    group = group_service.get_group_by_id(group_id)
+    return render_template("group/roles.htm", group=group, form=form)
 
 
 @blueprint.route('/api/group/users/<int:group_id>/', methods=['GET'])
+@require_role(Roles.GROUP_READ)
 def group_api_get_users(group_id):
-    if not(ModuleAPI.can_read('group')):
-        return abort(403)
     group = Group.query.get(group_id)
     users = group.users.order_by(User.first_name, User.last_name).all()
 
@@ -309,9 +238,8 @@ def group_api_get_users(group_id):
 
 
 @blueprint.route('/groups/<int:group_id>/users/add_users/', methods=['PUT'])
+@require_role(Roles.GROUP_WRITE)
 def group_api_add_users(group_id):
-    if not(ModuleAPI.can_write('group')):
-        return abort(403)
     group = Group.query.get(group_id)
 
     user_ids = request.get_json()['selected_ids']

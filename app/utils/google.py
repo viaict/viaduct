@@ -6,8 +6,8 @@ import httplib2
 from apiclient import errors
 from apiclient.discovery import build
 from apiclient.errors import HttpError
+from oauth2client.service_account import ServiceAccountCredentials
 from flask import flash, render_template
-from oauth2client.client import SignedJwtAssertionCredentials
 
 from app import app, sentry
 
@@ -27,16 +27,10 @@ _logger = logging.getLogger(__name__)
 
 def build_service(service_type, api_version, scope):
     try:
-        f = open(private_key, "rb")
-        key = f.read()
-        f.close()
-
-        credentials = SignedJwtAssertionCredentials(
-            service_email,
-            key,
-            scope=scope,
-            sub='bestuur@svia.nl'  # "Log in" as the admin account
-        )
+        credentials = ServiceAccountCredentials.from_p12_keyfile(
+            service_account_email=service_email,
+            filename=private_key,
+            scopes=[scope]).create_delegated("bestuur@svia.nl")
 
         # Create an authorized http instance
         http = httplib2.Http()
@@ -45,7 +39,7 @@ def build_service(service_type, api_version, scope):
         return build(service_type, api_version, http=http)
     except Exception as e:
         _logger.error(e)
-        sentry.captureException(e)
+        sentry.captureException()
         return None
 
 
@@ -94,7 +88,7 @@ def insert_activity(title="", description='', location="VIA kamer", start="",
                 .execute()
         except Exception as e:
             _logger.error(e)
-            sentry.captureException(e)
+            sentry.captureException()
             flash('Er ging iets mis met het toevogen van het event aan de'
                   'Google Calender')
             return None
@@ -120,7 +114,7 @@ def update_activity(event_id, title="", description='', location="VIA Kamer",
                 .execute()
         except Exception as e:
             _logger.error(e)
-            sentry.captureException(e)
+            sentry.captureException()
             return insert_activity(title, description, location, start, end)
 
 
@@ -134,7 +128,7 @@ def delete_activity(event_id):
                 .delete(calendarId=calendar_id, eventId=event_id) \
                 .execute()
         except Exception as e:
-            sentry.captureException(e)
+            sentry.captureException()
             _logger.error(e)
             flash('Er ging iets mis met het verwijderen van het event uit de'
                   'Google Calender, het kan zijn dat ie al verwijderd was')
@@ -213,7 +207,8 @@ def remove_email_from_group_if_exists(email, listname):
 
 def send_email(to, subject, email_template,
                sender='no-reply@svia.nl', **kwargs):
-    """ Send an e-mail from the via-gmail
+    """
+    Send an e-mail from the via-gmail.
 
     Args:
     sender: Email address of the sender.
@@ -225,9 +220,9 @@ def send_email(to, subject, email_template,
     user_id = 'bestuur@svia.nl'
 
     msg = MIMEText(render_template(email_template, **kwargs), 'html')
-    msg['to'] = to
-    msg['from'] = sender
-    msg['subject'] = subject
+    msg['To'] = to
+    msg['From'] = sender
+    msg['Subject'] = subject
 
     body = {'raw': base64.urlsafe_b64encode(msg.as_bytes()).decode()}
 
@@ -238,5 +233,4 @@ def send_email(to, subject, email_template,
         return email
     except errors.HttpError as e:
         _logger.warning(e)
-        sentry.captureException(e)
-        flash('Er is iets mis gegaan met het versturen van de e-mail')
+        sentry.captureException()

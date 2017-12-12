@@ -1,26 +1,28 @@
+{% from "macros/alv.htm" import render_presidium %}
+
 {% extends 'content.htm' %}
 
 {% block page %}
     <div class='row'>
         <div class='col-md-9 col-md-offset-1'>
             <p>
-                <a href="{{ url_for('alv.list') }}">{{ _('ALVs') }}</a>
+                <a href="{{ url_for('alv.list') }}">{{ _('GAs') }}</a>
                 <i class='fa fa-chevron-right'></i>
                 <a href="{{ url_for('alv.view', alv_id=alv.id) }}">{{ alv.name }}</a>
             </p>
         </div>
         <div class='col-md-9 col-md-offset-1 well'>
             <div class='page-header'>
-                {% if ModuleAPI.can_write('alv') %}
+                {% if can_write %}
                     <div class='pull-right'>
                         <a class='btn btn-warning btn-xs' href='
                             {{ url_for("alv.create_edit", alv_id=alv.id) }}'>
-                            <i class='fa fa-edit'></i> {{ _('Edit alv') }}
+                            <i class='fa fa-edit'></i> {{ _('Edit GA') }}
                         </a>
                         <form action="{{ url_for('alv.delete', alv_id=alv.id) }}"
                               method="POST">
                             <button class='btn btn-danger btn-xs'>
-                                <i class='fa fa-remove'></i> {{ _('Delete alv') }}
+                                <i class='fa fa-remove'></i> {{ _('Delete GA') }}
                             </button>
                         </form>
                     </div>
@@ -29,16 +31,32 @@
                 <h1>{{ alv.name }}</h1>
             </div>
 
-            <p>{{ alv.presidium }}</p>
+            <p>{{ render_presidium(alv) }}</p>
             {% if alv.activity %}
                 <p>{{ _('Activity') }}:
                     <a href="{{ url_for('activity.get_activity', activity_id=alv.activity.id) }}">{{ alv.activity }}</a>
                 </p>
             {% endif %}
+            {% if alv.minutes_file %}
+                <p>{{ _('Minutes') }}:
+                    <a href="/static/files/{{ alv.minutes_file.name }}">{{ alv.minutes_file.name }}</a> 
+                    {% if can_write %}
+                    <a class='btn btn-warning btn-xs' href='{{ url_for("alv.add_minute", alv_id=alv.id) }}'>
+                        <i class='fa fa-edit'></i> {{ _('Update minutes') }}
+                    </a>
+                {% endif %}
+                </p>
+            {% endif %}
+            {% if can_write and not alv.minutes_file %}
+                <a class='btn btn-success btn-xs' href='{{ url_for("alv.add_minute", alv_id=alv.id) }}'>
+                    <i class='fa fa-edit'></i> {{ _('Add minutes') }}
+                </a>
+            {% endif %}
+
             <hr>
             <div class='content'>
                 <h1>Documents</h1>
-                {% if ModuleAPI.can_write('alv') %}
+                {% if can_write %}
                 <p>
                     <a class="btn btn-xs btn-success"
                        href="{{ url_for('alv.create_document', alv_id=alv.id) }}">
@@ -64,7 +82,7 @@
                                 data-toggle="dropdown">Versions
                             <span class="caret"></span></button>
                         <ul class="dropdown-menu">
-                            {% if ModuleAPI.can_write('alv') %}
+                            {% if can_write %}
                             <li>
                                 <a href="{{ url_for('alv.update_document',
                                         alv_id=alv.id, doc_id=doc.id) }}">

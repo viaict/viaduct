@@ -1,20 +1,22 @@
 """Views for the file module."""
-from flask import Blueprint, render_template, request, abort, flash
+from flask import Blueprint, render_template, request, flash
+from flask_login import current_user
+
+from app.decorators import require_role
+from app.forms.file import FileForm
 from app.models.file import File
-from app.forms import FileForm
+from app.roles import Roles
+from app.service import role_service
 from app.utils.file import file_upload, file_search
-from app.utils.module import ModuleAPI
 
 blueprint = Blueprint('file', __name__, url_prefix='/files')
 
 
 @blueprint.route('/', methods=['GET'])
 @blueprint.route('/<int:page_nr>/', methods=['GET'])
+@require_role(Roles.FILE_READ)
 def list(page_nr=1):
     """List all files that are not assigned to a page."""
-    if not ModuleAPI.can_read('file'):
-        return abort(403)
-
     if request.args.get('search'):
         search = request.args.get('search', None)
         filters = file_search(search)
@@ -27,16 +29,17 @@ def list(page_nr=1):
 
     form = FileForm()
 
-    return render_template('files/list.htm', files=files, form=form)
+    can_write = role_service.user_has_role(current_user, Roles.FILE_WRITE)
+
+    return render_template('files/list.htm', files=files, form=form,
+                           can_write=can_write)
 
 
 @blueprint.route('/', methods=['POST'])
 @blueprint.route('/<int:page_nr>/', methods=['POST'])
+@require_role(Roles.FILE_WRITE)
 def upload(page_nr=1):
     """Upload a file."""
-    if not ModuleAPI.can_write('file'):
-        return abort(403)
-
     new_files = []
     for new_file_name in request.files.getlist('file'):
         # File upload request, but no added files
@@ -52,5 +55,5 @@ def upload(page_nr=1):
     form = FileForm()
 
     hostname = request.headers.get('Origin', '')
-
+    can_upload = True
     return render_template('files/list.htm', **locals())

@@ -20,10 +20,9 @@ class Alv(db.Model, BaseEntity):
     secretary_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     secretary = db.relationship('User', foreign_keys=[secretary_user_id])
 
-    @property
-    def presidium(self):
-        from app.service import alv_service
-        return alv_service.format_presidium(self)
+    minutes_file_id = db.Column(db.Integer, db.ForeignKey('file.id'),
+                                nullable=True)
+    minutes_file = db.relationship('File')
 
     def get_localized_name(self, locale=None):
         if not locale:
