@@ -55,5 +55,6 @@ def upload(page_nr=1):
     form = FileForm()
 
     hostname = request.headers.get('Origin', '')
-    can_upload = True
+    can_write = role_service.user_has_role(current_user, Roles.FILE_WRITE)
+
     return render_template('files/list.htm', **locals())
