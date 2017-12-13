@@ -114,11 +114,16 @@ def remove_avatar(user_id=None):
 @blueprint.route('/users/create/', methods=['GET', 'POST'])
 @blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
 @login_required
-@require_role(Roles.USER_WRITE)
 def edit(user_id=None):
     """Create user for admins and edit for admins and users."""
-    if current_user.is_anonymous or current_user.id != user_id:
-        return abort(403)
+
+    # TODO: Split the edit my own user and edit other user routes.
+    # We cannot check the rights using the decorator because normal
+    # users also change their profile using this route.
+
+    if (user_id is not None and current_user.id != user_id and
+            not role_service.user_has_role(current_user, Roles.USER_WRITE)):
+        abort(403)
 
     # Select user
     if user_id:
