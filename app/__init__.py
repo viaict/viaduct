@@ -86,8 +86,6 @@ def init_app():
     app.config['CACHE_TYPE'] = 'filesystem'
     app.config['CACHE_DIR'] = 'cache'
 
-    logging.basicConfig()
-
     cache.init_app(app)
     toolbar.init_app(app)
     jsglue.init_app(app)
