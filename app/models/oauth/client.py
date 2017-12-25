@@ -19,8 +19,8 @@ class OAuthClient(db.Model):
 
     confidential = db.Column(db.Boolean)
 
-    _redirect_uris = db.Column(db.Text)
-    _default_scopes = db.Column(db.Text)
+    _redirect_uris = db.relationship("OAuthClientRedirect")
+    _default_scopes = db.relationship("OAuthClientScope")
 
     @property
     def client_type(self):
@@ -31,9 +31,7 @@ class OAuthClient(db.Model):
 
     @property
     def redirect_uris(self):
-        if self._redirect_uris:
-            return self._redirect_uris.split()
-        return []
+        return [uri.redirect_uri for uri in self._redirect_uris]
 
     @property
     def default_redirect_uri(self):
@@ -41,6 +39,26 @@ class OAuthClient(db.Model):
 
     @property
     def default_scopes(self):
-        if self._default_scopes:
-            return self._default_scopes.split()
-        return []
+        return [scope.scope for scope in self._default_scopes]
+
+
+class OAuthClientRedirect(db.Model):
+    __tablename__ = "oauth_client_redirect"
+
+    id = db.Column(db.Integer, primary_key=True)
+    client = db.relationship("OAuthClient")
+    client_id = db.Column(db.String(64),
+                          db.ForeignKey("oauth_client.client_id",
+                                        ondelete="cascade"))
+    redirect_uri = db.Column(db.String(256))
+
+
+class OAuthClientScope(db.Model):
+    __tablename__ = "oauth_client_scope"
+
+    id = db.Column(db.Integer, primary_key=True)
+    client = db.relationship("OAuthClient")
+    client_id = db.Column(db.String(64),
+                          db.ForeignKey("oauth_client.client_id",
+                                        ondelete="cascade"))
+    scope = db.Column(db.String(256))

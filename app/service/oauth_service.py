@@ -13,15 +13,12 @@ def get_grant_by_client_id_and_code(client_id, code):
 
 def create_grant(client_id, code, user_id, request):
     expires = datetime.utcnow() + timedelta(seconds=100)
-    scopes = ' '.join(request.scopes)
-    redirect_uri = request.redirect_uri
-    code = code['code']
 
     return oauth_repository.create_grant(
         client_id=client_id,
-        code=code,
-        redirect_uri=redirect_uri,
-        scopes=scopes,
+        code=code['code'],
+        redirect_uri=request.redirect_uri,
+        scopes=request.scopes,
         user_id=user_id,
         expires=expires)
 
@@ -43,7 +40,7 @@ def create_token(token, user_id, request):
     access_token = token.get('access_token')
     refresh_token = token.get('refresh_token')
     token_type = token['token_type']
-    scopes = token['scope']
+    scopes = token['scope'].split()
 
     return oauth_repository.create_token(access_token, refresh_token,
                                          token_type, scopes, expires,

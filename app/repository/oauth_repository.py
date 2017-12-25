@@ -1,7 +1,7 @@
 from app import db
 from app.models.oauth.client import OAuthClient
-from app.models.oauth.grant import OAuthGrant
-from app.models.oauth.token import OAuthToken
+from app.models.oauth.grant import OAuthGrant, OAuthGrantScope
+from app.models.oauth.token import OAuthToken, OAuthTokenScope
 
 
 def get_client_by_id(client_id):
@@ -17,9 +17,11 @@ def get_grant_by_client_id_and_code(client_id, code):
 
 
 def create_grant(client_id, code, redirect_uri, scopes, user_id, expires):
+    grants = [OAuthGrantScope(scope=scope) for scope in scopes]
     grant = OAuthGrant(client_id=client_id, code=code,
                        redirect_uri=redirect_uri,
-                       _scopes=scopes, user_id=user_id, expires=expires)
+                       user_id=user_id, expires=expires)
+    db.session.add_all(grants)
     db.session.add(grant)
     db.session.commit()
     return grant
@@ -47,11 +49,14 @@ def remove_tokens_for_client_user(client_id, user_id):
 
 def create_token(access_token, refresh_token, token_type, scopes, expires,
                  client_id, user_id):
+    new_scopes = [OAuthTokenScope(scope=scope) for scope in scopes]
     tok = OAuthToken(access_token=access_token, refresh_token=refresh_token,
-                     token_type=token_type, _scopes=scopes, expires=expires,
-                     client_id=client_id, user_id=user_id)
+                     token_type=token_type, _scopes=new_scopes,
+                     expires=expires, client_id=client_id, user_id=user_id)
+    db.session.add_all(new_scopes)
     db.session.add(tok)
     db.session.commit()
+
     return tok
 
 

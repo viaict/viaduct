@@ -12,7 +12,8 @@ class OAuthGrant(db.Model):
 
     client = db.relationship("OAuthClient")
     client_id = db.Column(db.String(64),
-                          db.ForeignKey('oauth_client.client_id'),
+                          db.ForeignKey('oauth_client.client_id',
+                                        ondelete='cascade'),
                           nullable=False)
 
     code = db.Column(db.String(255), index=True, nullable=False)
@@ -20,7 +21,7 @@ class OAuthGrant(db.Model):
     redirect_uri = db.Column(db.String(255))
     expires = db.Column(db.DateTime)
 
-    _scopes = db.Column(db.Text)
+    _scopes = db.relationship("OAuthGrantScope")
 
     def delete(self):
         from app.service import oauth_service
@@ -28,6 +29,14 @@ class OAuthGrant(db.Model):
 
     @property
     def scopes(self):
-        if self._scopes:
-            return self._scopes.split()
-        return []
+        return [scope.scope for scope in self._scopes]
+
+
+class OAuthGrantScope(db.Model):
+    __tablename__ = "oauth_grant_scope"
+
+    id = db.Column(db.Integer, primary_key=True)
+    client = db.relationship("OAuthGrant")
+    client_id = db.Column(db.Integer,
+                          db.ForeignKey("oauth_grant.id", ondelete="cascade"))
+    scope = db.Column(db.String(256))

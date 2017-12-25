@@ -8,7 +8,8 @@ class OAuthToken(db.Model):
 
     client = db.relationship("OAuthClient")
     client_id = db.Column(db.String(64),
-                          db.ForeignKey('oauth_client.client_id'),
+                          db.ForeignKey('oauth_client.client_id',
+                                        ondelete="cascade"),
                           nullable=False)
 
     user = db.relationship('User')
@@ -19,10 +20,18 @@ class OAuthToken(db.Model):
     access_token = db.Column(db.String(255), unique=True)
     refresh_token = db.Column(db.String(255), unique=True)
     expires = db.Column(db.DateTime)
-    _scopes = db.Column(db.Text)
+    _scopes = db.relationship("OAuthTokenScope")
 
     @property
     def scopes(self):
-        if self._scopes:
-            return self._scopes.split()
-        return []
+        return [scope.scope for scope in self._scopes]
+
+
+class OAuthTokenScope(db.Model):
+    __tablename__ = "oauth_token_scope"
+
+    id = db.Column(db.Integer, primary_key=True)
+    token = db.relationship("OAuthToken")
+    token_id = db.Column(db.Integer,
+                         db.ForeignKey("oauth_token.id", ondelete='cascade'))
+    scope = db.Column(db.String(256))
