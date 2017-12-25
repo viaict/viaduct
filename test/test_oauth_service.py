@@ -63,7 +63,7 @@ class TestOAuthService(unittest.TestCase):
 
         oauth_repository_mock.create_grant.assert_called_once_with(
             client_id=client_id, code=grant_code, redirect_uri=redirect_uri,
-            scopes=scopes, user_id=1, expires=ANY)
+            scopes=scopes_list, user_id=1, expires=ANY)
 
         expire = oauth_repository_mock.create_grant.call_args[1]['expires']
         self.assertLess(expire, datetime.utcnow() + timedelta(seconds=100))
@@ -109,7 +109,7 @@ class TestOAuthService(unittest.TestCase):
 
         oauth_service.create_token(token, user_id, request)
         oauth_repository_mock.create_token.assert_called_once_with(
-            access_token, refresh_token, token_type, scopes,
+            access_token, refresh_token, token_type, scopes_list,
             ANY, client_id, user_id)
 
         expire = oauth_repository_mock.create_token.call_args[0][4]
