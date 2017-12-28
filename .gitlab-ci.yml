@@ -30,8 +30,13 @@ flake8:
      - pip install flake8
      - flake8 ./app
 
-translations:
+miscellaneous:
     image: python:3.6
     stage: test
     script:
+     - pip install -r requirements.txt
+     - cp default_config.py config.py
      - "[ -z $(grep -R fuzzy app/translations/) ]"
+     - "python manage.py db heads"
+     - "python manage.py db heads 2>/dev/null | grep head | wc -l"
+     - "[ $(python manage.py db heads 2>/dev/null | grep head | wc -l) -lt 2 ]"
