@@ -1214,6 +1214,10 @@ msgstr ""
 msgid "Successfully revoked token for client '%s'"
 msgstr ""
 
+#, python-format
+msgid "Successfully updated client '%s'"
+msgstr ""
+
 msgid "Team"
 msgstr ""
 

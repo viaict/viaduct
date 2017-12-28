@@ -84,7 +84,7 @@ def edit(client_id=None):
                 client_id=client_id, name=form.name.data,
                 description=form.description.data,
                 redirect_uri=form.redirect_uri.data)
-            flash(_("Successfully created client '%s'" % client.name))
+            flash(_("Successfully updated client '%s'" % client.name))
         else:
             client = oauth_service.create_client(
                 user_id=current_user.id,
