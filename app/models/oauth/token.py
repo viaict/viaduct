@@ -26,6 +26,10 @@ class OAuthToken(db.Model):
     def scopes(self):
         return [scope.scope for scope in self._scopes]
 
+    def delete(self):
+        from app.service import oauth_service
+        oauth_service.delete_token(self.id)
+
 
 class OAuthTokenScope(db.Model):
     __tablename__ = "oauth_token_scope"

@@ -45,6 +45,17 @@
     {{ field(class=cls) }}
 {% endmacro %}
 
+{% macro render_post_btn(url, confirm_text, btn_text) %}
+    <form action="{{ url }}"
+          class="form-inline" method="POST"
+          onsubmit="return confirm('{{ confirm_text }}');">
+        <button class='btn btn-danger'
+                data-loading-text={{ _('Loading...') }} type='submit'>
+            {{ btn_text }}
+        </button>
+    </form>
+{% endmacro %}
+
 {% macro render_submit(text) %}
     {{ ignore_kwargs(kwargs) }}
     <div class="form-group">

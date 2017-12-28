@@ -19,12 +19,17 @@ class OAuthClient(db.Model):
 
     confidential = db.Column(db.Boolean)
 
+    # TODO image, first create image upload feature.
+
+    # TODO? auto-approve tokens if managed by via (also hide from overview)
+    # TODO? allowed request types?
+
     _redirect_uris = db.relationship("OAuthClientRedirect")
     _default_scopes = db.relationship("OAuthClientScope")
 
     @property
     def client_type(self):
-        """According to RFC 6749: 2.1. Client Types"""
+        """According to RFC 6749: 2.1. Client Types."""
         if self.confidential:
             return 'confidential'
         return 'public'
