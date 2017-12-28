@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-12-28 13:50+0100\n"
+"POT-Creation-Date: 2017-12-28 15:11+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language: nl\n"
@@ -1208,6 +1208,10 @@ msgstr "Client '%s' succesvol aangemaakt"
 #, python-format
 msgid "Successfully revoked token for client '%s'"
 msgstr "Token voor client '%s' is ingetrokken"
+
+#, python-format
+msgid "Successfully updated client '%s'"
+msgstr "Client '%s' succesvol geupdate"
 
 msgid "Team"
 msgstr "Team"
