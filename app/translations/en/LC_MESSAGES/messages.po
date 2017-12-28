@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-11-27 16:36+0100\n"
+"POT-Creation-Date: 2017-12-28 13:50+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -37,6 +37,9 @@ msgstr ""
 
 #, python-format
 msgid "API call failed: %s"
+msgstr ""
+
+msgid "Access to your Pimpy data"
 msgstr ""
 
 msgid ""
@@ -75,9 +78,6 @@ msgid "Add user to"
 msgstr ""
 
 msgid "Address"
-msgstr ""
-
-msgid "Address is required."
 msgstr ""
 
 msgid "Admin data"
@@ -153,6 +153,9 @@ msgid ""
 "more information."
 msgstr ""
 
+msgid "Authorized callback URL"
+msgstr ""
+
 msgid "Avatar deleted successfully."
 msgstr "."
 
@@ -184,9 +187,6 @@ msgid "Change password"
 msgstr ""
 
 msgid "City"
-msgstr ""
-
-msgid "City is required."
 msgstr ""
 
 msgid "Click to expand"
@@ -233,6 +233,12 @@ msgstr ""
 msgid "Conditions"
 msgstr ""
 
+msgid "Confirm"
+msgstr ""
+
+msgid "Connected applications"
+msgstr ""
+
 msgid "Contact Name"
 msgstr ""
 
@@ -247,9 +253,6 @@ msgstr ""
 
 #, python-format
 msgid "Contact email \"%s\" is already in use."
-msgstr ""
-
-msgid "Contact email is required."
 msgstr ""
 
 #, python-format
@@ -277,13 +280,7 @@ msgstr ""
 msgid "Contract enddate"
 msgstr ""
 
-msgid "Contract enddate is required."
-msgstr ""
-
 msgid "Contract startdate"
-msgstr ""
-
-msgid "Contract startdate is required."
 msgstr ""
 
 msgid "Copy to clipboard"
@@ -299,9 +296,6 @@ msgid "Could not find REMOVE task: "
 msgstr ""
 
 msgid "Country"
-msgstr ""
-
-msgid "Country is required."
 msgstr ""
 
 msgid "Course"
@@ -335,6 +329,9 @@ msgid "Create"
 msgstr ""
 
 msgid "Create activity"
+msgstr ""
+
+msgid "Create application"
 msgstr ""
 
 msgid "Create form"
@@ -520,9 +517,6 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-msgid "Email is required."
-msgstr ""
-
 msgid "End date"
 msgstr ""
 
@@ -563,6 +557,9 @@ msgid "English title requires English content and vice versa"
 msgstr ""
 
 msgid "English title requires English description and vice versa"
+msgstr ""
+
+msgid "Error!"
 msgstr ""
 
 msgid "Examination"
@@ -699,10 +696,7 @@ msgstr ""
 msgid "Invalid REMOVE task id: "
 msgstr ""
 
-msgid "Invalid e-mail address"
-msgstr ""
-
-msgid "Invalid e-mail adress submitted"
+msgid "Invalid email address."
 msgstr ""
 
 msgid "Invalid email list name."
@@ -767,6 +761,9 @@ msgstr ""
 msgid "Log in"
 msgstr ""
 
+msgid "Log off"
+msgstr ""
+
 msgid "Logo"
 msgstr ""
 
@@ -792,6 +789,9 @@ msgstr ""
 msgid "Modify"
 msgstr ""
 
+msgid "My applications"
+msgstr ""
+
 msgid "My submissions"
 msgstr ""
 
@@ -800,9 +800,6 @@ msgstr ""
 
 #, python-format
 msgid "Name \"%s\" is already in use."
-msgstr ""
-
-msgid "Name is required."
 msgstr ""
 
 msgid "Navigation entry"
@@ -868,25 +865,7 @@ msgstr ""
 msgid "No answers uploaded."
 msgstr ""
 
-msgid "No birthdate submitted"
-msgstr ""
-
 msgid "No contests found"
-msgstr ""
-
-msgid "No course given"
-msgstr ""
-
-msgid "No description supplied"
-msgstr ""
-
-msgid "No e-mail adress submitted"
-msgstr ""
-
-msgid "No education given"
-msgstr ""
-
-msgid "No examination kind given"
 msgstr ""
 
 msgid "No examination uploaded."
@@ -898,13 +877,7 @@ msgstr ""
 msgid "No file uploaded."
 msgstr ""
 
-msgid "No first name sunmitted"
-msgstr ""
-
 msgid "No form"
-msgstr ""
-
-msgid "No last name submitted"
 msgstr ""
 
 msgid "No location"
@@ -913,22 +886,7 @@ msgstr ""
 msgid "No password submitted"
 msgstr ""
 
-msgid "No permissions to read contacts"
-msgstr ""
-
 msgid "No presidium"
-msgstr ""
-
-msgid "No starting year of study submitted"
-msgstr ""
-
-msgid "No studentnumber submitted"
-msgstr ""
-
-msgid "No title entered"
-msgstr ""
-
-msgid "No title given."
 msgstr ""
 
 msgid "No vacancies found."
@@ -940,9 +898,6 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-msgid "Not a valid email."
-msgstr ""
-
 msgid "Not found!"
 msgstr ""
 
@@ -950,6 +905,9 @@ msgid "Open voor nieuwe leden"
 msgstr ""
 
 msgid "Optional data"
+msgstr ""
+
+msgid "Owned by: "
 msgstr ""
 
 msgid "Page"
@@ -985,13 +943,13 @@ msgstr ""
 msgid "Phone"
 msgstr ""
 
-msgid "Phone is required."
-msgstr ""
-
 msgid "Please fill in"
 msgstr ""
 
 msgid "Please fill in :D"
+msgstr ""
+
+msgid "Please try again"
 msgstr ""
 
 msgid "Please verify that you are not a robot."
@@ -1006,7 +964,7 @@ msgstr ""
 msgid "Postoffice Box"
 msgstr ""
 
-msgid "Presidium: "
+msgid "Presidium:"
 msgstr ""
 
 msgid "Previous"
@@ -1063,6 +1021,9 @@ msgstr ""
 msgid "Register"
 msgstr ""
 
+msgid "Register OAuth developer application"
+msgstr ""
+
 msgid "Register account"
 msgstr ""
 
@@ -1090,10 +1051,19 @@ msgstr ""
 msgid "Reset password"
 msgstr ""
 
+msgid "Reset secret"
+msgstr ""
+
 msgid "Result"
 msgstr ""
 
 msgid "Retake"
+msgstr ""
+
+msgid "Revoke"
+msgstr ""
+
+msgid "Roles"
 msgstr ""
 
 msgid "Run Error"
@@ -1144,6 +1114,9 @@ msgstr ""
 msgid "Show plaintext"
 msgstr ""
 
+msgid "Show profile"
+msgstr ""
+
 msgid "Show recent news items"
 msgstr ""
 
@@ -1168,9 +1141,6 @@ msgid "Something went wrong."
 msgstr ""
 
 msgid "Source code file"
-msgstr ""
-
-msgid "Spaces are not allowed in email list name"
 msgstr ""
 
 msgid "Specified examination does not exist"
@@ -1216,6 +1186,14 @@ msgid "Submit solution"
 msgstr ""
 
 msgid "Success message: shown when user registers"
+msgstr ""
+
+#, python-format
+msgid "Successfully created client '%s'"
+msgstr ""
+
+#, python-format
+msgid "Successfully revoked token for client '%s'"
 msgstr ""
 
 msgid "Team"
@@ -1341,6 +1319,9 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
+msgid "Unknown OAuth error"
+msgstr ""
+
 msgid "Untried"
 msgstr ""
 
@@ -1381,9 +1362,6 @@ msgid "Vacancy saved"
 msgstr ""
 
 msgid "Vacany"
-msgstr ""
-
-msgid "Valid membership is required for the examination module"
 msgstr ""
 
 msgid "Valid membership is required to read this news article"
@@ -1512,9 +1490,6 @@ msgid "Your registration has been completed."
 msgstr ""
 
 msgid "Zip code"
-msgstr ""
-
-msgid "Zip code is required."
 msgstr ""
 
 msgid "ago"
@@ -1897,6 +1872,96 @@ msgstr ""
 #~ msgid "Wrong format summary."
 #~ msgstr ""
 
-#~ msgid "GA"
+#~ msgid "Delete alv"
+#~ msgstr ""
+
+#~ msgid "Developer applications"
+#~ msgstr ""
+
+#~ msgid "Address is required."
+#~ msgstr ""
+
+#~ msgid "City is required."
+#~ msgstr ""
+
+#~ msgid "Contact email is required."
+#~ msgstr ""
+
+#~ msgid "Contract enddate is required."
+#~ msgstr ""
+
+#~ msgid "Contract startdate is required."
+#~ msgstr ""
+
+#~ msgid "Country is required."
+#~ msgstr ""
+
+#~ msgid "Email is required."
+#~ msgstr ""
+
+#~ msgid "Invalid e-mail address"
+#~ msgstr ""
+
+#~ msgid "Invalid e-mail adress submitted"
+#~ msgstr ""
+
+#~ msgid "Name is required."
+#~ msgstr ""
+
+#~ msgid "No birthdate submitted"
+#~ msgstr ""
+
+#~ msgid "No course given"
+#~ msgstr ""
+
+#~ msgid "No description supplied"
+#~ msgstr ""
+
+#~ msgid "No e-mail adress submitted"
+#~ msgstr ""
+
+#~ msgid "No education given"
+#~ msgstr ""
+
+#~ msgid "No examination kind given"
+#~ msgstr ""
+
+#~ msgid "No first name sunmitted"
+#~ msgstr ""
+
+#~ msgid "No last name submitted"
+#~ msgstr ""
+
+#~ msgid "No permissions to read contacts"
+#~ msgstr ""
+
+#~ msgid "No starting year of study submitted"
+#~ msgstr ""
+
+#~ msgid "No studentnumber submitted"
+#~ msgstr ""
+
+#~ msgid "No title entered"
+#~ msgstr ""
+
+#~ msgid "No title given."
+#~ msgstr ""
+
+#~ msgid "Not a valid email."
+#~ msgstr ""
+
+#~ msgid "Phone is required."
+#~ msgstr ""
+
+#~ msgid "Presidium: "
+#~ msgstr ""
+
+#~ msgid "Spaces are not allowed in email list name"
+#~ msgstr ""
+
+#~ msgid "Valid membership is required for the examination module"
+#~ msgstr ""
+
+#~ msgid "Zip code is required."
 #~ msgstr ""
 
