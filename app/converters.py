@@ -1,34 +1,8 @@
-import datetime
 
-from flask.json import JSONEncoder as BaseEncoder
-from speaklater import _LazyString  # noqa
 from werkzeug.routing import ValidationError, BaseConverter
 
 from app import app
 from app.service import alv_service
-
-
-class JSONEncoder(BaseEncoder):
-    """Custom JSON encoding."""
-
-    def default(self, o):
-        if isinstance(o, _LazyString):
-            # Lazy strings need to be evaluation.
-            return str(o)
-
-        if isinstance(o, datetime.datetime):
-            if o.tzinfo:
-                # eg: '2015-09-25T23:14:42.588601+00:00'
-                return o.isoformat('T')
-            else:
-                # No timezone present (almost always in viaduct)
-                # eg: '2015-09-25T23:14:42.588601'
-                return o.isoformat('T')
-
-        if isinstance(o, datetime.date):
-            return o.isoformat()
-
-        return BaseEncoder.default(self, o)
 
 
 class ModelIdConverter(BaseConverter):

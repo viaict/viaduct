@@ -1,14 +1,16 @@
+import datetime
 import logging
 import os
 from unittest import mock
 
 import connexion
 from flask import Flask, request, session
+from flask.json import JSONEncoder as BaseEncoder
 from flask_babel import Babel
 from flask_login import current_user
 from flask_swagger_ui import get_swaggerui_blueprint
+from speaklater import _LazyString  # noqa
 
-from app.converters import JSONEncoder
 from app.exceptions import ResourceNotFoundException, ValidationException, \
     AuthorizationException
 from app.roles import Roles
@@ -118,6 +120,27 @@ def init_app():
                                                    Roles.SEO_WRITE)
         return dict(can_write_seo=can_write_seo)
 
+    class JSONEncoder(BaseEncoder):
+        """Custom JSON encoding."""
+
+        def default(self, o):
+            if isinstance(o, _LazyString):
+                # Lazy strings need to be evaluation.
+                return str(o)
+
+            if isinstance(o, datetime.datetime):
+                if o.tzinfo:
+                    # eg: '2015-09-25T23:14:42.588601+00:00'
+                    return o.isoformat('T')
+                else:
+                    # No timezone present (almost always in viaduct)
+                    # eg: '2015-09-25T23:14:42.588601'
+                    return o.isoformat('T')
+
+            if isinstance(o, datetime.date):
+                return o.isoformat()
+
+            return BaseEncoder.default(self, o)
     app.json_encoder = JSONEncoder
 
     register_views(app, os.path.join(app.path, 'views'))
