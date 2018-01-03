@@ -9,12 +9,14 @@ Flask-Migrate
 Flask-OAuthlib
 Flask-Script
 Flask-SQLAlchemy
+Flask-Swagger-UI
 Flask-WTF
 SQLAlchemy
 fuzzywuzzy
 google-api-python-client
 baas32
 coverage
+connexion
 flake8
 flake8-docstrings
 flake8-putty

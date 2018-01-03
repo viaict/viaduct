@@ -1,12 +1,14 @@
 import logging
 import os
+from unittest import mock
 
+import connexion
 from flask import Flask, request, session
-from flask.json import JSONEncoder as BaseEncoder
 from flask_babel import Babel
 from flask_login import current_user
-from speaklater import _LazyString
+from flask_swagger_ui import get_swaggerui_blueprint
 
+from app.converters import JSONEncoder
 from app.exceptions import ResourceNotFoundException, ValidationException, \
     AuthorizationException
 from app.roles import Roles
@@ -101,16 +103,6 @@ def init_app():
         sentry.init_app(app)
         sentry.client.release = version
 
-    class JSONEncoder(BaseEncoder):
-        """Custom JSON encoding."""
-
-        def default(self, o):
-            if isinstance(o, _LazyString):
-                # Lazy strings need to be evaluation.
-                return str(o)
-
-            return BaseEncoder.default(self, o)
-
     @app.context_processor
     def inject_urls():
         return dict(
@@ -134,6 +126,8 @@ def init_app():
 
     log = logging.getLogger('werkzeug')
     log.setLevel(app.config['LOG_LEVEL'])
+
+    return get_patched_api_app()
 
 
 def init_oauth():
@@ -169,3 +163,41 @@ def init_oauth():
         except (ResourceNotFoundException, AuthorizationException,
                 ValidationException):
             return None
+
+
+def get_patched_api_app():
+    # URL for exposing Swagger UI (without trailing '/')
+    SWAGGER_URL = '/api/docs'
+
+    # The API url defined by connexion.
+    API_URLS = [{"name": "pimpy", "url": "/api/pimpy/swagger.json"}]
+
+    swaggerui_blueprint = get_swaggerui_blueprint(
+        SWAGGER_URL,
+        API_URLS[0]["url"],
+        config={  # Swagger UI config overrides
+            'app_name': "Study Association via - Public API documentation",
+            'urls': API_URLS
+        },
+        oauth_config={
+            'clientId': "swagger",
+        }
+    )
+    app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
+
+    def inject(self):
+        print("Hacked connexion to let it load our flask app.")
+        return app
+
+    def add_api(app, name):
+        connexion_app.add_api(
+            './swagger-{}.yaml'.format(name),
+            base_path="/api/{}".format(name), validate_responses=True,
+            resolver=connexion.RestyResolver('app.api.{}'.format(name)),
+            pythonic_params=True, strict_validation=True)
+
+    with mock.patch("connexion.apps.flask_app.FlaskApp.create_app", inject):
+        connexion_app = connexion.App(__name__, specification_dir='swagger/',
+                                      swagger_ui=False)
+        add_api(connexion_app, "pimpy")
+    return connexion_app

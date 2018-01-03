@@ -1,4 +1,5 @@
-from flask import request, Blueprint, render_template, url_for, redirect, flash
+from flask import request, Blueprint, render_template, url_for, redirect, \
+    flash, jsonify
 from flask_babel import _
 from flask_login import login_required, current_user
 
@@ -25,7 +26,7 @@ def authorize(*args, **kwargs):
     return confirm == _("Confirm")
 
 
-@blueprint.route('/token/', methods=['POST'])
+@blueprint.route('/token/', methods=['GET', 'POST'])
 @oauth.token_handler
 def access_token():
     return {'version': version}
@@ -35,6 +36,13 @@ def access_token():
 @oauth.revoke_handler
 def revoke_token():
     pass
+
+
+@blueprint.route("/token/info/")
+@oauth.require_oauth()
+def token_info():
+    print(request.oauth.access_token.scopes)
+    return jsonify({"scope": request.oauth.access_token.scopes})
 
 
 @blueprint.route("/errors/", methods=['GET'])
