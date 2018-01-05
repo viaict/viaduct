@@ -39,9 +39,6 @@ msgstr ""
 msgid "API call failed: %s"
 msgstr ""
 
-msgid "Access to your Pimpy data"
-msgstr ""
-
 msgid ""
 "According to Google this email does not exist. Please use an email that "
 "does."
@@ -1027,6 +1024,9 @@ msgstr ""
 msgid "Read"
 msgstr ""
 
+msgid "Read access to your Pimpy data"
+msgstr ""
+
 msgid "Read more"
 msgstr ""
 
@@ -1449,6 +1449,9 @@ msgid "Workload"
 msgstr ""
 
 msgid "Would you like to recieve information from companies?"
+msgstr ""
+
+msgid "Write access to your Pimpy data"
 msgstr ""
 
 msgid "Written by"
@@ -2090,5 +2093,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Ask the board to create the mailbox for thisgroup (if needed)"
+#~ msgstr ""
+
+#~ msgid "Access to your Pimpy data"
 #~ msgstr ""
 

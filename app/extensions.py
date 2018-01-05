@@ -1,4 +1,5 @@
 from flask_cache import Cache
+from flask_cors import CORS
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_jsglue import JSGlue
 from flask_login import LoginManager
@@ -8,6 +9,7 @@ from raven.contrib.flask import Sentry
 from sqlalchemy import MetaData
 
 cache = Cache()
+cors = CORS()
 toolbar = DebugToolbarExtension()
 jsglue = JSGlue()
 sentry = Sentry()

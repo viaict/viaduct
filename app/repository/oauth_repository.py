@@ -65,14 +65,14 @@ def create_token(access_token, refresh_token, token_type, scopes, expires,
 def delete_grant(grant_id):
     db.session.query(OAuthGrant).filter_by(
         id=grant_id
-    ).delete(synchronize_session='fetch')
+    ).delete(synchronize_session=False)
     db.session.commit()
 
 
 def delete_token(token_id):
     db.session.query(OAuthToken).filter_by(
         id=token_id
-    ).delete(synchronize_session='fetch')
+    ).delete(synchronize_session=False)
     db.session.commit()
 
 
@@ -95,14 +95,15 @@ def get_owned_clients_by_user_id(user_id):
 def delete_user_tokens_by_client_id(user_id, client_id):
     db.session.query(OAuthToken).filter_by(
         user_id=user_id, client_id=client_id
-    ).delete(synchronize_session='fetch')
+    ).delete(synchronize_session=False)
     db.session.commit()
 
 
-def create_client(client_id, client_secret, name, description, redirect_uri,
+def create_client(client_id, client_secret, name, description, redirect_uris,
                   user_id, confidential, default_scopes):
     scopes = [OAuthClientScope(scope=scope) for scope in default_scopes]
-    redirect_uris = [OAuthClientRedirect(redirect_uri=redirect_uri)]
+    redirect_uris = [OAuthClientRedirect(redirect_uri=redirect_uri)
+                     for redirect_uri in redirect_uris]
 
     client = OAuthClient(client_id=client_id, client_secret=client_secret,
                          user_id=user_id, name=name, description=description,
@@ -129,8 +130,23 @@ def update_client_details(client_id, name, description):
     db.session.commit()
 
 
-def update_client_redirect_uri(client_id, redirect_uri):
+def get_redirect_uris_by_client_id(client_id):
+    uris = db.session.query(OAuthClientRedirect) \
+        .filter_by(client_id=client_id).all()
+    return [uri.redirect_uri for uri in uris]
+
+
+def delete_redirect_uris(client_id, redirect_uri_list):
     db.session.query(OAuthClientRedirect) \
-        .filter_by(client_id=client_id) \
-        .update(dict(redirect_uri=redirect_uri))
+        .filter(OAuthClientRedirect.client_id == client_id,
+                OAuthClientRedirect.redirect_uri.in_(redirect_uri_list)) \
+        .delete(synchronize_session=False)
+    db.session.commit()
+
+
+def insert_redirect_uris(client_id, redirect_uri_list):
+    redirect_uris = [OAuthClientRedirect(client_id=client_id,
+                                         redirect_uri=redirect_uri)
+                     for redirect_uri in redirect_uri_list]
+    db.session.add_all(redirect_uris)
     db.session.commit()

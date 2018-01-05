@@ -1,7 +1,8 @@
-from wtforms import IntegerField, SelectField, StringField
+from flask_babel import lazy_gettext as _  # noqa
 from wtforms import DecimalField as WtfDecimalFields
-from wtforms.validators import Email, ValidationError
-from flask_babel import lazy_gettext as _, gettext  # noqa
+from wtforms import IntegerField, SelectField, StringField
+from wtforms.validators import Email, ValidationError, URL
+
 from app.models.course import Course
 from app.models.education import Education
 from app.models.group import Group
@@ -83,3 +84,24 @@ class EmailField(StringField):
 
     def process_formdata(self, valuelist):
         super().process_formdata([d.strip().lower() for d in valuelist])
+
+
+class URLList(URL):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def __call__(self, form, field):
+        original_field_data = field.data
+
+        try:
+            for uri in [uri.strip() for uri in field.data.split(",")]:
+                field.data = uri
+                message = self.message
+                if message is None:
+                    message = field.gettext('Invalid URL.')
+
+                match = super(URL, self).__call__(form, field, message)
+                if not self.validate_hostname(match.group('host')):
+                    raise ValidationError(message)
+        finally:
+            field.data = original_field_data

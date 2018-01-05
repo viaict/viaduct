@@ -12,7 +12,7 @@ from app.exceptions import ResourceNotFoundException, ValidationException, \
 from app.roles import Roles
 from app.utils.import_module import import_module
 from .extensions import db, login_manager, \
-    cache, toolbar, jsglue, sentry, oauth
+    cache, toolbar, jsglue, sentry, oauth, cors
 
 version = 'v2.9.1.0'
 
@@ -90,6 +90,8 @@ def init_app():
     toolbar.init_app(app)
     jsglue.init_app(app)
     oauth.init_app(app)
+    # TODO add CORS domains to config.
+    cors.init_app(app)
     init_oauth()
 
     login_manager.init_app(app)

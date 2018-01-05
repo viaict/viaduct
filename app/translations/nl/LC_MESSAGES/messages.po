@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-12-28 15:11+0100\n"
+"POT-Creation-Date: 2018-01-04 13:21+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language: nl\n"
@@ -38,9 +38,6 @@ msgstr ""
 #, python-format
 msgid "API call failed: %s"
 msgstr "API call mislukt: %s"
-
-msgid "Access to your Pimpy data"
-msgstr "Toegang tot jouw Pimpy data"
 
 msgid ""
 "According to Google this email does not exist. Please use an email that "
@@ -937,7 +934,7 @@ msgid "Optional data"
 msgstr "Optionele gegevens"
 
 msgid "Owned by: "
-msgstr "Eigenaar van: "
+msgstr "Beheerder: "
 
 msgid "Page"
 msgstr "Pagina"
@@ -1039,6 +1036,9 @@ msgstr "Rang"
 
 msgid "Read"
 msgstr "Lees"
+
+msgid "Read access to your Pimpy data"
+msgstr "Lees rechten tot je Pimpy data"
 
 msgid "Read more"
 msgstr "Meer lezen"
@@ -1488,6 +1488,9 @@ msgstr "Werklast"
 
 msgid "Would you like to recieve information from companies?"
 msgstr "Wil je informatie van bedrijven ontvangen?"
+
+msgid "Write access to your Pimpy data"
+msgstr "Schrijf rechten tot je Pimpy data"
 
 msgid "Written by"
 msgstr "Geschreven door"
@@ -1996,4 +1999,7 @@ msgstr ""
 
 #~ msgid "Zip code is required."
 #~ msgstr "Postcode is vereist."
+
+#~ msgid "Access to your Pimpy data"
+#~ msgstr "Toegang tot jouw Pimpy data"
 

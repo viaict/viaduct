@@ -13,14 +13,18 @@
     <div class="form-group{% if field.errors %} has-error has-feedback{% endif %}">
         {{ field.label }}
         {{ field_input_html }}
-    {%- if field.errors -%}
-    {%- if show_cross -%}
-    <i class="glyphicon glyphicon-remove form-control-feedback"></i>
-    {%- endif -%}
-    {%- for error in field.errors -%}
-    <p class="help-block">{{ error }}</p>
-    {%- endfor -%}
-    {%- endif -%}
+        {%- if field.description -%}
+            <p class="help-block"><small>{{ field.description }}</small></p>
+        {%- endif -%}
+
+        {%- if field.errors -%}
+            {%- if show_cross -%}
+                <i class="glyphicon glyphicon-remove form-control-feedback"></i>
+            {%- endif -%}
+            {%- for error in field.errors -%}
+                <p class="help-block">{{ error }}</p>
+            {%- endfor -%}
+        {%- endif -%}
     </div>
     {% endmacro %}
 
