@@ -4,6 +4,7 @@ import json
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask import jsonify
 from flask_login import current_user
+from flask_babel import _
 
 from app import db
 from app.decorators import require_role
@@ -68,36 +69,41 @@ def create():
     form = CreateGroupForm(request.form)
 
     if form.validate_on_submit():
-        name = request.form['name'].strip()
-        maillist = request.form['maillist'].strip()
-        committee_url = form.committee_url.data.strip()
+        name = form.name.data.strip()
+        mailtype = form.mailtype.data
+        maillist = form.maillist.data.strip().lower()
+
         valid_form = True
 
         if Group.query.filter(Group.name == name).count() > 0:
-            flash('The naam van de groep wordt al gebruikt', 'danger')
+            flash(_('There is already another group with this name.'),
+                  'danger')
             valid_form = False
 
         if valid_form:
-            maillist = maillist.strip().lower()
+            print(mailtype)
             if maillist == '':
                 group = Group(name, None)
             else:
-                group = Group(name, maillist)
+                group = Group(name, maillist, mailtype)
 
             db.session.add(group)
             db.session.commit()
 
-            flash('De groep is aangemaakt.', 'success')
+            # Only automatically create mailing lists
+            if mailtype == 'mailinglist':
+                google.create_group_if_not_exists(name, maillist)
 
-            if committee_url != '':
-                return redirect('%s?group_id=%d' % (
-                    url_for('committee.edit_committee',
-                            committee=committee_url), group.id))
+            flash(_('The group has been created.'), 'success')
+
+            if mailtype == 'mailbox':
+                flash(_('Ask the board to create the mailbox for this'
+                        ' group (if needed)'))
 
             return redirect(url_for('group.view'))
 
-    return render_template('group/create.htm', title='Maak groep',
-                           form=form, group=None)
+    return render_template('group/edit.htm', title=_('Create group'),
+                           form=form)
 
 
 @blueprint.route('/groups/<int:group_id>/edit/', methods=['GET', 'POST'])
@@ -106,42 +112,47 @@ def edit(group_id):
     group = Group.by_id(group_id)
 
     form = EditGroupForm(request.form, obj=group)
-    if request.method == 'POST':
-        form = EditGroupForm(request.form)
 
-        if form.validate_on_submit():
-            name = form.data['name'].strip()
-            maillist = form.data['maillist'].strip().lower()
+    if form.validate_on_submit():
+        name = form.name.data.strip()
+        mailtype = form.mailtype.data
+        maillist = form.maillist.data.strip().lower()
 
-            suffix = maillist.find('@svia.nl')
-            if suffix > 0:
-                maillist = maillist[:suffix]
+        valid_form = True
 
-            valid_form = True
+        if Group.query.filter(Group.name == name,
+                              Group.id != group_id).count() > 0:
+            flash(_('There is already another group with this name.'),
+                  'danger')
+            valid_form = False
 
-            group_with_same_name = Group.query. \
-                filter(Group.name == name, Group.id != group_id).first()
-            if group_with_same_name is not None:
-                flash('The naam van de groep wordt al gebruikt', 'danger')
-                valid_form = False
-
-            if valid_form:
-                group.name = name
+        if valid_form:
+            group.name = name
+            group.maillist = maillist
+            if maillist == '' or mailtype == 'none':
+                group.maillist = None
+                group.mailtype = 'none'
+            else:
                 group.maillist = maillist
-                if maillist == '':
-                    group.maillist = None
-                else:
-                    group.maillist = maillist
+                group.mailtype = mailtype
 
-                db.session.commit()
+            db.session.commit()
+
+            # Only automatically create mailing lists
+            if mailtype == 'mailinglist':
                 google.create_group_if_not_exists(name, maillist)
-                group.add_members_to_maillist()
 
-                flash('De groep is aangepast.', 'success')
+            group.add_members_to_maillist()
 
-                return redirect(url_for('group.view'))
+            flash(_('The group has been edited.'), 'success')
 
-    return render_template('group/create.htm', title='Pas groep aan',
+            if mailtype == 'mailbox':
+                flash(_('Ask the board to create the mailbox for this'
+                        ' group (if needed)'))
+
+            return redirect(url_for('group.view'))
+
+    return render_template('group/edit.htm', title=_('Edit group'),
                            form=form, group=group)
 
 

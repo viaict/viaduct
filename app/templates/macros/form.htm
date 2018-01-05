@@ -210,6 +210,18 @@
     </div>
 {% endmacro %}
 
+{% macro _render_email_list_input(field, domain) %}
+    <div class="input-group">
+      {{ field(class='form-control') }}
+      <span class="input-group-addon">@{{ domain }}</span>
+    </div>
+{% endmacro %}
+
+{% macro render_email_list(field) %}
+    {%- set domain = kwargs.get('domain', 'svia.nl') -%}
+    {{ _render_field_with_errors(field, _render_email_list_input(field, domain), False) }}
+{% endmacro %}
+
 {% macro render_tabs(field) %}
 {# We use this group id in the ids of the tabs, to make them unique for this group #}
 {%- set group_id = field.hex_id -%}
@@ -296,6 +308,8 @@
         {{ render_vsplit(f, **kwargs) }}
     {%- elif f.type == 'RecaptchaField' -%}
         {{ render_recaptcha(f, **kwargs) }}
+    {%- elif f.type == 'EmailListField' -%}
+        {{ render_email_list(f, **kwargs) }}
     {%- elif f.type != 'CSRFTokenField' -%}
         {{ render_field(f, **kwargs) }}
     {%- endif -%}
