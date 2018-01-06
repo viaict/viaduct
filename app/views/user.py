@@ -13,7 +13,7 @@ from flask_babel import _
 from flask_login import current_user, login_user, logout_user, login_required
 
 from app import db, login_manager
-from app.decorators import require_role
+from app.decorators import require_role, response_headers
 from app.exceptions import ResourceNotFoundException, AuthorizationException, \
     ValidationException
 from app.forms.user import (EditUserForm, EditUserInfoForm, SignUpForm,
@@ -227,6 +227,7 @@ def edit(user_id=None):
 
 
 @blueprint.route('/sign-up/', methods=['GET', 'POST'])
+@response_headers({"X-Frame-Options": "SAMEORIGIN"})
 def sign_up():
     # Redirect the user to the index page if he or she has been authenticated
     # already.
@@ -284,6 +285,7 @@ def sign_up():
 
 
 @blueprint.route('/sign-in/', methods=['GET', 'POST'])
+@response_headers({"X-Frame-Options": "SAMEORIGIN"})
 def sign_in():
     # Redirect the user to the index page if he or she has been authenticated
     # already.
@@ -349,6 +351,7 @@ def sign_out():
 
 
 @blueprint.route('/request_password/', methods=['GET', 'POST'])
+@response_headers({"X-Frame-Options": "SAMEORIGIN"})
 def request_password():
     """Create a ticket and send a email with link to reset_password page."""
     if current_user.is_authenticated:
@@ -371,6 +374,7 @@ def request_password():
 
 
 @blueprint.route('/reset_password/<string:hash_>', methods=['GET', 'POST'])
+@response_headers({"X-Frame-Options": "SAMEORIGIN"})
 def reset_password(hash_):
     """
     Reset form existing of two fields, password and password_repeat.

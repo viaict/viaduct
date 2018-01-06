@@ -4,6 +4,7 @@ from flask_babel import _
 from flask_login import login_required, current_user
 
 from app import oauth, version
+from app.decorators import response_headers
 from app.forms.oauth_forms import OAuthClientForm
 from app.service import oauth_service
 
@@ -13,6 +14,7 @@ blueprint = Blueprint('oauth', __name__, url_prefix='/oauth')
 @blueprint.route('/authorize/', methods=['GET', 'POST'])
 @login_required
 @oauth.authorize_handler
+@response_headers({"X-Frame-Options": "SAMEORIGIN"})
 def authorize(*args, **kwargs):
     if request.method == 'GET':
         client_id = kwargs.get('client_id')
