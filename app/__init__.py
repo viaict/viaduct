@@ -7,10 +7,12 @@ from flask_babel import Babel
 from flask_login import current_user
 from speaklater import _LazyString
 
+from app.exceptions import ResourceNotFoundException, ValidationException, \
+    AuthorizationException
 from app.roles import Roles
 from app.utils.import_module import import_module
 from .extensions import db, login_manager, \
-    cache, toolbar, jsglue, sentry
+    cache, toolbar, jsglue, sentry, oauth, cors
 
 version = 'v2.9.1.0'
 
@@ -84,11 +86,13 @@ def init_app():
     app.config['CACHE_TYPE'] = 'filesystem'
     app.config['CACHE_DIR'] = 'cache'
 
-    logging.basicConfig()
-
     cache.init_app(app)
     toolbar.init_app(app)
     jsglue.init_app(app)
+    oauth.init_app(app)
+    # TODO add CORS domains to config.
+    cors.init_app(app)
+    init_oauth()
 
     login_manager.init_app(app)
     login_manager.login_view = 'user.sign_in'
@@ -132,3 +136,38 @@ def init_app():
 
     log = logging.getLogger('werkzeug')
     log.setLevel(app.config['LOG_LEVEL'])
+
+
+def init_oauth():
+    from app.service import user_service, oauth_service
+
+    @oauth.clientgetter
+    def oauth_clientgetter(client_id):
+        return oauth_service.get_client_by_id(client_id)
+
+    @oauth.grantgetter
+    def oauth_grantgetter(client_id, code):
+        return oauth_service.get_grant_by_client_id_and_code(client_id, code)
+
+    @oauth.grantsetter
+    def oauth_grantsetter(client_id, code, request, *_, **__):
+        return oauth_service.create_grant(
+            client_id, code, current_user.id, request)
+
+    @oauth.tokengetter
+    def oauth_tokengetter(access_token=None, refresh_token=None):
+        return oauth_service.get_token(access_token, refresh_token)
+
+    @oauth.tokensetter
+    def oauth_tokensetter(token, request, *_, **__):
+        user_id = request.user.id if request.user else current_user.id
+        return oauth_service.create_token(token, user_id, request)
+
+    @oauth.usergetter
+    def oauth_usergetter(email, password, *_, **__):
+        try:
+            return user_service.get_user_by_login(
+                email=email, password=password)
+        except (ResourceNotFoundException, AuthorizationException,
+                ValidationException):
+            return None

@@ -12,15 +12,19 @@
     {{ ignore_kwargs(kwargs) }}
     <div class="form-group{% if field.errors %} has-error has-feedback{% endif %}">
         {{ field.label }}
+        {%- if field.description -%}
+            <small> {{ field.description }}</small>
+        {%- endif -%}
         {{ field_input_html }}
-    {%- if field.errors -%}
-    {%- if show_cross -%}
-    <i class="glyphicon glyphicon-remove form-control-feedback"></i>
-    {%- endif -%}
-    {%- for error in field.errors -%}
-    <p class="help-block">{{ error }}</p>
-    {%- endfor -%}
-    {%- endif -%}
+
+        {%- if field.errors -%}
+            {%- if show_cross -%}
+                <i class="glyphicon glyphicon-remove form-control-feedback"></i>
+            {%- endif -%}
+            {%- for error in field.errors -%}
+                <p class="help-block">{{ error }}</p>
+            {%- endfor -%}
+        {%- endif -%}
     </div>
     {% endmacro %}
 
@@ -43,6 +47,17 @@
 {% macro render_button(field, cls='btn btn-default') %}
     {{ ignore_kwargs(kwargs) }}
     {{ field(class=cls) }}
+{% endmacro %}
+
+{% macro render_post_btn(url, confirm_text, btn_text) %}
+    <form action="{{ url }}"
+          class="form-inline" method="POST"
+          onsubmit="return confirm('{{ confirm_text }}');">
+        <button class='btn btn-danger'
+                data-loading-text={{ _('Loading...') }} type='submit'>
+            {{ btn_text }}
+        </button>
+    </form>
 {% endmacro %}
 
 {% macro render_submit(text) %}

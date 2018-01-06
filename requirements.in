@@ -1,11 +1,13 @@
 Flask
 Flask-Babel
 Flask-Cache
+Flask-CORS
 Flask-DebugToolbar
 Flask-Failsafe
 Flask-JSGlue
 Flask-Login
 Flask-Migrate
+Flask-OAuthlib
 Flask-Script
 Flask-SQLAlchemy
 Flask-WTF

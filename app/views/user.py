@@ -14,16 +14,18 @@ from flask_login import current_user, login_user, logout_user, login_required
 
 from app import db, login_manager
 from app.decorators import require_role
-from app.exceptions import ResourceNotFoundException
-from app.forms.user import (SignUpForm, SignInForm, ResetPassword,
-                            RequestPassword, EditUserForm, EditUserInfoForm)
+from app.exceptions import ResourceNotFoundException, AuthorizationException, \
+    ValidationException
+from app.forms.user import (EditUserForm, EditUserInfoForm, SignUpForm,
+                            SignInForm, ResetPassword, RequestPassword)
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult, CustomForm
 from app.models.education import Education
 from app.models.group import Group
 from app.models.user import User
 from app.roles import Roles
-from app.service import password_reset_service, role_service
+from app.service import password_reset_service, user_service
+from app.service import role_service
 from app.utils import copernica
 from app.utils.google import HttpError
 from app.utils.user import UserAPI
@@ -292,24 +294,19 @@ def sign_in():
     form = SignInForm(request.form)
 
     if form.validate_on_submit():
-        user = form.validate_signin()
 
-        if user:
-            # Notify the login manager that the user has been signed in.
+        try:
+            user = user_service.get_user_by_login(form.email.data,
+                                                  form.password.data)
             login_user(user)
-            if user.disabled:
-                flash(_('Your account has been disabled, you are not allowed '
-                        'to log in'), 'danger')
-            else:
-                flash(_('Hey %(name)s, you\'re now logged in!',
-                        name=current_user.first_name), 'success')
 
-            referer = request.headers.get('Referer')
+            # Notify the login manager that the user has been signed in.
+            flash(_('Hey %(name)s, you\'re now logged in!',
+                    name=current_user.first_name), 'success')
 
             # If referer is empty for some reason (browser policy, user entered
             # address in address bar, etc.), use empty string
-            if not referer:
-                referer = ''
+            referer = request.headers.get('Referer') or ''
 
             denied = (
                 re.match(r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),
@@ -323,6 +320,16 @@ def sign_in():
                 return redirect(denied_from)
 
             return redirect(url_for('home.home'))
+
+        except ResourceNotFoundException:
+            flash(_(
+                'It appears that account does not exist. Try again, or contact'
+                ' the website administration at ict (at) svia (dot) nl.'))
+        except AuthorizationException:
+            flash(_('Your account has been disabled, you are not allowed '
+                    'to log in'), 'danger')
+        except ValidationException:
+            flash(_('The password you entered appears to be incorrect.'))
 
     return render_template('user/sign_in.htm', form=form)
 
