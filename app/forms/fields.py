@@ -54,8 +54,9 @@ class EmailListField(StringField):
         try:
             self._email_validator(form, self)
             # The current version of WTForms does not check for spaces
+            # and multiple '@' characters.
             # this is fixed but not released yet, so we do it ourselves
-            if " " in self.data:
+            if " " in self.data or "@" in origdata:
                 raise ValidationError()
         except ValidationError:
             raise ValidationError(_('Invalid email list name.'))

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2017-11-27 16:36+0100\n"
+"POT-Creation-Date: 2018-01-06 16:16+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language: nl\n"
@@ -77,9 +77,6 @@ msgstr ""
 msgid "Address"
 msgstr "Adres"
 
-msgid "Address is required."
-msgstr "Adres is vereist."
-
 msgid "Admin data"
 msgstr "Administrator data"
 
@@ -145,6 +142,11 @@ msgstr "Weet je zeker dat je dit item wilt verwijderen?"
 msgid "Are you sure you want to delete this exam?"
 msgstr "Weet je zeker dat je het tentamen wilt verwijderen?"
 
+msgid "Ask the board to create the mailbox for this group (if needed)"
+msgstr ""
+"Vraag het bestuur om de mailbox aan te maken voor deze groep (indien "
+"nodig)"
+
 msgid "Attended activities"
 msgstr "Oude activiteiten"
 
@@ -189,9 +191,6 @@ msgstr "Verander wachtwoord"
 
 msgid "City"
 msgstr "Plaats"
-
-msgid "City is required."
-msgstr "Stad is vereist."
 
 msgid "Click to expand"
 msgstr "Klik om uit te klappen"
@@ -253,9 +252,6 @@ msgstr "Contact email"
 msgid "Contact email \"%s\" is already in use."
 msgstr "Contact email \" %s \" wordt al gebruikt."
 
-msgid "Contact email is required."
-msgstr "Contact email is vereist"
-
 #, python-format
 msgid "Contact name \"%s\" is already in use."
 msgstr "Contact naam \" %s \" wordt al gebruikt."
@@ -281,14 +277,8 @@ msgstr "Contract"
 msgid "Contract enddate"
 msgstr "Contract einddatum"
 
-msgid "Contract enddate is required."
-msgstr "Contract startdatum is vereist"
-
 msgid "Contract startdate"
 msgstr "Contract startdatum"
-
-msgid "Contract startdate is required."
-msgstr "Contract startdatum is vereist"
 
 msgid "Copy to clipboard"
 msgstr "Kopiëren naar klembord"
@@ -304,9 +294,6 @@ msgstr "Kan taak niet vinden in REMOVE: "
 
 msgid "Country"
 msgstr "Land"
-
-msgid "Country is required."
-msgstr "Land is vereist."
 
 msgid "Course"
 msgstr "Vak"
@@ -343,6 +330,9 @@ msgstr "Activiteit aanmaken"
 
 msgid "Create form"
 msgstr "Formulier aanmaken"
+
+msgid "Create group"
+msgstr "Groep aanmaken"
 
 msgid "Create news item"
 msgstr "Nieuwsbericht aanmaken"
@@ -455,8 +445,14 @@ msgstr "Nederlandse naam vereist Nederlandse beschrijving en vica versa."
 msgid "E-mail address"
 msgstr "E-mailadres"
 
+msgid "E-mail address cannot start with any of the following"
+msgstr "E-mailadres kan niet met het volgende beginnen"
+
 msgid "E-mail adress"
 msgstr "E-mailadres"
+
+msgid "E-mail type"
+msgstr "E-mail type"
 
 msgid "Edit"
 msgstr "Aanpassen"
@@ -472,6 +468,9 @@ msgstr "Opleiding aanpassen"
 
 msgid "Edit examination"
 msgstr "Tentamen aanpassen"
+
+msgid "Edit group"
+msgstr "Groep aanpassen"
 
 msgid "Edit news item"
 msgstr "Nieuwsbericht aanpassen"
@@ -523,9 +522,6 @@ msgstr "Een Nederlandse of Engelse titel is vereist."
 
 msgid "Email"
 msgstr "Email adres"
-
-msgid "Email is required."
-msgstr "Email is vereist"
 
 msgid "End date"
 msgstr "Einddatum"
@@ -706,11 +702,8 @@ msgstr "Ongeldige taak id in DONE: "
 msgid "Invalid REMOVE task id: "
 msgstr "Ongeldige taak id in REMOVE: "
 
-msgid "Invalid e-mail address"
-msgstr "Geen valide e-mailadres"
-
-msgid "Invalid e-mail adress submitted"
-msgstr "Geen valide e-mailadres opgegeven"
+msgid "Invalid email address."
+msgstr "Ongeldig emailadres."
 
 msgid "Invalid email list name."
 msgstr "Geen geldige naam van e-maillijst"
@@ -779,6 +772,9 @@ msgstr "Log in"
 msgid "Logo"
 msgstr "Logo"
 
+msgid "Mailing list"
+msgstr "Mailinglijst"
+
 msgid "Max number of attendents"
 msgstr "Maximaal aantal aanwezigen"
 
@@ -810,9 +806,6 @@ msgstr "Naam"
 #, python-format
 msgid "Name \"%s\" is already in use."
 msgstr "Naam \" %s \" wordt al gebruikt."
-
-msgid "Name is required."
-msgstr "Naam is vereist"
 
 msgid "Navigation entry"
 msgstr "Menu item"
@@ -877,26 +870,8 @@ msgstr "Geen uitvoer"
 msgid "No answers uploaded."
 msgstr "Geen antwoorden geüpload."
 
-msgid "No birthdate submitted"
-msgstr "Geen geboortedag opgegeven"
-
 msgid "No contests found"
 msgstr "Geen wedstrijden gevonden"
-
-msgid "No course given"
-msgstr "Geen vak opgegeven"
-
-msgid "No description supplied"
-msgstr "Geen omschrijving opgegeven"
-
-msgid "No e-mail adress submitted"
-msgstr "Geen valide e-mailadres opgegeven"
-
-msgid "No education given"
-msgstr "Geen opleiding opgegeven"
-
-msgid "No examination kind given"
-msgstr "Geen tentamen soort opgegeven"
 
 msgid "No examination uploaded."
 msgstr "Geen tentamen geüpload."
@@ -907,14 +882,8 @@ msgstr "Geen tentamens gevonden"
 msgid "No file uploaded."
 msgstr "Geen bestand geüpload."
 
-msgid "No first name sunmitted"
-msgstr "Geen voornaam opgeveven"
-
 msgid "No form"
 msgstr "Geen formulier"
-
-msgid "No last name submitted"
-msgstr "Geen achternaam opgeveven"
 
 msgid "No location"
 msgstr "Geen locatie"
@@ -922,23 +891,8 @@ msgstr "Geen locatie"
 msgid "No password submitted"
 msgstr "Geen wachtwoord opgegeven"
 
-msgid "No permissions to read contacts"
-msgstr "Geen rechten om contacten te bekijken."
-
 msgid "No presidium"
 msgstr ""
-
-msgid "No starting year of study submitted"
-msgstr "Geen beginjaar studie opgegeven"
-
-msgid "No studentnumber submitted"
-msgstr "Geen studenten ID opgegeven"
-
-msgid "No title entered"
-msgstr "Geen titel opgegeven."
-
-msgid "No title given."
-msgstr "Geen titel opgegeven."
 
 msgid "No vacancies found."
 msgstr "Geen vacatures gevonden."
@@ -948,9 +902,6 @@ msgstr "Geen valide ticket gevonden"
 
 msgid "None"
 msgstr "Geen"
-
-msgid "Not a valid email."
-msgstr "Geen valide e-mailadres."
 
 msgid "Not found!"
 msgstr "Niet gevonden!"
@@ -996,9 +947,6 @@ msgstr "Rechten"
 msgid "Phone"
 msgstr "Telefoonnummer"
 
-msgid "Phone is required."
-msgstr "Telefoonnummer is vereist."
-
 msgid "Please fill in"
 msgstr "Alstublieft invullen"
 
@@ -1017,7 +965,7 @@ msgstr "Postbus"
 msgid "Postoffice Box"
 msgstr "Postbus"
 
-msgid "Presidium: "
+msgid "Presidium:"
 msgstr ""
 
 msgid "Previous"
@@ -1106,6 +1054,9 @@ msgstr "Resultaat"
 
 msgid "Retake"
 msgstr "Herkansing"
+
+msgid "Roles"
+msgstr "Rollen"
 
 msgid "Run Error"
 msgstr "Run Fout"
@@ -1277,6 +1228,12 @@ msgstr ""
 msgid "The given title does not match the page title."
 msgstr "The opgegeven titel komt niet overeen met de titel van de pagina."
 
+msgid "The group has been created."
+msgstr "De groep is aangemaakt."
+
+msgid "The group has been edited."
+msgstr "De groep is aangepast."
+
 msgid "The link refers to a page that does not exist, pleasecreate the page!"
 msgstr "De link verwijst naar een pagina die niet bestaat, maak eerst deze pagina!"
 
@@ -1301,12 +1258,21 @@ msgstr "Het opgegeven wachtwoord lijkt incorrect."
 msgid "The seo settings have been saved"
 msgstr "De seo-instellingen zijn opgeslagen"
 
+msgid "There is already another group with this e-mail address."
+msgstr "Er is al een groep met hetzelfde emailadres."
+
+msgid "There is already another group with this name."
+msgstr "Er is al een groep met dezelfde naam."
+
 msgid ""
 "These details are taken from your account. You can change them on your "
 "account page."
 msgstr ""
 "Deze gegevens worden opgehaald uit je account. Deze kun je wijzigen op je"
 " account pagina."
+
+msgid "This field is required."
+msgstr "Dit veld is vereist."
 
 msgid ""
 "This is probably due to not having paid your member contribution. You can"
@@ -1412,9 +1378,6 @@ msgstr "Vacature opgeslagen"
 
 msgid "Vacany"
 msgstr "Vacature"
-
-msgid "Valid membership is required for the examination module"
-msgstr "Geldig lidmaatschap is vereist voor de tentamenbank"
 
 msgid "Valid membership is required to read this news article"
 msgstr "Geldig lidmaatschap is vereist om dit nieuwsartikel te kunnen lezen"
@@ -1549,9 +1512,6 @@ msgstr "Je inschrijving is voltooid."
 
 msgid "Zip code"
 msgstr "Postcode"
-
-msgid "Zip code is required."
-msgstr "Postcode is vereist."
 
 msgid "ago"
 msgstr "geleden"
@@ -1895,4 +1855,88 @@ msgstr ""
 
 #~ msgid "GA"
 #~ msgstr "ALV"
+
+#~ msgid "Address is required."
+#~ msgstr "Adres is vereist."
+
+#~ msgid "City is required."
+#~ msgstr "Stad is vereist."
+
+#~ msgid "Contact email is required."
+#~ msgstr "Contact email is vereist"
+
+#~ msgid "Contract enddate is required."
+#~ msgstr "Contract startdatum is vereist"
+
+#~ msgid "Contract startdate is required."
+#~ msgstr "Contract startdatum is vereist"
+
+#~ msgid "Country is required."
+#~ msgstr "Land is vereist."
+
+#~ msgid "Email is required."
+#~ msgstr "Email is vereist"
+
+#~ msgid "Invalid e-mail address"
+#~ msgstr "Geen valide e-mailadres"
+
+#~ msgid "Invalid e-mail adress submitted"
+#~ msgstr "Geen valide e-mailadres opgegeven"
+
+#~ msgid "Name is required."
+#~ msgstr "Naam is vereist"
+
+#~ msgid "No birthdate submitted"
+#~ msgstr "Geen geboortedag opgegeven"
+
+#~ msgid "No course given"
+#~ msgstr "Geen vak opgegeven"
+
+#~ msgid "No description supplied"
+#~ msgstr "Geen omschrijving opgegeven"
+
+#~ msgid "No e-mail adress submitted"
+#~ msgstr "Geen valide e-mailadres opgegeven"
+
+#~ msgid "No education given"
+#~ msgstr "Geen opleiding opgegeven"
+
+#~ msgid "No examination kind given"
+#~ msgstr "Geen tentamen soort opgegeven"
+
+#~ msgid "No first name sunmitted"
+#~ msgstr "Geen voornaam opgeveven"
+
+#~ msgid "No last name submitted"
+#~ msgstr "Geen achternaam opgeveven"
+
+#~ msgid "No permissions to read contacts"
+#~ msgstr "Geen rechten om contacten te bekijken."
+
+#~ msgid "No starting year of study submitted"
+#~ msgstr "Geen beginjaar studie opgegeven"
+
+#~ msgid "No studentnumber submitted"
+#~ msgstr "Geen studenten ID opgegeven"
+
+#~ msgid "No title entered"
+#~ msgstr "Geen titel opgegeven."
+
+#~ msgid "No title given."
+#~ msgstr "Geen titel opgegeven."
+
+#~ msgid "Not a valid email."
+#~ msgstr "Geen valide e-mailadres."
+
+#~ msgid "Phone is required."
+#~ msgstr "Telefoonnummer is vereist."
+
+#~ msgid "Presidium: "
+#~ msgstr ""
+
+#~ msgid "Valid membership is required for the examination module"
+#~ msgstr "Geldig lidmaatschap is vereist voor de tentamenbank"
+
+#~ msgid "Zip code is required."
+#~ msgstr "Postcode is vereist."
 
