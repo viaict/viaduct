@@ -78,7 +78,7 @@ def edit(client_id=None):
     client = oauth_service.get_client_by_id(client_id=client_id)
     form = OAuthClientForm(request.form, obj=client)
 
-    if client:
+    if not form.redirect_uri.data and client:
         form.redirect_uri.data = ', '.join(client.redirect_uris)
 
     if form.validate_on_submit():
