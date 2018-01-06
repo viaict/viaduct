@@ -94,8 +94,7 @@ def init_app():
     toolbar.init_app(app)
     jsglue.init_app(app)
     oauth.init_app(app)
-    # TODO add CORS domains to config.
-    cors.init_app(app)
+    cors.init_app(app, resources={r"/api/*": {"origins": "*"}})
     init_oauth()
 
     login_manager.init_app(app)
