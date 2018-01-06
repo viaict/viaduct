@@ -1,3 +1,5 @@
+import re
+
 from app import db
 
 
@@ -30,6 +32,9 @@ class OAuthGrant(db.Model):
     @property
     def scopes(self):
         return [scope.scope for scope in self._scopes]
+
+    def validate_redirect_uri(self, uri):
+        return re.match(self.redirect_uri, uri)
 
 
 class OAuthGrantScope(db.Model):

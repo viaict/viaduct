@@ -15,7 +15,7 @@ blueprint = Blueprint('oauth', __name__, url_prefix='/oauth')
 @login_required
 @oauth.authorize_handler
 @response_headers({"X-Frame-Options": "SAMEORIGIN"})
-def authorize(*args, **kwargs):
+def authorize(*__, **kwargs):
     if request.method == 'GET':
         client_id = kwargs.get('client_id')
         client = oauth_service.get_client_by_id(client_id=client_id)
@@ -44,6 +44,7 @@ def revoke_token():
 @oauth.require_oauth()
 def token_info():
     print(request.oauth.access_token.scopes)
+    # TODO expand with proper information.
     return jsonify({"scope": request.oauth.access_token.scopes})
 
 
@@ -88,19 +89,22 @@ def edit(client_id=None):
     client = oauth_service.get_client_by_id(client_id=client_id)
     form = OAuthClientForm(request.form, obj=client)
 
+    if not form.redirect_uri.data and client:
+        form.redirect_uri.data = ', '.join(client.redirect_uris)
+
     if form.validate_on_submit():
         if client:
             oauth_service.update_client(
                 client_id=client_id, name=form.name.data,
                 description=form.description.data,
-                redirect_uri=form.redirect_uri.data)
+                redirect_uri_list=form.redirect_uri.data)
             flash(_("Successfully updated client '%s'" % client.name))
         else:
             client = oauth_service.create_client(
                 user_id=current_user.id,
                 name=form.name.data,
                 description=form.description.data,
-                redirect_uri=form.redirect_uri.data)
+                redirect_uri_list=form.redirect_uri.data)
             flash(_("Successfully created client '%s'" % client.name))
         return redirect(url_for("oauth.list_clients"))
     return render_template("oauth/register.htm", form=form)

@@ -16,9 +16,9 @@ from app.exceptions import ResourceNotFoundException, ValidationException, \
 from app.roles import Roles
 from app.utils.import_module import import_module
 from .extensions import db, login_manager, \
-    cache, toolbar, jsglue, sentry, oauth
+    cache, toolbar, jsglue, sentry, oauth, cors
 
-version = 'v2.9.0.5'
+version = 'v2.9.1.0'
 
 
 def static_url(url):
@@ -94,6 +94,8 @@ def init_app():
     toolbar.init_app(app)
     jsglue.init_app(app)
     oauth.init_app(app)
+    # TODO add CORS domains to config.
+    cors.init_app(app)
     init_oauth()
 
     login_manager.init_app(app)
@@ -190,23 +192,23 @@ def init_oauth():
 
 def get_patched_api_app():
     # URL for exposing Swagger UI (without trailing '/')
-    SWAGGER_URL = '/api/docs'
+    swagger_url = '/api/docs'
 
     # The API url defined by connexion.
-    API_URLS = [{"name": "pimpy", "url": "/api/pimpy/swagger.json"}]
+    api_urls = [{"name": "pimpy", "url": "/api/pimpy/swagger.json"}]
 
     swaggerui_blueprint = get_swaggerui_blueprint(
-        SWAGGER_URL,
-        API_URLS[0]["url"],
+        swagger_url,
+        api_urls[0]["url"],
         config={  # Swagger UI config overrides
             'app_name': "Study Association via - Public API documentation",
-            'urls': API_URLS
+            'urls': api_urls
         },
         oauth_config={
             'clientId': "swagger",
         }
     )
-    app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
+    app.register_blueprint(swaggerui_blueprint, url_prefix=swagger_url)
 
     def inject(self):
         print("Hacked connexion to let it load our flask app.")

@@ -188,7 +188,10 @@ def add_email_to_group_if_not_exists(email, listname):
     except HttpError as e:
         if e.resp.status != 409:
             # Something else went wrong than the list already existing
-            raise(e)
+            sentry.captureException()
+            _logger.error(e)
+            flash('Something went wrong while updating the users'
+                  ' on the mailing list.')
 
 
 def remove_email_from_group_if_exists(email, listname):

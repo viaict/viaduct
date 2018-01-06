@@ -1,3 +1,5 @@
+import re
+
 from app import db
 
 
@@ -33,6 +35,9 @@ class OAuthClient(db.Model):
         if self.confidential:
             return 'confidential'
         return 'public'
+
+    def validate_redirect_uri(self, uri):
+        return any(re.match(allowed, uri) for allowed in self.redirect_uris)
 
     @property
     def redirect_uris(self):

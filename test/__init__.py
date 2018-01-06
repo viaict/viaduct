@@ -16,4 +16,7 @@ def Any(cls):  # noqa
         def __eq__(self, other):
             return isinstance(other, cls)
 
+        def __str__(self):
+            return 'Any(%s)' % str(cls)
+
     return Any()
