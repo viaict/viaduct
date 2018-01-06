@@ -10,8 +10,6 @@ info:
     url: https://svia.nl
     email: ict@svia.nl
 
-#host: "svia.nl"
-host: "localhost:5000"
 basePath: "/api/"
 schemes:
   - "http"
