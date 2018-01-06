@@ -13,8 +13,8 @@ blueprint = Blueprint('oauth', __name__, url_prefix='/oauth')
 
 @blueprint.route('/authorize/', methods=['GET', 'POST'])
 @login_required
-@oauth.authorize_handler
 @response_headers({"X-Frame-Options": "SAMEORIGIN"})
+@oauth.authorize_handler
 def authorize(*__, **kwargs):
     if request.method == 'GET':
         client_id = kwargs.get('client_id')
@@ -43,9 +43,19 @@ def revoke_token():
 @blueprint.route("/token/info/")
 @oauth.require_oauth()
 def token_info():
-    print(request.oauth.access_token.scopes)
-    # TODO expand with proper information.
-    return jsonify({"scope": request.oauth.access_token.scopes})
+    return jsonify({"active": "true",
+                    "scope": request.oauth.access_token.scopes,
+                    "username": request.oauth.user.email,
+                    "expires": request.oauth.access_token.expires,
+                    "client_id": request.oauth.client.client_id,
+                    "first_name": request.oauth.user.first_name,
+                    "last_name": request.oauth.user.last_name
+                    })
+
+
+@oauth.invalid_response
+def invalid_token_info(request):
+    return jsonify({"active": "false"})
 
 
 @blueprint.route("/errors/", methods=['GET'])
