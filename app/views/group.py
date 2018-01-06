@@ -81,7 +81,6 @@ def create():
             valid_form = False
 
         if valid_form:
-            print(mailtype)
             if maillist == '':
                 group = Group(name, None)
             else:
