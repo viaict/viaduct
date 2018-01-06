@@ -77,7 +77,9 @@ def reset_client_secret(client_id):
 def edit(client_id=None):
     client = oauth_service.get_client_by_id(client_id=client_id)
     form = OAuthClientForm(request.form, obj=client)
-    form.redirect_uri.data = ', '.join(client.redirect_uris)
+
+    if client:
+        form.redirect_uri.data = ', '.join(client.redirect_uris)
 
     if form.validate_on_submit():
         if client:
@@ -91,7 +93,7 @@ def edit(client_id=None):
                 user_id=current_user.id,
                 name=form.name.data,
                 description=form.description.data,
-                redirect_uri=form.redirect_uri.data)
+                redirect_uri_list=form.redirect_uri.data)
             flash(_("Successfully created client '%s'" % client.name))
         return redirect(url_for("oauth.list_clients"))
     return render_template("oauth/register.htm", form=form)

@@ -12,10 +12,10 @@
     {{ ignore_kwargs(kwargs) }}
     <div class="form-group{% if field.errors %} has-error has-feedback{% endif %}">
         {{ field.label }}
-        {{ field_input_html }}
         {%- if field.description -%}
-            <p class="help-block"><small>{{ field.description }}</small></p>
+            <small> {{ field.description }}</small>
         {%- endif -%}
+        {{ field_input_html }}
 
         {%- if field.errors -%}
             {%- if show_cross -%}
