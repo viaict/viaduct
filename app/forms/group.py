@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import BooleanField, FormField, FieldList, SubmitField, \
     StringField, SelectMultipleField, SelectField
 from wtforms import Form as UnsafeForm
-from wtforms.validators import InputRequired
+from wtforms.validators import InputRequired, StopValidation
 
 from app import Roles
 from app.forms.fields import EmailListField
@@ -23,9 +23,36 @@ class EditGroupPermissionEntry(UnsafeForm):
                                                     (2, "Lees/Schrijf")])
 
 
+illegal_prefixes = ['list-', 'coordinator-']
+
+
+def validate_maillist(form, field):
+    data_strip = field.data.strip()
+    if data_strip == '':
+        # Remove any previous errors
+        field.errors[:] = []
+
+        # Stop the validation, either with
+        # a message that the input is required or without one
+        # if it is not required
+        if form.mailtype.data == 'none':
+            raise StopValidation()
+        else:
+            raise StopValidation(field.gettext('This field is required.'))
+    else:
+        if any(data_strip.startswith(p) for p in illegal_prefixes):
+            raise StopValidation("{}: {}".format(
+                _('E-mail address cannot start with any of the following'),
+                ', '.join(illegal_prefixes)))
+
+
 class EditGroupForm(FlaskForm):
     name = StringField('Naam', validators=[InputRequired()])
-    maillist = EmailListField('Naam maillijst')
+    mailtype = SelectField(_('E-mail type'), choices=[
+        ('none', _('None')), ('mailinglist', _('Mailing list')),
+        ('mailbox', 'Mail box')])
+    maillist = EmailListField(_('E-mail address'),
+                              validators=[validate_maillist])
 
 
 class CreateGroupForm(EditGroupForm):
