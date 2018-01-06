@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-01-06 16:16+0100\n"
+"POT-Creation-Date: 2018-01-06 21:57+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -39,7 +39,7 @@ msgstr ""
 msgid "API call failed: %s"
 msgstr ""
 
-msgid "Access to your Pimpy data"
+msgid "Access to your name and e-mail"
 msgstr ""
 
 msgid ""
@@ -156,7 +156,7 @@ msgid ""
 "more information."
 msgstr ""
 
-msgid "Authorized callback URL"
+msgid "Authorized callback URLs"
 msgstr ""
 
 msgid "Avatar deleted successfully."
@@ -172,6 +172,9 @@ msgid "Birthdate"
 msgstr ""
 
 msgid "By registering you agree with the terms above."
+msgstr ""
+
+msgid "Cancel"
 msgstr ""
 
 msgid "Cannot find parent navigation entry."
@@ -192,7 +195,13 @@ msgstr ""
 msgid "City"
 msgstr ""
 
+msgid "Click 'confirm' to allow the application to do the following:"
+msgstr ""
+
 msgid "Click to expand"
+msgstr ""
+
+msgid "Comma separated, regex allowed"
 msgstr ""
 
 msgid "Comment"
@@ -397,6 +406,9 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
+msgid "Description of the client, usage for example"
+msgstr ""
+
 msgid "Details"
 msgstr ""
 
@@ -404,6 +416,9 @@ msgid "Disabled"
 msgstr ""
 
 msgid "Disclaimer"
+msgstr ""
+
+msgid "Display name of the client"
 msgstr ""
 
 msgid "Displayed price"
@@ -709,6 +724,9 @@ msgid "Invalid DONE task id: "
 msgstr ""
 
 msgid "Invalid REMOVE task id: "
+msgstr ""
+
+msgid "Invalid URL."
 msgstr ""
 
 msgid "Invalid email address."
@@ -2002,93 +2020,6 @@ msgstr ""
 #~ msgid "Zip code is required."
 #~ msgstr ""
 
-#~ msgid "Address is required."
-#~ msgstr ""
-
-#~ msgid "City is required."
-#~ msgstr ""
-
-#~ msgid "Contact email is required."
-#~ msgstr ""
-
-#~ msgid "Contract enddate is required."
-#~ msgstr ""
-
-#~ msgid "Contract startdate is required."
-#~ msgstr ""
-
-#~ msgid "Country is required."
-#~ msgstr ""
-
-#~ msgid "Email is required."
-#~ msgstr ""
-
-#~ msgid "Invalid e-mail address"
-#~ msgstr ""
-
-#~ msgid "Invalid e-mail adress submitted"
-#~ msgstr ""
-
-#~ msgid "Name is required."
-#~ msgstr ""
-
-#~ msgid "No birthdate submitted"
-#~ msgstr ""
-
-#~ msgid "No course given"
-#~ msgstr ""
-
-#~ msgid "No description supplied"
-#~ msgstr ""
-
-#~ msgid "No e-mail adress submitted"
-#~ msgstr ""
-
-#~ msgid "No education given"
-#~ msgstr ""
-
-#~ msgid "No examination kind given"
-#~ msgstr ""
-
-#~ msgid "No first name sunmitted"
-#~ msgstr ""
-
-#~ msgid "No last name submitted"
-#~ msgstr ""
-
-#~ msgid "No permissions to read contacts"
-#~ msgstr ""
-
-#~ msgid "No starting year of study submitted"
-#~ msgstr ""
-
-#~ msgid "No studentnumber submitted"
-#~ msgstr ""
-
-#~ msgid "No title entered"
-#~ msgstr ""
-
-#~ msgid "No title given."
-#~ msgstr ""
-
-#~ msgid "Not a valid email."
-#~ msgstr ""
-
-#~ msgid "Phone is required."
-#~ msgstr ""
-
-#~ msgid "Presidium: "
-#~ msgstr ""
-
-#~ msgid "Spaces are not allowed in email list name"
-#~ msgstr ""
-
-#~ msgid "Valid membership is required for the examination module"
-#~ msgstr ""
-
-#~ msgid "Zip code is required."
-#~ msgstr ""
-
 #~ msgid "Ask the board to create the actual mailbox for %s@svia.nl (if needed)"
 #~ msgstr ""
 
@@ -2099,5 +2030,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Access to your Pimpy data"
+#~ msgstr ""
+
+#~ msgid "Authorized callback URL"
 #~ msgstr ""
 
