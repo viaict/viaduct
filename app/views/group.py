@@ -76,8 +76,14 @@ def create():
         valid_form = True
 
         if Group.query.filter(Group.name == name).count() > 0:
-            flash(_('There is already another group with this name.'),
-                  'danger')
+            form.name.errors.append(
+                _('There is already another group with this name.'))
+            valid_form = False
+
+        if mailtype != 'none' and Group.query.filter(
+                Group.maillist == maillist).count() > 0:
+            form.maillist.errors.append(
+                _('There is already another group with this e-mail address.'))
             valid_form = False
 
         if valid_form:
@@ -121,8 +127,15 @@ def edit(group_id):
 
         if Group.query.filter(Group.name == name,
                               Group.id != group_id).count() > 0:
-            flash(_('There is already another group with this name.'),
-                  'danger')
+            form.name.errors.append(
+                _('There is already another group with this name.'))
+            valid_form = False
+
+        if mailtype != 'none' and Group.query.filter(
+                Group.maillist == maillist,
+                Group.id != group_id).count() > 0:
+            form.maillist.errors.append(
+                _('There is already another group with this e-mail address.'))
             valid_form = False
 
         if valid_form:

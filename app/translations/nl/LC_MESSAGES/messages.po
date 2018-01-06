@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2018-01-05 16:39+0100\n"
+"POT-Creation-Date: 2018-01-06 16:16+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language: nl\n"
@@ -1257,6 +1257,9 @@ msgstr "Het opgegeven wachtwoord lijkt incorrect."
 
 msgid "The seo settings have been saved"
 msgstr "De seo-instellingen zijn opgeslagen"
+
+msgid "There is already another group with this e-mail address."
+msgstr "Er is al een groep met hetzelfde emailadres."
 
 msgid "There is already another group with this name."
 msgstr "Er is al een groep met dezelfde naam."
