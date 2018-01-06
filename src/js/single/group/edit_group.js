@@ -5,12 +5,7 @@ $(document).ready(function() {
     var maillist_input = $("#maillist");
 
     function update_maillist_enabled() {
-        if(mailtype_select.val() === 'none') {
-            maillist_input.prop('disabled', true);
-        }
-        else {
-            maillist_input.prop('disabled', false);
-        }
+        maillist_input.prop('disabled', mailtype_select.val() === 'none');
     }
 
     mailtype_select.on('change', update_maillist_enabled);
