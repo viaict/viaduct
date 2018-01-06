@@ -34,7 +34,7 @@ class OAuthGrant(db.Model):
         return [scope.scope for scope in self._scopes]
 
     def validate_redirect_uri(self, uri):
-        return any(re.match(allowed, uri) for allowed in self.redirect_uris)
+        return re.match(self.redirect_uri, uri)
 
 
 class OAuthGrantScope(db.Model):
