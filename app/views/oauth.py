@@ -6,6 +6,7 @@ from flask_login import login_required, current_user
 from app import oauth, version
 from app.decorators import response_headers
 from app.forms.oauth_forms import OAuthClientForm
+from app.oauth_scopes import Scopes
 from app.service import oauth_service
 
 blueprint = Blueprint('oauth', __name__, url_prefix='/oauth')
@@ -99,22 +100,26 @@ def edit(client_id=None):
     client = oauth_service.get_client_by_id(client_id=client_id)
     form = OAuthClientForm(request.form, obj=client)
 
-    if not form.redirect_uri.data and client:
+    if form.redirect_uri.data is None and client:
         form.redirect_uri.data = ', '.join(client.redirect_uris)
+    if form.scopes.data is None and client:
+        form.scopes.data = [Scopes[s] for s in client.default_scopes]
 
     if form.validate_on_submit():
         if client:
             oauth_service.update_client(
                 client_id=client_id, name=form.name.data,
                 description=form.description.data,
-                redirect_uri_list=form.redirect_uri.data)
+                redirect_uri_list=form.redirect_uri.data,
+                scopes=form.scopes.data)
             flash(_("Successfully updated client '%s'" % client.name))
         else:
             client = oauth_service.create_client(
                 user_id=current_user.id,
                 name=form.name.data,
                 description=form.description.data,
-                redirect_uri_list=form.redirect_uri.data)
+                redirect_uri_list=form.redirect_uri.data,
+                scopes=form.scopes.data)
             flash(_("Successfully created client '%s'" % client.name))
         return redirect(url_for("oauth.list_clients"))
     return render_template("oauth/register.htm", form=form)
