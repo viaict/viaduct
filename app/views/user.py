@@ -37,9 +37,14 @@ blueprint = Blueprint('user', __name__)
 def load_user(user_id):
     # The hook used by the login manager to get the user from the database by
     # user ID.
-    user = User.query.get(int(user_id))
+    return user_service.get_user_by_id(user_id)
 
-    return user
+
+@login_manager.unauthorized_handler
+def unauthorized_handler():
+    return redirect(
+        url_for("user.sign_in",
+                next=url_for("oauth.authorize", **request.args)))
 
 
 @blueprint.route('/users/view/', methods=['GET'])
@@ -304,9 +309,13 @@ def sign_in():
             flash(_('Hey %(name)s, you\'re now logged in!',
                     name=current_user.first_name), 'success')
 
+            next = request.args.get("next", '')
+            if next and next.startswith("/"):
+                return redirect(next)
+
             # If referer is empty for some reason (browser policy, user entered
             # address in address bar, etc.), use empty string
-            referer = request.headers.get('Referer') or ''
+            referer = request.headers.get('Referer', '')
 
             denied = (
                 re.match(r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),
