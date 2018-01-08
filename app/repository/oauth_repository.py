@@ -6,6 +6,7 @@ from app.models.oauth.client import OAuthClient, OAuthClientScope, \
 from app.models.oauth.grant import OAuthGrant, OAuthGrantScope
 from app.models.oauth.token import OAuthToken, OAuthTokenScope
 from app.models.user import User
+from app.oauth_scopes import Scopes
 
 
 def get_client_by_id(client_id):
@@ -149,4 +150,27 @@ def insert_redirect_uris(client_id, redirect_uri_list):
                                          redirect_uri=redirect_uri)
                      for redirect_uri in redirect_uri_list]
     db.session.add_all(redirect_uris)
+    db.session.commit()
+
+
+def get_scopes_by_client_id(client_id):
+    scopes = db.session.query(OAuthClientScope) \
+        .filter_by(client_id=client_id).all()
+    return [Scopes[scope.scope] for scope in scopes]
+
+
+def delete_scopes(client_id, scopes_list):
+    scopes = [scope.name for scope in scopes_list]
+    db.session.query(OAuthClientScope) \
+        .filter(OAuthClientScope.client_id == client_id,
+                OAuthClientScope.scope.in_(scopes)) \
+        .delete(synchronize_session=False)
+    db.session.commit()
+
+
+def insert_scopes(client_id, scopes_list):
+    scopes = [OAuthClientScope(client_id=client_id,
+                               scope=scope.name)
+              for scope in scopes_list]
+    db.session.add_all(scopes)
     db.session.commit()

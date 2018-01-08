@@ -1,9 +1,12 @@
-from flask import request, Blueprint, render_template, url_for, redirect, flash
+from flask import request, Blueprint, render_template, url_for, redirect, \
+    flash, jsonify
 from flask_babel import _
 from flask_login import login_required, current_user
 
 from app import oauth, version
+from app.decorators import response_headers
 from app.forms.oauth_forms import OAuthClientForm
+from app.oauth_scopes import Scopes
 from app.service import oauth_service
 
 blueprint = Blueprint('oauth', __name__, url_prefix='/oauth')
@@ -11,8 +14,9 @@ blueprint = Blueprint('oauth', __name__, url_prefix='/oauth')
 
 @blueprint.route('/authorize/', methods=['GET', 'POST'])
 @login_required
+@response_headers({"X-Frame-Options": "SAMEORIGIN"})
 @oauth.authorize_handler
-def authorize(*args, **kwargs):
+def authorize(*__, **kwargs):
     if request.method == 'GET':
         client_id = kwargs.get('client_id')
         client = oauth_service.get_client_by_id(client_id=client_id)
@@ -25,7 +29,7 @@ def authorize(*args, **kwargs):
     return confirm == _("Confirm")
 
 
-@blueprint.route('/token/', methods=['POST'])
+@blueprint.route('/token/', methods=['GET', 'POST'])
 @oauth.token_handler
 def access_token():
     return {'version': version}
@@ -35,6 +39,24 @@ def access_token():
 @oauth.revoke_handler
 def revoke_token():
     pass
+
+
+@blueprint.route("/token/info/")
+@oauth.require_oauth()
+def token_info():
+    return jsonify({"active": "true",
+                    "scope": request.oauth.access_token.scopes,
+                    "username": request.oauth.user.email,
+                    "expires": request.oauth.access_token.expires,
+                    "client_id": request.oauth.client.client_id,
+                    "first_name": request.oauth.user.first_name,
+                    "last_name": request.oauth.user.last_name
+                    })
+
+
+@oauth.invalid_response
+def invalid_token_info(request):
+    return jsonify({"active": "false"})
 
 
 @blueprint.route("/errors/", methods=['GET'])
@@ -78,22 +100,26 @@ def edit(client_id=None):
     client = oauth_service.get_client_by_id(client_id=client_id)
     form = OAuthClientForm(request.form, obj=client)
 
-    if not form.redirect_uri.data and client:
+    if form.redirect_uri.data is None and client:
         form.redirect_uri.data = ', '.join(client.redirect_uris)
+    if form.scopes.data is None and client:
+        form.scopes.data = [Scopes[s] for s in client.default_scopes]
 
     if form.validate_on_submit():
         if client:
             oauth_service.update_client(
                 client_id=client_id, name=form.name.data,
                 description=form.description.data,
-                redirect_uri_list=form.redirect_uri.data)
+                redirect_uri_list=form.redirect_uri.data,
+                scopes=form.scopes.data)
             flash(_("Successfully updated client '%s'" % client.name))
         else:
             client = oauth_service.create_client(
                 user_id=current_user.id,
                 name=form.name.data,
                 description=form.description.data,
-                redirect_uri_list=form.redirect_uri.data)
+                redirect_uri_list=form.redirect_uri.data,
+                scopes=form.scopes.data)
             flash(_("Successfully created client '%s'" % client.name))
         return redirect(url_for("oauth.list_clients"))
     return render_template("oauth/register.htm", form=form)

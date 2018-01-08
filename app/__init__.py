@@ -1,11 +1,15 @@
+import datetime
 import logging
 import os
+from unittest import mock
 
+import connexion
 from flask import Flask, request, session
 from flask.json import JSONEncoder as BaseEncoder
 from flask_babel import Babel
 from flask_login import current_user
-from speaklater import _LazyString
+from flask_swagger_ui import get_swaggerui_blueprint
+from speaklater import _LazyString  # noqa
 
 from app.exceptions import ResourceNotFoundException, ValidationException, \
     AuthorizationException
@@ -90,8 +94,7 @@ def init_app():
     toolbar.init_app(app)
     jsglue.init_app(app)
     oauth.init_app(app)
-    # TODO add CORS domains to config.
-    cors.init_app(app)
+    cors.init_app(app, resources={r"/api/*": {"origins": "*"}})
     init_oauth()
 
     login_manager.init_app(app)
@@ -102,16 +105,6 @@ def init_app():
     if not app.debug and 'SENTRY_DSN' in app.config:
         sentry.init_app(app)
         sentry.client.release = version
-
-    class JSONEncoder(BaseEncoder):
-        """Custom JSON encoding."""
-
-        def default(self, o):
-            if isinstance(o, _LazyString):
-                # Lazy strings need to be evaluation.
-                return str(o)
-
-            return BaseEncoder.default(self, o)
 
     @app.context_processor
     def inject_urls():
@@ -128,6 +121,27 @@ def init_app():
                                                    Roles.SEO_WRITE)
         return dict(can_write_seo=can_write_seo)
 
+    class JSONEncoder(BaseEncoder):
+        """Custom JSON encoding."""
+
+        def default(self, o):
+            if isinstance(o, _LazyString):
+                # Lazy strings need to be evaluation.
+                return str(o)
+
+            if isinstance(o, datetime.datetime):
+                if o.tzinfo:
+                    # eg: '2015-09-25T23:14:42.588601+00:00'
+                    return o.isoformat('T')
+                else:
+                    # No timezone present (almost always in viaduct)
+                    # eg: '2015-09-25T23:14:42.588601'
+                    return o.isoformat('T')
+
+            if isinstance(o, datetime.date):
+                return o.isoformat()
+
+            return BaseEncoder.default(self, o)
     app.json_encoder = JSONEncoder
 
     register_views(app, os.path.join(app.path, 'views'))
@@ -136,6 +150,8 @@ def init_app():
 
     log = logging.getLogger('werkzeug')
     log.setLevel(app.config['LOG_LEVEL'])
+
+    return get_patched_api_app()
 
 
 def init_oauth():
@@ -171,3 +187,40 @@ def init_oauth():
         except (ResourceNotFoundException, AuthorizationException,
                 ValidationException):
             return None
+
+
+def get_patched_api_app():
+    # URL for exposing Swagger UI (without trailing '/')
+    swagger_url = '/api/docs'
+
+    # The API url defined by connexion.
+    api_urls = [{"name": "pimpy", "url": "/api/pimpy/swagger.json"}]
+
+    swaggerui_blueprint = get_swaggerui_blueprint(
+        swagger_url,
+        api_urls[0]["url"],
+        config={  # Swagger UI config overrides
+            'app_name': "Study Association via - Public API documentation",
+            'urls': api_urls
+        },
+        oauth_config={
+            'clientId': "swagger",
+        }
+    )
+    app.register_blueprint(swaggerui_blueprint, url_prefix=swagger_url)
+
+    def inject(self):
+        return app
+
+    def add_api(app, name):
+        connexion_app.add_api(
+            './swagger-{}.yaml'.format(name),
+            base_path="/api/{}".format(name), validate_responses=True,
+            resolver=connexion.RestyResolver('app.api.{}'.format(name)),
+            pythonic_params=True, strict_validation=True)
+
+    with mock.patch("connexion.apps.flask_app.FlaskApp.create_app", inject):
+        connexion_app = connexion.App(__name__, specification_dir='swagger/',
+                                      swagger_ui=False)
+        add_api(connexion_app, "pimpy")
+    return connexion_app

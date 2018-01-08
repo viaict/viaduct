@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2018-01-04 13:21+0100\n"
+"POT-Creation-Date: 2018-01-06 23:19+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language: nl\n"
@@ -38,6 +38,9 @@ msgstr ""
 #, python-format
 msgid "API call failed: %s"
 msgstr "API call mislukt: %s"
+
+msgid "Access to your name and e-mail"
+msgstr "Toegang tot je naam en e-mail"
 
 msgid ""
 "According to Google this email does not exist. Please use an email that "
@@ -157,8 +160,8 @@ msgstr ""
 "Let op: we gebruiken nu een base32 encoding. Lees de handleiding van deze"
 " module voor meer informatie."
 
-msgid "Authorized callback URL"
-msgstr ""
+msgid "Authorized callback URLs"
+msgstr "Toegestaande callback URLs"
 
 msgid "Avatar deleted successfully."
 msgstr "Avatar succesvol verwijderd."
@@ -176,6 +179,9 @@ msgid "By registering you agree with the terms above."
 msgstr ""
 "Door je aan te melden bij deze activiteit ga je akkoord met de "
 "bovenstaande voorwaarden."
+
+msgid "Cancel"
+msgstr ""
 
 msgid "Cannot find parent navigation entry."
 msgstr "Het bovenligende menu item kan niet gevonden worden."
@@ -195,8 +201,14 @@ msgstr "Verander wachtwoord"
 msgid "City"
 msgstr "Plaats"
 
+msgid "Click 'confirm' to allow the application to do the following:"
+msgstr "Click 'bevestigen' om de applicatie rechten geven tot het volgende:"
+
 msgid "Click to expand"
 msgstr "Klik om uit te klappen"
+
+msgid "Comma separated, regex allowed"
+msgstr "Komma gescheiden, regex toegestaan"
 
 msgid "Comment"
 msgstr "Commentaar"
@@ -400,6 +412,9 @@ msgstr "Pagina verwijderen:"
 msgid "Description"
 msgstr "Beschrijving"
 
+msgid "Description of the client, usage for example"
+msgstr "Beschrijving van de client, bijvoorbeeld gebruik"
+
 msgid "Details"
 msgstr "Details"
 
@@ -408,6 +423,9 @@ msgstr "Uitgeschakeld"
 
 msgid "Disclaimer"
 msgstr "Disclaimer"
+
+msgid "Display name of the client"
+msgstr "Weergave naam van de client"
 
 msgid "Displayed price"
 msgstr "Weergegeven prijs"
@@ -716,6 +734,9 @@ msgstr "Ongeldige taak id in DONE: "
 
 msgid "Invalid REMOVE task id: "
 msgstr "Ongeldige taak id in REMOVE: "
+
+msgid "Invalid URL."
+msgstr "Ongeldige URL."
 
 msgid "Invalid email address."
 msgstr "Ongeldig emailadres."
@@ -1091,11 +1112,11 @@ msgstr "Resultaat"
 msgid "Retake"
 msgstr "Herkansing"
 
-msgid "Roles"
-msgstr "Rollen"
-
 msgid "Revoke"
 msgstr ""
+
+msgid "Roles"
+msgstr "Rollen"
 
 msgid "Run Error"
 msgstr "Run Fout"
@@ -2002,4 +2023,7 @@ msgstr ""
 
 #~ msgid "Access to your Pimpy data"
 #~ msgstr "Toegang tot jouw Pimpy data"
+
+#~ msgid "Authorized callback URL"
+#~ msgstr ""
 
