@@ -78,10 +78,6 @@ def delete_token(token_id):
     repository.delete_token(token_id=token_id)
 
 
-def get_all_scopes():
-    return [scope.name for scope in Scopes]
-
-
 def get_scope_descriptions():
     return {scope.name: scope.value for scope in Scopes}
 
@@ -110,12 +106,12 @@ def split_redirect_uris(redirect_uri_list):
                        [uri.strip() for uri in redirect_uri_list.split(",")]))
 
 
-def create_client(user_id, name, description, redirect_uri_list):
+def create_client(user_id, name, description, redirect_uri_list, scopes):
     client_id = generate_client_id()
     client_secret = generate_client_secret()
 
-    scopes = get_all_scopes()
     redirect_uris = split_redirect_uris(redirect_uri_list)
+    scopes = [scope.name for scope in scopes]
 
     client = repository.create_client(
         client_id=client_id,
@@ -130,13 +126,12 @@ def create_client(user_id, name, description, redirect_uri_list):
     return client
 
 
-def update_client(client_id, name, description, redirect_uri_list):
+def update_client(client_id, name, description, redirect_uri_list, scopes):
     repository.update_client_details(
         client_id=client_id, name=name, description=description)
 
     current_uris = set(repository.get_redirect_uris_by_client_id(
-        client_id))
-
+        client_id=client_id))
     new_uris = set(split_redirect_uris(redirect_uri_list))
 
     removed_uris = current_uris - new_uris
@@ -147,6 +142,19 @@ def update_client(client_id, name, description, redirect_uri_list):
     if added_uris:
         repository.insert_redirect_uris(client_id=client_id,
                                         redirect_uri_list=added_uris)
+
+    current_scopes = set(repository.get_scopes_by_client_id(
+        client_id=client_id))
+    new_scopes = set(scope for scope in scopes)
+    removed_scopes = current_scopes - new_scopes
+    added_scopes = new_scopes - current_scopes
+
+    if removed_scopes:
+        repository.delete_scopes(client_id=client_id,
+                                 scopes_list=removed_scopes)
+    if added_scopes:
+        repository.insert_scopes(client_id=client_id,
+                                 scopes_list=added_scopes)
 
 
 def reset_client_secret(client_id):

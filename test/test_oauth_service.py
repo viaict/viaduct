@@ -8,9 +8,10 @@ from app import ResourceNotFoundException
 from app.models.oauth.client import OAuthClient
 from app.models.oauth.grant import OAuthGrant
 from app.models.oauth.token import OAuthToken
+from app.oauth_scopes import Scopes
 from app.repository import oauth_repository as mock_spec  # rename for safety
 from app.service import oauth_service
-from test import Any
+from test import Any, AnyList
 
 oauth_repo_mock = MagicMock(spec=dir(mock_spec))
 
@@ -156,11 +157,6 @@ class TestOAuthService(unittest.TestCase):
         oauth_service.delete_token(token_id=3)
         oauth_repo_mock.delete_token.assert_called_once_with(token_id=3)
 
-    def test_get_all_scopes(self):
-        scope_list = oauth_service.get_all_scopes()
-        self.assertIsInstance(scope_list, list)
-        all(self.assertIsInstance(scope, str) for scope in scope_list)
-
     def test_get_scope_descriptions(self):
         scope_dict = oauth_service.get_scope_descriptions()
         self.assertIsInstance(scope_dict, dict)
@@ -212,12 +208,17 @@ class TestOAuthService(unittest.TestCase):
         oauth_repo_mock.get_client_by_id.return_value = None
         oauth_repo_mock.get_client_by_secret.return_value = None
 
-        oauth_service.create_client(42, "name", "desc", redirect_uri)
+        scopes = [Scopes.pimpy_read, Scopes.pimpy_write]
+
+        oauth_service.create_client(user_id=42, name="name",
+                                    description="desc",
+                                    redirect_uri_list=redirect_uri,
+                                    scopes=scopes)
 
         oauth_repo_mock.create_client.assert_called_once_with(
             client_id=Any(str), client_secret=Any(str), name="name",
             description="desc", redirect_uris=[redirect_uri], user_id=42,
-            confidential=False, default_scopes=Any(list))
+            confidential=False, default_scopes=AnyList(str))
 
     def test_reset_client_secret(self):
         oauth_repo_mock.get_client_by_id.return_value = None
@@ -245,21 +246,30 @@ class TestOAuthService(unittest.TestCase):
 
     def test_update_client_details(self):
         uris = "uri, uri2"
+        new_scopes = [Scopes.pimpy_write]
 
-        oauth_repo_mock.get_redirect_uris_by_client_id.return_value = uris
         oauth_service.update_client(
             client_id="id", name="name", description="desc",
-            redirect_uri_list=uris)
+            redirect_uri_list=uris, scopes=new_scopes)
         oauth_repo_mock.update_client_details.assert_called_once_with(
             client_id="id", name="name", description="desc")
+
+        # Assert retrieving old scopes and redirect uris
+        oauth_repo_mock.get_redirect_uris_by_client_id \
+            .assert_called_once_with(client_id="id")
+        oauth_repo_mock.get_scopes_by_client_id \
+            .assert_called_once_with(client_id="id")
 
     def test_update_client_removed_uri(self):
         uris = ["uri", "uri2"]
         new_uris = "uri"
 
+        new_scopes = [Scopes.pimpy_write]
+
         oauth_repo_mock.get_redirect_uris_by_client_id.return_value = uris
         oauth_service.update_client(client_id="", name="", description="",
-                                    redirect_uri_list=new_uris)
+                                    redirect_uri_list=new_uris,
+                                    scopes=new_scopes)
 
         oauth_repo_mock.delete_redirect_uris.assert_called_once_with(
             client_id=Any(str), redirect_uri_list={"uri2"})
@@ -269,10 +279,41 @@ class TestOAuthService(unittest.TestCase):
         uris = ["uri"]
         new_uris = "uri, uri2"
 
+        new_scopes = [Scopes.pimpy_write]
+
         oauth_repo_mock.get_redirect_uris_by_client_id.return_value = uris
         oauth_service.update_client(client_id="", name="", description="",
-                                    redirect_uri_list=new_uris)
+                                    redirect_uri_list=new_uris,
+                                    scopes=new_scopes)
 
         self.assertEqual(oauth_repo_mock.delete_redirect_uris.call_count, 0)
         oauth_repo_mock.insert_redirect_uris.assert_called_once_with(
             client_id=Any(str), redirect_uri_list={"uri2"})
+
+    def test_update_client_removed_scopes(self):
+        old_scopes = [Scopes.pimpy_read]
+        new_scopes = [Scopes.pimpy_read, Scopes.pimpy_write]
+
+        oauth_repo_mock.get_scopes_by_client_id.return_value = old_scopes
+
+        oauth_service.update_client(client_id="", name="", description="",
+                                    redirect_uri_list=redirect_uri,
+                                    scopes=new_scopes)
+
+        oauth_repo_mock.insert_scopes.assert_called_once_with(
+            client_id=Any(str), scopes_list={Scopes.pimpy_write})
+        self.assertEqual(oauth_repo_mock.delete_scopes.call_count, 0)
+
+    def test_update_client_added_scopes(self):
+        old_scopes = [Scopes.pimpy_read, Scopes.pimpy_write]
+        new_scopes = [Scopes.pimpy_write]
+
+        oauth_repo_mock.get_scopes_by_client_id.return_value = old_scopes
+
+        oauth_service.update_client(client_id="", name="", description="",
+                                    redirect_uri_list=redirect_uri,
+                                    scopes=new_scopes)
+
+        oauth_repo_mock.delete_scopes.assert_called_once_with(
+            client_id=Any(str), scopes_list={Scopes.pimpy_read})
+        self.assertEqual(oauth_repo_mock.insert_scopes.call_count, 0)
