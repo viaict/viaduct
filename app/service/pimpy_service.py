@@ -50,6 +50,10 @@ def update_status(user, task, status):
     if not user.member_of_group(task.group_id):
         raise ValidationException('User not member of group of task')
 
+    valid = 0 <= status <= len(Task.status_meanings)
+    if not valid:
+        raise ValidationException('Status not valid')
+
     return pimpy_repository.update_status(task, status)
 
 

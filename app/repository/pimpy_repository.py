@@ -1,4 +1,5 @@
-from app import app, db
+from app import app, db, ValidationException
+from app.exceptions import BusinessRuleException
 from app.models.group import Group
 from app.models.pimpy import Minute, Task, TaskUserRel
 from app.models.user import User
@@ -61,13 +62,11 @@ def get_all_tasks_for_groups(group_ids, date_range=None, user=None):
 
 
 def update_status(task, status):
-    if 0 <= status <= len(Task.status_meanings):
-        task.status = status
-        db.session.commit()
-        return True
+    if not 0 <= status <= len(Task.status_meanings):
+        raise BusinessRuleException('Invalid status')
 
-    # TODO: raise exception
-    return False
+    task.status = status
+    db.session.commit()
 
 
 def add_task(task):
