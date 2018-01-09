@@ -10,7 +10,6 @@ import baas32 as b32
 
 from fuzzywuzzy import fuzz
 
-from app.utils.module import ModuleAPI
 from app.models.group import Group
 from app.models.pimpy import Minute, Task
 
@@ -259,8 +258,6 @@ class PimpyAPI:
 
     @staticmethod
     def get_navigation_menu(group_id, personal, type):
-        if not ModuleAPI.can_read('pimpy'):
-            return abort(403)
         if current_user.is_anonymous:
             flash('Huidige gebruiker niet gevonden!', 'danger')
             return redirect(url_for('pimpy.view_minutes'))
