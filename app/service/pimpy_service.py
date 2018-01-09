@@ -5,21 +5,20 @@ from app.models.group import Group
 from app.models.pimpy import Task
 from app.repository import pimpy_repository, group_repository, task_repository
 
-
 """
-Wat is pimpy?
+What is pimpy?
 
-Pimpy; Punten invoeren met Python / Punten invoeren met plezier.
-Het notulensysteem van studievereniging via.
+Pimpy; Precise Inscriptions of Minutes with Python.
+The minute system of the study association via.
 
-Pimpy wordt gebruikt voor het verwerken van notulen en actiepunten van
-verschillende groepen. Door het gebruik van verschillende keywords worden
-actiepunten automatisch uit de notulen gehaald en op de site verwerkt.
+Pimpy is used for handling the minutes and tasks of different groups.
+By using different keywords in the minutes tasks are extracted and automatically
+created.
 
+The Minute(s) are the notes of a meeting where the written text is in.
+With actions in these notes new Task(s) are created. These are bound to users, and have
+a status.
 
-De Minute(s) zijn notulen, waar de tekst van een vergadering in zit.
-Met acties in de notulen worden Task(s) aangemaakt. Deze worden gekoppeld aan
-personen, en hebben een status.
 
 """
 
