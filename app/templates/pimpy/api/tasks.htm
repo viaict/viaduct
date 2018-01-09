@@ -10,10 +10,11 @@
         </div>
         <table class="table table-hover">
         <tbody>
-        {% for i, tr in enumerate(tasks_rel) %}
+        {% set ns = namespace(prev_group=None, prev_user=None) %}
+        {% for i, tr in enumerate(tasks_rel): %}
 
-            {% if prev_group != tr.task.group_id %}
-                {% set prev_group = tr.task.group_id %}
+            {% if ns.prev_group != tr.task.group_id %}
+                {% set ns.prev_group = tr.task.group_id %}
 
                 <tr>
                 <td colspan="3" class="pimpy-group-head-td">
@@ -25,8 +26,8 @@
             {% endif %}
 
             {% if not personal: %}
-                {% if prev_user != tr.user_id %}
-                    {% set prev_user = tr.user_id %}
+                {% if ns.prev_user != tr.user_id %}
+                    {% set ns.prev_user = tr.user_id %}
                 <tr>
                 <td colspan="3" class="pimpy-user-head-td">
                     <h3> {{ tr.user.name }} </h3>

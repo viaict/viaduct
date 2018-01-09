@@ -3,6 +3,7 @@ from datetime import datetime
 from flask import Blueprint, render_template, request, redirect, url_for, \
     flash
 from flask_babel import lazy_gettext as _
+from flask_login import current_user
 from sqlalchemy import or_, and_, func
 
 from app import app, db
@@ -35,7 +36,7 @@ def list(page_nr=1, search=None):
                        Vacancy.contract_of_service.like('%' + search + '%'))) \
             .order_by(order.desc())
 
-        if not role_service.has_role(Roles.VACANCY_WRITE):
+        if not role_service.user_has_role(current_user, Roles.VACANCY_WRITE):
             vacancies = vacancies.filter(
                 and_(Vacancy.start_date <
                      datetime.utcnow(), Vacancy.end_date >
@@ -43,14 +44,15 @@ def list(page_nr=1, search=None):
 
         vacancies = vacancies.paginate(page_nr, 15, False)
 
-        can_write = role_service.user_has_role(Roles.VACANCY_WRITE)
+        can_write = role_service.user_has_role(current_user,
+                                               Roles.VACANCY_WRITE)
 
         return render_template('vacancy/list.htm', vacancies=vacancies,
                                search=search, path=FILE_FOLDER,
                                title="Vacatures",
                                can_write=can_write)
 
-    if not role_service.has_role(Roles.VACANCY_WRITE):
+    if role_service.user_has_role(current_user, Roles.VACANCY_WRITE):
         vacancies = Vacancy.query.join(Company).order_by(order.desc())
     else:
         vacancies = Vacancy.query.order_by(order.desc()) \
@@ -59,7 +61,7 @@ def list(page_nr=1, search=None):
                          datetime.utcnow()))
 
     vacancies = vacancies.paginate(page_nr, 15, False)
-    can_write = role_service.user_has_role(Roles.VACANCY_WRITE)
+    can_write = role_service.user_has_role(current_user, Roles.VACANCY_WRITE)
 
     return render_template('vacancy/list.htm', vacancies=vacancies,
                            search="", path=FILE_FOLDER, title="Vacatures",

@@ -27,7 +27,7 @@ def list(page_nr=1):
                                      db.not_(News.needs_paid))) \
         .order_by(desc(News.publish_date))
 
-    can_write = role_service.user_has_role(Roles.NEWS_WRITE)
+    can_write = role_service.user_has_role(current_user, Roles.NEWS_WRITE)
     return render_template('news/list.htm',
                            items=items.paginate(page_nr, 10, False),
                            archive=False, can_write=can_write)
@@ -94,7 +94,7 @@ def view(news_id=None):
     if not news.can_read():
         return abort(403)
 
-    can_write = role_service.user_has_role(Roles.NEWS_WRITE)
+    can_write = role_service.user_has_role(current_user, Roles.NEWS_WRITE)
 
     return render_template('news/view_single.htm', news=news,
                            can_write=can_write)

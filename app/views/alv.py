@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, url_for, redirect
+from flask_login import current_user
 
 from app.decorators import require_role, require_membership
 from app.forms.alv import AlvForm, AlvDocumentForm, AlvMinutesForm
@@ -14,7 +15,7 @@ blueprint = Blueprint('alv', __name__, url_prefix='/alv')
 @require_membership
 def list():
     alvs = alv_service.find_all_alv()
-    can_write = role_service.user_has_role(Roles.ALV_WRITE)
+    can_write = role_service.user_has_role(current_user, Roles.ALV_WRITE)
     return render_template('alv/list.htm', alvs=alvs, can_write=can_write)
 
 
@@ -24,7 +25,7 @@ def view(alv_id=0):
     if alv_id:
         alv = alv_service.get_alv_by_id(alv_id, include_documents=True)
 
-    can_write = role_service.user_has_role(Roles.ALV_WRITE)
+    can_write = role_service.user_has_role(current_user, Roles.ALV_WRITE)
     return render_template('alv/view.htm', alv=alv, can_write=can_write)
 
 

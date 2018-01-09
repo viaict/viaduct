@@ -70,7 +70,7 @@ def get_page(path=''):
 
             if form_result:
                 revision.custom_form_data = form_result.data.replace('"', "'")
-    can_write = role_service.user_has_role(Roles.PAGE_WRITE)
+    can_write = role_service.user_has_role(current_user, Roles.PAGE_WRITE)
     return render_template('%s/view_single.htm' % (page.type), page=page,
                            revision=revision, title=revision.title,
                            context=revision.__class__.context,

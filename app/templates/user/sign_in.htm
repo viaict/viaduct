@@ -7,5 +7,9 @@
 
 {{ render_form(form) }}
 
-{% endblock %}
+<ul class='list-unstyled' id='dropmenu-list'>
+    <li><a href="{{ url_for('user.sign_up')}}">{{_('Register new user')}}</a></li>
+    <li><a href="{{ url_for('user.request_password')}}">{{_('Forgot password?')}}</a></li>
+</ul>
 
+{% endblock %}

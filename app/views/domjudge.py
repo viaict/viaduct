@@ -88,7 +88,7 @@ def contest_list():
 @blueprint.route('/contest/<int:contest_id>/<int:page>')
 def contest_view(contest_id, page):
     link = False
-    if role_service.user_has_role(Roles.DOMJUDGE_ADMIN):
+    if role_service.user_has_role(current_user, Roles.DOMJUDGE_ADMIN):
         link = True
 
     fullscreen = 'fullscreen' in request.args
@@ -375,7 +375,8 @@ def contest_problem_submit(contest_id, problem_id):
 def contest_submissions_view(contest_id, team_id=None):
     # Use DOMjudge team id so the pages also support non via_user teams
 
-    if team_id and not role_service.user_has_role(Roles.DOMJUDGE_ADMIN):
+    if team_id and not role_service.user_has_role(current_user,
+                                                  Roles.DOMJUDGE_ADMIN):
         return abort(403)
 
     session = DOMjudgeAPI.login(DOMJUDGE_ADMIN_USERNAME,
@@ -395,7 +396,8 @@ def contest_submissions_view_all(contest_id, team_id=None):
 
 
 def render_contest_submissions_view(contest_id, view_all=False, team_id=None):
-    admin = role_service.user_has_role(Roles.DOMJUDGE_ADMIN)
+    admin = role_service.user_has_role(current_user,
+                                       Roles.DOMJUDGE_ADMIN)
 
     if view_all and not admin:
         return abort(403)

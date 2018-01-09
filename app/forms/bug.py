@@ -9,12 +9,11 @@ from werkzeug.datastructures import MultiDict
 class CreateIssueForm(FlaskForm):
     summary = StringField(
         _('Title'),
-        validators=[
-            InputRequired(message=_('No title entered'))]
+        validators=[InputRequired()]
     )
     description = TextAreaField(
         _('Description'),
-        validators=[InputRequired(message=_('No description supplied'))]
+        validators=[InputRequired()]
     )
     recaptcha = RecaptchaField()
 

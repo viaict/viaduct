@@ -4,6 +4,7 @@ from datetime import datetime
 from flask import Blueprint, flash, redirect, render_template, request, \
     url_for
 from flask_babel import lazy_gettext as _
+from flask_login import current_user
 from sqlalchemy import or_, and_
 
 from app import app, db
@@ -24,7 +25,8 @@ FILE_FOLDER = app.config['FILE_DIR']
 
 @blueprint.route('/get_companies/', methods=['GET'])
 def get_companies():
-    vacancy_write = role_service.user_has_role(Roles.VACANCY_WRITE)
+    vacancy_write = role_service.user_has_role(current_user,
+                                               Roles.VACANCY_WRITE)
     if not vacancy_write:
         companies = Company.query\
             .filter(and_(Company.contract_start_date < datetime.utcnow(),
@@ -82,7 +84,7 @@ def list(page=1):
                         Location.city.like('%' + search + '%')))\
             .order_by(Company.name).order_by(Company.rank)
 
-        if not role_service.user_has_role(Roles.VACANCY_WRITE):
+        if not role_service.user_has_role(current_user, Roles.VACANCY_WRITE):
             companies = companies\
                 .filter(and_(Company.contract_start_date < datetime.utcnow(),
                              Company.contract_end_date > datetime.utcnow()))\
@@ -100,7 +102,7 @@ def list(page=1):
         return render_template('company/list.htm', companies=companies,
                                search=search, path=FILE_FOLDER)
 
-    if not role_service.user_has_role(Roles.VACANCY_WRITE):
+    if not role_service.user_has_role(current_user, Roles.VACANCY_WRITE):
         companies = Company.query\
             .filter(and_(Company.contract_start_date < datetime.utcnow(),
                          Company.contract_end_date > datetime.utcnow()))\
@@ -128,7 +130,7 @@ def view(company_id=None):
     """View a company."""
 
     company = Company.query.get_or_404(company_id)
-    can_write = role_service.user_has_role(Roles.VACANCY_WRITE)
+    can_write = role_service.user_has_role(current_user, Roles.VACANCY_WRITE)
     return render_template('company/view.htm', company=company,
                            path=FILE_FOLDER, can_write=can_write)
 

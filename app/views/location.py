@@ -1,6 +1,7 @@
 from flask import Blueprint, flash, redirect, render_template, request, \
     url_for, jsonify
 from flask_babel import lazy_gettext as _
+from flask_login import current_user
 
 from app import db
 from app.decorators import require_role
@@ -25,7 +26,7 @@ def get_contacts(location_id):
 @require_role(Roles.VACANCY_READ)
 def list(page_nr=1):
     locations = Location.query.paginate(page_nr, 15, False)
-    can_write = role_service.user_has_role(Roles.VACANCY_WRITE)
+    can_write = role_service.user_has_role(current_user, Roles.VACANCY_WRITE)
     return render_template('location/list.htm', locations=locations,
                            can_write=can_write)
 
@@ -51,7 +52,7 @@ def edit(location_id=None):
         flash(_('Location saved.'), 'success')
         return redirect(url_for('location.edit', location_id=location.id))
 
-    can_write = role_service.user_has_role(Roles.VACANCY_WRITE)
+    can_write = role_service.user_has_role(current_user, Roles.VACANCY_WRITE)
     return render_template('location/edit.htm', location=location, form=form,
                            can_write=can_write)
 

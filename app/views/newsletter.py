@@ -77,9 +77,9 @@ def correct_token_provided(f):
     def wrapper(*args, **kwargs):
         token = request.args.get('auth_token')
         if token and app.config['COPERNICA_NEWSLETTER_TOKEN'] == token:
-            f(*args, **kwargs)
+            return f(*args, **kwargs)
         else:
-            abort(403)
+            return abort(403)
     return wrapper
 
 

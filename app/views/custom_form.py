@@ -26,7 +26,7 @@ def view(page_nr=1):
     active_forms = CustomForm.qry_active().all()
     archived_paginate = CustomForm.qry_archived().paginate(page_nr, 10)
 
-    can_write = role_service.user_has_role(Roles.ACTIVITY_WRITE)
+    can_write = role_service.user_has_role(current_user, Roles.ACTIVITY_WRITE)
     return render_template('custom_form/overview.htm',
                            followed_forms=followed_forms,
                            active_forms=active_forms,
