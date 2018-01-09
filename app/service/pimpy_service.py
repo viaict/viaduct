@@ -12,12 +12,12 @@ Pimpy; Precise Inscriptions of Minutes with Python.
 The minute system of the study association via.
 
 Pimpy is used for handling the minutes and tasks of different groups.
-By using different keywords in the minutes tasks are extracted and automatically
-created.
+By using different keywords in the minutes tasks are extracted and
+automatically created.
 
 The Minute(s) are the notes of a meeting where the written text is in.
-With actions in these notes new Task(s) are created. These are bound to users, and have
-a status.
+With actions in these notes new Task(s) are created. These are bound to users,
+and have a status.
 
 
 """

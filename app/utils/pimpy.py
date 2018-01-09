@@ -1,5 +1,5 @@
 from app import db, app
-from flask import render_template, Markup, redirect, url_for, abort,\
+from flask import render_template, Markup, redirect, url_for, \
     flash
 from flask_login import current_user
 from flask_babel import _

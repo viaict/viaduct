@@ -1,4 +1,4 @@
-from app import app, db, ValidationException
+from app import app, db
 from app.exceptions import BusinessRuleException
 from app.models.group import Group
 from app.models.pimpy import Minute, Task, TaskUserRel
@@ -8,7 +8,8 @@ _date_format = app.config['DATE_FORMAT']
 
 
 def find_minute_by_id(minute_id):
-    return db.session.query(Minute).filter(Minute.id == minute_id).one_or_none()
+    return db.session.query(Minute).filter(Minute.id == minute_id) \
+        .one_or_none()
 
 
 def find_task_by_id(task_id):
@@ -37,8 +38,8 @@ def get_all_minutes_for_group(group_id, date_range=None):
         query = query.filter(date_range[0] <= Minute.minute_date,
                              Minute.minute_date <= date_range[1])
 
-    list_items[db.session.query(Group).filter(Group.id == group_id).first().name] \
-        = query.all()
+    key = db.session.query(Group).filter(Group.id == group_id).first().name
+    list_items[key] = query.all()
 
     return list_items
 
