@@ -7,18 +7,18 @@ _date_format = app.config['DATE_FORMAT']
 
 
 def find_minute_by_id(minute_id):
-    return Minute.query.filter(Minute.id == minute_id).one_or_none()
+    return db.session.query(Minute).filter(Minute.id == minute_id).one_or_none()
 
 
 def find_task_by_id(task_id):
-    return Task.query.filter(Task.id == task_id).one_or_none()
+    return db.session.query(Task).filter(Task.id == task_id).one_or_none()
 
 
 def get_all_minutes_for_user(user):
     list_items = {}
 
     for group in user.groups:
-        list_items[group.name] = Minute.query \
+        list_items[group.name] = db.session.query(Minute) \
             .filter(Minute.group_id == group.id) \
             .order_by(Minute.minute_date.desc()) \
             .all()
@@ -29,21 +29,21 @@ def get_all_minutes_for_user(user):
 def get_all_minutes_for_group(group_id, date_range=None):
     list_items = {}
 
-    query = Minute.query.filter(Minute.group_id == group_id). \
+    query = db.session.query(Minute).filter(Minute.group_id == group_id). \
         order_by(Minute.minute_date.desc())
 
     if date_range:
         query = query.filter(date_range[0] <= Minute.minute_date,
                              Minute.minute_date <= date_range[1])
 
-    list_items[Group.query.filter(Group.id == group_id).first().name] \
+    list_items[db.session.query(Group).filter(Group.id == group_id).first().name] \
         = query.all()
 
     return list_items
 
 
 def get_all_tasks_for_groups(group_ids, date_range=None, user=None):
-    query = TaskUserRel.query.join(Task).join(User)
+    query = db.session.query(TaskUserRel).join(Task).join(User)
 
     query = query.filter(Task.group_id.in_(group_ids))
 
