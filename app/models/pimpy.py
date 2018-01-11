@@ -31,6 +31,7 @@ class Task(db.Model, BaseEntity):
     STATUS_NOT_DONE = 3
     STATUS_CHECKED = 4
     STATUS_DELETED = 5
+    STATUS_MAX = 5
 
     __tablename__ = 'pimpy_task'
 

@@ -11,6 +11,7 @@ from app.service import pimpy_service
 pimpy_repository_mock = Mock(pimpy_repository)
 group_repository_mock = Mock(group_repository)
 task_repository_mock = Mock(task_repository)
+task_mock = Mock(Task)
 
 existing_minute_id = 45
 existing_task_id = 22
@@ -52,6 +53,14 @@ group_repository_mock.find_by_id.side_effect = mock_find_group_id
 task_repository_mock.find_task_by_name_content_group.side_effect = \
     mock_find_task_by_name_content_group
 
+task_mock.STATUS_NOT_STARTED = Task.STATUS_NOT_STARTED
+task_mock.STATUS_STARTED = Task.STATUS_STARTED
+task_mock.STATUS_DONE = Task.STATUS_DONE
+task_mock.STATUS_NOT_DONE = Task.STATUS_NOT_DONE
+task_mock.STATUS_CHECKED = Task.STATUS_CHECKED
+task_mock.STATUS_DELETED = Task.STATUS_DELETED
+task_mock.STATUS_MAX = Task.STATUS_MAX
+
 
 # TODO: replace with the two argumennts to reset_mock when we're using py 3.6
 def reset_mock(mock):
@@ -63,7 +72,7 @@ def reset_mock(mock):
 @patch.object(pimpy_service, 'pimpy_repository', pimpy_repository_mock)
 @patch.object(pimpy_service, 'group_repository', group_repository_mock)
 @patch.object(pimpy_service, 'task_repository', task_repository_mock)
-@patch.object(pimpy_service, 'Task', Mock(spec=Task))
+@patch.object(pimpy_service, 'Task', task_mock)
 class TestPimpyService(unittest.TestCase):
     def setUp(self):
         reset_mock(pimpy_repository_mock)
