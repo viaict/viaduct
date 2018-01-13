@@ -150,14 +150,17 @@ def get_list_of_users_from_string(group_id, comma_sep):
         match = -1
 
         for user_name in user_names:
-            rate = fuzz.ratio(user_name['first_name'], comma_sep_user)
-            rate_last = fuzz.ratio(user_name['last_name'], comma_sep_user)
+            first = user_name['first_name']
+            last = user_name['last_name']
+            full = first + ' ' + last
 
-            full_name = user_name['first_name'] + ' ' + user_name['last_name']
-            rate_full = fuzz.ratio(full_name, comma_sep_user)
+            rate_first = fuzz.ratio(first, comma_sep_user)
+            rate_last = fuzz.ratio(last, comma_sep_user)
+            rate_full = fuzz.ratio(full, comma_sep_user)
 
-            if rate > maximum or rate_last > maximum or rate_full > maximum:
-                maximum = max(rate, rate_last)
+            new_max = max(rate_first, rate_last, rate_full)
+            if new_max > maximum:
+                maximum = new_max
                 match = user_name['id']
 
         found = False
