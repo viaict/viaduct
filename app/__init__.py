@@ -209,9 +209,6 @@ def get_patched_api_app():
     )
     app.register_blueprint(swaggerui_blueprint, url_prefix=swagger_url)
 
-    def inject(self):
-        return app
-
     def add_api(app, name):
         connexion_app.add_api(
             './swagger-{}.yaml'.format(name),
