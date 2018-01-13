@@ -1,28 +1,45 @@
 #!/bin/bash
-
-# Exit on error
 set -e
 
-cd /app
-
-pip-sync
-pip install uwsgi
+CLIENTJADE=$(which clientjade)
+GRUNT=$(which grunt)
 
 rm -f config.py
 if [ $ENVIRONMENT = "prod" ]; then
-	ln -s 'secrets/master.py' 'config.py'
+    echo 'STARTING PRODUCTION SERVER'
+    ln -s 'secrets/master.py' 'config.py'
+  cat common_config.rb deploy_config.rb > config.rb
 elif [ $ENVIRONMENT = "dev" ]; then
-	ln -s 'secrets/develop.py' 'config.py'
+    echo 'STARTING DEVELOPMENT SERVER'
+    ln -s 'secrets/develop.py' 'config.py'
+    cat common_config.rb > config.rb
 else
-	ln -s 'secrets/local.py' 'config.py'
+    echo 'STARTING DEVELOPMENT SERVER'
+    ln -s 'secrets/local.py' 'config.py'
+    cat common_config.rb > config.rb
 fi
 
-echo 'Applying database migrations...'
+echo 'Compiling Jade templates'
+mkdir -p /app/src/js/global
+nodejs $CLIENTJADE src/jade/ > src/js/global/jade.js
+
+echo 'Compiling scss'
+compass clean
+compass compile
+
+echo 'Compiling assets'
+nodejs $GRUNT clean
+nodejs $GRUNT prod
+
+echo 'Compiling translations'
+pybabel compile -d app/translations > /dev/null
+
+echo 'Applying database migrations'
 python manage.py db upgrade
 
 echo 'Starting server'
-if [ $ENVIRONMENT = 'prod' -o $ENVIRONMENT = 'dev' ]; then
-	uwsgi --ini viaduct-master.ini
+if [[ $ENVIRONMENT == 'prod' || $ENVIRONMENT == 'dev' ]]; then
+    uwsgi --ini viaduct-master.ini
 else
-	./watch.sh
+    ./watch.sh
 fi

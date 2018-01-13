@@ -3,27 +3,17 @@ services:
   app:
     build: .
     environment:
-      - ENVIRONMENT=${ENVIRONMENT}
+      - ENVIRONMENT=${COMPOSE_PROJECT_NAME}
     ports:
       - "127.0.0.1:${UWSGI_PORT}:3031"
     depends_on:
       - database
-    volumes:
-      - ".:/app"
-    command: "sh /app/docker-entrypoint.sh"
+    command: "bash /app/docker-entrypoint.sh"
 
   database:
     image: postgres:alpine
     ports:
-      - "127.0.0.1:5400:5432"
+      - "127.0.0.1:${DATABASE_PORT}:5432"
     environment:
       POSTGRES_USER: viaduct
       POSTGRES_DB: viaduct
-
-  adminer:
-    image: dehy/adminer
-    restart: always
-    depends_on:
-      - database
-    ports:
-      - "${ADMINER_PORT}:80"
