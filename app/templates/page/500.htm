@@ -1,6 +1,22 @@
 {% extends "content.htm" %}
 
+{% block includes %}
+    <script>
+    function handleError() {
+        Raven.showReportDialog();
+    };
+    </script>
+{% endblock %}
+
 {% block content %}
     <h1>{{_('We\'ve encountered an internal server error')}}</h1>
-    <img src="/static/img/500.png" />
+
+    <div class="row">
+        <div class="col-md-5">
+            <img class="img-responsive center" src="/static/img/500.png" />
+        </div>
+        <div class="col-md-6">
+            <a class="btn btn-lg btn-warning" onclick="handleError()">Click here to submit a bug report</a>
+        </div>
+    </div>
 {% endblock %}

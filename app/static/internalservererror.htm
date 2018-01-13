@@ -7,15 +7,13 @@
         <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
 
         <link href="/static/img/via.png" rel="image_src" />
-        <script src="https://cdn.ravenjs.com/2.1.0/raven.min.js"></script>
+        <script src="https://cdn.ravenjs.com/3.20.0/raven.min.js"></script>
 
         <script>
         Raven.config('https://a3bfb506a0ae4db592f0972007d0680a@sentry.io/122119').install();
 
         function handleError() {
-          var err = "A user submitted a bug report";
-          Raven.captureException(err);
-          Raven.showReportDialog();
+            Raven.showReportDialog();
         };
         </script>
     </head>
