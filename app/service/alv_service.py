@@ -1,5 +1,3 @@
-from flask_babel import _
-
 from app.repository import alv_repository
 from app.utils import file
 from app.views.errors import ResourceNotFoundException
@@ -42,20 +40,6 @@ def get_alv_document_by_id(alv_document_id):
     if not alv_document:
         raise ResourceNotFoundException("alv document", alv_document_id)
     return alv_document
-
-
-def format_presidium(alv):
-    if not alv.chairman and not alv.secretary:
-        return _("No presidium")
-
-    rv = []
-
-    if alv.chairman:
-        rv.append(str(alv.chairman))
-    if alv.secretary:
-        rv.append(str(alv.secretary))
-
-    return _("Presidium: ") + ", ".join(rv)
 
 
 def add_document(alv, file_storage, nl_name, en_name):

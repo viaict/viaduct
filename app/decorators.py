@@ -1,6 +1,6 @@
 from functools import wraps
 
-from flask import abort
+from flask import abort, make_response
 from flask_login import current_user
 
 from app.service import role_service
@@ -26,6 +26,21 @@ def require_membership(f):
         if current_user.is_anonymous or not current_user.has_paid:
             abort(403)
         else:
-            f(*args, **kwargs)
+            return f(*args, **kwargs)
 
     return wrapper
+
+
+def response_headers(headers={}):
+    def decorator(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            resp = make_response(f(*args, **kwargs))
+            h = resp.headers
+            for header, value in headers.items():
+                h[header] = value
+            return resp
+
+        return wrapper
+
+    return decorator

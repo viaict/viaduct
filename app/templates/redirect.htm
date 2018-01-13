@@ -6,21 +6,19 @@
 <h1>Omleiding</h1>
 <p>Creëer omleidingen van URLs, naar URLs.</p>
 
-{% if can_write %}
-    <h2>{% if redirection %}Bewerk{% else %}Nieuwe{% endif %} omleiding</h2>
-    <form method='post' class='form-inline'>
-        {{ form.csrf_token }}
+<h2>{% if redirection %}Bewerk{% else %}Nieuwe{% endif %} omleiding</h2>
+<form method='post' class='form-inline'>
+    {{ form.csrf_token }}
 
-        {{ render_field(form.fro) }}
-        {{ render_field(form.to) }}
+    {{ render_field(form.fro) }}
+    {{ render_field(form.to) }}
 
-        {{ render_button(form.submit, 'btn btn-primary') }}
+    {{ render_button(form.submit, 'btn btn-primary') }}
 
-        {% if redirection %}
-            <a href='{{ url_for('redirect.view') }}' class='btn btn-default'>Nieuw</a>
-        {% endif %}
-    </form>
-{% endif %}
+    {% if redirection %}
+        <a href='{{ url_for('redirect.view') }}' class='btn btn-default'>Nieuw</a>
+    {% endif %}
+</form>
 
 <h2>Bestaande omleidingen</h2>
 <table class='table table-condensed'>
@@ -38,12 +36,12 @@
                 <td>
                     <a href='{{ url_for('redirect.view',
                         redirect_id=redirection.id) }}' class='btn btn-default
-                        btn-xs {% if not can_write %}disabled{% endif %}'>
+                        btn-xs'>
                         <i class='fa fa-edit'></i>
                     </a>
                     <a href='{{ url_for('redirect.delete',
                         redirect_id=redirection.id) }}' class='btn btn-default
-                        btn-xs {% if not can_write %}disabled{% endif %}'>
+                        btn-xs'>
                         <i class='fa fa-trash'></i>
                     </a>
                 </td>

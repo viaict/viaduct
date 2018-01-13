@@ -42,10 +42,10 @@ class AddTaskForm(FlaskForm):
                                   range(0, len(status_meanings)),
                                   Task.status_meanings)
 
-    def __init__(self, formdata=None, obj=None, prefix='', **kwargs):
+    def __init__(self, formdata=None, *args, **kwargs):
         kwargs.setdefault('group', kwargs.get('default', -1))
 
-        FlaskForm.__init__(self, formdata, obj, prefix, **kwargs)
+        FlaskForm.__init__(self, formdata, *args, **kwargs)
 
 
 class EditTaskForm(FlaskForm):
@@ -69,10 +69,10 @@ class EditTaskForm(FlaskForm):
         self.group.choices = map(lambda x: (x.id, x.name), groups)
         self.group.default = default
 
-    def __init__(self, formdata=None, obj=None, prefix='', **kwargs):
+    def __init__(self, formdata=None, *args, **kwargs):
         kwargs.setdefault('group', kwargs.get('default', -1))
 
-        FlaskForm.__init__(self, formdata, obj, prefix, **kwargs)
+        FlaskForm.__init__(self, formdata, *args, **kwargs)
 
 
 class AddMinuteForm(FlaskForm):
@@ -88,7 +88,7 @@ class AddMinuteForm(FlaskForm):
         self.group.choices = map(lambda x: (x.id, x.name), groups)
         self.group.default = default
 
-    def __init__(self, formdata=None, obj=None, prefix='', **kwargs):
+    def __init__(self, formdata=None, *args, **kwargs):
         kwargs.setdefault('group', kwargs.get('default', -1))
 
-        FlaskForm.__init__(self, formdata, obj, prefix, **kwargs)
+        FlaskForm.__init__(self, formdata, *args, **kwargs)

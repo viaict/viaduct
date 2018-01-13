@@ -5,6 +5,7 @@ from flask import flash, session, redirect, render_template, request, \
     url_for, Blueprint, abort
 from flask_sqlalchemy import Pagination
 from flask_babel import gettext as _
+from flask_login import current_user
 from fuzzywuzzy import fuzz
 
 from app import app, db
@@ -278,7 +279,8 @@ def view_examination(page_nr=1):
 
     path = '/static/uploads/examinations/'
 
-    can_write = role_service.user_has_role(Roles.EXAMINATION_WRITE)
+    can_write = role_service.user_has_role(current_user,
+                                           Roles.EXAMINATION_WRITE)
 
     return render_template('examination/view.htm', path=path,
                            examinations=examinations, search=search,
