@@ -5,8 +5,7 @@ Versioning works as follows: vSYSTEM.FEATURE.IMPROVEMENT.BUG-/HOTFIX
 See [tutorial](TUTORIAL.md).
 
 ## Setup:
- - Mail your public key (`~/.ssh/id_rsa.pub`) to [ict@svia.nl](ict@svia.nl).
- - Clone the repository from `git@svia.nl:viaduct`.
+ - Primary development is located at [gitlab.com](https://gitlab.com/studieverenigingvia/viaduct).
 
 ### Requirements
 Ubuntu install packages (other OS's should install similar stuff):
