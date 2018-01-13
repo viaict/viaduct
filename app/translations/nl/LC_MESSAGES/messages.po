@@ -1582,7 +1582,7 @@ msgid "Your account has been disabled, you are not allowed to log in"
 msgstr "Je account is gedeactiveerd, je mag niet inloggen"
 
 msgid "Your current password does not match."
-msgstr "Je huidige wachtwoord is geen match."
+msgstr "Huidig wachtwoord klopt niet."
 
 msgid "Your password has been updated."
 msgstr "Uw wachtwoord is geüpdatet."
