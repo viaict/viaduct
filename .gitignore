@@ -2,6 +2,7 @@ application.db
 config.py
 config.rb
 client_secrets.json
+.env
 
 # Ignore the nodejs package lock file for now, until we update to the newest node on the server.
 package-lock.json
