@@ -764,7 +764,10 @@ msgstr ""
 msgid "Mailing list"
 msgstr ""
 
-msgid "Max number of attendents"
+msgid "Max number of attendants"
+msgstr ""
+
+msgid "Number of extra attendants"
 msgstr ""
 
 msgid "Member"

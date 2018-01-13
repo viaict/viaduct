@@ -9,6 +9,10 @@ from app.forms.fields import DecimalField, EmailField
 class CreateForm(FlaskForm):
     name = StringField(_('Form name'), validators=[InputRequired()])
     max_attendants = StringField(_('Max number of attendents'))
+    additional_attendants = SelectField('Number of extra attendants',
+                                        choices=[(0, _('None'))] +
+                                        [(x, "+%d" % x) for x in range(1, 11)],
+                                        default=(0, _('None')))
     msg_success = StringField(
         _('Success message: shown when user registers'))
     origin = StringField(_('Who'))
