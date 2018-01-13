@@ -17,19 +17,26 @@ def find_task_by_id(task_id):
 
 
 def get_all_minutes_for_user(user):
-    list_items = {}
+    res = []
 
     for group in user.groups:
-        list_items[group.name] = db.session.query(Minute) \
+        minutes = db.session.query(Minute) \
             .filter(Minute.group_id == group.id) \
             .order_by(Minute.minute_date.desc()) \
             .all()
 
-    return list_items
+        group_with_tasks = {
+            'group_name': group.name,
+            'minutes': minutes
+        }
+
+        res.append(group_with_tasks)
+
+    return res
 
 
 def get_all_minutes_for_group(group_id, date_range=None):
-    list_items = {}
+    res = []
 
     query = db.session.query(Minute).filter(Minute.group_id == group_id). \
         order_by(Minute.minute_date.desc())
@@ -39,9 +46,13 @@ def get_all_minutes_for_group(group_id, date_range=None):
                              Minute.minute_date <= date_range[1])
 
     key = db.session.query(Group).filter(Group.id == group_id).first().name
-    list_items[key] = query.all()
 
-    return list_items
+    res.append({
+        'group_name': key,
+        'minutes': query.all()
+    })
+
+    return res
 
 
 def get_all_tasks_for_groups(group_ids, date_range=None, user=None):

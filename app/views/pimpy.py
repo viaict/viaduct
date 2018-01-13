@@ -5,7 +5,7 @@ from flask import flash, render_template, request, jsonify
 from flask_babel import _
 from flask_login import current_user
 
-from app import db, Roles
+from app import db, Roles, app
 from app.decorators import require_role
 from app.exceptions import ValidationException
 from app.forms.pimpy import AddTaskForm, AddMinuteForm
@@ -47,8 +47,9 @@ def view_minutes_in_date_range(group_id=None):
     start_date = request.form['start_date']
     end_date = request.form['end_date']
 
-    start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
-    end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d")
+    df = app.config['DATE_FORMAT']
+    start_date = datetime.datetime.strptime(start_date, df)
+    end_date = datetime.datetime.strptime(end_date, df)
 
     if group_id:
         list_items = pimpy_service.get_all_minutes_for_group(group_id, (
@@ -73,8 +74,9 @@ def view_tasks_in_date_range(group_id=None):
     start_date = request.form['start_date']
     end_date = request.form['end_date']
 
-    start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
-    end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d")
+    df = app.config['DATE_FORMAT']
+    start_date = datetime.datetime.strptime(start_date, df)
+    end_date = datetime.datetime.strptime(end_date, df)
 
     status_meanings = Task.get_status_meanings()
 

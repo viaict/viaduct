@@ -5,13 +5,13 @@
     <div class="col-md-8">
 
 
-    {% for group_header in list_items: %}
+    {% for group_and_minutes in list_items %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">{{ group_header }}</h3>
+            <h3 class="panel-title">{{ group_and_minutes['group_name'] }}</h3>
         </div>
         <ul class="list-group">
-            {% for list_item in list_items[group_header] %}
+            {% for list_item in group_and_minutes['minutes'] %}
                 {% if list_item.id > 0 %}
                     <li class="list-group-item">
                         <div class="row toggle" id="dropdown-detail-1" data-toggle="#{{ list_item.get_name() }}">

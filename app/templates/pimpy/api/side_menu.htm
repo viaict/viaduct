@@ -1,3 +1,12 @@
+{%- set format = app_config['DATE_FORMAT']
+            | replace('%Y', 'yyyy')
+            | replace('%m', 'mm')
+            | replace('%d', 'dd')
+            | replace('%H', 'hh')
+            | replace('%M', 'ii')
+            | replace('%S', 'ss')
+-%}
+
 <div class="col-md-4">
   <ul class="nav">
     <li>
@@ -55,7 +64,7 @@
               <label for="start_date">Van</label>
               <div class="input-group date" id="start_date">
                 <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                <input class="form-control" data-date-format="yyyy-mm-dd"
+                <input class="form-control" data-date-format="{{ format }}"
                                             id="start_date"
                                             name="start_date"
                                             type="text"
@@ -66,7 +75,7 @@
               <label for="end_date">Tot</label>
               <div class="input-group date" id="end_date">
                 <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                <input class="form-control" data-date-format="yyyy-mm-dd"
+                <input class="form-control" data-date-format="{{ format }}"
                                             id="end_date"
                                             name="end_date"
                                             type="text"
@@ -76,8 +85,8 @@
             <button type="submit" class="btn btn-primary">Zoeken</button>
           </form>
 
-          <script>$('#start_date').datetimepicker({ format: 'yyyy-mm-dd' });</script>
-          <script>$('#end_date').datetimepicker({ format: 'yyyy-mm-dd' });</script>
+          <script>$('#start_date').datetimepicker({ format: '{{ format }}' });</script>
+          <script>$('#end_date').datetimepicker({ format: '{{ format }}' });</script>
         </ul>
       </ul>
     </li>
@@ -94,7 +103,7 @@
               <label for="start_date">Van</label>
               <div class="input-group date" id="start_date">
                 <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                <input class="form-control" data-date-format="yyyy-mm-dd"
+                <input class="form-control" data-date-format="{{ format }}"
                                             id="start_date"
                                             name="start_date"
                                             type="text"
@@ -105,7 +114,7 @@
               <label for="end_date">Tot</label>
               <div class="input-group date" id="end_date">
                 <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                <input class="form-control" data-date-format="yyyy-mm-dd"
+                <input class="form-control" data-date-format="{{ format }}"
                                             id="end_date"
                                             name="end_date"
                                             type="text"
@@ -116,8 +125,8 @@
             <button type="submit" class="btn btn-primary">Zoeken</button>
           </form>
 
-          <script>$('#start_date').datetimepicker({ format: 'yyyy-mm-dd' });</script>
-          <script>$('#end_date').datetimepicker({ format: 'yyyy-mm-dd' });</script>
+          <script>$('#start_date').datetimepicker({ format: '{{ format }}' });</script>
+          <script>$('#end_date').datetimepicker({ format: {{ format }} });</script>
         </ul>
       </ul>
     </li>
