@@ -88,21 +88,22 @@ def add_task(name, content, group_id, users_text, line, minute_id, status):
     pimpy_repository.add_task(task)
 
 
-def edit_task_property(user, task_id, property, value):
+def edit_task_property(user, task_id, content=None, title=None,
+                       users_propery=None):
     task = find_task_by_id(task_id)
 
     if not user.member_of_group(task.group_id):
         raise ValidationException('User not member of group of task')
 
-    if property == 'content':
-        pimpy_repository.edit_task_content(task, value)
-    elif property == 'title':
-        pimpy_repository.edit_task_title(task, value)
-    elif property == 'users':
-        users = get_list_of_users_from_string(task.group_id, value)
+    if content is not None:
+        pimpy_repository.edit_task_content(task, content)
+
+    if title is not None:
+        pimpy_repository.edit_task_title(task, title)
+
+    if users_propery is not None:
+        users = get_list_of_users_from_string(task.group_id, users_propery)
         pimpy_repository.edit_task_users(task, users)
-    else:
-        raise ValidationException('Invalid property to edit')
 
 
 def get_list_of_users_from_string(group_id, comma_sep):

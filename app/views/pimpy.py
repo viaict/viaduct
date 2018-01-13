@@ -13,6 +13,7 @@ from app.service import pimpy_service
 from app.utils.pimpy import PimpyAPI
 from app.models.pimpy import Task
 from app.models.group import Group
+
 # from app.utils import copernica
 
 blueprint = Blueprint('pimpy', __name__, url_prefix='/pimpy')
@@ -243,7 +244,16 @@ def edit_task(task_id=-1):
     value = request.form['value']
 
     if name in ('content', 'title', 'users'):
-        pimpy_service.edit_task_property(current_user, task_id, name, value)
+        content, title, users = [None] * 3
+        if name == 'content':
+            content = value
+        elif name == 'title':
+            title = value
+        elif name == 'users':
+            users = value
+
+        pimpy_service.edit_task_property(current_user, task_id,
+                                         content, title, users)
     else:
         abort(400)
 
