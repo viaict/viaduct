@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, Mock
 
-from app.exceptions import ValidationException
+from app.exceptions import ValidationException, ResourceNotFoundException
 from app.models.group import Group
 from app.models.pimpy import Task
 from app.models.user import User
@@ -22,10 +22,12 @@ nonexisting_task_name = 'nonexisting task'
 existing_user_name1 = 'Foo'
 existing_user_name2 = 'Bar'
 
+group_repository_mock_mock = Mock(spec=Group)
+
 
 def mock_find_group_id(group_id):
     if group_id == existing_group_id:
-        return Mock(spec=Group)
+        return group_repository_mock_mock
     else:
         return None
 
@@ -98,7 +100,7 @@ class TestPimpyService(unittest.TestCase):
     def test_get_all_minutes_for_group(self):
         pimpy_service.get_all_minutes_for_group(existing_group_id, (1, 2))
         pimpy_repository_mock.get_all_minutes_for_group. \
-            assert_called_once_with(existing_group_id, (1, 2))
+            assert_called_once_with(group_repository_mock_mock, (1, 2))
 
     def test_update_status(self):
         mock_user = Mock(User)
@@ -116,7 +118,7 @@ class TestPimpyService(unittest.TestCase):
             pimpy_repository_mock.update_status.assert_not_called()
 
     def test_add_task_invalid_group(self):
-        with self.assertRaises(ValidationException):
+        with self.assertRaises(ResourceNotFoundException):
             pimpy_service.add_task('foo', 'content', -1,
                                    nonexisting_group_id, 1, existing_minute_id,
                                    Task.STATUS_NOT_STARTED)
@@ -141,17 +143,28 @@ class TestPimpyService(unittest.TestCase):
             Task.STATUS_NOT_STARTED)
 
     def test_edit_task_property_content(self):
-        self._test_edit_task_property_with_type(
-            'content', pimpy_repository_mock.edit_task_content)
+        mock_task = Mock(Task)
+        pimpy_repository_mock.find_task_by_id.return_value = mock_task
+        value = 'val'
+
+        pimpy_service.edit_task_property(Mock(User), existing_task_id,
+                                         content=value)
+
+        pimpy_repository_mock.edit_task_content.assert_called_once_with(
+            mock_task, value
+        )
 
     def test_edit_task_property_title(self):
-        self._test_edit_task_property_with_type(
-            'title', pimpy_repository_mock.edit_task_title)
+        mock_task = Mock(Task)
+        pimpy_repository_mock.find_task_by_id.return_value = mock_task
+        value = 'val'
 
-    def test_edit_task_property_invalid(self):
-        with self.assertRaises(ValidationException):
-            self._test_edit_task_property_with_type(
-                'invalid_property', None)
+        pimpy_service.edit_task_property(Mock(User), existing_task_id,
+                                         title=value)
+
+        pimpy_repository_mock.edit_task_title.assert_called_once_with(
+            mock_task, value
+        )
 
     def _test_edit_task_property_with_type(
             self, content, func):
@@ -171,7 +184,7 @@ class TestPimpyService(unittest.TestCase):
         with patch.object(pimpy_service, 'get_list_of_users_from_string',
                           lambda group_id, userlist: [mock_user]):
             pimpy_service.edit_task_property(
-                mock_user, existing_task_id, 'users', [mock_user])
+                mock_user, existing_task_id, users_property=[mock_user])
             pimpy_repository_mock.edit_task_users.assert_called_once_with(
                 mock_task, [mock_user])
 
@@ -184,4 +197,4 @@ class TestPimpyService(unittest.TestCase):
 
         with self.assertRaises(ValidationException):
             pimpy_service.edit_task_property(
-                mock_user, existing_task_id, 'content', 'val')
+                mock_user, existing_task_id, content='val')

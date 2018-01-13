@@ -89,7 +89,7 @@ def add_task(name, content, group_id, users_text, line, minute_id, status):
 
 
 def edit_task_property(user, task_id, content=None, title=None,
-                       users_propery=None):
+                       users_property=None):
     task = find_task_by_id(task_id)
 
     if not user.member_of_group(task.group_id):
@@ -101,8 +101,8 @@ def edit_task_property(user, task_id, content=None, title=None,
     if title is not None:
         pimpy_repository.edit_task_title(task, title)
 
-    if users_propery is not None:
-        users = get_list_of_users_from_string(task.group_id, users_propery)
+    if users_property is not None:
+        users = get_list_of_users_from_string(task.group_id, users_property)
         pimpy_repository.edit_task_users(task, users)
 
 
