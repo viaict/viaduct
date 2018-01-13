@@ -67,11 +67,9 @@ def update_status(user, task, status):
 
 
 def add_task(name, content, group_id, users_text, line, minute_id, status):
-    # TODO: get group here and use that to query the repo
     group = group_repository.find_by_id(group_id)
     if not group:
-        raise ValidationException(
-            'Er is niet een groep die voldoet opgegeven.')
+        raise ResourceNotFoundException("group", group_id)
 
     users = get_list_of_users_from_string(group_id, users_text)
 
@@ -83,7 +81,7 @@ def add_task(name, content, group_id, users_text, line, minute_id, status):
         name, content, group)
 
     if task:
-        raise ValidationException('Deze taak bestaat al in de database')
+        raise ValidationException("This task already exists")
     else:
         task = Task(name, content, group_id, users, minute_id, line, status)
 
@@ -121,12 +119,11 @@ def get_list_of_users_from_string(group_id, comma_sep):
     """
 
     group = Group.query.filter(Group.id == group_id).first()
-    if group is None:
-        raise ValidationException('Kan groep niet vinden.')
+    if not group:
+        raise ResourceNotFoundException("group", group_id)
 
     if comma_sep is None:
-        raise ValidationException('Geen komma gescheiden lijst met gebruikers '
-                                  'gevonden.')
+        raise ValidationException('No comma separated list of users found.')
 
     comma_sep = comma_sep.strip()
 
@@ -167,7 +164,7 @@ def get_list_of_users_from_string(group_id, comma_sep):
 
         if match < 0:
             raise ValidationException(
-                'Kon geen gebruiker vinden voor: %s' % (comma_sep_user))
+                "Could not find a user for %s" % comma_sep_user)
 
         for user in users:
             if user.id == match:
@@ -177,6 +174,6 @@ def get_list_of_users_from_string(group_id, comma_sep):
 
         if not found:
             raise ValidationException(
-                'Kon geen gebruiker vinden voor: %s' % (comma_sep_user))
+                'Could not find a user for %s' % (comma_sep_user))
 
     return users_found

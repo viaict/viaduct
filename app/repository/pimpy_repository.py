@@ -25,12 +25,10 @@ def get_all_minutes_for_user(user):
             .order_by(Minute.minute_date.desc()) \
             .all()
 
-        group_with_tasks = {
+        res.append({
             'group_name': group.name,
             'minutes': minutes
-        }
-
-        res.append(group_with_tasks)
+        })
 
     return res
 
