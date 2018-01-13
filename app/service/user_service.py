@@ -48,7 +48,7 @@ def get_user_by_login(email, password):
     if user.disabled:
         raise AuthorizationException("User is disabled.")
 
-    submitted_hash = bcrypt.hashpw(password, user.password)
+    submitted_hash = bcrypt.hashpw(password.encode('utf-8'), user.password)
     if submitted_hash != user.password:
         raise ValidationException("Invalid password.")
 

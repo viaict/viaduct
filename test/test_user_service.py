@@ -84,7 +84,8 @@ class TestUserService(unittest.TestCase):
 
         expected_user = MagicMock(spec=dir(User))
         expected_user.disabled = False
-        expected_user.password = bcrypt.hashpw(password, bcrypt.gensalt())
+        expected_user.password = bcrypt.hashpw(password.encode('utf-8'),
+                                               bcrypt.gensalt())
 
         user_repository_mock.find_user_by_email.return_value = expected_user
 
@@ -119,7 +120,8 @@ class TestUserService(unittest.TestCase):
 
         expected_user = MagicMock(spec=dir(User))
         expected_user.disabled = False
-        expected_user.password = bcrypt.hashpw(password, bcrypt.gensalt())
+        expected_user.password = bcrypt.hashpw(password.encode('utf-8'),
+                                               bcrypt.gensalt())
 
         user_repository_mock.find_user_by_email.return_value = expected_user
         with self.assertRaises(ValidationException):

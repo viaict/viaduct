@@ -207,7 +207,8 @@ def edit(user_id=None):
         user.country = form.country.data.strip()
 
         if form.password.data != '':
-            user.password = bcrypt.hashpw(form.password.data, bcrypt.gensalt())
+            user.password = bcrypt.hashpw(form.password.data.encode('utf-8'),
+                                          bcrypt.gensalt())
 
         group = Group.query.filter(Group.name == 'all').first()
         group.add_user(user)
@@ -254,8 +255,9 @@ def sign_up():
             return render_template('user/sign_up.htm', form=form)
 
         user = User(form.email.data,
-                    bcrypt.hashpw(form.password.data,
-                                  bcrypt.gensalt()), form.first_name.data,
+                    bcrypt.hashpw(form.password.data.encode('utf-8'),
+                                  bcrypt.gensalt()),
+                    form.first_name.data,
                     form.last_name.data, form.student_id.data,
                     form.education_id.data, form.birth_date.data,
                     form.study_start.data, form.receive_information.data)
