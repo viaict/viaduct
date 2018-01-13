@@ -11,6 +11,14 @@ from app.models.page import Page
 from app.roles import Roles
 from app.service import role_service
 
+import werkzeug.exceptions
+
+from connexion.apis.flask_api import FlaskApi
+from connexion.exceptions import ProblemException
+from connexion.problem import problem
+
+from functools import wraps
+
 
 @login_manager.unauthorized_handler
 def unauthorized():
@@ -21,18 +29,42 @@ def unauthorized():
     return redirect(url_for('user.sign_in'))
 
 
+def add_api_error_handler(f):
+    @wraps(f)
+    def wrapper(e):
+        if request.path.startswith('/api') or request.is_xhr:
+            return handle_api_error(e)
+
+        return f(e)
+
+    return wrapper
+
+
 def handle_api_error(e):
-    return jsonify({"title": e.title,
-                    "status": e.status,
-                    "detail": str(e),
-                    "type": e.type_}), e.status
+    if not isinstance(e, werkzeug.exceptions.HTTPException):
+        e = werkzeug.exceptions.InternalServerError()
+
+    if isinstance(e, DetailedException):
+        return jsonify({"title": e.title,
+                        "status": e.status,
+                        "detail": str(e),
+                        "type": e.type_}), e.status
+
+    response = problem(title=e.name,
+                       detail=e.description,
+                       status=e.code)
+
+    return FlaskApi.get_response(response)
+
+
+@app.errorhandler(ProblemException)
+def connexion_problem_exception_handler(e):
+    return FlaskApi.get_response(e.to_problem())
 
 
 @app.errorhandler(DetailedException)
+@add_api_error_handler
 def default_detailed_exception_handler(e):
-    if request.blueprint.startswith("/api") or request.is_xhr:
-        return handle_api_error(e)
-
     if isinstance(e, ResourceNotFoundException):
         return page_not_found(e)
 
@@ -40,6 +72,7 @@ def default_detailed_exception_handler(e):
 
 
 @app.errorhandler(403)
+@add_api_error_handler
 def permission_denied(e):
     """When permission denied and not logged in you will be redirected."""
     content = "403, The police has been notified!"
@@ -56,11 +89,13 @@ def permission_denied(e):
 
 
 @app.errorhandler(500)
+@add_api_error_handler
 def internal_server_error(e):
     return render_template('page/500.htm'), 500
 
 
 @app.errorhandler(404)
+@add_api_error_handler
 def page_not_found(e):
     # Search for file extension.
     if re.match(r'(?:.*)\.[a-zA-Z]{3,}$', request.path):

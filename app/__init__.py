@@ -1,7 +1,6 @@
 import datetime
 import logging
 import os
-from unittest import mock
 
 import connexion
 from flask import Flask, request, session
@@ -17,6 +16,7 @@ from app.roles import Roles
 from app.utils.import_module import import_module
 from .extensions import db, login_manager, \
     cache, toolbar, jsglue, sentry, oauth, cors
+from .connexion_app import ConnexionFlaskApp
 
 version = 'v2.9.1.0'
 
@@ -219,8 +219,8 @@ def get_patched_api_app():
             resolver=connexion.RestyResolver('app.api.{}'.format(name)),
             pythonic_params=True, strict_validation=True)
 
-    with mock.patch("connexion.apps.flask_app.FlaskApp.create_app", inject):
-        connexion_app = connexion.App(__name__, specification_dir='swagger/',
-                                      swagger_ui=False)
-        add_api(connexion_app, "pimpy")
+    connexion_app = ConnexionFlaskApp(
+        __name__, app, specification_dir='swagger/', swagger_ui=False)
+
+    add_api(connexion_app, "pimpy")
     return connexion_app
