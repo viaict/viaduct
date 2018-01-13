@@ -47,12 +47,12 @@ def get_all_tasks_for_user(user, date_range=None):
     return pimpy_repository.get_all_tasks_for_user(user, date_range)
 
 
-def get_all_tasks_for_group(group_id, date_range=None):
+def get_all_tasks_for_group(group_id, date_range=None, user=None):
     group = group_repository.find_by_id(group_id)
     if not group:
         raise ResourceNotFoundException("group", group_id)
 
-    return pimpy_repository.get_all_tasks_for_group(group, date_range)
+    return pimpy_repository.get_all_tasks_for_group(group, date_range, user)
 
 
 def update_status(user, task, status):

@@ -68,7 +68,7 @@ def get_all_tasks_for_user(user, date_range=None):
     return query.all()
 
 
-def get_all_tasks_for_group(group, date_range=None):
+def get_all_tasks_for_group(group, date_range=None, user=None):
     query = db.session.query(TaskUserRel) \
         .join(Task).join(User).join(Group) \
         .filter(Task.group == group) \
@@ -77,6 +77,9 @@ def get_all_tasks_for_group(group, date_range=None):
     if date_range:
         query = query.filter(date_range[0] <= Task.timestamp,
                              Task.timestamp <= date_range[1])
+
+    if user:
+        query = query.filter(User.id == user.id)
 
     query = query.order_by(
         Group.name.asc(),

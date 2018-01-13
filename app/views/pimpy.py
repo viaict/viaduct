@@ -124,7 +124,8 @@ def view_tasks_personal(group_id=None):
     status_meanings = Task.get_status_meanings()
 
     if group_id is not None:
-        tasks_rel = pimpy_service.get_all_tasks_for_group(group_id)
+        tasks_rel = pimpy_service.get_all_tasks_for_group(group_id,
+                                                          user=current_user)
     else:
         tasks_rel = pimpy_service.get_all_tasks_for_user(current_user)
 
