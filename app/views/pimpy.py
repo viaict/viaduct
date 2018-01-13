@@ -14,7 +14,6 @@ from app.utils.pimpy import PimpyAPI
 from app.models.pimpy import Task
 from app.models.group import Group
 # from app.utils import copernica
-from app.utils.user import UserAPI
 
 blueprint = Blueprint('pimpy', __name__, url_prefix='/pimpy')
 
@@ -63,42 +62,6 @@ def view_minutes_in_date_range(group_id=None):
                            title='PimPy')
 
 
-@blueprint.route('/task_archive/', methods=['GET', 'POST'])
-@blueprint.route('/task_archive/<int:group_id>', methods=['GET', 'POST'])
-@require_role(Roles.PIMPY_READ)
-def view_tasks_in_date_range(group_id=None):
-    if group_id is not None and not current_user.member_of_group(group_id):
-        return abort(403)
-
-    # group_id = request.form['group_id']
-    start_date = request.form['start_date']
-    end_date = request.form['end_date']
-
-    df = app.config['DATE_FORMAT']
-    start_date = datetime.datetime.strptime(start_date, df)
-    end_date = datetime.datetime.strptime(end_date, df)
-
-    status_meanings = Task.get_status_meanings()
-
-    if group_id is not None:
-        group_ids = [group_id]
-    else:
-        # TODO
-        groups = UserAPI.get_groups_for_current_user()
-        group_ids = list(map(lambda x: x.id, groups))
-
-    tasks_rel = pimpy_service.get_all_tasks_for_groups(group_ids, (
-        start_date, end_date))
-
-    return render_template('pimpy/api/tasks.htm',
-                           personal=False,
-                           group_id=group_id,
-                           tasks_rel=tasks_rel,
-                           type='tasks',
-                           status_meanings=status_meanings,
-                           title='PimPy')
-
-
 @blueprint.route('/minutes/single/<int:minute_id>/')
 @blueprint.route('/minutes/single/<int:minute_id>/<int:line_number>')
 @require_role(Roles.PIMPY_READ)
@@ -136,13 +99,9 @@ def view_tasks(group_id=None):
     status_meanings = Task.get_status_meanings()
 
     if group_id is not None:
-        group_ids = [group_id]
+        tasks_rel = pimpy_service.get_all_tasks_for_group(group_id)
     else:
-        # TODO
-        groups = UserAPI.get_groups_for_current_user()
-        group_ids = list(map(lambda x: x.id, groups))
-
-    tasks_rel = pimpy_service.get_all_tasks_for_groups(group_ids)
+        tasks_rel = pimpy_service.get_all_tasks_for_user(current_user)
 
     return render_template('pimpy/api/tasks.htm',
                            personal=False,
@@ -164,14 +123,43 @@ def view_tasks_personal(group_id=None):
     status_meanings = Task.get_status_meanings()
 
     if group_id is not None:
-        group_ids = [group_id]
+        tasks_rel = pimpy_service.get_all_tasks_for_group(group_id)
     else:
-        # TODO
-        groups = UserAPI.get_groups_for_current_user()
-        group_ids = list(map(lambda x: x.id, groups))
+        tasks_rel = pimpy_service.get_all_tasks_for_user(current_user)
 
-    tasks_rel = pimpy_service.get_all_tasks_for_groups(group_ids,
-                                                       user=current_user)
+    return render_template('pimpy/api/tasks.htm',
+                           personal=False,
+                           group_id=group_id,
+                           tasks_rel=tasks_rel,
+                           type='tasks',
+                           status_meanings=status_meanings,
+                           title='PimPy')
+
+
+@blueprint.route('/task_archive/', methods=['GET', 'POST'])
+@blueprint.route('/task_archive/<int:group_id>', methods=['GET', 'POST'])
+@require_role(Roles.PIMPY_READ)
+def view_tasks_in_date_range(group_id=None):
+    if group_id is not None and not current_user.member_of_group(group_id):
+        return abort(403)
+
+    # group_id = request.form['group_id']
+    start_date = request.form['start_date']
+    end_date = request.form['end_date']
+
+    df = app.config['DATE_FORMAT']
+    start_date = datetime.datetime.strptime(start_date, df)
+    end_date = datetime.datetime.strptime(end_date, df)
+
+    date_tuple = (start_date, end_date)
+
+    status_meanings = Task.get_status_meanings()
+
+    if group_id is not None:
+        tasks_rel = pimpy_service.get_all_tasks_for_group(group_id, date_tuple)
+    else:
+        tasks_rel = pimpy_service.get_all_tasks_for_user(current_user,
+                                                         date_tuple)
 
     return render_template('pimpy/api/tasks.htm',
                            personal=False,

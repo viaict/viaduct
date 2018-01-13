@@ -1,6 +1,6 @@
 from fuzzywuzzy import fuzz
 
-from app.exceptions import ValidationException
+from app.exceptions import ValidationException, ResourceNotFoundException
 from app.models.group import Group
 from app.models.pimpy import Task
 from app.repository import pimpy_repository, group_repository, task_repository
@@ -36,14 +36,23 @@ def get_all_minutes_for_user(user):
 
 
 def get_all_minutes_for_group(group_id, date_range=None):
-    # TODO: get group here and use that to query the repo
-    return pimpy_repository.get_all_minutes_for_group(group_id, date_range)
+    group = group_repository.find_by_id(group_id)
+    if not group:
+        raise ResourceNotFoundException("group", group_id)
+
+    return pimpy_repository.get_all_minutes_for_group(group, date_range)
 
 
-def get_all_tasks_for_groups(group_ids, date_range=None, user=None):
-    # TODO: get group here and use that to query the repo
-    return pimpy_repository.get_all_tasks_for_groups(
-        group_ids, date_range, user)
+def get_all_tasks_for_user(user, date_range=None):
+    return pimpy_repository.get_all_tasks_for_user(user, date_range)
+
+
+def get_all_tasks_for_group(group_id, date_range=None):
+    group = group_repository.find_by_id(group_id)
+    if not group:
+        raise ResourceNotFoundException("group", group_id)
+
+    return pimpy_repository.get_all_tasks_for_group(group, date_range)
 
 
 def update_status(user, task, status):

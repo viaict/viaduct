@@ -35,42 +35,57 @@ def get_all_minutes_for_user(user):
     return res
 
 
-def get_all_minutes_for_group(group_id, date_range=None):
+def get_all_minutes_for_group(group, date_range=None):
     res = []
 
-    query = db.session.query(Minute).filter(Minute.group_id == group_id). \
+    query = db.session.query(Minute).filter(Minute.group == group). \
         order_by(Minute.minute_date.desc())
 
     if date_range:
         query = query.filter(date_range[0] <= Minute.minute_date,
                              Minute.minute_date <= date_range[1])
 
-    key = db.session.query(Group).filter(Group.id == group_id).first().name
-
     res.append({
-        'group_name': key,
+        'group_name': group.name,
         'minutes': query.all()
     })
 
     return res
 
 
-def get_all_tasks_for_groups(group_ids, date_range=None, user=None):
-    query = db.session.query(TaskUserRel).join(Task).join(User)
-
-    query = query.filter(Task.group_id.in_(group_ids))
-
-    if user:
-        query = query.filter(User.id == user.id)
-
-    query = query.filter(~Task.status.in_((4, 5))).join(Group)
+def get_all_tasks_for_user(user, date_range=None):
+    query = db.session.query(TaskUserRel) \
+        .join(Task).join(User) \
+        .filter(TaskUserRel.user == user) \
+        .filter(~Task.status.in_((4, 5)))
 
     if date_range:
         query = query.filter(date_range[0] <= Task.timestamp,
                              Task.timestamp <= date_range[1])
 
-    return query.order_by(Group.name.asc(), User.first_name.asc(),
-                          User.last_name.asc(), Task.id.asc())
+    query = query.order_by(
+        User.first_name.asc(), User.last_name.asc(), Task.id.asc()
+    )
+
+    return query.all()
+
+
+def get_all_tasks_for_group(group, date_range=None):
+    query = db.session.query(TaskUserRel) \
+        .join(Task).join(User).join(Group) \
+        .filter(Task.group == group) \
+        .filter(~Task.status.in_((4, 5)))
+
+    if date_range:
+        query = query.filter(date_range[0] <= Task.timestamp,
+                             Task.timestamp <= date_range[1])
+
+    query = query.order_by(
+        Group.name.asc(),
+        User.first_name.asc(), User.last_name.asc(), Task.id.asc()
+    )
+
+    return query.all()
 
 
 def update_status(task, status):

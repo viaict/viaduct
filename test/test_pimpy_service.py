@@ -100,11 +100,6 @@ class TestPimpyService(unittest.TestCase):
         pimpy_repository_mock.get_all_minutes_for_group. \
             assert_called_once_with(existing_group_id, (1, 2))
 
-    def test_get_all_tasks_for_groups(self):
-        pimpy_service.get_all_tasks_for_groups([existing_group_id], (1, 2))
-        pimpy_repository_mock.get_all_tasks_for_groups.assert_called_once_with(
-            [existing_group_id], (1, 2), None)
-
     def test_update_status(self):
         mock_user = Mock(User)
         mock_task = Mock(Task)
