@@ -295,6 +295,7 @@ def submit(form_id=-1):
         entries = CustomFormResult.query \
             .filter(CustomFormResult.form_id == form_id)
         num_attendants = entries.count()
+        num_introduce = request.form['introductions']
 
         result = CustomFormResult(current_user.id, form_id,
                                   request.form['data'])
@@ -303,6 +304,8 @@ def submit(form_id=-1):
         if num_attendants >= custom_form.max_attendants:
             # Create "Reserve" signup
             response = "reserve"
+        elif num_introduce > custom_form.introductions:
+            response = "edit"
         else:
             copernica_data = {
                 "Naam": custom_form.name,
