@@ -114,6 +114,7 @@ def get_activity(activity_id=0):
     # Count current attendants for "reserved" message
     entries = CustomFormResult.query.filter(CustomFormResult.form_id ==
                                             activity.form_id)
+    # TODO Check the extra attendees and add these to the entries.count()
     activity.num_attendants = entries.count()
     over_max_registrations = activity.num_attendants >= \
         activity.form.max_attendants

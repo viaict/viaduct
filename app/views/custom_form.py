@@ -147,6 +147,7 @@ def create(form_id=None):
         custom_form.html = form.html.data
         custom_form.msg_success = form.msg_success.data
         custom_form.max_attendants = form.max_attendants.data
+        custom_form.introductions = form.introductions.data
         if form.price.data is None:
             form.price.data = 0.0
         custom_form.price = form.price.data
