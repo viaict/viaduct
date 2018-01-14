@@ -50,14 +50,14 @@ def get_course_id(course):
     return course_object.id
 
 
-@blueprint.route('/examination/preview/<int:exam_id>/<string:doc_type>/', \
-                methods=['GET', 'POST'])
+@blueprint.route('/examination/preview/<int:exam_id>/<string:doc_type>/',
+                 methods=['GET', 'POST'])
 @require_membership
 def preview(exam_id, doc_type):
     exam = Examination.query.filter(Examination.id == exam_id).first()
     path = '/static/uploads/examinations/'
-    return render_template('examination/preview.htm', \
-                        exam=exam, doc_type=doc_type, path=path)
+    return render_template('examination/preview.htm',
+                           exam=exam, doc_type=doc_type, path=path)
 
 
 @blueprint.route('/examination/add/', methods=['GET', 'POST'])
