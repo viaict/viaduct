@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-01-06 23:19+0100\n"
+"POT-Creation-Date: 2018-01-13 12:24+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.5.1\n"
+"Generated-By: Babel 2.3.4\n"
 
 #, python-format
 msgid "%(email)s is unknown to our system."
@@ -365,6 +365,9 @@ msgid "Created"
 msgstr ""
 
 msgid "Current"
+msgstr ""
+
+msgid "Current Password"
 msgstr ""
 
 msgid "Current avatar"
@@ -868,6 +871,9 @@ msgstr ""
 msgid "New location"
 msgstr ""
 
+msgid "New password"
+msgstr ""
+
 msgid "New vacancy"
 msgstr ""
 
@@ -917,9 +923,6 @@ msgid "No form"
 msgstr ""
 
 msgid "No location"
-msgstr ""
-
-msgid "No password submitted"
 msgstr ""
 
 msgid "No presidium"
@@ -1078,7 +1081,7 @@ msgstr ""
 msgid "Remove page"
 msgstr ""
 
-msgid "Repeat password"
+msgid "Repeat new password"
 msgstr ""
 
 msgid "Request to DOMjudge server failed"
@@ -1109,6 +1112,9 @@ msgid "Run Error"
 msgstr ""
 
 msgid "Save"
+msgstr ""
+
+msgid "Scopes"
 msgstr ""
 
 msgid "Scoreboard"
@@ -1304,6 +1310,9 @@ msgid "The page you tried to delete does not exist."
 msgstr ""
 
 msgid "The password you entered appears to be incorrect."
+msgstr ""
+
+msgid "The scopes required by your application"
 msgstr ""
 
 msgid "The seo settings have been saved"
@@ -1534,7 +1543,13 @@ msgstr ""
 msgid "Your account has been disabled, you are not allowed to log in"
 msgstr ""
 
+msgid "Your current password does not match."
+msgstr ""
+
 msgid "Your password has been updated."
+msgstr ""
+
+msgid "Your password has successfully been changed."
 msgstr ""
 
 msgid "Your payment has not been completed."
@@ -2033,5 +2048,11 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Authorized callback URL"
+#~ msgstr ""
+
+#~ msgid "No password submitted"
+#~ msgstr ""
+
+#~ msgid "Repeat password"
 #~ msgstr ""
 

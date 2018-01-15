@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2018-01-06 23:19+0100\n"
+"POT-Creation-Date: 2018-01-13 12:24+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.5.1\n"
+"Generated-By: Babel 2.3.4\n"
 
 #, python-format
 msgid "%(email)s is unknown to our system."
@@ -372,6 +372,9 @@ msgstr "Aangemaakt"
 
 msgid "Current"
 msgstr "Huidig"
+
+msgid "Current Password"
+msgstr "Huidige wachtwoord"
 
 msgid "Current avatar"
 msgstr "Huidige avatar"
@@ -879,6 +882,9 @@ msgstr "Nieuw item"
 msgid "New location"
 msgstr "Nieuwe locatie"
 
+msgid "New password"
+msgstr "Nieuw wachtwoord"
+
 msgid "New vacancy"
 msgstr "Nieuwe vacature"
 
@@ -929,9 +935,6 @@ msgstr "Geen formulier"
 
 msgid "No location"
 msgstr "Geen locatie"
-
-msgid "No password submitted"
-msgstr "Geen wachtwoord opgegeven"
 
 msgid "No presidium"
 msgstr ""
@@ -1091,8 +1094,8 @@ msgstr "Ingeschreven activiteiten"
 msgid "Remove page"
 msgstr "Verwijder pagina"
 
-msgid "Repeat password"
-msgstr "Herhaal wachtwoord"
+msgid "Repeat new password"
+msgstr "Herhaal nieuw wachtwoord"
 
 msgid "Request to DOMjudge server failed"
 msgstr "Request aan de DOMjudge server mislukt"
@@ -1329,6 +1332,9 @@ msgstr "De pagina die je probeerde te verwijderen bestaat niet"
 
 msgid "The password you entered appears to be incorrect."
 msgstr "Het opgegeven wachtwoord lijkt incorrect."
+
+msgid "The scopes required by your application"
+msgstr ""
 
 msgid "The seo settings have been saved"
 msgstr "De seo-instellingen zijn opgeslagen"
@@ -1575,8 +1581,14 @@ msgstr ""
 msgid "Your account has been disabled, you are not allowed to log in"
 msgstr "Je account is gedeactiveerd, je mag niet inloggen"
 
+msgid "Your current password does not match."
+msgstr "Huidig wachtwoord klopt niet."
+
 msgid "Your password has been updated."
 msgstr "Uw wachtwoord is geüpdatet."
+
+msgid "Your password has successfully been changed."
+msgstr "Je wachtwoord is veranderd."
 
 msgid "Your payment has not been completed."
 msgstr "Je betaling is nog niet voltooid."
@@ -2026,4 +2038,10 @@ msgstr ""
 
 #~ msgid "Authorized callback URL"
 #~ msgstr ""
+
+#~ msgid "No password submitted"
+#~ msgstr "Geen wachtwoord opgegeven"
+
+#~ msgid "Repeat password"
+#~ msgstr "Herhaal wachtwoord"
 
