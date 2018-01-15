@@ -11,12 +11,6 @@
         </div>
     </div>
 
-{% if doc_type == 'exam' %}
-	<iframe src="{{ path + exam.path }} " height="600px" width="100% ></iframe>
-{% elif doc_type == 'answers' %}
-	<iframe src="{{ path + exam.answer_path }}" height="600px" width="100% ></iframe>
-{% else %}
-	abort(404)
-{% endif %}
+<iframe src="{{ path }} " height="600px" width="100%" ></iframe>
 
 {% endblock %}
