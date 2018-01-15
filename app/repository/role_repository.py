@@ -12,14 +12,14 @@ def load_user_roles(user_id):
     roles = db.session.query(GroupRole.role). \
         join(GroupRole.group, Group.users). \
         filter(User.id == user_id).group_by(GroupRole.role).all()
-    return [Roles(role.role) for role in roles]
+    return [Roles[role.role] for role in roles]
 
 
 def find_all_roles_by_group_id(group_id):
     roles = db.session.query(GroupRole) \
         .filter(GroupRole.group_id == group_id) \
         .order_by(GroupRole.role).all()
-    return [Roles(role.role) for role in roles]
+    return [Roles[role.role] for role in roles]
 
 
 def delete_roles_by_group(group_id, removed_roles):
@@ -35,7 +35,7 @@ def insert_roles_by_group(group_id, added_roles):
     for role in added_roles:
         group_role = GroupRole()
         group_role.group_id = group_id
-        group_role.role = role.value
+        group_role.role = role.name
         roles.append(group_role)
 
     db.session.add_all(roles)
