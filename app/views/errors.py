@@ -1,5 +1,10 @@
 import re
+from functools import wraps
 
+import werkzeug.exceptions
+from connexion.apis.flask_api import FlaskApi
+from connexion.exceptions import ProblemException
+from connexion.problem import problem
 from flask import flash, request, url_for, render_template, redirect, \
     session, jsonify
 from flask_babel import _
@@ -10,14 +15,6 @@ from app.exceptions import ResourceNotFoundException, DetailedException
 from app.models.page import Page
 from app.roles import Roles
 from app.service import role_service
-
-import werkzeug.exceptions
-
-from connexion.apis.flask_api import FlaskApi
-from connexion.exceptions import ProblemException
-from connexion.problem import problem
-
-from functools import wraps
 
 
 @login_manager.unauthorized_handler
@@ -71,6 +68,7 @@ def default_detailed_exception_handler(e):
     return internal_server_error(e)
 
 
+@app.errorhandler(401)
 @app.errorhandler(403)
 @add_api_error_handler
 def permission_denied(e):

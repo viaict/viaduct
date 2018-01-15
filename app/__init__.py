@@ -14,9 +14,9 @@ from app.exceptions import ResourceNotFoundException, ValidationException, \
     AuthorizationException
 from app.roles import Roles
 from app.utils.import_module import import_module
+from .connexion_app import ConnexionFlaskApp
 from .extensions import db, login_manager, \
     cache, toolbar, jsglue, sentry, oauth, cors
-from .connexion_app import ConnexionFlaskApp
 
 version = 'v2.9.1.0'
 
@@ -194,7 +194,8 @@ def get_patched_api_app():
     swagger_url = '/api/docs'
 
     # The API url defined by connexion.
-    api_urls = [{"name": "pimpy", "url": "/api/pimpy/swagger.json"}]
+    api_urls = [{"name": "pimpy", "url": "/api/pimpy/swagger.json"},
+                {"name": "token", "url": "/api/token/swagger.json"}]
 
     swaggerui_blueprint = get_swaggerui_blueprint(
         swagger_url,
@@ -209,8 +210,17 @@ def get_patched_api_app():
     )
     app.register_blueprint(swaggerui_blueprint, url_prefix=swagger_url)
 
-    def add_api(app, name):
-        connexion_app.add_api(
+    def add_api(patched_app, name):
+        kwargs = {
+            "protocol": "http" if patched_app.app.debug else "https",
+        }
+        with open("./app/swagger/swagger-{}.yaml".format(name), "w") as f:
+            a = patched_app.app.jinja_env \
+                .get_template("swagger/{}.yaml"
+                              .format(name)).render(**kwargs)
+            f.write(a)
+
+        patched_app.add_api(
             './swagger-{}.yaml'.format(name),
             base_path="/api/{}".format(name), validate_responses=True,
             resolver=connexion.RestyResolver('app.api.{}'.format(name)),
@@ -220,4 +230,5 @@ def get_patched_api_app():
         __name__, app, specification_dir='swagger/', swagger_ui=False)
 
     add_api(connexion_app, "pimpy")
+    add_api(connexion_app, "token")
     return connexion_app

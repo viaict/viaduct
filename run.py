@@ -10,4 +10,4 @@ def create_app():
 
 
 if __name__ == '__main__':
-    create_app().run(port=5000, processes=2)
+    create_app().run(port=5000)
