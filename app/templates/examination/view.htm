@@ -78,7 +78,7 @@
 
     <div class='row'>
         <div class='col-md-12'>
-            <div class="alert alert-warning">
+            <div class="alert alert-danger">
                     <label>{{ _('Disclaimer') }}</label>:
             {{ _('The answers provided here are not the official answers and are not guaranteed to be correct.') }}
             </div>
@@ -126,7 +126,7 @@
                             {% endif %}
                         </td>
                         <td>
-                            <a href='{{ path + examination.path }}' target='_blank' style="white-space: nowrap">
+                            <a href='{{ url_for('examination.preview', exam_id=examination.id, doc_type='exam') }}' style="white-space: nowrap">
                                 <i class='glyphicon glyphicon-cloud-download'></i>
                                 {% if examination.date %}
                                     {{ examination.date }}
@@ -142,7 +142,8 @@
                         </td>
                         <td>
                             {% if examination.answer_path and examination.answer_path != '1' %}
-                            <a href='{{ path + examination.answer_path }}' target='_blank'><i class='glyphicon glyphicon-file'></i>{{ _('Answers') }}</a>
+                            <a href='{{url_for('examination.preview', exam_id=examination.id, doc_type='answers') }}' >
+                                <i class='glyphicon glyphicon-file'></i>{{ _('Answers') }}</a>
                             {% else %}
                                 N/A
                             {% endif %}

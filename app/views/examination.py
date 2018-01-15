@@ -3,6 +3,7 @@ import os
 
 from flask import Blueprint
 from flask import flash, session, redirect, render_template, request, url_for
+from flask import abort
 from flask_babel import gettext as _
 from flask_login import current_user
 from fuzzywuzzy import fuzz
@@ -48,6 +49,22 @@ def get_course_id(course):
     if not course_object:
         return None
     return course_object.id
+
+
+@blueprint.route('/examination/preview/<int:exam_id>/<string:doc_type>/',
+                 methods=['GET', 'POST'])
+@require_membership
+def preview(exam_id, doc_type):
+    exam = Examination.query.filter(Examination.id == exam_id).first()
+    path = '/static/uploads/examinations/'
+
+    if doc_type == 'exam' and exam.path:
+        return render_template('examination/preview.htm',
+                               path=path + exam.path)
+    elif doc_type == 'answers' and exam.answer_path:
+        return render_template('examination/preview.htm',
+                               path=path + exam.answer_path)
+    return abort(404)
 
 
 @blueprint.route('/examination/add/', methods=['GET', 'POST'])
