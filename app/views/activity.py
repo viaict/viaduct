@@ -78,7 +78,6 @@ def get_activity(activity_id=0):
     Register and update for an activity, with handling of custom forms
     and payment.
     """
-
     activity = Activity.query.get_or_404(activity_id)
 
     form = ActivityForm(request.form, obj=current_user)
@@ -86,6 +85,14 @@ def get_activity(activity_id=0):
     # Add education for activity form
     educations = Education.query.all()
     form.education_id.choices = [(e.id, e.name) for e in educations]
+
+    # Set the number of extra attendees
+    form.introductions.choices = [(0, _('None'))] + [
+        (x, "+%d" % x) for x in range(1, activity.form.introductions+1)]
+    form.introductions.default = (0, _('None'))
+
+    # TODO Set the previous number of extra attendants
+    # TODO If paid, make extra attendees read-only
 
     auto_open_register_pane = False
 

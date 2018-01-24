@@ -120,6 +120,11 @@
                                             <p>{{_('By registering you agree with the terms above.')}}</p>
                                         </div>
                                     {% endif %}
+                                    {% if activity.form.introductions > 0 %}
+                                        <div class="col-md-7">
+                                            {{ render_field(form.introductions) }}
+                                        </div>
+                                    {% endif %}
                                 </div>
                                 {% if current_user.has_paid %}
                                     <button id="custom_form" class="btn btn-success">{{_('Send form')}}</button>

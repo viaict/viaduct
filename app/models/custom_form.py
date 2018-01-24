@@ -116,6 +116,11 @@ class CustomForm(db.Model, BaseEntity):
         return self.archived or (latest_activity and
                                  datetime.now() > latest_activity.end_time)
 
+    @property
+    def attendants(self):
+        return sum(entry.introductions + 1 for entry in
+                   self.custom_form_results.all())
+
     @classmethod
     def aslist(cls, current=None):
         lst = [
