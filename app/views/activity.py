@@ -88,11 +88,8 @@ def get_activity(activity_id=0):
 
     # Set the number of extra attendees
     form.introductions.choices = [(0, _('None'))] + [
-        (x, "+%d" % x) for x in range(1, activity.form.introductions+1)]
+        (x, "+%d" % x) for x in range(1, activity.form.introductions + 1)]
     form.introductions.default = (0, _('None'))
-
-    # TODO Set the previous number of extra attendants
-    # TODO If paid, make extra attendees read-only
 
     auto_open_register_pane = False
 
@@ -141,6 +138,9 @@ def get_activity(activity_id=0):
                               "placed on the reserves list.")
         return render()
 
+    # Set the previous amount of extra attendees
+    form.introductions.data = form_result.introductions
+
     activity.form_data = form_result.data.replace('"', "'")
 
     auto_open_register_pane = True
@@ -166,6 +166,9 @@ def get_activity(activity_id=0):
             _("Your registration has been completed.") + " " + \
             _("You can edit your registration by resubmitting the form.")
     elif is_attending:
+
+        # TODO If paid, make extra attendees read-only
+
         activity.info = _("You have successfully registered, "
                           "payment is still required!")
 
@@ -284,8 +287,11 @@ def create_mollie_transaction(result_id):
         db.session.add(callback)
         db.session.commit()
 
+        # Calculate the price with extra attendees
+        price = form_result.form.price * (form_result.introductions + 1)
+
         payment_url, msg = mollie.create_transaction(
-            amount=form_result.form.price,
+            amount=price,
             description=form_result.form.name,
             user=form_result.owner,
             callbacks=[callback]
