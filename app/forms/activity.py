@@ -81,4 +81,4 @@ class ActivityForm(FlaskForm):
             InputRequired(_('Student ID') + " " + _('required'))])
     education_id = SelectField(
         _('Education'), coerce=int)
-    introductions = SelectField(_('Number of extra attendants'))
+    introductions = SelectField(_('Number of extra attendants'), coerce=int)

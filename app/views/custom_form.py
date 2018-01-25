@@ -302,7 +302,8 @@ def submit(form_id=-1):
             .filter(CustomFormResult.form_id == form_id)
         num_attendants = sum(entry.introductions + 1 for entry in
                              entries.all())
-        num_introduce = int(request.form.get('introductions', 0))
+        num_introduce = min(int(request.form.get('introductions', 0)),
+                            custom_form.introductions)
 
         result = CustomFormResult(current_user.id, form_id,
                                   request.form['data'],

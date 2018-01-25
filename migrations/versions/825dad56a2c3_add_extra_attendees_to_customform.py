@@ -20,6 +20,13 @@ def upgrade():
     op.add_column('custom_form_result', sa.Column('introductions',
                                                   sa.Integer(), nullable=True))
     # ### end Alembic commands ###
+    connection = op.get_bind()
+
+    connection.execute("""
+        UPDATE custom_form_result
+           SET introductions = 0
+         WHERE introductions is NULL
+    """)
 
 
 def downgrade():

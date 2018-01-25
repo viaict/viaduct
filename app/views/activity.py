@@ -93,14 +93,14 @@ def get_activity(activity_id=0):
 
     auto_open_register_pane = False
 
-    def render(read_only_extra_attendees=False):
+    def render(num_extra_attendees=None):
         can_write = role_service.user_has_role(current_user,
                                                Roles.ACTIVITY_WRITE)
         return render_template(
             'activity/view_single.htm', activity=activity, form=form,
             login_form=SignInForm(), title=activity.name,
             auto_open_register=auto_open_register_pane, can_write=can_write,
-            read_only_extra_attendees=read_only_extra_attendees)
+            num_extra_attendees=num_extra_attendees)
 
     # Check if there is a custom_form for this activity
     if not activity.form_id:
@@ -115,12 +115,8 @@ def get_activity(activity_id=0):
                           "member, please contact the board.")
         return render()
 
-    # Count current attendants for "reserved" message
-    entries = CustomFormResult.query.filter(CustomFormResult.form_id ==
-                                            activity.form_id)
-    # TODO Check the extra attendees and add these to the entries.count()
-    activity.num_attendants = entries.count()
-    over_max_registrations = activity.num_attendants >= \
+    # Check all attendees including extra attendees
+    over_max_registrations = activity.form.attendants >= \
         activity.form.max_attendants
 
     all_form_results = CustomFormResult.query \
@@ -158,9 +154,9 @@ def get_activity(activity_id=0):
         not form_result.has_paid
 
     if is_attending:
-        read_only = True
+        introductions = form_result.introductions
     else:
-        read_only = False
+        introductions = None
 
     if payment_required:
         form.show_pay_button = True
@@ -187,7 +183,7 @@ def get_activity(activity_id=0):
                           "number of registrations. You have been "
                           "placed on the reserves list.")
 
-    return render(read_only_extra_attendees=read_only)
+    return render(num_extra_attendees=introductions)
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
