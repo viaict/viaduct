@@ -122,7 +122,12 @@
                                     {% endif %}
                                     {% if activity.form.introductions > 0 %}
                                         <div class="col-md-7">
-                                            {{ render_field(form.introductions) }}
+                                            {% if read_only_extra_attendees %}
+                                                {{ render_field_disabled(form.introductions) }}
+                                                <span class="label label-info">{{_("You cannot change the amount of extra attendees")}}</span>
+                                            {% else %}
+                                                {{ render_field(form.introductions) }}
+                                            {% endif %}
                                         </div>
                                     {% endif %}
                                 </div>

@@ -93,14 +93,14 @@ def get_activity(activity_id=0):
 
     auto_open_register_pane = False
 
-    def render():
+    def render(read_only_extra_attendees=False):
         can_write = role_service.user_has_role(current_user,
                                                Roles.ACTIVITY_WRITE)
-        return render_template('activity/view_single.htm', activity=activity,
-                               form=form, login_form=SignInForm(),
-                               title=activity.name,
-                               auto_open_register=auto_open_register_pane,
-                               can_write=can_write)
+        return render_template(
+            'activity/view_single.htm', activity=activity, form=form,
+            login_form=SignInForm(), title=activity.name,
+            auto_open_register=auto_open_register_pane, can_write=can_write,
+            read_only_extra_attendees=read_only_extra_attendees)
 
     # Check if there is a custom_form for this activity
     if not activity.form_id:
@@ -157,6 +157,11 @@ def get_activity(activity_id=0):
     payment_required = form_costs_money and is_attending and \
         not form_result.has_paid
 
+    if is_attending:
+        read_only = True
+    else:
+        read_only = False
+
     if payment_required:
         form.show_pay_button = True
         form.form_result = form_result
@@ -182,7 +187,7 @@ def get_activity(activity_id=0):
                           "number of registrations. You have been "
                           "placed on the reserves list.")
 
-    return render()
+    return render(read_only_extra_attendees=read_only)
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])

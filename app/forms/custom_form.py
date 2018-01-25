@@ -9,7 +9,7 @@ from app.forms.fields import DecimalField, EmailField
 class CreateForm(FlaskForm):
     name = StringField(_('Form name'), validators=[InputRequired()])
     max_attendants = StringField(_('Max number of attendants'))
-    introductions = SelectField(_('Number of extra attendants'),
+    introductions = SelectField(_('Number of extra attendants allowed'),
                                 choices=[(0, _('None'))] +
                                 [(x, "+%d" % x) for x in range(1, 11)],
                                 default=(0, _('None')))
