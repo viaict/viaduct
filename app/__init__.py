@@ -12,7 +12,7 @@ from app.utils.import_module import import_module
 from .extensions import db, login_manager, \
     cache, toolbar, jsglue, sentry
 
-version = 'v2.9.1.0'
+version = 'v2.9.2.0'
 
 
 def static_url(url):
