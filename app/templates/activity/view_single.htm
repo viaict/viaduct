@@ -122,7 +122,7 @@
                                     {% endif %}
                                     {% if activity.form.introductions > 0 %}
                                         <div class="col-md-7">
-                                            {% if num_extra_attendees is defined %}
+                                            {% if num_extra_attendees is defined and num_extra_attendees != None %}
                                                 <label>{{_('Number of extra attendants')}}: +{{ num_extra_attendees }}</label>
                                             {% else %}
                                                 {{ render_field(form.introductions) }}

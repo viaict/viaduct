@@ -87,9 +87,10 @@ def get_activity(activity_id=0):
     form.education_id.choices = [(e.id, e.name) for e in educations]
 
     # Set the number of extra attendees
-    form.introductions.choices = [(0, _('None'))] + [
-        (x, "+%d" % x) for x in range(1, activity.form.introductions + 1)]
-    form.introductions.default = (0, _('None'))
+    if activity.form:
+        form.introductions.choices = [(0, _('None'))] + [
+            (x, "+%d" % x) for x in range(1, activity.form.introductions + 1)]
+        form.introductions.default = (0, _('None'))
 
     auto_open_register_pane = False
 
