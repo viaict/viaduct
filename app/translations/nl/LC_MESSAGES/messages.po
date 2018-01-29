@@ -817,8 +817,11 @@ msgstr "Logo"
 msgid "Mailing list"
 msgstr "Mailinglijst"
 
-msgid "Max number of attendents"
+msgid "Max number of attendants"
 msgstr "Maximaal aantal aanwezigen"
+
+msgid "Number of extra attendants"
+msgstr "Aantal introducees"
 
 msgid "Member"
 msgstr "Lid"

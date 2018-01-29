@@ -18,7 +18,7 @@ from .extensions import db, login_manager, \
     cache, toolbar, jsglue, sentry, oauth, cors
 from .connexion_app import ConnexionFlaskApp
 
-version = 'v2.9.1.0'
+version = 'v2.9.2.0'
 
 
 def static_url(url):

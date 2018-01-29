@@ -50,6 +50,7 @@ def view_single(form_id=None):
     from urllib.parse import unquote_plus
     from urllib.parse import parse_qs
 
+    attendants = 0
     for entry in entries:
         # Hide form entries from non existing users
         data = parse_qs(entry.data)
@@ -58,13 +59,18 @@ def view_single(form_id=None):
         time = entry.created.strftime(app.config['DT_FORMAT']) if \
             entry.created is not None else ""
 
+        # Get the total number of attendants including extra attendees
+        attendants = attendants + 1 + entry.introductions
+
         # Append the results with a single entry
         results.append({
             'id': entry.id,
             'owner': entry.owner,
             'data': data,
             'has_paid': entry.has_paid,
-            'time': time
+            'time': time,
+            'introductions': entry.introductions,
+            'is_reserve': attendants > custom_form.max_attendants
         })
 
     custom_form.results = results
@@ -147,6 +153,7 @@ def create(form_id=None):
         custom_form.html = form.html.data
         custom_form.msg_success = form.msg_success.data
         custom_form.max_attendants = form.max_attendants.data
+        custom_form.introductions = form.introductions.data
         if form.price.data is None:
             form.price.data = 0.0
         custom_form.price = form.price.data
@@ -293,15 +300,21 @@ def submit(form_id=-1):
     else:
         entries = CustomFormResult.query \
             .filter(CustomFormResult.form_id == form_id)
-        num_attendants = entries.count()
+        num_attendants = sum(entry.introductions + 1 for entry in
+                             entries.all())
+        num_introduce = min(int(request.form.get('introductions', 0)),
+                            custom_form.introductions)
 
         result = CustomFormResult(current_user.id, form_id,
-                                  request.form['data'])
+                                  request.form['data'],
+                                  introductions=num_introduce)
 
         # Check if number attendants allows another registration
         if num_attendants >= custom_form.max_attendants:
             # Create "Reserve" signup
             response = "reserve"
+        elif num_introduce > custom_form.introductions:
+            response = "edit"
         else:
             copernica_data = {
                 "Naam": custom_form.name,

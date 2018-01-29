@@ -23,14 +23,15 @@
             <th>Gebruiker</th>
             <th>Informatie</th>
             <th>Datum aanmelding</th>
+            <th>Introducees</th>
             <th>Betaald</th>
             <th></th>
         </tr>
     </thead>
 
     <tbody>
-        {% for i, result in enumerate(custom_form.results) %}
-            <tr {% if i >= custom_form.max_attendants %}
+        {% for result in custom_form.results %}
+            <tr {% if result.is_reserve %}
                     {{ 'class=is_reserve' }}
                 {% endif %}>
                 <td><img src='{{ UserAPI.avatar(result.owner) }}' class='img-responsive thumbnail' style='width: 50px;' /></td>
@@ -65,6 +66,7 @@
                     </dl>
                 </td>
                 <td>{{ result.time }}</td>
+                <td>+{{ result.introductions }}</td>
                 <td>
                     <button id="{{ result.id }}" title="Gebruiker als betaald aan- / afvinken" class="btn btn-sm btn-success has_paid">
                         {% if result.has_paid %}
