@@ -14,9 +14,9 @@ from app.exceptions import ResourceNotFoundException, ValidationException, \
     AuthorizationException
 from app.roles import Roles
 from app.utils.import_module import import_module
+from .connexion_app import ConnexionFlaskApp
 from .extensions import db, login_manager, \
     cache, toolbar, jsglue, sentry, oauth, cors
-from .connexion_app import ConnexionFlaskApp
 
 version = 'v2.9.2.0'
 
@@ -36,7 +36,7 @@ def is_module(path):
     return False
 
 
-def register_views(app, path, extension=''):
+def register_views(app, path):
     app_path = os.path.dirname(os.path.abspath(app.root_path))
 
     for filename in os.listdir(path):

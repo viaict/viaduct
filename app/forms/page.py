@@ -1,9 +1,8 @@
 from flask_babel import lazy_gettext as _
 from flask_wtf import FlaskForm
-from wtforms import Form as UnsafeForm
 from wtforms import BooleanField, StringField, TextAreaField, FieldList, \
     SelectField, SubmitField, RadioField, FormField, IntegerField
-
+from wtforms import Form as UnsafeForm
 from wtforms.validators import InputRequired, Regexp, Optional
 
 
@@ -35,7 +34,6 @@ class PageForm(SuperPageForm):
         # Validate all other fields with default validators
         if not SuperPageForm.validate(self):
             return False
-        result = True
 
         # Test if either english or dutch is entered
         result = True
