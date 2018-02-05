@@ -24,7 +24,6 @@ def find_all_roles_by_group_id(group_id):
 
 def delete_roles_by_group(group_id, removed_roles):
     roles = [role.name for role in removed_roles]
-    print(roles)
     db.session.query(GroupRole).filter(
         GroupRole.group_id == group_id,
         GroupRole.role.in_(roles)
