@@ -22,7 +22,6 @@ from app.forms.user import (EditUserForm, EditUserInfoForm, SignUpForm,
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult, CustomForm
 from app.models.education import Education
-from app.models.group import Group
 from app.models.user import User
 from app.roles import Roles
 from app.service import password_reset_service, user_service
@@ -184,7 +183,7 @@ def edit(user_id=None):
                 flash(_('According to Google this email does not exist. '
                         'Please use an email that does.'), 'danger')
                 return edit_page()
-            raise (e)
+            raise e
 
         user.first_name = form.first_name.data.strip()
         user.last_name = form.last_name.data.strip()
@@ -210,10 +209,6 @@ def edit(user_id=None):
         if form.password.data != '':
             user.password = bcrypt.hashpw(form.password.data, bcrypt.gensalt())
 
-        group = Group.query.filter(Group.name == 'all').first()
-        group.add_user(user)
-
-        db.session.add(group)
         db.session.add(user)
         db.session.commit()
 
@@ -306,9 +301,9 @@ def sign_in():
             flash(_('Hey %(name)s, you\'re now logged in!',
                     name=current_user.first_name), 'success')
 
-            next = request.args.get("next", '')
-            if next and next.startswith("/"):
-                return redirect(next)
+            next_ = request.args.get("next", '')
+            if next_ and next_.startswith("/"):
+                return redirect(next_)
 
             # If referer is empty for some reason (browser policy, user entered
             # address in address bar, etc.), use empty string

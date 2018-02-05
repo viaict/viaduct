@@ -3,11 +3,11 @@ import logging
 from email.mime.text import MIMEText
 
 import httplib2
-from apiclient import errors
-from apiclient.discovery import build
-from apiclient.errors import HttpError
-from oauth2client.service_account import ServiceAccountCredentials
 from flask import flash, render_template
+from googleapiclient import errors
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+from oauth2client.service_account import ServiceAccountCredentials
 
 from app import app, sentry
 
@@ -170,7 +170,7 @@ def create_group_if_not_exists(groupname, listname):
     except HttpError as e:
         if e.resp.status != 409:
             # Something else went wrong than the list already existing
-            raise(e)
+            raise e
 
 
 def add_email_to_group(email, listname):
@@ -205,7 +205,7 @@ def remove_email_from_group_if_exists(email, listname):
             return
         if e.resp.status == 404:
             return
-        raise(e)
+        raise e
 
 
 def send_email(to, subject, email_template,

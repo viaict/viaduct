@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2018-01-13 12:24+0100\n"
+"POT-Creation-Date: 2018-01-16 00:14+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.4\n"
+"Generated-By: Babel 2.5.1\n"
 
 #, python-format
 msgid "%(email)s is unknown to our system."
@@ -380,7 +380,10 @@ msgid "Current avatar"
 msgstr "Huidige avatar"
 
 msgid "Custom URL"
-msgstr ""
+msgstr "Aangepaste URL"
+
+msgid "DOMjudge administrator"
+msgstr "DOMjudge administrator"
 
 msgid "Date"
 msgstr "Datum"
@@ -490,8 +493,20 @@ msgstr "E-mail type"
 msgid "Edit"
 msgstr "Aanpassen"
 
+msgid "Edit ALVs"
+msgstr "Bewerken ALVs"
+
 msgid "Edit GA"
 msgstr "ALV aanpassen"
+
+msgid "Edit Pimpy"
+msgstr "Bewerken Pimpy"
+
+msgid "Edit activities"
+msgstr "Bewerken activiteiten"
+
+msgid "Edit challenges"
+msgstr "Bewerken challenges"
 
 msgid "Edit course"
 msgstr "Vak aanpassen"
@@ -499,11 +514,32 @@ msgstr "Vak aanpassen"
 msgid "Edit education"
 msgstr "Opleiding aanpassen"
 
+msgid "Edit elections"
+msgstr "Bewerken verkiezingen"
+
 msgid "Edit examination"
 msgstr "Tentamen aanpassen"
 
+msgid "Edit examinations"
+msgstr "Bewerken tentamens"
+
+msgid "Edit files"
+msgstr "Bewerken bestanden"
+
 msgid "Edit group"
 msgstr "Groep aanpassen"
+
+msgid "Edit group permissions"
+msgstr "Bewerken groepsrechten"
+
+msgid "Edit groups"
+msgstr "Bewerken groepen"
+
+msgid "Edit navigation and redirect"
+msgstr "Bewerken navigation en redirect"
+
+msgid "Edit news"
+msgstr "Bewerken nieuws"
 
 msgid "Edit news item"
 msgstr "Nieuwsbericht aanpassen"
@@ -514,8 +550,20 @@ msgstr "Nieuwsbrief aanpassen"
 msgid "Edit page"
 msgstr "Pagina aanpassen"
 
+msgid "Edit pages"
+msgstr "Bewerken paginas"
+
+msgid "Edit search-engine optimizations"
+msgstr "Bewerken search-engine optimizations"
+
+msgid "Edit user"
+msgstr "Bewerken gebruiker"
+
 msgid "Edit user permissions"
 msgstr "Wijzig gebruikersrechten"
+
+msgid "Edit vacancy"
+msgstr "Bewerken vacature"
 
 msgid "Education"
 msgstr "Opleiding"
@@ -1064,11 +1112,29 @@ msgstr "Rang"
 msgid "Read"
 msgstr "Lees"
 
+msgid "Read Pimpy"
+msgstr "Lezen pimpy"
+
 msgid "Read access to your Pimpy data"
 msgstr "Lees rechten tot je Pimpy data"
 
+msgid "Read files"
+msgstr "Lezen bestanden"
+
+msgid "Read groups"
+msgstr "Lezen groepen"
+
+msgid "Read mollie payments"
+msgstr "Lezen mollie betalingen"
+
 msgid "Read more"
 msgstr "Meer lezen"
+
+msgid "Read user"
+msgstr "Lezen gebruiker"
+
+msgid "Read vacancy"
+msgstr "Lezen vacature"
 
 msgid "Read/Write"
 msgstr "Lees/Schrijf"
@@ -1129,6 +1195,9 @@ msgstr "Run Fout"
 
 msgid "Save"
 msgstr "Opslaan"
+
+msgid "Scopes"
+msgstr ""
 
 msgid "Scoreboard"
 msgstr "Scorebord"
@@ -1335,6 +1404,9 @@ msgstr "De pagina die je probeerde te verwijderen bestaat niet"
 
 msgid "The password you entered appears to be incorrect."
 msgstr "Het opgegeven wachtwoord lijkt incorrect."
+
+msgid "The roles have been updated."
+msgstr "De rollen zijn geupdate."
 
 msgid "The scopes required by your application"
 msgstr ""
@@ -2047,4 +2119,10 @@ msgstr ""
 
 #~ msgid "Repeat password"
 #~ msgstr "Herhaal wachtwoord"
+
+#~ msgid "Ability to create ALVs"
+#~ msgstr ""
+
+#~ msgid "Ability to create activities"
+#~ msgstr ""
 
