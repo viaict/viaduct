@@ -68,6 +68,7 @@ def default_detailed_exception_handler(e):
     return internal_server_error(e)
 
 
+@app.errorhandler(401)
 @app.errorhandler(403)
 @add_api_error_handler
 def permission_denied(_):

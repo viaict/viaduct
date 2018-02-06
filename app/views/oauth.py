@@ -1,5 +1,5 @@
 from flask import request, Blueprint, render_template, url_for, redirect, \
-    flash, jsonify
+    flash
 from flask_babel import _
 from flask_login import login_required, current_user
 
@@ -10,6 +10,20 @@ from app.oauth_scopes import Scopes
 from app.service import oauth_service
 
 blueprint = Blueprint('oauth', __name__, url_prefix='/oauth')
+
+
+def token_info(_):
+    valid, req = oauth.verify_request([])
+    if valid:
+        return {"active": "true",
+                "scope": req.access_token.scopes,
+                "username": req.user.email,
+                "expires": req.access_token.expires,
+                "client_id": req.client.client_id,
+                "first_name": req.user.first_name,
+                "last_name": req.user.last_name
+                }
+    return None
 
 
 @blueprint.route('/authorize/', methods=['GET', 'POST'])
@@ -39,24 +53,6 @@ def access_token():
 @oauth.revoke_handler
 def revoke_token():
     pass
-
-
-@blueprint.route("/token/info/")
-@oauth.require_oauth()
-def token_info():
-    return jsonify({"active": "true",
-                    "scope": request.oauth.access_token.scopes,
-                    "username": request.oauth.user.email,
-                    "expires": request.oauth.access_token.expires,
-                    "client_id": request.oauth.client.client_id,
-                    "first_name": request.oauth.user.first_name,
-                    "last_name": request.oauth.user.last_name
-                    })
-
-
-@oauth.invalid_response
-def invalid_token_info(request):
-    return jsonify({"active": "false"})
 
 
 @blueprint.route("/errors/", methods=['GET'])
