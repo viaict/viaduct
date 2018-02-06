@@ -18,7 +18,7 @@
     {% if nav_entries %}
         <div id="outer" class="sortable col-md-6">
             {% for entry in nav_entries %}
-                {{ render_entry_list(entry) }}
+                {{ render_entry_list(entry, can_write) }}
             {% endfor %}
         </div>
     {% endif %}

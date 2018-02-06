@@ -1,11 +1,11 @@
-{% macro render_entry_list(entry) %}
+{% macro render_entry_list(entry, can_write) %}
 	<div class="nav_entry" data-entry-id="{{ entry.id }}">
 			<span class="sortable_handler">
 				<i class="glyphicon glyphicon-move"></i>
 			</span>	
 			{{ entry.title }}
 
-		{% if can_write %}		
+		{% if can_write %}
 			<a class="btn btn-success pull-right" href="{{ url_for('navigation.edit', parent_id=entry.id) }}">
 				<i class="glyphicon glyphicon-plus"></i>
 			</a>
@@ -22,7 +22,7 @@
 
 		<div class="sortable">
 			{% for child in entry.children %}
-				{{ render_entry_list(child) }}
+				{{ render_entry_list(child, can_write) }}
 			{% endfor %}
 		</div>
 	</div>
