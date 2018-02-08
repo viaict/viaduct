@@ -3,8 +3,8 @@ import re
 from flask import request
 
 from app.models.activity import Activity
-from app.models.page import Page
 from app.models.seo import SEO
+from app.service import page_service
 
 
 def get_seo_fields(language='nl', module_name=None, request_path=None):
@@ -33,7 +33,7 @@ def get_seo_fields(language='nl', module_name=None, request_path=None):
     elif module_name == "page":
         # Retrieve the page for its id
         path = request_path[1:]
-        page = Page.get_by_path(path)
+        page = page_service.get_page_by_path(path)
 
         # Retrieve the revision by page id
         if page is not None:
@@ -93,7 +93,7 @@ def get_seo(module_name=None, request_path=None):
     elif module_name == "page":
         # Retrieve the page for its id
         path = request_path[1:]
-        page = Page.get_by_path(path)
+        page = page_service.get_page_by_path(path)
 
         # Retrieve the revision by page id
         if page is not None:
@@ -138,7 +138,7 @@ def get_resources(module_name=None, request_path=None):
     elif module_name == "page":
         # Retrieve the page for its id
         path = request_path[1:]
-        page = Page.get_by_path(path)
+        page = page_service.get_page_by_path(path)
 
         # Retrieve the revision by page id
         if page is not None:

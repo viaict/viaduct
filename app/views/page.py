@@ -20,7 +20,6 @@ from app.roles import Roles
 from app.service import role_service, page_service
 from app.utils.forms import flash_form_errors
 from app.utils.htmldiff import htmldiff
-from app.utils.page import PageAPI
 
 blueprint = Blueprint('page', __name__)
 
@@ -28,7 +27,7 @@ blueprint = Blueprint('page', __name__)
 @blueprint.route('/<path:path>', methods=['GET', 'POST'])
 def get_page(path=''):
     path = Page.strip_path(path)
-    page = Page.get_by_path(path)
+    page = page_service.get_page_by_path(path)
 
     if not page:
         # Try if this might be a redirect.
@@ -50,7 +49,7 @@ def get_page(path=''):
 
         return abort(404)
 
-    if not PageAPI.can_read(page):
+    if not page_service.can_user_read_page(page, current_user):
         return abort(403)
 
     revision = page.get_latest_revision()
@@ -80,12 +79,12 @@ def get_page(path=''):
 def get_page_history(path=''):
     form = HistoryPageForm(request.form)
 
-    page = Page.get_by_path(path)
+    page = page_service.get_page_by_path(path)
 
     if not page:
         return abort(404)
 
-    if not PageAPI.can_write(page):
+    if not page_service.can_user_write_page(page, current_user):
         return abort(403)
 
     revisions = page.revision_cls.get_query()\
@@ -119,7 +118,7 @@ def get_page_history(path=''):
 @require_role(Roles.PAGE_WRITE)
 def edit_page(path=''):
 
-    page = Page.get_by_path(path)
+    page = page_service.get_page_by_path(path)
 
     if page:
         revision = page.get_latest_revision()
@@ -183,7 +182,7 @@ def edit_page(path=''):
 @require_role(Roles.PAGE_WRITE)
 def delete(path):
 
-    page = Page.get_by_path(path)
+    page = page_service.get_page_by_path(path)
     if not page:
         flash(_('The page you tried to delete does not exist.'), 'danger')
         return redirect(url_for('page.get_page', path=path))

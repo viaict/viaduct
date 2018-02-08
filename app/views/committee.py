@@ -14,6 +14,7 @@ from app.models.page import Page
 from app.models.page import PagePermission
 from app.models.user import User
 from app.roles import Roles
+from app.service import page_service
 from app.utils.navigation import NavigationAPI
 
 blueprint = Blueprint('committee', __name__)
@@ -30,7 +31,7 @@ def list():
 def edit_committee(committee=''):
     path = 'commissie/' + committee
 
-    page = Page.get_by_path(path)
+    page = page_service.get_page_by_path(path)
 
     form = request.form
     if page:

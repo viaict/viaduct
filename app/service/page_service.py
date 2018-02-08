@@ -1,3 +1,4 @@
+from app.models.page import PagePermission
 from app.repository import page_repository
 
 
@@ -19,3 +20,26 @@ def set_page_permissions(page, new_groups, permission_type):
 def get_permission_groups_by_page(page, permission_type):
     return page_repository.get_permission_groups_by_page(
         page, permission_type.value)
+
+
+def can_user_read_page(page, user):
+    return (PagePermission.get_user_rights(user, page) >=
+            PagePermission.Level.read)
+
+
+def can_user_write_page(page, user):
+    return (PagePermission.get_user_rights(user, page) >=
+            PagePermission.Level.write)
+
+
+def get_page_by_path(path):
+    return page_repository.get_page_by_path(path)
+
+
+def delete_page_by_path(path):
+    page = page_repository.get_page_by_path(path)
+    if not page:
+        return False
+    else:
+        page_repository.delete_page(page)
+    return True

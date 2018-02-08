@@ -65,10 +65,6 @@ class Page(db.Model, BaseEntity):
     def strip_path(path):
         return path.rstrip('/')
 
-    @staticmethod
-    def get_by_path(path):
-        return Page.query.filter(Page.path == path).first()
-
 
 @event.listens_for(Page, 'load')
 def set_revision_class(page, context):
