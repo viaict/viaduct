@@ -1,7 +1,7 @@
 from flask_login import current_user
-from app.models.page import Page, PagePermission
 
 from app import db
+from app.models.page import Page, PagePermission
 
 
 class PageAPI:
@@ -18,8 +18,10 @@ class PageAPI:
 
     @staticmethod
     def can_read(page):
-        return PagePermission.get_user_rights(current_user, page) > 0
+        return (PagePermission.get_user_rights(current_user, page) >=
+                PagePermission.Level.read)
 
     @staticmethod
     def can_write(page):
-        return PagePermission.get_user_rights(current_user, page) > 1
+        return (PagePermission.get_user_rights(current_user, page) >=
+                PagePermission.Level.write)

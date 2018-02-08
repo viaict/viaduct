@@ -1,6 +1,9 @@
 import sys
-from sqlalchemy import event
+from enum import IntEnum
+
 from flask_babel import lazy_gettext as _
+from sqlalchemy import event
+
 from app import db, get_locale
 from app.models.base_model import BaseEntity
 
@@ -186,74 +189,46 @@ class PagePermission(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     permission = db.Column(db.Integer)
-    page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
+    group = db.relationship('Group')
 
+    page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
     page = db.relationship('Page', backref=db.backref('permissions',
                                                       lazy='joined'))
 
-    def __init__(self, group_id, page_id, permission=0):
-        self.permission = permission
-        self.group_id = group_id
-        self.page_id = page_id
+    class Level(IntEnum):
+        deny = 0
+        read = 1
+        write = 2
 
     @staticmethod
     def get_user_rights(user, page):
         if not page:
-            return 0
+            return PagePermission.Level.deny
 
         if user.is_anonymous:
             if page.needs_paid:
-                return 0
+                return PagePermission.Level.deny
             else:
-                return 1
+                return PagePermission.Level.read
 
         if not user.has_paid and page.needs_paid:
-            return 0
+            return PagePermission.Level.deny
 
-        rights = 0
+        rights = PagePermission.Level.deny
         for group in user.groups:
             if group.name == 'administrators':
-                return 2
+                return PagePermission.Level.write
 
             try:
                 permissions = next(perm for perm in page.permissions
                                    if perm.group_id == group.id)
 
                 if permissions.permission >= 2:
-                    return permissions.permission
+                    return PagePermission.Level.write
                 elif permissions.permission > rights:
                     rights = permissions.permission
             except StopIteration:
                 pass
 
         return rights
-
-
-# This class is not used at all in viaduct
-# class IdRevision(SuperRevision):
-#     """Class that page types can inherit from to let their pages to work with
-#     id's instead of paths."""
-#     __abstract__ = True
-#
-#     instance_id = db.Column(db.Integer)
-#
-#     def __init__(self, title, comment, instance_id):
-#         """Initialization. Don't forget to call
-#         `super().__init__(title, comment, instance_id)`."""
-#         super(IdRevision, self).__init__(title, comment)
-#
-#         self.instance_id = instance_id
-#
-#     def get_path(self):
-#         return '/%s/%d/' % (self.page.type, self.instance_id)
-#
-#     @classmethod
-#     def get_new_id(cls):
-#         first = cls.get_query().first()
-#
-#         return first.instance_id + 1 if first else 1
-#
-#     @classmethod
-#     def get_latest(cls, instance_id):
-#         return cls.get_query().filter(cls.instance_id == instance_id).first()
