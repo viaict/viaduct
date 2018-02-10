@@ -70,6 +70,10 @@ class CustomForm(db.Model, BaseEntity):
             'label': 'Form resultaat',
             'export': export_form_data,
             'on_by_default': False,
+        }), ('introductions', {
+            'label': 'Introducees',
+            'export': lambda r: r.introductions,
+            'on_by_default': True,
         })])
 
     def __init__(self, owner_id=None, name="", origin="", html="",
