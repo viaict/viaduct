@@ -9,7 +9,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from oauth2client.service_account import ServiceAccountCredentials
 
-from app import app, sentry
+from app import app
 
 # google calendar Settings > via_events > id
 calendar_id = app.config['GOOGLE_CALENDAR_ID']
@@ -38,8 +38,7 @@ def build_service(service_type, api_version, scope):
 
         return build(service_type, api_version, http=http)
     except Exception as e:
-        _logger.error(e)
-        sentry.captureException()
+        _logger.error(e, exc_info=True)
         return None
 
 
@@ -87,8 +86,7 @@ def insert_activity(title="", description='', location="VIA kamer", start="",
                 .insert(calendarId=calendar_id, body=event) \
                 .execute()
         except Exception as e:
-            _logger.error(e)
-            sentry.captureException()
+            _logger.error(e, exc_info=True)
             flash('Er ging iets mis met het toevogen van het event aan de'
                   'Google Calender')
             return None
@@ -113,8 +111,7 @@ def update_activity(event_id, title="", description='', location="VIA Kamer",
                 .update(calendarId=calendar_id, eventId=event_id, body=event) \
                 .execute()
         except Exception as e:
-            _logger.error(e)
-            sentry.captureException()
+            _logger.error(e, exc_info=True)
             return insert_activity(title, description, location, start, end)
 
 
@@ -128,8 +125,7 @@ def delete_activity(event_id):
                 .delete(calendarId=calendar_id, eventId=event_id) \
                 .execute()
         except Exception as e:
-            sentry.captureException()
-            _logger.error(e)
+            _logger.error(e, exc_info=True)
             flash('Er ging iets mis met het verwijderen van het event uit de'
                   'Google Calender, het kan zijn dat ie al verwijderd was')
 
@@ -188,8 +184,7 @@ def add_email_to_group_if_not_exists(email, listname):
     except HttpError as e:
         if e.resp.status != 409:
             # Something else went wrong than the list already existing
-            sentry.captureException()
-            _logger.error(e)
+            _logger.error(e, exc_info=True)
             flash('Something went wrong while updating the users'
                   ' on the mailing list.')
 
@@ -232,8 +227,7 @@ def send_email(to, subject, email_template,
     try:
         email = (service.users().messages().send(userId=user_id, body=body)
                  .execute())
-        _logger.info('Sent e-mailmessage Id: %s' % email['id'])
+        _logger.info('Sent e-mailmessage Id: {}'.format(email['id']))
         return email
     except errors.HttpError as e:
-        _logger.warning(e)
-        sentry.captureException()
+        _logger.warning(e, exc_info=True)
