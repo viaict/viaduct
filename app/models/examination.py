@@ -1,5 +1,3 @@
-import datetime
-
 from flask_babel import lazy_gettext as _
 
 from app import db
@@ -41,15 +39,3 @@ class Examination(db.Model, BaseEntity):
     education = db.relationship(Education,
                                 backref=db.backref('examinations',
                                                    lazy='dynamic'))
-
-    def __init__(self, path, date, comment, course_id, education_id,
-                 timestamp=datetime.datetime.utcnow(), answers='',
-                 test_type=test_type_default):
-        self.timestamp = timestamp
-        self.path = path
-        self.date = date
-        self.comment = comment
-        self.course_id = course_id
-        self.education_id = education_id
-        self.answer_path = answers
-        self.test_type = test_type

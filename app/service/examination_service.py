@@ -1,10 +1,14 @@
 from app.repository import examination_repository
 from app.exceptions import ResourceNotFoundException, BusinessRuleException, \
     DuplicateResourceException
+import datetime
 
 
 def get_examination_by_id(examination_id):
-    return examination_repository.find_examination_by_id(examination_id)
+    exam = examination_repository.find_examination_by_id(examination_id)
+    if not exam:
+        raise ResourceNotFoundException("Examination", examination_id)
+    return exam
 
 
 def get_education_by_id(education_id):
@@ -36,8 +40,17 @@ def find_all_examinations_by_course(course_id):
 
 def find_all_examinations_by_education(education_id):
     get_education_by_id(education_id)
-    return examination_repository.\
-        find_all_examinations_by_education(education_id)
+    return examination_repository\
+        .find_all_examinations_by_education(education_id)
+
+
+def find_all_examinations(page_nr, per_page):
+    return examination_repository.find_all_examinations(page_nr, per_page)
+
+
+def search_examinations_by_courses(courses, page_nr, per_page):
+    return examination_repository\
+        .search_examinations_by_courses(courses, page_nr, per_page)
 
 
 def add_course(name, description):
@@ -63,18 +76,38 @@ def add_education(name):
     examination_repository.save_education(education)
 
 
-def create_education(exam):
-    examination_repository.create_education(exam)
-    pass
+def add_examination(path, date, comment, course_id, education_id, answers,
+                    test_type):
+    exam = examination_repository.create_examination()
+
+    exam.timestamp = datetime.datetime.utcnow()
+    exam.path = path
+    exam.path = path
+    exam.date = date
+    exam.comment = comment
+    exam.course_id = course_id
+    exam.education_id = education_id
+    exam.answer_path = answers
+    exam.test_type = test_type
+
+    examination_repository.save_examination(exam)
 
 
-def create_course(course):
-    examination_repository.create_course(course)
+def update_examination(exam_id, path, date, comment, course_id, education_id,
+                       answers, test_type):
+    exam = examination_repository.find_examination_by_id(exam_id)
 
+    exam.timestamp = datetime.datetime.utcnow()
+    exam.path = path
+    exam.path = path
+    exam.date = date
+    exam.comment = comment
+    exam.course_id = course_id
+    exam.education_id = education_id
+    exam.answer_path = answers
+    exam.test_type = test_type
 
-def update_examination(examination_id, exam_file, answer_file,
-                       type, date, comment):
-    pass
+    examination_repository.save_education(exam)
 
 
 def update_education(education_id, name):
@@ -98,8 +131,8 @@ def update_course(course_id, name, description):
     examination_repository.save_course(course)
 
 
-def delete_examination():
-    pass
+def delete_examination(examination_id):
+    examination_repository.delete_examination(examination_id)
 
 
 def count_examinations_by_course(course_id):
