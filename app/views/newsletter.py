@@ -10,7 +10,8 @@ from app import app, db
 from app.decorators import require_role
 from app.forms.newsletter import NewsletterForm
 from app.models.news import News
-from app.models.newsletter import Newsletter
+from app.models.newsletter import Newsletter, \
+    NewsletterActivity, NewsletterNewsItem
 from app.roles import Roles
 
 blueprint = Blueprint('newsletter', __name__, url_prefix='/newsletter')
@@ -29,14 +30,27 @@ def all():
 @blueprint.route('/edit/<int:newsletter_id>/', methods=['GET', 'POST'])
 @require_role(Roles.NEWS_WRITE)
 def edit(newsletter_id=None):
+    form = NewsletterForm(request.form)
+
     if newsletter_id:
         newsletter = Newsletter.query.get_or_404(newsletter_id)
     else:
         newsletter = Newsletter()
 
-    form = NewsletterForm(request.form, obj=newsletter)
+    if request.method == 'GET':
+        form.activities.data = [a.activity for a in newsletter.activities]
+        form.news_items.data = [n.news_item for n in newsletter.news_items]
+
     if request.method == 'POST' and form.validate_on_submit():
-        form.populate_obj(newsletter)
+        newsletter.activities.clear()
+        newsletter.news_items.clear()
+
+        for a in form.activities.data:
+            newsletter.activities.append(NewsletterActivity(a))
+
+        for n in form.news_items.data:
+            newsletter.news_items.append(NewsletterNewsItem(n))
+
         db.session.add(newsletter)
         db.session.commit()
 
@@ -106,7 +120,7 @@ def committees_xml():
 @correct_token_provided
 def activities_xml(newsletter_id=None):
     newsletter = get_newsletter(newsletter_id)
-    items = newsletter.activities if newsletter else []
+    items = [a.activity for a in newsletter.activities] if newsletter else []
     return Response(
         render_template('newsletter/activities.xml', items=items),
         mimetype='text/xml')
@@ -117,7 +131,7 @@ def activities_xml(newsletter_id=None):
 @correct_token_provided
 def news_xml(newsletter_id=None):
     newsletter = get_newsletter(newsletter_id)
-    items = newsletter.news_items if newsletter else []
+    items = [n.news_item for n in newsletter.news_items] if newsletter else []
     return Response(
         render_template('newsletter/news.xml', items=items),
         mimetype='text/xml')

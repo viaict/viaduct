@@ -73,10 +73,10 @@
                         <td>{{ newsletter.created.date().isoformat() }}</td>
                         <td>
                             <ul>
-                            {% for activity in newsletter.activities %}
-                                <li><a href="{{ url_for('activity.get_activity', activity_id=activity.id) }}">{{ activity.name }}</a>
-                                {%- if activity.en_name and not activity.nl_name %} (EN){% endif %}
-                                {%- if activity.nl_name and not activity.en_name %} (NL){% endif %}
+                            {% for a in newsletter.activities %}
+                                <li><a href="{{ url_for('activity.get_activity', activity_id=a.activity.id) }}">{{ a.activity.name }}</a>
+                                {%- if a.activity.en_name and not a.activity.nl_name %} (EN){% endif %}
+                                {%- if a.activity.nl_name and not a.activity.en_name %} (NL){% endif %}
                                 </li>
                             {% endfor %}
                             </ul>
@@ -89,10 +89,10 @@
                         </td>
                         <td>
                             <ul>
-                            {% for item in newsletter.news_items %}
-                                <li><a href="{{ url_for('news.view', news_id=item.id) }}">{{ item.title }}</a>
-                                {%- if item.en_title and not item.nl_title %} (EN){% endif %}
-                                {%- if item.nl_title and not item.en_title %} (NL){% endif %}
+                            {% for n in newsletter.news_items %}
+                                <li><a href="{{ url_for('news.view', news_id=n.news_item.id) }}">{{ n.news_item.title }}</a>
+                                {%- if n.news_item.en_title and not n.news_item.nl_title %} (EN){% endif %}
+                                {%- if n.news_item.nl_title and not n.news_item.en_title %} (NL){% endif %}
                                 </li>
                             {% endfor %}
                         </td>
