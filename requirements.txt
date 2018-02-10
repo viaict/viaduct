@@ -82,6 +82,7 @@ speaklater==1.3
 sqlalchemy==1.2.0
 swagger-spec-validator==2.1.0  # via connexion
 unidecode==1.0.22
+typing==3.6.4             # via connexion
 uritemplate==3.0.0        # via google-api-python-client
 urllib3==1.22             # via requests
 validictory==1.1.2
