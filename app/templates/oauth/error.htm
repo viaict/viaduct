@@ -1,0 +1,9 @@
+{% extends 'page/view_super.htm' %}
+
+{% block page_title %}{{ _("Error!") + " " + error }}{% endblock %}
+
+{% block page_content %}
+    <p>
+        {{ description }}
+    </p>
+{% endblock %}

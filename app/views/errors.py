@@ -1,12 +1,17 @@
 import re
+from functools import wraps
 
+import werkzeug.exceptions
+from connexion.apis.flask_api import FlaskApi
+from connexion.exceptions import ProblemException
+from connexion.problem import problem
 from flask import flash, request, url_for, render_template, redirect, \
     session, jsonify
 from flask_babel import _
 from flask_login import current_user
 
 from app import app, login_manager
-from app.exceptions import ResourceNotFoundException
+from app.exceptions import ResourceNotFoundException, DetailedException
 from app.models.page import Page
 from app.roles import Roles
 from app.service import role_service
@@ -21,16 +26,53 @@ def unauthorized():
     return redirect(url_for('user.sign_in'))
 
 
-@app.errorhandler(ResourceNotFoundException)
-def resource_not_found(e):
-    return page_not_found(e)
+def add_api_error_handler(f):
+    @wraps(f)
+    def wrapper(e):
+        if request.path.startswith('/api') or request.is_xhr:
+            return handle_api_error(e)
+
+        return f(e)
+
+    return wrapper
 
 
+def handle_api_error(e):
+    if not isinstance(e, werkzeug.exceptions.HTTPException):
+        e = werkzeug.exceptions.InternalServerError()
+
+    if isinstance(e, DetailedException):
+        return jsonify({"title": e.title,
+                        "status": e.status,
+                        "detail": str(e),
+                        "type": e.type_}), e.status
+
+    response = problem(title=e.name,
+                       detail=e.description,
+                       status=e.code)
+
+    return FlaskApi.get_response(response)
+
+
+@app.errorhandler(ProblemException)
+def connexion_problem_exception_handler(e):
+    return FlaskApi.get_response(e.to_problem())
+
+
+@app.errorhandler(DetailedException)
+@add_api_error_handler
+def default_detailed_exception_handler(e):
+    if isinstance(e, ResourceNotFoundException):
+        return page_not_found(e)
+
+    return internal_server_error(e)
+
+
+@app.errorhandler(401)
 @app.errorhandler(403)
+@add_api_error_handler
 def permission_denied(e):
     """When permission denied and not logged in you will be redirected."""
-    if request.is_xhr:
-        return jsonify('You are not allowed to access this resource'), 403
 
     content = "403, The police has been notified!"
     image = '/static/img/403.jpg'
@@ -46,21 +88,18 @@ def permission_denied(e):
 
 
 @app.errorhandler(500)
-def internal_server_error(e):
-    if request.is_xhr:
-        return jsonify('An internal server error occurred'), 500
+@add_api_error_handler
+def internal_server_error(_):
     return render_template('page/500.htm'), 500
 
 
 @app.errorhandler(404)
-def page_not_found(e):
-    if request.is_xhr:
-        return jsonify('The requested resource could not be found.'), 404
-
+@add_api_error_handler
+def page_not_found(_):
     # Search for file extension.
     if re.match(r'(?:.*)\.[a-zA-Z]{3,}$', request.path):
         return '', 404
 
     page = Page(request.path.lstrip('/'))
-    can_write = role_service.user_has_role(Roles.PAGE_WRITE)
+    can_write = role_service.user_has_role(current_user, Roles.PAGE_WRITE)
     return render_template('page/404.htm', page=page, can_write=can_write), 404

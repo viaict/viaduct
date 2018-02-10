@@ -98,10 +98,20 @@
                             <div id="userInformation">
                                 <h4 class="username">{{ current_user.name }}</h4>
                                 <p>{{ current_user.email }}</p>
-                                <p><a href="{{ url_for('user.view_single', user_id=current_user.id) }}">Profiel weergeven</a></p>
+                                <p>
+                                    <a href="{{ url_for('user.view_single', user_id=current_user.id) }}">{{ _("Show profile") }}</a>
+                                </p>
+                                <p>
+                                    <a href="{{ url_for('user.change_password', user_id=current_user.id) }}">{{ _("Change password") }}</a>
+                                </p>
+                                <p>
+                                    <a href="{{ url_for('oauth.list_clients') }}">{{ _("Connected applications") }}</a>
+                                </p>
                             </div>
                             <div id="logoutButtonContainer">
-                                <a href="{{ url_for('user.sign_out') }}"> <button class="btn btn-primary fullWidth" >Uitloggen</button></a>
+                                <a href="{{ url_for('user.sign_out') }}">
+                                    <button class="btn btn-primary fullWidth">{{ _("Log off") }}</button>
+                                </a>
                             </div>
                           </div>
                            {% endif %}
@@ -128,10 +138,20 @@
                             <div id="userInformationMobile">
                                 <h4 class="username">{{ current_user.name }}</h4>
                                 <p>{{ current_user.email }}</p>
-                                <p><a href="{{ url_for('user.view_single', user_id=current_user.id) }}">Profiel weergeven</a></p>
+                                <p>
+                                    <a href="{{ url_for('user.view_single', user_id=current_user.id) }}">{{ _("Show profile") }}</a>
+                                </p>
+                                <p>
+                                    <a href="{{ url_for('user.change_password', user_id=current_user.id) }}">{{ _("Change password") }}</a>
+                                </p>
+                                <p>
+                                    <a href="{{ url_for('oauth.list_clients') }}">{{ _("Connected applications") }}</a>
+                                </p>
                             </div>
                             <div id="logoutButtonContainerMobile">
-                                <a href="{{ url_for('user.sign_out') }}"> <button class="btn btn-primary fullWidth" >uitloggen</button></a>
+                                <a href="{{ url_for('user.sign_out') }}">
+                                    <button class="btn btn-primary fullWidth">{{ _("Log off") }}</button>
+                                </a>
                             </div>
 
                        {% endif %}

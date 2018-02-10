@@ -885,3 +885,8 @@ $DOMJUDGE_LIGHTGREEN:   #7CD449;
         margin-right: 10px;
     }
 }
+
+/* Fix sentry feedback form */
+.sentry-error-embed * {
+    position: relative;
+}

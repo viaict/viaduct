@@ -2,9 +2,9 @@ from flask_babel import lazy_gettext as _  # gettext
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import StringField, SelectField, TextAreaField, DateTimeField
-from wtforms.validators import InputRequired, Email
+from wtforms.validators import InputRequired
 
-from app.forms.fields import CustomFormSelectField
+from app.forms.fields import CustomFormSelectField, EmailField
 from app.forms.util import FieldTabGroup, FieldTab, FieldVerticalSplit
 
 
@@ -68,10 +68,8 @@ class CreateForm(FlaskForm):
 
 
 class ActivityForm(FlaskForm):
-    email = StringField(
-        _('E-mail address'), validators=[
-            InputRequired(_('E-mail address') + " " + _('required')),
-            Email(_('Invalid e-mail address'))])
+    email = EmailField(
+        _('E-mail address'), validators=[InputRequired()])
     first_name = StringField(
         _('First name'), validators=[
             InputRequired(_('First name') + " " + _('required'))])
@@ -83,3 +81,4 @@ class ActivityForm(FlaskForm):
             InputRequired(_('Student ID') + " " + _('required'))])
     education_id = SelectField(
         _('Education'), coerce=int)
+    introductions = SelectField(_('Number of extra attendants'), coerce=int)

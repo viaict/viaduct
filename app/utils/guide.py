@@ -1,4 +1,5 @@
 from flask import request
+from flask_login import current_user
 
 from app.models.page import Page, PageRevision
 from app.roles import Roles
@@ -23,7 +24,7 @@ class GuideAPI:
             user_revision.title = \
                 'Er is geen user handleiding beschikbaar voor ' + module_name
 
-            if role_service.user_has_role(Roles.PAGE_WRITE):
+            if role_service.user_has_role(current_user, Roles.PAGE_WRITE):
                 user_revision.content = 'Voeg ' +\
                     '<a href="/edit/guides/user/' + module_name + \
                     '"> hier </a> een user handleiding toe.'
@@ -31,7 +32,7 @@ class GuideAPI:
                 user_revision.content = ''
         else:
             user_revision = user_guide.get_latest_revision()
-            if role_service.user_has_role(Roles.PAGE_WRITE):
+            if role_service.user_has_role(current_user, Roles.PAGE_WRITE):
                 user_revision.title += '<a href="/edit/guides/user/' +\
                     module_name + '"> (bewerk) </a>'
 
@@ -49,7 +50,7 @@ class GuideAPI:
             admin_revision.title = \
                 'Er is geen admin handleiding beschikbaar voor ' + \
                 module_name
-            if role_service.user_has_role(Roles.PAGE_WRITE):
+            if role_service.user_has_role(current_user, Roles.PAGE_WRITE):
                 admin_revision.content = 'Voeg ' +\
                     '<a href="/edit/guides/admin/' + module_name +\
                     '"> hier </a> een admin handleiding toe.'
@@ -58,7 +59,7 @@ class GuideAPI:
 
         else:
             admin_revision = admin_guide.get_latest_revision()
-            if role_service.user_has_role(Roles.PAGE_WRITE):
+            if role_service.user_has_role(current_user, Roles.PAGE_WRITE):
                 admin_revision.title += '<a href="/edit/guides/admin/' + \
                     module_name + '"> (bewerk) </a>'
 

@@ -23,11 +23,22 @@ class Group(db.Model, BaseEntity):
                                                order_by='Group.name'),
                             lazy='dynamic')
 
+    mailtype = db.Column(db.Enum('none', 'mailinglist', 'mailbox'),
+                         nullable=False)
     maillist = db.Column(db.String(100), unique=True)
 
-    def __init__(self, name, maillist):
+    def __init__(self, name, maillist=None, mailtype=None):
         self.name = name
-        self.maillist = maillist
+        if maillist is None:
+            self.mailtype = 'none'
+        else:
+            if not (mailtype == 'mailinglist' or mailtype == 'mailbox'):
+                raise ValueError(
+                    'When maillist is set, mailtype must be either '
+                    '\'mailinglist\' or \'mailbox\'')
+
+            self.maillist = maillist
+            self.mailtype = mailtype
 
     def is_committee(self, id):
         from app.models.committee import CommitteeRevision
@@ -49,8 +60,11 @@ class Group(db.Model, BaseEntity):
             return self
 
     def add_email_to_maillist(self, email):
-        if self.maillist:
+        if self.mailtype == 'mailinglist':
             google.add_email_to_group_if_not_exists(email, self.maillist)
+        elif self.mailtype == 'mailbox':
+            google.add_email_to_group_if_not_exists(
+                email, 'list-' + self.maillist)
 
     def remove_email_from_maillist(self, email):
         if self.maillist:

@@ -1,0 +1,14 @@
+{% from "macros/form.htm" import render_form %}
+{% extends "content.htm" %}
+
+{% block includes %}
+    <script src="{{ static_url('/static/js/group/edit_group.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+
+<legend>{{ title }}</legend>
+{{ render_form(form) }}
+
+{% endblock %}
+

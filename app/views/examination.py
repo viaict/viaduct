@@ -2,11 +2,13 @@ import os
 
 from flask import Blueprint
 from flask import flash, session, redirect, render_template, request, url_for
+from flask import abort
 from flask_babel import gettext as _
+from flask_login import current_user
 from fuzzywuzzy import fuzz
 
 from app import app
-from app.decorators import require_role
+from app.decorators import require_role, require_membership
 from app.forms.examination import EditForm
 from app.models.examination import test_types
 from app.roles import Roles
@@ -26,7 +28,24 @@ REDIR_PAGES = {'view': 'examination.view_examination',
 DATE_FORMAT = app.config['DATE_FORMAT']
 
 
-@blueprint.route('/add/', methods=['GET', 'POST'])
+@blueprint.route('/examination/preview/<int:exam_id>/<string:doc_type>/',
+                 methods=['GET', 'POST'])
+@require_membership
+def preview(exam_id, doc_type):
+    exam = examination_service.get_examination_by_id(exam_id)
+    path = '/static/uploads/examinations/'
+
+    if doc_type == 'exam' and exam.path:
+        return render_template('examination/preview.htm',
+                               path=path + exam.path)
+    elif doc_type == 'answers' and exam.answer_path:
+        return render_template('examination/preview.htm',
+                               path=path + exam.answer_path)
+    return abort(404)
+
+
+@blueprint.route('/examination/add/', methods=['GET', 'POST'])
+@require_membership
 @require_role(Roles.EXAMINATION_WRITE)
 def add():
     form = EditForm(request.form)
@@ -81,7 +100,7 @@ def add():
                                 form.test_type.data)
 
             flash(_('Examination successfully uploaded.'), 'success')
-            return redirect(url_for('examination.add', new_exam=True))
+            return redirect(url_for('examination.preview', new_exam=True))
 
     return render_template('examination/edit.htm',
                            courses=courses,
@@ -220,7 +239,8 @@ def view_examination(page_nr=1):
 
     path = '/static/uploads/examinations/'
 
-    can_write = role_service.user_has_role(Roles.EXAMINATION_WRITE)
+    can_write = role_service.user_has_role(current_user,
+                                           Roles.EXAMINATION_WRITE)
 
     return render_template('examination/view.htm', path=path,
                            examinations=examinations, search=search,

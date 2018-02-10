@@ -1,44 +1,47 @@
 from enum import Enum, unique
 
+from flask_babel import lazy_gettext as _
+
 
 @unique
 class Roles(Enum):
     """
     Roles used to secure the application.
 
-    Note: When updating the list of roles, also insert them in the roles
-    table.
+    Note: When updating the list of roles do not change the key of an role,
+    without creating a proper migration.
     """
 
-    ACTIVITY_WRITE = 'ACTIVITY_WRITE'
-    ALV_WRITE = 'ALV_WRITE'
-    CHALLENGE_WRITE = 'CHALLENGE_WRITE'
-    DOMJUDGE_ADMIN = 'DOMJUDGE_ADMIN'
-    ELECTIONS_WRITE = 'ELECTIONS_WRITE'
-    EXAMINATION_WRITE = 'EXAMINATION_WRITE'
-    FILE_READ = 'FILE_READ'
-    FILE_WRITE = 'FILE_WRITE'
-    GROUP_READ = 'GROUP_READ'
-    GROUP_WRITE = 'GROUP_WRITE'
-    MOLLIE_READ = 'MOLLIE_READ'
-    NAVIGATION_WRITE = 'NAVIGATION_WRITE'
-    NEWS_WRITE = 'NEWS_WRITE'
-    PAGE_WRITE = 'PAGE_WRITE'
-    PIMPY_READ = 'PIMPY_READ'
-    PIMPY_WRITE = 'PIMPY_WRITE'
-    SEO_WRITE = 'SEO_WRITE'
-    USER_READ = 'USER_READ'
-    USER_WRITE = 'USER_WRITE'
-    VACANCY_READ = 'VACANCY_READ'
-    VACANCY_WRITE = 'VACANCY_WRITE'
+    ACTIVITY_WRITE = _("Create activities")
+    ALV_WRITE = _("Create ALVs")
+    CHALLENGE_WRITE = _("Change challenges")
+    DOMJUDGE_ADMIN = _("Display administrative buttons to DOMjudge")
+    ELECTIONS_WRITE = _("Change election properties")
+    EXAMINATION_WRITE = _("Change the examinations")
+    FILE_READ = _("Read files")
+    FILE_WRITE = _("Upload files")
+    GROUP_READ = _("View groups")
+    GROUP_WRITE = _("Change group members")
+    GROUP_PERMISSIONS = _("Change group permissions")
+    MOLLIE_READ = _("View mollie transactions")
+    NAVIGATION_WRITE = _("Change the navigation and redirects")
+    NEWS_WRITE = _("Create news articles")
+    PAGE_WRITE = _("Create pages")
+    PIMPY_READ = _("View Pimpy")
+    PIMPY_WRITE = _("Upload minutes and tasks")
+    SEO_WRITE = _("Change SEO properties")
+    USER_READ = _("Read user properties")
+    USER_WRITE = _("Change user properties")
+    VACANCY_READ = _("View vacancy overview")
+    VACANCY_WRITE = _("Change vacancies")
 
     @classmethod
     def choices(cls):
-        return [(choice, choice.name) for choice in cls]
+        return [(choice, "%s" % choice.value) for choice in cls]
 
     @classmethod
     def coerce(cls, item):
-        return cls(item) if not isinstance(item, cls) else item
+        return cls[item] if not isinstance(item, cls) else item
 
     def __str__(self):
-        return str(self.value)
+        return str(self.name)

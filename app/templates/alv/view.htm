@@ -1,3 +1,5 @@
+{% from "macros/alv.htm" import render_presidium %}
+
 {% extends 'content.htm' %}
 
 {% block page %}
@@ -29,7 +31,7 @@
                 <h1>{{ alv.name }}</h1>
             </div>
 
-            <p>{{ alv.presidium }}</p>
+            <p>{{ render_presidium(alv) }}</p>
             {% if alv.activity %}
                 <p>{{ _('Activity') }}:
                     <a href="{{ url_for('activity.get_activity', activity_id=alv.activity.id) }}">{{ alv.activity }}</a>

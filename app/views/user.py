@@ -13,17 +13,19 @@ from flask_babel import _
 from flask_login import current_user, login_user, logout_user, login_required
 
 from app import db, login_manager
-from app.decorators import require_role
-from app.exceptions import ResourceNotFoundException
-from app.forms.user import (SignUpForm, SignInForm, ResetPassword,
-                            RequestPassword, EditUserForm, EditUserInfoForm)
+from app.decorators import require_role, response_headers
+from app.exceptions import ResourceNotFoundException, AuthorizationException, \
+    ValidationException
+from app.forms.user import (EditUserForm, EditUserInfoForm, SignUpForm,
+                            SignInForm, ResetPasswordForm, RequestPassword,
+                            ChangePasswordForm)
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult, CustomForm
 from app.models.education import Education
-from app.models.group import Group
 from app.models.user import User
 from app.roles import Roles
-from app.service import password_reset_service, role_service
+from app.service import password_reset_service, user_service
+from app.service import role_service
 from app.utils import copernica
 from app.utils.google import HttpError
 from app.utils.user import UserAPI
@@ -35,9 +37,14 @@ blueprint = Blueprint('user', __name__)
 def load_user(user_id):
     # The hook used by the login manager to get the user from the database by
     # user ID.
-    user = User.query.get(int(user_id))
+    return user_service.get_user_by_id(user_id)
 
-    return user
+
+@login_manager.unauthorized_handler
+def unauthorized_handler():
+    return redirect(
+        url_for("user.sign_in",
+                next=url_for("oauth.authorize", **request.args)))
 
 
 @blueprint.route('/users/view/', methods=['GET'])
@@ -61,13 +68,13 @@ def view_single(user_id=None):
         can_write = True
         can_read = True
     # group rights
-    if role_service.user_has_role(Roles.USER_READ):
+    if role_service.user_has_role(current_user, Roles.USER_READ):
         can_read = True
-    if role_service.user_has_role(Roles.USER_WRITE):
+    if role_service.user_has_role(current_user, Roles.USER_WRITE):
         can_write = True
         can_read = True
 
-    user = User.query.get_or_404(user_id)
+    user = user_service.get_user_by_id(user_id)
     user.avatar = UserAPI.avatar(user)
     user.groups = UserAPI.get_groups_for_user_id(user)
 
@@ -103,7 +110,7 @@ def view_single(user_id=None):
 @login_required
 @require_role(Roles.USER_WRITE)
 def remove_avatar(user_id=None):
-    user = User.query.get(user_id)
+    user = user_service.get_user_by_id(user_id)
     if current_user.is_anonymous or current_user.id != user_id:
         return "", 403
 
@@ -114,21 +121,26 @@ def remove_avatar(user_id=None):
 @blueprint.route('/users/create/', methods=['GET', 'POST'])
 @blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
 @login_required
-@require_role(Roles.USER_WRITE)
 def edit(user_id=None):
     """Create user for admins and edit for admins and users."""
-    if current_user.is_anonymous or current_user.id != user_id:
-        return abort(403)
+
+    # TODO: Split the edit my own user and edit other user routes.
+    # We cannot check the rights using the decorator because normal
+    # users also change their profile using this route.
+
+    if (user_id is not None and current_user.id != user_id and
+            not role_service.user_has_role(current_user, Roles.USER_WRITE)):
+        abort(403)
 
     # Select user
     if user_id:
-        user = User.query.get_or_404(user_id)
+        user = user_service.get_user_by_id(user_id)
     else:
         user = User()
 
     user.avatar = UserAPI.has_avatar(user_id)
 
-    if role_service.user_has_role(Roles.USER_WRITE):
+    if role_service.user_has_role(current_user, Roles.USER_WRITE):
         form = EditUserForm(request.form, obj=user)
         is_admin = True
     else:
@@ -171,12 +183,12 @@ def edit(user_id=None):
                 flash(_('According to Google this email does not exist. '
                         'Please use an email that does.'), 'danger')
                 return edit_page()
-            raise (e)
+            raise e
 
         user.first_name = form.first_name.data.strip()
         user.last_name = form.last_name.data.strip()
         user.locale = form.locale.data
-        if role_service.user_has_role(Roles.USER_WRITE):
+        if role_service.user_has_role(current_user, Roles.USER_WRITE):
             user.has_paid = form.has_paid.data
             user.honorary_member = form.honorary_member.data
             user.favourer = form.favourer.data
@@ -197,10 +209,6 @@ def edit(user_id=None):
         if form.password.data != '':
             user.password = bcrypt.hashpw(form.password.data, bcrypt.gensalt())
 
-        group = Group.query.filter(Group.name == 'all').first()
-        group.add_user(user)
-
-        db.session.add(group)
         db.session.add(user)
         db.session.commit()
 
@@ -220,6 +228,7 @@ def edit(user_id=None):
 
 
 @blueprint.route('/sign-up/', methods=['GET', 'POST'])
+@response_headers({"X-Frame-Options": "SAMEORIGIN"})
 def sign_up():
     # Redirect the user to the index page if he or she has been authenticated
     # already.
@@ -252,12 +261,6 @@ def sign_up():
         user.city = form.city.data
         user.country = form.country.data
 
-        group = Group.query.filter(Group.name == 'all').first()
-        group.add_user(user)
-
-        db.session.add(group)
-        db.session.commit()
-
         db.session.add(user)
         db.session.commit()
 
@@ -277,6 +280,7 @@ def sign_up():
 
 
 @blueprint.route('/sign-in/', methods=['GET', 'POST'])
+@response_headers({"X-Frame-Options": "SAMEORIGIN"})
 def sign_in():
     # Redirect the user to the index page if he or she has been authenticated
     # already.
@@ -287,24 +291,23 @@ def sign_in():
     form = SignInForm(request.form)
 
     if form.validate_on_submit():
-        user = form.validate_signin()
 
-        if user:
-            # Notify the login manager that the user has been signed in.
+        try:
+            user = user_service.get_user_by_login(form.email.data,
+                                                  form.password.data)
             login_user(user)
-            if user.disabled:
-                flash(_('Your account has been disabled, you are not allowed '
-                        'to log in'), 'danger')
-            else:
-                flash(_('Hey %(name)s, you\'re now logged in!',
-                        name=current_user.first_name), 'success')
 
-            referer = request.headers.get('Referer')
+            # Notify the login manager that the user has been signed in.
+            flash(_('Hey %(name)s, you\'re now logged in!',
+                    name=current_user.first_name), 'success')
+
+            next_ = request.args.get("next", '')
+            if next_ and next_.startswith("/"):
+                return redirect(next_)
 
             # If referer is empty for some reason (browser policy, user entered
             # address in address bar, etc.), use empty string
-            if not referer:
-                referer = ''
+            referer = request.headers.get('Referer', '')
 
             denied = (
                 re.match(r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),
@@ -318,6 +321,16 @@ def sign_in():
                 return redirect(denied_from)
 
             return redirect(url_for('home.home'))
+
+        except ResourceNotFoundException:
+            flash(_(
+                'It appears that account does not exist. Try again, or contact'
+                ' the website administration at ict (at) svia (dot) nl.'))
+        except AuthorizationException:
+            flash(_('Your account has been disabled, you are not allowed '
+                    'to log in'), 'danger')
+        except ValidationException:
+            flash(_('The password you entered appears to be incorrect.'))
 
     return render_template('user/sign_in.htm', form=form)
 
@@ -337,6 +350,7 @@ def sign_out():
 
 
 @blueprint.route('/request_password/', methods=['GET', 'POST'])
+@response_headers({"X-Frame-Options": "SAMEORIGIN"})
 def request_password():
     """Create a ticket and send a email with link to reset_password page."""
     if current_user.is_authenticated:
@@ -359,6 +373,7 @@ def request_password():
 
 
 @blueprint.route('/reset_password/<string:hash_>', methods=['GET', 'POST'])
+@response_headers({"X-Frame-Options": "SAMEORIGIN"})
 def reset_password(hash_):
     """
     Reset form existing of two fields, password and password_repeat.
@@ -372,7 +387,7 @@ def reset_password(hash_):
         flash(_('No valid ticket found'), 'danger')
         return redirect(url_for('user.request_password'))
 
-    form = ResetPassword(request.form)
+    form = ResetPasswordForm(request.form)
 
     if form.validate_on_submit():
         password_reset_service.reset_password(ticket, form.password.data)
@@ -380,6 +395,28 @@ def reset_password(hash_):
         return redirect(url_for('user.sign_in'))
 
     return render_template('user/reset_password.htm', form=form)
+
+
+@blueprint.route("/users/<int:user_id>/password/", methods=['GET', 'POST'])
+@response_headers({"X-Frame-Options": "SAMEORIGIN"})
+def change_password(user_id):
+    if (user_id is not None and current_user.id != user_id and
+            not role_service.user_has_role(current_user, Roles.USER_WRITE)):
+        abort(403)
+
+    form = ChangePasswordForm()
+
+    if form.validate_on_submit():
+        if user_service.validate_password(current_user,
+                                          form.current_password.data):
+            user_service.set_password(current_user.id,
+                                      form.password.data)
+            flash(_("Your password has successfully been changed."))
+            return redirect(url_for("home.home"))
+        else:
+            form.current_password.errors.append(
+                _("Your current password does not match."))
+    return render_template("user/change_password.htm", form=form)
 
 
 @blueprint.route('/users/', methods=['GET', 'POST'])
@@ -428,18 +465,3 @@ def get_users():
              if user.alumnus else ""
              ])
     return json.dumps({"data": user_list})
-
-
-# Not used at the moment due to integrity problems in the database
-@blueprint.route('/users/delete_users/', methods=['DELETE'])
-@require_role(Roles.USER_WRITE)
-def api_delete_user():
-    user_ids = request.get_json()['selected_ids']
-    del_users = User.query.filter(User.id.in_(user_ids)).all()
-
-    for user in del_users:
-        db.session.delete(user)
-
-    db.session.commit()
-
-    return json.dumps({'status': 'success'})

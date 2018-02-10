@@ -9,14 +9,12 @@ from app.models.examination import test_type_default
 
 
 class CourseForm(FlaskForm):
-    title = StringField(_('Title'), validators=[InputRequired(
-        message=_('No title given.'))])
+    title = StringField(_('Title'), validators=[InputRequired()])
     description = StringField(_('Description'))
 
 
 class EducationForm(FlaskForm):
-    title = StringField(_('Title'), validators=[InputRequired(
-        message=_('No title given.'))])
+    title = StringField(_('Title'), validators=[InputRequired()])
 
 
 class EditForm(FlaskForm):
@@ -24,15 +22,12 @@ class EditForm(FlaskForm):
                      validators=[Optional()],
                      format=app.config['DATE_FORMAT'])
     course = SelectField(_('Course'), coerce=int,
-                         validators=[InputRequired(
-                             message=_('No course given'))])
+                         validators=[InputRequired()])
     education = SelectField(_('Education'), coerce=int,
-                            validators=[InputRequired(
-                                message=_('No education given'))])
+                            validators=[InputRequired()])
     test_type = SelectField(_('Examination type'), coerce=str,
                             default=test_type_default,
-                            validators=[InputRequired(
-                                message=_('No examination kind given'))])
+                            validators=[InputRequired()])
     comment = StringField(_('Comment'))
     examination = FileField(_('Examination'))
     answers = FileField(_('Answers'))
