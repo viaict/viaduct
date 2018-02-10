@@ -148,8 +148,8 @@ def init_app():
 
     login_manager.anonymous_user = AnonymousUser
 
-    log = logging.getLogger('werkzeug')
-    log.setLevel(app.config['LOG_LEVEL'])
+    # Set root logger log level
+    logging.getLogger().setLevel(app.config['LOG_LEVEL'])
 
     return get_patched_api_app()
 
