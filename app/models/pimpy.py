@@ -136,7 +136,7 @@ class Minute(db.Model, BaseEntity):
         self.minute_date = minute_date
 
     def get_name(self):
-        """A representable (unique) name for minute."""
+        """Representable (unique) name for minute."""
         return 'minute%d' % self.id
 
     def get_timestamp(self):

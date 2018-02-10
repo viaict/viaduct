@@ -11,6 +11,7 @@ class Roles(Enum):
     Note: When updating the list of roles do not change the key of an role,
     without creating a proper migration.
     """
+
     ACTIVITY_WRITE = _("Create activities")
     ALV_WRITE = _("Create ALVs")
     CHALLENGE_WRITE = _("Change challenges")

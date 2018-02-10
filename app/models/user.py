@@ -121,7 +121,6 @@ class User(db.Model, UserMixin, BaseEntity):
 
     @property
     def name(self):
-        """The user's name."""
         if not self.first_name and not self.last_name:
             return None
         return ' '.join([self.first_name, self.last_name])
