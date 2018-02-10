@@ -20,6 +20,24 @@ from .extensions import db, login_manager, \
 
 version = 'v2.9.2.0'
 
+logging.basicConfig(
+    format='[%(asctime)s] [%(name)s] %(levelname)s: %(message)s'
+)
+
+_logger = logging.getLogger('app')
+
+
+app = Flask(__name__)
+app.logger_name = 'flask.app'
+app.config.from_object('config.Config')
+
+_logger.setLevel(app.config['LOG_LEVEL'])
+
+# Set up Flask Babel, which is used for internationalisation support.
+babel = Babel(app)
+
+app.path = os.path.dirname(os.path.abspath(__file__))
+
 
 def static_url(url):
     return url + '?v=' + version
@@ -52,18 +70,8 @@ def register_views(app, path):
             blueprint = getattr(import_module(module_name), 'blueprint', None)
 
             if blueprint:
+                _logger.info('"{}" has been imported'.format(module_name))
                 app.register_blueprint(blueprint)
-
-
-app = Flask(__name__)
-app.config.from_object('config.Config')
-app.logger.setLevel(app.config['LOG_LEVEL'])
-
-
-# Set up Flask Babel, which is used for internationalisation support.
-babel = Babel(app)
-
-app.path = os.path.dirname(os.path.abspath(__file__))
 
 
 @babel.localeselector

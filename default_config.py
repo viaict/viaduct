@@ -78,4 +78,4 @@ class Config:
     SENTRY_USER_ATTRS = ['name', 'email']
 
     # Log levels: CRITICAL, ERROR, WARNING, INFO, DEBUG, NOTSET
-    LOG_LEVEL = logging.NOTSET
+    LOG_LEVEL = logging.DEBUG
