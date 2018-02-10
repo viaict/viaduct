@@ -12,7 +12,9 @@ DATABASE_ID = app.config['COPERNICA_DATABASE_ID']
 SUBPROFILE_TASK = app.config['COPERNICA_ACTIEPUNTEN']
 SUBPROFILE_ACTIVITY = app.config['COPERNICA_ACTIVITEITEN']
 
-logging.getLogger(__name__).info('COPERNICA_ENABLED={}'.format(COPERNICA_ENABLED))
+_logger = logging.getLogger(__name__)
+_logger.info('COPERNICA_ENABLED={}'.format(COPERNICA_ENABLED))
+
 
 def copernica_enabled(f):
     @wraps(f)
