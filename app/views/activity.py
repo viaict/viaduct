@@ -217,7 +217,7 @@ def create(activity_id=None):
                 if image:
                     old_picture = activity.picture
                     activity.picture = image.name
-                    
+
                     if old_picture:
                         file_remove(old_picture, PICTURE_DIR)
 
