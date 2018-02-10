@@ -208,9 +208,6 @@ def create(activity_id=None):
     if request.method == 'POST':
 
         if form.validate_on_submit():
-
-            act_picture = activity.picture
-
             form.populate_obj(activity)
 
             file = request.files['picture']
@@ -218,16 +215,11 @@ def create(activity_id=None):
             if file.filename:
                 image = file_upload(file, PICTURE_DIR, True)
                 if image:
-                    picture = image.name
-                else:
-                    picture = None
-
-                # Remove old picture
-                if act_picture:
-                    file_remove(act_picture, PICTURE_DIR)
-
-            else:
-                picture = None
+                    old_picture = activity.picture
+                    activity.picture = image.name
+                    
+                    if old_picture:
+                        file_remove(old_picture, PICTURE_DIR)
 
             # Facebook ID location, not used yet
             activity.venue = 1
@@ -238,8 +230,6 @@ def create(activity_id=None):
                 form_id = None
 
             activity.form_id = form_id
-
-            activity.picture = picture
             activity.owner_id = current_user.id
 
             if activity.id and activity.google_event_id:
