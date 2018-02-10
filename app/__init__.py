@@ -1,6 +1,7 @@
 import datetime
 import logging
 import os
+import sys
 
 import connexion
 from flask import Flask, request, session
@@ -20,18 +21,23 @@ from .extensions import db, login_manager, \
 
 version = 'v2.9.2.0'
 
-logging.basicConfig(
-    format='[%(asctime)s] [%(name)s] %(levelname)s: %(message)s'
-)
-
-_logger = logging.getLogger('app')
-
 
 app = Flask(__name__)
-app.logger_name = 'flask.app'
 app.config.from_object('config.Config')
 
+logging.basicConfig(
+    format='[%(asctime)s] %(levelname)7s [%(name)s]: %(message)s',
+    stream=sys.stdout,
+)
+
+app.logger_name = 'app.flask'
+app.logger.setLevel(logging.NOTSET)
+
+_logger = logging.getLogger('app')
 _logger.setLevel(app.config['LOG_LEVEL'])
+
+logging.getLogger('werkzeug').setLevel(logging.INFO)
+
 
 # Set up Flask Babel, which is used for internationalisation support.
 babel = Babel(app)
