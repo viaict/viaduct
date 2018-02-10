@@ -71,8 +71,9 @@ def default_detailed_exception_handler(e):
 @app.errorhandler(401)
 @app.errorhandler(403)
 @add_api_error_handler
-def permission_denied(_):
+def permission_denied(e):
     """When permission denied and not logged in you will be redirected."""
+
     content = "403, The police has been notified!"
     image = '/static/img/403.jpg'
 
