@@ -20,7 +20,7 @@ from app.utils.thumb import thumb  # noqa
 from app.utils.user import UserAPI  # noqa
 
 _logger = logging.getLogger(__name__)
-_logger.info("Imported {}", template_filters)
+_logger.info("Imported {}".format(template_filters))
 
 # Set jinja global variables
 app.jinja_env.globals.update(enumerate=enumerate)

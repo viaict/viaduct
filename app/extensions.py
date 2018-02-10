@@ -12,7 +12,7 @@ cache = Cache()
 cors = CORS()
 toolbar = DebugToolbarExtension()
 jsglue = JSGlue()
-sentry = Sentry(logging=True)
+sentry = Sentry()
 oauth = OAuth2Provider()
 
 

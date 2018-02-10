@@ -6,9 +6,6 @@ import requests
 import re
 
 COPERNICA_ENABLED = app.config['COPERNICA_ENABLED']
-
-print("COPERNICA ENABLED: %s" % str(COPERNICA_ENABLED))
-
 API_TOKEN = app.config['COPERNICA_API_KEY']
 DATABASE_ID = app.config['COPERNICA_DATABASE_ID']
 SUBPROFILE_TASK = app.config['COPERNICA_ACTIEPUNTEN']

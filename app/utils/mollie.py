@@ -15,10 +15,8 @@ MollieClient = Client()
 
 if app.config.get('MOLLIE_TEST_MODE', False):
     MollieClient.set_api_key(app.config['MOLLIE_TEST_KEY'])
-    print('USING MOLLIE TEST KEY')
 else:
     MollieClient.set_api_key(app.config['MOLLIE_KEY'])
-    print('USING MOLLIE LIVE KEY')
 
 
 def create_transaction(amount, description, user=current_user,

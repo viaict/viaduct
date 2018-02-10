@@ -52,13 +52,13 @@ def register_views(app, path):
             blueprint = getattr(import_module(module_name), 'blueprint', None)
 
             if blueprint:
-                print(('{0} has been imported.'.format(module_name)))
                 app.register_blueprint(blueprint)
 
 
-# Set up the app and load the configuration file.
 app = Flask(__name__)
 app.config.from_object('config.Config')
+app.logger.setLevel(app.config['LOG_LEVEL'])
+
 
 # Set up Flask Babel, which is used for internationalisation support.
 babel = Babel(app)
@@ -103,7 +103,7 @@ def init_app():
     db.init_app(app)
 
     if not app.debug and 'SENTRY_DSN' in app.config:
-        sentry.init_app(app)
+        sentry.init_app(app, logging=True, level=logging.WARNING)
         sentry.client.release = version
 
     @app.context_processor
@@ -147,9 +147,6 @@ def init_app():
     register_views(app, os.path.join(app.path, 'views'))
 
     login_manager.anonymous_user = AnonymousUser
-
-    # Set root logger log level
-    logging.getLogger().setLevel(app.config['LOG_LEVEL'])
 
     return get_patched_api_app()
 
