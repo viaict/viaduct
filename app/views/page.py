@@ -120,10 +120,12 @@ def edit_page(path=''):
 
     if page:
         revision = page.get_latest_revision()
+        revision.read_groups = page_service.get_read_permission_groups_by_page(
+            page)
+        revision.needs_paid = page.needs_paid
+        revision.custom_read_permission = page.custom_read_permission
 
         form = PageForm(request.form, obj=revision)
-        form.needs_paid.data = page.needs_paid
-        form.custom_read_permission.data = page.custom_read_permission
     else:
         form = PageForm()
 
@@ -166,8 +168,6 @@ def edit_page(path=''):
         # redirect (newly) created page revision
         return redirect(url_for('page.get_page', path=path))
 
-    form.read_groups.data = page_service.get_read_permission_groups_by_page(
-        page)
     return render_template('page/edit_page.htm', page=page, form=form)
 
 

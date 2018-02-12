@@ -1,5 +1,6 @@
+from app import Roles
 from app.repository import page_repository
-from app.service import group_service
+from app.service import group_service, role_service
 
 
 def set_read_page_permissions(page, new_groups):
@@ -20,7 +21,11 @@ def get_read_permission_groups_by_page(page):
 
 
 def can_user_read_page(page, user):
-    """If the page needs membership, the user has_paid has to be true."""
+    """Test whether a use can read the page."""
+    if role_service.user_has_role(user, Roles.PAGE_WRITE):
+        return True
+
+    # If the page needs membership, the user has_paid has to be true.
     matched_paid = not page.needs_paid or user.has_paid
 
     # If page has custom permission

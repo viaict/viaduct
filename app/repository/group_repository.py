@@ -14,5 +14,5 @@ def get_group_for_user(user):
     # return user.groups
     return db.session.query(Group) \
         .join(user_group) \
-        .filter(user_group.user_id == user.id) \
+        .filter(user_group.c.user_id == user.id) \
         .all()
