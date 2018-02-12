@@ -1,6 +1,6 @@
 Flask
 Flask-Babel
-Flask-Cache
+Flask-Caching
 Flask-CORS
 Flask-DebugToolbar
 Flask-Failsafe
