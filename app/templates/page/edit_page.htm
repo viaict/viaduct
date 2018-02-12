@@ -64,8 +64,8 @@
                 </div>
 
                 <div class="col-md-12">
+                    {{ render_checkbox(form.custom_read_permission) }}
                     {{ render_field(form.read_groups) }}
-                    {{ render_field(form.write_groups) }}
                     {{ enable_select2() }}
                 </div>
             </div>

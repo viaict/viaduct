@@ -1,29 +1,26 @@
 from app import db
 from app.models.group import Group
-from app.models.page import PagePermission, Page
+from app.models.page import Page, PageReadPermission
 
 
-def get_permission_groups_by_page(page, permission_type):
+def get_read_permission_groups_by_page(page):
     return db.session.query(Group) \
-        .join(PagePermission) \
-        .filter(PagePermission.permission == permission_type,
-                PagePermission.page == page) \
+        .join(PageReadPermission) \
+        .filter(PageReadPermission.page == page) \
         .all()
 
 
-def add_page_group_permission(page, added_groups, permission):
-    permissions = [PagePermission(page=page, group=group,
-                                  permission=permission)
+def add_page_group_read_permission(page, added_groups):
+    permissions = [PageReadPermission(page=page, group=group)
                    for group in added_groups]
     db.session.add_all(permissions)
     db.session.commit()
 
 
-def delete_page_group_permission(page, removed_groups, permission):
-    db.session.query(PagePermission).filter(
-        PagePermission.page == page,
-        PagePermission.group_id.in_([g.id for g in removed_groups]),
-        PagePermission.permission == permission
+def delete_page_group_read_permission(page, removed_groups):
+    db.session.query(PageReadPermission).filter(
+        PageReadPermission.page == page,
+        PageReadPermission.group_id.in_([g.id for g in removed_groups])
     ).delete(synchronize_session='fetch')
     db.session.commit()
 
@@ -34,4 +31,11 @@ def get_page_by_path(path):
 
 def delete_page(page):
     db.session.delete(page)
+    db.session.commit()
+
+
+def delete_read_page_permission(page):
+    db.session.query(PageReadPermission).filter(
+        PageReadPermission.page_id == page.id
+    ).delete(synchronize_session='fetch')
     db.session.commit()

@@ -11,7 +11,6 @@ from app.models.committee import CommitteeRevision
 from app.models.group import Group
 from app.models.navigation import NavigationEntry
 from app.models.page import Page
-from app.models.page import PagePermission
 from app.models.user import User
 from app.roles import Roles
 from app.service import page_service
@@ -116,13 +115,6 @@ def edit_committee(committee=''):
 
             # Sort these navigation entries.
             NavigationAPI.alphabeticalize(root_entry)
-
-            # Edit the rights for BC
-            bc_group = Group.query.filter(Group.name == 'BC').first()
-            bc_entry = PagePermission(bc_group.id, page.id, 2)
-
-            db.session.add(bc_entry)
-            db.session.commit()
         else:
             # If the committee's title has changed, the navigation needs to be
             # updated. Look for the entry, compare the titles, and change where

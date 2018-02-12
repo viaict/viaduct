@@ -1,5 +1,4 @@
 import sys
-from enum import IntEnum
 
 from flask_babel import lazy_gettext as _
 from sqlalchemy import event
@@ -13,6 +12,7 @@ class Page(db.Model, BaseEntity):
 
     path = db.Column(db.String(200), unique=True)
     needs_paid = db.Column(db.Boolean)
+    custom_read_permission = db.Column(db.Boolean)
 
     type = db.Column(db.String(256))
 
@@ -25,18 +25,6 @@ class Page(db.Model, BaseEntity):
 
     def __repr__(self):
         return '<Page(%s, "%s")>' % (self.id, self.path)
-
-    def can_read(self, user):
-        if PagePermission.get_user_rights(user, self) > 0:
-            return True
-        else:
-            return False
-
-    def can_write(self, user):
-        if PagePermission.get_user_rights(user, self) > 1:
-            return True
-        else:
-            return False
 
     def get_latest_revision(self):
         """Get the latest revision of this page."""
@@ -180,51 +168,11 @@ def set_page_revision_locale(page_rev, context):
         page_rev.content = 'N/A'
 
 
-class PagePermission(db.Model):
-    __tablename__ = 'page_permission'
+class PageReadPermission(db.Model, BaseEntity):
+    """Contains page group combinations with use custom read permissions."""
 
-    id = db.Column(db.Integer, primary_key=True)
-    permission = db.Column(db.Integer)
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
     group = db.relationship('Group')
 
+    page = db.relationship('Page')
     page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
-    page = db.relationship('Page', backref=db.backref('permissions',
-                                                      lazy='joined'))
-
-    class Level(IntEnum):
-        deny = 0
-        read = 1
-        write = 2
-
-    @staticmethod
-    def get_user_rights(user, page):
-        if not page:
-            return PagePermission.Level.deny
-
-        if user.is_anonymous:
-            if page.needs_paid:
-                return PagePermission.Level.deny
-            else:
-                return PagePermission.Level.read
-
-        if not user.has_paid and page.needs_paid:
-            return PagePermission.Level.deny
-
-        rights = PagePermission.Level.deny
-        for group in user.groups:
-            if group.name == 'administrators':
-                return PagePermission.Level.write
-
-            try:
-                permissions = next(perm for perm in page.permissions
-                                   if perm.group_id == group.id)
-
-                if permissions.permission >= 2:
-                    return PagePermission.Level.write
-                elif permissions.permission > rights:
-                    rights = permissions.permission
-            except StopIteration:
-                pass
-
-        return rights

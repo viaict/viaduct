@@ -14,7 +14,7 @@ from app.decorators import require_role
 from app.forms.page import PageForm, HistoryPageForm
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult
-from app.models.page import Page, PageRevision, PagePermission
+from app.models.page import Page, PageRevision
 from app.models.redirect import Redirect
 from app.roles import Roles
 from app.service import role_service, page_service
@@ -76,6 +76,7 @@ def get_page(path=''):
 
 
 @blueprint.route('/history/<path:path>', methods=['GET', 'POST'])
+@require_role(Roles.PAGE_WRITE)
 def get_page_history(path=''):
     form = HistoryPageForm(request.form)
 
@@ -83,9 +84,6 @@ def get_page_history(path=''):
 
     if not page:
         return abort(404)
-
-    if not page_service.can_user_write_page(page, current_user):
-        return abort(403)
 
     revisions = page.revision_cls.get_query()\
         .filter(page.revision_cls.page_id == page.id)\
@@ -123,11 +121,9 @@ def edit_page(path=''):
     if page:
         revision = page.get_latest_revision()
 
-        # Add the `needs_paid` option to the revision, so it will be inside
-        # the form.
-        revision.needs_paid = page.needs_paid
-
         form = PageForm(request.form, obj=revision)
+        form.needs_paid.data = page.needs_paid
+        form.custom_read_permission.data = page.custom_read_permission
     else:
         form = PageForm()
 
@@ -138,6 +134,7 @@ def edit_page(path=''):
             page = Page(path)
 
         page.needs_paid = form.needs_paid.data
+        page.custom_read_permission = form.custom_read_permission.data
 
         db.session.add(page)
         db.session.commit()
@@ -159,22 +156,18 @@ def edit_page(path=''):
         db.session.add(new_revision)
         db.session.commit()
 
-        page_service.set_page_permissions(
-            page, form.read_groups.data,
-            permission_type=PagePermission.Level.read)
-        page_service.set_page_permissions(
-            page, form.read_groups.data,
-            permission_type=PagePermission.Level.read)
+        if form.custom_read_permission.data:
+            page_service.set_read_page_permissions(page, form.read_groups.data)
+        else:
+            page_service.delete_read_page_permission(page)
 
         flash(_('The page has been saved'), 'success')
 
         # redirect (newly) created page revision
         return redirect(url_for('page.get_page', path=path))
 
-    form.read_groups.data = page_service.get_permission_groups_by_page(
-        page, PagePermission.Level.read)
-    form.write_groups.data = page_service.get_permission_groups_by_page(
-        page, PagePermission.Level.write)
+    form.read_groups.data = page_service.get_read_permission_groups_by_page(
+        page)
     return render_template('page/edit_page.htm', page=page, form=form)
 
 

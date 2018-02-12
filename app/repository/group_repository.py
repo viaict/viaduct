@@ -1,5 +1,5 @@
 from app import db
-from app.models.group import Group
+from app.models.group import Group, user_group
 
 
 def find_by_id(group_id):
@@ -8,3 +8,11 @@ def find_by_id(group_id):
 
 def find_groups():
     return db.session.query(Group).order_by(Group.name).all()
+
+
+def get_group_for_user(user):
+    # return user.groups
+    return db.session.query(Group) \
+        .join(user_group) \
+        .filter(user_group.user_id == user.id) \
+        .all()
