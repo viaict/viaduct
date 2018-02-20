@@ -2,16 +2,19 @@ import difflib
 import fnmatch
 import os
 import magic
+import logging
 
 from flask import flash
 from flask_babel import lazy_gettext as _
 from werkzeug.utils import secure_filename
 
-from app import app, db, sentry
+from app import app, db
 from app.models.file import File
 
 ALLOWED_MIMETYPES = ['text/plain', 'application/pdf']
 UPLOAD_DIR = app.config['UPLOAD_DIR']
+
+_logger = logging.getLogger(__name__)
 
 
 # Check if the extension is allowed. Set image to True to allow only image-
@@ -130,8 +133,7 @@ def file_remove(filename, directory=UPLOAD_DIR):
                 db_entry.delete()
 
     except OSError:
-        sentry.captureException()
-        print(_('Cannot remove file, it does not exist') + ": " + filename)
+        _logger.info('Could not remove file "{}"'.format(filename))
 
 
 # Remove files meeting a certain pattern from a directory and from the

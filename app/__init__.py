@@ -1,6 +1,7 @@
 import datetime
 import logging
 import os
+import sys
 
 import connexion
 from flask import Flask, request, session
@@ -19,6 +20,29 @@ from .extensions import db, login_manager, \
     cache, toolbar, jsglue, sentry, oauth, cors
 
 version = 'v2.9.2.0'
+
+
+app = Flask(__name__)
+app.config.from_object('config.Config')
+
+logging.basicConfig(
+    format='[%(asctime)s] %(levelname)7s [%(name)s]: %(message)s',
+    stream=sys.stdout,
+)
+
+app.logger_name = 'app.flask'
+app.logger.setLevel(logging.NOTSET)
+
+_logger = logging.getLogger('app')
+_logger.setLevel(app.config['LOG_LEVEL'])
+
+logging.getLogger('werkzeug').setLevel(logging.INFO)
+
+
+# Set up Flask Babel, which is used for internationalisation support.
+babel = Babel(app)
+
+app.path = os.path.dirname(os.path.abspath(__file__))
 
 
 def static_url(url):
@@ -52,18 +76,8 @@ def register_views(app, path):
             blueprint = getattr(import_module(module_name), 'blueprint', None)
 
             if blueprint:
-                print(('{0} has been imported.'.format(module_name)))
+                _logger.info('"{}" has been imported'.format(module_name))
                 app.register_blueprint(blueprint)
-
-
-# Set up the app and load the configuration file.
-app = Flask(__name__)
-app.config.from_object('config.Config')
-
-# Set up Flask Babel, which is used for internationalisation support.
-babel = Babel(app)
-
-app.path = os.path.dirname(os.path.abspath(__file__))
 
 
 @babel.localeselector
@@ -103,7 +117,7 @@ def init_app():
     db.init_app(app)
 
     if not app.debug and 'SENTRY_DSN' in app.config:
-        sentry.init_app(app)
+        sentry.init_app(app, logging=True, level=logging.WARNING)
         sentry.client.release = version
 
     @app.context_processor
@@ -147,9 +161,6 @@ def init_app():
     register_views(app, os.path.join(app.path, 'views'))
 
     login_manager.anonymous_user = AnonymousUser
-
-    log = logging.getLogger('werkzeug')
-    log.setLevel(app.config['LOG_LEVEL'])
 
     return get_patched_api_app()
 
