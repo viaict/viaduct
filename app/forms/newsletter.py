@@ -1,8 +1,8 @@
 import datetime
 from flask_babel import lazy_gettext as _
 from flask_wtf import FlaskForm
-from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField
 from app import db
+from app.forms.fields import OrderedQuerySelectMultipleField
 from app.models.activity import Activity
 from app.models.news import News
 
@@ -22,7 +22,7 @@ def activities_factory():
 
 
 class NewsletterForm(FlaskForm):
-    activities = QuerySelectMultipleField(
+    activities = OrderedQuerySelectMultipleField(
         _('Activities'), query_factory=activities_factory)
-    news_items = QuerySelectMultipleField(
+    news_items = OrderedQuerySelectMultipleField(
         _('News items'), query_factory=news_factory)

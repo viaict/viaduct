@@ -3,7 +3,8 @@ import itertools
 
 from wtforms import RadioField, SubmitField, SelectFieldBase
 
-from app.forms.fields import CustomFormSelectField
+from app.forms.fields import CustomFormSelectField, \
+    OrderedSelectMultipleField, OrderedQuerySelectMultipleField
 
 
 class FieldTabGroup:
@@ -149,9 +150,11 @@ class FormWrapper:
         self.form = form
         self.groups = []
         self.vsplits = []
+        self.ordered_multiselect_fields = []
 
         self.csrf_token = form.csrf_token
 
+        self.has_ordered_multiselect_fields = False
         self.has_select_fields = False
         self.has_custom_form_fields = False
         self.has_submit_field = False
@@ -169,8 +172,16 @@ class FormWrapper:
 
             # Check if the form has select fields
             elif isinstance(obj, SelectFieldBase) \
+                    and not isinstance(obj, OrderedSelectMultipleField) \
+                    and not isinstance(obj, OrderedQuerySelectMultipleField) \
                     and not isinstance(obj, RadioField):
                 self.has_select_fields = True
+
+            # Check if the form has ordered multi-select fields
+            elif isinstance(obj, OrderedSelectMultipleField) \
+                    or isinstance(obj, OrderedQuerySelectMultipleField):
+                self.has_ordered_multiselect_fields = True
+                self.ordered_multiselect_fields.append(obj)
 
             # Check if the form has custom form select fields
             elif isinstance(obj, CustomFormSelectField):
