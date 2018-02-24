@@ -6,7 +6,7 @@
  * inspired by : jQuery Chosen Sortable (https://github.com/mrhenry/jquery-chosen-sortable)
  * License     : GPL
  */
-
+// jshint ignore:start
 (function($){
 	$.fn.extend({
 		select2SortableOrder: function(){
