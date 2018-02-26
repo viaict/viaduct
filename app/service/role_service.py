@@ -2,7 +2,7 @@ import logging
 
 from flask_login import current_user
 
-from app import app, Roles
+from app import app
 from app.repository import role_repository
 
 _logger = logging.getLogger(__name__)
@@ -10,10 +10,6 @@ _logger = logging.getLogger(__name__)
 
 def user_has_role(user, *roles):
     return all(role in user.roles for role in roles)
-
-
-def find_all_roles():
-    return [(choice, choice.name) for choice in Roles]
 
 
 def find_all_roles_by_group_id(group_id):

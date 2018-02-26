@@ -1,4 +1,5 @@
 import datetime
+
 from app import db
 from app.models.base_model import BaseEntity
 

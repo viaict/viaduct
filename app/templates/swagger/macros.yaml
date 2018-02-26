@@ -1,0 +1,70 @@
+{% macro security() %}
+securityDefinitions:
+  OAuth2Implicit:
+    type: oauth2
+    description: >-
+      The API uses OAuth2 to grant access, for more information see the
+      explicit documentation [here](https://svia.nl/oauth2/)
+    flow: implicit
+    authorizationUrl: "/oauth/authorize"
+    x-tokenInfoFunc: "app.views.oauth.token_info"
+    {% if caller -%}
+    scopes:
+      {{ caller() }}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro error_definition() %}
+  Error:
+    type: object
+    description: Generic error response, modelled after RFC 7807.
+    properties:
+      code:
+        type: integer
+        description: Error code within the system.
+      title:
+        type: string
+        description: This title is not meant to be shown to users. Please use the code to parse the error.
+      detail:
+        type: string
+        description: Error details, to help developers detect what went wrong.
+      type:
+       type: string
+       description: Link to additional documentation regarding the error.
+{% endmacro %}
+
+{% macro responses() %}
+responses:
+  ResourceNotFound:
+    description: Referenced resource could not be found.
+    schema:
+      $ref: '#/definitions/Error'
+  Unauthorized:
+    description: You are not authenticated. Please authenticate and try again.
+    schema:
+      $ref: '#/definitions/Error'
+  Forbidden:
+    description: You have no permission to access the specified resource.
+    schema:
+      $ref: '#/definitions/Error'
+  ValidationError:
+    description: The supplied object is invalid. Error detail will contain the validation error.
+    schema:
+      $ref: '#/definitions/Error'
+  NotAcceptableError:
+    description: The requested resource is capable of generating only content not acceptable according to the Accept headers sent in the request.
+    schema:
+      $ref: '#/definitions/Error'
+  UnsupportedMediaType:
+    description: The requested resource does not understand the media type sent in the request.
+    schema:
+      $ref: '#/definitions/Error'
+  Conflict:
+    description: There was a conflict while trying to perform your request. Error detail will contain the detailed conflict.
+    schema:
+      $ref: '#/definitions/Error'
+  InternalServerError:
+    description: Something went wrong in the server. Please try again.
+    schema:
+      $ref: '#/definitions/Error'
+{% endmacro %}

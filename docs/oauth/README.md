@@ -52,7 +52,7 @@ The endpoints for [svia.nl](https://svia.nl/) are:
 - Authorization endpoint : [svia.nl/oauth/authorize/](https://svia.nl/oauth/authorize/)
 - Token endpoint : [svia.nl/oauth/token/](https://svia.nl/oauth/token/)
 - Revoke endpoint : [svia.nl/oauth/revoke/](https://svia.nl/oauth/revoke/)
-- Token details : [svia.nl/oauth/token/info/](https://svia.nl/oauth/token/info/)
+- Token details : [svia.nl/api/token/info/](https://svia.nl/api/token/info/)
 
 ## Scopes
 
@@ -243,7 +243,7 @@ Example response of the token endpoint:
 Any token can be used to request basic information about the token and the user.
 
 ```
-GET /oauth/token/info/
+GET /api/token/info/
 Authorization: Bearer TOKEN
 ```
 

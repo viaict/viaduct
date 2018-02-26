@@ -4,15 +4,16 @@ from app.models.user import User
 
 import requests
 import re
+import logging
 
 COPERNICA_ENABLED = app.config['COPERNICA_ENABLED']
-
-print("COPERNICA ENABLED: %s" % str(COPERNICA_ENABLED))
-
 API_TOKEN = app.config['COPERNICA_API_KEY']
 DATABASE_ID = app.config['COPERNICA_DATABASE_ID']
 SUBPROFILE_TASK = app.config['COPERNICA_ACTIEPUNTEN']
 SUBPROFILE_ACTIVITY = app.config['COPERNICA_ACTIVITEITEN']
+
+_logger = logging.getLogger(__name__)
+_logger.info('COPERNICA_ENABLED={}'.format(COPERNICA_ENABLED))
 
 
 def copernica_enabled(f):

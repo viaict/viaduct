@@ -370,10 +370,16 @@ msgstr ""
 msgid "Current"
 msgstr ""
 
+msgid "Current Password"
+msgstr ""
+
 msgid "Current avatar"
 msgstr ""
 
 msgid "Custom URL"
+msgstr ""
+
+msgid "DOMjudge administrator"
 msgstr ""
 
 msgid "Date"
@@ -484,7 +490,19 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
+msgid "Edit ALVs"
+msgstr ""
+
 msgid "Edit GA"
+msgstr ""
+
+msgid "Edit Pimpy"
+msgstr ""
+
+msgid "Edit activities"
+msgstr ""
+
+msgid "Edit challenges"
 msgstr ""
 
 msgid "Edit course"
@@ -493,10 +511,31 @@ msgstr ""
 msgid "Edit education"
 msgstr ""
 
+msgid "Edit elections"
+msgstr ""
+
 msgid "Edit examination"
 msgstr ""
 
+msgid "Edit examinations"
+msgstr ""
+
+msgid "Edit files"
+msgstr ""
+
 msgid "Edit group"
+msgstr ""
+
+msgid "Edit group permissions"
+msgstr ""
+
+msgid "Edit groups"
+msgstr ""
+
+msgid "Edit navigation and redirect"
+msgstr ""
+
+msgid "Edit news"
 msgstr ""
 
 msgid "Edit news item"
@@ -508,7 +547,19 @@ msgstr ""
 msgid "Edit page"
 msgstr ""
 
+msgid "Edit pages"
+msgstr ""
+
+msgid "Edit search-engine optimizations"
+msgstr ""
+
+msgid "Edit user"
+msgstr ""
+
 msgid "Edit user permissions"
+msgstr ""
+
+msgid "Edit vacancy"
 msgstr ""
 
 msgid "Education"
@@ -806,7 +857,10 @@ msgstr ""
 msgid "Mailing list"
 msgstr ""
 
-msgid "Max number of attendents"
+msgid "Max number of attendants"
+msgstr ""
+
+msgid "Number of extra attendants"
 msgstr ""
 
 msgid "Member"
@@ -871,6 +925,9 @@ msgstr ""
 msgid "New location"
 msgstr ""
 
+msgid "New password"
+msgstr ""
+
 msgid "New vacancy"
 msgstr ""
 
@@ -920,9 +977,6 @@ msgid "No form"
 msgstr ""
 
 msgid "No location"
-msgstr ""
-
-msgid "No password submitted"
 msgstr ""
 
 msgid "No presidium"
@@ -1048,10 +1102,28 @@ msgstr ""
 msgid "Read"
 msgstr ""
 
+msgid "Read Pimpy"
+msgstr ""
+
 msgid "Read access to your Pimpy data"
 msgstr ""
 
+msgid "Read files"
+msgstr ""
+
+msgid "Read groups"
+msgstr ""
+
+msgid "Read mollie payments"
+msgstr ""
+
 msgid "Read more"
+msgstr ""
+
+msgid "Read user"
+msgstr ""
+
+msgid "Read vacancy"
 msgstr ""
 
 msgid "Read/Write"
@@ -1081,7 +1153,7 @@ msgstr ""
 msgid "Remove page"
 msgstr ""
 
-msgid "Repeat password"
+msgid "Repeat new password"
 msgstr ""
 
 msgid "Request to DOMjudge server failed"
@@ -1112,6 +1184,9 @@ msgid "Run Error"
 msgstr ""
 
 msgid "Save"
+msgstr ""
+
+msgid "Scopes"
 msgstr ""
 
 msgid "Scoreboard"
@@ -1307,6 +1382,12 @@ msgid "The page you tried to delete does not exist."
 msgstr ""
 
 msgid "The password you entered appears to be incorrect."
+msgstr ""
+
+msgid "The roles have been updated."
+msgstr ""
+
+msgid "The scopes required by your application"
 msgstr ""
 
 msgid "The seo settings have been saved"
@@ -1537,7 +1618,13 @@ msgstr ""
 msgid "Your account has been disabled, you are not allowed to log in"
 msgstr ""
 
+msgid "Your current password does not match."
+msgstr ""
+
 msgid "Your password has been updated."
+msgstr ""
+
+msgid "Your password has successfully been changed."
 msgstr ""
 
 msgid "Your payment has not been completed."
@@ -2036,5 +2123,17 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Authorized callback URL"
+#~ msgstr ""
+
+#~ msgid "No password submitted"
+#~ msgstr ""
+
+#~ msgid "Repeat password"
+#~ msgstr ""
+
+#~ msgid "Ability to create ALVs"
+#~ msgstr ""
+
+#~ msgid "Ability to create activities"
 #~ msgstr ""
 
