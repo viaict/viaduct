@@ -104,9 +104,9 @@
                                 <p>
                                     <a href="{{ url_for('user.change_password', user_id=current_user.id) }}">{{ _("Change password") }}</a>
                                 </p>
-                                <p>
+                                {#<p>
                                     <a href="{{ url_for('oauth.list_clients') }}">{{ _("Connected applications") }}</a>
-                                </p>
+                                </p>#}
                             </div>
                             <div id="logoutButtonContainer">
                                 <a href="{{ url_for('user.sign_out') }}">
@@ -144,9 +144,9 @@
                                 <p>
                                     <a href="{{ url_for('user.change_password', user_id=current_user.id) }}">{{ _("Change password") }}</a>
                                 </p>
-                                <p>
+                                {#<p>
                                     <a href="{{ url_for('oauth.list_clients') }}">{{ _("Connected applications") }}</a>
-                                </p>
+                                </p>#}
                             </div>
                             <div id="logoutButtonContainerMobile">
                                 <a href="{{ url_for('user.sign_out') }}">
