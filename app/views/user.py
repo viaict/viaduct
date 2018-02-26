@@ -206,9 +206,6 @@ def edit(user_id=None):
         user.city = form.city.data.strip()
         user.country = form.country.data.strip()
 
-        if form.password.data != '':
-            user.password = bcrypt.hashpw(form.password.data, bcrypt.gensalt())
-
         db.session.add(user)
         db.session.commit()
 
