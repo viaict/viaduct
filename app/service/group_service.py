@@ -14,4 +14,4 @@ def find_groups():
 
 
 def get_group_for_user(user):
-    return group_repository.get_group_for_user(user)
+    return group_repository.get_groups_for_user(user)

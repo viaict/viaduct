@@ -10,7 +10,7 @@ def find_groups():
     return db.session.query(Group).order_by(Group.name).all()
 
 
-def get_group_for_user(user):
+def get_groups_for_user(user):
     # return user.groups
     return db.session.query(Group) \
         .join(user_group) \
