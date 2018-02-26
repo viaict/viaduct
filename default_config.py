@@ -11,7 +11,7 @@ class Config:
 
     DATABASE_CONNECT_OPTIONS = {}
 
-    SECRET_KEY = ''  # Change this for real use
+    SECRET_KEY = 'secret'  # Change this for real use
 
     CSRF_ENABLED = True
     CSRF_SESSION_KEY = ''  # Change this for real use
@@ -57,7 +57,7 @@ class Config:
 
     # Mollie config
     MOLLIE_URL = 'https://api.mollie.nl/v1/payments/'
-    MOLLIE_TEST_KEY = ''
+    MOLLIE_TEST_KEY = 'test_SOMEAPIKEY'
     MOLLIE_KEY = ''
     MOLLIE_REDIRECT_URL = 'https://svia.nl/mollie/check/'
     MOLLIE_TEST_MODE = True
@@ -78,4 +78,4 @@ class Config:
     SENTRY_USER_ATTRS = ['name', 'email']
 
     # Log levels: CRITICAL, ERROR, WARNING, INFO, DEBUG, NOTSET
-    LOG_LEVEL = logging.NOTSET
+    LOG_LEVEL = logging.DEBUG

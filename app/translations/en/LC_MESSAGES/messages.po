@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-01-06 16:16+0100\n"
+"POT-Creation-Date: 2018-02-24 21:32+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -37,6 +37,9 @@ msgstr ""
 
 #, python-format
 msgid "API call failed: %s"
+msgstr ""
+
+msgid "Access to your name and e-mail"
 msgstr ""
 
 msgid ""
@@ -153,6 +156,9 @@ msgid ""
 "more information."
 msgstr ""
 
+msgid "Authorized callback URLs"
+msgstr ""
+
 msgid "Avatar deleted successfully."
 msgstr "."
 
@@ -166,6 +172,9 @@ msgid "Birthdate"
 msgstr ""
 
 msgid "By registering you agree with the terms above."
+msgstr ""
+
+msgid "Cancel"
 msgstr ""
 
 msgid "Cannot find parent navigation entry."
@@ -186,7 +195,13 @@ msgstr ""
 msgid "City"
 msgstr ""
 
+msgid "Click 'confirm' to allow the application to do the following:"
+msgstr ""
+
 msgid "Click to expand"
+msgstr ""
+
+msgid "Comma separated, regex allowed"
 msgstr ""
 
 msgid "Comment"
@@ -202,6 +217,9 @@ msgid "Committee members"
 msgstr ""
 
 msgid "Committees"
+msgstr ""
+
+msgid "Committees open for new members"
 msgstr ""
 
 msgid "Company"
@@ -228,6 +246,12 @@ msgid "Compiler Error"
 msgstr ""
 
 msgid "Conditions"
+msgstr ""
+
+msgid "Confirm"
+msgstr ""
+
+msgid "Connected applications"
 msgstr ""
 
 msgid "Contact Name"
@@ -322,6 +346,9 @@ msgstr ""
 msgid "Create activity"
 msgstr ""
 
+msgid "Create application"
+msgstr ""
+
 msgid "Create form"
 msgstr ""
 
@@ -343,10 +370,16 @@ msgstr ""
 msgid "Current"
 msgstr ""
 
+msgid "Current Password"
+msgstr ""
+
 msgid "Current avatar"
 msgstr ""
 
 msgid "Custom URL"
+msgstr ""
+
+msgid "DOMjudge administrator"
 msgstr ""
 
 msgid "Date"
@@ -382,6 +415,9 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
+msgid "Description of the client, usage for example"
+msgstr ""
+
 msgid "Details"
 msgstr ""
 
@@ -389,6 +425,9 @@ msgid "Disabled"
 msgstr ""
 
 msgid "Disclaimer"
+msgstr ""
+
+msgid "Display name of the client"
 msgstr ""
 
 msgid "Displayed price"
@@ -451,7 +490,19 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
+msgid "Edit ALVs"
+msgstr ""
+
 msgid "Edit GA"
+msgstr ""
+
+msgid "Edit Pimpy"
+msgstr ""
+
+msgid "Edit activities"
+msgstr ""
+
+msgid "Edit challenges"
 msgstr ""
 
 msgid "Edit course"
@@ -460,10 +511,31 @@ msgstr ""
 msgid "Edit education"
 msgstr ""
 
+msgid "Edit elections"
+msgstr ""
+
 msgid "Edit examination"
 msgstr ""
 
+msgid "Edit examinations"
+msgstr ""
+
+msgid "Edit files"
+msgstr ""
+
 msgid "Edit group"
+msgstr ""
+
+msgid "Edit group permissions"
+msgstr ""
+
+msgid "Edit groups"
+msgstr ""
+
+msgid "Edit navigation and redirect"
+msgstr ""
+
+msgid "Edit news"
 msgstr ""
 
 msgid "Edit news item"
@@ -475,7 +547,19 @@ msgstr ""
 msgid "Edit page"
 msgstr ""
 
+msgid "Edit pages"
+msgstr ""
+
+msgid "Edit search-engine optimizations"
+msgstr ""
+
+msgid "Edit user"
+msgstr ""
+
 msgid "Edit user permissions"
+msgstr ""
+
+msgid "Edit vacancy"
 msgstr ""
 
 msgid "Education"
@@ -557,6 +641,9 @@ msgid "English title requires English content and vice versa"
 msgstr ""
 
 msgid "English title requires English description and vice versa"
+msgstr ""
+
+msgid "Error!"
 msgstr ""
 
 msgid "Examination"
@@ -693,6 +780,9 @@ msgstr ""
 msgid "Invalid REMOVE task id: "
 msgstr ""
 
+msgid "Invalid URL."
+msgstr ""
+
 msgid "Invalid email address."
 msgstr ""
 
@@ -758,6 +848,9 @@ msgstr ""
 msgid "Log in"
 msgstr ""
 
+msgid "Log off"
+msgstr ""
+
 msgid "Logo"
 msgstr ""
 
@@ -787,6 +880,9 @@ msgid "Modified"
 msgstr ""
 
 msgid "Modify"
+msgstr ""
+
+msgid "My applications"
 msgstr ""
 
 msgid "My submissions"
@@ -827,6 +923,9 @@ msgid "New item"
 msgstr ""
 
 msgid "New location"
+msgstr ""
+
+msgid "New password"
 msgstr ""
 
 msgid "New vacancy"
@@ -880,9 +979,6 @@ msgstr ""
 msgid "No location"
 msgstr ""
 
-msgid "No password submitted"
-msgstr ""
-
 msgid "No presidium"
 msgstr ""
 
@@ -902,6 +998,9 @@ msgid "Open voor nieuwe leden"
 msgstr ""
 
 msgid "Optional data"
+msgstr ""
+
+msgid "Owned by: "
 msgstr ""
 
 msgid "Page"
@@ -941,6 +1040,9 @@ msgid "Please fill in"
 msgstr ""
 
 msgid "Please fill in :D"
+msgstr ""
+
+msgid "Please try again"
 msgstr ""
 
 msgid "Please verify that you are not a robot."
@@ -1000,7 +1102,28 @@ msgstr ""
 msgid "Read"
 msgstr ""
 
+msgid "Read Pimpy"
+msgstr ""
+
+msgid "Read access to your Pimpy data"
+msgstr ""
+
+msgid "Read files"
+msgstr ""
+
+msgid "Read groups"
+msgstr ""
+
+msgid "Read mollie payments"
+msgstr ""
+
 msgid "Read more"
+msgstr ""
+
+msgid "Read user"
+msgstr ""
+
+msgid "Read vacancy"
 msgstr ""
 
 msgid "Read/Write"
@@ -1010,6 +1133,9 @@ msgid "Refresh"
 msgstr ""
 
 msgid "Register"
+msgstr ""
+
+msgid "Register OAuth developer application"
 msgstr ""
 
 msgid "Register account"
@@ -1027,7 +1153,7 @@ msgstr ""
 msgid "Remove page"
 msgstr ""
 
-msgid "Repeat password"
+msgid "Repeat new password"
 msgstr ""
 
 msgid "Request to DOMjudge server failed"
@@ -1039,10 +1165,16 @@ msgstr ""
 msgid "Reset password"
 msgstr ""
 
+msgid "Reset secret"
+msgstr ""
+
 msgid "Result"
 msgstr ""
 
 msgid "Retake"
+msgstr ""
+
+msgid "Revoke"
 msgstr ""
 
 msgid "Roles"
@@ -1052,6 +1184,9 @@ msgid "Run Error"
 msgstr ""
 
 msgid "Save"
+msgstr ""
+
+msgid "Scopes"
 msgstr ""
 
 msgid "Scoreboard"
@@ -1094,6 +1229,9 @@ msgid "Show news item archive"
 msgstr ""
 
 msgid "Show plaintext"
+msgstr ""
+
+msgid "Show profile"
 msgstr ""
 
 msgid "Show recent news items"
@@ -1167,6 +1305,18 @@ msgstr ""
 msgid "Success message: shown when user registers"
 msgstr ""
 
+#, python-format
+msgid "Successfully created client '%s'"
+msgstr ""
+
+#, python-format
+msgid "Successfully revoked token for client '%s'"
+msgstr ""
+
+#, python-format
+msgid "Successfully updated client '%s'"
+msgstr ""
+
 msgid "Team"
 msgstr ""
 
@@ -1232,6 +1382,12 @@ msgid "The page you tried to delete does not exist."
 msgstr ""
 
 msgid "The password you entered appears to be incorrect."
+msgstr ""
+
+msgid "The roles have been updated."
+msgstr ""
+
+msgid "The scopes required by your application"
 msgstr ""
 
 msgid "The seo settings have been saved"
@@ -1303,6 +1459,9 @@ msgid ""
 msgstr ""
 
 msgid "Unknown"
+msgstr ""
+
+msgid "Unknown OAuth error"
 msgstr ""
 
 msgid "Untried"
@@ -1397,6 +1556,9 @@ msgstr ""
 msgid "Would you like to recieve information from companies?"
 msgstr ""
 
+msgid "Write access to your Pimpy data"
+msgstr ""
+
 msgid "Written by"
 msgstr ""
 
@@ -1456,7 +1618,13 @@ msgstr ""
 msgid "Your account has been disabled, you are not allowed to log in"
 msgstr ""
 
+msgid "Your current password does not match."
+msgstr ""
+
 msgid "Your password has been updated."
+msgstr ""
+
+msgid "Your password has successfully been changed."
 msgstr ""
 
 msgid "Your payment has not been completed."
@@ -1669,13 +1837,7 @@ msgstr ""
 #~ msgid "Not given"
 #~ msgstr ""
 
-#~ msgid "No"
-#~ msgstr ""
-
 #~ msgid "Would you like to recieve mail from via?"
-#~ msgstr ""
-
-#~ msgid "Yes"
 #~ msgstr ""
 
 #~ msgid "Yes, but only for alumni activity"
@@ -1855,7 +2017,10 @@ msgstr ""
 #~ msgid "Wrong format summary."
 #~ msgstr ""
 
-#~ msgid "GA"
+#~ msgid "Delete alv"
+#~ msgstr ""
+
+#~ msgid "Developer applications"
 #~ msgstr ""
 
 #~ msgid "Address is required."
@@ -1952,5 +2117,23 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Ask the board to create the mailbox for thisgroup (if needed)"
+#~ msgstr ""
+
+#~ msgid "Access to your Pimpy data"
+#~ msgstr ""
+
+#~ msgid "Authorized callback URL"
+#~ msgstr ""
+
+#~ msgid "No password submitted"
+#~ msgstr ""
+
+#~ msgid "Repeat password"
+#~ msgstr ""
+
+#~ msgid "Ability to create ALVs"
+#~ msgstr ""
+
+#~ msgid "Ability to create activities"
 #~ msgstr ""
 

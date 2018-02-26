@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2018-01-06 16:16+0100\n"
+"POT-Creation-Date: 2018-01-16 00:14+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language: nl\n"
@@ -38,6 +38,9 @@ msgstr ""
 #, python-format
 msgid "API call failed: %s"
 msgstr "API call mislukt: %s"
+
+msgid "Access to your name and e-mail"
+msgstr "Toegang tot je naam en e-mail"
 
 msgid ""
 "According to Google this email does not exist. Please use an email that "
@@ -72,7 +75,7 @@ msgid "Add new version"
 msgstr "Nieuwe versie toevoegen"
 
 msgid "Add user to"
-msgstr ""
+msgstr "Gebruiker toevoegen aan"
 
 msgid "Address"
 msgstr "Adres"
@@ -157,6 +160,9 @@ msgstr ""
 "Let op: we gebruiken nu een base32 encoding. Lees de handleiding van deze"
 " module voor meer informatie."
 
+msgid "Authorized callback URLs"
+msgstr "Toegestaande callback URLs"
+
 msgid "Avatar deleted successfully."
 msgstr "Avatar succesvol verwijderd."
 
@@ -174,6 +180,9 @@ msgstr ""
 "Door je aan te melden bij deze activiteit ga je akkoord met de "
 "bovenstaande voorwaarden."
 
+msgid "Cancel"
+msgstr ""
+
 msgid "Cannot find parent navigation entry."
 msgstr "Het bovenligende menu item kan niet gevonden worden."
 
@@ -184,7 +193,7 @@ msgid "Captain's log succesfully ended."
 msgstr "Captain's log afsluiten gelukt."
 
 msgid "Chairman"
-msgstr ""
+msgstr "Voorzitter"
 
 msgid "Change password"
 msgstr "Verander wachtwoord"
@@ -192,8 +201,14 @@ msgstr "Verander wachtwoord"
 msgid "City"
 msgstr "Plaats"
 
+msgid "Click 'confirm' to allow the application to do the following:"
+msgstr "Click 'bevestigen' om de applicatie rechten geven tot het volgende:"
+
 msgid "Click to expand"
 msgstr "Klik om uit te klappen"
+
+msgid "Comma separated, regex allowed"
+msgstr "Komma gescheiden, regex toegestaan"
 
 msgid "Comment"
 msgstr "Commentaar"
@@ -209,6 +224,9 @@ msgstr "Commissieleden"
 
 msgid "Committees"
 msgstr "Commissies"
+
+msgid "Committees open for new members"
+msgstr "Commissies open voor nieuwe leden"
 
 msgid "Company"
 msgstr "Bedrijf"
@@ -235,6 +253,12 @@ msgstr "Compileerfout"
 
 msgid "Conditions"
 msgstr "Voorwaarden"
+
+msgid "Confirm"
+msgstr "Bevestigen"
+
+msgid "Connected applications"
+msgstr "Gekoppelde applicaties"
 
 msgid "Contact Name"
 msgstr "Contact Naam"
@@ -328,6 +352,9 @@ msgstr "Aanmaken"
 msgid "Create activity"
 msgstr "Activiteit aanmaken"
 
+msgid "Create application"
+msgstr "Applicatie aanmaken"
+
 msgid "Create form"
 msgstr "Formulier aanmaken"
 
@@ -349,11 +376,17 @@ msgstr "Aangemaakt"
 msgid "Current"
 msgstr "Huidig"
 
+msgid "Current Password"
+msgstr "Huidige wachtwoord"
+
 msgid "Current avatar"
 msgstr "Huidige avatar"
 
 msgid "Custom URL"
-msgstr ""
+msgstr "Aangepaste URL"
+
+msgid "DOMjudge administrator"
+msgstr "DOMjudge administrator"
 
 msgid "Date"
 msgstr "Datum"
@@ -388,6 +421,9 @@ msgstr "Pagina verwijderen:"
 msgid "Description"
 msgstr "Beschrijving"
 
+msgid "Description of the client, usage for example"
+msgstr "Beschrijving van de client, bijvoorbeeld gebruik"
+
 msgid "Details"
 msgstr "Details"
 
@@ -396,6 +432,9 @@ msgstr "Uitgeschakeld"
 
 msgid "Disclaimer"
 msgstr "Disclaimer"
+
+msgid "Display name of the client"
+msgstr "Weergave naam van de client"
 
 msgid "Displayed price"
 msgstr "Weergegeven prijs"
@@ -457,8 +496,20 @@ msgstr "E-mail type"
 msgid "Edit"
 msgstr "Aanpassen"
 
+msgid "Edit ALVs"
+msgstr "Bewerken ALVs"
+
 msgid "Edit GA"
 msgstr "ALV aanpassen"
+
+msgid "Edit Pimpy"
+msgstr "Bewerken Pimpy"
+
+msgid "Edit activities"
+msgstr "Bewerken activiteiten"
+
+msgid "Edit challenges"
+msgstr "Bewerken challenges"
 
 msgid "Edit course"
 msgstr "Vak aanpassen"
@@ -466,11 +517,32 @@ msgstr "Vak aanpassen"
 msgid "Edit education"
 msgstr "Opleiding aanpassen"
 
+msgid "Edit elections"
+msgstr "Bewerken verkiezingen"
+
 msgid "Edit examination"
 msgstr "Tentamen aanpassen"
 
+msgid "Edit examinations"
+msgstr "Bewerken tentamens"
+
+msgid "Edit files"
+msgstr "Bewerken bestanden"
+
 msgid "Edit group"
 msgstr "Groep aanpassen"
+
+msgid "Edit group permissions"
+msgstr "Bewerken groepsrechten"
+
+msgid "Edit groups"
+msgstr "Bewerken groepen"
+
+msgid "Edit navigation and redirect"
+msgstr "Bewerken navigation en redirect"
+
+msgid "Edit news"
+msgstr "Bewerken nieuws"
 
 msgid "Edit news item"
 msgstr "Nieuwsbericht aanpassen"
@@ -481,8 +553,20 @@ msgstr "Nieuwsbrief aanpassen"
 msgid "Edit page"
 msgstr "Pagina aanpassen"
 
+msgid "Edit pages"
+msgstr "Bewerken paginas"
+
+msgid "Edit search-engine optimizations"
+msgstr "Bewerken search-engine optimizations"
+
+msgid "Edit user"
+msgstr "Bewerken gebruiker"
+
 msgid "Edit user permissions"
 msgstr "Wijzig gebruikersrechten"
+
+msgid "Edit vacancy"
+msgstr "Bewerken vacature"
 
 msgid "Education"
 msgstr "Opleiding"
@@ -564,6 +648,9 @@ msgstr "Engelse titel vereist Engelse inhoud en vica versa."
 
 msgid "English title requires English description and vice versa"
 msgstr "Engelse naam vereist Engelse beschrijving en vica versa."
+
+msgid "Error!"
+msgstr "Fout!"
 
 msgid "Examination"
 msgstr "Tentamen"
@@ -702,6 +789,9 @@ msgstr "Ongeldige taak id in DONE: "
 msgid "Invalid REMOVE task id: "
 msgstr "Ongeldige taak id in REMOVE: "
 
+msgid "Invalid URL."
+msgstr "Ongeldige URL."
+
 msgid "Invalid email address."
 msgstr "Ongeldig emailadres."
 
@@ -769,6 +859,9 @@ msgstr "Location opgeslagen."
 msgid "Log in"
 msgstr "Log in"
 
+msgid "Log off"
+msgstr "Uitloggen"
+
 msgid "Logo"
 msgstr "Logo"
 
@@ -799,6 +892,9 @@ msgstr "Aangepast"
 
 msgid "Modify"
 msgstr "Bewerken"
+
+msgid "My applications"
+msgstr "Mijn applicaties"
 
 msgid "My submissions"
 msgstr "Mijn inzendingen"
@@ -839,6 +935,9 @@ msgstr "Nieuw item"
 
 msgid "New location"
 msgstr "Nieuwe locatie"
+
+msgid "New password"
+msgstr "Nieuw wachtwoord"
 
 msgid "New vacancy"
 msgstr "Nieuwe vacature"
@@ -891,9 +990,6 @@ msgstr "Geen formulier"
 msgid "No location"
 msgstr "Geen locatie"
 
-msgid "No password submitted"
-msgstr "Geen wachtwoord opgegeven"
-
 msgid "No presidium"
 msgstr ""
 
@@ -914,6 +1010,9 @@ msgstr ""
 
 msgid "Optional data"
 msgstr "Optionele gegevens"
+
+msgid "Owned by: "
+msgstr "Beheerder: "
 
 msgid "Page"
 msgstr "Pagina"
@@ -955,6 +1054,9 @@ msgstr "Alstublieft invullen"
 
 msgid "Please fill in :D"
 msgstr "Vul a.u.b. in :D"
+
+msgid "Please try again"
+msgstr ""
 
 msgid "Please verify that you are not a robot."
 msgstr "Verifieer dat je geen robot bent."
@@ -1013,8 +1115,29 @@ msgstr "Rang"
 msgid "Read"
 msgstr "Lees"
 
+msgid "Read Pimpy"
+msgstr "Lezen pimpy"
+
+msgid "Read access to your Pimpy data"
+msgstr "Lees rechten tot je Pimpy data"
+
+msgid "Read files"
+msgstr "Lezen bestanden"
+
+msgid "Read groups"
+msgstr "Lezen groepen"
+
+msgid "Read mollie payments"
+msgstr "Lezen mollie betalingen"
+
 msgid "Read more"
 msgstr "Meer lezen"
+
+msgid "Read user"
+msgstr "Lezen gebruiker"
+
+msgid "Read vacancy"
+msgstr "Lezen vacature"
 
 msgid "Read/Write"
 msgstr "Lees/Schrijf"
@@ -1024,6 +1147,9 @@ msgstr "Verversen"
 
 msgid "Register"
 msgstr "Registreer"
+
+msgid "Register OAuth developer application"
+msgstr "Registreer OAuth developer applicatie"
 
 msgid "Register account"
 msgstr "Gebruiker aanmaken"
@@ -1040,8 +1166,8 @@ msgstr "Ingeschreven activiteiten"
 msgid "Remove page"
 msgstr "Verwijder pagina"
 
-msgid "Repeat password"
-msgstr "Herhaal wachtwoord"
+msgid "Repeat new password"
+msgstr "Herhaal nieuw wachtwoord"
 
 msgid "Request to DOMjudge server failed"
 msgstr "Request aan de DOMjudge server mislukt"
@@ -1052,11 +1178,17 @@ msgstr "Vereist meteen betalen"
 msgid "Reset password"
 msgstr "Reset wachtwoord"
 
+msgid "Reset secret"
+msgstr ""
+
 msgid "Result"
 msgstr "Resultaat"
 
 msgid "Retake"
 msgstr "Herkansing"
+
+msgid "Revoke"
+msgstr ""
 
 msgid "Roles"
 msgstr "Rollen"
@@ -1066,6 +1198,9 @@ msgstr "Run Fout"
 
 msgid "Save"
 msgstr "Opslaan"
+
+msgid "Scopes"
+msgstr ""
 
 msgid "Scoreboard"
 msgstr "Scorebord"
@@ -1080,7 +1215,7 @@ msgid "Search for title, contact or company"
 msgstr "Zoeken op titel, contact of bedrijf"
 
 msgid "Secretary"
-msgstr ""
+msgstr "Secretaris"
 
 msgid "Select a time and date by clicking on the clock"
 msgstr "Selecteer een tijd en datum door op de klok te klikken"
@@ -1108,6 +1243,9 @@ msgstr "Toon niews berichten in het archief"
 
 msgid "Show plaintext"
 msgstr "Laat als plaintext zien"
+
+msgid "Show profile"
+msgstr "Toon profiel"
 
 msgid "Show recent news items"
 msgstr "Toon recente news berichten"
@@ -1181,6 +1319,18 @@ msgstr "Oplossing insturen"
 
 msgid "Success message: shown when user registers"
 msgstr "Succes bericht: zichtbaar wanneer gebruiker zich inschrijft"
+
+#, python-format
+msgid "Successfully created client '%s'"
+msgstr "Client '%s' succesvol aangemaakt"
+
+#, python-format
+msgid "Successfully revoked token for client '%s'"
+msgstr "Token voor client '%s' is ingetrokken"
+
+#, python-format
+msgid "Successfully updated client '%s'"
+msgstr "Client '%s' succesvol geupdate"
 
 msgid "Team"
 msgstr "Team"
@@ -1257,6 +1407,12 @@ msgstr "De pagina die je probeerde te verwijderen bestaat niet"
 
 msgid "The password you entered appears to be incorrect."
 msgstr "Het opgegeven wachtwoord lijkt incorrect."
+
+msgid "The roles have been updated."
+msgstr "De rollen zijn geupdate."
+
+msgid "The scopes required by your application"
+msgstr ""
 
 msgid "The seo settings have been saved"
 msgstr "De seo-instellingen zijn opgeslagen"
@@ -1339,6 +1495,9 @@ msgstr ""
 
 msgid "Unknown"
 msgstr "Onbekend"
+
+msgid "Unknown OAuth error"
+msgstr "Onbekende OAuth foutmelding"
 
 msgid "Untried"
 msgstr "Niet geprobeerd"
@@ -1435,6 +1594,9 @@ msgstr "Werklast"
 msgid "Would you like to recieve information from companies?"
 msgstr "Wil je informatie van bedrijven ontvangen?"
 
+msgid "Write access to your Pimpy data"
+msgstr "Schrijf rechten tot je Pimpy data"
+
 msgid "Written by"
 msgstr "Geschreven door"
 
@@ -1497,8 +1659,14 @@ msgstr ""
 msgid "Your account has been disabled, you are not allowed to log in"
 msgstr "Je account is gedeactiveerd, je mag niet inloggen"
 
+msgid "Your current password does not match."
+msgstr "Huidig wachtwoord klopt niet."
+
 msgid "Your password has been updated."
 msgstr "Uw wachtwoord is geüpdatet."
+
+msgid "Your password has successfully been changed."
+msgstr "Je wachtwoord is veranderd."
 
 msgid "Your payment has not been completed."
 msgstr "Je betaling is nog niet voltooid."
@@ -1691,14 +1859,8 @@ msgstr ""
 #~ msgid "Het email adres %(email)s is bij ons niet bekend."
 #~ msgstr ""
 
-#~ msgid "No"
-#~ msgstr "Nee"
-
 #~ msgid "Would you like to recieve mail from via?"
 #~ msgstr "Wil je email van via ontvangen?"
-
-#~ msgid "Yes"
-#~ msgstr "Ja"
 
 #~ msgid "Yes, but only for alumni activity"
 #~ msgstr "Ja, maar alleen voor alumni-activiteiten"
@@ -1859,6 +2021,12 @@ msgstr ""
 #~ msgid "GA"
 #~ msgstr "ALV"
 
+#~ msgid "Delete alv"
+#~ msgstr ""
+
+#~ msgid "Developer applications"
+#~ msgstr ""
+
 #~ msgid "Address is required."
 #~ msgstr "Adres is vereist."
 
@@ -1942,4 +2110,22 @@ msgstr ""
 
 #~ msgid "Zip code is required."
 #~ msgstr "Postcode is vereist."
+
+#~ msgid "Access to your Pimpy data"
+#~ msgstr "Toegang tot jouw Pimpy data"
+
+#~ msgid "Authorized callback URL"
+#~ msgstr ""
+
+#~ msgid "No password submitted"
+#~ msgstr "Geen wachtwoord opgegeven"
+
+#~ msgid "Repeat password"
+#~ msgstr "Herhaal wachtwoord"
+
+#~ msgid "Ability to create ALVs"
+#~ msgstr ""
+
+#~ msgid "Ability to create activities"
+#~ msgstr ""
 

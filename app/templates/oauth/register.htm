@@ -1,0 +1,10 @@
+{% extends "content.htm" %}
+
+{% from 'macros/form.htm' import render_form %}
+
+{% block content %}
+    <h1>{{ _("Register OAuth developer application") }}</h1>
+    <div class="col-md-8">
+        {{ render_form(form) }}
+    </div>
+{% endblock %}

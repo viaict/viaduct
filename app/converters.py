@@ -1,3 +1,4 @@
+
 from werkzeug.routing import ValidationError, BaseConverter
 
 from app import app
@@ -5,9 +6,7 @@ from app.service import alv_service
 
 
 class ModelIdConverter(BaseConverter):
-    """
-    URL converter that resolves id to a model and returns the model.
-    """
+    """URL converter that resolves id to a model and returns the model."""
 
     def __init__(self, url_map):
         super().__init__(url_map)

@@ -1,18 +1,47 @@
+import datetime
 import logging
 import os
+import sys
 
+import connexion
 from flask import Flask, request, session
 from flask.json import JSONEncoder as BaseEncoder
 from flask_babel import Babel
 from flask_login import current_user
-from speaklater import _LazyString
+from flask_swagger_ui import get_swaggerui_blueprint
+from speaklater import _LazyString  # noqa
 
+from app.exceptions import ResourceNotFoundException, ValidationException, \
+    AuthorizationException
 from app.roles import Roles
 from app.utils.import_module import import_module
+from .connexion_app import ConnexionFlaskApp
 from .extensions import db, login_manager, \
-    cache, toolbar, jsglue, sentry
+    cache, toolbar, jsglue, sentry, oauth, cors
 
-version = 'v2.9.2.0'
+version = 'v2.10.0.0'
+
+app = Flask(__name__)
+app.config.from_object('config.Config')
+
+logging.basicConfig(
+    format='[%(asctime)s] %(levelname)7s [%(name)s]: %(message)s',
+    stream=sys.stdout,
+)
+
+app.logger_name = 'app.flask'
+app.logger.setLevel(logging.NOTSET)
+
+_logger = logging.getLogger('app')
+_logger.setLevel(app.config['LOG_LEVEL'])
+
+logging.getLogger('werkzeug').setLevel(logging.INFO)
+
+
+# Set up Flask Babel, which is used for internationalisation support.
+babel = Babel(app)
+
+app.path = os.path.dirname(os.path.abspath(__file__))
 
 
 def static_url(url):
@@ -30,7 +59,7 @@ def is_module(path):
     return False
 
 
-def register_views(app, path, extension=''):
+def register_views(app, path):
     app_path = os.path.dirname(os.path.abspath(app.root_path))
 
     for filename in os.listdir(path):
@@ -46,18 +75,8 @@ def register_views(app, path, extension=''):
             blueprint = getattr(import_module(module_name), 'blueprint', None)
 
             if blueprint:
-                print(('{0} has been imported.'.format(module_name)))
+                _logger.info('"{}" has been imported'.format(module_name))
                 app.register_blueprint(blueprint)
-
-
-# Set up the app and load the configuration file.
-app = Flask(__name__)
-app.config.from_object('config.Config')
-
-# Set up Flask Babel, which is used for internationalisation support.
-babel = Babel(app)
-
-app.path = os.path.dirname(os.path.abspath(__file__))
 
 
 @babel.localeselector
@@ -84,11 +103,12 @@ def init_app():
     app.config['CACHE_TYPE'] = 'filesystem'
     app.config['CACHE_DIR'] = 'cache'
 
-    logging.basicConfig()
-
     cache.init_app(app)
     toolbar.init_app(app)
     jsglue.init_app(app)
+    oauth.init_app(app)
+    cors.init_app(app, resources={r"/api/*": {"origins": "*"}})
+    init_oauth()
 
     login_manager.init_app(app)
     login_manager.login_view = 'user.sign_in'
@@ -96,18 +116,8 @@ def init_app():
     db.init_app(app)
 
     if not app.debug and 'SENTRY_DSN' in app.config:
-        sentry.init_app(app)
+        sentry.init_app(app, logging=True, level=logging.WARNING)
         sentry.client.release = version
-
-    class JSONEncoder(BaseEncoder):
-        """Custom JSON encoding."""
-
-        def default(self, o):
-            if isinstance(o, _LazyString):
-                # Lazy strings need to be evaluation.
-                return str(o)
-
-            return BaseEncoder.default(self, o)
 
     @app.context_processor
     def inject_urls():
@@ -124,11 +134,111 @@ def init_app():
                                                    Roles.SEO_WRITE)
         return dict(can_write_seo=can_write_seo)
 
+    class JSONEncoder(BaseEncoder):
+        """Custom JSON encoding."""
+
+        def default(self, o):
+            if isinstance(o, _LazyString):
+                # Lazy strings need to be evaluation.
+                return str(o)
+
+            if isinstance(o, datetime.datetime):
+                if o.tzinfo:
+                    # eg: '2015-09-25T23:14:42.588601+00:00'
+                    return o.isoformat('T')
+                else:
+                    # No timezone present (almost always in viaduct)
+                    # eg: '2015-09-25T23:14:42.588601'
+                    return o.isoformat('T')
+
+            if isinstance(o, datetime.date):
+                return o.isoformat()
+
+            return BaseEncoder.default(self, o)
     app.json_encoder = JSONEncoder
 
     register_views(app, os.path.join(app.path, 'views'))
 
     login_manager.anonymous_user = AnonymousUser
 
-    log = logging.getLogger('werkzeug')
-    log.setLevel(app.config['LOG_LEVEL'])
+    return get_patched_api_app()
+
+
+def init_oauth():
+    from app.service import user_service, oauth_service
+
+    @oauth.clientgetter
+    def oauth_clientgetter(client_id):
+        return oauth_service.get_client_by_id(client_id)
+
+    @oauth.grantgetter
+    def oauth_grantgetter(client_id, code):
+        return oauth_service.get_grant_by_client_id_and_code(client_id, code)
+
+    @oauth.grantsetter
+    def oauth_grantsetter(client_id, code, request, *_, **__):
+        return oauth_service.create_grant(
+            client_id, code, current_user.id, request)
+
+    @oauth.tokengetter
+    def oauth_tokengetter(access_token=None, refresh_token=None):
+        return oauth_service.get_token(access_token, refresh_token)
+
+    @oauth.tokensetter
+    def oauth_tokensetter(token, request, *_, **__):
+        user_id = request.user.id if request.user else current_user.id
+        return oauth_service.create_token(token, user_id, request)
+
+    @oauth.usergetter
+    def oauth_usergetter(email, password, *_, **__):
+        try:
+            return user_service.get_user_by_login(
+                email=email, password=password)
+        except (ResourceNotFoundException, AuthorizationException,
+                ValidationException):
+            return None
+
+
+def get_patched_api_app():
+    # URL for exposing Swagger UI (without trailing '/')
+    swagger_url = '/api/docs'
+
+    # The API url defined by connexion.
+    api_urls = [{"name": "pimpy", "url": "/api/pimpy/swagger.json"},
+                {"name": "token", "url": "/api/token/swagger.json"}]
+
+    swaggerui_blueprint = get_swaggerui_blueprint(
+        swagger_url,
+        api_urls[0]["url"],
+        config={  # Swagger UI config overrides
+            'app_name': "Study Association via - Public API documentation",
+            'urls': api_urls
+        },
+        oauth_config={
+            'clientId': "swagger",
+        }
+    )
+    app.register_blueprint(swaggerui_blueprint, url_prefix=swagger_url)
+
+    def add_api(patched_app, name):
+        kwargs = {
+            "protocol": "http" if patched_app.app.debug else "https",
+        }
+        with open("./app/swagger/swagger-{}.yaml".format(name), "w") as f:
+            a = patched_app.app.jinja_env \
+                .get_template("swagger/{}.yaml"
+                              .format(name)).render(**kwargs)
+            f.write(a)
+
+        patched_app.add_api(
+            './swagger-{}.yaml'.format(name),
+            base_path="/api/{}".format(name), validate_responses=True,
+            resolver=connexion.RestyResolver('app.api.{}'.format(name)),
+            pythonic_params=True, strict_validation=True)
+
+    connexion_app = ConnexionFlaskApp(
+        __name__, app, specification_dir='swagger/', swagger_ui=False)
+
+    add_api(connexion_app, "pimpy")
+    add_api(connexion_app, "token")
+    return connexion_app

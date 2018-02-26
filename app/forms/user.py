@@ -1,21 +1,31 @@
 # coding=utf-8
-from app import app
-from app.models.user import User
-from app.forms.fields import EmailField
-
+from flask_babel import lazy_gettext as _  # noqa
 from flask_wtf import FlaskForm
 from flask_wtf.recaptcha import RecaptchaField, Recaptcha
 from wtforms import StringField, PasswordField, BooleanField, \
     SelectField, FileField, DateField
-from wtforms.validators import InputRequired, EqualTo, ValidationError,\
-    Length, Optional
+from wtforms.validators import (InputRequired, EqualTo, Length, Optional)
 
-from flask_babel import lazy_gettext as _, gettext  # noqa
+from app import app
+from app.forms.fields import EmailField
 from app.forms.util import FieldVerticalSplit
 
-import bcrypt
-
 _min_password_length = app.config['MIN_PASSWORD_LENGTH']
+
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField(
+        _('New password'), validators=[
+            InputRequired(),
+            Length(message=(_('Minimal password length: %(length)d',
+                              length=_min_password_length)),
+                   min=_min_password_length)]
+    )
+    password_repeat = PasswordField(
+        _('Repeat new password'), validators=[
+            InputRequired(),
+            EqualTo('password', message=_('Passwords do not match'))]
+    )
 
 
 class BaseUserForm(FlaskForm):
@@ -44,20 +54,7 @@ class BaseUserForm(FlaskForm):
     avatar = FileField('Avatar', validators=[Optional()])
 
 
-class SignUpForm(BaseUserForm):
-    password = PasswordField(
-        _('Password'), validators=[
-            InputRequired(),
-            Length(
-                message=(_('Minimal password length: %(length)d',
-                           length=_min_password_length)),
-                min=_min_password_length)]
-    )
-    repeat_password = PasswordField(
-        _('Repeat password'), validators=[
-            InputRequired(),
-            EqualTo('password', message=_('Passwords do not match'))]
-    )
+class SignUpForm(BaseUserForm, ResetPasswordForm):
     birth_date = DateField(_('Birthdate'), validators=[
         InputRequired()])
     study_start = DateField(_('Starting year study'), validators=[
@@ -68,7 +65,7 @@ class SignUpForm(BaseUserForm):
     register_split = FieldVerticalSplit([
         ['first_name', 'last_name', 'birth_date', 'address', 'zip', 'city',
          'country', 'recaptcha'],
-        ['email', 'password', 'repeat_password', 'student_id', 'education_id',
+        ['email', 'password', 'password_repeat', 'student_id', 'education_id',
          'study_start', 'receive_information']
     ], large_spacing=True)
 
@@ -78,17 +75,14 @@ class SignUpForm(BaseUserForm):
 class EditUserForm(BaseUserForm):
     """Edit a user as administrator."""
 
-    password = PasswordField(_('Password'))
-    repeat_password = PasswordField(_('Repeat password'))
     has_paid = BooleanField(_('Has paid'))
     honorary_member = BooleanField(_('Honorary member'))
     favourer = BooleanField(_('Favourer'))
     disabled = BooleanField(_('Disabled'))
 
     register_split = FieldVerticalSplit([
-        ['first_name', 'last_name', 'birth_date', 'address', 'zip', 'city',
-         'country'],
-        ['email', 'password', 'repeat_password', 'student_id', 'education_id',
+        ['first_name', 'last_name', 'address', 'zip', 'city', 'country'],
+        ['email', 'student_id', 'education_id', 'birth_date',
          'study_start', 'receive_information']
     ], large_spacing=True)
 
@@ -106,34 +100,15 @@ class EditUserForm(BaseUserForm):
 
     new_user = False
 
-    def validate_password(self, field):
-        """Providing a password is only required when creating a new user."""
-        if self.new_user:
-            if len(field.data) == 0:
-                raise ValidationError(_('No password submitted'))
-        if len(field.data) > 0 and len(field.data) < _min_password_length:
-            raise ValidationError(_('Minimal password length: %(length)d',
-                                    length=_min_password_length))
-
-    def validate_repeat_password(self, field):
-        """Only validate the repeat password if a password is set."""
-        if len(self.password.data) > 0 and field.data != self.password.data:
-            raise ValidationError(_('Passwords do not match'))
-
 
 class EditUserInfoForm(BaseUserForm):
     """Edit your own user information."""
 
     alumnus = BooleanField(_('Yes, I have finished studying'))
 
-    password = PasswordField(_('Password'))
-    repeat_password = PasswordField(_('Repeat password'))
-
     register_split = FieldVerticalSplit([
-        ['first_name', 'last_name', 'birth_date', 'address', 'zip', 'city',
-         'country'],
-        ['email', 'password', 'repeat_password', 'student_id', 'education_id',
-         'study_start']
+        ['first_name', 'last_name', 'address', 'zip', 'city', 'country'],
+        ['email', 'student_id', 'education_id', 'birth_date', 'study_start']
     ], large_spacing=True)
 
     optional_split = FieldVerticalSplit([
@@ -143,41 +118,10 @@ class EditUserInfoForm(BaseUserForm):
 
     new_user = False
 
-    def validate_password(self, field):
-        """Providing a password is only required when creating a new user."""
-        if self.new_user:
-            if len(field.data) == 0:
-                raise ValidationError(_('No password submitted'))
-        if len(field.data) > 0 and len(field.data) < _min_password_length:
-            raise ValidationError(_('Minimal password length: %(length)d',
-                                    length=_min_password_length))
-
-    def validate_repeat_password(self, field):
-        """Only validate the repeat password if a password is set."""
-        if len(self.password.data) > 0 and field.data != self.password.data:
-            raise ValidationError(_('Passwords do not match'))
-
 
 class SignInForm(FlaskForm):
     email = EmailField(_('E-mail adress'), validators=[InputRequired()])
     password = PasswordField(_('Password'), validators=[InputRequired()])
-
-    def validate_signin(self):
-        user = User.query.filter(User.email == self.email.data.strip()).first()
-
-        if user is None:
-            self.email.errors.append(_(
-                'It appears that account does not exist. Try again, or contact'
-                ' the website administration at ict (at) svia (dot) nl.'))
-            return None
-
-        submitted_hash = bcrypt.hashpw(self.password.data, user.password)
-        if submitted_hash != user.password:
-            self.password.errors.append(_(
-                'The password you entered appears to be incorrect.'))
-            return None
-
-        return user
 
 
 class RequestPassword(FlaskForm):
@@ -186,16 +130,12 @@ class RequestPassword(FlaskForm):
         validators=[Recaptcha(message='Check Recaptcha')])
 
 
-class ResetPassword(FlaskForm):
-    password = PasswordField(
-        _('Password'), validators=[
+class ChangePasswordForm(ResetPasswordForm):
+    current_password = PasswordField(
+        _('Current Password'), validators=[
             InputRequired(),
-            Length(message=(_('Minimal password length: %(length)d',
-                              length=_min_password_length)),
-                   min=_min_password_length)]
-    )
-    password_repeat = PasswordField(
-        _('Repeat password'), validators=[
-            InputRequired(),
-            EqualTo('password', message=_('Passwords do not match'))]
+            Length(
+                message=(_('Minimal password length: %(length)d',
+                           length=_min_password_length)),
+                min=_min_password_length)]
     )

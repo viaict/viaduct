@@ -5,13 +5,13 @@ from flask import url_for
 from flask_login import current_user
 
 from app import db
-from app.models.base_model import BaseEntity
 from app.models.activity import Activity
-from app.models.user import User
+from app.models.base_model import BaseEntity
 from app.models.mollie import Transaction
 from app.models.page import PageRevision, Page
+from app.models.user import User
+from app.service import page_service
 from app.utils.google import send_email
-from app.utils.page import PageAPI
 
 
 def export_form_data(r):
@@ -70,6 +70,10 @@ class CustomForm(db.Model, BaseEntity):
             'label': 'Form resultaat',
             'export': export_form_data,
             'on_by_default': False,
+        }), ('introductions', {
+            'label': 'Introducees',
+            'export': lambda r: r.introductions,
+            'on_by_default': True,
         })])
 
     def __init__(self, owner_id=None, name="", origin="", html="",
@@ -104,7 +108,8 @@ class CustomForm(db.Model, BaseEntity):
             .filter(PageRevision.custom_form_id == self.id).all()
 
         # Test if we are allowed to read on any on these pages.
-        if any([PageAPI.can_read(page) for page in pages]):
+        if any([page_service.can_user_read_page(page, user)
+                for page in pages]):
             return True
 
         return False

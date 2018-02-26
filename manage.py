@@ -418,7 +418,7 @@ def system():
 
 
 def _administrators_action(user_search, remove):
-    """Method for adding or removing users in the administrators group."""
+    """Add or remove users in the administrators group."""
     admin_group = Group.query.filter(Group.name == "administrators").first()
     if admin_group is None:
         print("Administrators group does not exist.")
