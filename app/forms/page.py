@@ -1,14 +1,12 @@
 from flask_babel import lazy_gettext as _
 from flask_wtf import FlaskForm
-from wtforms import BooleanField, StringField, TextAreaField, FieldList, \
-    SelectField, SubmitField, RadioField, FormField, IntegerField
-from wtforms import Form as UnsafeForm
+from wtforms import BooleanField, StringField, TextAreaField, SubmitField, \
+    RadioField
+from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField
 from wtforms.validators import InputRequired, Regexp, Optional
 
-
-class EditGroupPagePermissionEntry(UnsafeForm):
-    select = SelectField(None, coerce=int, choices=[
-        (0, _('None')), (1, _('Read')), (2, _('Read/Write'))])
+from app.forms.fields import CustomFormSelectField
+from app.service import group_service
 
 
 class SuperPageForm(FlaskForm):
@@ -24,10 +22,15 @@ class PageForm(SuperPageForm):
     nl_content = TextAreaField(_('Dutch content'))
     en_content = TextAreaField(_('English content'))
     filter_html = BooleanField(_('Do not filter HTML tags'))
-    custom_form_id = IntegerField()
-    permissions = FieldList(FormField(EditGroupPagePermissionEntry))
 
-    needs_paid = BooleanField(_('Visible for members only'))
+    custom_read_permission = BooleanField(_('Limit read permission to groups'))
+    read_groups = QuerySelectMultipleField(
+        _("Groups with read permission"),
+        query_factory=lambda: group_service.find_groups(),
+        get_label='name')
+
+    needs_paid = BooleanField(_('Require membership to view'))
+    custom_form_id = CustomFormSelectField(_('Form'))
 
     def validate(self):
 

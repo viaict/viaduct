@@ -12,10 +12,9 @@ from app.forms.navigation import NavigationEntryForm
 from app.models.navigation import NavigationEntry
 from app.models.page import Page
 from app.roles import Roles
-from app.service import role_service
+from app.service import role_service, page_service
 from app.utils.forms import flash_form_errors
 from app.utils.navigation import NavigationAPI
-from app.utils.page import PageAPI
 from app.utils.resource import get_all_routes
 
 blueprint = Blueprint('navigation', __name__, url_prefix='/navigation')
@@ -82,7 +81,7 @@ def edit(entry_id=None, parent_id=None):
         if not page_id and not form.external.data:
             # Check if the page exists, if not redirect to create it
             path = form.url.data.lstrip('/')
-            page = Page.get_by_path(path)
+            page = page_service.get_page_by_path(path)
             if url.rstrip('/') in get_all_routes():
                 return redirect(url_for('navigation.view'))
             if not page and form.url.data != '/':
@@ -126,7 +125,8 @@ def delete(entry_id, inc_page=0):
             flash('Deze item verwijst niet naar een pagina op deze website.',
                   'danger')
         else:
-            if entry.url is None or PageAPI.remove_page(entry.url.lstrip('/')):
+            if (entry.url is None or page_service.delete_page_by_path(
+                    entry.url.lstrip('/'))):
                 flash('De pagina is verwijderd.', 'success')
             else:
                 flash('De te verwijderen pagina kon niet worden gevonden.',

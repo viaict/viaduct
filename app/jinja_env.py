@@ -11,7 +11,6 @@ from app.utils.category import CategoryAPI  # noqa
 from app.utils.company import CompanyAPI  # noqa
 from app.utils.guide import GuideAPI  # noqa
 from app.utils.navigation import NavigationAPI  # noqa
-from app.utils.page import PageAPI  # noqa
 from app.utils.pimpy import PimpyAPI  # noqa
 from app.utils.seo import get_seo_fields  # noqa
 from app.utils.serialize_sqla import serialize_sqla  # noqa
@@ -41,6 +40,5 @@ app.jinja_env.globals.update(app_config=app.config)
 app.jinja_env.globals.update(FormWrapper=FormWrapper)
 app.jinja_env.globals.update(NavigationAPI=NavigationAPI)
 app.jinja_env.globals.update(PimpyAPI=PimpyAPI)
-app.jinja_env.globals.update(PageAPI=PageAPI)
 app.jinja_env.globals.update(CategoryAPI=CategoryAPI)
 app.jinja_env.globals.update(get_seo_fields=get_seo_fields)

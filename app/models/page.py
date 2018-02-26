@@ -1,6 +1,8 @@
 import sys
-from sqlalchemy import event
+
 from flask_babel import lazy_gettext as _
+from sqlalchemy import event
+
 from app import db, get_locale
 from app.models.base_model import BaseEntity
 
@@ -10,6 +12,7 @@ class Page(db.Model, BaseEntity):
 
     path = db.Column(db.String(200), unique=True)
     needs_paid = db.Column(db.Boolean)
+    custom_read_permission = db.Column(db.Boolean)
 
     type = db.Column(db.String(256))
 
@@ -22,18 +25,6 @@ class Page(db.Model, BaseEntity):
 
     def __repr__(self):
         return '<Page(%s, "%s")>' % (self.id, self.path)
-
-    def can_read(self, user):
-        if PagePermission.get_user_rights(user, self) > 0:
-            return True
-        else:
-            return False
-
-    def can_write(self, user):
-        if PagePermission.get_user_rights(user, self) > 1:
-            return True
-        else:
-            return False
 
     def get_latest_revision(self):
         """Get the latest revision of this page."""
@@ -61,10 +52,6 @@ class Page(db.Model, BaseEntity):
     @staticmethod
     def strip_path(path):
         return path.rstrip('/')
-
-    @staticmethod
-    def get_by_path(path):
-        return Page.query.filter(Page.path == path).first()
 
 
 @event.listens_for(Page, 'load')
@@ -181,79 +168,11 @@ def set_page_revision_locale(page_rev, context):
         page_rev.content = 'N/A'
 
 
-class PagePermission(db.Model):
-    __tablename__ = 'page_permission'
+class PageReadPermission(db.Model, BaseEntity):
+    """Contains page group combinations with use custom read permissions."""
 
-    id = db.Column(db.Integer, primary_key=True)
-    permission = db.Column(db.Integer)
-    page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
+    group = db.relationship('Group')
 
-    page = db.relationship('Page', backref=db.backref('permissions',
-                                                      lazy='joined'))
-
-    def __init__(self, group_id, page_id, permission=0):
-        self.permission = permission
-        self.group_id = group_id
-        self.page_id = page_id
-
-    @staticmethod
-    def get_user_rights(user, page):
-        if not page:
-            return 0
-
-        if user.is_anonymous:
-            if page.needs_paid:
-                return 0
-            else:
-                return 1
-
-        if not user.has_paid and page.needs_paid:
-            return 0
-
-        rights = 0
-        for group in user.groups:
-            if group.name == 'administrators':
-                return 2
-
-            try:
-                permissions = next(perm for perm in page.permissions
-                                   if perm.group_id == group.id)
-
-                if permissions.permission >= 2:
-                    return permissions.permission
-                elif permissions.permission > rights:
-                    rights = permissions.permission
-            except StopIteration:
-                pass
-
-        return rights
-
-
-# This class is not used at all in viaduct
-# class IdRevision(SuperRevision):
-#     """Class that page types can inherit from to let their pages to work with
-#     id's instead of paths."""
-#     __abstract__ = True
-#
-#     instance_id = db.Column(db.Integer)
-#
-#     def __init__(self, title, comment, instance_id):
-#         """Initialization. Don't forget to call
-#         `super().__init__(title, comment, instance_id)`."""
-#         super(IdRevision, self).__init__(title, comment)
-#
-#         self.instance_id = instance_id
-#
-#     def get_path(self):
-#         return '/%s/%d/' % (self.page.type, self.instance_id)
-#
-#     @classmethod
-#     def get_new_id(cls):
-#         first = cls.get_query().first()
-#
-#         return first.instance_id + 1 if first else 1
-#
-#     @classmethod
-#     def get_latest(cls, instance_id):
-#         return cls.get_query().filter(cls.instance_id == instance_id).first()
+    page = db.relationship('Page')
+    page_id = db.Column(db.Integer, db.ForeignKey('page.id'))

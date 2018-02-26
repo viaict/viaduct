@@ -3,13 +3,14 @@ import datetime
 import re
 
 from flask import render_template, request, url_for
+from flask_login import current_user
 
 from app import db
 from app.forms.user import SignInForm
 from app.models.activity import Activity
 from app.models.navigation import NavigationEntry
 from app.models.page import Page
-from app.utils.page import PageAPI
+from app.service import page_service
 
 
 class NavigationAPI:
@@ -127,7 +128,7 @@ class NavigationAPI:
         """
         if entry.external or entry.activity_list or not entry.page:
             return True
-        return PageAPI.can_read(entry.page)
+        return page_service.can_user_read_page(entry.page, current_user)
 
     @staticmethod
     def remove_unauthorized(entries):

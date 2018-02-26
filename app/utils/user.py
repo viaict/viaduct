@@ -7,7 +7,6 @@ import urllib.request
 from flask import render_template
 from flask_login import current_user
 
-from app.models.page import PagePermission
 from app.utils.file import file_exists_pattern, file_remove_pattern, \
     file_upload
 
@@ -89,14 +88,6 @@ class UserAPI:
     def get_groups_for_current_user():
         """Call the get_groups_for_user_id function with current user."""
         return UserAPI.get_groups_for_user_id(current_user)
-
-    @staticmethod
-    def can_read(page):
-        return PagePermission.get_user_rights(current_user, page) > 0
-
-    @staticmethod
-    def can_write(page):
-        return PagePermission.get_user_rights(current_user, page) > 1
 
     @staticmethod
     def get_membership_warning():
