@@ -3,24 +3,51 @@ import datetime
 from app import db
 from app.models.base_model import BaseEntity
 
-newsletter_activities = db.Table(
-    'newsletter_activities',
-    db.Column('newsletter_id', db.Integer, db.ForeignKey('newsletter.id')),
-    db.Column('activity_id', db.Integer, db.ForeignKey('activity.id'))
-)
+from sqlalchemy.ext.orderinglist import ordering_list
 
-newsletter_news = db.Table(
-    'newsletter_news',
-    db.Column('newsletter_id', db.Integer, db.ForeignKey('newsletter.id')),
-    db.Column('news_id', db.Integer, db.ForeignKey('news.id'))
-)
+
+class NewsletterActivity(db.Model):
+    __tablename__ = 'newsletter_activities'
+
+    def __init__(self, activity=None):
+        self.activity = activity
+
+    newsletter_id = db.Column(db.Integer, db.ForeignKey('newsletter.id',
+                                                        ondelete='cascade'),
+                              nullable=False, primary_key=True)
+    activity_id = db.Column(db.Integer, db.ForeignKey('activity.id'),
+                            nullable=False, primary_key=True)
+    position = db.Column(db.Integer, nullable=False)
+
+    activity = db.relationship('Activity')
+
+
+class NewsletterNewsItem(db.Model):
+    __tablename__ = 'newsletter_news'
+
+    def __init__(self, news_item=None):
+        self.news_item = news_item
+
+    newsletter_id = db.Column(db.Integer, db.ForeignKey('newsletter.id',
+                                                        ondelete='cascade'),
+                              nullable=False, primary_key=True)
+    news_id = db.Column(db.Integer, db.ForeignKey('news.id'),
+                        nullable=False, primary_key=True)
+    position = db.Column(db.Integer, nullable=False)
+
+    news_item = db.relationship('News')
 
 
 class Newsletter(db.Model, BaseEntity):
-    __tablename__ = 'newsletter'
-    activities = db.relationship('Activity', secondary=newsletter_activities)
-    news_items = db.relationship('News', secondary=newsletter_news,
-                                 order_by="News.publish_date")
+    activities = db.relationship('NewsletterActivity',
+                                 order_by='NewsletterActivity.position',
+                                 collection_class=ordering_list('position'),
+                                 cascade='all, delete-orphan')
+
+    news_items = db.relationship('NewsletterNewsItem',
+                                 order_by='NewsletterNewsItem.position',
+                                 collection_class=ordering_list('position'),
+                                 cascade='all, delete-orphan')
 
     def __init__(self, start_day=None):
         if start_day is None:

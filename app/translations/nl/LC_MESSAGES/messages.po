@@ -225,6 +225,9 @@ msgstr "Commissieleden"
 msgid "Committees"
 msgstr "Commissies"
 
+msgid "Committees open for new members"
+msgstr "Commissies open voor nieuwe leden"
+
 msgid "Company"
 msgstr "Bedrijf"
 
