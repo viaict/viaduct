@@ -28,7 +28,7 @@ REDIR_PAGES = {'view': 'examination.view_examination',
 DATE_FORMAT = app.config['DATE_FORMAT']
 
 
-@blueprint.route('/examination/preview/<int:exam_id>/<string:doc_type>/',
+@blueprint.route('/preview/<int:exam_id>/<string:doc_type>/',
                  methods=['GET', 'POST'])
 @require_membership
 def preview(exam_id, doc_type):
@@ -93,14 +93,15 @@ def add():
                                    form=form,
                                    test_types=test_types, new_exam=True)
         else:
-            examination_service.\
+            exam = examination_service.\
                 add_examination(exam_filename, form.date.data,
                                 form.comment.data, form.course.data,
                                 form.education.data, answer_filename,
                                 form.test_type.data)
 
             flash(_('Examination successfully uploaded.'), 'success')
-            return redirect(url_for('examination.preview', new_exam=True))
+            return redirect(url_for('examination.preview',
+                                    exam_id=exam.id, doc_type='exam'))
 
     return render_template('examination/edit.htm',
                            courses=courses,
