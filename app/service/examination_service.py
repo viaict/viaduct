@@ -64,6 +64,8 @@ def add_course(name, description):
 
     examination_repository.save_course(course)
 
+    return course
+
 
 def add_education(name):
     existing_education = examination_repository.find_education_by_name(name)
@@ -74,6 +76,8 @@ def add_education(name):
     education.name = name
 
     examination_repository.save_education(education)
+
+    return education
 
 
 def add_examination(path, date, comment, course_id, education_id, answers,
@@ -92,6 +96,8 @@ def add_examination(path, date, comment, course_id, education_id, answers,
 
     examination_repository.save_examination(exam)
 
+    return exam
+
 
 def update_examination(exam_id, path, date, comment, course_id, education_id,
                        answers, test_type):
@@ -109,6 +115,8 @@ def update_examination(exam_id, path, date, comment, course_id, education_id,
 
     examination_repository.save_education(exam)
 
+    return exam
+
 
 def update_education(education_id, name):
     education = examination_repository.find_education_by_id(education_id)
@@ -118,6 +126,8 @@ def update_education(education_id, name):
     education.name = name
 
     examination_repository.save_education(education)
+
+    return education
 
 
 def update_course(course_id, name, description):
@@ -129,6 +139,8 @@ def update_course(course_id, name, description):
     course.description = description
 
     examination_repository.save_course(course)
+
+    return course
 
 
 def delete_examination(examination_id):
