@@ -10,6 +10,8 @@ from flask_babel import Babel
 from flask_login import current_user
 from flask_swagger_ui import get_swaggerui_blueprint
 from speaklater import _LazyString  # noqa
+from hashfs import HashFS
+import mimetypes
 
 from app.exceptions import ResourceNotFoundException, ValidationException, \
     AuthorizationException
@@ -40,6 +42,9 @@ logging.getLogger('werkzeug').setLevel(logging.INFO)
 
 # Set up Flask Babel, which is used for internationalisation support.
 babel = Babel(app)
+
+hashfs = HashFS(app.config['HASHFS_ROOT_DIR'])
+mimetypes.init()
 
 app.path = os.path.dirname(os.path.abspath(__file__))
 

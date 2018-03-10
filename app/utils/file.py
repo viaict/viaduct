@@ -84,7 +84,9 @@ def file_upload(f, directory=UPLOAD_DIR, image=False, filename=None):
     os.chmod(path, 0o644)
 
     # Add to database if needed
-    new_file = File(filename)
+    new_file = File()
+    new_file.display_name = filename
+
     if directory == UPLOAD_DIR:
         db.session.add(new_file)
         db.session.commit()

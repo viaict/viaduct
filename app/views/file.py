@@ -1,13 +1,15 @@
 """Views for the file module."""
-from flask import Blueprint, render_template, request, flash
+from flask import Blueprint, render_template, request, flash, abort
 from flask_login import current_user
 
 from app.decorators import require_role
 from app.forms.file import FileForm
 from app.models.file import File
+from app.enums import FileCategory
 from app.roles import Roles
 from app.service import role_service
 from app.utils.file import file_upload, file_search
+from app.service import file_service
 
 blueprint = Blueprint('file', __name__, url_prefix='/files')
 
@@ -20,12 +22,11 @@ def list(page_nr=1):
     if request.args.get('search'):
         search = request.args.get('search', None)
         filters = file_search(search)
-        files = File.query.filter(File.name.in_(filters),
-                                  File.page == None)  # noqa
+        files = File.query.filter(File.display_name.in_(filters))
     else:
-        files = File.query.filter(File.page == None)  # noqa
+        files = File.query
 
-    files = files.order_by(File.name).paginate(page_nr, 30, False)
+    files = files.order_by(File.display_name).paginate(page_nr, 30, False)
 
     form = FileForm()
 
@@ -50,7 +51,7 @@ def upload(page_nr=1):
         if file:
             new_files.append(file)
 
-    files = File.query.filter_by(page=None).order_by(File.name)\
+    files = File.query.filter_by(page=None).order_by(File.display_name)\
         .paginate(page_nr, 30, False)
     form = FileForm()
 
@@ -58,3 +59,32 @@ def upload(page_nr=1):
     can_write = role_service.user_has_role(current_user, Roles.FILE_WRITE)
 
     return render_template('files/list.htm', **locals())
+
+
+@blueprint.route('/content/<int:file_id>/<string:file_hash>/', methods=['GET'])
+def file_content(file_id, file_hash):
+    f = file_service.get_file_by_id(file_id)
+
+    if f.hash != file_hash:
+        return abort(404)
+
+    if (f.category == FileCategory.EXAMINATION or
+            f.category == FileCategory.ALV_DOCUMENT) and \
+            (current_user.is_anonymous or not current_user.has_paid):
+        return abort(404)
+
+    mimetype = file_service.get_file_mimetype(f)
+    content = file_service.get_file_content(f)
+
+    if mimetype is None:
+        mimetype = 'application/octet-stream'
+
+    headers = {'Content-Type': mimetype}
+
+    if f.display_name is not None:
+        fn = f.display_name
+        if len(f.extension) > 0:
+            fn += "." + f.extension
+        headers['Content-Disposition'] = 'inline; filename="{}"'.format(fn)
+
+    return content, headers

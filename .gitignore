@@ -25,6 +25,7 @@ Thumbs.db
 *.swp
 
 app/swagger
+app/uploads
 !app/static/img/*.png
 app/static/files/*
 app/static/css/*
