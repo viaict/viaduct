@@ -9,9 +9,56 @@ from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import mysql
 
+from app import app, db, hashfs
+from app.models.file import File
+
+import os
+import traceback
+import re
+
 # revision identifiers, used by Alembic.
 revision = 'adbd033b0dcd'
 down_revision = '0563ce5ca262'
+
+
+def migrate_files():
+    print("Migrating all existing files to HashFS")
+
+    filename_regex = re.compile(r'(.+)\.([^\s.]+)')
+
+    files = db.session.query(File).all()
+    files_dir = app.config['UPLOAD_DIR']
+
+    total = len(files)
+    stepsize = 40
+
+    for i, f in enumerate(files):
+        if (i + 1) % stepsize == 0:
+            print("{}/{}".format(i + 1, total))
+
+        # Not an old file
+        if len(f.hash) > 0:
+            continue
+
+        path = os.path.join(files_dir, f.display_name)
+        if not os.path.isfile(path):
+            print("File does not exist:", path)
+            db.session.delete(f)
+            continue
+
+        with open(path, 'rb') as file_reader:
+            address = hashfs.put(file_reader)
+
+        f.hash = address.id
+
+        m = filename_regex.match(f.display_name)
+        if m is not None:
+            f.display_name = m.group(1)
+            f.extension = m.group(2).lower()
+        else:
+            f.extension = ""
+
+    db.session.commit()
 
 
 def upgrade():
@@ -20,12 +67,16 @@ def upgrade():
     op.add_column('file', sa.Column('category', sa.Enum('UPLOADS', 'EXAMINATION', 'ACTIVITY_PICTURES', 'ALV_DOCUMENT', 'COMPANY_LOGO', 'USER_AVATAR', name='filecategory'), nullable=False))
     op.add_column('file', sa.Column('extension', sa.String(length=20), nullable=False))
     op.add_column('file', sa.Column('hash', sa.String(length=200), nullable=False))
-    op.create_unique_constraint(op.f('uq_file_display_name'), 'file', ['display_name'])
+    op.create_unique_constraint(op.f('uq_file_display_name'), 'file', ['display_name', 'extension'])
     op.drop_index('uq_file_name', table_name='file')
     op.drop_constraint('file_ibfk_1', 'file', type_='foreignkey')
     op.drop_column('file', 'page_id')
-    # op.drop_column('file', 'name')
     # ### end Alembic commands ###
+
+    try:
+        migrate_files()
+    except:
+        traceback.print_exc()
 
 
 def downgrade():
