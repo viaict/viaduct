@@ -8,7 +8,7 @@
 {% block content %}
     <div class='mainblock'>
         <div class='page-header'>
-            {% if can_write and (not page.id or UserAPI.can_write(page)) %}
+            {% if can_write %}
                 <div class='btn-group pull-right'>
                     {% if page.id %}
                         <a class='btn btn-default' href='{{ url_for('page.get_page_history', path=page.path) }}'>

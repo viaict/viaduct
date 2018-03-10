@@ -16,6 +16,8 @@
 @import 'modules/_pimpy';
 @import 'modules/_inbox';
 
+@import 'select2.sortable';
+
 label.checkbox {
     font-weight:normal;
 }
@@ -884,4 +886,9 @@ $DOMJUDGE_LIGHTGREEN:   #7CD449;
     #domjudge-buttons {
         margin-right: 10px;
     }
+}
+
+/* Fix sentry feedback form */
+.sentry-error-embed * {
+    position: relative;
 }

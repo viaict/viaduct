@@ -144,6 +144,13 @@
     {{ _render_field_with_errors(field, field(class='form-control'), False) }}
 {% endmacro %}
 
+{% macro render_ordered_multiselect(field) %}
+    {{ ignore_kwargs(kwargs) }}
+    <div class="select2-sortable">
+    {{ _render_field_with_errors(field, field(class='form-control'), False) }}
+    </div>
+{% endmacro %}
+
 {# TODO Remove once done #}
 {% macro render_file(field) %}
     {{ ignore_kwargs(kwargs) }}
@@ -169,7 +176,7 @@
     <div class='input-group'>
         {{ _render_select_options(field) }}
         <span class="input-group-btn">
-            <a href="{{ url_for('examination.add_course') }}" class="btn btn-default btn-success">
+            <a href="{{ url_for('course.add_course') }}" class="btn btn-default btn-success">
                 <i class="glyphicon glyphicon-pencil"></i>
                 {{_('New course')}}
             </a>
@@ -186,7 +193,7 @@
     <div class='input-group'>
         {{ _render_select_options(field) }}
         <span class="input-group-btn">
-            <a href="{{ url_for('examination.add_education') }}" class="btn btn-default btn-success">
+            <a href="{{ url_for('education.add_education') }}" class="btn btn-default btn-success">
                 <i class="glyphicon glyphicon-pencil"></i>
                 {{_('New education')}}
             </a>
@@ -305,6 +312,9 @@
         {{ render_integer(f, **kwargs) }}
     {%- elif f.type == 'RadioField' -%}
         {{ render_radio_buttons(f, **kwargs) }}
+    {%- elif f.type == 'OrderedSelectMultipleField'
+            or f.type == 'OrderedQuerySelectMultipleField' -%}
+        {{ render_ordered_multiselect(f, **kwargs) }}
     {%- elif f.type == 'SelectField' -%}
         {{ render_select(f, **kwargs) }}
     {%- elif f.type == 'QuerySelectField' -%}
@@ -360,6 +370,9 @@
     {%- if form_wrapped.has_select_fields -%}
     {{ enable_select2() }}
     {%- endif -%}
+    {%- if form_wrapped.has_ordered_multiselect_fields -%}
+    {{ enable_ordered_select2(form_wrapped.ordered_multiselect_fields) }}
+    {%- endif -%}
     {%- if form_wrapped.has_custom_form_fields -%}
     <script src='{{static_url('/static/js/custom_form/loader.js')}}'></script>
     {%- endif -%}
@@ -371,6 +384,20 @@
     $(function () {
         'use strict';
         $("select").select2();
+    });
+</script>
+{% endmacro %}
+
+{% macro enable_ordered_select2(fields) %}
+<script type='text/javascript'>
+    $(function () {
+        'use strict';
+
+        {% for field in fields %}
+        $("#{{ field.id }}").select2Sortable({
+            bindOrder: 'sortableStop'
+        });
+        {% endfor %}
     });
 </script>
 {% endmacro %}

@@ -1,13 +1,15 @@
 from datetime import date, datetime
+
 from flask import Blueprint, render_template, abort
 from flask_babel import _
 from flask_login import current_user
 from sqlalchemy import desc
 
 from app import db, cache
+from app.models.activity import Activity
 from app.models.news import News
 from app.models.page import Page, PageRevision
-from app.models.activity import Activity
+from app.service import page_service
 
 blueprint = Blueprint('home', __name__)
 
@@ -32,7 +34,7 @@ def get_revisions(data):
 
             continue
 
-        page = Page.get_by_path(Page.strip_path(path))
+        page = page_service.get_page_by_path(Page.strip_path(path))
         pages.append(page)
 
         if not page:

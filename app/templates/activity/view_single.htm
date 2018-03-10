@@ -120,6 +120,15 @@
                                             <p>{{_('By registering you agree with the terms above.')}}</p>
                                         </div>
                                     {% endif %}
+                                    {% if activity.form.introductions > 0 %}
+                                        <div class="col-md-7">
+                                            {% if num_extra_attendees is defined and num_extra_attendees != None %}
+                                                <label>{{_('Number of extra attendants')}}: +{{ num_extra_attendees }}</label>
+                                            {% else %}
+                                                {{ render_field(form.introductions) }}
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
                                 </div>
                                 {% if current_user.has_paid %}
                                     <button id="custom_form" class="btn btn-success">{{_('Send form')}}</button>

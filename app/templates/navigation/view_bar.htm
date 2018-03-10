@@ -102,8 +102,11 @@
                                     <a href="{{ url_for('user.view_single', user_id=current_user.id) }}">{{ _("Show profile") }}</a>
                                 </p>
                                 <p>
-                                    <a href="{{ url_for('oauth.list_clients') }}">{{ _("Connected applications") }}</a>
+                                    <a href="{{ url_for('user.change_password', user_id=current_user.id) }}">{{ _("Change password") }}</a>
                                 </p>
+                                {#<p>
+                                    <a href="{{ url_for('oauth.list_clients') }}">{{ _("Connected applications") }}</a>
+                                </p>#}
                             </div>
                             <div id="logoutButtonContainer">
                                 <a href="{{ url_for('user.sign_out') }}">
@@ -139,8 +142,11 @@
                                     <a href="{{ url_for('user.view_single', user_id=current_user.id) }}">{{ _("Show profile") }}</a>
                                 </p>
                                 <p>
-                                    <a href="{{ url_for('oauth.list_clients') }}">{{ _("Connected applications") }}</a>
+                                    <a href="{{ url_for('user.change_password', user_id=current_user.id) }}">{{ _("Change password") }}</a>
                                 </p>
+                                {#<p>
+                                    <a href="{{ url_for('oauth.list_clients') }}">{{ _("Connected applications") }}</a>
+                                </p>#}
                             </div>
                             <div id="logoutButtonContainerMobile">
                                 <a href="{{ url_for('user.sign_out') }}">

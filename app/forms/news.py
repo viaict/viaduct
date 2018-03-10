@@ -1,9 +1,9 @@
+from datetime import date, timedelta
+
 from flask_babel import lazy_gettext as _
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, DateField, BooleanField
 from wtforms.validators import InputRequired, Optional
-
-from datetime import date, timedelta
 
 from app.forms.util import FieldTabGroup, FieldTab, FieldVerticalSplit
 
@@ -45,7 +45,6 @@ class NewsForm(FlaskForm):
             result = False
 
         # Test if either english or dutch is entered
-        result = True
         if not (self.nl_title.data or self.en_title.data):
             self.nl_title.errors.append(
                 _('Either Dutch or English title required'))

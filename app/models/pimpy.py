@@ -1,8 +1,8 @@
 import datetime
 
-from jinja2 import escape
 import baas32 as b32
 from flask_login import current_user
+from jinja2 import escape
 
 from app import app, db
 from app.models.base_model import BaseEntity
@@ -102,7 +102,7 @@ class Task(db.Model, BaseEntity):
 
     @staticmethod
     def get_status_meanings():
-        statusi = [0 for i in range(len(Task.status_meanings) - 2)]
+        statusi = [0 for _ in range(len(Task.status_meanings) - 2)]
         for i in range(0, len(Task.status_meanings) - 2):
             statusi[i] = [Task.status_meanings[i], Task.status_colors[i], i]
         return statusi
@@ -148,7 +148,7 @@ class Minute(db.Model, BaseEntity):
         self.minute_date = minute_date
 
     def get_name(self):
-        """A representable (unique) name for minute."""
+        """Representable (unique) name for minute."""
         return 'minute%d' % self.id
 
     def get_timestamp(self):

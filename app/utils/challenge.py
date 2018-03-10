@@ -1,11 +1,12 @@
-from app import db
-
-from app.models.page import Page, PageRevision
-from app.models.user import User
-from app.models.challenge import Challenge, Submission, Competitor
+import datetime
 
 from sqlalchemy import and_
-import datetime
+
+from app import db
+from app.models.challenge import Challenge, Submission, Competitor
+from app.models.page import Page, PageRevision
+from app.models.user import User
+from app.service import page_service
 
 ALLOWED_EXTENSIONS = set(['png', 'gif', 'jpg', 'jpeg'])
 UPLOAD_DIR = 'app/static/files/users/'
@@ -201,7 +202,8 @@ class ChallengeAPI:
     @staticmethod
     def get_challenge_description():
         """ Get the description page for challenges """
-        page = Page.get_by_path(Page.strip_path("challenge_description"))
+        page = page_service.get_page_by_path(
+            Page.strip_path("challenge_description"))
 
         if not page:
             revision = PageRevision(None, None, None, None, None)
