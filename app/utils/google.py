@@ -182,7 +182,10 @@ def add_email_to_group_if_not_exists(email, listname):
     try:
         add_email_to_group(email, listname)
     except HttpError as e:
-        if e.resp.status != 409:
+        if e.resp.status == 404:
+            _logger.error(e, exc_info=True)
+            flash('Google group does not exist (yet?)')
+        elif e.resp.status != 409:
             # Something else went wrong than the list already existing
             _logger.error(e, exc_info=True)
             flash('Something went wrong while updating the users'
