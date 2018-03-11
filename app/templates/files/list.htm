@@ -50,10 +50,18 @@
             {% for index, new_file in enumerate(new_files) %}
             <div class="row">
                 <div class="col-md-12">
+                    <b>{{ _('Filename') }}:</b>
+                    <p style="font-family: monospace; display: inline; margin-left: 10px">
+                        {{ new_file.full_display_name }}
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
                     <b>{{ _('Link to file') }}:</b>
                     <div class="input-group" style="padding-bottom: 5px">
                         <input id="file-{{ index }}"
-                        class="form-control url-copy-textbox" type="text" value="{{ hostname }}/static/files/{{ new_file.name }}" readonly></input>
+                        class="form-control url-copy-textbox" type="text" value="{{ url_for('file.content', file_id=new_file.id, file_hash=new_file.hash, _external=True) }}" readonly></input>
                         <span class="input-group-btn">
                             <button class="btn btn-primary"
                                 title="{{ _('Link copied') }}"
@@ -85,7 +93,7 @@
             <div class="form-group">
                 <label>{{ _('Search') }}</label>
                 <div class="input-group">
-                    <input type="text" class="form-control" name="search"></input><br>
+                    <input type="text" class="form-control" name="search" {% if search %}value="{{ search }}"{% endif %}></input><br>
                     <div class="input-group-btn">
                         <button type="submit" class="btn btn-primary">
                             <i class="glyphicon glyphicon-search"></i>
@@ -102,17 +110,19 @@
                 </tr>
             </thead>
             <tbody>
-                {% for file in files.items %}
+                {% for file in files %}
                     <tr>
                         <td>
-                            <a href="/static/files/{{ file.display_name }}" target="_blank">{{ file.display_name }}</a>
+                            <a href="{{ url_for('file.content', file_id=file.id, file_hash=file.hash) }}" target="_blank">{{ file.full_display_name }}</a>
                         </td>
                     </tr>
                 {% endfor %}
             </ul>
         </table>
 
-        {{ render_pagination(files, 'file.list') }}
+        {% if files_paginated %}
+        {{ render_pagination(files_paginated, 'file.list') }}
+        {% endif %}
     </div>
 </div>
 

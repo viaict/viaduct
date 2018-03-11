@@ -15,4 +15,15 @@ class File(db.Model, BaseEntity):
     category = db.Column(db.Enum(FileCategory), nullable=False)
     display_name = db.Column(db.String(200))
 
+    @property
+    def full_display_name(self):
+        if not self.display_name:
+            return None
+
+        name = self.display_name
+        if len(self.extension) > 0:
+            name += "." + self.extension
+
+        return name
+
     __table_args__ = (UniqueConstraint('display_name', 'extension'),)

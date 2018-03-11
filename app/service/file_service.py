@@ -1,23 +1,38 @@
 import mimetypes
+import re
 
 from app import hashfs
 from app.enums import FileCategory
 from app.repository import file_repository
-from app.exceptions import ResourceNotFoundException, \
-    DuplicateResourceException, BusinessRuleException
+from app.exceptions import ResourceNotFoundException
 
 
-def add_file(category, data, extension, display_name=None):
-    if display_name is not None and category != FileCategory.UPLOADS:
-        raise BusinessRuleException(
-            'display_name is only allowed for category \'UPLOADS\'')
-    elif display_name is None and category == FileCategory.UPLOADS:
-        raise BusinessRuleException(
-            'display_name is required for category \'UPLOADS\'')
-    elif display_name is not None:
-        duplicate = file_repository.find_file_by_display_name(display_name)
-        if duplicate is not None:
-            raise DuplicateResourceException(display_name, duplicate.id)
+FILENAME_REGEX = re.compile(r'(.+)\.([^\s.]+)')
+
+
+def add_file(category, data, filename):
+    m = FILENAME_REGEX.match(filename)
+    if not m:
+        extension = ""
+    else:
+        extension = m.group(2)
+
+    if category == FileCategory.UPLOADS:
+        orig_display_name = m.group(1)
+
+        display_name = orig_display_name
+        filename_unique = False
+        i = 0
+
+        # Create a unique full display name
+        while not filename_unique:
+            i += 1
+            duplicate = file_repository.find_file_by_display_name(
+                display_name, extension)
+            if duplicate is not None:
+                display_name = "{}_{}".format(orig_display_name, i)
+            else:
+                filename_unique = True
 
     address = hashfs.put(data)
 
@@ -60,9 +75,10 @@ def get_file_mimetype(_file):
         return None
 
 
-def get_all_files_in_category(category):
-    return file_repository.find_all_files_by_category(category)
+def get_all_files_in_category(category, page_nr=None, per_page=None):
+    return file_repository.find_all_files_by_category(category,
+                                                      page_nr, per_page)
 
 
-def get_all_files():
-    return file_repository.find_all_files()
+def get_all_files(page_nr=None, per_page=None):
+    return file_repository.find_all_files(page_nr, per_page)

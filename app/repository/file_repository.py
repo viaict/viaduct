@@ -11,15 +11,24 @@ def save(_file):
     db.session.commit()
 
 
-def find_all_files():
-    return db.session.query(File) \
-        .order_by(File.category, File.display_name).all()
+def find_all_files(page_nr=None, per_page=None):
+    q = db.session.query(File) \
+        .order_by(File.category, File.display_name)
+
+    if page_nr is not None and per_page is not None:
+        return q.paginate(page_nr, per_page)
+
+    return q.all()
 
 
-def find_all_files_by_category(category):
-    return db.session.query(File) \
+def find_all_files_by_category(category, page_nr=None, per_page=None):
+    q = db.session.query(File) \
         .filter_by(category=category) \
-        .order_by(File.display_name).all()
+        .order_by(File.display_name)
+    if page_nr is not None and per_page is not None:
+        return q.paginate(page_nr, per_page)
+
+    return q.all()
 
 
 def find_all_files_by_hash(_hash):
@@ -34,9 +43,9 @@ def find_file_by_id(file_id):
         .one_or_none()
 
 
-def find_file_by_display_name(display_name):
+def find_file_by_display_name(display_name, extension):
     return db.session.query(File) \
-        .filter_by(display_name=display_name) \
+        .filter_by(display_name=display_name, extension=extension) \
         .one_or_none()
 
 
