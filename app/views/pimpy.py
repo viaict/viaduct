@@ -7,12 +7,11 @@ from flask_login import current_user
 
 from app import db, Roles, app
 from app.decorators import require_role
-from app.exceptions import ValidationException
+from app.exceptions import ValidationException, ResourceNotFoundException
 from app.forms.pimpy import AddTaskForm, AddMinuteForm
 from app.models.pimpy import Task
 from app.service import pimpy_service, group_service
 from app.utils.pimpy import PimpyAPI
-
 
 blueprint = Blueprint('pimpy', __name__, url_prefix='/pimpy')
 
@@ -198,36 +197,24 @@ def add_task(group_id=None):
     if group_id is not None and not current_user.member_of_group(group_id):
         return abort(403)
 
-    form = AddTaskForm(request.form, default=group_id)
-    if request.method == 'POST':
-        # TODO: use wtforms validation
-        message = None
-        if form.name.data == "":
-            message = "Naam is vereist"
-        elif form.group == "":
-            message = "Groep is vereist"
-        elif form.users.data == "":
-            message = "Minimaal 1 gebruiker is vereist"
+    # Set the group as default
+    try:
+        group = group_service.get_group_by_id(group_id)
+    except ResourceNotFoundException:
+        group = None
+    form = AddTaskForm(request.form, group=group)
 
-        if not message:
-            try:
-                pimpy_service.add_task(
-                    form.name.data, form.content.data, int(form.group.data),
-                    form.users.data, form.line.data, None, form.status.data)
+    if form.validate_on_submit():
+        try:
+            pimpy_service.add_task(
+                form.name.data, form.content.data, form.group.data.id,
+                form.users.data, None, None, form.status.data)
 
-                flash('De taak is succesvol aangemaakt!', 'success')
-
-                return redirect(url_for('pimpy.view_tasks',
-                                        group_id=form.group.data))
-            except ValidationException as e:
-                flash(e.details)
-
-        else:
-            flash(message, 'danger')
-
-    group = group_service.get_group_by_id(group_id)
-    form.load_groups(current_user.groups)
-    form.load_status(Task.status_meanings)
+            flash('De taak is succesvol aangemaakt!', 'success')
+            return redirect(url_for('pimpy.view_tasks',
+                                    group_id=form.group.data.id))
+        except ValidationException as e:
+            flash(e.details)
 
     return render_template('pimpy/add_task.htm', group=group,
                            group_id=group_id, type='tasks', form=form,

@@ -152,3 +152,9 @@ def get_list_of_users_from_string(group_id, comma_sep_users):
         users_found.append(match)
 
     return users_found
+
+
+def get_task_status_choices():
+    return list(map(lambda index, status: (index, status),
+                    range(0, len(Task.status_meanings)),
+                    Task.status_meanings))
