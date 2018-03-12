@@ -40,7 +40,7 @@ def mock_get_list_of_users_from_string(group_id, value):
             Mock(spec=User, first_name='Bar')
         ]
     else:
-        raise ValidationException()
+        raise ValidationException("")
 
 
 def mock_find_task_by_name_content_group(name, content, group):
@@ -102,20 +102,45 @@ class TestPimpyService(unittest.TestCase):
         pimpy_repository_mock.get_all_minutes_for_group. \
             assert_called_once_with(group_repository_mock_mock, (1, 2))
 
-    def test_update_status(self):
+    def test_set_task_status(self):
         mock_user = Mock(User)
         mock_task = Mock(Task)
 
         status = Task.STATUS_NOT_STARTED
+        mock_user.member_of_group.return_value = True
 
-        pimpy_service.update_status(mock_user, mock_task, status)
+        pimpy_service.set_task_status(mock_user, mock_task, status)
+        pimpy_repository_mock.update_status.assert_called_once_with(
+            mock_task, status)
+
+    def test_set_task_status_member_not_group_not_owner(self):
+        mock_user = Mock(User)
+        mock_task = Mock(Task)
+        mock_task.users = []
+
+        status = Task.STATUS_NOT_STARTED
+
+        pimpy_service.set_task_status(mock_user, mock_task, status)
         pimpy_repository_mock.update_status.assert_called_once_with(
             mock_task, status)
 
         with self.assertRaises(ValidationException):
             mock_user.member_of_group.return_value = False
-            pimpy_service.update_status(mock_user, mock_task, status)
+            pimpy_service.set_task_status(mock_user, mock_task, status)
             pimpy_repository_mock.update_status.assert_not_called()
+
+    def test_set_task_status_not_group_but_owner(self):
+        mock_user = Mock(User)
+        mock_task = Mock(Task)
+        mock_task.users = [mock_user]
+
+        status = Task.STATUS_NOT_STARTED
+
+        mock_user.member_of_group.return_value = False
+
+        pimpy_service.set_task_status(mock_user, mock_task, status)
+        pimpy_repository_mock.update_status.assert_called_once_with(
+            mock_task, status)
 
     def test_add_task_invalid_group(self):
         with self.assertRaises(ResourceNotFoundException):
@@ -136,10 +161,10 @@ class TestPimpyService(unittest.TestCase):
     @patch.object(pimpy_service, 'get_list_of_users_from_string',
                   mock_get_list_of_users_from_string)
     def test_add_nonexisting_task(self):
-        userlist = existing_user_name1 + ',' + existing_user_name2
+        user_list = existing_user_name1 + ',' + existing_user_name2
         pimpy_service.add_task(
             nonexisting_task_name, 'test content', existing_group_id,
-            userlist, 1, existing_minute_id,
+            user_list, 1, existing_minute_id,
             Task.STATUS_NOT_STARTED)
 
     def test_edit_task_property_content(self):

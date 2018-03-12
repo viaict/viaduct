@@ -9,12 +9,10 @@ from app import db, Roles, app
 from app.decorators import require_role
 from app.exceptions import ValidationException
 from app.forms.pimpy import AddTaskForm, AddMinuteForm
-from app.service import pimpy_service
-from app.utils.pimpy import PimpyAPI
 from app.models.pimpy import Task
-from app.models.group import Group
+from app.service import pimpy_service, group_service
+from app.utils.pimpy import PimpyAPI
 
-# from app.utils import copernica
 
 blueprint = Blueprint('pimpy', __name__, url_prefix='/pimpy')
 
@@ -71,7 +69,11 @@ def view_minute(minute_id=0, line_number=-1):
     if not minute:
         abort(404)
 
-    list_items = {minute.group.name: [minute]}
+    list_items = [{
+        'group_name': minute.group.name,
+        'minutes': [minute]
+    }]
+
     tag = "%dln%d" % (minute.id, int(line_number))
 
     return render_template('pimpy/api/minutes.htm', list_items=list_items,
@@ -138,14 +140,13 @@ def view_tasks_personal(group_id=None):
                            title='PimPy')
 
 
-@blueprint.route('/task_archive/', methods=['GET', 'POST'])
-@blueprint.route('/task_archive/<int:group_id>', methods=['GET', 'POST'])
+@blueprint.route('/task_archive/', methods=['POST'])
+@blueprint.route('/task_archive/<int:group_id>', methods=['POST'])
 @require_role(Roles.PIMPY_READ)
 def view_tasks_in_date_range(group_id=None):
     if group_id is not None and not current_user.member_of_group(group_id):
         return abort(403)
 
-    # group_id = request.form['group_id']
     start_date = request.form['start_date']
     end_date = request.form['end_date']
 
@@ -183,9 +184,9 @@ def update_task_status():
         return jsonify(success=False, message="Task does not exist"), 404
     else:
         try:
-            pimpy_service.update_status(current_user, task, new_status)
+            pimpy_service.set_task_status(current_user, task, new_status)
         except ValidationException as e:
-            return jsonify(success=False, message=e.detail), 400
+            return jsonify(success=False, message=e.details), 400
 
     return jsonify(success=True, status=task.get_status_color())
 
@@ -212,19 +213,19 @@ def add_task(group_id=None):
             try:
                 pimpy_service.add_task(
                     form.name.data, form.content.data, int(form.group.data),
-                    form.users.data, form.line.data, -1, form.status.data)
+                    form.users.data, form.line.data, None, form.status.data)
 
                 flash('De taak is succesvol aangemaakt!', 'success')
 
                 return redirect(url_for('pimpy.view_tasks',
                                         group_id=form.group.data))
             except ValidationException as e:
-                flash(e.detail)
+                flash(e.details)
 
         else:
             flash(message, 'danger')
 
-    group = Group.query.filter(Group.id == group_id).first()
+    group = group_service.get_group_by_id(group_id)
     form.load_groups(current_user.groups)
     form.load_status(Task.status_meanings)
 
@@ -237,6 +238,7 @@ def add_task(group_id=None):
 @blueprint.route('/tasks/edit/<string:task_id>', methods=['POST'])
 @require_role(Roles.PIMPY_WRITE)
 def edit_task(task_id=-1):
+    """Ajax method for updating a task."""
     if task_id is '' or task_id is -1:
         flash('Taak niet gespecificeerd.')
         return redirect(url_for('pimpy.view_tasks', group_id=None))
@@ -244,19 +246,15 @@ def edit_task(task_id=-1):
     name = request.form['name']
     value = request.form['value']
 
-    if name in ('content', 'title', 'users'):
-        content, title, users = [None] * 3
-        if name == 'content':
-            content = value
-        elif name == 'title':
-            title = value
-        elif name == 'users':
-            users = value
-
+    if name == 'content':
+        pimpy_service.edit_task_property(current_user, task_id, content=value)
+    elif name == 'title':
+        pimpy_service.edit_task_property(current_user, task_id, title=value)
+    elif name == 'users':
         pimpy_service.edit_task_property(current_user, task_id,
-                                         content, title, users)
+                                         users_property=value)
     else:
-        abort(400)
+        jsonify(result=400, message='Unknown property'), 400
 
     return jsonify(result=200, message='ok'), 200
 
@@ -269,9 +267,10 @@ def add_minute(group_id=None):
         return abort(403)
 
     form = AddMinuteForm(request.form, default=group_id)
+    # TODO change to Wtforms.
     if request.method == 'POST':
 
-        group = Group.query.get(form.group.data)
+        group = group_service.get_group_by_id(form.group.data)
 
         # validate still does not work
         message = ""

@@ -1,15 +1,15 @@
-from app import db, app
-from flask import render_template, Markup, redirect, url_for, \
-    flash
-from flask_login import current_user
-from flask_babel import _
-from unidecode import unidecode
 import datetime
 import re
+
 import baas32 as b32
-
+from flask import render_template, Markup, redirect, url_for, \
+    flash
+from flask_babel import _
+from flask_login import current_user
 from fuzzywuzzy import fuzz
+from unidecode import unidecode
 
+from app import db, app
 from app.models.group import Group
 from app.models.pimpy import Minute, Task
 
@@ -34,7 +34,7 @@ class PimpyAPI:
                 return False, "De datum kon niet worden verwerkt."
             date = None
 
-        minute = Minute(content, group_id, date)
+        minute = Minute(content=content, group_id=group_id, minute_date=date)
         db.session.add(minute)
         db.session.commit()
 
@@ -89,8 +89,9 @@ class PimpyAPI:
                     continue
 
                 try:
-                    task = Task(title, "", group_id, users,
-                                minute_id, i, 0)
+                    task = Task(title=title, content="", group_id=group_id,
+                                users=users, minute_id=minute_id, line=i,
+                                status=0)
                 except Exception:
                     print("wasnt given the right input to create a task")
                     continue
@@ -116,8 +117,9 @@ class PimpyAPI:
 
                 for user in users:
                     try:
-                        task = Task(title, "", group_id, [user],
-                                    minute_id, i, 0)
+                        task = Task(title=title, content="", group_id=group_id,
+                                    users=[user], minute_id=minute_id, line=i,
+                                    status=0)
                     except Exception:
                         print("wasnt given the right input to create a task")
                         continue

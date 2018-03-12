@@ -4,14 +4,14 @@
     <div class="col-md-8">
         Filter:
         <div class="btn-group" data-toggle="buttons-checkbox">
-            {% for status_meaning in status_meanings: %}
+            {% for status_meaning in status_meanings %}
                 <button type="button" class="btn btn-filter btn-primary active" data-hide='{{ status_meaning[0] | replace(" ","_")}}'> {{ status_meaning[0] }}</button>
             {% endfor %}
         </div>
         <table class="table table-hover">
         <tbody>
         {% set ns = namespace(prev_group=None, prev_user=None) %}
-        {% for i, tr in enumerate(tasks_rel): %}
+        {% for i, tr in enumerate(tasks_rel) %}
 
             {% if ns.prev_group != tr.task.group_id %}
                 {% set ns.prev_group = tr.task.group_id %}
@@ -25,7 +25,7 @@
                 </tr>
             {% endif %}
 
-            {% if not personal: %}
+            {% if not personal %}
                 {% if ns.prev_user != tr.user_id %}
                     {% set ns.prev_user = tr.user_id %}
                 <tr>
@@ -43,7 +43,7 @@
                     <div class="btn-group" style="margin-bottom: 8px;">
                         <a id="pimpy_task{{ t.id }}" class="pimpy_task btn dropdown-toggle {{ t.get_status_color() }} " data-toggle="dropdown" href="#"> {{ t.base32_id() }} </a>
                         <ul class="dropdown-menu">
-                            {% for status_meaning in status_meanings: %}
+                            {% for status_meaning in status_meanings %}
                                 <li>
                                     <a href="#" data-toggle="dropdown" data-task-id="{{ t.id }}" data-status-id="{{ status_meaning[2] }}" class="pimpy_status {{ status_meaning[1] }}"> {{ status_meaning[0] }}</a>
                                 </li>
@@ -79,7 +79,7 @@
                                 {{t.timestamp }}
                             </dd>
                         </dl>
-                        {% if t.minute_id > 1 %}
+                        {% if t.minute_id %}
                         <a href="{{ url_for('pimpy.view_minute',
                             minute_id=t.minute_id,
                             line_number=t.line) }}">Ga naar Notulen!</a>
