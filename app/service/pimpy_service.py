@@ -79,11 +79,15 @@ def add_task(title, content, group_id, users_text, line, minute_id, status):
     if task:
         raise ValidationException("This task already exists")
     else:
-        task = Task(title=title, content=content, group_id=group_id,
-                    users=users, minute_id=minute_id, line=line,
-                    status=status)
+        pimpy_repository.add_task(title=title, content=content,
+                                  group_id=group_id, users=users,
+                                  minute_id=minute_id, line=line,
+                                  status=status)
 
-    pimpy_repository.add_task(task)
+
+def add_minute(content, date, group_id):
+    return pimpy_repository.add_minute(content=content, date=date,
+                                       group_id=group_id)
 
 
 def edit_task_property(user, task_id, content=None, title=None,

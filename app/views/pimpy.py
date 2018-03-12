@@ -264,11 +264,13 @@ def add_minute(group_id=None):
 
         group_id = form.group.data.id
         group = group_service.get_group_by_id(group_id)
-        result, message = PimpyAPI.commit_minute_to_db(
-            form.content.data, request.form['date'], group_id)
-        if result and form.parse_tasks.data:
+        minute_id = pimpy_service.add_minute(content=form.content.data,
+                                             date=form.date.data,
+                                             group_id=group_id)
+
+        if form.parse_tasks.data:
             tasks, dones, removes = PimpyAPI.parse_minute(
-                form.content.data, group_id, message)
+                form.content.data, group_id, minute_id)
 
             valid_dones = []
             valid_removes = []

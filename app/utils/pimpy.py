@@ -19,26 +19,6 @@ DATE_FORMAT = app.config['DATE_FORMAT']
 
 
 class PimpyAPI:
-    @staticmethod
-    def commit_minute_to_db(content, date, group_id):
-        """
-        Enter minute into the database.
-
-        Return succes (boolean, message (string). Message is the new minute.id
-        if succes is true, otherwise it contains an error message.
-        """
-        try:
-            date = datetime.datetime.strptime(date, DATE_FORMAT)
-        except Exception:
-            if date != "":
-                return False, "De datum kon niet worden verwerkt."
-            date = None
-
-        minute = Minute(content=content, group_id=group_id, minute_date=date)
-        db.session.add(minute)
-        db.session.commit()
-
-        return True, minute.id
 
     @staticmethod
     def parse_minute(content, group_id, minute_id):
