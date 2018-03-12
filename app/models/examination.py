@@ -5,6 +5,7 @@ from app import db
 from app.models.course import Course
 from app.models.education import Education
 from app.models.user import User
+from app.models.file import File
 from app.models.base_model import BaseEntity
 
 
@@ -21,8 +22,11 @@ class Examination(db.Model, BaseEntity):
 
     comment = db.Column(db.String(128))
     date = db.Column(db.Date)
-    path = db.Column(db.String(256))
-    answer_path = db.Column(db.String(256))
+
+    examination_file_id = db.Column(db.Integer, db.ForeignKey('file.id'),
+                                    nullable=False)
+    answers_file_id = db.Column(db.Integer, db.ForeignKey('file.id'))
+
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     timestamp = db.Column(db.DateTime)
     course_id = db.Column(db.Integer,
@@ -39,3 +43,8 @@ class Examination(db.Model, BaseEntity):
     education = db.relationship(Education,
                                 backref=db.backref('examinations',
                                                    lazy='dynamic'))
+
+    examination_file = db.relationship(
+        File, foreign_keys=[examination_file_id], lazy='joined')
+    answers_file = db.relationship(
+        File, foreign_keys=[answers_file_id], lazy='joined')
