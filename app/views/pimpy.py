@@ -253,62 +253,51 @@ def add_minute(group_id=None):
     if group_id is not None and not current_user.member_of_group(group_id):
         return abort(403)
 
-    form = AddMinuteForm(request.form, default=group_id)
-    # TODO change to Wtforms.
-    if request.method == 'POST':
+    # Set the current group as default.
+    try:
+        group = group_service.get_group_by_id(group_id)
+    except ResourceNotFoundException:
+        group = None
+    form = AddMinuteForm(request.form, group=group)
 
-        group = group_service.get_group_by_id(form.group.data)
+    if form.validate_on_submit():
 
-        # validate still does not work
-        message = ""
-        if form.content.data == "":
-            message = "Content is vereist"
-        elif request.form['date'] == "":
-            message = "Datum is vereist"
-        elif form.group == "":
-            message = "Groep is vereist"
+        group_id = form.group.data.id
+        group = group_service.get_group_by_id(group_id)
+        result, message = PimpyAPI.commit_minute_to_db(
+            form.content.data, request.form['date'], group_id)
+        if result and form.parse_tasks.data:
+            tasks, dones, removes = PimpyAPI.parse_minute(
+                form.content.data, group_id, message)
 
-        result = message == ""
+            valid_dones = []
+            valid_removes = []
 
-        if result:
-            result, message = PimpyAPI.commit_minute_to_db(
-                form.content.data, request.form['date'], form.group.data)
-            if result and form.parse_tasks.data:
-                tasks, dones, removes = PimpyAPI.parse_minute(
-                    form.content.data, form.group.data, message)
+            for task in tasks:
+                db.session.add(task)
 
-                valid_dones = []
-                valid_removes = []
+            for done in dones:
+                if done.group_id == group.id and done.update_status(4):
+                    valid_dones.append(done)
+                else:
+                    flash(_("Found invalid DONE task: %s").format(
+                        done.base32_id()), 'danger')
 
-                for task in tasks:
-                    db.session.add(task)
+            for remove in removes:
+                if remove.group_id == group.id and remove.update_status(5):
+                    valid_removes.append(remove)
+                else:
+                    flash(_("Found invalid REMOVE task: %s").format(
+                        remove.base32_id()), 'danger')
 
-                for done in dones:
-                    if done.group_id == group.id and done.update_status(4):
-                        valid_dones.append(done)
-                    else:
-                        flash(_("Found invalid DONE task: %s").format(
-                            done.base32_id()), 'danger')
+            db.session.commit()
 
-                for remove in removes:
-                    if remove.group_id == group.id and remove.update_status(5):
-                        valid_removes.append(remove)
-                    else:
-                        flash(_("Found invalid REMOVE task: %s").format(
-                            remove.base32_id()), 'danger')
+            flash('De notulen zijn verwerkt!', 'success')
 
-                db.session.commit()
-
-                flash('De notulen zijn verwerkt!', 'success')
-
-                return render_template('pimpy/view_parsed_tasks.htm',
-                                       tasks=tasks, dones=valid_dones,
-                                       group_id=group_id,
-                                       removes=valid_removes, title='PimPy')
-        else:
-            flash(message, 'danger')
-
-    form.load_groups(current_user.groups)
+            return render_template('pimpy/view_parsed_tasks.htm',
+                                   tasks=tasks, dones=valid_dones,
+                                   group_id=group_id,
+                                   removes=valid_removes, title='PimPy')
 
     return render_template('pimpy/add_minute.htm', group_id=group_id,
                            type='minutes', form=form, title='PimPy')

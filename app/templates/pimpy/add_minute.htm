@@ -1,5 +1,7 @@
 {% extends 'pimpy/view_page.htm' %}
 
+{% from 'macros/form.htm' import render_form %}
+
 {% block includes %}
     <script src={{static_url("/static/js/pimpy/add_minute.js")}}></script>
 {% endblock %}
@@ -10,31 +12,32 @@
     <h2>Nieuwe notulen</h2>
 
     <p><em>{{ _('Attention: we now use a base32 encoding. Read this module\'s manual for more information.') }}</em></p>
+    {{ render_form(form) }}
 
-    <form class='minute-form' method='post' enctype='multipart/form-data'>
-        <div class='form-group'>
-            <label for='content'>Content (Kopieer notulen hier naar toe)</label>
-            {{ form.content(class_='form-control') }}
-        </div>
-
-        <div class='form-group'>
-            <label for='line'>Groep</label>
-            {{ form.group(class_='form-control') }}
-        </div>
-
-        <div class='form-group'>
-            <label for='line'>Datum (yyyy-mm-dd)</label>
-            {{ form.date(id='minute_date', class_='form-control', autocomplete='off') }}
-        </div>
-
-        <div class='checkbox'>
-            <label for='line'>
-                {{ form.parse_tasks }} Verwerk taken
-            </label>
-        </div>
-
-        <button type='submit' class='btn btn-primary submit-button' data-loading-text='Bezig...'>Creëer notulen</button>
-    </form>
+{#    <form class='minute-form' method='post' enctype='multipart/form-data'>#}
+{#        <div class='form-group'>#}
+{#            <label for='content'>Content (Kopieer notulen hier naar toe)</label>#}
+{#            {{ form.content(class_='form-control') }}#}
+{#        </div>#}
+{##}
+{#        <div class='form-group'>#}
+{#            <label for='line'>Groep</label>#}
+{#            {{ form.group(class_='form-control') }}#}
+{#        </div>#}
+{##}
+{#        <div class='form-group'>#}
+{#            <label for='line'>Datum (yyyy-mm-dd)</label>#}
+{#            {{ form.date(id='minute_date', class_='form-control', autocomplete='off') }}#}
+{#        </div>#}
+{##}
+{#        <div class='checkbox'>#}
+{#            <label for='line'>#}
+{#                {{ form.parse_tasks }} Verwerk taken#}
+{#            </label>#}
+{#        </div>#}
+{##}
+{#        <button type='submit' class='btn btn-primary submit-button' data-loading-text='Bezig...'>Creëer notulen</button>#}
+{#    </form>#}
 </div>
 
 {% endblock content %}
