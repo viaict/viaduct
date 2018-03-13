@@ -95,15 +95,10 @@ def content(file_id, file_hash):
     mimetype = file_service.get_file_mimetype(f)
     content = file_service.get_file_content(f)
 
-    if mimetype is None:
-        mimetype = 'application/octet-stream'
-
     headers = {'Content-Type': mimetype}
 
-    if f.display_name is not None:
-        fn = f.display_name
-        if len(f.extension) > 0:
-            fn += "." + f.extension
-        headers['Content-Disposition'] = 'inline; filename="{}"'.format(fn)
+    if f.full_display_name is not None:
+        headers['Content-Disposition'] = 'inline; filename="{}"'.format(
+            f.full_display_name)
 
     return content, headers

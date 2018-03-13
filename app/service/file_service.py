@@ -33,6 +33,8 @@ def add_file(category, data, filename):
                 display_name = "{}_{}".format(orig_display_name, i)
             else:
                 filename_unique = True
+    else:
+        display_name = None
 
     address = hashfs.put(data)
 
@@ -70,9 +72,13 @@ def get_file_content(_file):
 
 def get_file_mimetype(_file):
     try:
-        return mimetypes.types_map['.' + _file.extension]
+        mimetype = mimetypes.types_map['.' + _file.extension]
+        if mimetype.startswith('text/'):
+            mimetype += '; charset=utf-8'
+
+        return mimetype
     except KeyError:
-        return None
+        return 'application/octet-stream'
 
 
 def get_all_files_in_category(category, page_nr=None, per_page=None):

@@ -1,4 +1,5 @@
 from flask_babel import lazy_gettext as _
+import re
 
 from app import db
 
@@ -48,3 +49,52 @@ class Examination(db.Model, BaseEntity):
         File, foreign_keys=[examination_file_id], lazy='joined')
     answers_file = db.relationship(
         File, foreign_keys=[answers_file_id], lazy='joined')
+
+    def _get_filename(self, answers):
+        fn = ""
+
+        for word in re.split(r"\s+", self.course.name):
+            fn += word[0].upper() + word[1:].lower()
+
+        if self.test_type == 'Mid-term':
+            fn += "_Midterm"
+        elif self.test_type == 'End-term':
+            fn += "_Final"
+        elif self.test_type == 'Retake':
+            fn += "_Retake"
+
+        if self.date is not None:
+            fn += self.date.strftime("_%d_%m_%Y")
+
+        if answers:
+            fn += "_answers"
+            f = self.answers_file
+        else:
+            f = self.examination_file
+
+        fn += "." + f.extension
+
+        return fn
+
+    @property
+    def examination_filename(self):
+        """
+        Filename for the examination file.
+
+        Create a filename for the examination file
+        based on the exam's information.
+        """
+        return self._get_filename(False)
+
+    @property
+    def answers_filename(self):
+        """
+        Filename for the answers file file.
+
+        Create a filename for the answers file
+        based on the exam's information.
+        """
+
+        if self.answers_file is None:
+            return None
+        return self._get_filename(True)
