@@ -2,16 +2,15 @@ import datetime
 
 from flask import Blueprint, abort, redirect, url_for
 from flask import flash, render_template, request, jsonify
-from flask_babel import _
 from flask_login import current_user
 
-from app import db, Roles, app
+from app import Roles, app
 from app.decorators import require_role
-from app.exceptions import ValidationException, ResourceNotFoundException
+from app.exceptions import ValidationException, ResourceNotFoundException, \
+    InvalidMinuteException
 from app.forms.pimpy import AddTaskForm, AddMinuteForm
 from app.models.pimpy import Task
 from app.service import pimpy_service, group_service
-from app.utils.pimpy import PimpyAPI
 
 blueprint = Blueprint('pimpy', __name__, url_prefix='/pimpy')
 
@@ -131,7 +130,7 @@ def view_tasks_personal(group_id=None):
         tasks_rel = pimpy_service.get_all_tasks_for_user(current_user)
 
     return render_template('pimpy/api/tasks.htm',
-                           personal=False,
+                           personal=True,
                            group_id=group_id,
                            tasks_rel=tasks_rel,
                            type='tasks',
@@ -206,7 +205,7 @@ def add_task(group_id=None):
 
     if form.validate_on_submit():
         try:
-            pimpy_service.add_task(
+            pimpy_service.add_task_by_user_string(
                 form.name.data, form.content.data, form.group.data.id,
                 form.users.data, None, None, form.status.data)
 
@@ -219,6 +218,37 @@ def add_task(group_id=None):
     return render_template('pimpy/add_task.htm', group=group,
                            group_id=group_id, type='tasks', form=form,
                            title='PimPy')
+
+
+@blueprint.route('/minutes/add/', methods=['GET', 'POST'])
+@blueprint.route('/minutes/add/<int:group_id>', methods=['GET', 'POST'])
+@require_role(Roles.PIMPY_WRITE)
+def add_minute(group_id=None):
+    if group_id is not None and not current_user.member_of_group(group_id):
+        return abort(403)
+
+    # Set the current group as default.
+    try:
+        group = group_service.get_group_by_id(group_id)
+    except ResourceNotFoundException:
+        group = None
+    form = AddMinuteForm(request.form, group=group)
+
+    if form.validate_on_submit():
+        minute_group = group_service.get_group_by_id(form.group.data.id)
+
+        try:
+            minute = pimpy_service.add_minute(
+                content=form.content.data, date=form.date.data,
+                group=minute_group)
+        except InvalidMinuteException as e:
+            return render_template('pimpy/add_minute.htm', group_id=group_id,
+                                   type='minutes', form=form, title='PimPy',
+                                   invalid_lines=e.details)
+        return redirect(url_for("pimpy.view_minute", minute_id=minute.id))
+
+    return render_template('pimpy/add_minute.htm', group_id=group_id,
+                           type='minutes', form=form, title='PimPy')
 
 
 @blueprint.route('/tasks/edit/', methods=['POST'])
@@ -244,62 +274,3 @@ def edit_task(task_id=-1):
         jsonify(result=400, message='Unknown property'), 400
 
     return jsonify(result=200, message='ok'), 200
-
-
-@blueprint.route('/minutes/add/', methods=['GET', 'POST'])
-@blueprint.route('/minutes/add/<int:group_id>', methods=['GET', 'POST'])
-@require_role(Roles.PIMPY_WRITE)
-def add_minute(group_id=None):
-    if group_id is not None and not current_user.member_of_group(group_id):
-        return abort(403)
-
-    # Set the current group as default.
-    try:
-        group = group_service.get_group_by_id(group_id)
-    except ResourceNotFoundException:
-        group = None
-    form = AddMinuteForm(request.form, group=group)
-
-    if form.validate_on_submit():
-
-        group_id = form.group.data.id
-        group = group_service.get_group_by_id(group_id)
-        minute_id = pimpy_service.add_minute(content=form.content.data,
-                                             date=form.date.data,
-                                             group_id=group_id)
-
-        if form.parse_tasks.data:
-            tasks, dones, removes = PimpyAPI.parse_minute(
-                form.content.data, group_id, minute_id)
-
-            valid_dones = []
-            valid_removes = []
-
-            for task in tasks:
-                db.session.add(task)
-
-            for done in dones:
-                if done.group_id == group.id and done.update_status(4):
-                    valid_dones.append(done)
-                else:
-                    flash(_("Found invalid DONE task: %s").format(
-                        done.base32_id()), 'danger')
-
-            for remove in removes:
-                if remove.group_id == group.id and remove.update_status(5):
-                    valid_removes.append(remove)
-                else:
-                    flash(_("Found invalid REMOVE task: %s").format(
-                        remove.base32_id()), 'danger')
-
-            db.session.commit()
-
-            flash('De notulen zijn verwerkt!', 'success')
-
-            return render_template('pimpy/view_parsed_tasks.htm',
-                                   tasks=tasks, dones=valid_dones,
-                                   group_id=group_id,
-                                   removes=valid_removes, title='PimPy')
-
-    return render_template('pimpy/add_minute.htm', group_id=group_id,
-                           type='minutes', form=form, title='PimPy')

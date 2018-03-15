@@ -1,6 +1,10 @@
+import re
+
+import baas32 as b32
 from fuzzywuzzy import fuzz
 
-from app.exceptions import ValidationException, ResourceNotFoundException
+from app.exceptions import ValidationException, ResourceNotFoundException, \
+    InvalidMinuteException
 from app.models.pimpy import Task
 from app.repository import pimpy_repository, group_repository, task_repository
 from app.service import group_service
@@ -21,6 +25,11 @@ and have a status.
 
 
 """
+TASK_REGEX = re.compile(r"\s*(?:ACTIE|TASK)\s+(.*):\s*(.*)\s*$")
+TASKS_REGEX = re.compile(r"\s*(?:ACTIES|TASKS)\s+(.*):\s*(.*)\s*$")
+DONE_REGEX = re.compile("\s*(?:DONE) ([^\n\r]*)")
+REMOVE_REGEX = re.compile("\s*(?:REMOVE) ([^\n\r]*)")
+MISSING_COLON_REGEX = re.compile(r"\s*(?:ACTIE|TASK|ACTIES|TASKS)+[^:]*$")
 
 
 def find_minute_by_id(minute_id):
@@ -66,28 +75,52 @@ def set_task_status(user, task, status):
     return pimpy_repository.update_status(task, status)
 
 
-def add_task(title, content, group_id, users_text, line, minute_id, status):
+def add_task_by_user_string(title, content, group_id, users_text, line,
+                            minute, status):
     group = group_repository.find_by_id(group_id)
     if not group:
         raise ResourceNotFoundException("group", group_id)
 
-    users = get_list_of_users_from_string(group_id, users_text)
+    user_list = get_list_of_users_from_string(group_id, users_text)
 
+    _add_task(title=title, content=content, group=group,
+              user_list=user_list, minute=minute, line=line,
+              status=status)
+
+
+def _add_task(title, content, group, user_list, line, minute, status):
     task = task_repository.find_task_by_name_content_group(
         title, content, group)
 
     if task:
         raise ValidationException("This task already exists")
     else:
-        pimpy_repository.add_task(title=title, content=content,
-                                  group_id=group_id, users=users,
-                                  minute_id=minute_id, line=line,
+        pimpy_repository.add_task(title=title, content=content, group=group,
+                                  users=user_list, minute=minute, line=line,
                                   status=status)
 
 
-def add_minute(content, date, group_id):
-    return pimpy_repository.add_minute(content=content, date=date,
-                                       group_id=group_id)
+def add_minute(content, date, group):
+    # Parse the minute
+    task_list, done_list, remove_list = _parse_minute_into_tasks(
+        content, group)
+
+    minute = pimpy_repository.add_minute(content=content, date=date,
+                                         group=group)
+    # Add new tasks
+    for line, task, users in task_list:
+        _add_task(task, '', group, users, line, minute, 0)
+
+    # Mark existing tasks as done.
+    for line, task in done_list:
+        task = pimpy_repository.find_task_by_id(task)
+        pimpy_repository.update_status(task, 4)
+
+    # Mark existing tasks as removed.
+    for line, task in remove_list:
+        task = pimpy_repository.find_task_by_id(task)
+        pimpy_repository.update_status(task, 5)
+    return minute
 
 
 def edit_task_property(user, task_id, content=None, title=None,
@@ -126,7 +159,7 @@ def get_list_of_users_from_string(group_id, comma_sep_users):
     comma_sep_users = comma_sep_users.strip()
 
     if not comma_sep_users:
-        return group.users.all(), ''
+        return group.users.all()
 
     comma_sep_users = filter(None, map(lambda x: x.lower().strip(),
                                        comma_sep_users.split(',')))
@@ -156,6 +189,63 @@ def get_list_of_users_from_string(group_id, comma_sep_users):
         users_found.append(match)
 
     return users_found
+
+
+def _parse_minute_into_tasks(content, group):
+    """
+    Parse the specified minutes for tasks and return task, done and remove.
+
+    Syntax within the content:
+    ACTIE <name_1>, <name_2>, name_n>: <title of task>
+    This creates a single task for one or multiple users
+
+    ACTIES <name_1>, <name_2>, name_n>: <title of task>
+    This creates one or multiple tasks for one or multiple users
+
+    DONE <task1>, <task2, <taskn>
+    This sets the given tasks on 'done'
+    """
+    invalid_lines = []
+
+    task_list = []
+    done_list = []
+    remove_list = []
+
+    for i, line in enumerate(content.splitlines()):
+        try:
+            if MISSING_COLON_REGEX.search(line):
+                invalid_lines.append((i, line))
+                continue
+
+            # Single task for multiple users.
+            for names, task in TASK_REGEX.findall(line):
+                users = get_list_of_users_from_string(group.id, names)
+                task_list.append((i, task, users))
+
+            # Single task for individual users.
+            for names, task in TASKS_REGEX.findall(line):
+                users = get_list_of_users_from_string(group.id, names)
+                for user in users:
+                    task_list.append((i, task, user))
+
+            # Mark a comma separated list as done.
+            for task_id_list in DONE_REGEX.findall(line):
+                for b32_task_id in task_id_list.strip().split(","):
+                    done_list.append(b32.decode(b32_task_id.strip()))
+
+            # Mark a comma separated list as removed.
+            for task_id_list in REMOVE_REGEX.findall(line):
+                for b32_task_id in task_id_list.strip().split(","):
+                    remove_list.append(b32.decode(b32_task_id.strip()))
+
+        # Catch invalid user and incorrect b32 task_id.
+        except (ValidationException, ValueError):
+            invalid_lines.append((i, line))
+
+    if len(invalid_lines):
+        raise InvalidMinuteException(invalid_lines)
+
+    return task_list, done_list, remove_list
 
 
 def get_task_status_choices():

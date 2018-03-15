@@ -3,8 +3,7 @@ import datetime
 from flask_babel import _
 from flask_login import current_user
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, DateTimeField, SelectField, \
-    BooleanField
+from wtforms import StringField, TextAreaField, DateTimeField, SelectField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import InputRequired, Optional
 
@@ -35,4 +34,3 @@ class AddMinuteForm(FlaskForm):
 
     date = DateTimeField(_('Date'), format=DATE_FORMAT,
                          default=datetime.date.today)
-    parse_tasks = BooleanField(_("Parse tasks"), default=True)

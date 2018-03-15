@@ -97,18 +97,18 @@ def update_status(task, status):
     db.session.commit()
 
 
-def add_task(title, content, group_id, users, minute_id, line, status):
+def add_task(title, content, group, users, minute, line, status):
     task = Task()
     task.title = title
     task.content = content
-    task.group_id = group_id
+    task.group = group
     task.users = users
-    task.minute_id = minute_id
+    task.minute = minute
     task.line = line
     task.status = status
     db.session.add(task)
     db.session.commit()
-    return task.id
+    return task
 
 
 def edit_task_title(task, title):
@@ -126,11 +126,11 @@ def edit_task_users(task, users):
     db.session.commit()
 
 
-def add_minute(content, date, group_id):
+def add_minute(content, date, group):
     minute = Minute()
     minute.content = content
-    minute.group_id = group_id
+    minute.group = group
     minute.minute_date = date
     db.session.add(minute)
     db.session.commit()
-    return minute.id
+    return minute

@@ -144,16 +144,17 @@ class TestPimpyService(unittest.TestCase):
 
     def test_add_task_invalid_group(self):
         with self.assertRaises(ResourceNotFoundException):
-            pimpy_service.add_task('foo', 'content', -1,
-                                   nonexisting_group_id, 1, existing_minute_id,
-                                   Task.STATUS_NOT_STARTED)
+            pimpy_service.add_task_by_user_string('foo', 'content', -1,
+                                                  nonexisting_group_id, 1,
+                                                  existing_minute_id,
+                                                  Task.STATUS_NOT_STARTED)
 
     @patch.object(pimpy_service, 'get_list_of_users_from_string',
                   mock_get_list_of_users_from_string)
     def test_add_existing_task(self):
         with self.assertRaises(ValidationException):
             userlist = existing_user_name1 + ',' + existing_user_name2
-            pimpy_service.add_task(
+            pimpy_service.add_task_by_user_string(
                 existing_task_name, 'test content', existing_group_id,
                 userlist, 1, existing_minute_id,
                 Task.STATUS_NOT_STARTED)
@@ -162,7 +163,7 @@ class TestPimpyService(unittest.TestCase):
                   mock_get_list_of_users_from_string)
     def test_add_nonexisting_task(self):
         user_list = existing_user_name1 + ',' + existing_user_name2
-        pimpy_service.add_task(
+        pimpy_service.add_task_by_user_string(
             nonexisting_task_name, 'test content', existing_group_id,
             user_list, 1, existing_minute_id,
             Task.STATUS_NOT_STARTED)
