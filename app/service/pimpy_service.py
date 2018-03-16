@@ -1,12 +1,12 @@
+import datetime
 import re
 
 import baas32 as b32
 from fuzzywuzzy import fuzz
 
-from app.exceptions import ValidationException, ResourceNotFoundException, \
-    InvalidMinuteException
+from app.exceptions import ValidationException, InvalidMinuteException
 from app.models.pimpy import Task
-from app.repository import pimpy_repository, group_repository, task_repository
+from app.repository import pimpy_repository, task_repository
 from app.service import group_service
 
 """
@@ -44,23 +44,32 @@ def get_all_minutes_for_user(user):
     return pimpy_repository.get_all_minutes_for_user(user)
 
 
-def get_all_minutes_for_group(group_id, date_range=None):
-    group = group_repository.find_by_id(group_id)
-    if not group:
-        raise ResourceNotFoundException("group", group_id)
+def check_date_range(date_range):
+    if date_range:
+        if len(date_range) != 2:
+            raise ValidationException("Date range should be of length 2")
+        if not all(map(lambda x: type(x) == datetime.datetime,
+                       date_range)):
+            raise ValidationException("Date range should consist of datetime")
+        if date_range[0] > date_range[1]:
+            raise ValidationException(
+                "First date should be smaller then second")
 
+
+def get_all_minutes_for_group(group_id, date_range=None):
+    check_date_range(date_range)
+    group = group_service.get_group_by_id(group_id)
     return pimpy_repository.get_all_minutes_for_group(group, date_range)
 
 
 def get_all_tasks_for_user(user, date_range=None):
+    check_date_range(date_range)
     return pimpy_repository.get_all_tasks_for_user(user, date_range)
 
 
 def get_all_tasks_for_group(group_id, date_range=None, user=None):
-    group = group_repository.find_by_id(group_id)
-    if not group:
-        raise ResourceNotFoundException("group", group_id)
-
+    check_date_range(date_range)
+    group = group_service.get_group_by_id(group_id)
     return pimpy_repository.get_all_tasks_for_group(group, date_range, user)
 
 
@@ -75,12 +84,15 @@ def set_task_status(user, task, status):
     return pimpy_repository.update_status(task, status)
 
 
+def get_task_status_choices():
+    return list(map(lambda index, status: (index, status),
+                    range(0, len(Task.status_meanings)),
+                    Task.status_meanings))
+
+
 def add_task_by_user_string(title, content, group_id, users_text, line,
                             minute, status):
-    group = group_repository.find_by_id(group_id)
-    if not group:
-        raise ResourceNotFoundException("group", group_id)
-
+    group = group_service.get_group_by_id(group_id)
     user_list = get_list_of_users_from_string(group_id, users_text)
 
     _add_task(title=title, content=content, group=group,
@@ -89,15 +101,16 @@ def add_task_by_user_string(title, content, group_id, users_text, line,
 
 
 def _add_task(title, content, group, user_list, line, minute, status):
-    task = task_repository.find_task_by_name_content_group(
-        title, content, group)
+    # Only check for tasks added not using minute.
+    if not minute:
+        task = task_repository.find_task_by_name_content_group(
+            title, content, group)
 
-    if task:
-        raise ValidationException("This task already exists")
-    else:
-        pimpy_repository.add_task(title=title, content=content, group=group,
-                                  users=user_list, minute=minute, line=line,
-                                  status=status)
+        if task:
+            raise ValidationException("This task already exists")
+    pimpy_repository.add_task(title=title, content=content, group=group,
+                              users=user_list, minute=minute, line=line,
+                              status=status)
 
 
 def add_minute(content, date, group):
@@ -137,7 +150,6 @@ def edit_task_property(user, task_id, content=None, title=None,
 
     if users_property is not None:
         users = get_list_of_users_from_string(task.group_id, users_property)
-        print(users)
         pimpy_repository.edit_task_users(task, users)
 
 
@@ -226,17 +238,17 @@ def _parse_minute_into_tasks(content, group):
             for names, task in TASKS_REGEX.findall(line):
                 users = get_list_of_users_from_string(group.id, names)
                 for user in users:
-                    task_list.append((i, task, user))
+                    task_list.append((i, task, [user]))
 
             # Mark a comma separated list as done.
             for task_id_list in DONE_REGEX.findall(line):
                 for b32_task_id in task_id_list.strip().split(","):
-                    done_list.append(b32.decode(b32_task_id.strip()))
+                    done_list.append((i, b32.decode(b32_task_id.strip())))
 
             # Mark a comma separated list as removed.
             for task_id_list in REMOVE_REGEX.findall(line):
                 for b32_task_id in task_id_list.strip().split(","):
-                    remove_list.append(b32.decode(b32_task_id.strip()))
+                    remove_list.append((i, b32.decode(b32_task_id.strip())))
 
         # Catch invalid user and incorrect b32 task_id.
         except (ValidationException, ValueError):
@@ -246,9 +258,3 @@ def _parse_minute_into_tasks(content, group):
         raise InvalidMinuteException(invalid_lines)
 
     return task_list, done_list, remove_list
-
-
-def get_task_status_choices():
-    return list(map(lambda index, status: (index, status),
-                    range(0, len(Task.status_meanings)),
-                    Task.status_meanings))
