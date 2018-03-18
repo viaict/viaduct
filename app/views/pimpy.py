@@ -214,6 +214,7 @@ def add_task(group_id=None):
             return redirect(url_for('pimpy.view_tasks',
                                     group_id=form.group.data.id))
         except ValidationException as e:
+            # TODO fix translations outside of service.
             flash(e.details)
 
     return render_template('pimpy/add_task.htm', group=group,
