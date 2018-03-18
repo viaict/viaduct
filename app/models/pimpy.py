@@ -42,7 +42,6 @@ class Task(db.Model, BaseEntity):
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow())
     line = db.Column(db.Integer)
 
-    # TODO: why is the deletion of a task cascading to a minute
     minute_id = db.Column(db.Integer,
                           db.ForeignKey('pimpy_minute.id', ondelete='cascade'))
     minute = db.relationship('Minute',

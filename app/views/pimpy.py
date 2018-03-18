@@ -102,7 +102,8 @@ def view_tasks(group_id=None):
     if group_id is not None:
         tasks_rel = pimpy_service.get_all_tasks_for_group(group_id)
     else:
-        tasks_rel = pimpy_service.get_all_tasks_for_user(current_user)
+        tasks_rel = pimpy_service.get_all_tasks_for_users_in_groups_of_user(
+            current_user)
 
     return render_template('pimpy/api/tasks.htm',
                            personal=False,

@@ -73,6 +73,12 @@ def get_all_tasks_for_group(group_id, date_range=None, user=None):
     return pimpy_repository.get_all_tasks_for_group(group, date_range, user)
 
 
+def get_all_tasks_for_users_in_groups_of_user(user, date_range=None):
+    check_date_range(date_range)
+    groups = group_service.get_groups_for_user(user)
+    return pimpy_repository.get_all_tasks_for_users_in_groups(groups)
+
+
 def set_task_status(user, task, status):
     if not user.member_of_group(task.group_id) and user not in task.users:
         raise ValidationException('User not member of group of task')

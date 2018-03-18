@@ -18,7 +18,7 @@ class AddTaskForm(FlaskForm):
     content = TextAreaField(_('Content'), validators=[Optional()])
     group = QuerySelectField(
         _('Group'),
-        query_factory=lambda: group_service.get_group_for_user(current_user),
+        query_factory=lambda: group_service.get_groups_for_user(current_user),
         get_label=lambda x: x.name)
     users = StringField(_('Users'))
     status = SelectField(_('Status'), coerce=int,
@@ -29,7 +29,7 @@ class AddMinuteForm(FlaskForm):
     content = TextAreaField(_('Minute content'), validators=[InputRequired()])
     group = QuerySelectField(
         _('Group'),
-        query_factory=lambda: group_service.get_group_for_user(current_user),
+        query_factory=lambda: group_service.get_groups_for_user(current_user),
         get_label=lambda x: x.name)
 
     date = DateTimeField(_('Date'), format=DATE_FORMAT,

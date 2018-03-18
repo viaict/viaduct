@@ -89,6 +89,22 @@ def get_all_tasks_for_group(group, date_range=None, user=None):
     return query.all()
 
 
+def get_all_tasks_for_users_in_groups(groups, date_range=None):
+    query = db.session.query(TaskUserRel) \
+        .join(Task).join(User).join(Group) \
+        .filter(Task.group_id.in_([g.id for g in groups])) \
+        .filter(~Task.status.in_((4, 5)))
+
+    if date_range:
+        query = query.filter(date_range[0] <= Task.timestamp,
+                             Task.timestamp <= date_range[1])
+    query = query.order_by(
+        Group.name.asc(),
+        User.first_name.asc(), User.last_name.asc(), Task.id.asc()
+    )
+    return query.all()
+
+
 def update_status(task, status):
     if not 0 <= status <= len(Task.status_meanings):
         raise BusinessRuleException('Invalid status')
