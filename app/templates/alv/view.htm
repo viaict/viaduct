@@ -45,14 +45,14 @@
                         <i class='fa fa-book'></i> {{ _('View') }}
                     </a>
                     {% if can_write %}
-                    <a class='btn btn-warning btn-xs' href='{{ url_for("alv.add_minute", alv_id=alv.id) }}'>
+                    <a class='btn btn-warning btn-xs' href='{{ url_for("alv.add_minutes", alv_id=alv.id) }}'>
                         <i class='fa fa-edit'></i> {{ _('Edit') }}
                     </a>
                     {% endif %}
                 </div>
             {% endif %}
             {% if can_write and not alv.minutes_file %}
-                <a class='btn btn-success btn-xs' href='{{ url_for("alv.add_minute", alv_id=alv.id) }}'>
+                <a class='btn btn-success btn-xs' href='{{ url_for("alv.add_minutes", alv_id=alv.id) }}'>
                     <i class='fa fa-edit'></i> {{ _('Add minutes') }}
                 </a>
             {% endif %}

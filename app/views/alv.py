@@ -100,7 +100,7 @@ def create_edit(alv_id=None):
 @blueprint.route('/<int:alv_id>/documents/minutes/edit/',
                  methods=['GET', 'POST'])
 @require_role(Roles.ALV_WRITE)
-def add_minute(alv_id=None):
+def add_minutes(alv_id=None):
     alv = alv_service.get_alv_by_id(alv_id)
     form = AlvMinutesForm(request.form)
 
