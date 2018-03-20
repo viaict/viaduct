@@ -64,10 +64,13 @@ def get_file_by_id(file_id):
 
 
 def get_file_content(_file):
-    with hashfs.open(_file.hash) as f:
-        content = f.read()
+    try:
+        with hashfs.open(_file.hash) as f:
+            content = f.read()
 
-    return content
+        return content
+    except IOError:
+        raise ResourceNotFoundException('file content', _file.hash)
 
 
 def get_file_mimetype(_file):
