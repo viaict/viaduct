@@ -2,6 +2,7 @@ import datetime
 import unittest
 from unittest.mock import patch, Mock, ANY
 
+from app.enums import PimpyTaskStatus
 from app.exceptions import ValidationException, ResourceNotFoundException, \
     InvalidMinuteException
 from app.models.group import Group
@@ -137,13 +138,6 @@ def mock_find_task_by_id(task_id):
 
 pimpy_repository_mock.find_task_by_id.side_effect = mock_find_task_by_id
 
-task_mock.STATUS_NOT_STARTED = Task.STATUS_NOT_STARTED
-task_mock.STATUS_STARTED = Task.STATUS_STARTED
-task_mock.STATUS_DONE = Task.STATUS_DONE
-task_mock.STATUS_NOT_DONE = Task.STATUS_NOT_DONE
-task_mock.STATUS_CHECKED = Task.STATUS_CHECKED
-task_mock.STATUS_DELETED = Task.STATUS_DELETED
-task_mock.STATUS_MAX = Task.STATUS_MAX
 task_mock.status_meanings = Task.status_meanings
 
 
@@ -300,7 +294,7 @@ class TestPimpyService(unittest.TestCase):
         mock_user = Mock(User)
         mock_task = Mock(Task)
 
-        status = Task.STATUS_NOT_STARTED
+        status = PimpyTaskStatus.NOT_STARTED.value
         mock_user.member_of_group.return_value = True
 
         pimpy_service.set_task_status(mock_user, mock_task, status)
@@ -312,7 +306,7 @@ class TestPimpyService(unittest.TestCase):
         mock_task = Mock(Task)
         mock_task.users = []
 
-        status = Task.STATUS_NOT_STARTED
+        status = PimpyTaskStatus.NOT_STARTED.value
 
         pimpy_service.set_task_status(mock_user, mock_task, status)
         pimpy_repository_mock.update_status.assert_called_once_with(
@@ -328,7 +322,7 @@ class TestPimpyService(unittest.TestCase):
         mock_task = Mock(Task)
         mock_task.users = [mock_user]
 
-        status = Task.STATUS_NOT_STARTED
+        status = PimpyTaskStatus.NOT_STARTED.value
 
         mock_user.member_of_group.return_value = False
 
@@ -341,7 +335,7 @@ class TestPimpyService(unittest.TestCase):
         mock_task = Mock(Task)
         mock_task.users = [mock_user]
 
-        status = Task.STATUS_MAX + 1
+        status = PimpyTaskStatus.MAX.value + 1
 
         mock_user.member_of_group.return_value = False
 
@@ -353,7 +347,7 @@ class TestPimpyService(unittest.TestCase):
             pimpy_service.add_task_by_user_string('foo', 'content', -1,
                                                   nonexisting_group_id, 1,
                                                   existing_minute_id,
-                                                  Task.STATUS_NOT_STARTED)
+                                                  PimpyTaskStatus.NOT_STARTED)
 
     @patch.object(pimpy_service, 'get_list_of_users_from_string',
                   mock_get_list_of_users_from_string)
@@ -362,7 +356,7 @@ class TestPimpyService(unittest.TestCase):
             userlist = existing_user_name1 + ',' + existing_user_name2
             pimpy_service.add_task_by_user_string(
                 existing_task_name, 'test content', existing_group_id,
-                userlist, None, None, Task.STATUS_NOT_STARTED)
+                userlist, None, None, PimpyTaskStatus.NOT_STARTED.value)
 
     @patch.object(pimpy_service, 'get_list_of_users_from_string',
                   mock_get_list_of_users_from_string)
@@ -370,7 +364,8 @@ class TestPimpyService(unittest.TestCase):
         userlist = existing_user_name1 + ',' + existing_user_name2
         pimpy_service.add_task_by_user_string(
             existing_task_name, 'test content', existing_group_id,
-            userlist, 1, existing_minute_id, Task.STATUS_NOT_STARTED)
+            userlist, 1, existing_minute_id,
+            PimpyTaskStatus.NOT_STARTED.value)
 
     @patch.object(pimpy_service, 'get_list_of_users_from_string',
                   mock_get_list_of_users_from_string)
@@ -379,7 +374,7 @@ class TestPimpyService(unittest.TestCase):
         pimpy_service.add_task_by_user_string(
             nonexisting_task_name, 'test content', existing_group_id,
             user_list, 1, existing_minute_id,
-            Task.STATUS_NOT_STARTED)
+            PimpyTaskStatus.NOT_STARTED.value)
 
     @patch.object(pimpy_service, '_parse_minute_into_tasks',
                   mock_parse_minute_into_tasks)

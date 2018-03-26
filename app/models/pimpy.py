@@ -25,14 +25,6 @@ class TaskUserRel(db.Model):
 
 
 class Task(db.Model, BaseEntity):
-    STATUS_NOT_STARTED = 0
-    STATUS_STARTED = 1
-    STATUS_DONE = 2
-    STATUS_NOT_DONE = 3
-    STATUS_CHECKED = 4
-    STATUS_DELETED = 5
-    STATUS_MAX = 5
-
     __tablename__ = 'pimpy_task'
 
     prints = ('id', 'title')

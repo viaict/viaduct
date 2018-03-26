@@ -1,4 +1,5 @@
 from app import app, db
+from app.enums import PimpyTaskStatus
 from app.exceptions import BusinessRuleException
 from app.models.group import Group
 from app.models.pimpy import Minute, Task, TaskUserRel
@@ -55,7 +56,8 @@ def get_all_tasks_for_user(user, date_range=None):
     query = db.session.query(TaskUserRel) \
         .join(Task).join(User) \
         .filter(TaskUserRel.user == user) \
-        .filter(~Task.status.in_((4, 5)))
+        .filter(~Task.status.in_((PimpyTaskStatus.CHECKED.value,
+                                  PimpyTaskStatus.DELETED.value)))
 
     if date_range:
         query = query.filter(date_range[0] <= Task.timestamp,
@@ -72,7 +74,8 @@ def get_all_tasks_for_group(group, date_range=None, user=None):
     query = db.session.query(TaskUserRel) \
         .join(Task).join(User).join(Group) \
         .filter(Task.group == group) \
-        .filter(~Task.status.in_((4, 5)))
+        .filter(~Task.status.in_((PimpyTaskStatus.CHECKED.value,
+                                  PimpyTaskStatus.DELETED.value)))
 
     if date_range:
         query = query.filter(date_range[0] <= Task.timestamp,
@@ -93,7 +96,8 @@ def get_all_tasks_for_users_in_groups(groups, date_range=None):
     query = db.session.query(TaskUserRel) \
         .join(Task).join(User).join(Group) \
         .filter(Task.group_id.in_([g.id for g in groups])) \
-        .filter(~Task.status.in_((4, 5)))
+        .filter(~Task.status.in_((PimpyTaskStatus.CHECKED.value,
+                                  PimpyTaskStatus.DELETED.value)))
 
     if date_range:
         query = query.filter(date_range[0] <= Task.timestamp,

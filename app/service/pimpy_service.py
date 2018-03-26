@@ -4,6 +4,7 @@ import re
 import baas32 as b32
 from fuzzywuzzy import fuzz
 
+from app.enums import PimpyTaskStatus
 from app.exceptions import ValidationException, InvalidMinuteException
 from app.models.pimpy import Task
 from app.repository import pimpy_repository, task_repository
@@ -83,7 +84,8 @@ def set_task_status(user, task, status):
     if not user.member_of_group(task.group_id) and user not in task.users:
         raise ValidationException('User not member of group of task')
 
-    valid = 0 <= status <= Task.STATUS_MAX
+    valid = (PimpyTaskStatus.NOT_STARTED.value <= status <=
+             PimpyTaskStatus.MAX.value)
     if not valid:
         raise ValidationException('Status not valid')
 
