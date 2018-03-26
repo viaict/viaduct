@@ -60,3 +60,7 @@ class AuthorizationException(DetailedException):
     def __str__(self):
         return ("You are not authorized for this operation. " +
                 str(self.details))
+
+
+class InvalidMinuteException(ValidationException):
+    pass
