@@ -111,7 +111,9 @@ def upgrade():
     op.create_foreign_key(op.f('fk_activity_picture_file_id_file'), 'activity', 'file', ['picture_file_id'], ['id'])
 
     # Change ACTIVITY_PICTURES -> ACTIVITY_PICTURE
-    op.execute("ALTER TABLE file CHANGE category category enum('UPLOADS','EXAMINATION','ACTIVITY_PICTURE','ALV_DOCUMENT','COMPANY_LOGO','USER_AVATAR')")
+    op.alter_column('file', 'category',
+                    existing_type=mysql.ENUM('UPLOADS', 'EXAMINATION', 'ACTIVITY_PICTURE', 'ALV_DOCUMENT', 'COMPANY_LOGO', 'USER_AVATAR'),
+                    nullable=False)
 
     try:
         migrate_files()
