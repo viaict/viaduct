@@ -1,14 +1,12 @@
 import hashlib
-import os
 import urllib.error
 import urllib.parse
 import urllib.request
 
-from flask import render_template
+from flask import render_template, url_for
 from flask_login import current_user
 
-from app.utils.file import file_exists_pattern, file_remove_pattern, \
-    file_upload
+from app.service import user_service
 
 ALLOWED_EXTENSIONS = set(['png', 'gif', 'jpg', 'jpeg'])
 UPLOAD_DIR = 'app/static/files/users/'
@@ -18,14 +16,12 @@ class UserAPI:
     @staticmethod
     def has_avatar(user_id):
         """Check if the user has uploaded an avatar."""
-        return bool(file_exists_pattern('avatar_' + str(user_id) + '.*',
-                                        UPLOAD_DIR))
+        return user_service.user_has_avatar(user_id)
 
     @staticmethod
     def remove_avatar(user):
         """Remove avatar of a user."""
-        # Find avatar by avatar_<userid>.*
-        file_remove_pattern('avatar_' + str(user.id) + '.*', UPLOAD_DIR)
+        user_service.remove_avatar(user.id)
 
     @staticmethod
     def avatar(user):
@@ -37,12 +33,8 @@ class UserAPI:
         If the user neither has an avatar nor an gravatar return default image.
         """
 
-        # check if user has avatar if so return it
-        avatar = file_exists_pattern('avatar_' + str(user.id) + '.*',
-                                     UPLOAD_DIR)
-
-        if avatar:
-            return '/static/files/users/' + avatar
+        if user_service.user_has_avatar(user.id):
+            return url_for('user.view_avatar', user_id=user.id)
 
         # Set default values gravatar
         email = user.email or ''
@@ -63,15 +55,8 @@ class UserAPI:
         Checks if the file type is allowed if so removes any
         previous uploaded avatars.
         """
-        # Remove old avatars
-        file_remove_pattern('avatar_' + str(user_id) + '.*', UPLOAD_DIR)
 
-        # construct file name
-        filename = 'avatar_' + str(user_id) + '.' + \
-                   os.path.splitext(f.filename)[1]
-
-        # Save new avatar
-        file_upload(f, UPLOAD_DIR, True, filename)
+        user_service.set_avatar(user_id, f)
 
     @staticmethod
     def get_groups_for_user_id(user):

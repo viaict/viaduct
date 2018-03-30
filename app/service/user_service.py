@@ -3,6 +3,8 @@ import bcrypt
 from app.exceptions import ResourceNotFoundException, ValidationException, \
     AuthorizationException
 from app.repository import user_repository
+from app.service import file_service
+from app.enums import FileCategory
 
 
 def set_password(user_id, password):
@@ -60,3 +62,38 @@ def validate_password(user, password):  # type: (User, str) -> bool
         return True
     else:
         return False
+
+
+def user_has_avatar(user_id):
+    user = get_user_by_id(user_id)
+
+    return user.avatar_file_id is not None
+
+
+def remove_avatar(user_id):
+    user = get_user_by_id(user_id)
+
+    _file = file_service.get_file_by_id(user.avatar_file_id)
+    user.avatar_file_id = None
+
+    user_repository.save(user)
+
+    file_service.delete_file(_file)
+
+
+def set_avatar(user_id, file_data):
+    user = get_user_by_id(user_id)
+
+    # Remove old avatar
+    if user.avatar_file_id is not None:
+        _file = file_service.get_file_by_id(user.avatar_file_id)
+        user.avatar_file_id = None
+
+        file_service.delete_file(_file)
+
+    _file = file_service.add_file(FileCategory.USER_AVATAR,
+                                  file_data, file_data.filename)
+
+    user.avatar_file_id = _file.id
+
+    user_repository.save(user)

@@ -11,6 +11,7 @@ from flask import flash, redirect, render_template, request, url_for, abort, \
     session
 from flask_babel import _
 from flask_login import current_user, login_user, logout_user, login_required
+from werkzeug.utils import secure_filename
 
 from app import db, login_manager
 from app.decorators import require_role, response_headers
@@ -24,8 +25,8 @@ from app.models.custom_form import CustomFormResult, CustomForm
 from app.models.education import Education
 from app.models.user import User
 from app.roles import Roles
-from app.service import password_reset_service, user_service
-from app.service import role_service
+from app.service import password_reset_service, user_service, \
+    role_service, file_service
 from app.utils import copernica
 from app.utils.google import HttpError
 from app.utils.user import UserAPI
@@ -432,6 +433,47 @@ def user_export():
     for user in users:
         cw.writerow([getattr(user, c.name) for c in User.__mapper__.columns])
     return si.getvalue().strip('\r\n')
+
+
+@blueprint.route('/users/avatar/<int:user_id>/', methods=['GET'])
+@login_required
+def view_avatar(user_id=None):
+    can_read = False
+
+    # Unpaid members cannot view other avatars
+    if current_user.id != user_id and not current_user.has_paid:
+        return abort(403)
+
+    # A user can always view his own avatar
+    if current_user.id == user_id:
+        can_read = True
+    # group rights
+    if role_service.user_has_role(current_user, Roles.USER_READ) \
+            or role_service.user_has_role(current_user, Roles.USER_WRITE):
+        can_read = True
+
+    if not can_read:
+        return abort(403)
+
+    if not user_service.user_has_avatar(user_id):
+        return abort(404)
+
+    user = user_service.get_user_by_id(user_id)
+
+    avatar_file = file_service.get_file_by_id(user.avatar_file_id)
+    mimetype = file_service.get_file_mimetype(avatar_file)
+    content = file_service.get_file_content(avatar_file)
+
+    fn = secure_filename('user_avatar_' + str(user.id))
+    if len(avatar_file.extension) > 0:
+        fn += "." + avatar_file.extension
+
+    headers = {
+        'Content-Type': mimetype,
+        'Content-Disposition': 'inline; filename="{}"'.format(fn)
+    }
+
+    return content, headers
 
 
 ###
