@@ -6,6 +6,7 @@ from flask import flash, redirect, render_template, request, url_for, abort, \
 from flask_babel import _  # gettext
 from flask_login import current_user
 from werkzeug.contrib.atom import AtomFeed
+from werkzeug.utils import secure_filename
 
 # this is now uncommented for breaking activity for some reason
 # please some one check out what is happening
@@ -19,10 +20,10 @@ from app.models.custom_form import CustomFormResult
 from app.models.education import Education
 from app.models.mollie import Transaction, TransactionActivity
 from app.roles import Roles
-from app.service import role_service
+from app.service import role_service, file_service
 from app.utils import mollie
-from app.utils.file import file_upload, file_remove
 from app.utils.serialize_sqla import serialize_sqla
+from app.enums import FileCategory
 
 blueprint = Blueprint('activity', __name__, url_prefix='/activities')
 
@@ -210,17 +211,6 @@ def create(activity_id=None):
         if form.validate_on_submit():
             form.populate_obj(activity)
 
-            file = request.files['picture']
-
-            if file.filename:
-                image = file_upload(file, PICTURE_DIR, True)
-                if image:
-                    old_picture = activity.picture
-                    activity.picture = image.name
-
-                    if old_picture:
-                        file_remove(old_picture, PICTURE_DIR)
-
             # Facebook ID location, not used yet
             activity.venue = 1
 
@@ -253,6 +243,20 @@ def create(activity_id=None):
                     activity.google_event_id = google_activity['id']
 
             db.session.add(activity)
+
+            file = request.files['picture']
+
+            if file.filename:
+                picture = file_service.add_file(FileCategory.ACTIVITY_PICTURE,
+                                                file, file.filename)
+
+                old_picture_id = activity.picture_file_id
+                activity.picture_file_id = picture.id
+
+                if old_picture_id:
+                    old_picture = file_service.get_file_by_id(old_picture_id)
+                    file_service.delete_file(old_picture)
+
             db.session.commit()
 
             return redirect(url_for('activity.get_activity',
@@ -330,3 +334,27 @@ def rss(locale='en'):
                  url=url_for('activity.get_activity', activity_id=activity.id))
 
     return feed.get_response()
+
+
+@blueprint.route('/picture/<int:activity_id>/')
+def picture(activity_id):
+    activity = Activity.query.get_or_404(activity_id)
+
+    if activity.picture_file_id is None:
+        return redirect('/static/img/via_thumbnail.png')
+
+    picture_file = file_service.get_file_by_id(activity.picture_file_id)
+
+    mimetype = file_service.get_file_mimetype(picture_file)
+    content = file_service.get_file_content(picture_file)
+
+    fn = secure_filename('activity_picture_' + activity.name)
+    if len(picture_file.extension) > 0:
+        fn += "." + picture_file.extension
+
+    headers = {
+        'Content-Type': mimetype,
+        'Content-Disposition': 'inline; filename="{}"'.format(fn)
+    }
+
+    return content, headers
