@@ -84,12 +84,7 @@ def upload(page_nr=1):
 def content(file_id, file_hash):
     f = file_service.get_file_by_id(file_id)
 
-    if f.hash != file_hash:
-        return abort(404)
-
-    if (f.category == FileCategory.EXAMINATION or
-            f.category == FileCategory.ALV_DOCUMENT) and \
-            (current_user.is_anonymous or not current_user.has_paid):
+    if f.category != FileCategory.UPLOADS or f.hash != file_hash:
         return abort(404)
 
     mimetype = file_service.get_file_mimetype(f)
