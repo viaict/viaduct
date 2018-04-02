@@ -37,6 +37,7 @@ class TestUserService(unittest.TestCase):
         self.assertEqual(u, user)
         user_repository_mock.find_by_id.assert_called_once_with(1)
         self.assertNotEqual(u.password, password)
+        user_repository_mock.save.assert_called_once_with(user)
 
     def test_find_by_id(self):
         user_id = 1
@@ -187,6 +188,7 @@ class TestUserService(unittest.TestCase):
 
         file_service_mock.get_file_by_id.assert_not_called()
         file_service_mock.delete_file.assert_not_called()
+        user_repository_mock.save.assert_called_once_with(user)
 
     def test_user_replace_avatar(self):
         user_id = 1
@@ -217,3 +219,27 @@ class TestUserService(unittest.TestCase):
         file_service_mock.get_file_by_id.assert_called_once_with(
             old_avatar_file_id)
         file_service_mock.delete_file.assert_called_once_with(old_avatar)
+        user_repository_mock.save.assert_called_once_with(user)
+
+    def test_user_remove_avatar(self):
+        user_id = 1
+        avatar_file_id = 1
+
+        user = MagicMock(spec=dir(User))
+        avatar = MagicMock(spec=dir(File))
+
+        user.id = user_id
+        user.avatar_file_id = avatar_file_id
+        avatar.id = avatar_file_id
+
+        user_repository_mock.find_by_id.return_value = user
+        file_service_mock.get_file_by_id.return_value = avatar
+
+        user_service.remove_avatar(user_id)
+
+        self.assertEqual(user.avatar_file_id, None)
+
+        file_service_mock.get_file_by_id.assert_called_once_with(
+            avatar_file_id)
+        file_service_mock.delete_file.assert_called_once_with(avatar)
+        user_repository_mock.save.assert_called_once_with(user)
