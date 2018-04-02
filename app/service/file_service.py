@@ -14,13 +14,13 @@ FILENAME_REGEX = re.compile(r'(.+)\.([^\s.]+)')
 def add_file(category, data, filename):
     m = FILENAME_REGEX.match(filename)
     if not m:
+        orig_display_name = filename
         extension = ""
     else:
+        orig_display_name = m.group(1)
         extension = m.group(2)
 
     if category == FileCategory.UPLOADS:
-        orig_display_name = m.group(1)
-
         display_name = orig_display_name
         filename_unique = False
         i = 0
@@ -94,9 +94,9 @@ def get_all_files(page_nr=None, per_page=None):
     return file_repository.find_all_files(page_nr, per_page)
 
 
-def search_files_in_category(category, search):
+def search_files_in_uploads(search):
     search = search.lower()
-    all_files = get_all_files_in_category(category)
+    all_files = get_all_files_in_category(FileCategory.UPLOADS)
     file_scores = {}
 
     for f in all_files:

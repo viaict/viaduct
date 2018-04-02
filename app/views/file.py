@@ -22,8 +22,7 @@ def list(page_nr=1):
     per_page = 30
 
     if search:
-        files = file_service.search_files_in_category(
-            FileCategory.UPLOADS, search)[:per_page]
+        files = file_service.search_files_in_uploads(search)[:per_page]
         files_paginated = None
     else:
         files_paginated = file_service.get_all_files_in_category(
