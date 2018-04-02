@@ -1,5 +1,6 @@
 import mimetypes
 import re
+from fuzzywuzzy import fuzz
 
 from app import hashfs
 from app.enums import FileCategory
@@ -91,3 +92,17 @@ def get_all_files_in_category(category, page_nr=None, per_page=None):
 
 def get_all_files(page_nr=None, per_page=None):
     return file_repository.find_all_files(page_nr, per_page)
+
+
+def search_files_in_category(category, search):
+    search = search.lower()
+    all_files = get_all_files_in_category(category)
+    file_scores = {}
+
+    for f in all_files:
+        score = fuzz.partial_ratio(search, f.full_display_name.lower())
+        if score > 75:
+            file_scores[f] = score
+
+    files = sorted(file_scores, key=file_scores.get, reverse=True)
+    return files

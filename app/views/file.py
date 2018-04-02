@@ -1,6 +1,4 @@
 """Views for the file module."""
-from fuzzywuzzy import fuzz
-
 from flask import Blueprint, render_template, request, flash, \
     abort, redirect, url_for
 from flask_login import current_user
@@ -24,18 +22,8 @@ def list(page_nr=1):
     per_page = 30
 
     if search:
-        search = search.lower()
-        all_files = file_service.get_all_files_in_category(
-            FileCategory.UPLOADS)
-        file_scores = {}
-
-        for f in all_files:
-            score = fuzz.partial_ratio(search, f.full_display_name)
-            if score > 75:
-                file_scores[f] = score
-
-        files = sorted(file_scores,
-                       key=file_scores.get, reverse=True)[:per_page]
+        files = file_service.search_files_in_category(
+            FileCategory.UPLOADS, search)[:per_page]
         files_paginated = None
     else:
         files_paginated = file_service.get_all_files_in_category(
