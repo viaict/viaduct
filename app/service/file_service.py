@@ -74,11 +74,11 @@ def get_file_content(_file):
         raise ResourceNotFoundException('file content', _file.hash)
 
 
-def get_file_mimetype(_file):
+def get_file_mimetype(_file, add_http_text_charset='utf-8'):
     try:
         mimetype = mimetypes.types_map['.' + _file.extension]
-        if mimetype.startswith('text/'):
-            mimetype += '; charset=utf-8'
+        if mimetype.startswith('text/') and add_http_text_charset is not None:
+            mimetype += '; charset=' + add_http_text_charset
 
         return mimetype
     except KeyError:

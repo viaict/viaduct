@@ -449,7 +449,8 @@ class TestFileService(unittest.TestCase):
         extension = 'txt'
         category = FileCategory.UPLOADS
         _hash = '123456789abcdefghiklmnopqrstuvwxyz'
-        expected_mimetype = 'text/plain; charset=utf-8'
+        expected_mimetype = 'text/plain'
+        expected_mimetype_charset = 'text/plain; charset=utf-8'
 
         _file = MagicMock(spec=dir(File))
         _file.id = 1
@@ -460,11 +461,14 @@ class TestFileService(unittest.TestCase):
 
         # === Service function call ===
 
-        mimetype = file_service.get_file_mimetype(_file)
+        mimetype = file_service.get_file_mimetype(
+            _file, add_http_text_charset=None)
+        mimetype_charset = file_service.get_file_mimetype(_file)
 
         # === Assertions ===
 
         self.assertEqual(mimetype, expected_mimetype)
+        self.assertEqual(mimetype_charset, expected_mimetype_charset)
 
     def test_get_file_mimetype_unknown(self):
         # === Initialization ===
