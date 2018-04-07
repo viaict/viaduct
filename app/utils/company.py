@@ -14,7 +14,7 @@ class CompanyAPI:
                                               datetime.utcnow(),
                                               Company.contract_end_date >
                                               datetime.utcnow(),
-                                              Company.logo_file_id is not None)
+                                              Company.logo_file_id != None)  # noqa
                                          ).all()
         random.shuffle(companies)
         return companies

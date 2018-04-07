@@ -47,6 +47,11 @@ def get_companies():
     company_list = []
 
     for company in companies:
+        if company.logo_file_id is not None:
+            logo_url = url_for('company.view_logo', company_id=company.id)
+        else:
+            logo_url = ""
+
         company_list.append(
             {
                 "id": company.id,
@@ -59,7 +64,7 @@ def get_companies():
                     "country": company.location.country
                 },
                 "expired": company.expired,
-                "logo": url_for('company.view_logo', company_id=company.id),
+                "logo": logo_url,
                 "view": url_for('company.view', company_id=company.id),
                 "contact": {
                     "email": company.contact.email,
