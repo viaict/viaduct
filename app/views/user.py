@@ -11,7 +11,6 @@ from flask import flash, redirect, render_template, request, url_for, abort, \
     session
 from flask_babel import _
 from flask_login import current_user, login_user, logout_user, login_required
-from werkzeug.utils import secure_filename
 
 from app import db, login_manager
 from app.decorators import require_role, response_headers
@@ -461,17 +460,12 @@ def view_avatar(user_id=None):
     user = user_service.get_user_by_id(user_id)
 
     avatar_file = file_service.get_file_by_id(user.avatar_file_id)
-    mimetype = file_service.get_file_mimetype(avatar_file)
+
+    fn = 'user_avatar_' + str(user.id)
+
     content = file_service.get_file_content(avatar_file)
-
-    fn = secure_filename('user_avatar_' + str(user.id))
-    if len(avatar_file.extension) > 0:
-        fn += "." + avatar_file.extension
-
-    headers = {
-        'Content-Type': mimetype,
-        'Content-Disposition': 'inline; filename="{}"'.format(fn)
-    }
+    headers = file_service.get_file_content_headers(
+        avatar_file, display_name=fn)
 
     return content, headers
 

@@ -6,7 +6,6 @@ from flask import Blueprint, flash, redirect, render_template, request, \
 from flask_babel import lazy_gettext as _
 from flask_login import current_user
 from sqlalchemy import or_, and_
-from werkzeug.utils import secure_filename
 
 from app import db
 from app.decorators import require_role
@@ -312,16 +311,9 @@ def view_logo(company_id):
 
     logo_file = file_service.get_file_by_id(company.logo_file_id)
 
-    mimetype = file_service.get_file_mimetype(logo_file)
+    fn = 'logo_' + company.name
+
     content = file_service.get_file_content(logo_file)
-
-    fn = secure_filename('logo_' + company.name)
-    if len(logo_file.extension) > 0:
-        fn += "." + logo_file.extension
-
-    headers = {
-        'Content-Type': mimetype,
-        'Content-Disposition': 'inline; filename="{}"'.format(fn)
-    }
+    headers = file_service.get_file_content_headers(logo_file, display_name=fn)
 
     return content, headers

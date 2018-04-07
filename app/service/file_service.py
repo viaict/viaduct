@@ -1,6 +1,7 @@
 import mimetypes
 import re
 from fuzzywuzzy import fuzz
+from werkzeug.utils import secure_filename
 
 from app import hashfs
 from app.enums import FileCategory
@@ -83,6 +84,25 @@ def get_file_mimetype(_file, add_http_text_charset='utf-8'):
         return mimetype
     except KeyError:
         return 'application/octet-stream'
+
+
+def get_file_content_headers(_file, display_name=None):
+    mimetype = get_file_mimetype(_file)
+
+    headers = {'Content-Type': mimetype}
+
+    if display_name is None:
+        filename = _file.full_display_name
+    else:
+        filename = secure_filename(display_name)
+        if len(_file.extension) > 0:
+            filename += "." + _file.extension
+
+    if filename is not None:
+        headers['Content-Disposition'] = 'inline; filename="{}"'.format(
+            filename)
+
+    return headers
 
 
 def get_all_files_in_category(category, page_nr=None, per_page=None):

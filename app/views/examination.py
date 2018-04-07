@@ -33,13 +33,8 @@ def view(exam_id, doc_type):
     else:
         return abort(404)
 
-    mimetype = file_service.get_file_mimetype(_file)
     content = file_service.get_file_content(_file)
-
-    headers = {
-        'Content-Type': mimetype,
-        'Content-Disposition': 'inline; filename="{}"'.format(fn)
-    }
+    headers = file_service.get_file_content_headers(_file, display_name=fn)
 
     return content, headers
 

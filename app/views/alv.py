@@ -48,13 +48,9 @@ def view_document_version(alv_document_id, version):
 
     fn = alv_service.get_alv_document_version_filename(alv_document,
                                                        version, _file)
-    mimetype = file_service.get_file_mimetype(_file)
-    content = file_service.get_file_content(_file)
 
-    headers = {
-        'Content-Type': mimetype,
-        'Content-Disposition': 'inline; filename="{}"'.format(fn)
-    }
+    headers = file_service.get_file_content_headers(_file, display_name=fn)
+    content = file_service.get_file_content(_file)
 
     return content, headers
 

@@ -74,13 +74,7 @@ def content(file_id, file_hash):
     if f.category != FileCategory.UPLOADS or f.hash != file_hash:
         return abort(404)
 
-    mimetype = file_service.get_file_mimetype(f)
     content = file_service.get_file_content(f)
-
-    headers = {'Content-Type': mimetype}
-
-    if f.full_display_name is not None:
-        headers['Content-Disposition'] = 'inline; filename="{}"'.format(
-            f.full_display_name)
+    headers = file_service.get_file_content_headers(f)
 
     return content, headers

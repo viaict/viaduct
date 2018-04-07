@@ -72,6 +72,69 @@ class TestFileService(unittest.TestCase):
         file_repository_mock.reset_mock()
         hashfs_mock.reset_mock()
 
+    def test_file_full_display_name(self):
+        # === Initialization ===
+
+        display_name = 'test123'
+        extension = 'png'
+        expected_full_display_name = display_name + '.' + extension
+
+        f = MagicMock(spec=dir(File))
+        f.display_name = display_name
+        f.extension = extension
+        f.hash = '123456789abcdefghiklmnopqrstuvwxyz'
+        f.category = FileCategory.UPLOADS
+
+        # == Property __get__ call ==
+
+        full_display_name = File.full_display_name.__get__(f)
+
+        # == Assertions
+
+        self.assertEqual(expected_full_display_name, full_display_name)
+
+    def test_file_full_display_name_no_extension(self):
+        # === Initialization ===
+
+        display_name = 'test123'
+        extension = ''
+        expected_full_display_name = display_name
+
+        # == Property __get__ call ==
+
+        f = MagicMock(spec=dir(File))
+        f.display_name = display_name
+        f.extension = extension
+        f.hash = '123456789abcdefghiklmnopqrstuvwxyz'
+        f.category = FileCategory.UPLOADS
+
+        full_display_name = File.full_display_name.__get__(f)
+
+        # == Assertions
+
+        self.assertEqual(expected_full_display_name, full_display_name)
+
+    def test_file_full_display_name_no_display_name(self):
+        # === Initialization ===
+
+        display_name = None
+        extension = 'png'
+        expected_full_display_name = None
+
+        # == Property __get__ call ==
+
+        f = MagicMock(spec=dir(File))
+        f.display_name = display_name
+        f.extension = extension
+        f.hash = '123456789abcdefghiklmnopqrstuvwxyz'
+        f.category = FileCategory.ACTIVITY_PICTURE
+
+        full_display_name = File.full_display_name.__get__(f)
+
+        # == Assertions
+
+        self.assertEqual(expected_full_display_name, full_display_name)
+
     def test_add_file_uploads(self):
         # === Initialization ===
 
@@ -493,6 +556,152 @@ class TestFileService(unittest.TestCase):
         # === Assertions ===
 
         self.assertEqual(mimetype, expected_mimetype)
+
+    def test_get_file_content_headers(self):
+        # === Initialization ===
+
+        display_name = 'test123'
+        extension = 'png'
+        category = FileCategory.UPLOADS
+        _hash = '123456789abcdefghiklmnopqrstuvwxyz'
+        full_display_name = display_name + "." + extension
+
+        expected_content_type = "image/png"
+        expected_content_disposition = 'inline; filename="{}"'.format(
+            full_display_name)
+
+        _file = MagicMock(spec=dir(File))
+        _file.id = 1
+        _file.hash = _hash
+        _file.category = category
+        _file.display_name = display_name
+        _file.extension = extension
+        _file.full_display_name = full_display_name
+
+        # === Service function call ===
+
+        with patch.object(file_service, 'get_file_mimetype',
+                          return_value=expected_content_type):
+            headers = file_service.get_file_content_headers(_file)
+
+        # === Assertions ===
+
+        assert "Content-Type" in headers
+        assert "Content-Disposition" in headers
+
+        self.assertEqual(headers["Content-Type"], expected_content_type)
+        self.assertEqual(headers["Content-Disposition"],
+                         expected_content_disposition)
+
+    def test_get_file_content_headers_no_display_name(self):
+        # === Initialization ===
+
+        display_name = None
+        extension = 'png'
+        category = FileCategory.ACTIVITY_PICTURE
+        _hash = '123456789abcdefghiklmnopqrstuvwxyz'
+        full_display_name = None
+
+        expected_content_type = "image/png"
+
+        _file = MagicMock(spec=dir(File))
+        _file.id = 1
+        _file.hash = _hash
+        _file.category = category
+        _file.display_name = display_name
+        _file.extension = extension
+        _file.full_display_name = full_display_name
+
+        # === Service function call ===
+
+        with patch.object(file_service, 'get_file_mimetype',
+                          return_value=expected_content_type):
+            headers = file_service.get_file_content_headers(_file)
+
+        # === Assertions ===
+
+        assert "Content-Type" in headers
+        assert "Content-Disposition" not in headers
+
+        self.assertEqual(headers["Content-Type"], expected_content_type)
+
+    def test_get_file_content_headers_explicit_display_name(self):
+        # === Initialization ===
+
+        display_name = None
+        extension = 'png'
+        category = FileCategory.ACTIVITY_PICTURE
+        _hash = '123456789abcdefghiklmnopqrstuvwxyz'
+        full_display_name = None
+
+        overriden_display_name = 'test456'
+
+        expected_content_type = "image/png"
+        expected_content_disposition = 'inline; filename="{}.{}"'.format(
+            overriden_display_name, extension)
+
+        _file = MagicMock(spec=dir(File))
+        _file.id = 1
+        _file.hash = _hash
+        _file.category = category
+        _file.display_name = display_name
+        _file.extension = extension
+        _file.full_display_name = full_display_name
+
+        # === Service function call ===
+
+        with patch.object(file_service, 'get_file_mimetype',
+                          return_value=expected_content_type):
+            headers = file_service.get_file_content_headers(
+                _file, display_name=overriden_display_name)
+
+        # === Assertions ===
+
+        assert "Content-Type" in headers
+        assert "Content-Disposition" in headers
+
+        self.assertEqual(headers["Content-Type"], expected_content_type)
+        self.assertEqual(headers["Content-Disposition"],
+                         expected_content_disposition)
+
+    def test_get_file_content_headers_override_display_name(self):
+        # === Initialization ===
+
+        display_name = 'test123'
+        extension = 'png'
+        category = FileCategory.UPLOADS
+        _hash = '123456789abcdefghiklmnopqrstuvwxyz'
+        full_display_name = display_name + "." + extension
+
+        overriden_display_name = 'test456'
+
+        expected_content_type = "image/png"
+        expected_content_disposition = 'inline; filename="{}.{}"'.format(
+            overriden_display_name, extension)
+
+        _file = MagicMock(spec=dir(File))
+        _file.id = 1
+        _file.hash = _hash
+        _file.category = category
+        _file.display_name = display_name
+        _file.extension = extension
+        _file.full_display_name = full_display_name
+
+        # === Service function call ===
+
+        with patch.object(file_service, 'get_file_mimetype',
+                          return_value=expected_content_type):
+            headers = file_service.get_file_content_headers(
+                _file, display_name=overriden_display_name)
+
+        # === Assertions ===
+
+        assert "Content-Type" in headers
+        assert "Content-Disposition" in headers
+
+        self.assertEqual(headers["Content-Type"], expected_content_type)
+        self.assertEqual(headers["Content-Disposition"],
+                         expected_content_disposition)
 
     def test_get_all_files_in_category(self):
         # === Initialization ===

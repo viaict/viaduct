@@ -6,7 +6,6 @@ from flask import flash, redirect, render_template, request, url_for, abort, \
 from flask_babel import _  # gettext
 from flask_login import current_user
 from werkzeug.contrib.atom import AtomFeed
-from werkzeug.utils import secure_filename
 
 # this is now uncommented for breaking activity for some reason
 # please some one check out what is happening
@@ -345,16 +344,10 @@ def picture(activity_id):
 
     picture_file = file_service.get_file_by_id(activity.picture_file_id)
 
-    mimetype = file_service.get_file_mimetype(picture_file)
+    fn = 'activity_picture_' + activity.name
+
     content = file_service.get_file_content(picture_file)
-
-    fn = secure_filename('activity_picture_' + activity.name)
-    if len(picture_file.extension) > 0:
-        fn += "." + picture_file.extension
-
-    headers = {
-        'Content-Type': mimetype,
-        'Content-Disposition': 'inline; filename="{}"'.format(fn)
-    }
+    headers = file_service.get_file_content_headers(picture_file,
+                                                    display_name=fn)
 
     return content, headers

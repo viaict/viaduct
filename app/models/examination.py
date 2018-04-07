@@ -68,18 +68,13 @@ class Examination(db.Model, BaseEntity):
 
         if answers:
             fn += "_answers"
-            f = self.answers_file
-        else:
-            f = self.examination_file
-
-        fn += "." + f.extension
 
         return fn
 
     @property
     def examination_filename(self):
         """
-        Filename for the examination file.
+        Filename for the examination file (without extension).
 
         Create a filename for the examination file
         based on the exam's information.
@@ -89,7 +84,7 @@ class Examination(db.Model, BaseEntity):
     @property
     def answers_filename(self):
         """
-        Filename for the answers file file.
+        Filename for the answers file file (without extension).
 
         Create a filename for the answers file
         based on the exam's information.

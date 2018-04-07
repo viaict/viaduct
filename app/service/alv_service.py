@@ -56,9 +56,6 @@ def get_alv_document_version_filename(alv_document, version_number,
     if version_number > 1:
         fn += "_v{}".format(version_number)
 
-    if len(_file.extension) > 0:
-        fn += "." + _file.extension
-
     return fn
 
 
