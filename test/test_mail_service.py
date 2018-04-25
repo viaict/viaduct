@@ -11,7 +11,10 @@ class TestMailService(unittest.TestCase):
         to = "to"
         subject = "subject"
         template = "sometemplate"
+        template_kwargs = dict(a=1, b=2, c=3)
 
-        mail_service.send_mail(to=to, subject=subject, email_template=template)
+        mail_service.send_mail(to=to, subject=subject,
+                               email_template=template, **template_kwargs)
 
-        google_mock.send_email.assert_called_once_with(to, subject, template)
+        google_mock.send_email.assert_called_once_with(
+            to, subject, template, email_template_kwargs=template_kwargs)
