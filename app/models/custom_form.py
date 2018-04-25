@@ -238,11 +238,13 @@ class CustomFormResult(db.Model, BaseEntity):
             send_email(to=follower.owner.email,
                        subject='Formulier ingevuld',
                        email_template='email/form.html',
-                       sender='via',
-                       user=follower.owner,
-                       form_url=form_url,
-                       owner=owner.first_name + " " + owner.last_name,
-                       form=form.name)
+                       email_template_kwargs=dict(
+                           sender='via',
+                           user=follower.owner,
+                           form_url=form_url,
+                           owner=owner.first_name + " " + owner.last_name,
+                           form=form.name)
+                       )
 
 
 class CustomFormFollower(db.Model, BaseEntity):
