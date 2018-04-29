@@ -15,7 +15,6 @@ jsglue = JSGlue()
 sentry = Sentry()
 oauth = OAuth2Provider()
 
-
 # Set up the database.
 constraint_naming_convention = {
     "ix": 'ix_%(column_0_label)s',

@@ -1,11 +1,11 @@
-from flask import Blueprint, render_template, request, url_for, redirect
+from flask import Blueprint, render_template, request, url_for, redirect, abort
 from flask_login import current_user
 
 from app.decorators import require_role, require_membership
 from app.forms.alv import AlvForm, AlvDocumentForm, AlvMinutesForm
 from app.models.alv_model import Alv
 from app.roles import Roles
-from app.service import alv_service, role_service
+from app.service import alv_service, role_service, file_service
 
 blueprint = Blueprint('alv', __name__, url_prefix='/alv')
 
@@ -29,6 +29,51 @@ def view(alv_id=0):
     return render_template('alv/view.htm', alv=alv, can_write=can_write)
 
 
+@blueprint.route('/documents/<int:alv_document_id>/<int:version>/',
+                 methods=['GET'])
+@require_membership
+def view_document_version(alv_document_id, version):
+    if version <= 0:
+        return abort(404)
+
+    alv_document = alv_service.get_alv_document_by_id(
+        alv_document_id, include_versions=True)
+
+    version_idx = version - 1
+    if version_idx >= len(alv_document.versions):
+        return abort(404)
+
+    alv_document_version = alv_document.versions[version_idx]
+    _file = alv_service.get_alv_document_version_file(alv_document_version)
+
+    fn = alv_service.get_alv_document_version_filename(alv_document,
+                                                       version, _file)
+
+    headers = file_service.get_file_content_headers(_file, display_name=fn)
+    content = file_service.get_file_content(_file)
+
+    return content, headers
+
+
+@blueprint.route('/<int:alv_id>/document/minutes/')
+@require_membership
+def view_minutes(alv_id):
+    alv = alv_service.get_alv_by_id(alv_id)
+
+    _file = alv_service.get_alv_minutes_file(alv)
+    fn = alv_service.get_alv_minutes_filename(alv, _file)
+
+    mimetype = file_service.get_file_mimetype(_file)
+    content = file_service.get_file_content(_file)
+
+    headers = {
+        'Content-Type': mimetype,
+        'Content-Disposition': 'inline; filename="{}"'.format(fn)
+    }
+
+    return content, headers
+
+
 @blueprint.route("/create/", methods=['GET', 'POST'])
 @blueprint.route("/<int:alv_id>/edit/", methods=['GET', 'POST'])
 @require_role(Roles.ALV_WRITE)
@@ -48,9 +93,10 @@ def create_edit(alv_id=None):
     return render_template('alv/edit.htm', form=form)
 
 
-@blueprint.route('/<int:alv_id>/documents/minute/', methods=['GET', 'POST'])
+@blueprint.route('/<int:alv_id>/documents/minutes/edit/',
+                 methods=['GET', 'POST'])
 @require_role(Roles.ALV_WRITE)
-def add_minute(alv_id=None):
+def add_minutes(alv_id=None):
     alv = alv_service.get_alv_by_id(alv_id)
     form = AlvMinutesForm(request.form)
 

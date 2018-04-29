@@ -14,7 +14,6 @@ from app.utils.guide import GuideAPI  # noqa
 from app.utils.navigation import NavigationAPI  # noqa
 from app.utils.seo import get_seo_fields  # noqa
 from app.utils.serialize_sqla import serialize_sqla  # noqa
-from app.utils.thumb import thumb  # noqa
 from app.utils.user import UserAPI  # noqa
 
 template_filters.register_filters(app)
@@ -31,7 +30,6 @@ app.jinja_env.globals.update(datetime=datetime)
 app.jinja_env.globals.update(json=json)
 app.jinja_env.globals.update(serialize_sqla=serialize_sqla)
 app.jinja_env.globals.update(len=len)
-app.jinja_env.globals.update(thumb=thumb)
 app.jinja_env.globals.update(isinstance=isinstance)
 app.jinja_env.globals.update(list=list)
 app.jinja_env.globals.update(static_url=static_url)

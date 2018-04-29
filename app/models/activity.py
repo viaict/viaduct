@@ -22,7 +22,7 @@ class Activity(db.Model, BaseEntity):
     location = db.Column(db.String(64))
     privacy = db.Column(db.String(64))
     price = db.Column(db.String(16))
-    picture = db.Column(db.String(255))
+    picture_file_id = db.Column(db.Integer, db.ForeignKey('file.id'))
     venue = db.Column(db.Integer)  # venue ID
     updated_time = db.Column(db.DateTime, default=datetime.now())
     form_id = db.Column(db.Integer, db.ForeignKey('custom_form.id'))

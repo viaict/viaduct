@@ -173,7 +173,7 @@ def mysqlinit():
 @manager.command
 def test():
     """Run all tests in the test folder."""
-    subprocess.call("python -m unittest discover", shell=True)
+    subprocess.call("python -m unittest discover -vs test/", shell=True)
 
 
 def _add_group(name):

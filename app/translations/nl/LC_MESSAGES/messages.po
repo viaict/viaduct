@@ -1553,6 +1553,9 @@ msgstr "Geldig lidmaatschap is vereist om dit nieuwsartikel te kunnen lezen"
 msgid "Vancancies"
 msgstr "Vacatures"
 
+msgid "Version"
+msgstr "Versie"
+
 msgid "Versions"
 msgstr "Versies"
 

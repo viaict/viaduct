@@ -126,7 +126,7 @@
                             {% endif %}
                         </td>
                         <td>
-                            <a href='{{ url_for('examination.preview', exam_id=examination.id, doc_type='exam') }}' style="white-space: nowrap">
+                            <a href='{{ url_for('examination.view', exam_id=examination.id, doc_type='exam') }}' style="white-space: nowrap">
                                 <i class='glyphicon glyphicon-cloud-download'></i>
                                 {% if examination.date %}
                                     {{ examination.date }}
@@ -141,8 +141,8 @@
                             {%- endif -%}
                         </td>
                         <td>
-                            {% if examination.answer_path and examination.answer_path != '1' %}
-                            <a href='{{url_for('examination.preview', exam_id=examination.id, doc_type='answers') }}' >
+                            {% if examination.answers_file %}
+                            <a href='{{url_for('examination.view', exam_id=examination.id, doc_type='answers') }}' >
                                 <i class='glyphicon glyphicon-file'></i>{{ _('Answers') }}</a>
                             {% else %}
                                 N/A
@@ -151,7 +151,7 @@
                         {% if can_write %}
                             <td>
                                 <a href='{{ url_for('examination.edit', exam_id=examination.id) }}'><i class='glyphicon glyphicon-pencil'></i></a>
-                                <a onclick='confirmation({{examination.id}})' role='button' data-toggle='modal' style='cursor: pointer;'><i class='glyphicon glyphicon-remove'></i></a>
+                                <a onclick='delete_examination("{{ url_for('examination.delete', exam_id=examination.id, search=search) }}")' role='button' data-toggle='modal' style='cursor: pointer;'><i class='glyphicon glyphicon-remove'></i></a>
                             </td>
                         {% endif %}
                     </tr>
@@ -164,6 +164,11 @@
     {% if examinations != None %}
     {{ render_pagination(examinations, 'examination.view_examination', '?search=' + search) }}
     {% endif %}
+
+
+    <form style="display: none" method="POST" id="examination-delete-form">
+    </form>
+
 <script>
 function searchKeyPress(e)
 {
@@ -175,10 +180,12 @@ function searchKeyPress(e)
     }
 }
 
-function confirmation(id) {
+function delete_examination(exam_delete_url) {
     var answer = confirm("{{ _("Are you sure you want to delete this exam?") }}")
     if (answer) {
-        window.location = '?search={{ search }}&delete='+id;
+        var $form = $('#examination-delete-form');
+        $form.attr('action', exam_delete_url);
+        $form.submit();
     }
 }
 </script>
