@@ -17,7 +17,3 @@ class Course(db.Model, BaseEntity):
     educations = db.relationship('Education', secondary=education_course,
                                  backref=db.backref('courses', lazy='dynamic'),
                                  lazy='dynamic')
-
-    def __init__(self, name, description):
-        self.name = name
-        self.description = description

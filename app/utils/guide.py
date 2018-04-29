@@ -1,9 +1,9 @@
 from flask import request
 from flask_login import current_user
 
-from app.models.page import Page, PageRevision
+from app.models.page import PageRevision
 from app.roles import Roles
-from app.service import role_service
+from app.service import role_service, page_service
 
 
 # Get the guide page for a specific module
@@ -16,7 +16,8 @@ class GuideAPI:
         module_name = request.blueprint
 
         """ Get the user guide for a specific module """
-        user_guide = Page.get_by_path('guides/user/' + module_name)
+        user_guide = page_service.get_page_by_path(
+            'guides/user/' + module_name)
 
         if not user_guide:
             user_revision = PageRevision(None, None, None, None, None, None,
@@ -42,7 +43,8 @@ class GuideAPI:
     def get_current_admin_guide():
         module_name = request.blueprint
 
-        admin_guide = Page.get_by_path('guides/admin/' + module_name)
+        admin_guide = page_service.get_page_by_path(
+            'guides/admin/' + module_name)
 
         if not admin_guide:
             admin_revision = PageRevision(None, None, None, None, None, None,

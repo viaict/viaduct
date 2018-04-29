@@ -71,7 +71,7 @@ def contest_list():
         return render_template('domjudge/list.htm')
 
     json_data = r.json()
-    if json_data == []:
+    if not json_data:
         data = []
     else:
         data = list(json_data.values())
@@ -391,7 +391,7 @@ def contest_submissions_view(contest_id, team_id=None):
 
 @blueprint.route('/contest/<int:contest_id>/submissions/all/')
 @login_required
-def contest_submissions_view_all(contest_id, team_id=None):
+def contest_submissions_view_all(contest_id):
     return render_contest_submissions_view(contest_id, view_all=True)
 
 

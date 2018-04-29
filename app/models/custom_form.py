@@ -5,13 +5,13 @@ from flask import url_for
 from flask_login import current_user
 
 from app import db
-from app.models.base_model import BaseEntity
 from app.models.activity import Activity
-from app.models.user import User
+from app.models.base_model import BaseEntity
 from app.models.mollie import Transaction
 from app.models.page import PageRevision, Page
+from app.models.user import User
+from app.service import page_service
 from app.utils.google import send_email
-from app.utils.page import PageAPI
 
 
 def export_form_data(r):
@@ -34,6 +34,7 @@ class CustomForm(db.Model, BaseEntity):
     html = db.Column(db.UnicodeText())
     msg_success = db.Column(db.String(2048))
     max_attendants = db.Column(db.Integer)
+    introductions = db.Column(db.Integer)
     price = db.Column(db.Float, default=0)
     owner = db.relationship('User', backref=db.backref('custom_forms',
                                                        lazy='dynamic'))
@@ -69,16 +70,22 @@ class CustomForm(db.Model, BaseEntity):
             'label': 'Form resultaat',
             'export': export_form_data,
             'on_by_default': False,
+        }), ('introductions', {
+            'label': 'Introducees',
+            'export': lambda r: r.introductions,
+            'on_by_default': True,
         })])
 
     def __init__(self, owner_id=None, name="", origin="", html="",
-                 msg_success="", max_attendants=150, terms=""):
+                 msg_success="", max_attendants=150, introductions=0,
+                 terms=""):
         self.owner_id = owner_id
         self.name = name
         self.origin = origin
         self.html = html
         self.msg_success = msg_success
         self.max_attendants = max_attendants
+        self.introductions = introductions
         self.terms = terms
         self.archived = False
 
@@ -101,7 +108,8 @@ class CustomForm(db.Model, BaseEntity):
             .filter(PageRevision.custom_form_id == self.id).all()
 
         # Test if we are allowed to read on any on these pages.
-        if any([PageAPI.can_read(page) for page in pages]):
+        if any([page_service.can_user_read_page(page, user)
+                for page in pages]):
             return True
 
         return False
@@ -113,6 +121,11 @@ class CustomForm(db.Model, BaseEntity):
         latest_activity = \
             self.activities.order_by(Activity.end_time.desc()).first()
         return datetime.now(timezone.utc) > latest_activity.end_time
+
+    @property
+    def attendants(self):
+        return sum(entry.introductions + 1 for entry in
+                   self.custom_form_results.all())
 
     @classmethod
     def aslist(cls, current=None):
@@ -193,6 +206,7 @@ class CustomFormResult(db.Model, BaseEntity):
     form_id = db.Column(db.Integer, db.ForeignKey('custom_form.id'))
     data = db.Column(db.String(4096))
     has_paid = db.Column(db.Boolean)
+    introductions = db.Column(db.Integer)
 
     owner = db.relationship('User', backref=db.backref('custom_form_results',
                                                        lazy='dynamic'))
@@ -201,11 +215,12 @@ class CustomFormResult(db.Model, BaseEntity):
                                               lazy='dynamic'))
 
     def __init__(self, owner_id=None, form_id=None, data="", has_paid=False,
-                 price=0.0):
+                 introductions=0, price=0.0):
         self.owner_id = owner_id
         self.form_id = form_id
         self.data = data
         self.has_paid = has_paid
+        self.introductions = introductions
         self.price = price
         self.notify_followers()
 
@@ -224,11 +239,13 @@ class CustomFormResult(db.Model, BaseEntity):
             send_email(to=follower.owner.email,
                        subject='Formulier ingevuld',
                        email_template='email/form.html',
-                       sender='via',
-                       user=follower.owner,
-                       form_url=form_url,
-                       owner=owner.first_name + " " + owner.last_name,
-                       form=form.name)
+                       email_template_kwargs=dict(
+                           sender='via',
+                           user=follower.owner,
+                           form_url=form_url,
+                           owner=owner.first_name + " " + owner.last_name,
+                           form=form.name)
+                       )
 
 
 class CustomFormFollower(db.Model, BaseEntity):

@@ -19,10 +19,10 @@ from app.models.custom_form import CustomFormResult
 from app.models.education import Education
 from app.models.mollie import Transaction, TransactionActivity
 from app.roles import Roles
-from app.service import role_service
+from app.service import role_service, file_service
 from app.utils import mollie
-from app.utils.file import file_upload, file_remove
 from app.utils.serialize_sqla import serialize_sqla
+from app.enums import FileCategory
 
 blueprint = Blueprint('activity', __name__, url_prefix='/activities')
 
@@ -78,7 +78,6 @@ def get_activity(activity_id=0):
     Register and update for an activity, with handling of custom forms
     and payment.
     """
-
     activity = Activity.query.get_or_404(activity_id)
 
     form = ActivityForm(request.form, obj=current_user)
@@ -87,16 +86,22 @@ def get_activity(activity_id=0):
     educations = Education.query.all()
     form.education_id.choices = [(e.id, e.name) for e in educations]
 
+    # Set the number of extra attendees
+    if activity.form:
+        form.introductions.choices = [(0, _('None'))] + [
+            (x, "+%d" % x) for x in range(1, activity.form.introductions + 1)]
+        form.introductions.default = (0, _('None'))
+
     auto_open_register_pane = False
 
-    def render():
+    def render(num_extra_attendees=None):
         can_write = role_service.user_has_role(current_user,
                                                Roles.ACTIVITY_WRITE)
-        return render_template('activity/view_single.htm', activity=activity,
-                               form=form, login_form=SignInForm(),
-                               title=activity.name,
-                               auto_open_register=auto_open_register_pane,
-                               can_write=can_write)
+        return render_template(
+            'activity/view_single.htm', activity=activity, form=form,
+            login_form=SignInForm(), title=activity.name,
+            auto_open_register=auto_open_register_pane, can_write=can_write,
+            num_extra_attendees=num_extra_attendees)
 
     # Check if there is a custom_form for this activity
     if not activity.form_id:
@@ -111,11 +116,8 @@ def get_activity(activity_id=0):
                           "member, please contact the board.")
         return render()
 
-    # Count current attendants for "reserved" message
-    entries = CustomFormResult.query.filter(CustomFormResult.form_id ==
-                                            activity.form_id)
-    activity.num_attendants = entries.count()
-    over_max_registrations = activity.num_attendants >= \
+    # Check all attendees including extra attendees
+    over_max_registrations = activity.form.attendants >= \
         activity.form.max_attendants
 
     all_form_results = CustomFormResult.query \
@@ -133,6 +135,9 @@ def get_activity(activity_id=0):
                               "placed on the reserves list.")
         return render()
 
+    # Set the previous amount of extra attendees
+    form.introductions.data = form_result.introductions
+
     activity.form_data = form_result.data.replace('"', "'")
 
     auto_open_register_pane = True
@@ -149,6 +154,11 @@ def get_activity(activity_id=0):
     payment_required = form_costs_money and is_attending and \
         not form_result.has_paid
 
+    if is_attending:
+        introductions = form_result.introductions
+    else:
+        introductions = None
+
     if payment_required:
         form.show_pay_button = True
         form.form_result = form_result
@@ -158,6 +168,9 @@ def get_activity(activity_id=0):
             _("Your registration has been completed.") + " " + \
             _("You can edit your registration by resubmitting the form.")
     elif is_attending:
+
+        # TODO If paid, make extra attendees read-only
+
         activity.info = _("You have successfully registered, "
                           "payment is still required!")
 
@@ -171,7 +184,7 @@ def get_activity(activity_id=0):
                           "number of registrations. You have been "
                           "placed on the reserves list.")
 
-    return render()
+    return render(num_extra_attendees=introductions)
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
@@ -195,26 +208,7 @@ def create(activity_id=None):
     if request.method == 'POST':
 
         if form.validate_on_submit():
-
-            act_picture = activity.picture
-
             form.populate_obj(activity)
-
-            file = request.files['picture']
-
-            if file.filename:
-                image = file_upload(file, PICTURE_DIR, True)
-                if image:
-                    picture = image.name
-                else:
-                    picture = None
-
-                # Remove old picture
-                if act_picture:
-                    file_remove(act_picture, PICTURE_DIR)
-
-            else:
-                picture = None
 
             # Facebook ID location, not used yet
             activity.venue = 1
@@ -225,8 +219,6 @@ def create(activity_id=None):
                 form_id = None
 
             activity.form_id = form_id
-
-            activity.picture = picture
             activity.owner_id = current_user.id
 
             if activity.id and activity.google_event_id:
@@ -250,6 +242,20 @@ def create(activity_id=None):
                     activity.google_event_id = google_activity['id']
 
             db.session.add(activity)
+
+            file = request.files['picture']
+
+            if file.filename:
+                picture = file_service.add_file(FileCategory.ACTIVITY_PICTURE,
+                                                file, file.filename)
+
+                old_picture_id = activity.picture_file_id
+                activity.picture_file_id = picture.id
+
+                if old_picture_id:
+                    old_picture = file_service.get_file_by_id(old_picture_id)
+                    file_service.delete_file(old_picture)
+
             db.session.commit()
 
             return redirect(url_for('activity.get_activity',
@@ -276,8 +282,11 @@ def create_mollie_transaction(result_id):
         db.session.add(callback)
         db.session.commit()
 
+        # Calculate the price with extra attendees
+        price = form_result.form.price * (form_result.introductions + 1)
+
         payment_url, msg = mollie.create_transaction(
-            amount=form_result.form.price,
+            amount=price,
             description=form_result.form.name,
             user=form_result.owner,
             callbacks=[callback]
@@ -324,3 +333,21 @@ def rss(locale='en'):
                  url=url_for('activity.get_activity', activity_id=activity.id))
 
     return feed.get_response()
+
+
+@blueprint.route('/picture/<int:activity_id>/')
+def picture(activity_id):
+    activity = Activity.query.get_or_404(activity_id)
+
+    if activity.picture_file_id is None:
+        return redirect('/static/img/via_thumbnail.png')
+
+    picture_file = file_service.get_file_by_id(activity.picture_file_id)
+
+    fn = 'activity_picture_' + activity.name
+
+    content = file_service.get_file_content(picture_file)
+    headers = file_service.get_file_content_headers(picture_file,
+                                                    display_name=fn)
+
+    return content, headers

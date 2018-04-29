@@ -17,15 +17,15 @@ from app.decorators import require_role, response_headers
 from app.exceptions import ResourceNotFoundException, AuthorizationException, \
     ValidationException
 from app.forms.user import (EditUserForm, EditUserInfoForm, SignUpForm,
-                            SignInForm, ResetPassword, RequestPassword)
+                            SignInForm, ResetPasswordForm, RequestPassword,
+                            ChangePasswordForm)
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult, CustomForm
 from app.models.education import Education
-from app.models.group import Group
 from app.models.user import User
 from app.roles import Roles
-from app.service import password_reset_service, user_service
-from app.service import role_service
+from app.service import password_reset_service, user_service, \
+    role_service, file_service
 from app.utils import copernica
 from app.utils.google import HttpError
 from app.utils.user import UserAPI
@@ -74,7 +74,7 @@ def view_single(user_id=None):
         can_write = True
         can_read = True
 
-    user = User.query.get_or_404(user_id)
+    user = user_service.get_user_by_id(user_id)
     user.avatar = UserAPI.avatar(user)
     user.groups = UserAPI.get_groups_for_user_id(user)
 
@@ -110,11 +110,11 @@ def view_single(user_id=None):
 @login_required
 @require_role(Roles.USER_WRITE)
 def remove_avatar(user_id=None):
-    user = User.query.get(user_id)
+    user = user_service.get_user_by_id(user_id)
     if current_user.is_anonymous or current_user.id != user_id:
         return "", 403
 
-    UserAPI.remove_avatar(user)
+    user_service.remove_avatar(user.id)
     return "", 200
 
 
@@ -134,11 +134,11 @@ def edit(user_id=None):
 
     # Select user
     if user_id:
-        user = User.query.get_or_404(user_id)
+        user = user_service.get_user_by_id(user_id)
     else:
         user = User()
 
-    user.avatar = UserAPI.has_avatar(user_id)
+    user.avatar = user_service.user_has_avatar(user_id)
 
     if role_service.user_has_role(current_user, Roles.USER_WRITE):
         form = EditUserForm(request.form, obj=user)
@@ -183,7 +183,7 @@ def edit(user_id=None):
                 flash(_('According to Google this email does not exist. '
                         'Please use an email that does.'), 'danger')
                 return edit_page()
-            raise (e)
+            raise e
 
         user.first_name = form.first_name.data.strip()
         user.last_name = form.last_name.data.strip()
@@ -206,14 +206,6 @@ def edit(user_id=None):
         user.city = form.city.data.strip()
         user.country = form.country.data.strip()
 
-        if form.password.data != '':
-            user.password = bcrypt.hashpw(form.password.data.encode('utf-8'),
-                                          bcrypt.gensalt())
-
-        group = Group.query.filter(Group.name == 'all').first()
-        group.add_user(user)
-
-        db.session.add(group)
         db.session.add(user)
         db.session.commit()
 
@@ -267,12 +259,6 @@ def sign_up():
         user.city = form.city.data
         user.country = form.country.data
 
-        group = Group.query.filter(Group.name == 'all').first()
-        group.add_user(user)
-
-        db.session.add(group)
-        db.session.commit()
-
         db.session.add(user)
         db.session.commit()
 
@@ -307,15 +293,13 @@ def sign_in():
         try:
             user = user_service.get_user_by_login(form.email.data,
                                                   form.password.data)
-            login_user(user)
 
             # Notify the login manager that the user has been signed in.
-            flash(_('Hey %(name)s, you\'re now logged in!',
-                    name=current_user.first_name), 'success')
+            login_user(user)
 
-            next = request.args.get("next", '')
-            if next and next.startswith("/"):
-                return redirect(next)
+            next_ = request.args.get("next", '')
+            if next_ and next_.startswith("/"):
+                return redirect(next_)
 
             # If referer is empty for some reason (browser policy, user entered
             # address in address bar, etc.), use empty string
@@ -399,7 +383,7 @@ def reset_password(hash_):
         flash(_('No valid ticket found'), 'danger')
         return redirect(url_for('user.request_password'))
 
-    form = ResetPassword(request.form)
+    form = ResetPasswordForm(request.form)
 
     if form.validate_on_submit():
         password_reset_service.reset_password(ticket, form.password.data)
@@ -407,6 +391,28 @@ def reset_password(hash_):
         return redirect(url_for('user.sign_in'))
 
     return render_template('user/reset_password.htm', form=form)
+
+
+@blueprint.route("/users/<int:user_id>/password/", methods=['GET', 'POST'])
+@response_headers({"X-Frame-Options": "SAMEORIGIN"})
+def change_password(user_id):
+    if (user_id is not None and current_user.id != user_id and
+            not role_service.user_has_role(current_user, Roles.USER_WRITE)):
+        abort(403)
+
+    form = ChangePasswordForm()
+
+    if form.validate_on_submit():
+        if user_service.validate_password(current_user,
+                                          form.current_password.data):
+            user_service.set_password(current_user.id,
+                                      form.password.data)
+            flash(_("Your password has successfully been changed."))
+            return redirect(url_for("home.home"))
+        else:
+            form.current_password.errors.append(
+                _("Your current password does not match."))
+    return render_template("user/change_password.htm", form=form)
 
 
 @blueprint.route('/users/', methods=['GET', 'POST'])
@@ -425,6 +431,42 @@ def user_export():
     for user in users:
         cw.writerow([getattr(user, c.name) for c in User.__mapper__.columns])
     return si.getvalue().strip('\r\n')
+
+
+@blueprint.route('/users/avatar/<int:user_id>/', methods=['GET'])
+@login_required
+def view_avatar(user_id=None):
+    can_read = False
+
+    # Unpaid members cannot view other avatars
+    if current_user.id != user_id and not current_user.has_paid:
+        return abort(403)
+
+    # A user can always view his own avatar
+    if current_user.id == user_id:
+        can_read = True
+    # group rights
+    if role_service.user_has_role(current_user, Roles.USER_READ) \
+            or role_service.user_has_role(current_user, Roles.USER_WRITE):
+        can_read = True
+
+    if not can_read:
+        return abort(403)
+
+    if not user_service.user_has_avatar(user_id):
+        return abort(404)
+
+    user = user_service.get_user_by_id(user_id)
+
+    avatar_file = file_service.get_file_by_id(user.avatar_file_id)
+
+    fn = 'user_avatar_' + str(user.id)
+
+    content = file_service.get_file_content(avatar_file)
+    headers = file_service.get_file_content_headers(
+        avatar_file, display_name=fn)
+
+    return content, headers
 
 
 ###
@@ -455,18 +497,3 @@ def get_users():
              if user.alumnus else ""
              ])
     return json.dumps({"data": user_list})
-
-
-# Not used at the moment due to integrity problems in the database
-@blueprint.route('/users/delete_users/', methods=['DELETE'])
-@require_role(Roles.USER_WRITE)
-def api_delete_user():
-    user_ids = request.get_json()['selected_ids']
-    del_users = User.query.filter(User.id.in_(user_ids)).all()
-
-    for user in del_users:
-        db.session.delete(user)
-
-    db.session.commit()
-
-    return json.dumps({'status': 'success'})

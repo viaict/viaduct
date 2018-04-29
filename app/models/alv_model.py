@@ -22,7 +22,28 @@ class Alv(db.Model, BaseEntity):
 
     minutes_file_id = db.Column(db.Integer, db.ForeignKey('file.id'),
                                 nullable=True)
-    minutes_file = db.relationship('File')
+    minutes_file = db.relationship('File', foreign_keys=[minutes_file_id])
+
+    def get_localized_basename(self, locale=None):
+        if not locale:
+            locale = get_locale()
+
+        fallback = "Minutes {}".format(self.id)
+
+        if locale == 'nl':
+            if self.nl_name:
+                return self.nl_name
+            elif self.en_name:
+                return self.en_name
+            else:
+                return fallback
+        elif locale == 'en' and self.en_name:
+            if self.en_name:
+                return self.nl_name
+            elif self.nl_name:
+                return self.nl_name
+            else:
+                return fallback
 
     def get_localized_name(self, locale=None):
         if not locale:
@@ -46,6 +67,27 @@ class AlvDocument(db.Model, BaseEntity):
 
     alv_id = db.Column(db.Integer(), db.ForeignKey('alv.id'))
     alv = db.relationship('Alv', backref='documents')
+
+    def get_localized_basename(self, locale=None):
+        if not locale:
+            locale = get_locale()
+
+        fallback = "Document {}".format(self.id)
+
+        if locale == 'nl':
+            if self.nl_name:
+                return self.nl_name
+            elif self.en_name:
+                return self.en_name
+            else:
+                return fallback
+        elif locale == 'en' and self.en_name:
+            if self.en_name:
+                return self.nl_name
+            elif self.nl_name:
+                return self.nl_name
+            else:
+                return fallback
 
     def get_localized_name(self, locale=None):
         if not locale:

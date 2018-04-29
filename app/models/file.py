@@ -1,18 +1,29 @@
 from app import db
 from app.models.base_model import BaseEntity
+from app.enums import FileCategory
+from sqlalchemy import UniqueConstraint
 
 
 class File(db.Model, BaseEntity):
-    """A file for pages and generic file usage."""
+    """Contains the metadata of an uploaded file."""
 
     __tablename__ = 'file'
 
-    name = db.Column(db.String(200), unique=True)
-    page_id = db.Column(db.Integer, db.ForeignKey('page.id'))
+    hash = db.Column(db.String(200), nullable=False)
+    extension = db.Column(db.String(20), nullable=False)
 
-    page = db.relationship('Page', backref=db.backref('files', lazy='dynamic'))
+    category = db.Column(db.Enum(FileCategory), nullable=False)
+    display_name = db.Column(db.String(200))
 
-    def __init__(self, name='', page=None):
-        """Constructor."""
-        self.name = name
-        self.page = page
+    @property
+    def full_display_name(self):
+        if not self.display_name:
+            return None
+
+        name = self.display_name
+        if len(self.extension) > 0:
+            name += "." + self.extension
+
+        return name
+
+    __table_args__ = (UniqueConstraint('display_name', 'extension'),)

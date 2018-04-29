@@ -30,6 +30,16 @@ class BusinessRuleException(DetailedException):
                 str(self.detail))
 
 
+class DuplicateResourceException(Exception):
+    def __init__(self, resource, identifier):
+        self.identifier = identifier
+        self.resource = resource
+
+    def __str__(self):
+        return "Duplicate resource '" + str(self.resource) + \
+               "' identified by '" + str(self.identifier) + "'"
+
+
 class ValidationException(DetailedException):
     def __init__(self, details, **kwargs):
         super(ValidationException, self).__init__(
@@ -50,3 +60,7 @@ class AuthorizationException(DetailedException):
     def __str__(self):
         return ("You are not authorized for this operation. " +
                 str(self.details))
+
+
+class InvalidMinuteException(ValidationException):
+    pass

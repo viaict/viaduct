@@ -69,6 +69,7 @@ class User(db.Model, UserMixin, BaseEntity):
     education = db.relationship(Education,
                                 backref=db.backref('user', lazy='dynamic'))
     copernica_id = db.Column(db.Integer(), nullable=True)
+    avatar_file_id = db.Column(db.Integer, db.ForeignKey('file.id'))
 
     def __init__(self, email=None, password=None, first_name=None,
                  last_name=None, student_id=None, education_id=None,
@@ -122,7 +123,6 @@ class User(db.Model, UserMixin, BaseEntity):
 
     @property
     def name(self):
-        """The user's name."""
         if not self.first_name and not self.last_name:
             return None
         return ' '.join([self.first_name, self.last_name])

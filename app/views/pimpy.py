@@ -1,15 +1,16 @@
+import datetime
+
 from flask import Blueprint, abort, redirect, url_for
 from flask import flash, render_template, request, jsonify
-from flask_babel import _
 from flask_login import current_user
 
-from app import db
+from app import Roles, app
 from app.decorators import require_role
+from app.exceptions import ValidationException, ResourceNotFoundException, \
+    InvalidMinuteException
 from app.forms.pimpy import AddTaskForm, AddMinuteForm
-from app.models.group import Group
 from app.models.pimpy import Task
-from app.roles import Roles
-from app.utils.pimpy import PimpyAPI
+from app.service import pimpy_service, group_service
 
 blueprint = Blueprint('pimpy', __name__, url_prefix='/pimpy')
 
@@ -21,11 +22,19 @@ def view_minutes(group_id=None):
     if group_id is not None and not current_user.member_of_group(group_id):
         return abort(403)
 
-    return PimpyAPI.get_minutes(group_id)
+    if group_id:
+        list_items = pimpy_service.get_all_minutes_for_group(group_id)
+    else:
+        list_items = pimpy_service.get_all_minutes_for_user(current_user)
+
+    return render_template('pimpy/api/minutes.htm',
+                           list_items=list_items, type='minutes',
+                           group_id=group_id, line_number=-1,
+                           title='PimPy')
 
 
-@blueprint.route('/archive/', methods=['GET', 'POST'])
-@blueprint.route('/archive/<int:group_id>', methods=['GET', 'POST'])
+@blueprint.route('/archive/', methods=['POST'])
+@blueprint.route('/archive/<int:group_id>', methods=['POST'])
 @require_role(Roles.PIMPY_READ)
 def view_minutes_in_date_range(group_id=None):
     if group_id is not None and not current_user.member_of_group(group_id):
@@ -33,35 +42,52 @@ def view_minutes_in_date_range(group_id=None):
 
     start_date = request.form['start_date']
     end_date = request.form['end_date']
-    return PimpyAPI.get_minutes_in_date_range(group_id, start_date, end_date)
 
+    df = app.config['DATE_FORMAT']
+    start_date = datetime.datetime.strptime(start_date, df)
+    end_date = datetime.datetime.strptime(end_date, df)
 
-@blueprint.route('/task_archive/', methods=['GET', 'POST'])
-@blueprint.route('/task_archive/<int:group_id>', methods=['GET', 'POST'])
-@require_role(Roles.PIMPY_READ)
-def view_tasks_in_date_range(group_id=None):
-    if group_id is not None and not current_user.member_of_group(group_id):
-        return abort(403)
+    if group_id:
+        list_items = pimpy_service.get_all_minutes_for_group(group_id, (
+            start_date, end_date))
+    else:
+        list_items = pimpy_service.get_all_minutes_for_user(current_user)
 
-    # group_id = request.form['group_id']
-    start_date = request.form['start_date']
-    end_date = request.form['end_date']
-    return PimpyAPI.get_tasks_in_date_range(
-        group_id, False, start_date, end_date)
+    return render_template('pimpy/api/minutes.htm',
+                           list_items=list_items, type='minutes',
+                           group_id=group_id, line_number=-1,
+                           title='PimPy')
 
 
 @blueprint.route('/minutes/single/<int:minute_id>/')
 @blueprint.route('/minutes/single/<int:minute_id>/<int:line_number>')
 @require_role(Roles.PIMPY_READ)
 def view_minute(minute_id=0, line_number=-1):
-    return PimpyAPI.get_minute(minute_id, line_number)
+    minute = pimpy_service.find_minute_by_id(minute_id)
+    if not minute:
+        abort(404)
+
+    list_items = [{
+        'group_name': minute.group.name,
+        'minutes': [minute]
+    }]
+
+    tag = "%dln%d" % (minute.id, int(line_number))
+
+    return render_template('pimpy/api/minutes.htm', list_items=list_items,
+                           type='minutes', group_id=minute.group.id,
+                           line_number=line_number, tag=tag,
+                           title='PimPy')
 
 
 @blueprint.route('/minutes/single/<int:minute_id>/raw')
 @require_role(Roles.PIMPY_READ)
 def view_minute_raw(minute_id):
-    return (PimpyAPI.get_minute_raw(minute_id),
-            {'Content-Type': 'text/plain; charset=utf-8'})
+    minute = pimpy_service.find_minute_by_id(minute_id)
+    if not minute:
+        abort(404)
+
+    return minute.content, {'Content-Type': 'text/plain; charset=utf-8'}
 
 
 @blueprint.route('/tasks/', methods=['GET', 'POST'])
@@ -71,7 +97,21 @@ def view_tasks(group_id=None):
     if group_id is not None and not current_user.member_of_group(group_id):
         return abort(403)
 
-    return PimpyAPI.get_tasks(group_id, False)
+    status_meanings = Task.get_status_meanings()
+
+    if group_id is not None:
+        tasks_rel = pimpy_service.get_all_tasks_for_group(group_id)
+    else:
+        tasks_rel = pimpy_service.get_all_tasks_for_users_in_groups_of_user(
+            current_user)
+
+    return render_template('pimpy/api/tasks.htm',
+                           personal=False,
+                           group_id=group_id,
+                           tasks_rel=tasks_rel,
+                           type='tasks',
+                           status_meanings=status_meanings,
+                           title='PimPy')
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
@@ -82,7 +122,54 @@ def view_tasks_personal(group_id=None):
     if group_id is not None and not current_user.member_of_group(group_id):
         return abort(403)
 
-    return PimpyAPI.get_tasks(group_id, True)
+    status_meanings = Task.get_status_meanings()
+
+    if group_id is not None:
+        tasks_rel = pimpy_service.get_all_tasks_for_group(group_id,
+                                                          user=current_user)
+    else:
+        tasks_rel = pimpy_service.get_all_tasks_for_user(current_user)
+
+    return render_template('pimpy/api/tasks.htm',
+                           personal=True,
+                           group_id=group_id,
+                           tasks_rel=tasks_rel,
+                           type='tasks',
+                           status_meanings=status_meanings,
+                           title='PimPy')
+
+
+@blueprint.route('/task_archive/', methods=['POST'])
+@blueprint.route('/task_archive/<int:group_id>', methods=['POST'])
+@require_role(Roles.PIMPY_READ)
+def view_tasks_in_date_range(group_id=None):
+    if group_id is not None and not current_user.member_of_group(group_id):
+        return abort(403)
+
+    start_date = request.form['start_date']
+    end_date = request.form['end_date']
+
+    df = app.config['DATE_FORMAT']
+    start_date = datetime.datetime.strptime(start_date, df)
+    end_date = datetime.datetime.strptime(end_date, df)
+
+    date_tuple = (start_date, end_date)
+
+    status_meanings = Task.get_status_meanings()
+
+    if group_id is not None:
+        tasks_rel = pimpy_service.get_all_tasks_for_group(group_id, date_tuple)
+    else:
+        tasks_rel = pimpy_service.get_all_tasks_for_user(current_user,
+                                                         date_tuple)
+
+    return render_template('pimpy/api/tasks.htm',
+                           personal=False,
+                           group_id=group_id,
+                           tasks_rel=tasks_rel,
+                           type='tasks',
+                           status_meanings=status_meanings,
+                           title='PimPy')
 
 
 @blueprint.route('/tasks/update_status/', methods=['GET', 'POST'])
@@ -91,25 +178,14 @@ def update_task_status():
     task_id = request.form.get('task_id', 0, type=int)
     new_status = request.form.get('new_status', 0, type=int)
 
-    task = Task.query.get(task_id)
-
+    task = pimpy_service.find_task_by_id(task_id)
     if not task:
         return jsonify(success=False, message="Task does not exist"), 404
     else:
-        if not task.update_status(new_status):
-            return jsonify(success=False,
-                           message="Invalid data"), 400
-
-        # for user in task.users:
-        #     copernica_data = {
-        #         "Actiepunt": task.title,
-        #         "Status": task.get_status_string(),
-        #     }
-        #     copernica.update_subprofile(copernica.SUBPROFILE_TASK,
-        #                                 user.id, task.base32_id(),
-        #                                 copernica_data)
-
-        db.session.commit()
+        try:
+            pimpy_service.set_task_status(current_user, task, new_status)
+        except ValidationException as e:
+            return jsonify(success=False, message=e.details), 400
 
     return jsonify(success=True, status=task.get_status_color())
 
@@ -121,65 +197,29 @@ def add_task(group_id=None):
     if group_id is not None and not current_user.member_of_group(group_id):
         return abort(403)
 
-    form = AddTaskForm(request.form, default=group_id)
-    if request.method == 'POST':
-        # FIXME: validate does not seem to work :(, so we are doin' it
-        # manually now
-        message = ""
-        if form.name.data == "":
-            message = "Naam is vereist"
-        elif form.group == "":
-            message = "Groep is vereist"
-        elif form.users.data == "":
-            message = "Minimaal 1 gebruiker is vereist"
+    # Set the group as default
+    try:
+        group = group_service.get_group_by_id(group_id)
+    except ResourceNotFoundException:
+        group = None
+    form = AddTaskForm(request.form, group=group)
 
-        result = message == ""
+    if form.validate_on_submit():
+        try:
+            pimpy_service.add_task_by_user_string(
+                form.name.data, form.content.data, form.group.data.id,
+                form.users.data, None, None, form.status.data)
 
-        if result:
-            result, message = PimpyAPI.commit_task_to_db(
-                form.name.data, form.content.data,
-                form.group.data,
-                form.users.data, form.line.data, -1, form.status.data)
-
-        if result:
             flash('De taak is succesvol aangemaakt!', 'success')
             return redirect(url_for('pimpy.view_tasks',
-                                    group_id=form.group.data))
-
-        else:
-            flash(message, 'danger')
-
-    group = Group.query.filter(Group.id == group_id).first()
-    form.load_groups(current_user.groups)
-    form.load_status(Task.status_meanings)
+                                    group_id=form.group.data.id))
+        except ValidationException as e:
+            # TODO fix translations outside of service.
+            flash(e.details)
 
     return render_template('pimpy/add_task.htm', group=group,
                            group_id=group_id, type='tasks', form=form,
                            title='PimPy')
-
-
-@blueprint.route('/tasks/edit/', methods=['POST'])
-@blueprint.route('/tasks/edit/<string:task_id>', methods=['POST'])
-@require_role(Roles.PIMPY_WRITE)
-def edit_task(task_id=-1):
-    if task_id is '' or task_id is -1:
-        flash('Taak niet gespecificeerd.')
-        return redirect(url_for('pimpy.view_tasks', group_id=None))
-
-    name = request.form['name']
-    if name == "content":
-        result, message = PimpyAPI.update_content(
-            task_id, request.form['value'])
-    elif name == "title":
-        result, message = PimpyAPI.update_title(
-            task_id, request.form['value'])
-    elif name == "users":
-        result, message = PimpyAPI.update_users(
-            task_id, request.form['value'])
-
-    status_code = 200 if result else 400
-
-    return jsonify(result=result, message=message), status_code
 
 
 @blueprint.route('/minutes/add/', methods=['GET', 'POST'])
@@ -189,86 +229,50 @@ def add_minute(group_id=None):
     if group_id is not None and not current_user.member_of_group(group_id):
         return abort(403)
 
-    form = AddMinuteForm(request.form, default=group_id)
-    if request.method == 'POST':
+    # Set the current group as default.
+    try:
+        group = group_service.get_group_by_id(group_id)
+    except ResourceNotFoundException:
+        group = None
+    form = AddMinuteForm(request.form, group=group)
 
-        group = Group.query.get(form.group.data)
+    if form.validate_on_submit():
+        minute_group = group_service.get_group_by_id(form.group.data.id)
 
-        # validate still does not work
-        message = ""
-        if form.content.data == "":
-            message = "Content is vereist"
-        elif request.form['date'] == "":
-            message = "Datum is vereist"
-        elif form.group == "":
-            message = "Groep is vereist"
-
-        result = message == ""
-
-        if result:
-            result, message = PimpyAPI.commit_minute_to_db(
-                form.content.data, request.form['date'], form.group.data)
-            if result and form.parse_tasks.data:
-                tasks, dones, removes = PimpyAPI.parse_minute(
-                    form.content.data, form.group.data, message)
-
-                valid_dones = []
-                valid_removes = []
-
-                for task in tasks:
-                    db.session.add(task)
-                # for user in task.users:
-                #     copernica_data = {
-                #         "viaductID": task.base32_id(),
-                #         "Actiepunt": task.title,
-                #         "Status": task.get_status_string(),
-                #         "Groep": task.group.name,
-                #     }
-                #     copernica.add_subprofile(
-                #         copernica.SUBPROFILE_TASK, user.id, copernica_data)
-                for done in dones:
-                    if done.group_id == group.id and done.update_status(4):
-                        valid_dones.append(done)
-                    else:
-                        flash(_("Found invalid DONE task: %s").format(
-                            done.base32_id()), 'danger')
-
-                # for user in done.users:
-                #     copernica_data = {
-                #         "Actiepunt": task.title,
-                #         "Status": task.get_status_string(),
-                #     }
-                #     copernica.update_subprofile(copernica.SUBPROFILE_TASK,
-                #                                 user.id, task.base32_id(),
-                #                                 copernica_data)
-
-                for remove in removes:
-                    if remove.group_id == group.id and remove.update_status(5):
-                        valid_removes.append(remove)
-                    else:
-                        flash(_("Found invalid REMOVE task: %s").format(
-                            remove.base32_id()), 'danger')
-
-                # for user in remove.users:
-                #     copernica_data = {
-                #         "Actiepunt": task.title,
-                #         "Status": task.get_status_string(),
-                #     }
-                #     copernica.update_subprofile(copernica.SUBPROFILE_TASK,
-                #                                 user.id, task.base32_id(),
-                #                                 copernica_data)
-                db.session.commit()
-
-                flash('De notulen zijn verwerkt!', 'success')
-
-                return render_template('pimpy/view_parsed_tasks.htm',
-                                       tasks=tasks, dones=valid_dones,
-                                       group_id=group_id,
-                                       removes=valid_removes, title='PimPy')
-        else:
-            flash(message, 'danger')
-
-    form.load_groups(current_user.groups)
+        try:
+            minute = pimpy_service.add_minute(
+                content=form.content.data, date=form.date.data,
+                group=minute_group)
+        except InvalidMinuteException as e:
+            return render_template('pimpy/add_minute.htm', group_id=group_id,
+                                   type='minutes', form=form, title='PimPy',
+                                   invalid_lines=e.details)
+        return redirect(url_for("pimpy.view_minute", minute_id=minute.id))
 
     return render_template('pimpy/add_minute.htm', group_id=group_id,
                            type='minutes', form=form, title='PimPy')
+
+
+@blueprint.route('/tasks/edit/', methods=['POST'])
+@blueprint.route('/tasks/edit/<string:task_id>', methods=['POST'])
+@require_role(Roles.PIMPY_WRITE)
+def edit_task(task_id=-1):
+    """Ajax method for updating a task."""
+    if task_id is '' or task_id is -1:
+        flash('Taak niet gespecificeerd.')
+        return redirect(url_for('pimpy.view_tasks', group_id=None))
+
+    name = request.form['name']
+    value = request.form['value']
+
+    if name == 'content':
+        pimpy_service.edit_task_property(current_user, task_id, content=value)
+    elif name == 'title':
+        pimpy_service.edit_task_property(current_user, task_id, title=value)
+    elif name == 'users':
+        pimpy_service.edit_task_property(current_user, task_id,
+                                         users_property=value)
+    else:
+        jsonify(result=400, message='Unknown property'), 400
+
+    return jsonify(result=200, message='ok'), 200

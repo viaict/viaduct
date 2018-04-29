@@ -3,8 +3,8 @@ import json
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask import jsonify
-from flask_login import current_user
 from flask_babel import _
+from flask_login import current_user
 
 from app import db
 from app.decorators import require_role
@@ -237,13 +237,14 @@ def add_users(group_id, page_nr=1):
 
 
 @blueprint.route("/groups/<int:group_id>/roles/", methods=['GET', 'POST'])
-@require_role(Roles.GROUP_WRITE)
+@require_role(Roles.GROUP_PERMISSIONS)
 def roles(group_id):
     form = GroupRolesForm(request.form)
-    form.roles.choices = role_service.find_all_roles()
 
     if form.validate_on_submit():
         role_service.set_roles_for_group(group_id, form.roles.data)
+        flash(_("The roles have been updated."))
+        return redirect(url_for("group.view"))
 
     form.roles.data = role_service.find_all_roles_by_group_id(group_id)
     group = group_service.get_group_by_id(group_id)

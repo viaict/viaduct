@@ -1,3 +1,4 @@
+
 swagger: '2.0'
 info:
   version: 1.0.0
@@ -10,10 +11,9 @@ info:
     url: https://svia.nl
     email: ict@svia.nl
 
-basePath: "/api/"
+basePath: "/api/pimpy"
 schemes:
   - "http"
-  - "https"
 produces:
   - application/json
 consumes:
@@ -275,27 +275,6 @@ responses:
 
 
 definitions:
-  Error:
-    type: object
-    description: Generic error response, modelled after RFC 7807.
-    properties:
-      code:
-        type: integer
-        description: Error code within the system.
-      title:
-        type: string
-        description: This title is not meant to be shown to users. Please use the code to parse the error.
-      detail:
-        type: string
-        description: Error details, to help developers detect what went wrong.
-      type:
-       type: string
-       description: Link to additional documentation regarding the error.
-
-    required:
-      - code
-      - title
-
   PimpyTaskStatus:
     type: string
     enum:
@@ -382,6 +361,25 @@ definitions:
     items:
       $ref: "#/definitions/PimpyMinuteMinimal"
 
+  Error:
+    type: object
+    description: Generic error response, modelled after RFC 7807.
+    properties:
+      code:
+        type: integer
+        description: Error code within the system.
+      title:
+        type: string
+        description: This title is not meant to be shown to users. Please use the code to parse the error.
+      detail:
+        type: string
+        description: Error details, to help developers detect what went wrong.
+      type:
+       type: string
+       description: Link to additional documentation regarding the error.
+
+
+
 securityDefinitions:
   OAuth2Implicit:
     type: oauth2
@@ -389,10 +387,9 @@ securityDefinitions:
       The API uses OAuth2 to grant access, for more information see the
       explicit documentation [here](https://svia.nl/oauth2/)
     flow: implicit
-    authorizationUrl: "/oauth/authorize/"
-    x-tokenInfoUrl: "http://localhost:5000/oauth/token/info/"
+    authorizationUrl: "/oauth/authorize"
+    x-tokenInfoFunc: "app.views.oauth.token_info"
     scopes:
       pimpy_read: "Read access to your Pimpy data"
       pimpy_write: "Write access to your Pimpy data"
-
 # vim: sw=2 ts=2

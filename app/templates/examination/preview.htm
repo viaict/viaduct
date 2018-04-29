@@ -1,0 +1,16 @@
+{% extends "base.htm" %}
+
+{% block page %}
+
+	 <div class='row'>
+	        <div class='col-md-12'>
+	            <div class="alert alert-danger">
+	                    <label>{{ _('Disclaimer') }}</label>:
+	            {{ _('The answers provided here are not the official answers and are not guaranteed to be correct.') }}
+            </div>
+        </div>
+    </div>
+
+<iframe src="{{ path }} " height="600px" width="100%" ></iframe>
+
+{% endblock %}

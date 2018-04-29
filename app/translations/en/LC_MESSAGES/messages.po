@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-01-06 23:19+0100\n"
+"POT-Creation-Date: 2018-03-10 12:09+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -219,6 +219,9 @@ msgstr ""
 msgid "Committees"
 msgstr ""
 
+msgid "Committees open for new members"
+msgstr ""
+
 msgid "Company"
 msgstr ""
 
@@ -367,10 +370,16 @@ msgstr ""
 msgid "Current"
 msgstr ""
 
+msgid "Current Password"
+msgstr ""
+
 msgid "Current avatar"
 msgstr ""
 
 msgid "Custom URL"
+msgstr ""
+
+msgid "DOMjudge administrator"
 msgstr ""
 
 msgid "Date"
@@ -481,7 +490,19 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
+msgid "Edit ALVs"
+msgstr ""
+
 msgid "Edit GA"
+msgstr ""
+
+msgid "Edit Pimpy"
+msgstr ""
+
+msgid "Edit activities"
+msgstr ""
+
+msgid "Edit challenges"
 msgstr ""
 
 msgid "Edit course"
@@ -490,10 +511,31 @@ msgstr ""
 msgid "Edit education"
 msgstr ""
 
+msgid "Edit elections"
+msgstr ""
+
 msgid "Edit examination"
 msgstr ""
 
+msgid "Edit examinations"
+msgstr ""
+
+msgid "Edit files"
+msgstr ""
+
 msgid "Edit group"
+msgstr ""
+
+msgid "Edit group permissions"
+msgstr ""
+
+msgid "Edit groups"
+msgstr ""
+
+msgid "Edit navigation and redirect"
+msgstr ""
+
+msgid "Edit news"
 msgstr ""
 
 msgid "Edit news item"
@@ -505,7 +547,19 @@ msgstr ""
 msgid "Edit page"
 msgstr ""
 
+msgid "Edit pages"
+msgstr ""
+
+msgid "Edit search-engine optimizations"
+msgstr ""
+
+msgid "Edit user"
+msgstr ""
+
 msgid "Edit user permissions"
+msgstr ""
+
+msgid "Edit vacancy"
 msgstr ""
 
 msgid "Education"
@@ -800,10 +854,16 @@ msgstr ""
 msgid "Logo"
 msgstr ""
 
+msgid "Looking for new members"
+msgstr ""
+
 msgid "Mailing list"
 msgstr ""
 
-msgid "Max number of attendents"
+msgid "Max number of attendants"
+msgstr ""
+
+msgid "Number of extra attendants"
 msgstr ""
 
 msgid "Member"
@@ -868,6 +928,9 @@ msgstr ""
 msgid "New location"
 msgstr ""
 
+msgid "New password"
+msgstr ""
+
 msgid "New vacancy"
 msgstr ""
 
@@ -917,9 +980,6 @@ msgid "No form"
 msgstr ""
 
 msgid "No location"
-msgstr ""
-
-msgid "No password submitted"
 msgstr ""
 
 msgid "No presidium"
@@ -1045,10 +1105,28 @@ msgstr ""
 msgid "Read"
 msgstr ""
 
+msgid "Read Pimpy"
+msgstr ""
+
 msgid "Read access to your Pimpy data"
 msgstr ""
 
+msgid "Read files"
+msgstr ""
+
+msgid "Read groups"
+msgstr ""
+
+msgid "Read mollie payments"
+msgstr ""
+
 msgid "Read more"
+msgstr ""
+
+msgid "Read user"
+msgstr ""
+
+msgid "Read vacancy"
 msgstr ""
 
 msgid "Read/Write"
@@ -1078,7 +1156,7 @@ msgstr ""
 msgid "Remove page"
 msgstr ""
 
-msgid "Repeat password"
+msgid "Repeat new password"
 msgstr ""
 
 msgid "Request to DOMjudge server failed"
@@ -1111,6 +1189,9 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
+msgid "Scopes"
+msgstr ""
+
 msgid "Scoreboard"
 msgstr ""
 
@@ -1133,6 +1214,9 @@ msgid "Send"
 msgstr ""
 
 msgid "Send an e-mail to the"
+msgstr ""
+
+msgid "Send an email"
 msgstr ""
 
 msgid "Send form"
@@ -1306,6 +1390,12 @@ msgstr ""
 msgid "The password you entered appears to be incorrect."
 msgstr ""
 
+msgid "The roles have been updated."
+msgstr ""
+
+msgid "The scopes required by your application"
+msgstr ""
+
 msgid "The seo settings have been saved"
 msgstr ""
 
@@ -1469,6 +1559,9 @@ msgstr ""
 msgid "Workload"
 msgstr ""
 
+msgid "Would you like to join this committee?"
+msgstr ""
+
 msgid "Would you like to recieve information from companies?"
 msgstr ""
 
@@ -1534,7 +1627,13 @@ msgstr ""
 msgid "Your account has been disabled, you are not allowed to log in"
 msgstr ""
 
+msgid "Your current password does not match."
+msgstr ""
+
 msgid "Your password has been updated."
+msgstr ""
+
+msgid "Your password has successfully been changed."
 msgstr ""
 
 msgid "Your payment has not been completed."
@@ -1587,6 +1686,9 @@ msgid "required"
 msgstr ""
 
 msgid "still"
+msgstr ""
+
+msgid "to"
 msgstr ""
 
 msgid ""
@@ -2033,5 +2135,20 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Authorized callback URL"
+#~ msgstr ""
+
+#~ msgid "No password submitted"
+#~ msgstr ""
+
+#~ msgid "Repeat password"
+#~ msgstr ""
+
+#~ msgid "Ability to create ALVs"
+#~ msgstr ""
+
+#~ msgid "Ability to create activities"
+#~ msgstr ""
+
+#~ msgid "Would you like to join this committee"
 #~ msgstr ""
 

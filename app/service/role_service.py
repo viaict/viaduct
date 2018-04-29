@@ -2,8 +2,9 @@ import logging
 
 from flask_login import current_user
 
-from app import app, Roles
+from app import app
 from app.repository import role_repository
+from flask import request
 
 _logger = logging.getLogger(__name__)
 
@@ -12,17 +13,14 @@ def user_has_role(user, *roles):
     return all(role in user.roles for role in roles)
 
 
-def find_all_roles():
-    return [(choice, choice.name) for choice in Roles]
-
-
 def find_all_roles_by_group_id(group_id):
     return role_repository.find_all_roles_by_group_id(group_id)
 
 
 @app.before_request
 def load_user_roles():
-    current_user.roles = role_repository.load_user_roles(current_user.id)
+    if request.endpoint and not request.endpoint.startswith('static'):
+        current_user.roles = role_repository.load_user_roles(current_user.id)
 
 
 def set_roles_for_group(group_id, new_roles):

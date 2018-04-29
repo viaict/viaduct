@@ -1,4 +1,4 @@
-from flask_cache import Cache
+from flask_caching import Cache
 from flask_cors import CORS
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_jsglue import JSGlue
@@ -14,7 +14,6 @@ toolbar = DebugToolbarExtension()
 jsglue = JSGlue()
 sentry = Sentry()
 oauth = OAuth2Provider()
-
 
 # Set up the database.
 constraint_naming_convention = {

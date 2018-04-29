@@ -1,5 +1,10 @@
 import re
+from functools import wraps
 
+import werkzeug.exceptions
+from connexion.apis.flask_api import FlaskApi
+from connexion.exceptions import ProblemException
+from connexion.problem import problem
 from flask import flash, request, url_for, render_template, redirect, \
     session, jsonify
 from flask_babel import _
@@ -10,14 +15,6 @@ from app.exceptions import ResourceNotFoundException, DetailedException
 from app.models.page import Page
 from app.roles import Roles
 from app.service import role_service
-
-import werkzeug.exceptions
-
-from connexion.apis.flask_api import FlaskApi
-from connexion.exceptions import ProblemException
-from connexion.problem import problem
-
-from functools import wraps
 
 
 @login_manager.unauthorized_handler
@@ -71,10 +68,12 @@ def default_detailed_exception_handler(e):
     return internal_server_error(e)
 
 
+@app.errorhandler(401)
 @app.errorhandler(403)
 @add_api_error_handler
 def permission_denied(e):
     """When permission denied and not logged in you will be redirected."""
+
     content = "403, The police has been notified!"
     image = '/static/img/403.jpg'
 
@@ -90,13 +89,13 @@ def permission_denied(e):
 
 @app.errorhandler(500)
 @add_api_error_handler
-def internal_server_error(e):
+def internal_server_error(_):
     return render_template('page/500.htm'), 500
 
 
 @app.errorhandler(404)
 @add_api_error_handler
-def page_not_found(e):
+def page_not_found(_):
     # Search for file extension.
     if re.match(r'(?:.*)\.[a-zA-Z]{3,}$', request.path):
         return '', 404

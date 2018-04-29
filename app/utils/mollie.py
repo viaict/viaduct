@@ -10,15 +10,17 @@ from mollie.api.client import Client
 from mollie.api.error import Error as MollieError
 
 import itertools
+import logging
 
 MollieClient = Client()
+_logger = logging.getLogger(__name__)
 
 if app.config.get('MOLLIE_TEST_MODE', False):
     MollieClient.set_api_key(app.config['MOLLIE_TEST_KEY'])
-    print('USING MOLLIE TEST KEY')
+    _logger.info('Using MOLLIE_TEST_KEY')
 else:
     MollieClient.set_api_key(app.config['MOLLIE_KEY'])
-    print('USING MOLLIE LIVE KEY')
+    _logger.info('Using MOLLIE_KEY')
 
 
 def create_transaction(amount, description, user=current_user,

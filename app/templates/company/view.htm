@@ -9,7 +9,7 @@
         <div class="col-md-4">
             <blockquote>
                 {% if company.logo_path != '#' %}
-                <img style="max-width:250px; max-height:100px;" src="{{path}}{{company.logo_path}}"></img>
+                <img style="max-width:250px; max-height:100px;" src="{{ url_for('company.view_logo', company_id=company.id) }}"></img>
                 <br/>
                 {% endif %}
             </blockquote>

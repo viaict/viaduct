@@ -3,14 +3,15 @@ import itertools
 
 from wtforms import RadioField, SubmitField, SelectFieldBase
 
-from app.forms.fields import CustomFormSelectField
+from app.forms.fields import CustomFormSelectField, \
+    OrderedSelectMultipleField, OrderedQuerySelectMultipleField
 
 
 class FieldTabGroup:
     """Represents a group of fields divided into tabs."""
 
     def __init__(self, tabs):
-        """Tabs should be a list of FieldTab's"""
+        """Tabs should be a list of FieldTabs."""
 
         self.type = self.__class__.__name__
         self.tabs = tabs
@@ -32,7 +33,11 @@ class FieldTabGroup:
             self._fieldnames.extend(tab.field_names)
 
     def _set_form(self, form):
-        """Internal method used by FormWrapper."""
+        """
+        Pass the form to the FieldTabGroup.
+
+        Internal method used by FormWrapper.
+        """
         self.form = form
 
         # Build a list of (tabname, fieldlist) tuples,
@@ -83,7 +88,7 @@ class FieldVerticalSplit:
 
     def __init__(self, field_names, large_spacing=False):
         """
-        field_names should be a list of list of fields to be splitted
+        field_names should be a list of list of fields to be splitted.
 
         For example,
             [['X1', 'X2'], ['Y1', 'Y2']]
@@ -126,7 +131,11 @@ class FieldVerticalSplit:
             self.spacing_sizes = [0] * self.amount_splits
 
     def _set_form(self, form):
-        """Internal method used by FormWrapper."""
+        """
+        Pass the form to the FieldVerticalSplit.
+
+        Internal method used by FormWrapper.
+        """
         self.form = form
 
         self._fields = []
@@ -149,9 +158,11 @@ class FormWrapper:
         self.form = form
         self.groups = []
         self.vsplits = []
+        self.ordered_multiselect_fields = []
 
         self.csrf_token = form.csrf_token
 
+        self.has_ordered_multiselect_fields = False
         self.has_select_fields = False
         self.has_custom_form_fields = False
         self.has_submit_field = False
@@ -169,8 +180,16 @@ class FormWrapper:
 
             # Check if the form has select fields
             elif isinstance(obj, SelectFieldBase) \
+                    and not isinstance(obj, OrderedSelectMultipleField) \
+                    and not isinstance(obj, OrderedQuerySelectMultipleField) \
                     and not isinstance(obj, RadioField):
                 self.has_select_fields = True
+
+            # Check if the form has ordered multi-select fields
+            elif isinstance(obj, OrderedSelectMultipleField) \
+                    or isinstance(obj, OrderedQuerySelectMultipleField):
+                self.has_ordered_multiselect_fields = True
+                self.ordered_multiselect_fields.append(obj)
 
             # Check if the form has custom form select fields
             elif isinstance(obj, CustomFormSelectField):

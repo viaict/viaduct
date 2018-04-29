@@ -1,8 +1,6 @@
-application.db
 config.py
 config.rb
 client_secrets.json
-.env
 
 # Ignore the nodejs package lock file for now, until we update to the newest node on the server.
 package-lock.json
@@ -27,6 +25,8 @@ Thumbs.db
 *.sublime-*
 *.swp
 
+app/swagger
+app/uploads
 !app/static/img/*.png
 app/static/files/*
 app/static/css/*
@@ -40,10 +40,6 @@ venv3
 .mypy_cache/
 node_modules/
 dist/
-
-gitlog.txt
-gitlog.md
-gitlog.py
 
 app/translations/*/LC_MESSAGES/messages.mo
 messages.pot

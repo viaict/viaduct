@@ -120,6 +120,15 @@
                                             <p>{{_('By registering you agree with the terms above.')}}</p>
                                         </div>
                                     {% endif %}
+                                    {% if activity.form.introductions > 0 %}
+                                        <div class="col-md-7">
+                                            {% if num_extra_attendees is defined and num_extra_attendees != None %}
+                                                <label>{{_('Number of extra attendants')}}: +{{ num_extra_attendees }}</label>
+                                            {% else %}
+                                                {{ render_field(form.introductions) }}
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
                                 </div>
                                 {% if current_user.has_paid %}
                                     <button id="custom_form" class="btn btn-success">{{_('Send form')}}</button>
@@ -157,7 +166,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-7 col-xs-12">
             <h4>{{_('Price')}}:
                 {% if not activity.price.lower() == "gratis" and not activity.price.lower() == "free"
                         and not activity.price == "0"%}
@@ -173,9 +182,9 @@
             </div>
         </div>
 
-        <div class="col-md-4">
-            {% if activity.picture %}
-                <img src="{{ thumb('/static/activity_pictures/' + activity.picture, (220, 220)) }}">
+        <div class="col-md-5 col-xs-12">
+            {% if activity.picture_file_id %}
+                <img class="img-responsive activity-picture" src="{{ url_for('activity.picture', activity_id=activity.id) }}">
             {% endif %}
         </div>
     </div>

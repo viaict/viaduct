@@ -33,22 +33,26 @@
 
             <p>{{ render_presidium(alv) }}</p>
             {% if alv.activity %}
-                <p>{{ _('Activity') }}:
-                    <a href="{{ url_for('activity.get_activity', activity_id=alv.activity.id) }}">{{ alv.activity }}</a>
-                </p>
+            <p>{{ _('Activity') }}:
+                <a href="{{ url_for('activity.get_activity', activity_id=alv.activity.id) }}">{{ alv.activity }}</a>
+            </p>
             {% endif %}
             {% if alv.minutes_file %}
-                <p>{{ _('Minutes') }}:
-                    <a href="/static/files/{{ alv.minutes_file.name }}">{{ alv.minutes_file.name }}</a> 
-                    {% if can_write %}
-                    <a class='btn btn-warning btn-xs' href='{{ url_for("alv.add_minute", alv_id=alv.id) }}'>
-                        <i class='fa fa-edit'></i> {{ _('Update minutes') }}
+               {{ _('Minutes') }}:
+                <div class="btn-group">
+                    <a class="btn btn-primary btn-xs" target="_blank"
+                        href="{{ url_for("alv.view_minutes", alv_id=alv.id) }}">
+                        <i class='fa fa-book'></i> {{ _('View') }}
                     </a>
-                {% endif %}
-                </p>
+                    {% if can_write %}
+                    <a class='btn btn-warning btn-xs' href='{{ url_for("alv.add_minutes", alv_id=alv.id) }}'>
+                        <i class='fa fa-edit'></i> {{ _('Edit') }}
+                    </a>
+                    {% endif %}
+                </div>
             {% endif %}
             {% if can_write and not alv.minutes_file %}
-                <a class='btn btn-success btn-xs' href='{{ url_for("alv.add_minute", alv_id=alv.id) }}'>
+                <a class='btn btn-success btn-xs' href='{{ url_for("alv.add_minutes", alv_id=alv.id) }}'>
                     <i class='fa fa-edit'></i> {{ _('Add minutes') }}
                 </a>
             {% endif %}
@@ -79,7 +83,7 @@
                         <span class="dropdown">
                         <button class="btn btn-xs dropdown-toggle"
                                 type="button"
-                                data-toggle="dropdown">Versions
+                                data-toggle="dropdown">{{ _('Versions') }}
                             <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             {% if can_write %}
@@ -92,17 +96,19 @@
                             {% endif %}
                             {%- for i, doc_version in enumerate(doc.versions) | reverse -%}
                                 <li>
-                                    <a href="/static/files/{{ doc_version.file.name }}" target="_blank">
-                                        {{ _('Version %d' % (i + 1)) }}: {{ doc_version.created.date() }}
+                                    <a href="{{ url_for('alv.view_document_version', alv_document_id=doc.id,
+                                        version=(i + 1)) }}" target="_blank">
+                                        {{ _('Version') }} {{ i + 1 }}: {{ doc_version.created.date() }}
                                     </a>
                                 </li>
                             {%- endfor -%}
                         </ul>
-                        {% if doc.versions[-1] and doc.versions[-1].file.name %}
-                            <a class='btn btn-info btn-xs' 
-                                href='/static/files/{{ doc.versions[-1].file.name }}'> 
+                        {% if doc.versions[-1] %}
+                            <a class='btn btn-info btn-xs'
+                                href="{{ url_for('alv.view_document_version', alv_document_id=doc.id,
+                                        version=(len(doc.versions))) }}" target="_blank">
                                 {{ _('Latest') }}
-                            </a> 
+                            </a>
                         {% endif %}
                     </span>
                             </td>
