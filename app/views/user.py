@@ -114,7 +114,7 @@ def remove_avatar(user_id=None):
     if current_user.is_anonymous or current_user.id != user_id:
         return "", 403
 
-    UserAPI.remove_avatar(user)
+    user_service.remove_avatar(user.id)
     return "", 200
 
 
@@ -138,7 +138,7 @@ def edit(user_id=None):
     else:
         user = User()
 
-    user.avatar = UserAPI.has_avatar(user_id)
+    user.avatar = user_service.user_has_avatar(user_id)
 
     if role_service.user_has_role(current_user, Roles.USER_WRITE):
         form = EditUserForm(request.form, obj=user)

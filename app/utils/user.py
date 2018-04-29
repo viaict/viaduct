@@ -13,15 +13,6 @@ UPLOAD_DIR = 'app/static/files/users/'
 
 
 class UserAPI:
-    @staticmethod
-    def has_avatar(user_id):
-        """Check if the user has uploaded an avatar."""
-        return user_service.user_has_avatar(user_id)
-
-    @staticmethod
-    def remove_avatar(user):
-        """Remove avatar of a user."""
-        user_service.remove_avatar(user.id)
 
     @staticmethod
     def avatar(user):
