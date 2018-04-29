@@ -292,11 +292,9 @@ def sign_in():
         try:
             user = user_service.get_user_by_login(form.email.data,
                                                   form.password.data)
-            login_user(user)
 
             # Notify the login manager that the user has been signed in.
-            flash(_('Hey %(name)s, you\'re now logged in!',
-                    name=current_user.first_name), 'success')
+            login_user(user)
 
             next_ = request.args.get("next", '')
             if next_ and next_.startswith("/"):
