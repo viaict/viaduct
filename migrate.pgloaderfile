@@ -1,5 +1,5 @@
 LOAD database
-    from mysql://viaduct:viaduct@localhost/viaduct
+    from mysql://root@localhost/viaduct?sslmode=disable
     into postgresql://viaduct@localhost:5400/viaduct
 
 WITH include drop, create tables, no truncate,

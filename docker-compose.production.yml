@@ -1,0 +1,6 @@
+version: "3.4"
+services:
+  backend:
+    ports:
+      - 4000:3031
+    command: sh docker/entrypoint.production.sh

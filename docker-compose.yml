@@ -1,19 +1,14 @@
-version: "3.2"
+version: "3.4"
 services:
-  app:
-    build: .
-    environment:
-      - ENVIRONMENT=${COMPOSE_PROJECT_NAME}
-    ports:
-      - "127.0.0.1:${UWSGI_PORT}:3031"
+  backend:
+    build: 
+      context: .
+      dockerfile: docker/Dockerfile
     depends_on:
       - database
-    command: "bash /app/docker-entrypoint.sh"
 
   database:
     image: postgres:alpine
-    ports:
-      - "127.0.0.1:${DATABASE_PORT}:5432"
     environment:
       POSTGRES_USER: viaduct
       POSTGRES_DB: viaduct

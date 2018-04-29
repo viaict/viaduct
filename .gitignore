@@ -37,6 +37,7 @@ venv3
 .ackrc
 
 .sass-cache/
+.mypy_cache/
 node_modules/
 dist/
 
@@ -80,3 +81,9 @@ tags
 # Coverage
 .coverage
 htmlcov/
+
+
+### VisualStudioCode ###
+.vscode/*
+.history
+

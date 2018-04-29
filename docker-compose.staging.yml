@@ -1,0 +1,6 @@
+version: "3.4"
+services:
+  backend:
+    ports:
+      - 4001:3031
+    command: sh docker/entrypoint.staging.sh
