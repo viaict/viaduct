@@ -50,6 +50,12 @@ class AlvDocumentVersion(db.Model, BaseEntity):
 
 
 def upgrade():
+    connection = op.get_bind()
+    Session = sa.orm.sessionmaker()
+    session = Session(bind=connection)
+
+    db.session = session
+
     minutes = db.session.query(File).join(Alv.minutes_file)
     documents = db.session.query(File).join(AlvDocumentVersion.file)
     files = documents.union(minutes).all()

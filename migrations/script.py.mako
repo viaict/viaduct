@@ -22,11 +22,22 @@ db.Model = Base
 db.relationship = relationship
 
 
+def create_session():
+    connection = op.get_bind()
+    session_maker = sa.orm.sessionmaker()
+    session = session_maker(bind=connection)
+    db.session = session
+
+
 def upgrade():
+    create_session()
+
     ${upgrades if upgrades else "pass"}
 
 
 def downgrade():
+    create_session()
+
     ${downgrades if downgrades else "pass"}
 
 
