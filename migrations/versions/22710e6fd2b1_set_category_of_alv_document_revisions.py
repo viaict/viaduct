@@ -18,21 +18,10 @@ from sqlalchemy.orm import sessionmaker, relationship
 revision = '22710e6fd2b1'
 down_revision = '4a3debf40b72'
 
-# op.get_bind() will fail when the migration is created,
-# so catch the AttributeError
-try:
-    Base = declarative_base()
-    db = sa
-    Session = sessionmaker()
-
-    conn = op.get_bind()
-    session = Session(bind=conn)
-
-    db.Model = Base
-    db.relationship = relationship
-    db.session = session
-except AttributeError:
-    pass
+Base = declarative_base()
+db = sa
+db.Model = Base
+db.relationship = relationship
 
 
 class File(db.Model, BaseEntity):

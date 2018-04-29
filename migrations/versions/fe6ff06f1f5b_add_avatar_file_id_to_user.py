@@ -24,21 +24,10 @@ from app.enums import FileCategory
 revision = 'fe6ff06f1f5b'
 down_revision = '1f4385bac8f9'
 
-# op.get_bind() will fail when the migration is created,
-# so catch the AttributeError
-try:
-    Base = declarative_base()
-    db = sa
-    Session = sessionmaker()
-
-    conn = op.get_bind()
-    session = Session(bind=conn)
-
-    db.Model = Base
-    db.relationship = relationship
-    db.session = session
-except AttributeError:
-    pass
+Base = declarative_base()
+db = sa
+db.Model = Base
+db.relationship = relationship
 
 
 filename_regex = re.compile(r'.+\/avatar_(\d+)\.+(.+)')

@@ -27,12 +27,7 @@ from sqlalchemy.orm import sessionmaker, relationship
 
 Base = declarative_base()
 db = sa
-conn = op.get_bind()
-Session = sessionmaker()
-session = Session(bind=conn)
-
 db.Model = Base
-db.session = session
 db.relationship = relationship
 
 
