@@ -1,17 +1,16 @@
-{% extends "pimpy/view_page.htm" %}
+{% extends "pimpy/base.htm" %}
 
-
-{%block content %}
+{% block content %}
     <div class="col-md-8">
 
 
-    {% for group_header in list_items: %}
+    {% for group_and_minutes in list_items %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">{{ group_header }}</h3>
+            <h3 class="panel-title">{{ group_and_minutes['group_name'] }}</h3>
         </div>
         <ul class="list-group">
-            {% for list_item in list_items[group_header] %}
+            {% for list_item in group_and_minutes['minutes'] %}
                 {% if list_item.id > 0 %}
                     <li class="list-group-item">
                         <div class="row toggle" id="dropdown-detail-1" data-toggle="#{{ list_item.get_name() }}">
@@ -24,7 +23,7 @@
                             <a href="{{ url_for('pimpy.view_minute_raw', minute_id=list_item.id) }}" target="_blank">{{ _('Show plaintext') }}</a>
                             <div class="pimpy_minute_styled">
                                 {% for (id, num, line) in list_item.get_content_lines() %}
-                                <a id="{{- id -}}ln{{- num -}} " class="pimpy_minute_line"/>
+                                <a id="{{- id -}}ln{{- num -}} " class="pimpy_minute_line">
                                     <div class="pimpy_line_number"> {{- num -}} </div>
                                     {{- line -}} &zwnj;
                                 </a>
@@ -54,7 +53,7 @@
     {% if line_number != -1 %}
         <script>
         $(document).ready(function() {
-            location.hash = '{{ tag }}'
+            location.hash = '{{ tag }}';
             $("#{{tag}}").addClass('selected_line');
             $("#{{tag}}").closest(".pimpy_minute_toggle").slideToggle();
 

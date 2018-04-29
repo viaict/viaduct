@@ -2,6 +2,7 @@ import datetime
 import json
 
 from flask import Markup, render_template
+from flask_login import current_user
 from markdown import markdown
 
 from app import app, static_url, get_locale
@@ -11,7 +12,6 @@ from app.utils.category import CategoryAPI  # noqa
 from app.utils.company import CompanyAPI  # noqa
 from app.utils.guide import GuideAPI  # noqa
 from app.utils.navigation import NavigationAPI  # noqa
-from app.utils.pimpy import PimpyAPI  # noqa
 from app.utils.seo import get_seo_fields  # noqa
 from app.utils.serialize_sqla import serialize_sqla  # noqa
 from app.utils.user import UserAPI  # noqa
@@ -37,6 +37,6 @@ app.jinja_env.globals.update(get_locale=get_locale)
 app.jinja_env.globals.update(app_config=app.config)
 app.jinja_env.globals.update(FormWrapper=FormWrapper)
 app.jinja_env.globals.update(NavigationAPI=NavigationAPI)
-app.jinja_env.globals.update(PimpyAPI=PimpyAPI)
+app.jinja_env.globals.update(current_user=current_user)
 app.jinja_env.globals.update(CategoryAPI=CategoryAPI)
 app.jinja_env.globals.update(get_seo_fields=get_seo_fields)

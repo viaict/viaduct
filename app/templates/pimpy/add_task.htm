@@ -1,31 +1,12 @@
-{% extends 'pimpy/view_page.htm' %} {%block content %}
+{% extends 'pimpy/base.htm' %}
 
-<div class='col-md-8'>
-    <h2>Creëer nieuwe taak</h2>
+{% from 'macros/form.htm' import render_form %}
 
-    <form method='post' enctype='multipart/form-data'>
-        <div class='form-group'>
-            <label for='name'>Taak</label> {{ form.name(class_='form-control') }}
-        </div>
+{% block content %}
 
-        <div class='form-group'>
-            <label for='content'>Meer informatie</label> {{ form.content(class_='form-control') }}
-        </div>
+    <div class='col-md-8'>
+        <h2>Creëer nieuwe taak</h2>
 
-        <div class='form-group'>
-            <label for='group'>Groep</label> {{ form.group(class_='form-control') }}
-        </div>
-
-        <div class='form-group'>
-            <label for='users'>Gebruikers</label> {{ form.users(class_='form-control') }}
-        </div>
-
-        <div class='form-group'>
-            <label for='status'>Status</label> {{ form.status(class_='form-control') }}
-        </div>
-
-        <button type='submit' class='btn btn-primary'>Creëer taak!</button>
-    </form>
-</div>
-
+        {{ render_form(form) }}
+    </div>
 {% endblock content %}

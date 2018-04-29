@@ -22,15 +22,17 @@ private_key = app.config['GOOGLE_API_KEY']
 
 domain = 'svia.nl'
 
+info_email = 'info@svia.nl'
+
 _logger = logging.getLogger(__name__)
 
 
-def build_service(service_type, api_version, scope):
+def build_service(service_type, api_version, scope, email):
     try:
         credentials = ServiceAccountCredentials.from_p12_keyfile(
             service_account_email=service_email,
             filename=private_key,
-            scopes=[scope]).create_delegated("bestuur@svia.nl")
+            scopes=[scope]).create_delegated(email)
 
         # Create an authorized http instance
         http = httplib2.Http()
@@ -44,18 +46,21 @@ def build_service(service_type, api_version, scope):
 
 def build_calendar_service():
     return build_service('calendar', 'v3',
-                         'https://www.googleapis.com/auth/calendar')
+                         'https://www.googleapis.com/auth/calendar',
+                         'bestuur@svia.nl')
 
 
 def build_groups_service():
     return build_service('admin', 'directory_v1',
                          ('https://www.googleapis.com'
-                          '/auth/admin.directory.group'))
+                          '/auth/admin.directory.group'),
+                         'bestuur@svia.nl')
 
 
 def build_gmail_service():
     return build_service('gmail', 'v1',
-                         'https://www.googleapis.com/auth/gmail.send')
+                         'https://www.googleapis.com/auth/gmail.send',
+                         info_email)
 
 
 def get_group_api():
@@ -182,7 +187,10 @@ def add_email_to_group_if_not_exists(email, listname):
     try:
         add_email_to_group(email, listname)
     except HttpError as e:
-        if e.resp.status != 409:
+        if e.resp.status == 404:
+            _logger.error(e, exc_info=True)
+            flash('Google group does not exist (yet?)')
+        elif e.resp.status != 409:
             # Something else went wrong than the list already existing
             _logger.error(e, exc_info=True)
             flash('Something went wrong while updating the users'
@@ -204,20 +212,23 @@ def remove_email_from_group_if_exists(email, listname):
 
 
 def send_email(to, subject, email_template,
-               sender='no-reply@svia.nl', **kwargs):
+               sender='Studievereniging VIA <info@svia.nl>',
+               email_template_kwargs={}):
     """
     Send an e-mail from the via-gmail.
 
     Args:
-    sender: Email address of the sender.
     to: Email address of the receiver.
     subject: The subject of the email message.
-    content: The text of the email message.
+    email_template: The text of the email message.
+    sender: Email address of the sender.
+    email_template_kwargs: Optional arguments for the template
     """
     service = build_gmail_service()
-    user_id = 'bestuur@svia.nl'
 
-    msg = MIMEText(render_template(email_template, **kwargs), 'html')
+    msg = MIMEText(render_template(email_template, **email_template_kwargs),
+                   'html')
+
     msg['To'] = to
     msg['From'] = sender
     msg['Subject'] = subject
@@ -225,7 +236,7 @@ def send_email(to, subject, email_template,
     body = {'raw': base64.urlsafe_b64encode(msg.as_bytes()).decode()}
 
     try:
-        email = (service.users().messages().send(userId=user_id, body=body)
+        email = (service.users().messages().send(userId=info_email, body=body)
                  .execute())
         _logger.info('Sent e-mailmessage Id: {}'.format(email['id']))
         return email
