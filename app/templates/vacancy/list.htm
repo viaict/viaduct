@@ -69,7 +69,7 @@
 
                                     {% if vacancy.company.logo_path != '#' %}
                                         <img class="img-rounded" style="max-width:250px; max-height:100px;"
-                                             src="{{ path }}{{ vacancy.company.logo_path }}"></img>
+                                             src="{{ path }}{{ vacancy.company.logo_path }}" />
                                     {% else %}
                                         {{ vacancy.company.name }}
                                     {% endif %}
@@ -159,7 +159,7 @@
 
                 document.location.href = Flask.url_for('vacancy.list', {
                     page_nr: 1,
-                    search: data ? data : null
+                    search: data ? data : ''
                 });
 
             });

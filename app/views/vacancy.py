@@ -20,7 +20,6 @@ FILE_FOLDER = app.config['FILE_DIR']
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
-@blueprint.route('/<int:page_nr>/<search>/', methods=['GET', 'POST'])
 def list(page_nr=1, search=None):
     # Order the vacancies in such a way that vacancies that are new
     # or almost expired, end up on top.
@@ -28,7 +27,7 @@ def list(page_nr=1, search=None):
         (100 * (func.datediff(Vacancy.start_date, func.current_date()) /
                 func.datediff(Vacancy.start_date, Vacancy.end_date))) - 50)
 
-    if search is not None:
+    if search:
         vacancies = Vacancy.query.join(Company). \
             filter(or_(Vacancy.title.like('%' + search + '%'),
                        Company.name.like('%' + search + '%'),
