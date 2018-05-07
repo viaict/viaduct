@@ -1,17 +1,15 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-from app import db, app
-from flask import Blueprint, redirect, session, request, url_for, flash
+from flask import Blueprint, redirect, session, url_for, flash
+from flask_babel import _
 from flask_babel import refresh
 from flask_login import current_user
-from flask_babel import _
+
+from app import db, app
+from app.views import redirect_back
 
 blueprint = Blueprint('lang', __name__, url_prefix='/lang')
-
-
-def redirect_url(default='home.home'):
-    return request.args.get('next') or request.referrer or url_for(default)
 
 
 @blueprint.route('/set/<path:lang>', methods=['GET'])
@@ -21,13 +19,13 @@ def set_user_lang(lang=None):
         return redirect(url_for('home.home'))
     if current_user.is_anonymous:
         flash(_('You need to be logged in to set a permanent language.'))
-        return redirect(redirect_url())
+        return redirect_back()
 
     current_user.locale = lang
     db.session.add(current_user)
     db.session.commit()
     refresh()
-    return redirect(redirect_url())
+    return redirect_back()
 
 
 @blueprint.route('/<path:lang>', methods=['GET'])
@@ -44,4 +42,4 @@ def set_lang(lang=None):
                          url_for('lang.set_user_lang', lang=lang)),
               'safe')
 
-    return redirect(redirect_url())
+    return redirect_back()

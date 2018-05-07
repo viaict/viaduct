@@ -111,7 +111,7 @@
                 </a>
                 |
                 {% endif %}
-                <a href="{{ url_for('bug.report', redir=request.path) }}"  class="btn btn-sm"> <i class="fa fa-bug"></i> Report a bug</a>
+                <a href="{{ url_for('bug.report', next=request.path) }}"  class="btn btn-sm"> <i class="fa fa-bug"></i> Report a bug</a>
                 |
                 <a href="https://www.facebook.com/groups/studieverenigingvia/" class ="btn btn-sm"> <i class="fa fa-facebook-square"></i> FB groep</a>
             </p>
