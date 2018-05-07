@@ -1,14 +1,16 @@
 import unittest
 from unittest import mock
 from unittest.mock import patch
+from werkzeug.datastructures import FileStorage
 
 from app.enums import FileCategory
 from app.exceptions import ResourceNotFoundException
-from app.models.alv_model import Alv
-from app.service import alv_service
+from app.models.alv_model import Alv, AlvDocument
+from app.repository import alv_repository
+from app.service import alv_service, file_service
 
-alv_repository_mock = mock.MagicMock()
-file_service_mock = mock.MagicMock()
+alv_repository_mock = mock.MagicMock(alv_repository)
+file_service_mock = mock.MagicMock(file_service)
 
 
 @patch.object(alv_service, "file_service", file_service_mock)
@@ -20,7 +22,7 @@ class TestAlvService(unittest.TestCase):
         alv_repository_mock.reset_mock()
 
     def test_save_alv(self):
-        alv = mock.MagicMock()
+        alv = mock.MagicMock(spec=Alv)
 
         alv_service.save_alv(alv)
 
@@ -66,7 +68,7 @@ class TestAlvService(unittest.TestCase):
 
     def test_add_minutes(self):
         alv = mock.MagicMock(spec=dir(Alv))
-        minutes_file = mock.MagicMock()
+        minutes_file = mock.MagicMock(spec=FileStorage)
         minutes_file.filename = "minutes.pdf"
 
         alv_service.add_minutes(alv, minutes_file)
@@ -75,8 +77,8 @@ class TestAlvService(unittest.TestCase):
             FileCategory.ALV_DOCUMENT, minutes_file, minutes_file.filename)
 
     def test_add_document(self):
-        alv = mock.MagicMock()
-        file_storage = mock.MagicMock()
+        alv = mock.MagicMock(spec=Alv)
+        file_storage = mock.MagicMock(spec=FileStorage)
         file_storage.filename = "document.pdf"
 
         alv_service.add_document(alv, file_storage, "nl", "en")
@@ -103,7 +105,7 @@ class TestAlvService(unittest.TestCase):
             1, include_presidium=True, include_documents=False)
 
     def test_update_document(self):
-        doc = mock.MagicMock()
+        doc = mock.MagicMock(spec=AlvDocument)
         alv_service.update_document(doc, None, "nl", "en")
 
         alv_repository_mock.save_document.assert_called_once()
@@ -114,8 +116,8 @@ class TestAlvService(unittest.TestCase):
         self.assertEqual(doc.en_name, "en")
 
     def test_update_document_with_file_storage(self):
-        doc = mock.MagicMock()
-        file_storage = mock.MagicMock()
+        doc = mock.MagicMock(spec=AlvDocument)
+        file_storage = mock.MagicMock(spec=FileStorage)
         file_storage.filename = "updated_document.pdf"
 
         alv_service.update_document(doc, file_storage, "nl", "en")
@@ -129,7 +131,7 @@ class TestAlvService(unittest.TestCase):
         self.assertEqual(doc.en_name, "en")
 
     def test_delete_alv(self):
-        alv = mock.MagicMock()
+        alv = mock.MagicMock(spec=Alv)
 
         alv_service.delete_alv(alv)
 
