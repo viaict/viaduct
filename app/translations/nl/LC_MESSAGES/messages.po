@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2018-03-10 12:09+0100\n"
+"POT-Creation-Date: 2018-05-07 23:20+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language: nl\n"
@@ -21,10 +21,6 @@ msgstr ""
 #, python-format
 msgid "%(email)s is unknown to our system."
 msgstr "%(email)s is niet bekend in ons systeem."
-
-#, python-format
-msgid "%s is not an allowed file type."
-msgstr "%s is niet een toegestaan bestandstype"
 
 msgid "A user with this e-mail address already exist."
 msgstr "Er bestaat al een gebruiker met dat emailadres."
@@ -114,12 +110,6 @@ msgstr "Aantal opgelost"
 msgid "An email has been sent to %(email)s with further instructions."
 msgstr "Er is een email verstuurd naar %(email)s met verdere instructies."
 
-msgid "An error occurred while uploading "
-msgstr "Er is een fout opgetreden bij het uploaden van het bestand"
-
-msgid "An error occurred while uploading the file"
-msgstr "Er is een fout opgetreden bij het uploaden van het bestand"
-
 msgid "Answers"
 msgstr "Antwoorden"
 
@@ -186,17 +176,44 @@ msgstr ""
 msgid "Cannot find parent navigation entry."
 msgstr "Het bovenligende menu item kan niet gevonden worden."
 
-msgid "Cannot remove file, it does not exist"
-msgstr "Kan het bestand niet verwijderen, want het bestand bestaat niet"
-
 msgid "Captain's log succesfully ended."
 msgstr "Captain's log afsluiten gelukt."
 
 msgid "Chairman"
 msgstr "Voorzitter"
 
+msgid "Change SEO properties"
+msgstr "SEO properties aanpassen"
+
+msgid "Change challenges"
+msgstr "Challenges aanpassen"
+
+msgid "Change election properties"
+msgstr "Verkiezings details aanpassen"
+
+msgid "Change group members"
+msgstr "Leden groep aanpassen"
+
+msgid "Change group permissions"
+msgstr "Groep rechten veranderen"
+
 msgid "Change password"
 msgstr "Verander wachtwoord"
+
+msgid "Change the examinations"
+msgstr "Tentamens aanpassen"
+
+msgid "Change the navigation"
+msgstr "Navigatie aanpassen"
+
+msgid "Change the redirects"
+msgstr "Redirects aanpassen"
+
+msgid "Change user properties"
+msgstr "Gebruikers eigenschappen aanpassen"
+
+msgid "Change vacancies"
+msgstr "Vacaturen aanpassen"
 
 msgid "City"
 msgstr "Plaats"
@@ -289,6 +306,9 @@ msgstr "Contactpersoon verwijderd."
 msgid "Contact person saved."
 msgstr "Contactpersoon opgeslagen."
 
+msgid "Content"
+msgstr "Inhoud"
+
 msgid "Contest does not exist."
 msgstr "Wedstrijd bestaat niet."
 
@@ -310,35 +330,27 @@ msgstr "Kopiëren naar klembord"
 msgid "Correct"
 msgstr "Correct"
 
-msgid "Could not find DONE task: "
-msgstr "Kan taak niet vinden in DONE: "
-
-msgid "Could not find REMOVE task: "
-msgstr "Kan taak niet vinden in REMOVE: "
-
 msgid "Country"
 msgstr "Land"
 
 msgid "Course"
 msgstr "Vak"
 
-msgid "Course could not be found."
-msgstr "Vak kan niet worden gevonden"
+#, python-format
+msgid "Course '%s' already in database."
+msgstr "Vak %s bestaat al in database."
 
 msgid "Course overview"
 msgstr "Vakoverzicht"
 
-msgid "Course still has examinations in the database."
-msgstr "Vak heeft nog tentamens in de tentamenbank."
+msgid "Course successfully added."
+msgstr "Vak succesvol opgeslagen"
 
-msgid "Course succesfully added."
-msgstr "Vak succesvol toegevoegd."
+msgid "Course successfully deleted."
+msgstr "Vak succesvol verwijderd"
 
-msgid "Course succesfully deleted."
-msgstr "Vak succesvol verwijderd."
-
-msgid "Course succesfully saved."
-msgstr "Vak succesvol opgeslagen."
+msgid "Course successfully saved."
+msgstr "Vak succesvol opgeslagen"
 
 msgid "Courses"
 msgstr "Vakken"
@@ -348,6 +360,12 @@ msgstr "Coördinator"
 
 msgid "Create"
 msgstr "Aanmaken"
+
+msgid "Create ALVs"
+msgstr "ALVs aanmaken"
+
+msgid "Create activities"
+msgstr "Activiteiten aanmaken"
 
 msgid "Create activity"
 msgstr "Activiteit aanmaken"
@@ -361,11 +379,17 @@ msgstr "Formulier aanmaken"
 msgid "Create group"
 msgstr "Groep aanmaken"
 
+msgid "Create news articles"
+msgstr "Nieuwsberichten aanmaken"
+
 msgid "Create news item"
 msgstr "Nieuwsbericht aanmaken"
 
 msgid "Create newsletter"
 msgstr "Nieuwsbrief aanmaken"
+
+msgid "Create pages"
+msgstr "Paginas aanmaken"
 
 msgid "Create user"
 msgstr "Gebruiker aanmaken"
@@ -384,9 +408,6 @@ msgstr "Huidige avatar"
 
 msgid "Custom URL"
 msgstr "Aangepaste URL"
-
-msgid "DOMjudge administrator"
-msgstr "DOMjudge administrator"
 
 msgid "Date"
 msgstr "Datum"
@@ -432,6 +453,9 @@ msgstr "Uitgeschakeld"
 
 msgid "Disclaimer"
 msgstr "Disclaimer"
+
+msgid "Display administrative buttons to DOMjudge"
+msgstr "Weergave administrative DOMjudge knoppen"
 
 msgid "Display name of the client"
 msgstr "Weergave naam van de client"
@@ -496,20 +520,8 @@ msgstr "E-mail type"
 msgid "Edit"
 msgstr "Aanpassen"
 
-msgid "Edit ALVs"
-msgstr "Bewerken ALVs"
-
 msgid "Edit GA"
 msgstr "ALV aanpassen"
-
-msgid "Edit Pimpy"
-msgstr "Bewerken Pimpy"
-
-msgid "Edit activities"
-msgstr "Bewerken activiteiten"
-
-msgid "Edit challenges"
-msgstr "Bewerken challenges"
 
 msgid "Edit course"
 msgstr "Vak aanpassen"
@@ -517,32 +529,11 @@ msgstr "Vak aanpassen"
 msgid "Edit education"
 msgstr "Opleiding aanpassen"
 
-msgid "Edit elections"
-msgstr "Bewerken verkiezingen"
-
 msgid "Edit examination"
 msgstr "Tentamen aanpassen"
 
-msgid "Edit examinations"
-msgstr "Bewerken tentamens"
-
-msgid "Edit files"
-msgstr "Bewerken bestanden"
-
 msgid "Edit group"
 msgstr "Groep aanpassen"
-
-msgid "Edit group permissions"
-msgstr "Bewerken groepsrechten"
-
-msgid "Edit groups"
-msgstr "Bewerken groepen"
-
-msgid "Edit navigation and redirect"
-msgstr "Bewerken navigation en redirect"
-
-msgid "Edit news"
-msgstr "Bewerken nieuws"
 
 msgid "Edit news item"
 msgstr "Nieuwsbericht aanpassen"
@@ -553,40 +544,22 @@ msgstr "Nieuwsbrief aanpassen"
 msgid "Edit page"
 msgstr "Pagina aanpassen"
 
-msgid "Edit pages"
-msgstr "Bewerken paginas"
-
-msgid "Edit search-engine optimizations"
-msgstr "Bewerken search-engine optimizations"
-
-msgid "Edit user"
-msgstr "Bewerken gebruiker"
-
 msgid "Edit user permissions"
 msgstr "Wijzig gebruikersrechten"
-
-msgid "Edit vacancy"
-msgstr "Bewerken vacature"
 
 msgid "Education"
 msgstr "Opleiding"
 
-msgid "Education could not be found."
-msgstr "Opleiding kan niet worden gevonden."
-
 msgid "Education overview"
 msgstr "Opleidingsoverzicht"
 
-msgid "Education still has examinations in the database."
-msgstr "Opleiding heeft nog tentamens in de database."
-
-msgid "Education succesfully added."
+msgid "Education successfully added."
 msgstr "Opleiding succesvol toegevoegd."
 
-msgid "Education succesfully deleted."
-msgstr "Opleiding succesvol verwijderd."
+msgid "Education successfully deleted."
+msgstr "Opleiding succesvol verwijderd"
 
-msgid "Education succesfully saved."
+msgid "Education successfully saved."
 msgstr "Opleiding succesvol opgeslagen."
 
 msgid "Educations"
@@ -655,11 +628,11 @@ msgstr "Fout!"
 msgid "Examination"
 msgstr "Tentamen"
 
-msgid "Examination could not be found."
-msgstr "Tentamen kan niet worden gevonden."
+msgid "Examination does not exist."
+msgstr "Tentamen bestaat niet."
 
-msgid "Examination succesfully changed."
-msgstr "Tentamen succesvol veranderd."
+msgid "Examination successfully changed."
+msgstr "Tentamen succesvol aangepast."
 
 msgid "Examination successfully deleted."
 msgstr "Tentamen succesvol verwijderd."
@@ -691,17 +664,11 @@ msgstr "Begunstigde"
 msgid "File"
 msgstr "Bestand"
 
-msgid "File does not exist, examination deleted."
-msgstr "Bestand bestaat niet, tentamen verwijderd."
-
 msgid "Filename"
 msgstr "Bestandsnaam"
 
 msgid "Files"
 msgstr "Bestanden"
-
-msgid "Filter groups"
-msgstr "Filter groepen"
 
 msgid "First name"
 msgstr "Voornaam"
@@ -718,13 +685,8 @@ msgstr "Formulier"
 msgid "Form name"
 msgstr "Formulier naam"
 
-#, python-format
-msgid "Found invalid DONE task: %s"
-msgstr "Ongeldige DONE taak: %s"
-
-#, python-format
-msgid "Found invalid REMOVE task: %s"
-msgstr "Ongeldige REMOVE taak: %s"
+msgid "Found invalid lines in minutes"
+msgstr "Ongeldige regel gevonden in notulen"
 
 msgid "Fullscreen"
 msgstr "Schermvullend"
@@ -735,18 +697,14 @@ msgstr "ALVs"
 msgid "Group"
 msgstr "Groep"
 
-msgid "Group permissions"
-msgstr "Groep permissies"
-
 msgid "Groups"
 msgstr "Groepen"
 
+msgid "Groups with read permission"
+msgstr "Groepen met lees rechten"
+
 msgid "Has paid"
 msgstr "Heeft betaald"
-
-#, python-format
-msgid "Hey %(name)s, you're now logged in!"
-msgstr "Hey %(name)s, je bent ingelogd!"
 
 msgid "Honorary member"
 msgstr "Erelid"
@@ -782,12 +740,6 @@ msgstr "Interim coördinator"
 
 msgid "Interim-coördinator"
 msgstr "Interim-coördinator"
-
-msgid "Invalid DONE task id: "
-msgstr "Ongeldige taak id in DONE: "
-
-msgid "Invalid REMOVE task id: "
-msgstr "Ongeldige taak id in REMOVE: "
 
 msgid "Invalid URL."
 msgstr "Ongeldige URL."
@@ -835,6 +787,9 @@ msgstr "Legenda"
 msgid "Let the dogs out"
 msgstr ""
 
+msgid "Limit read permission to groups"
+msgstr "Limiteer lees rechten tot groepen"
+
 msgid "Link copied"
 msgstr "Link gekopieerd"
 
@@ -874,9 +829,6 @@ msgstr "Mailinglijst"
 msgid "Max number of attendants"
 msgstr "Maximaal aantal aanwezigen"
 
-msgid "Number of extra attendants"
-msgstr "Aantal introducees"
-
 msgid "Member"
 msgstr "Lid"
 
@@ -886,6 +838,9 @@ msgstr "Deeltentamen"
 #, python-format
 msgid "Minimal password length: %(length)d"
 msgstr "Minimum lengte van wachtwoord: %(length)d "
+
+msgid "Minute content"
+msgstr "Inhoud notulen"
 
 msgid "Minutes"
 msgstr "Notulen"
@@ -1008,6 +963,12 @@ msgstr "Geen"
 msgid "Not found!"
 msgstr "Niet gevonden!"
 
+msgid "Number of extra attendants"
+msgstr "Aantal introducees"
+
+msgid "Number of extra attendants allowed"
+msgstr "Aantal introducees toegestaan"
+
 msgid "Open voor nieuwe leden"
 msgstr ""
 
@@ -1115,35 +1076,17 @@ msgstr ""
 msgid "Rank"
 msgstr "Rang"
 
-msgid "Read"
-msgstr "Lees"
-
-msgid "Read Pimpy"
-msgstr "Lezen pimpy"
-
 msgid "Read access to your Pimpy data"
 msgstr "Lees rechten tot je Pimpy data"
 
 msgid "Read files"
 msgstr "Lezen bestanden"
 
-msgid "Read groups"
-msgstr "Lezen groepen"
-
-msgid "Read mollie payments"
-msgstr "Lezen mollie betalingen"
-
 msgid "Read more"
 msgstr "Meer lezen"
 
-msgid "Read user"
-msgstr "Lezen gebruiker"
-
-msgid "Read vacancy"
-msgstr "Lezen vacature"
-
-msgid "Read/Write"
-msgstr "Lees/Schrijf"
+msgid "Read user properties"
+msgstr "Lees gebruikers eigenschappen"
 
 msgid "Refresh"
 msgstr "Verversen"
@@ -1174,6 +1117,9 @@ msgstr "Herhaal nieuw wachtwoord"
 
 msgid "Request to DOMjudge server failed"
 msgstr "Request aan de DOMjudge server mislukt"
+
+msgid "Require membership to view"
+msgstr "Vereis lidmaatschap voor weergeven"
 
 msgid "Requires direct payment"
 msgstr "Vereist meteen betalen"
@@ -1281,9 +1227,6 @@ msgstr "Er is iets mis gegaan."
 msgid "Source code file"
 msgstr "Broncode bestand"
 
-msgid "Specified examination does not exist"
-msgstr "Opgegeven tentamen bestaat niet"
-
 msgid "Stage"
 msgstr "Stage"
 
@@ -1295,6 +1238,9 @@ msgstr "Starttijd"
 
 msgid "Starting year study"
 msgstr "Beginjaar studie"
+
+msgid "Status"
+msgstr "Status"
 
 msgid "Student ID"
 msgstr "Studentnummer"
@@ -1508,14 +1454,17 @@ msgstr "Onbekende OAuth foutmelding"
 msgid "Untried"
 msgstr "Niet geprobeerd"
 
-msgid "Update minutes"
-msgstr "Notulen aanpassen"
-
 msgid "Upload"
 msgstr "Uploaden"
 
 msgid "Upload file"
 msgstr "Bestand uploaden"
+
+msgid "Upload files"
+msgstr "Upload files"
+
+msgid "Upload minutes and tasks"
+msgstr "Upload notulen en taken"
 
 msgid "Uploaded files"
 msgstr "Geuploade bestanden"
@@ -1562,8 +1511,20 @@ msgstr "Versies"
 msgid "View"
 msgstr "Weergeven"
 
+msgid "View Pimpy"
+msgstr "Pimpy weergeven"
+
+msgid "View groups"
+msgstr "Groepen weergeven"
+
+msgid "View mollie transactions"
+msgstr "Mollie betalingen weergeven"
+
 msgid "View submission"
 msgstr "Bekijk inzending"
+
+msgid "View vacancy overview"
+msgstr "Vacature overzicht weergeven"
 
 msgid "Visible for members only"
 msgstr "Alleen zichtbaar voor leden"
@@ -1614,18 +1575,6 @@ msgstr "Geschreven door"
 
 msgid "Wrong Answer"
 msgstr "Verkeerd antwoord"
-
-msgid "Wrong format answers or error uploading the file."
-msgstr ""
-
-msgid "Wrong format answers."
-msgstr "Fout formaat antwoorden."
-
-msgid "Wrong format examination or error uploading the file."
-msgstr "Fout formaat tentamen of een error bij het uploaden van de file."
-
-msgid "Wrong format examination."
-msgstr "Fout formaat tentamen."
 
 msgid "Yes"
 msgstr "Ja"
@@ -2146,3 +2095,169 @@ msgstr ""
 
 #~ msgid "Would you like to join this committee"
 #~ msgstr "Wil je bij de commissie"
+
+#~ msgid "%s is not an allowed file type."
+#~ msgstr "%s is niet een toegestaan bestandstype"
+
+#~ msgid "An error occurred while uploading "
+#~ msgstr "Er is een fout opgetreden bij het uploaden van het bestand"
+
+#~ msgid "An error occurred while uploading the file"
+#~ msgstr "Er is een fout opgetreden bij het uploaden van het bestand"
+
+#~ msgid "Cannot remove file, it does not exist"
+#~ msgstr "Kan het bestand niet verwijderen, want het bestand bestaat niet"
+
+#~ msgid "Could not find DONE task: "
+#~ msgstr "Kan taak niet vinden in DONE: "
+
+#~ msgid "Could not find REMOVE task: "
+#~ msgstr "Kan taak niet vinden in REMOVE: "
+
+#~ msgid "Course could not be found."
+#~ msgstr "Vak kan niet worden gevonden"
+
+#~ msgid "Course still has examinations in the database."
+#~ msgstr "Vak heeft nog tentamens in de tentamenbank."
+
+#~ msgid "Course succesfully added."
+#~ msgstr "Vak succesvol toegevoegd."
+
+#~ msgid "Course succesfully deleted."
+#~ msgstr "Vak succesvol verwijderd."
+
+#~ msgid "Course succesfully saved."
+#~ msgstr "Vak succesvol opgeslagen."
+
+#~ msgid "DOMjudge administrator"
+#~ msgstr "DOMjudge administrator"
+
+#~ msgid "Edit ALVs"
+#~ msgstr "Bewerken ALVs"
+
+#~ msgid "Edit Pimpy"
+#~ msgstr "Bewerken Pimpy"
+
+#~ msgid "Edit activities"
+#~ msgstr "Bewerken activiteiten"
+
+#~ msgid "Edit challenges"
+#~ msgstr "Bewerken challenges"
+
+#~ msgid "Edit elections"
+#~ msgstr "Bewerken verkiezingen"
+
+#~ msgid "Edit examinations"
+#~ msgstr "Bewerken tentamens"
+
+#~ msgid "Edit files"
+#~ msgstr "Bewerken bestanden"
+
+#~ msgid "Edit group permissions"
+#~ msgstr "Bewerken groepsrechten"
+
+#~ msgid "Edit groups"
+#~ msgstr "Bewerken groepen"
+
+#~ msgid "Edit navigation and redirect"
+#~ msgstr "Bewerken navigation en redirect"
+
+#~ msgid "Edit news"
+#~ msgstr "Bewerken nieuws"
+
+#~ msgid "Edit pages"
+#~ msgstr "Bewerken paginas"
+
+#~ msgid "Edit search-engine optimizations"
+#~ msgstr "Bewerken search-engine optimizations"
+
+#~ msgid "Edit user"
+#~ msgstr "Bewerken gebruiker"
+
+#~ msgid "Edit vacancy"
+#~ msgstr "Bewerken vacature"
+
+#~ msgid "Education could not be found."
+#~ msgstr "Opleiding kan niet worden gevonden."
+
+#~ msgid "Education still has examinations in the database."
+#~ msgstr "Opleiding heeft nog tentamens in de database."
+
+#~ msgid "Education succesfully added."
+#~ msgstr "Opleiding succesvol toegevoegd."
+
+#~ msgid "Education succesfully deleted."
+#~ msgstr "Opleiding succesvol verwijderd."
+
+#~ msgid "Education succesfully saved."
+#~ msgstr "Opleiding succesvol opgeslagen."
+
+#~ msgid "Examination could not be found."
+#~ msgstr "Tentamen kan niet worden gevonden."
+
+#~ msgid "Examination succesfully changed."
+#~ msgstr "Tentamen succesvol veranderd."
+
+#~ msgid "File does not exist, examination deleted."
+#~ msgstr "Bestand bestaat niet, tentamen verwijderd."
+
+#~ msgid "Filter groups"
+#~ msgstr "Filter groepen"
+
+#~ msgid "Found invalid DONE task: %s"
+#~ msgstr "Ongeldige DONE taak: %s"
+
+#~ msgid "Found invalid REMOVE task: %s"
+#~ msgstr "Ongeldige REMOVE taak: %s"
+
+#~ msgid "Group permissions"
+#~ msgstr "Groep permissies"
+
+#~ msgid "Hey %(name)s, you're now logged in!"
+#~ msgstr "Hey %(name)s, je bent ingelogd!"
+
+#~ msgid "Invalid DONE task id: "
+#~ msgstr "Ongeldige taak id in DONE: "
+
+#~ msgid "Invalid REMOVE task id: "
+#~ msgstr "Ongeldige taak id in REMOVE: "
+
+#~ msgid "Read"
+#~ msgstr "Lees"
+
+#~ msgid "Read Pimpy"
+#~ msgstr "Lezen pimpy"
+
+#~ msgid "Read groups"
+#~ msgstr "Lezen groepen"
+
+#~ msgid "Read mollie payments"
+#~ msgstr "Lezen mollie betalingen"
+
+#~ msgid "Read user"
+#~ msgstr "Lezen gebruiker"
+
+#~ msgid "Read vacancy"
+#~ msgstr "Lezen vacature"
+
+#~ msgid "Read/Write"
+#~ msgstr "Lees/Schrijf"
+
+#~ msgid "Specified examination does not exist"
+#~ msgstr "Opgegeven tentamen bestaat niet"
+
+#~ msgid "Update minutes"
+#~ msgstr "Notulen aanpassen"
+
+#~ msgid "Wrong format answers or error uploading the file."
+#~ msgstr ""
+
+#~ msgid "Wrong format answers."
+#~ msgstr "Fout formaat antwoorden."
+
+#~ msgid "Wrong format examination or error uploading the file."
+#~ msgstr "Fout formaat tentamen of een error bij het uploaden van de file."
+
+#~ msgid "Wrong format examination."
+#~ msgstr "Fout formaat tentamen."
+
