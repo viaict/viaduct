@@ -34,6 +34,8 @@ def authorize(*__, **kwargs):
     if request.method == 'GET':
         client_id = kwargs.get('client_id')
         client = oauth_service.get_client_by_id(client_id=client_id)
+        if client.auto_approve:
+            return True
         kwargs['client'] = client
         kwargs['user'] = current_user
         kwargs['descriptions'] = oauth_service.get_scope_descriptions()
