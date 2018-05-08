@@ -1,6 +1,5 @@
 import json
 import re
-
 from flask import Blueprint, render_template, abort, request, flash, \
     redirect, url_for
 from flask_babel import _
@@ -61,6 +60,8 @@ def edit(entry_id=None, parent_id=None):
             entry.page_id = page_id
             entry.external = form.external.data
             entry.activity_list = form.activity_list.data
+            entry.order_children_alphabetically = \
+                form.order_children_alphabetically.data
         else:
             last_entry = NavigationEntry.query.filter_by(parent_id=None) \
                 .order_by(NavigationEntry.position.desc()).first()
