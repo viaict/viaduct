@@ -134,6 +134,15 @@ def init_app():
                                                    Roles.SEO_WRITE)
         return dict(can_write_seo=can_write_seo)
 
+    @app.context_processor
+    def inject_privacy_policy_url():
+        if get_locale() == 'nl':
+            url = app.config['PRIVACY_POLICY_URL_NL']
+        else:
+            url = app.config['PRIVACY_POLICY_URL_EN']
+
+        return dict(privacy_policy_url=url)
+
     class JSONEncoder(BaseEncoder):
         """Custom JSON encoding."""
 

@@ -79,3 +79,6 @@ class Config:
 
     # Log levels: CRITICAL, ERROR, WARNING, INFO, DEBUG, NOTSET
     LOG_LEVEL = logging.DEBUG
+
+    PRIVACY_POLICY_URL_NL = '/static/via_privacy_policy_nl.pdf'
+    PRIVACY_POLICY_URL_EN = '/static/via_privacy_policy_en.pdf'
