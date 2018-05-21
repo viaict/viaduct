@@ -1554,6 +1554,10 @@ msgid ""
 "been logged in!"
 msgstr ""
 
+#, python-format
+msgid "Welcome to via, %(name)s"
+msgstr ""
+
 msgid "Who"
 msgstr ""
 

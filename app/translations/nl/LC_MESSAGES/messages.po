@@ -1592,6 +1592,10 @@ msgid ""
 "been logged in!"
 msgstr "Welkom %(name)s! Je profiel is aangemaakt en je bent ingelogd!"
 
+#, python-format
+msgid "Welcome to via, %(name)s"
+msgstr "Welkom bij via, %(name)s"
+
 msgid "Who"
 msgstr "Wie"
 
