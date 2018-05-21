@@ -121,7 +121,7 @@ def init_app():
     db.init_app(app)
 
     if not app.debug and 'SENTRY_DSN' in app.config:
-        sentry.init_app(app, logging=True, level=logging.WARNING)
+        sentry.init_app(app, logging=True, level=logging.ERROR)
         sentry.client.release = version
 
     @app.context_processor
