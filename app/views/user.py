@@ -456,7 +456,8 @@ def view_avatar(user_id=None):
 
     # group rights
     if role_service.user_has_role(current_user, Roles.USER_READ) \
-            or role_service.user_has_role(current_user, Roles.USER_WRITE):
+            or role_service.user_has_role(current_user, Roles.USER_WRITE) \
+            or role_service.user_has_role(current_user, Roles.ACTIVITY_WRITE):
         can_read = True
 
     if not can_read:
