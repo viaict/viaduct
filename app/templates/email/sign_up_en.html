@@ -1,0 +1,34 @@
+<p>Hi {{ user.first_name }},</p>
+
+<p>We're glad that you want to become a member of <b>via</b>!</p>
+
+<p>
+{% if user.education.name.startswith('MSc') %}
+Membership for master students is free! To complete your membership, we kindly ask you to come to our association room (A0.10)
+and ask one of the board members to complete your membership.
+{% else %}
+Membership for bachelor students costs €20. You can pay this amount in two ways:
+<ul>
+    <li>By transferring the amount to NL09INGB0009109613 with the description "Membership {{ user.name }}",
+        and sending an email to the board (<a href="mailto:bestuur@svia.nl">bestuur@svia.nl</a>) with a copy of the transfer,
+        so we can complete your membership.</li>
+    <li>By paying the amount in our association room via PIN or with cash (only the exact amount).
+        In our room, there will always be a board member present to complete your membership.</li>
+</ul>
+{% endif %}
+</p>
+
+<p>For any further questions, you can always email us on <a href="mailto:bestuur@svia.nl">bestuur@svia.nl</a>.</p>
+
+</p>With kind regards,</p>
+
+<p>Study association <b>via</b></p>
+
+<img src="https://svia.nl/static/img/via.png" style="max-width: 50px" alt="via logo" />
+
+<p>
+    <small><i>Verenging Informatiewetenschappen Amsterdam</i></small><br />
+    <small><b>T</b> (020) 525 7880</small><br />
+    <small><b>E</b> <a href="mailto:bestuur@svia.nl">bestuur@svia.nl</a></small><br />
+    <small><b>W</b> <a href="https://svia.nl/">www.svia.nl</a></small>
+</p>

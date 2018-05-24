@@ -4,11 +4,15 @@ from flask_wtf import FlaskForm
 from flask_wtf.recaptcha import RecaptchaField, Recaptcha
 from wtforms import StringField, PasswordField, BooleanField, \
     SelectField, FileField, DateField
-from wtforms.validators import (InputRequired, EqualTo, Length, Optional)
+from wtforms.validators import (InputRequired, EqualTo, Length,
+                                Optional, ValidationError)
 
 from app import app
 from app.forms.fields import EmailField
 from app.forms.util import FieldVerticalSplit
+
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 _min_password_length = app.config['MIN_PASSWORD_LENGTH']
 
@@ -70,6 +74,12 @@ class SignUpForm(BaseUserForm, ResetPasswordForm):
     ], large_spacing=True)
 
     _RenderIgnoreFields = ['locale', 'phone_nr', 'avatar']
+
+    def validate_birth_date(self, field):
+        sixteen_years_ago = datetime.now().date() - relativedelta(years=16)
+
+        if field.data > sixteen_years_ago:
+            raise ValidationError(_('You need to be at least 16 years old.'))
 
 
 class EditUserForm(BaseUserForm):

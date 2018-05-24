@@ -114,6 +114,8 @@
                 <a href="{{ url_for('bug.report', redir=request.path) }}"  class="btn btn-sm"> <i class="fa fa-bug"></i> Report a bug</a>
                 |
                 <a href="https://www.facebook.com/groups/studieverenigingvia/" class ="btn btn-sm"> <i class="fa fa-facebook-square"></i> FB groep</a>
+                |
+                <a href="{{ privacy_policy_url }}" class="btn btn-sm" target="_blank"> <i class="fa fa-book"></i> {{ _('Privacy Policy') }}</a>
             </p>
             {%- endif -%}
             <div class="row">

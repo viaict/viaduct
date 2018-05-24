@@ -171,6 +171,10 @@ msgstr ""
 msgid "Birthdate"
 msgstr ""
 
+#, python-format
+msgid "By clicking 'Register', you agree to our %(link)s."
+msgstr ""
+
 msgid "By registering you agree with the terms above."
 msgstr ""
 
@@ -1069,6 +1073,9 @@ msgstr ""
 msgid "Price"
 msgstr ""
 
+msgid "Privacy Policy"
+msgstr ""
+
 msgid "Problem"
 msgstr ""
 
@@ -1553,6 +1560,10 @@ msgid ""
 "been logged in!"
 msgstr ""
 
+#, python-format
+msgid "Welcome to via, %(name)s"
+msgstr ""
+
 msgid "Who"
 msgstr ""
 
@@ -1616,6 +1627,9 @@ msgid "You must be logged in to view this page."
 msgstr ""
 
 msgid "You must be logged-in to register for an activity."
+msgstr ""
+
+msgid "You need to be at least 16 years old."
 msgstr ""
 
 msgid "You need to be logged in to set a permanent language."
