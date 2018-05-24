@@ -892,3 +892,10 @@ $DOMJUDGE_LIGHTGREEN:   #7CD449;
 .sentry-error-embed * {
     position: relative;
 }
+
+.activity-picture {
+    max-width: 400px;
+    max-height: 250px;
+    margin-top: 10px;
+    float: right;
+}

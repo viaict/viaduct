@@ -39,6 +39,7 @@ flask-wtf==0.14.2
 flask==0.12.2
 fuzzywuzzy==0.15.1
 google-api-python-client==1.6.4
+hashfs==0.7.0
 httplib2==0.10.3          # via google-api-python-client, oauth2client
 idna==2.6                 # via cryptography, requests
 inflection==0.3.1         # via connexion
@@ -79,6 +80,7 @@ reportlab==3.4.0
 requests-oauthlib==0.8.0  # via flask-oauthlib
 requests==2.18.4
 rsa==3.4.2                # via oauth2client
+scandir==1.7              # via hashfs
 six==1.11.0               # via connexion, cryptography, flask-cors, google-api-python-client, oauth2client, packaging, pydocstyle, pyopenssl, python-dateutil, swagger-spec-validator
 snowballstemmer==1.2.1    # via pydocstyle
 speaklater==1.3

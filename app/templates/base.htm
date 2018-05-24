@@ -41,6 +41,12 @@
         <link href="{{static_url("/static/css/custom.css")}}" rel="stylesheet" />
         <link href="{{static_url("/static/css/navigation.css")}}" rel="stylesheet" />
 
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-PKHM7J9');</script>
+
         <script src="https://cdn.ravenjs.com/3.20.0/raven.min.js" crossorigin="anonymous"></script>
 
         {% if data %}
@@ -74,6 +80,9 @@
         {%- endif -%}
         {% block below_menu %}
         {% endblock %}
+
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PKHM7J9"
+                          height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         <div class="container">
             {%- if not __fullscreen_mode -%}

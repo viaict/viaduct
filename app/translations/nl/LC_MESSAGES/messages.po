@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2018-01-16 00:14+0100\n"
+"POT-Creation-Date: 2018-03-10 12:09+0100\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language: nl\n"
@@ -869,6 +869,9 @@ msgstr "Uitloggen"
 msgid "Logo"
 msgstr "Logo"
 
+msgid "Looking for new members"
+msgstr "Op zoek naar nieuwe leden"
+
 msgid "Mailing list"
 msgstr "Mailinglijst"
 
@@ -1233,6 +1236,9 @@ msgstr "Verzend"
 msgid "Send an e-mail to the"
 msgstr "Verstuur een e-mail naar de"
 
+msgid "Send an email"
+msgstr "Stuur een mail"
+
 msgid "Send form"
 msgstr "Verstuur formulier"
 
@@ -1554,6 +1560,9 @@ msgstr "Geldig lidmaatschap is vereist om dit nieuwsartikel te kunnen lezen"
 msgid "Vancancies"
 msgstr "Vacatures"
 
+msgid "Version"
+msgstr "Versie"
+
 msgid "Versions"
 msgstr "Versies"
 
@@ -1601,6 +1610,9 @@ msgstr "Wie"
 
 msgid "Workload"
 msgstr "Werklast"
+
+msgid "Would you like to join this committee?"
+msgstr "Wil je bij de commissie?"
 
 msgid "Would you like to recieve information from companies?"
 msgstr "Wil je informatie van bedrijven ontvangen?"
@@ -1733,6 +1745,9 @@ msgstr "vereist"
 
 msgid "still"
 msgstr "nog"
+
+msgid "to"
+msgstr "naar"
 
 msgid ""
 "via, short for 'Vereniging Informatiewetenschappen Amsterdam' (Dutch), is"
@@ -2143,3 +2158,5 @@ msgstr ""
 #~ msgid "Ability to create activities"
 #~ msgstr ""
 
+#~ msgid "Would you like to join this committee"
+#~ msgstr "Wil je bij de commissie"

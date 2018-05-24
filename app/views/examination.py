@@ -1,5 +1,3 @@
-import os
-
 from flask import Blueprint
 from flask import flash, session, redirect, render_template, request, url_for
 from flask import abort
@@ -12,39 +10,36 @@ from app.decorators import require_role, require_membership
 from app.forms.examination import EditForm
 from app.models.examination import test_types
 from app.roles import Roles
-from app.service import role_service, examination_service
-from app.utils.file import file_upload, file_remove
+from app.service import role_service, examination_service, file_service
+from app.enums import FileCategory
 
 blueprint = Blueprint('examination', __name__, url_prefix='/examination')
 
 UPLOAD_FOLDER = app.config['EXAMINATION_UPLOAD_FOLDER']
 
-REDIR_PAGES = {'view': 'examination.view_examination',
-               'add': 'examination.add',
-               'courses': 'course.view_courses'
-               }
 
-
-DATE_FORMAT = app.config['DATE_FORMAT']
-
-
-@blueprint.route('/preview/<int:exam_id>/<string:doc_type>/',
-                 methods=['GET', 'POST'])
+@blueprint.route('/view/<int:exam_id>/<any(exam,answers):doc_type>/',
+                 methods=['GET'])
 @require_membership
-def preview(exam_id, doc_type):
+def view(exam_id, doc_type):
     exam = examination_service.get_examination_by_id(exam_id)
-    path = '/static/uploads/examinations/'
 
-    if doc_type == 'exam' and exam.path:
-        return render_template('examination/preview.htm',
-                               path=path + exam.path)
-    elif doc_type == 'answers' and exam.answer_path:
-        return render_template('examination/preview.htm',
-                               path=path + exam.answer_path)
-    return abort(404)
+    if doc_type == 'exam':
+        _file = exam.examination_file
+        fn = exam.examination_filename
+    elif doc_type == 'answers' and exam.answers_file is not None:
+        _file = exam.answers_file
+        fn = exam.answers_filename
+    else:
+        return abort(404)
+
+    content = file_service.get_file_content(_file)
+    headers = file_service.get_file_content_headers(_file, display_name=fn)
+
+    return content, headers
 
 
-@blueprint.route('/examination/add/', methods=['GET', 'POST'])
+@blueprint.route('/add/', methods=['GET', 'POST'])
 @require_membership
 @require_role(Roles.EXAMINATION_WRITE)
 def add():
@@ -58,31 +53,25 @@ def add():
     form.test_type.choices = test_types.items()
 
     if form.validate_on_submit():
-        answer_filename = None
-        exam_filename = None
         error = False
 
-        exam_file = request.files.get('examination', None)
-        answer_file = request.files.get('answers', None)
+        exam_file_data = request.files.get('examination', None)
+        answer_file_data = request.files.get('answers', None)
 
         # Exam file is required
-        if exam_file:
-            exam_path = file_upload(exam_file, UPLOAD_FOLDER)
-            if not exam_path:
-                error = True
-            else:
-                exam_filename = exam_path.name
+        if exam_file_data is not None:
+            exam_file = file_service.add_file(FileCategory.EXAMINATION,
+                                              exam_file_data,
+                                              exam_file_data.filename)
         else:
             flash(_('No examination uploaded.'), 'danger')
             error = True
 
         # Answer file is optional
-        if answer_file:
-            answer_path = file_upload(answer_file, UPLOAD_FOLDER)
-            if not answer_path:
-                error = True
-            else:
-                answer_filename = answer_path.name
+        if answer_file_data is not None:
+            answers_file = file_service.add_file(FileCategory.EXAMINATION,
+                                                 answer_file_data,
+                                                 answer_file_data.filename)
         else:
             flash(_('No answers uploaded.'), 'warning')
 
@@ -93,15 +82,14 @@ def add():
                                    form=form,
                                    test_types=test_types, new_exam=True)
         else:
-            exam = examination_service.\
-                add_examination(exam_filename, form.date.data,
-                                form.comment.data, form.course.data,
-                                form.education.data, answer_filename,
-                                form.test_type.data)
+            examination_service.add_examination(
+                exam_file, form.date.data,
+                form.comment.data, form.course.data,
+                form.education.data, form.test_type.data,
+                answers_file)
 
             flash(_('Examination successfully uploaded.'), 'success')
-            return redirect(url_for('examination.preview',
-                                    exam_id=exam.id, doc_type='exam'))
+            return redirect(url_for('examination.view_examination'))
 
     return render_template('examination/edit.htm',
                            courses=courses,
@@ -127,40 +115,47 @@ def edit(exam_id):
     form.test_type.choices = test_types.items()
 
     if form.validate_on_submit():
-        file = request.files['examination']
-        answers = request.files['answers']
+        exam_file_data = request.files.get('examination', None)
+        answer_file_data = request.files.get('answers', None)
+
+        old_examination_file = None
+        old_answers_file = None
+
+        if exam_file_data is not None:
+            exam_file = file_service.add_file(FileCategory.EXAMINATION,
+                                              exam_file_data,
+                                              exam_file_data.filename)
+            old_examination_file = exam.examination_file
+        else:
+            exam_file = exam.examination_file
+            flash(_('No examination uploaded.'), 'warning')
+
+        if answer_file_data is not None:
+            answers_file = file_service.add_file(FileCategory.EXAMINATION,
+                                                 answer_file_data,
+                                                 answer_file_data.filename)
+            old_answers_file = exam.answers_file
+        else:
+            answers_file = exam.answers_file
+            flash(_('No answers uploaded.'), 'warning')
 
         date = form.date.data
         comment = form.comment.data
         course_id = form.course.data
         education_id = form.education.data
         test_type = form.test_type.data
-        path = exam.path
-        answer_path = exam.answer_path
 
-        if file.filename:
-            if exam.path:
-                file_remove(exam.path, UPLOAD_FOLDER)
-            new_path = file_upload(file, UPLOAD_FOLDER)
-            if new_path:
-                path = new_path.name
-            else:
-                flash(_('Wrong format examination or error ' +
-                        'uploading the file.'), 'danger')
+        examination_service.update_examination(exam_id, exam_file, date,
+                                               comment, course_id,
+                                               education_id, test_type,
+                                               answers_file)
 
-        if answers.filename:
-            if exam.answer_path:
-                file_remove(exam.answer_path, UPLOAD_FOLDER)
-            new_answer_path = file_upload(answers, UPLOAD_FOLDER)
-            if new_answer_path:
-                answer_path = new_answer_path.name
-            else:
-                flash(_('Wrong format answers or error ' +
-                        'uploading the file.'), 'danger')
+        if old_examination_file is not None:
+            file_service.delete_file(old_examination_file)
 
-        examination_service.update_examination(exam_id, path, date, comment,
-                                               course_id, education_id,
-                                               answer_path, test_type)
+        if old_answers_file is not None:
+            file_service.delete_file(old_answers_file)
+
         flash(_('Examination successfully changed.'), 'success')
 
         return redirect(url_for('examination.edit', exam_id=exam_id))
@@ -171,36 +166,35 @@ def edit(exam_id):
         form.test_type.data = exam.test_type
         form.comment.data = exam.comment
 
-    path = '/static/uploads/examinations/'
-
     return render_template('examination/edit.htm',
-                           form=form, path=path,
-                           examination=exam, title=_('Examinations'),
+                           title=_('Examinations'),
+                           form=form, examination=exam,
                            courses=courses, educations=educations,
                            new_exam=False)
+
+
+@blueprint.route('/delete/<int:exam_id>/', methods=['POST'])
+@require_role(Roles.EXAMINATION_WRITE)
+def delete(exam_id):
+    search = request.args.get('search', None)
+
+    exam = examination_service.get_examination_by_id(exam_id)
+    if exam is not None:
+        examination_service.delete_examination(exam_id)
+        file_service.delete_file(exam.examination_file)
+        if exam.answers_file is not None:
+            file_service.delete_file(exam.answers_file)
+
+        flash(_('Examination successfully deleted.'), 'success')
+    else:
+        flash(_('Examination does not exist.'), 'danger')
+
+    return redirect(url_for('.view_examination', search=search))
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
 def view_examination(page_nr=1):
-    # First check if the delete argument is set before loading
-    # the search results
-    if request.args.get('delete'):
-        exam_id = request.args.get('delete')
-        examination = examination_service.get_examination_by_id(exam_id)
-
-        if not examination:
-            flash(_('Specified examination does not exist'), 'danger')
-        else:
-            try:
-                os.remove(os.path.join(UPLOAD_FOLDER, examination.path))
-            except OSError:
-                flash(_('File does not exist, examination deleted.'), 'info')
-
-            examination_service.delete_examination(exam_id)
-            flash(_('Examination successfully deleted.'))
-
-    # After deletion, do the search.
     if request.args.get('search'):
         search = request.args.get('search')
 
@@ -238,12 +232,10 @@ def view_examination(page_nr=1):
         examinations = examination_service\
             .find_all_examinations(page_nr, 15)
 
-    path = '/static/uploads/examinations/'
-
     can_write = role_service.user_has_role(current_user,
                                            Roles.EXAMINATION_WRITE)
 
-    return render_template('examination/view.htm', path=path,
+    return render_template('examination/view.htm',
                            examinations=examinations, search=search,
                            title=_('Examinations'), test_types=test_types,
                            can_write=can_write)

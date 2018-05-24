@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-02-24 21:32+0100\n"
+"POT-Creation-Date: 2018-03-10 12:09+0100\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -858,6 +858,9 @@ msgstr ""
 msgid "Logo"
 msgstr ""
 
+msgid "Looking for new members"
+msgstr ""
+
 msgid "Mailing list"
 msgstr ""
 
@@ -1220,6 +1223,9 @@ msgstr ""
 msgid "Send an e-mail to the"
 msgstr ""
 
+msgid "Send an email"
+msgstr ""
+
 msgid "Send form"
 msgstr ""
 
@@ -1564,6 +1570,9 @@ msgstr ""
 msgid "Workload"
 msgstr ""
 
+msgid "Would you like to join this committee?"
+msgstr ""
+
 msgid "Would you like to recieve information from companies?"
 msgstr ""
 
@@ -1691,6 +1700,9 @@ msgid "required"
 msgstr ""
 
 msgid "still"
+msgstr ""
+
+msgid "to"
 msgstr ""
 
 msgid ""
@@ -2149,5 +2161,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Ability to create activities"
+#~ msgstr ""
+
+#~ msgid "Would you like to join this committee"
 #~ msgstr ""
 

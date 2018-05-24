@@ -80,18 +80,18 @@ def add_education(name):
     return education
 
 
-def add_examination(path, date, comment, course_id, education_id, answers,
-                    test_type):
+def add_examination(examination_file, date, comment,
+                    course_id, education_id, test_type,
+                    answers_file=None):
     exam = examination_repository.create_examination()
 
     exam.timestamp = datetime.datetime.utcnow()
-    exam.path = path
-    exam.path = path
+    exam.examination_file = examination_file
     exam.date = date
     exam.comment = comment
     exam.course_id = course_id
     exam.education_id = education_id
-    exam.answer_path = answers
+    exam.answers_file = answers_file
     exam.test_type = test_type
 
     examination_repository.save_examination(exam)
@@ -99,18 +99,18 @@ def add_examination(path, date, comment, course_id, education_id, answers,
     return exam
 
 
-def update_examination(exam_id, path, date, comment, course_id, education_id,
-                       answers, test_type):
+def update_examination(exam_id, examination_file, date, comment,
+                       course_id, education_id, test_type,
+                       answers_file=None):
     exam = examination_repository.find_examination_by_id(exam_id)
 
     exam.timestamp = datetime.datetime.utcnow()
-    exam.path = path
-    exam.path = path
+    exam.examination_file = examination_file
     exam.date = date
     exam.comment = comment
     exam.course_id = course_id
     exam.education_id = education_id
-    exam.answer_path = answers
+    exam.answers_file = answers_file
     exam.test_type = test_type
 
     examination_repository.save_education(exam)

@@ -30,7 +30,7 @@ def can_user_read_page(page, user):
 
     # If page has custom permission
     if page.custom_read_permission:
-        user_groups = set(group_service.get_group_for_user(user))
+        user_groups = set(group_service.get_groups_for_user(user))
         page_read_groups = set(get_read_permission_groups_by_page(page))
         if not user_groups.intersection(page_read_groups):
             return False

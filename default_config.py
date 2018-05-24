@@ -30,6 +30,8 @@ class Config:
     UPLOAD_DIR = 'app/static/files/'
     FILE_DIR = '/static/files/'
 
+    HASHFS_ROOT_DIR = 'app/uploads/'
+
     # One date format string to rule them all (use this in strftime)
     DATE_FORMAT = "%d-%m-%Y"
     TIME_FORMAT = "%H:%M"

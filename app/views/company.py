@@ -2,25 +2,23 @@ import json
 from datetime import datetime
 
 from flask import Blueprint, flash, redirect, render_template, request, \
-    url_for
+    url_for, abort
 from flask_babel import lazy_gettext as _
 from flask_login import current_user
 from sqlalchemy import or_, and_
 
-from app import app, db
+from app import db
 from app.decorators import require_role
 from app.forms.company import CompanyForm, NewCompanyForm
 from app.models.company import Company
 from app.models.contact import Contact
 from app.models.location import Location
 from app.roles import Roles
-from app.service import role_service
-from app.utils.file import file_upload
+from app.service import role_service, file_service
 from app.utils.forms import flash_form_errors
+from app.enums import FileCategory
 
 blueprint = Blueprint('company', __name__, url_prefix='/companies')
-
-FILE_FOLDER = app.config['FILE_DIR']
 
 
 @blueprint.route('/get_companies/', methods=['GET'])
@@ -48,6 +46,11 @@ def get_companies():
     company_list = []
 
     for company in companies:
+        if company.logo_file_id is not None:
+            logo_url = url_for('company.view_logo', company_id=company.id)
+        else:
+            logo_url = ""
+
         company_list.append(
             {
                 "id": company.id,
@@ -60,7 +63,7 @@ def get_companies():
                     "country": company.location.country
                 },
                 "expired": company.expired,
-                "logo": company.logo_path,
+                "logo": logo_url,
                 "view": url_for('company.view', company_id=company.id),
                 "contact": {
                     "email": company.contact.email,
@@ -100,7 +103,7 @@ def list(page=1):
             companies = companies.paginate(page, 15, False)
 
         return render_template('company/list.htm', companies=companies,
-                               search=search, path=FILE_FOLDER)
+                               search=search)
 
     if not role_service.user_has_role(current_user, Roles.VACANCY_WRITE):
         companies = Company.query\
@@ -121,8 +124,7 @@ def list(page=1):
 
     # companies = Company.query.paginate(page, 15, False)
 
-    return render_template('company/list.htm', companies=companies, search="",
-                           path=FILE_FOLDER)
+    return render_template('company/list.htm', companies=companies, search="")
 
 
 @blueprint.route('/view/<int:company_id>/', methods=['GET'])
@@ -132,7 +134,7 @@ def view(company_id=None):
     company = Company.query.get_or_404(company_id)
     can_write = role_service.user_has_role(current_user, Roles.VACANCY_WRITE)
     return render_template('company/view.htm', company=company,
-                           path=FILE_FOLDER, can_write=can_write)
+                           can_write=can_write)
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
@@ -171,9 +173,10 @@ def edit(company_id=None):
         company.contact = Contact.query.get(form.contact_id.data)
         company.website = form.website.data
         if request.files['file']:
-            logo = file_upload(request.files['file'])
-            if logo is not None:
-                company.logo_path = logo.name
+            logo = request.files['file']
+            _file = file_service.add_file(FileCategory.COMPANY_LOGO,
+                                          logo, logo.filename)
+            company.logo_file_id = _file.id
 
         db.session.add(company)
         db.session.commit()
@@ -210,7 +213,6 @@ def create(company_id=None):
     data["description"] = company.description
     data["contract_start_date"] = company.contract_start_date
     data["contract_end_date"] = company.contract_end_date
-    data["file"] = company.logo_path
     data["website"] = company.website
 
     # Select locations.
@@ -285,9 +287,10 @@ def create(company_id=None):
         company.contact = contact
         company.website = form.website.data
         if request.files['file']:
-            logo = file_upload(request.files['file'])
-            if logo is not None:
-                company.logo_path = logo.name
+            logo = request.files['file']
+            _file = file_service.add_file(FileCategory.COMPANY_LOGO,
+                                          logo, logo.filename)
+            company.logo_file = _file
 
         db.session.add(company)
         db.session.commit()
@@ -297,3 +300,20 @@ def create(company_id=None):
         flash_form_errors(form)
 
     return render_template('company/create.htm', company=company, form=form)
+
+
+@blueprint.route('/view_logo/<int:company_id>/', methods=['GET'])
+def view_logo(company_id):
+    company = Company.query.get_or_404(company_id)
+
+    if company.logo_file_id is None:
+        return abort(404)
+
+    logo_file = file_service.get_file_by_id(company.logo_file_id)
+
+    fn = 'logo_' + company.name
+
+    content = file_service.get_file_content(logo_file)
+    headers = file_service.get_file_content_headers(logo_file, display_name=fn)
+
+    return content, headers

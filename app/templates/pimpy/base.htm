@@ -1,4 +1,5 @@
 {% from "macros/flash.htm" import render_flash %}
+{% from "pimpy/api/side_menu.htm" import pimpy_side_menu %}
 
 {% extends "content.htm" %}
 
@@ -16,7 +17,7 @@
 
 {% block page %}
     <div class="row">
-        {% block sidebar %}{% endblock %}
+        {{ pimpy_side_menu(group_id, personal, type) }}
         {% block content %}{% endblock %}
     </div>
 

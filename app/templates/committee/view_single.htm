@@ -19,8 +19,10 @@
         {% if revision.group.maillist is not none %}<br />Email: <a href="mailto:{{revision.group.maillist}}@svia.nl">{{ revision.group.maillist }}@svia.nl</a>{% endif %}
         {% if revision.open_new_members %}
         <p>
-            <strong> Op zoek naar nieuwe leden! </strong> <br />
-            Wil je bij de commissie? Stuur een mailtje {% if revision.group.maillist is not none %} naar <a href="mailto:{{revision.group.maillist}}@svia.nl">{{revision.group.maillist}}@svia.nl</a> {% endif %} </p>
+            <strong>{{ _('Looking for new members') }}!</strong> <br />
+            {{ _('Would you like to join this committee?') }} {{ _('Send an email') }}
+            {% if revision.group.maillist is not none %} {{ _('to') }} <a href="mailto:{{revision.group.maillist}}@svia.nl">{{revision.group.maillist}}@svia.nl</a> {% endif %}
+        </p>
         {% endif %}
     </p>
     <hr />

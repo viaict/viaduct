@@ -52,32 +52,24 @@ class Task(db.Model, BaseEntity):
     status_meanings = [
         "Niet begonnen", "Begonnen", "Done",
         "Niet Done", "Gecheckt", "Verwijderd"]
+
+    # TODO: no view related code here
     status_colors = [
         "btn-info", "btn-warning", "btn-success",
         "btn-danger", "btn-success", "btn-inverse"]
-
-    def __init__(self, title, content, group_id, users,
-                 minute_id, line, status):
-        self.title = title
-        self.content = content
-        self.group_id = group_id
-        self.line = line
-        self.users = users
-        self.minute_id = minute_id
-        self.status = status
 
     def base32_id(self):
         return b32.encode(self.id)
 
     def get_status_string(self):
         """Return a string representing the status."""
-        if self.status >= 0 and self.status < len(self.status_meanings):
+        if 0 <= self.status < len(self.status_meanings):
             return self.status_meanings[self.status]
         return "Onbekend"
 
     def update_status(self, status):
         if current_user.member_of_group(self.group_id) \
-                and status >= 0 and status <= len(self.status_meanings):
+                and 0 <= status <= len(self.status_meanings):
             self.status = status
             return True
 
@@ -85,7 +77,7 @@ class Task(db.Model, BaseEntity):
 
     def get_status_color(self):
         """Return a string representing the status."""
-        if self.status >= 0 and self.status < len(self.status_colors):
+        if 0 <= self.status < len(self.status_colors):
             return self.status_colors[self.status]
         return "Onbekend"
 
@@ -96,6 +88,7 @@ class Task(db.Model, BaseEntity):
             statusi[i] = [Task.status_meanings[i], Task.status_colors[i], i]
         return statusi
 
+    # TODO: view code
     def get_users(self, include_break_spans=False):
         """
         Return a list of users, comma separated.
@@ -112,7 +105,7 @@ class Task(db.Model, BaseEntity):
 
         if include_break_spans:
             users = map(lambda x: "<span style='white-space: nowrap'>" +
-                        x + "</span>", users)
+                                  x + "</span>", users)
         return ", ".join(users)
 
 
@@ -130,27 +123,13 @@ class Minute(db.Model, BaseEntity):
     # the date when the meeting took place
     minute_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
 
-    def __init__(self, content, group_id, minute_date):
-        self.content = content
-        self.group_id = group_id
-        self.minute_date = minute_date
-
     def get_name(self):
         """Representable (unique) name for minute."""
         return 'minute%d' % self.id
 
-    def get_timestamp(self):
-        return self.timestamp
-
-    def get_content(self):
-        return self.content
-
     def get_content_lines(self):
         for i, line in enumerate(self.content.split('\n')):
             yield (self.id, i, line[:-1])
-
-    def get_group(self):
-        return self.group
 
     def get_minute_day(self):
         """Return the date of when the meeting took place in ryyy-mm-dd."""

@@ -29,5 +29,6 @@ class TestPDFService(unittest.TestCase):
         self.assertTrue(bytes("mailadres", "utf-8") in pdf_bytes)
         self.assertTrue(bytes("svia", "utf-8") in pdf_bytes)
 
+
 if __name__ == '__main__':
     unittest.main()
