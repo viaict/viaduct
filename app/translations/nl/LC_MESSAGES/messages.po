@@ -175,6 +175,10 @@ msgstr "Bijbaan"
 msgid "Birthdate"
 msgstr "Geboortedatum"
 
+#, python-format
+msgid "By clicking 'Register', you agree to our %(link)s."
+msgstr "Door op 'Registreer' te klikken ga je akkoord met ons %(link)s."
+
 msgid "By registering you agree with the terms above."
 msgstr ""
 "Door je aan te melden bij deze activiteit ga je akkoord met de "
@@ -1082,6 +1086,9 @@ msgstr "Vorige"
 msgid "Price"
 msgstr "Prijs"
 
+msgid "Privacy Policy"
+msgstr "Privacybeleid"
+
 msgid "Problem"
 msgstr "Probleem"
 
@@ -1594,6 +1601,10 @@ msgid ""
 "been logged in!"
 msgstr "Welkom %(name)s! Je profiel is aangemaakt en je bent ingelogd!"
 
+#, python-format
+msgid "Welcome to via, %(name)s"
+msgstr "Welkom bij via, %(name)s"
+
 msgid "Who"
 msgstr "Wie"
 
@@ -1661,6 +1672,9 @@ msgstr "Je moet ingelogd zijn om deze pagina te bekijken."
 
 msgid "You must be logged-in to register for an activity."
 msgstr "Je moet ingelogd zijn om je te registeren voor een activiteit."
+
+msgid "You need to be at least 16 years old."
+msgstr "Je moet ten minste 16 jaar oud zijn."
 
 msgid "You need to be logged in to set a permanent language."
 msgstr "Je moet ingelogd zijn om een permanente taal in te stellen."
