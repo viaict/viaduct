@@ -13,8 +13,24 @@
 {%- endif -%}
 {% endmacro %}
 
+{% macro submit_renderer() %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="well">
+            {% set link = '<a href="{}" target="_blank">{}</a>'.format(privacy_policy_url, _('Privacy Policy')) | safe %}
+            {{ _('By clicking \'Register\', you agree to our %(link)s.', link=link) }}
+        </div>
+    </div>
+</div>
+
+{{ render_submit(_('Register')) }}
+
+{% endmacro %}
+
 {% block content %}
 
-{{ render_form(form, form_name="sign_up", render_before_hook=render_before_hook) }}
+{{ render_form(form, form_name="sign_up",
+    render_before_hook=render_before_hook, submit_renderer=submit_renderer) }}
 
 {% endblock %}

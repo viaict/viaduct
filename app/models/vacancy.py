@@ -8,7 +8,7 @@ from app.models.base_model import BaseEntity
 class Vacancy(db.Model, BaseEntity):
     __tablename__ = 'vacancy'
 
-    title = db.Column(db.String(200), unique=True)
+    title = db.Column(db.String(200))
     description = db.Column(db.Text)
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)

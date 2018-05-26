@@ -86,14 +86,17 @@ def set_avatar(user_id, file_data):
 
     # Remove old avatar
     if user.avatar_file_id is not None:
-        _file = file_service.get_file_by_id(user.avatar_file_id)
+        old_file = file_service.get_file_by_id(user.avatar_file_id)
         user.avatar_file_id = None
-
-        file_service.delete_file(_file)
+    else:
+        old_file = None
 
     _file = file_service.add_file(FileCategory.USER_AVATAR,
                                   file_data, file_data.filename)
 
     user.avatar_file_id = _file.id
+
+    if old_file:
+        file_service.delete_file(old_file)
 
     user_repository.save(user)

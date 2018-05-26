@@ -21,7 +21,7 @@ from .connexion_app import ConnexionFlaskApp
 from .extensions import db, login_manager, \
     cache, toolbar, jsglue, sentry, oauth, cors
 
-version = 'v2.10.0.5'
+version = 'v2.10.0.6'
 
 app = Flask(__name__)
 app.config.from_object('config.Config')
@@ -138,6 +138,15 @@ def init_app():
         can_write_seo = role_service.user_has_role(current_user,
                                                    Roles.SEO_WRITE)
         return dict(can_write_seo=can_write_seo)
+
+    @app.context_processor
+    def inject_privacy_policy_url():
+        if get_locale() == 'nl':
+            url = app.config['PRIVACY_POLICY_URL_NL']
+        else:
+            url = app.config['PRIVACY_POLICY_URL_EN']
+
+        return dict(privacy_policy_url=url)
 
     class JSONEncoder(BaseEncoder):
         """Custom JSON encoding."""

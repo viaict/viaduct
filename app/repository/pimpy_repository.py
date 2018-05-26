@@ -54,7 +54,7 @@ def get_all_minutes_for_group(group, date_range=None):
 
 def get_all_tasks_for_user(user, date_range=None):
     query = db.session.query(TaskUserRel) \
-        .join(Task).join(User) \
+        .join(Task).join(User).join(Group) \
         .filter(TaskUserRel.user == user) \
         .filter(~Task.status.in_((PimpyTaskStatus.CHECKED.value,
                                   PimpyTaskStatus.DELETED.value)))
@@ -64,6 +64,7 @@ def get_all_tasks_for_user(user, date_range=None):
                              Task.timestamp <= date_range[1])
 
     query = query.order_by(
+        Group.name.asc(),
         User.first_name.asc(), User.last_name.asc(), Task.id.asc()
     )
 
