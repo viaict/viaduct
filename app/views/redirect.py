@@ -12,7 +12,7 @@ blueprint = Blueprint('redirect', __name__, url_prefix='/redirect')
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<int:redirect_id>/', methods=['GET', 'POST'])
-@require_role(Roles.NAVIGATION_WRITE)
+@require_role(Roles.REDIRECT_WRITE)
 def view(redirect_id=None):
     redirection = Redirect.query.get(redirect_id) if redirect_id else None
 
@@ -53,7 +53,7 @@ def view(redirect_id=None):
 
 
 @blueprint.route('/delete/<int:redirect_id>/', methods=['GET', 'POST'])
-@require_role(Roles.NAVIGATION_WRITE)
+@require_role(Roles.REDIRECT_WRITE)
 def delete(redirect_id):
     redirection = Redirect.query.get_or_404(redirect_id)
 
