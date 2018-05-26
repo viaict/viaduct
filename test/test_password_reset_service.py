@@ -3,12 +3,14 @@ from datetime import datetime, timedelta
 from unittest.mock import patch, MagicMock
 
 from app.exceptions import ResourceNotFoundException
-from app.service import password_reset_service
+from app.models.request_ticket import PasswordTicket
+from app.models.user import User
+from app.repository import password_reset_repository
+from app.service import password_reset_service, mail_service, user_service
 
-repository_mock = MagicMock()
-mail_service_mock = MagicMock()
-user_service_mock = MagicMock()
-file_mock = MagicMock()
+repository_mock = MagicMock(password_reset_repository)
+mail_service_mock = MagicMock(mail_service)
+user_service_mock = MagicMock(user_service)
 
 
 @patch.object(password_reset_service, 'password_reset_repository',
@@ -31,7 +33,7 @@ class TestPasswordResetService(unittest.TestCase):
         self.assertEqual(len(hash_), 0)
 
     def test_get_valid_ticket(self):
-        ticket = MagicMock()
+        ticket = MagicMock(spec=PasswordTicket)
         ticket.created = datetime.now() - timedelta(minutes=15)
         repository_mock.find_password_ticket_by_hash.return_value = ticket
 
@@ -43,7 +45,7 @@ class TestPasswordResetService(unittest.TestCase):
         self.assertEqual(ticket, rv)
 
     def test_get_valid_ticket_expired(self):
-        ticket = MagicMock()
+        ticket = MagicMock(spec=PasswordTicket)
         ticket.created = datetime.now() - timedelta(hours=1, minutes=1)
         repository_mock.find_password_ticket_by_hash.return_value = ticket
 
@@ -57,7 +59,7 @@ class TestPasswordResetService(unittest.TestCase):
             password_reset_service.get_valid_ticket("hash")
 
     def test_reset_password(self):
-        ticket = MagicMock()
+        ticket = MagicMock(spec=PasswordTicket)
 
         password_reset_service.reset_password(ticket, "password")
 
@@ -71,7 +73,7 @@ class TestPasswordResetService(unittest.TestCase):
         template = "email/forgot_password.html"
 
         # Setup
-        user = MagicMock()
+        user = MagicMock(spec=User)
         user.id.return_value = 1
         user.email.return_value = email
         user.name.return_value = name

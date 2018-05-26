@@ -1,4 +1,5 @@
 from sqlalchemy import event, orm
+
 from app import db, get_locale
 from app.models.base_model import BaseEntity
 
@@ -16,6 +17,8 @@ class NavigationEntry(db.Model, BaseEntity):
     external = db.Column(db.Boolean)
     activity_list = db.Column(db.Boolean)
     position = db.Column(db.Integer)
+    order_children_alphabetically = db.Column(db.Boolean(), default=False,
+                                              nullable=False)
 
     parent = db.relationship(
         'NavigationEntry', remote_side='NavigationEntry.id',
@@ -49,7 +52,10 @@ class NavigationEntry(db.Model, BaseEntity):
         set_navigation_entry_locale(self, None)
 
     def get_children(self):
-        return self.children_fast
+        if self.order_children_alphabetically:
+            return sorted(self.children_fast, key=lambda x: x.title)
+        else:
+            return self.children_fast
 
     @property
     def href(self):

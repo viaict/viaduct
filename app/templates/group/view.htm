@@ -3,61 +3,57 @@
 {% extends "content.htm" %}
 
 {%block content %}
-<form action="" method="post" name="group_view">
-	<fieldset>
-		<legend>Groepen</legend>
-
-		{{ form.csrf_token }}
-
-		<table class="table table-bordered table-striped">
-			<thead>
-				<tr>
-					<th>Groep naam</th>
-					<th></th>
-					<th></th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for group, form_entry in groups %}
-					<tr>
-						<td>
-							{{ form_entry.csrf_token }} {{ form_entry.select }} {{ group.name }}
-						</td>
-
-						<td>
-                            <a href="{{ url_for('group.view_users', group_id=group.id) }}">
-                                <i class="glyphicon glyphicon-user"></i> Bekijk leden</a>
-						</td>
-
-						<td>
-                            <a href="{{ url_for('group.roles', group_id=group.id) }}">
-                                <i class="fa fa-key"></i> Wijzig permissies</a>
-						</td>
-						<td>
-                            <a href="{{ url_for('group.edit', group_id=group.id) }}">
-                                <i class="fa fa-pencil"></i> Wijzig naam en mail</a>
-						</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-        <div class="btn-group">
-            {% if can_write %}
-            <a href="{{ url_for('group.create') }}" class="btn btn-success">
-                Creëer groep
-            </a>
-            <button
-                id="{{ form.delete_group.id }}"
-                name="{{ form.delete_group.id }}"
-                type="submit"
-                class="btn btn-danger">
-                {{ form.delete_group.label.text }}
+<form id="search-form" class="form-inline">
+    <div class="input-group">
+        <input name="search" id="search" class="form-control" type="text"
+               placeholder="{{ _('Search for group') }}" value="{{ search }}">
+        <div class="input-group-btn">
+            <button type="submit" class="btn btn-primary">
+                <i class="glyphicon glyphicon-search" id="submit"></i>
             </button>
-            {% endif %}
-            {{ render_pagination(pagination, 'group.view') }}
         </div>
-	</fieldset>
+    </div>
 </form>
+
+<legend>Groepen</legend>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Groep naam</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for group in groups %}
+            <tr>
+                <td>{{ group.name }}</td>
+                <td>
+                    <a href="{{ url_for('group.view_users', group_id=group.id) }}">
+                        <i class="glyphicon glyphicon-user"></i> Bekijk leden</a>
+                </td>
+
+                <td>
+                    <a href="{{ url_for('group.roles', group_id=group.id) }}">
+                        <i class="fa fa-key"></i> Wijzig permissies</a>
+                </td>
+                <td>
+                    <a href="{{ url_for('group.edit', group_id=group.id) }}">
+                        <i class="fa fa-pencil"></i> Wijzig naam en mail</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="btn-group">
+    {% if can_write %}
+    <a href="{{ url_for('group.create') }}" class="btn btn-success">
+        Creëer groep
+    </a>
+    {% endif %}
+    {{ render_pagination(pagination, 'group.view') }}
+</div>
 {% endblock %}
 

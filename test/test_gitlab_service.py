@@ -4,9 +4,10 @@ from unittest.mock import patch
 
 from requests import Session
 
+from app.repository import gitlab_repository as gitlab_mock_spec
 from app.service import gitlab_service
 
-gitlab_repository_mock = mock.MagicMock()
+gitlab_repository_mock = mock.MagicMock(spec=gitlab_mock_spec)
 
 
 @patch.object(gitlab_service, 'gitlab_repository', gitlab_repository_mock)

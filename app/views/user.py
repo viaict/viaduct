@@ -12,7 +12,7 @@ from flask import flash, redirect, render_template, request, url_for, abort, \
 from flask_babel import _
 from flask_login import current_user, login_user, logout_user, login_required
 
-from app import db, login_manager
+from app import db, login_manager, get_locale
 from app.decorators import require_role, response_headers
 from app.exceptions import ResourceNotFoundException, AuthorizationException, \
     ValidationException
@@ -25,7 +25,7 @@ from app.models.education import Education
 from app.models.user import User
 from app.roles import Roles
 from app.service import password_reset_service, user_service, \
-    role_service, file_service
+    role_service, mail_service, file_service
 from app.utils import copernica
 from app.utils.google import HttpError
 from app.utils.user import UserAPI
@@ -265,6 +265,15 @@ def sign_up():
 
         copernica.update_user(user, subscribe=True)
 
+        if get_locale() == 'nl':
+            mail_template = 'email/sign_up_nl.html'
+        else:
+            mail_template = 'email/sign_up_en.html'
+
+        mail_service.send_mail(
+            user.email, _('Welcome to via, %(name)s', name=user.first_name),
+            mail_template)
+
         login_user(user)
 
         flash(_('Welcome %(name)s! Your profile has been succesfully '
@@ -444,9 +453,11 @@ def view_avatar(user_id=None):
     # A user can always view his own avatar
     if current_user.id == user_id:
         can_read = True
+
     # group rights
     if role_service.user_has_role(current_user, Roles.USER_READ) \
-            or role_service.user_has_role(current_user, Roles.USER_WRITE):
+            or role_service.user_has_role(current_user, Roles.USER_WRITE) \
+            or role_service.user_has_role(current_user, Roles.ACTIVITY_WRITE):
         can_read = True
 
     if not can_read:
