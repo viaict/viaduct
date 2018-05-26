@@ -30,7 +30,7 @@ services:
     ports:
       - 8201:8080
     volumes:
-      - ./secrets/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+      - ./adminer-uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
 
   migration:
     image: dimitri/pgloader:latest

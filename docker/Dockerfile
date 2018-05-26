@@ -32,11 +32,11 @@ RUN apk del build-deps
 FROM development AS production
 
 # Copy the source into the image for production
-COPY . /app
-
+COPY src/ /app/src
 RUN mkdir -p /app/src/js/global && \
     clientjade src/jade/ > src/js/global/jade.js
 
+COPY . /app
 RUN grunt clean && grunt prod
 RUN pybabel compile -d app/translations
 RUN compass clean && compass compile
