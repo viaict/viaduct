@@ -19,12 +19,15 @@ blueprint = Blueprint('vacancy', __name__, url_prefix='/vacancies')
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
-def list(page_nr=1, search=None):
+def list(page_nr=1):
+
     # Order the vacancies in such a way that vacancies that are new
     # or almost expired, end up on top.
     order = func.abs(
         (100 * (func.datediff(Vacancy.start_date, func.current_date()) /
                 func.datediff(Vacancy.start_date, Vacancy.end_date))) - 50)
+
+    search = request.args.get('search', None)
 
     if search:
         vacancies = Vacancy.query.join(Company). \
