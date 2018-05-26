@@ -9,6 +9,6 @@ services:
     ports:
       - 5000:3031
 
-  database:
+  db:
     ports:
       - 5400:5432

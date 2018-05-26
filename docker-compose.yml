@@ -1,14 +1,44 @@
 version: "3.4"
 services:
   backend:
-    build: 
+    build:
       context: .
       dockerfile: docker/Dockerfile
     depends_on:
-      - database
+      - db
+      - migration
 
-  database:
+  db:
     image: postgres:alpine
+    volumes:
+      - db:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: viaduct
       POSTGRES_DB: viaduct
+
+  db_old:
+    image: mysql:5.5
+    volumes:
+      - db_old:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: viaduct
+      MYSQL_DATABASE: viaduct
+      MYSQL_USER: viaduct
+      MYSQL_PASSWORD: viaduct
+
+  adminer:
+    image: adminer:latest
+    ports:
+      - 8201:8080
+
+  migration:
+    image: dimitri/pgloader:latest
+    volumes:
+      - ./migrate.pgloaderfile:/migrate.pgloaderfile
+    depends_on:
+      - db
+      - db_old
+
+volumes:
+  db:
+  db_old:
