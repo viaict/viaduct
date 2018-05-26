@@ -6,7 +6,6 @@ services:
       dockerfile: docker/Dockerfile
     depends_on:
       - db
-      - migration
 
   db:
     image: postgres:alpine
@@ -30,6 +29,8 @@ services:
     image: adminer:latest
     ports:
       - 8201:8080
+    volumes:
+      - ./secrets/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
 
   migration:
     image: dimitri/pgloader:latest
@@ -38,6 +39,7 @@ services:
     depends_on:
       - db
       - db_old
+    command: pgloader /migrate.pgloaderfile
 
 volumes:
   db:

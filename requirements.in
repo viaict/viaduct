@@ -29,6 +29,7 @@ pep8-naming
 bcrypt
 pyflakes
 psycopg2
+pymysql
 python-dateutil
 python-magic
 raven

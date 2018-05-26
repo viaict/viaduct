@@ -6,4 +6,4 @@ ln -s secrets/develop.py config.py
 cat common_config.rb > config.rb
 
 python manage.py db upgrade
-uwsgi --ini viaduct-master.ini
+uwsgi --ini uwsgi.ini
