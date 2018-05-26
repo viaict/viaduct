@@ -67,9 +67,9 @@
                             <blockquote>
                                 <a href="{{ url_for('company.view', company_id=vacancy.company.id) }}">
 
-                                    {% if vacancy.company.logo_path != '#' %}
+                                    {% if vacancy.company.logo_file_id %}
                                         <img class="img-rounded" style="max-width:250px; max-height:100px;"
-                                             src="{{ path }}{{ vacancy.company.logo_path }}"></img>
+                                             src="{{ url_for('company.view_logo', company_id=vacancy.company.id) }}" />
                                     {% else %}
                                         {{ vacancy.company.name }}
                                     {% endif %}
@@ -159,7 +159,7 @@
 
                 document.location.href = Flask.url_for('vacancy.list', {
                     page_nr: 1,
-                    search: data ? data : null
+                    search: data ? data : ''
                 });
 
             });
