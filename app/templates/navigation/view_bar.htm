@@ -7,9 +7,9 @@
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
                         {% if current_user.is_anonymous %}
-                            <img class="visible-xs" src="/static/img/user.png" alt="..." id="loginImageMobile" class="img-rounded" data-target="#bs-example-navbar-collapse-2" data-toggle="collapse">
+                            <img class="visible-xs img-rounded" src="/static/img/user.png" alt="..." id="loginImageMobile" data-target="#bs-example-navbar-collapse-2" data-toggle="collapse">
                         {% else %}
-                            <img class="visible-xs" src="{{ UserAPI.avatar(current_user) }}" alt="..." id="loginImageMobile" class="img-rounded" data-target="#bs-example-navbar-collapse-2" data-toggle="collapse">
+                            <img class="visible-xs img-rounded" src="{{ UserAPI.avatar(current_user) }}" alt="..." id="loginImageMobile" data-target="#bs-example-navbar-collapse-2" data-toggle="collapse">
                         {% endif %}
                           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                             <span class="sr-only">Toggle navigation</span>
@@ -26,7 +26,7 @@
                         <ul class="nav navbar-nav">
                             {% for entry in bar_entries %}
 
-                                {% set children = entry.activities if entry.activities else entry.children_fast %}
+                                {% set children = entry.activities if entry.activities else entry.get_children() %}
                                 {% set children = NavigationAPI.remove_unauthorized(children) %}
 
                                 <li class="{% if children %}dropdown{% endif %}">
@@ -43,7 +43,7 @@
                                         "
                                         >
                                         {% for child in children %}
-                                        {% set grandChildren = child.children_fast if not entry.activities %}
+                                        {% set grandChildren = child.get_children() if not entry.activities %}
                                         {% set grandChildren = NavigationAPI.remove_unauthorized(grandChildren) %}
 
                                              <li {% if grandChildren %} class="dropdown-submenu" {% endif %}>
@@ -86,7 +86,7 @@
                             <ul class='list-unstyled' id='dropmenu-list'>
                                 <li><a href="{{ url_for('user.sign_up')}}">{{_('Register new user')}}</a></li>
                                 <li><a href="{{ url_for('user.request_password')}}">{{_('Forgot password?')}}</a></li>
-                            <ul>
+                            </ul>
                             </form>
                           </div>
                         {% else %}
