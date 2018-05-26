@@ -1285,6 +1285,9 @@ msgstr ""
 msgid "Start time"
 msgstr ""
 
+msgid "Start time must be before end time"
+msgstr ""
+
 msgid "Starting year study"
 msgstr ""
 

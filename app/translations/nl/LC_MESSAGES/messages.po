@@ -1300,6 +1300,9 @@ msgstr "Startdatum"
 msgid "Start time"
 msgstr "Starttijd"
 
+msgid "Start time must be before end time"
+msgstr "Starttijd moet voor eindtijd zijn"
+
 msgid "Starting year study"
 msgstr "Beginjaar studie"
 
