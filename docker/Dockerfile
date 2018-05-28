@@ -4,7 +4,6 @@ WORKDIR /app
 # Ruby
 RUN apk add -U ruby ruby-rdoc ruby-bundler ruby-irb
 COPY Gemfile /app
-RUN cat common_config.rb deploy_config.rb > config.rb
 RUN bundle install
 
 # Node
@@ -40,6 +39,7 @@ RUN mkdir -p /app/src/js/global && \
     clientjade src/jade/ > src/js/global/jade.js
 
 COPY . /app
+RUN cat common_config.rb deploy_config.rb > config.rb
 RUN grunt clean && grunt prod
 RUN pybabel compile -d app/translations
 RUN compass clean && compass compile
