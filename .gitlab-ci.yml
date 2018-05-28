@@ -15,12 +15,10 @@ stages:
   - test
   - release
 
-before_script:
-  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
-
 build:
   stage: build
   script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
     - docker build --pull -t $BRANCH_IMAGE -f docker/Dockerfile .
     - docker push $BRANCH_IMAGE
 
