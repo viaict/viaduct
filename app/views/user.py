@@ -273,7 +273,7 @@ def sign_up():
 
         mail_service.send_mail(
             user.email, _('Welcome to via, %(name)s', name=user.first_name),
-            mail_template)
+            mail_template, user=user)
 
         login_user(user)
 

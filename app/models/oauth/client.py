@@ -20,10 +20,10 @@ class OAuthClient(db.Model):
                               nullable=False)
 
     confidential = db.Column(db.Boolean)
+    auto_approve = db.Column(db.Boolean(), default=False, nullable=False)
 
     # TODO image, first create image upload feature.
 
-    # TODO? auto-approve tokens if managed by via (also hide from overview)
     # TODO? allowed request types?
 
     _redirect_uris = db.relationship("OAuthClientRedirect")
