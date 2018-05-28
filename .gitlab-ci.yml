@@ -1,40 +1,56 @@
 variables:
-    PIP_CACHE_DIR: "$CI_PROJECT_DIR/pip-cache"
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/pip-cache"
+  BRANCH_IMAGE: registry.gitlab.com/studieverenigingvia/viaduct:$CI_COMMIT_REF_SLUG
+  RELEASE_IMAGE: registry.gitlab.com/studieverenigingvia/viaduct:latest
+
+services:
+  - docker:dind
 
 cache:
-    paths:
+  paths:
     - "$CI_PROJECT_DIR/pip-cache"
 
 stages:
-    - test
+  - build
+  - test
+  - release
+
+build:
+  stage: build
+  script:
+    - docker build --pull -t $BRANCH_IMAGE -f docker/Dockerfile .
+    - docker push $BRANCH_IMAGE
 
 unittest:
-    image: python:3.6
-    stage: test
+  image: $BRANCH_IMAGE
+  stage: test
 
-    script:
-    - pip install -r requirements.txt
-    - cp default_config.py config.py
-    - coverage run --source=./app/service -m unittest discover -vs test/
-    - coverage report -m
-    - coverage html
-    artifacts:
-        paths:
-        - htmlcov/
-        expire_in: 1 week
+  script:
+  - coverage run --source=./app/service -m unittest discover -vs test/
+  - coverage report -m
+  - coverage html
+  artifacts:
+    paths:
+    - htmlcov/
+    expire_in: 1 week
 
 flake8:
-    image: python:3.6
-    stage: test
-    script:
-     - pip install flake8
-     - flake8 ./app
+  image: $BRANCH_IMAGE
+  stage: test
+  script:
+   - flake8 ./app
 
 miscellaneous:
-    image: python:3.6
-    stage: test
-    script:
-     - pip install -r requirements.txt
-     - cp default_config.py config.py
-     - "[ -z $(grep -R fuzzy app/translations/) ]"
-     - "[ $(python manage.py db heads 2>/dev/null | grep head | wc -l) -lt 2 ]"
+  image: $BRANCH_IMAGE
+  stage: test
+  script:
+   - "[ -z $(grep -R fuzzy app/translations/) ]"
+   - "[ $(python manage.py db heads 2>/dev/null | grep head | wc -l) -lt 2 ]"
+
+release:
+  script:
+    - docker pull $BRANCH_IMAGE
+    - docker tag $BRANCH_IMAGE $RELEASE_IMAGE
+    - docker push $RELEASE_IMAGE
+  only:
+    - master

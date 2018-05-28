@@ -7,7 +7,7 @@ COPY Gemfile /app
 RUN bundle install
 
 # Node
-RUN apk add -U nodejs yarn
+RUN apk add -U nodejs # yarn
 COPY package.json /app
 RUN npm install -g grunt-cli clientjade jshint
 RUN npm install
@@ -19,7 +19,7 @@ RUN pip install --upgrade pip pip-tools
 
 RUN apk add -U --virtual build-deps \
     python3-dev build-base linux-headers pcre-dev musl-dev \
-    postgresql-dev libffi-dev libjpeg-turbo-dev libressl-dev zlib-dev
+    postgresql-dev libffi-dev libjpeg-turbo-dev openssl-dev # libressl-dev zlib-dev
 
 RUN pip-sync && \
     pip install uwsgi && \
