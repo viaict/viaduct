@@ -3,8 +3,6 @@ variables:
   BRANCH_IMAGE: registry.gitlab.com/studieverenigingvia/viaduct:$CI_COMMIT_REF_SLUG
   RELEASE_IMAGE: registry.gitlab.com/studieverenigingvia/viaduct:latest
 
-services:
-  - docker:dind
 
 cache:
   paths:
