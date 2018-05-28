@@ -60,6 +60,13 @@ def get_approved_clients_by_user_id(user_id):
     return repository.get_approved_clients_by_user_id(user_id=user_id)
 
 
+def user_has_approved_client(user_id, client):
+    """
+    Check whether the user has already approved client.
+    """
+    return client in repository.get_approved_clients_by_user_id(user_id)
+
+
 def get_owned_clients_by_user_id(user_id):
     return repository.get_owned_clients_by_user_id(user_id=user_id)
 
