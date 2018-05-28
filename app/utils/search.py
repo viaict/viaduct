@@ -14,7 +14,8 @@ class SearchAPI:
 
     @staticmethod
     def search(stack, needle, case_insensitive=True):
-        """Generic search on specified database tables and columns.
+        """
+        Search generically on specified database tables and columns.
 
         Parameters:
         * stack is a list of (table, [columns]) tuples.

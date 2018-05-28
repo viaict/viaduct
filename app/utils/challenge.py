@@ -201,7 +201,7 @@ class ChallengeAPI:
 
     @staticmethod
     def get_challenge_description():
-        """ Get the description page for challenges """
+        """Get the description page for challenges."""
         page = page_service.get_page_by_path(
             Page.strip_path("challenge_description"))
 

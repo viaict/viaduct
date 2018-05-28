@@ -8,7 +8,8 @@ class CategoryAPI:
 
     @staticmethod
     def update_categories_from_content(content, page):
-        """ Parses the string content for categories.
+        """
+        Parse the string content for categories.
 
         The found categories in the content are processed as followed:
         * Existing categories are updated to save the path.
@@ -19,7 +20,8 @@ class CategoryAPI:
         other pages left.
 
         Categories are indicated in the text as followed:
-            [[Category:Category name]]"""
+        [[Category:Category name]]
+        """
 
         # we shall store all found categories in this list
         found_categories = []
@@ -72,7 +74,8 @@ class CategoryAPI:
 
     @staticmethod
     def get_category_instance(category_name):
-        """ Obtains a category instance from a name.
+        """
+        Obtain a category instance from a name.
 
         This is either retrieved from an existing category out of the database
         or a new instance is created from the database. No commits to the
@@ -80,7 +83,8 @@ class CategoryAPI:
 
         Returns a tuple. A boolean is stored in the first index, this boolean
         indicates if the instance is new (And should be commited to the db) or
-        not. The second index stores the instance of the category."""
+        not. The second index stores the instance of the category.
+        """
 
         category = Category.query.filter(Category.name == category_name)\
             .first()
