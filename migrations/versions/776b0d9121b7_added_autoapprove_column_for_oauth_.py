@@ -12,7 +12,7 @@ from sqlalchemy.orm import sessionmaker, relationship
 
 # revision identifiers, used by Alembic.
 revision = '776b0d9121b7'
-down_revision = 'da44c279ce0a'
+down_revision = 'c008583e8f8d'
 
 Base = declarative_base()
 db = sa
