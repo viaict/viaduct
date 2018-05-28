@@ -37,9 +37,14 @@
         <div class="row">
             <div class="col-md-8">
                 {{ client.name }}<br/>
-                <small>{{ _("Owned by: ") }} <a
-                        href="{{ url_for("user.view_single", user_id=client.user_id) }}">{{ client.user.name }}</a>
+                <small>{{ _("Owned by: ") }}
+                    {% if client.user %}
+                    <a href="{{ url_for("user.view_single", user_id=client.user_id) }}">{{ client.user.name }}</a>
+                    {% else %}
+                        <strong>via</strong>
+                    {% endif %}
                 </small>
+
             </div>
             <div class="col-md-4">
                 {{ render_post_btn(url_for("oauth.revoke_client_token", client_id=client.client_id),
