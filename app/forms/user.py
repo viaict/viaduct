@@ -78,6 +78,9 @@ class SignUpForm(BaseUserForm, ResetPasswordForm):
     def validate_birth_date(self, field):
         sixteen_years_ago = datetime.now().date() - relativedelta(years=16)
 
+        if field.data is None:
+            return
+
         if field.data > sixteen_years_ago:
             raise ValidationError(_('You need to be at least 16 years old.'))
 

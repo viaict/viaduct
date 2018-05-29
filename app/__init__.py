@@ -21,7 +21,7 @@ from .connexion_app import ConnexionFlaskApp
 from .extensions import db, login_manager, \
     cache, toolbar, jsglue, sentry, oauth, cors
 
-version = 'v2.10.0.7'
+version = 'v2.10.0.8'
 
 app = Flask(__name__)
 app.config.from_object('config.Config')
