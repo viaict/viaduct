@@ -30,12 +30,12 @@ services:
     ports:
       - 8201:8080
     volumes:
-      - ./adminer-uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+      - ./docker/adminer-uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
 
   migration:
     image: dimitri/pgloader:latest
     volumes:
-      - ./migrate.pgloaderfile:/migrate.pgloaderfile
+      - ./docker/migrate.pgloaderfile:/migrate.pgloaderfile
     depends_on:
       - db
       - db_old

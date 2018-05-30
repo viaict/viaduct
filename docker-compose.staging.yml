@@ -1,7 +1,0 @@
-version: "3.4"
-services:
-  backend:
-    image: registry.gitlab.com/studieverenigingvia/viaduct:develop
-    ports:
-      - 4001:3031
-    command: sh docker/entrypoint.staging.sh
