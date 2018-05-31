@@ -1,0 +1,14 @@
+version: "3.4"
+services:
+  backend:
+    build:
+      target: development
+    command: sh /app/docker/entrypoint.development.sh
+    volumes:
+      - .:/app
+    ports:
+      - 5000:3031
+
+  db:
+    ports:
+      - 5400:5432

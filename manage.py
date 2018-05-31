@@ -301,7 +301,7 @@ def createdb():
             break
         print("\tPasswords do not match")
 
-    passwd = bcrypt.hashpw(passwd_plain, bcrypt.gensalt())
+    passwd = bcrypt.hashpw(passwd_plain.encode('utf-8'), bcrypt.gensalt())
     admin = User(
         first_name=first_name,
         last_name=last_name,

@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, \
     flash
 from flask_babel import lazy_gettext as _
 from flask_login import current_user
-from sqlalchemy import or_, and_, func
+from sqlalchemy import or_, and_
 
 from app import db
 from app.decorators import require_role
@@ -21,12 +21,6 @@ blueprint = Blueprint('vacancy', __name__, url_prefix='/vacancies')
 @blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
 def list(page_nr=1):
 
-    # Order the vacancies in such a way that vacancies that are new
-    # or almost expired, end up on top.
-    order = func.abs(
-        (100 * (func.datediff(Vacancy.start_date, func.current_date()) /
-                func.datediff(Vacancy.start_date, Vacancy.end_date))) - 50)
-
     search = request.args.get('search', None)
 
     if search:
@@ -34,8 +28,8 @@ def list(page_nr=1):
             filter(or_(Vacancy.title.like('%' + search + '%'),
                        Company.name.like('%' + search + '%'),
                        Vacancy.workload.like('%' + search + '%'),
-                       Vacancy.contract_of_service.like('%' + search + '%'))) \
-            .order_by(order.desc())
+                       Vacancy.contract_of_service.like(
+                           '%' + search + '%')))
 
         if not role_service.user_has_role(current_user, Roles.VACANCY_WRITE):
             vacancies = vacancies.filter(
@@ -53,12 +47,14 @@ def list(page_nr=1):
                                can_write=can_write)
 
     if role_service.user_has_role(current_user, Roles.VACANCY_WRITE):
-        vacancies = Vacancy.query.join(Company).order_by(order.desc())
+        vacancies = Vacancy.query.join(Company)\
+                                 .order_by(Vacancy.start_date.desc())
     else:
-        vacancies = Vacancy.query.order_by(order.desc()) \
-            .filter(and_(Vacancy.start_date <
-                         datetime.utcnow(), Vacancy.end_date >
-                         datetime.utcnow()))
+        res = Vacancy.query.filter(and_(Vacancy.start_date <
+                                        datetime.utcnow(), Vacancy.end_date >
+                                        datetime.utcnow()))
+
+    res = _order_vacancies(res)
 
     vacancies = vacancies.paginate(page_nr, 15, False)
     can_write = role_service.user_has_role(current_user, Roles.VACANCY_WRITE)
@@ -66,6 +62,18 @@ def list(page_nr=1):
     return render_template('vacancy/list.htm', vacancies=vacancies,
                            search="", title="Vacatures",
                            can_write=can_write)
+
+
+def _order_vacancies(vacancies):
+    # Order the vacancies in such a way that vacancies that are new
+    # or almost expired, end up on top.
+    def key(vacancy):
+        old = (vacancy.start_date - datetime.now().date()).days
+        new = (vacancy.start_date - vacancy.end_date).days
+
+        return abs((100 * (old / min(1, 1 if new == 0 else new)) - 50))
+
+    return sorted(vacancies, key=key, reverse=True)
 
 
 @blueprint.route('/create/', methods=['GET', 'POST'])
