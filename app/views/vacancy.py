@@ -6,7 +6,7 @@ from flask_babel import lazy_gettext as _
 from flask_login import current_user
 from sqlalchemy import or_, and_, func
 
-from app import app, db
+from app import db
 from app.decorators import require_role
 from app.forms.vacancy import VacancyForm
 from app.models.company import Company
@@ -15,20 +15,21 @@ from app.roles import Roles
 from app.service import role_service
 
 blueprint = Blueprint('vacancy', __name__, url_prefix='/vacancies')
-FILE_FOLDER = app.config['FILE_DIR']
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/<int:page_nr>/', methods=['GET', 'POST'])
-@blueprint.route('/<int:page_nr>/<search>/', methods=['GET', 'POST'])
-def list(page_nr=1, search=None):
+def list(page_nr=1):
+
     # Order the vacancies in such a way that vacancies that are new
     # or almost expired, end up on top.
     order = func.abs(
         (100 * (func.datediff(Vacancy.start_date, func.current_date()) /
                 func.datediff(Vacancy.start_date, Vacancy.end_date))) - 50)
 
-    if search is not None:
+    search = request.args.get('search', None)
+
+    if search:
         vacancies = Vacancy.query.join(Company). \
             filter(or_(Vacancy.title.like('%' + search + '%'),
                        Company.name.like('%' + search + '%'),
@@ -48,8 +49,7 @@ def list(page_nr=1, search=None):
                                                Roles.VACANCY_WRITE)
 
         return render_template('vacancy/list.htm', vacancies=vacancies,
-                               search=search, path=FILE_FOLDER,
-                               title="Vacatures",
+                               search=search, title="Vacatures",
                                can_write=can_write)
 
     if role_service.user_has_role(current_user, Roles.VACANCY_WRITE):
@@ -64,7 +64,7 @@ def list(page_nr=1, search=None):
     can_write = role_service.user_has_role(current_user, Roles.VACANCY_WRITE)
 
     return render_template('vacancy/list.htm', vacancies=vacancies,
-                           search="", path=FILE_FOLDER, title="Vacatures",
+                           search="", title="Vacatures",
                            can_write=can_write)
 
 

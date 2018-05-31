@@ -5,20 +5,22 @@ from wtforms import StringField, SelectField, TextAreaField, DateTimeField
 from wtforms.validators import InputRequired
 
 from app.forms.fields import CustomFormSelectField, EmailField
-from app.forms.util import FieldTabGroup, FieldTab, FieldVerticalSplit
+from app.forms.util import FieldVerticalSplit
 
 
 class CreateForm(FlaskForm):
     form_id = CustomFormSelectField(_('Form'))
-    nl_name = StringField(_('Dutch name'))
-    nl_description = TextAreaField(_('Dutch description'))
-    en_name = StringField(_('English name'))
-    en_description = TextAreaField(_('English description'))
+    nl_name = StringField(_('Dutch name'),
+                          validators=[InputRequired()])
+    nl_description = TextAreaField(_('Dutch description'),
+                                   validators=[InputRequired()])
+    en_name = StringField(_('English name'),
+                          validators=[InputRequired()])
+    en_description = TextAreaField(_('English description'),
+                                   validators=[InputRequired()])
 
-    details = FieldTabGroup([
-        FieldTab(_('Dutch details'), ['nl_name', 'nl_description']),
-        FieldTab(_('English details'), ['en_name', 'en_description'])
-    ])
+    names = FieldVerticalSplit([['nl_name', 'nl_description'],
+                                ['en_name', 'en_description']])
 
     start_time = DateTimeField(
         _('Start time'), validators=[
@@ -44,27 +46,14 @@ class CreateForm(FlaskForm):
             return False
 
         # Test if either english or dutch is entered
-        result = True
-        if not (self.nl_name.data or self.en_name.data):
-            self.nl_name.errors.append(
-                _('Either Dutch or English name required'))
-            result = False
-        if not (self.nl_description.data or self.en_description.data):
-            self.nl_description.errors.append(
-                _('Either Dutch or English description required'))
-            result = False
+        if self.start_time.data >= self.end_time.data:
+            self.start_time.errors.append(
+                _("Start time must be before end time"))
+            # Append empty string to mark the field red.
+            self.end_time.errors.append('')
+            return False
 
-        # XOR the results to test if both of a language was given
-        if bool(self.nl_name.data) != bool(self.nl_description.data):
-            self.nl_name.errors.append(
-                _('Dutch name requires Dutch description and vice versa'))
-            result = False
-        if bool(self.en_name.data) != bool(self.en_description.data):
-            self.en_name.errors.append(
-                _('English name requires English description and vice versa'))
-            result = False
-
-        return result
+        return True
 
 
 class ActivityForm(FlaskForm):

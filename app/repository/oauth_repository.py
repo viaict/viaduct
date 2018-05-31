@@ -90,7 +90,7 @@ def get_approved_clients_by_user_id(user_id):
 def get_owned_clients_by_user_id(user_id):
     return db.session.query(OAuthClient) \
         .order_by(OAuthClient.name) \
-        .filter_by(user_id=user_id).all()
+        .filter_by(user_id=user_id, auto_approve=False).all()
 
 
 def delete_user_tokens_by_client_id(user_id, client_id):

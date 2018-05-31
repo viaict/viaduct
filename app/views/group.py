@@ -1,6 +1,5 @@
 # coding: utf-8
 import json
-
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask import jsonify
 from flask_babel import _
@@ -8,8 +7,7 @@ from flask_login import current_user
 
 from app import db
 from app.decorators import require_role
-from app.forms.group import (ViewGroupForm, CreateGroupForm, EditGroupForm,
-                             GroupRolesForm)
+from app.forms.group import CreateGroupForm, EditGroupForm, GroupRolesForm
 from app.models.group import Group
 from app.models.user import User
 from app.roles import Roles
@@ -23,44 +21,23 @@ blueprint = Blueprint('group', __name__)
 @blueprint.route('/groups/<int:page_nr>/', methods=['GET', 'POST'])
 @require_role(Roles.GROUP_READ)
 def view(page_nr=1):
-    form = ViewGroupForm(request.form)
-    pagination = Group.query.order_by(Group.name).paginate(page_nr, 15, False)
+    search = request.args.get('search')
 
-    if form.validate_on_submit():
-        if form.delete_group.data:
-            if role_service.user_has_role(current_user, Roles.GROUP_WRITE):
-                group_ids = []
-
-                for group, form_entry in zip(pagination.items, form.entries):
-                    if form_entry.select.data:
-                        group_ids.append(group.id)
-
-                groups = Group.query.filter(Group.id.in_(group_ids)).all()
-
-                for group in groups:
-                    db.session.delete(group)
-
-                db.session.commit()
-
-                if len(groups) > 1:
-                    flash('The selected groups have been deleted.', 'success')
-                else:
-                    flash('The selected group has been deleted.', 'success')
-
-                return redirect(url_for('group.view'))
-            else:
-                flash('This incident has been reported to our authorities.',
-                      'warning')
+    if search:
+        pagination = Group.query \
+            .filter(Group.name.like('%{}%'.format(search))) \
+            .order_by(Group.name)\
+            .paginate(page_nr, 15, False)
     else:
-        for group in pagination.items:
-            form.entries.append_entry()
+        pagination = Group.query.order_by(Group.name) \
+            .paginate(page_nr, 15, False)
 
     can_write = role_service.user_has_role(current_user, Roles.GROUP_WRITE)
 
-    return render_template('group/view.htm', form=form, pagination=pagination,
-                           groups=zip(pagination.items, form.entries),
+    return render_template('group/view.htm', pagination=pagination,
+                           groups=pagination.items,
                            current_user=current_user, title='Groups',
-                           can_write=can_write)
+                           can_write=can_write, search=search)
 
 
 @blueprint.route('/groups/create/', methods=['GET', 'POST'])

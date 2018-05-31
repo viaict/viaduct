@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-03-10 12:09+0100\n"
+"POT-Creation-Date: 2018-05-07 23:20+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -20,10 +20,6 @@ msgstr ""
 
 #, python-format
 msgid "%(email)s is unknown to our system."
-msgstr ""
-
-#, python-format
-msgid "%s is not an allowed file type."
 msgstr ""
 
 msgid "A user with this e-mail address already exist."
@@ -114,12 +110,6 @@ msgstr ""
 msgid "An email has been sent to %(email)s with further instructions."
 msgstr ""
 
-msgid "An error occurred while uploading "
-msgstr ""
-
-msgid "An error occurred while uploading the file"
-msgstr ""
-
 msgid "Answers"
 msgstr ""
 
@@ -184,16 +174,43 @@ msgstr ""
 msgid "Cannot find parent navigation entry."
 msgstr ""
 
-msgid "Cannot remove file, it does not exist"
-msgstr ""
-
 msgid "Captain's log succesfully ended."
 msgstr "."
 
 msgid "Chairman"
 msgstr ""
 
+msgid "Change SEO properties"
+msgstr ""
+
+msgid "Change challenges"
+msgstr ""
+
+msgid "Change election properties"
+msgstr ""
+
+msgid "Change group members"
+msgstr ""
+
+msgid "Change group permissions"
+msgstr ""
+
 msgid "Change password"
+msgstr ""
+
+msgid "Change the examinations"
+msgstr ""
+
+msgid "Change the navigation"
+msgstr ""
+
+msgid "Change the redirects"
+msgstr ""
+
+msgid "Change user properties"
+msgstr ""
+
+msgid "Change vacancies"
 msgstr ""
 
 msgid "City"
@@ -287,6 +304,9 @@ msgstr ""
 msgid "Contact person saved."
 msgstr ""
 
+msgid "Content"
+msgstr ""
+
 msgid "Contest does not exist."
 msgstr ""
 
@@ -308,34 +328,26 @@ msgstr ""
 msgid "Correct"
 msgstr ""
 
-msgid "Could not find DONE task: "
-msgstr ""
-
-msgid "Could not find REMOVE task: "
-msgstr ""
-
 msgid "Country"
 msgstr ""
 
 msgid "Course"
 msgstr ""
 
-msgid "Course could not be found."
+#, python-format
+msgid "Course '%s' already in database."
 msgstr ""
 
 msgid "Course overview"
 msgstr ""
 
-msgid "Course still has examinations in the database."
+msgid "Course successfully added."
 msgstr ""
 
-msgid "Course succesfully added."
+msgid "Course successfully deleted."
 msgstr ""
 
-msgid "Course succesfully deleted."
-msgstr ""
-
-msgid "Course succesfully saved."
+msgid "Course successfully saved."
 msgstr ""
 
 msgid "Courses"
@@ -345,6 +357,12 @@ msgid "Coördinator"
 msgstr ""
 
 msgid "Create"
+msgstr ""
+
+msgid "Create ALVs"
+msgstr ""
+
+msgid "Create activities"
 msgstr ""
 
 msgid "Create activity"
@@ -359,10 +377,16 @@ msgstr ""
 msgid "Create group"
 msgstr ""
 
+msgid "Create news articles"
+msgstr ""
+
 msgid "Create news item"
 msgstr ""
 
 msgid "Create newsletter"
+msgstr ""
+
+msgid "Create pages"
 msgstr ""
 
 msgid "Create user"
@@ -381,9 +405,6 @@ msgid "Current avatar"
 msgstr ""
 
 msgid "Custom URL"
-msgstr ""
-
-msgid "DOMjudge administrator"
 msgstr ""
 
 msgid "Date"
@@ -429,6 +450,9 @@ msgid "Disabled"
 msgstr ""
 
 msgid "Disclaimer"
+msgstr ""
+
+msgid "Display administrative buttons to DOMjudge"
 msgstr ""
 
 msgid "Display name of the client"
@@ -494,19 +518,7 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-msgid "Edit ALVs"
-msgstr ""
-
 msgid "Edit GA"
-msgstr ""
-
-msgid "Edit Pimpy"
-msgstr ""
-
-msgid "Edit activities"
-msgstr ""
-
-msgid "Edit challenges"
 msgstr ""
 
 msgid "Edit course"
@@ -515,31 +527,10 @@ msgstr ""
 msgid "Edit education"
 msgstr ""
 
-msgid "Edit elections"
-msgstr ""
-
 msgid "Edit examination"
 msgstr ""
 
-msgid "Edit examinations"
-msgstr ""
-
-msgid "Edit files"
-msgstr ""
-
 msgid "Edit group"
-msgstr ""
-
-msgid "Edit group permissions"
-msgstr ""
-
-msgid "Edit groups"
-msgstr ""
-
-msgid "Edit navigation and redirect"
-msgstr ""
-
-msgid "Edit news"
 msgstr ""
 
 msgid "Edit news item"
@@ -551,40 +542,22 @@ msgstr ""
 msgid "Edit page"
 msgstr ""
 
-msgid "Edit pages"
-msgstr ""
-
-msgid "Edit search-engine optimizations"
-msgstr ""
-
-msgid "Edit user"
-msgstr ""
-
 msgid "Edit user permissions"
-msgstr ""
-
-msgid "Edit vacancy"
 msgstr ""
 
 msgid "Education"
 msgstr ""
 
-msgid "Education could not be found."
-msgstr ""
-
 msgid "Education overview"
 msgstr ""
 
-msgid "Education still has examinations in the database."
+msgid "Education successfully added."
 msgstr ""
 
-msgid "Education succesfully added."
+msgid "Education successfully deleted."
 msgstr ""
 
-msgid "Education succesfully deleted."
-msgstr ""
-
-msgid "Education succesfully saved."
+msgid "Education successfully saved."
 msgstr ""
 
 msgid "Educations"
@@ -653,10 +626,10 @@ msgstr ""
 msgid "Examination"
 msgstr ""
 
-msgid "Examination could not be found."
+msgid "Examination does not exist."
 msgstr ""
 
-msgid "Examination succesfully changed."
+msgid "Examination successfully changed."
 msgstr ""
 
 msgid "Examination successfully deleted."
@@ -689,16 +662,10 @@ msgstr ""
 msgid "File"
 msgstr ""
 
-msgid "File does not exist, examination deleted."
-msgstr ""
-
 msgid "Filename"
 msgstr ""
 
 msgid "Files"
-msgstr ""
-
-msgid "Filter groups"
 msgstr ""
 
 msgid "First name"
@@ -716,12 +683,7 @@ msgstr ""
 msgid "Form name"
 msgstr ""
 
-#, python-format
-msgid "Found invalid DONE task: %s"
-msgstr ""
-
-#, python-format
-msgid "Found invalid REMOVE task: %s"
+msgid "Found invalid lines in minutes"
 msgstr ""
 
 msgid "Fullscreen"
@@ -733,17 +695,13 @@ msgstr ""
 msgid "Group"
 msgstr ""
 
-msgid "Group permissions"
-msgstr ""
-
 msgid "Groups"
 msgstr ""
 
-msgid "Has paid"
+msgid "Groups with read permission"
 msgstr ""
 
-#, python-format
-msgid "Hey %(name)s, you're now logged in!"
+msgid "Has paid"
 msgstr ""
 
 msgid "Honorary member"
@@ -776,12 +734,6 @@ msgid "Interim coördinator"
 msgstr ""
 
 msgid "Interim-coördinator"
-msgstr ""
-
-msgid "Invalid DONE task id: "
-msgstr ""
-
-msgid "Invalid REMOVE task id: "
 msgstr ""
 
 msgid "Invalid URL."
@@ -828,6 +780,9 @@ msgstr ""
 msgid "Let the dogs out"
 msgstr ""
 
+msgid "Limit read permission to groups"
+msgstr ""
+
 msgid "Link copied"
 msgstr ""
 
@@ -867,9 +822,6 @@ msgstr ""
 msgid "Max number of attendants"
 msgstr ""
 
-msgid "Number of extra attendants"
-msgstr ""
-
 msgid "Member"
 msgstr ""
 
@@ -878,6 +830,9 @@ msgstr ""
 
 #, python-format
 msgid "Minimal password length: %(length)d"
+msgstr ""
+
+msgid "Minute content"
 msgstr ""
 
 msgid "Minutes"
@@ -1001,6 +956,12 @@ msgstr ""
 msgid "Not found!"
 msgstr ""
 
+msgid "Number of extra attendants"
+msgstr ""
+
+msgid "Number of extra attendants allowed"
+msgstr ""
+
 msgid "Open voor nieuwe leden"
 msgstr ""
 
@@ -1109,34 +1070,16 @@ msgstr ""
 msgid "Rank"
 msgstr ""
 
-msgid "Read"
-msgstr ""
-
-msgid "Read Pimpy"
-msgstr ""
-
 msgid "Read access to your Pimpy data"
 msgstr ""
 
 msgid "Read files"
 msgstr ""
 
-msgid "Read groups"
-msgstr ""
-
-msgid "Read mollie payments"
-msgstr ""
-
 msgid "Read more"
 msgstr ""
 
-msgid "Read user"
-msgstr ""
-
-msgid "Read vacancy"
-msgstr ""
-
-msgid "Read/Write"
+msgid "Read user properties"
 msgstr ""
 
 msgid "Refresh"
@@ -1167,6 +1110,9 @@ msgid "Repeat new password"
 msgstr ""
 
 msgid "Request to DOMjudge server failed"
+msgstr ""
+
+msgid "Require membership to view"
 msgstr ""
 
 msgid "Requires direct payment"
@@ -1273,9 +1219,6 @@ msgstr ""
 msgid "Source code file"
 msgstr ""
 
-msgid "Specified examination does not exist"
-msgstr ""
-
 msgid "Stage"
 msgstr ""
 
@@ -1285,7 +1228,13 @@ msgstr ""
 msgid "Start time"
 msgstr ""
 
+msgid "Start time must be before end time"
+msgstr ""
+
 msgid "Starting year study"
+msgstr ""
+
+msgid "Status"
 msgstr ""
 
 msgid "Student ID"
@@ -1480,13 +1429,16 @@ msgstr ""
 msgid "Untried"
 msgstr ""
 
-msgid "Update minutes"
-msgstr ""
-
 msgid "Upload"
 msgstr ""
 
 msgid "Upload file"
+msgstr ""
+
+msgid "Upload files"
+msgstr ""
+
+msgid "Upload minutes and tasks"
 msgstr ""
 
 msgid "Uploaded files"
@@ -1525,13 +1477,28 @@ msgstr ""
 msgid "Vancancies"
 msgstr ""
 
+msgid "Version"
+msgstr ""
+
 msgid "Versions"
 msgstr ""
 
 msgid "View"
 msgstr ""
 
+msgid "View Pimpy"
+msgstr ""
+
+msgid "View groups"
+msgstr ""
+
+msgid "View mollie transactions"
+msgstr ""
+
 msgid "View submission"
+msgstr ""
+
+msgid "View vacancy overview"
 msgstr ""
 
 msgid "Visible for members only"
@@ -1583,18 +1550,6 @@ msgid "Written by"
 msgstr ""
 
 msgid "Wrong Answer"
-msgstr ""
-
-msgid "Wrong format answers or error uploading the file."
-msgstr ""
-
-msgid "Wrong format answers."
-msgstr ""
-
-msgid "Wrong format examination or error uploading the file."
-msgstr ""
-
-msgid "Wrong format examination."
 msgstr ""
 
 msgid "Yes"
@@ -2164,5 +2119,170 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Would you like to join this committee"
+#~ msgstr ""
+
+#~ msgid "%s is not an allowed file type."
+#~ msgstr ""
+
+#~ msgid "An error occurred while uploading "
+#~ msgstr ""
+
+#~ msgid "An error occurred while uploading the file"
+#~ msgstr ""
+
+#~ msgid "Cannot remove file, it does not exist"
+#~ msgstr ""
+
+#~ msgid "Could not find DONE task: "
+#~ msgstr ""
+
+#~ msgid "Could not find REMOVE task: "
+#~ msgstr ""
+
+#~ msgid "Course could not be found."
+#~ msgstr ""
+
+#~ msgid "Course still has examinations in the database."
+#~ msgstr ""
+
+#~ msgid "Course succesfully added."
+#~ msgstr ""
+
+#~ msgid "Course succesfully deleted."
+#~ msgstr ""
+
+#~ msgid "Course succesfully saved."
+#~ msgstr ""
+
+#~ msgid "DOMjudge administrator"
+#~ msgstr ""
+
+#~ msgid "Edit ALVs"
+#~ msgstr ""
+
+#~ msgid "Edit Pimpy"
+#~ msgstr ""
+
+#~ msgid "Edit activities"
+#~ msgstr ""
+
+#~ msgid "Edit challenges"
+#~ msgstr ""
+
+#~ msgid "Edit elections"
+#~ msgstr ""
+
+#~ msgid "Edit examinations"
+#~ msgstr ""
+
+#~ msgid "Edit files"
+#~ msgstr ""
+
+#~ msgid "Edit group permissions"
+#~ msgstr ""
+
+#~ msgid "Edit groups"
+#~ msgstr ""
+
+#~ msgid "Edit navigation and redirect"
+#~ msgstr ""
+
+#~ msgid "Edit news"
+#~ msgstr ""
+
+#~ msgid "Edit pages"
+#~ msgstr ""
+
+#~ msgid "Edit search-engine optimizations"
+#~ msgstr ""
+
+#~ msgid "Edit user"
+#~ msgstr ""
+
+#~ msgid "Edit vacancy"
+#~ msgstr ""
+
+#~ msgid "Education could not be found."
+#~ msgstr ""
+
+#~ msgid "Education still has examinations in the database."
+#~ msgstr ""
+
+#~ msgid "Education succesfully added."
+#~ msgstr ""
+
+#~ msgid "Education succesfully deleted."
+#~ msgstr ""
+
+#~ msgid "Education succesfully saved."
+#~ msgstr ""
+
+#~ msgid "Examination could not be found."
+#~ msgstr ""
+
+#~ msgid "Examination succesfully changed."
+#~ msgstr ""
+
+#~ msgid "File does not exist, examination deleted."
+#~ msgstr ""
+
+#~ msgid "Filter groups"
+#~ msgstr ""
+
+#~ msgid "Found invalid DONE task: %s"
+#~ msgstr ""
+
+#~ msgid "Found invalid REMOVE task: %s"
+#~ msgstr ""
+
+#~ msgid "Group permissions"
+#~ msgstr ""
+
+#~ msgid "Hey %(name)s, you're now logged in!"
+#~ msgstr ""
+
+#~ msgid "Invalid DONE task id: "
+#~ msgstr ""
+
+#~ msgid "Invalid REMOVE task id: "
+#~ msgstr ""
+
+#~ msgid "Read"
+#~ msgstr ""
+
+#~ msgid "Read Pimpy"
+#~ msgstr ""
+
+#~ msgid "Read groups"
+#~ msgstr ""
+
+#~ msgid "Read mollie payments"
+#~ msgstr ""
+
+#~ msgid "Read user"
+#~ msgstr ""
+
+#~ msgid "Read vacancy"
+#~ msgstr ""
+
+#~ msgid "Read/Write"
+#~ msgstr ""
+
+#~ msgid "Specified examination does not exist"
+#~ msgstr ""
+
+#~ msgid "Update minutes"
+#~ msgstr ""
+
+#~ msgid "Wrong format answers or error uploading the file."
+#~ msgstr ""
+
+#~ msgid "Wrong format answers."
+#~ msgstr ""
+
+#~ msgid "Wrong format examination or error uploading the file."
+#~ msgstr ""
+
+#~ msgid "Wrong format examination."
 #~ msgstr ""
 

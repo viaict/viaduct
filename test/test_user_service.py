@@ -28,7 +28,7 @@ class TestUserService(unittest.TestCase):
         file_service_mock.reset_mock()
 
     def test_set_password(self):
-        user = MagicMock()
+        user = MagicMock(spec=User)
         password = "password"
         user_repository_mock.find_by_id.return_value = user
 
