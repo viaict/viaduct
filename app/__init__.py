@@ -19,7 +19,7 @@ from app.roles import Roles
 from app.utils.import_module import import_module
 from .connexion_app import ConnexionFlaskApp
 from .extensions import db, login_manager, \
-    cache, toolbar, jsglue, oauth, cors
+    cache, toolbar, jsglue, oauth, cors, sentry
 
 version = 'v2.10.1.0'
 
@@ -120,9 +120,9 @@ def init_app():
 
     db.init_app(app)
 
-    # if not app.debug and 'SENTRY_DSN' in app.config:
-    #     sentry.init_app(app, logging=True, level=logging.ERROR)
-    #     sentry.client.release = version
+    if not app.debug and 'SENTRY_DSN' in app.config:
+        sentry.init_app(app, logging=True, level=logging.ERROR)
+        sentry.client.release = version
 
     @app.context_processor
     def inject_urls():
