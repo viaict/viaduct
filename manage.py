@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-import os
-import platform
-import re
-import subprocess
 import sys
 import time
 
 import alembic
 import alembic.config
 import bcrypt
+import os
+import platform
+import re
 import sqlalchemy
+import subprocess
 from flask import current_app
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager, Server, prompt, prompt_pass
@@ -155,56 +155,53 @@ def jade():
 
 
 @manager.command
-def mysqlinit():
-    """Insert the viaduct user and give it rights for the viaduct db."""
-    mysql_user = prompt("User for mysql database", default="root")
-    cmd = "mysql -u %s " % mysql_user
-    sudo = prompt_bool("Use sudo", default=False)
-    if sudo:
-        cmd = "sudo " + cmd
-    password = prompt_bool("Use password", default=True)
-    if password:
-        cmd += "-p "
-    cmd += "< script/mysqlinit.sql"
-    print(cmd)
-    subprocess.call(cmd, shell=True)
-
-
-@manager.command
 def test():
     """Run all tests in the test folder."""
     subprocess.call("python -m unittest discover -vs test/", shell=True)
 
 
 def _add_group(name):
-    try:
-        db.session.add(Group(name, None))
-        db.session.commit()
-    except sqlalchemy.exc.IntegrityError:
-        db.session.rollback()
+    existing_group = Group.query.filter(Group.name == name).first()
+    if existing_group:
         print("-> Group '{}' already exists.".format(name))
+    else:
+        try:
+            db.session.add(Group(name, None))
+            db.session.commit()
+        except sqlalchemy.exc.IntegrityError:
+            db.session.rollback()
 
 
-def _add_user(user, catch_error=False, error_msg=None):
+def _add_user(user, error_msg="User already exists"):
+    existing_user = User.query.filter(User.email == user.email).first()
+    if existing_user:
+        print("-> {}.".format(error_msg))
     try:
         db.session.add(user)
         db.session.commit()
     except sqlalchemy.exc.IntegrityError:
         db.session.rollback()
-        if catch_error:
-            print("-> {}.".format(error_msg))
-        else:
-            raise
+        raise
 
 
 def _add_navigation(entries, parent=None):
+
     for pos, (nl_title, en_title, url, activities, children) \
             in enumerate(entries):
-        nav = NavigationEntry(parent, nl_title, en_title, url,
-                              False, activities, pos + 1)
-        db.session.add(nav)
-        db.session.commit()
-        _add_navigation(children, nav)
+        navigation_entry = NavigationEntry.query \
+            .filter(NavigationEntry.en_title == en_title).first()
+
+        if not navigation_entry:
+            print("-> Added {}".format(en_title))
+            navigation_entry = NavigationEntry(
+                parent, nl_title, en_title, url,
+                None, False, activities, pos + 1)
+            db.session.add(navigation_entry)
+            db.session.commit()
+        else:
+            print("-> Navigation entry {} exists".format(en_title))
+
+        _add_navigation(children, navigation_entry)
 
 
 @manager.command
@@ -250,7 +247,11 @@ def createdb():
         "Minor Informatica",
         "Minor Kunstmatige Intelligentie"]
 
-    db.session.bulk_save_objects(Education(name) for name in education_names)
+    for name in education_names:
+        if not Education.query.filter(Education.name == name).first():
+            db.session.add(Education(name=name) for name in education_names)
+        else:
+            print("-> Education {} exists".format(name))
     db.session.commit()
 
     # Add some default navigation
@@ -309,8 +310,7 @@ def createdb():
         password=passwd,
         education_id=Education.query.first().id)
     admin.has_paid = True
-    _add_user(admin, True,
-              "A user with email '{}' already exists".format(email))
+    _add_user(admin, "A user with email '{}' already exists".format(email))
 
     # Add admin user to administrators group
     admin_group = Group.query.filter_by(name='administrators').first()
@@ -321,7 +321,7 @@ def createdb():
     for role in Roles:
         group_role = GroupRole()
         group_role.group_id = admin_group.id
-        group_role.role = role
+        group_role.role = role.name
         roles.append(group_role)
 
     # Grant read/write privilege to administrators group on every module

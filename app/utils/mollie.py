@@ -12,19 +12,19 @@ from mollie.api.error import Error as MollieError
 import itertools
 import logging
 
-MollieClient = Client()
 _logger = logging.getLogger(__name__)
 
-if app.config.get('MOLLIE_TEST_MODE', False):
-    MollieClient.set_api_key(app.config['MOLLIE_TEST_KEY'])
-    _logger.info('Using MOLLIE_TEST_KEY')
-else:
+MollieClient = Client()
+
+if app.config['MOLLIE_KEY'] != '':
     MollieClient.set_api_key(app.config['MOLLIE_KEY'])
-    _logger.info('Using MOLLIE_KEY')
+    _logger.info('Using MOLLIE_KEY: %s', app.config['MOLLIE_KEY'])
+else:
+    _logger.info('Using MOLLIE_KEY: NOTSET')
 
 
 def create_transaction(amount, description, user=current_user,
-                       callbacks=[]):
+                       callbacks=list()):
     # Only create a new transaction if there is a related form result
     if not isinstance(callbacks, list):
         callbacks = [callbacks]

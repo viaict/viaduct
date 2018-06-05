@@ -14,8 +14,6 @@ import json
 
 blueprint = Blueprint('education', __name__, url_prefix='/education')
 
-UPLOAD_FOLDER = app.config['EXAMINATION_UPLOAD_FOLDER']
-
 REDIR_PAGES = {'view': 'examination.view_examination',
                'add': 'examination.add',
                'educations': 'education.view_educations',

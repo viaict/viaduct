@@ -9,7 +9,8 @@ class Transaction(db.Model, BaseEntity):
     mollie_id = db.Column(db.String(256))
     status = db.Column(
         db.Enum('open', 'cancelled', 'pending', 'expired', 'failed',
-                'paid', 'paidout', 'refunded', 'charged_back'),
+                'paid', 'paidout', 'refunded', 'charged_back',
+                name='transaction_status'),
         nullable=False)
 
     def __init__(self, status='open'):

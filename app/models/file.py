@@ -12,7 +12,8 @@ class File(db.Model, BaseEntity):
     hash = db.Column(db.String(200), nullable=False)
     extension = db.Column(db.String(20), nullable=False)
 
-    category = db.Column(db.Enum(FileCategory), nullable=False)
+    category = db.Column(db.Enum(FileCategory, name='file_category'),
+                         nullable=False)
     display_name = db.Column(db.String(200))
 
     @property
