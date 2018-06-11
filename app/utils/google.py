@@ -31,7 +31,6 @@ def build_service(service_type, api_version, scope, email):
     service_email = app.config['GOOGLE_SERVICE_EMAIL']
     private_key = app.config['GOOGLE_API_KEY']
 
-
     try:
         credentials = ServiceAccountCredentials.from_p12_keyfile(
             service_account_email=service_email,

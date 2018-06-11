@@ -27,9 +27,9 @@ class UserAPI:
             return url_for('user.view_avatar', user_id=user.id)
 
         # Set default values gravatar
-        email = user.email or ''
         default = 'identicon'
         size = 100
+        email = user.email or ''
 
         # Construct the url
         gravatar_url = 'https://www.gravatar.com/avatar/' + \

@@ -9,18 +9,20 @@ import datetime as dt
 
 
 class DOMjudgeAPI:
+    DT_FORMAT = app.config['DT_FORMAT']
+    DOMJUDGE_URL = app.config['DOMJUDGE_URL']
+
     @staticmethod
     def flash_error():
         flash(_("Request to DOMjudge server failed"), 'danger')
 
-    @staticmethod
-    def request_get(url, session=None):
-        DOMJUDGE_URL = app.config['DOMJUDGE_URL']
+    @classmethod
+    def request_get(cls, url, session=None):
 
         if not session:
             session = requests
         try:
-            r = session.get(DOMJUDGE_URL + url, timeout=(5, 5))
+            r = session.get(cls.DOMJUDGE_URL + url, timeout=(5, 5))
         except RequestException:
             DOMjudgeAPI.flash_error()
             return None
@@ -31,15 +33,14 @@ class DOMjudgeAPI:
 
         return r
 
-    @staticmethod
-    def request_post(url, data, files={},
+    @classmethod
+    def request_post(cls, url, data, files={},
                      session=None, flash_on_error=True):
-        DOMJUDGE_URL = app.config['DOMJUDGE_URL']
 
         if not session:
             session = requests.Session()
         try:
-            r = session.post(DOMJUDGE_URL + url, data=data,
+            r = session.post(cls.DOMJUDGE_URL + url, data=data,
                              files=files, timeout=(5, 5))
         except RequestException as e:
             if flash_on_error:
@@ -96,16 +97,15 @@ class DOMjudgeAPI:
             return r
         return None
 
-    @staticmethod
-    def add_team(name, member, categoryid, session):
-        DT_FORMAT = app.config['DT_FORMAT']
+    @classmethod
+    def add_team(cls, name, member, categoryid, session):
 
         form_data = {
             'data[0][name]': name,
             'data[0][members]': member,
             'data[0][categoryid]': categoryid,
             'data[0][comments]': 'Created by Viaduct on {}'.format(
-                dt.datetime.now().strftime(DT_FORMAT)),
+                dt.datetime.now().strftime(cls.DT_FORMAT)),
             'data[0][enabled]': '1',
             'table': 'team',
             'cmd': 'add'

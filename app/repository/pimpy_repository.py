@@ -1,4 +1,4 @@
-from app import app, db
+from app import db
 from app.enums import PimpyTaskStatus
 from app.exceptions import BusinessRuleException
 from app.models.group import Group
