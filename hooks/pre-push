@@ -1,0 +1,32 @@
+#!/bin/bash
+
+RESET_STYLE="\e[0m"
+YELLOW="\e[93m"
+RED="\e[91m"
+BOLD="\e[1m"
+
+while read localname localhash remotename remotehash; do
+    if [[ $localname == *"master" ]] || [[ $remotename == *"master" ]]; then
+        echo -ne $YELLOW$BOLD
+        echo "-------------------------------------------------------"
+        echo "| Warning: You are about to push to the master branch |"
+        echo "-------------------------------------------------------"
+        echo -ne $RESET_STYLE
+        echo "$localname --> $1 $remotename"
+        echo
+
+        read -p "    -> Continue? [y/N] " -r < /dev/tty
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            # Continue push
+            continue
+        fi
+
+        echo -ne $RED
+        echo "Aborting push"
+        echo -ne $RESET_STYLE
+
+        # Abort push
+        exit 1
+    fi
+done

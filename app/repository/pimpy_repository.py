@@ -5,8 +5,6 @@ from app.models.group import Group
 from app.models.pimpy import Minute, Task, TaskUserRel
 from app.models.user import User
 
-_date_format = app.config['DATE_FORMAT']
-
 
 def find_minute_by_id(minute_id):
     return db.session.query(Minute).filter(Minute.id == minute_id) \

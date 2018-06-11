@@ -7,12 +7,6 @@ import requests
 from requests.exceptions import RequestException
 import datetime as dt
 
-DOMJUDGE_URL = app.config['DOMJUDGE_URL']
-DOMJUDGE_ADMIN_USERNAME = app.config['DOMJUDGE_ADMIN_USERNAME']
-DOMJUDGE_ADMIN_PASSWORD = app.config['DOMJUDGE_ADMIN_PASSWORD']
-
-DT_FORMAT = app.config['DT_FORMAT']
-
 
 class DOMjudgeAPI:
     @staticmethod
@@ -21,6 +15,8 @@ class DOMjudgeAPI:
 
     @staticmethod
     def request_get(url, session=None):
+        DOMJUDGE_URL = app.config['DOMJUDGE_URL']
+
         if not session:
             session = requests
         try:
@@ -38,6 +34,8 @@ class DOMjudgeAPI:
     @staticmethod
     def request_post(url, data, files={},
                      session=None, flash_on_error=True):
+        DOMJUDGE_URL = app.config['DOMJUDGE_URL']
+
         if not session:
             session = requests.Session()
         try:
@@ -100,6 +98,8 @@ class DOMjudgeAPI:
 
     @staticmethod
     def add_team(name, member, categoryid, session):
+        DT_FORMAT = app.config['DT_FORMAT']
+
         form_data = {
             'data[0][name]': name,
             'data[0][members]': member,

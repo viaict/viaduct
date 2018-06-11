@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from flask_login import UserMixin, AnonymousUserMixin
 
-from app import db, app
+from app import db, constants
 from app.models.base_model import BaseEntity
 from app.models.education import Education
 from app.models.group import Group
@@ -44,7 +44,7 @@ class User(db.Model, UserMixin, BaseEntity):
     password = db.Column(db.String(60))
     first_name = db.Column(db.String(256))
     last_name = db.Column(db.String(256))
-    locale = db.Column(db.Enum(*list(app.config['LANGUAGES'].keys()),
+    locale = db.Column(db.Enum(*list(constants.LANGUAGES.keys()),
                                name='locale'),
                        default="nl")
     has_paid = db.Column(db.Boolean, default=None)

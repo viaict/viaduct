@@ -10,8 +10,8 @@ services:
       - .:/app
     ports:
       - 5000:3031
-    env_file:
-      - docker/viaduct.env
+    environment:
+      - SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://viaduct:viaduct@db/viaduct
     depends_on:
       - db
 

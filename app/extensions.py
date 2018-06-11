@@ -1,3 +1,4 @@
+from flask_babel import Babel
 from flask_caching import Cache
 from flask_cors import CORS
 from flask_debugtoolbar import DebugToolbarExtension
@@ -14,6 +15,7 @@ toolbar = DebugToolbarExtension()
 jsglue = JSGlue()
 sentry = Sentry()
 oauth = OAuth2Provider()
+babel = Babel()
 
 # Set up the database.
 constraint_naming_convention = {

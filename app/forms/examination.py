@@ -1,4 +1,4 @@
-from app import app
+from app import constants
 from flask_babel import lazy_gettext as _
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
@@ -20,7 +20,7 @@ class EducationForm(FlaskForm):
 class EditForm(FlaskForm):
     date = DateField(_('Date'),
                      validators=[Optional()],
-                     format=app.config['DATE_FORMAT'])
+                     format=constants.DATE_FORMAT)
     course = SelectField(_('Course'), coerce=int,
                          validators=[InputRequired()])
     education = SelectField(_('Education'), coerce=int,

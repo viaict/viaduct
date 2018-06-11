@@ -24,9 +24,10 @@ from app.models.education import Education
 from app.models.group import Group
 from app.models.navigation import NavigationEntry
 from app.models.role_model import GroupRole
+from app.models.setting_model import Setting
 from app.models.user import User
 
-init_app()
+init_app(query_settings=False)
 
 migrate = Migrate(app, db)
 versionbump = Manager(
@@ -168,6 +169,7 @@ def _add_group(name):
         try:
             db.session.add(Group(name, None))
             db.session.commit()
+            print(f"-> Group '{name}' added.")
         except sqlalchemy.exc.IntegrityError:
             db.session.rollback()
 
@@ -179,6 +181,7 @@ def _add_user(user, error_msg="User already exists"):
     try:
         db.session.add(user)
         db.session.commit()
+        print(f"-> Group '{user.email}' added.")
     except sqlalchemy.exc.IntegrityError:
         db.session.rollback()
         raise
@@ -249,7 +252,7 @@ def createdb():
 
     for name in education_names:
         if not Education.query.filter(Education.name == name).first():
-            db.session.add(Education(name=name) for name in education_names)
+            db.session.add(Education(name=name))
         else:
             print("-> Education {} exists".format(name))
     db.session.commit()
@@ -326,6 +329,44 @@ def createdb():
 
     # Grant read/write privilege to administrators group on every module
     db.session.bulk_save_objects(roles)
+    db.session.commit()
+
+    print("* Adding default settings")
+
+    settings = {'SECRET_KEY': 'localsecret',
+                "CSRF_ENABLED": "True",
+                "CSRF_SESSION_KEY": "localsession",
+                "RECAPTCHA_PUBLIC_KEY": "",
+                "RECAPTCHA_PRIVATE_KEY": "",
+                "GOOGLE_SERVICE_EMAIL": "test@developer.gserviceaccount.com",
+                "GOOGLE_CALENDAR_ID": "",
+                "ELECTIONS_NOMINATE_START": "2014-12-12",
+                "ELECTIONS_VOTE_START": "2015-01-05",
+                "ELECTIONS_VOTE_END": "2015-01-16",
+                "GITLAB_TOKEN": "",
+                "MOLLIE_URL": "https://api.mollie.nl/v1/payments/",
+                "MOLLIE_KEY": "",
+                "MOLLIE_REDIRECT_URL": "http://localhost",
+                "COPERNICA_ENABLED": "False",
+                "COPERNICA_API_KEY": "",
+                "COPERNICA_DATABASE_ID": "",
+                "COPERNICA_ACTIEPUNTEN": "",
+                "COPERNICA_ACTIVITEITEN": "",
+                "COPERNICA_NEWSLETTER_TOKEN": "",
+                "DOMJUDGE_ADMIN_USERNAME": "viaduct",
+                "DOMJUDGE_ADMIN_PASSWORD": "",
+                "DOMJUDGE_URL": "",
+                "DOMJUDGE_USER_PASSWORD": "",
+                "ENVIRONMENT": "Development",
+                "PRIVACY_POLICY_URL_EN": "/static/via_privacy_policy_nl.pdf",
+                "PRIVACY_POLICY_URL_NL": "/static/via_privacy_policy_en.pdf"}
+    for key, value in settings.items():
+        if Setting.query.filter(Setting.key == key).count() > 1:
+            print(f"-> {key} already exists")
+        else:
+            db.session.add(Setting(key=key, value=value))
+            print(f"-> {key} added to database.")
+
     db.session.commit()
 
     print("Done!")

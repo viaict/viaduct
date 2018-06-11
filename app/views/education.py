@@ -3,7 +3,7 @@ from flask import flash, session, redirect, render_template, request, \
     url_for
 from flask_babel import _
 
-from app import app
+from app import constants
 from app.forms.examination import EducationForm
 from app.exceptions import BusinessRuleException, DuplicateResourceException
 from app.roles import Roles
@@ -20,7 +20,7 @@ REDIR_PAGES = {'view': 'examination.view_examination',
                'courses': 'course.view_courses'
                }
 
-DATE_FORMAT = app.config['DATE_FORMAT']
+DATE_FORMAT = constants.DATE_FORMAT
 
 
 @blueprint.route('/', methods=['GET'])
