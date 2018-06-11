@@ -1004,6 +1004,9 @@ msgstr ""
 msgid "Phone"
 msgstr ""
 
+msgid "Please agree with our Privacy Policy."
+msgstr ""
+
 msgid "Please fill in"
 msgstr ""
 
@@ -1553,6 +1556,10 @@ msgid "Wrong Answer"
 msgstr ""
 
 msgid "Yes"
+msgstr ""
+
+#, python-format
+msgid "Yes, I agree to the %(link)s."
 msgstr ""
 
 msgid "Yes, I have finished studying"

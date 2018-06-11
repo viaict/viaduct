@@ -41,10 +41,11 @@ class BaseUserForm(FlaskForm):
     receive_information = BooleanField(_('Would you like to recieve '
                                          'information from companies?'))
 
-    address = StringField(_('Address'))
-    zip = StringField(_('Zip code'))
-    city = StringField(_('City'))
-    country = StringField(_('Country'), default='Nederland')
+    address = StringField(_('Address'), validators=[InputRequired()])
+    zip = StringField(_('Zip code'), validators=[InputRequired()])
+    city = StringField(_('City'), validators=[InputRequired()])
+    country = StringField(_('Country'), default='Nederland',
+                          validators=[InputRequired()])
 
     # Dates
     birth_date = DateField(_('Birthdate'), validators=[InputRequired()])
@@ -65,6 +66,8 @@ class SignUpForm(BaseUserForm, ResetPasswordForm):
         InputRequired()])
     recaptcha = RecaptchaField(
         validators=[Recaptcha(message='Check Recaptcha')])
+    agree_with_privacy_policy = BooleanField(validators=[
+        InputRequired(_('Please agree with our Privacy Policy.'))])
 
     register_split = FieldVerticalSplit([
         ['first_name', 'last_name', 'birth_date', 'address', 'zip', 'city',
@@ -73,7 +76,8 @@ class SignUpForm(BaseUserForm, ResetPasswordForm):
          'study_start', 'receive_information']
     ], large_spacing=True)
 
-    _RenderIgnoreFields = ['locale', 'phone_nr', 'avatar']
+    _RenderIgnoreFields = ['locale', 'phone_nr',
+                           'avatar', 'agree_with_privacy_policy']
 
     def validate_birth_date(self, field):
         sixteen_years_ago = datetime.now().date() - relativedelta(years=16)

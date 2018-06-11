@@ -8,10 +8,14 @@
 {% macro ignore_kwargs(_kwargs) %}
 {% endmacro %}
 
-{% macro _render_field_with_errors(field, field_input_html, show_cross=True) %}
+{% macro _render_field_with_errors(field, field_input_html,
+        show_cross=True, render_label=True) %}
     {{ ignore_kwargs(kwargs) }}
     <div class="form-group{% if field.errors %} has-error has-feedback{% endif %}">
+        {% if render_label %}
         {{ field.label }}
+        {% endif %}
+
         {%- if field.description -%}
             <small> {{ field.description }}</small>
         {%- endif -%}
@@ -68,14 +72,42 @@
     </div>
 {% endmacro %}
 
+{% macro _render_checkbox_input_html(field) %}
+    <div class="checkbox">
+        <label>
+            {{ field }}
+            {{ field.label.text }}
+        </label>
+    </div>
+{% endmacro %}
+
 {% macro render_checkbox(field) %}
     {{ ignore_kwargs(kwargs) }}
-    <div class="form-group">
-        <div class="checkbox">
-            <label>
-                {{ field }}
-                {{ field.label.text }}
-            </label>
+    {{ _render_field_with_errors(field, _render_checkbox_input_html(field),
+        render_label=False) }}
+{% endmacro %}
+
+{% macro render_checkbox_well(field, label=None) %}
+    {{ ignore_kwargs(kwargs) }}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="well{% if field.errors %} has-error has-feedback{% endif %}">
+                <label style="font-weight: unset">
+                    {{ field }}
+                    {% if label %}
+                    {{ label }}
+                    {% else %}
+                    {{ field.label.text }}
+                    {% endif %}
+                </label>
+
+                {%- if field.errors -%}
+                    {%- for error in field.errors -%}
+                        <p class="help-block">{{ error }}</p>
+                    {%- endfor -%}
+                {%- endif -%}
+            </div>
         </div>
     </div>
 {% endmacro %}

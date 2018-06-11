@@ -1017,6 +1017,9 @@ msgstr "Rechten"
 msgid "Phone"
 msgstr "Telefoonnummer"
 
+msgid "Please agree with our Privacy Policy."
+msgstr "Je moet akkoord gaan met het Privacybeleid."
+
 msgid "Please fill in"
 msgstr "Alstublieft invullen"
 
@@ -1592,6 +1595,10 @@ msgstr "Verkeerd antwoord"
 
 msgid "Yes"
 msgstr "Ja"
+
+#, python-format
+msgid "Yes, I agree to the %(link)s."
+msgstr "Ja, ik ga akkoord met het %(link)s."
 
 msgid "Yes, I have finished studying"
 msgstr "Ja, ik ben klaar met studeren"
