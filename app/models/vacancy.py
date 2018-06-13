@@ -12,8 +12,9 @@ class Vacancy(db.Model, BaseEntity):
     description = db.Column(db.Text)
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)
-    contract_of_service = db.Column(db.Enum('voltijd', 'deeltijd',
-                                            'bijbaan', 'stage'))
+    contract_of_service = db.Column(
+        db.Enum('voltijd', 'deeltijd', 'bijbaan', 'stage',
+                name='vacancy_type'))
     workload = db.Column(db.String(256))
     date = db.Column(db.DateTime)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'))

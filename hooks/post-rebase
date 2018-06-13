@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+echo "Updating Submodules"
+git submodule update
+echo "Concatenating configs..."
+cat common_config.rb local_config.rb > config.rb
+
+venv/bin/python venv/bin/pybabel compile -d app/translations

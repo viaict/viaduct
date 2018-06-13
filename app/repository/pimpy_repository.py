@@ -1,11 +1,9 @@
-from app import app, db
+from app import db
 from app.enums import PimpyTaskStatus
 from app.exceptions import BusinessRuleException
 from app.models.group import Group
 from app.models.pimpy import Minute, Task, TaskUserRel
 from app.models.user import User
-
-_date_format = app.config['DATE_FORMAT']
 
 
 def find_minute_by_id(minute_id):

@@ -13,7 +13,7 @@ info:
 
 basePath: "/api/pimpy"
 schemes:
-  - "http"
+  - "https"
 produces:
   - application/json
 consumes:

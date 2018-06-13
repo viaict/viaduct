@@ -20,7 +20,7 @@ coverage
 connexion
 flake8
 flake8-docstrings
-flake8-putty
+# flake8-putty
 alembic
 Markdown
 PyPDF2

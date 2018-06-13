@@ -13,6 +13,9 @@ See [tutorial](TUTORIAL.md).
 
 ### Python environment
 
+Development can be done using only `docker` and `docker-compose`, then you can 
+ skip this step and the ruby and node setup.
+
 For the Python dependencies, usage of virtual environments is recommended.
 All dependencies are listed in `requirements.in`.
 Using `pip-tools` we compile a list of the dependencies with pinned versions,
@@ -26,16 +29,13 @@ pip install pip-tools
 pip-sync
 ```
 
-
 ### Configuration files
 
-The config of viaduct is a private repository that is not pushed to the
-github.com servers. Get the submodule with the secret API keys from the server:
+The config of viaduct is done using the database. To create an initial database
+with basic settings configured run:
 
 ```bash
-git submodule init
-git submodule update
-ln -s secrets/local.py config.py
+docker-compose run --rm backend python manage.py createdb
 ```
 
 To check that all code has been written in a correct style, we have server side
@@ -48,7 +48,7 @@ Finally, set up the awesome hooks:
 ```bash
 cd .git
 rm -rf hooks
-ln -s ../secrets/hooks .
+ln -s ../hooks .
 cd ..
 .git/hooks/post-merge
 ```
@@ -94,6 +94,8 @@ git checkout develop
 
 ### Ruby and NodeJS tools
 
+**Note:** Only needed for running outside docker
+
 Build dependencies are for ruby and npm:
 * Install Ruby gems
     - `gem install bundler`
@@ -132,7 +134,7 @@ If this is the case use these commands to upgrade your actual database.
 This will create a new migration script:
 
 ```bash
-python manage.py db migrate --message 'revision message'`.
+python manage.py db migrate --message 'revision message'
 ```
 
 After this script is done you can view it to check if nothing weird is

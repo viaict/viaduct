@@ -8,18 +8,13 @@ from flask import flash, redirect, \
 from flask_babel import _
 from flask_login import login_required, current_user
 
-from app import app
+from app import app, constants
 from app.models.user import User
 from app.roles import Roles
 from app.service import role_service
 from app.utils.domjudge import DOMjudgeAPI
 
-DOMJUDGE_URL = app.config['DOMJUDGE_URL']
-DOMJUDGE_ADMIN_USERNAME = app.config['DOMJUDGE_ADMIN_USERNAME']
-DOMJUDGE_ADMIN_PASSWORD = app.config['DOMJUDGE_ADMIN_PASSWORD']
-DOMJUDGE_USER_PASSWORD = app.config['DOMJUDGE_USER_PASSWORD']
-
-DT_FORMAT = app.config['DT_FORMAT']
+DT_FORMAT = constants.DT_FORMAT
 VIA_USER_TEAM = re.compile(r"^via_user_team_(\d+)$")
 
 
@@ -290,14 +285,15 @@ def contest_problem_submit(contest_id, problem_id):
         dom_username = "via_user_{}".format(current_user.id)
         dom_teamname = 'via_user_team_{}'.format(current_user.id)
 
-        session = DOMjudgeAPI.login(dom_username, DOMJUDGE_USER_PASSWORD,
+        session = DOMjudgeAPI.login(dom_username,
+                                    app.config['DOMJUDGE_USER_PASSWORD'],
                                     flash_on_error=False)
 
         # Check if user exists
         if not session:
             # User does not exist
-            session = DOMjudgeAPI.login(DOMJUDGE_ADMIN_USERNAME,
-                                        DOMJUDGE_ADMIN_PASSWORD)
+            session = DOMjudgeAPI.login(app.config['DOMJUDGE_ADMIN_USERNAME'],
+                                        app.config['DOMJUDGE_ADMIN_PASSWORD'])
 
             # Admin login failed, just give a 'request failed' error flash
             if not session:
@@ -334,7 +330,7 @@ def contest_problem_submit(contest_id, problem_id):
 
             # Create the user
             r = DOMjudgeAPI.add_user(
-                dom_username, DOMJUDGE_USER_PASSWORD,
+                dom_username, app.config['DOMJUDGE_USER_PASSWORD'],
                 current_user.first_name + " " + current_user.last_name,
                 current_user.email, user_team_id, session)
 
@@ -346,7 +342,8 @@ def contest_problem_submit(contest_id, problem_id):
             DOMjudgeAPI.logout(session)
 
             # Login as the new user
-            session = DOMjudgeAPI.login(dom_username, DOMJUDGE_USER_PASSWORD)
+            session = DOMjudgeAPI.login(dom_username,
+                                        app.config['DOMJUDGE_USER_PASSWORD'])
 
             if not session:
                 return render_template('domjudge/problem/submit.htm',
@@ -379,8 +376,8 @@ def contest_submissions_view(contest_id, team_id=None):
                                                   Roles.DOMJUDGE_ADMIN):
         return abort(403)
 
-    session = DOMjudgeAPI.login(DOMJUDGE_ADMIN_USERNAME,
-                                DOMJUDGE_ADMIN_PASSWORD)
+    session = DOMjudgeAPI.login(app.config['DOMJUDGE_ADMIN_USERNAME'],
+                                app.config['DOMJUDGE_ADMIN_PASSWORD'])
 
     if not team_id:
         team_id = DOMjudgeAPI.get_teamid_for_userid(
@@ -412,8 +409,8 @@ def render_contest_submissions_view(contest_id, view_all=False, team_id=None):
 
     contest = r.json()[str(contest_id)]
 
-    session = DOMjudgeAPI.login(DOMJUDGE_ADMIN_USERNAME,
-                                DOMJUDGE_ADMIN_PASSWORD)
+    session = DOMjudgeAPI.login(app.config['DOMJUDGE_ADMIN_USERNAME'],
+                                app.config['DOMJUDGE_ADMIN_PASSWORD'])
 
     r = DOMjudgeAPI.request_get('api/submissions?cid={}'.format(contest_id),
                                 session=session)
@@ -494,6 +491,7 @@ def render_contest_submissions_view(contest_id, view_all=False, team_id=None):
     submissions.sort(key=lambda x: x['time'], reverse=True)
 
     return render_template('domjudge/submissions.htm', view_all=view_all,
-                           team=team_id, domjudge_url=DOMJUDGE_URL,
+                           team=team_id,
+                           domjudge_url=app.config['DOMJUDGE_URL'],
                            admin=admin, contest=contest,
                            submissions=submissions)

@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-import os
-import platform
-import re
-import subprocess
 import sys
 import time
 
 import alembic
 import alembic.config
 import bcrypt
+import os
+import platform
+import re
 import sqlalchemy
+import subprocess
 from flask import current_app
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager, Server, prompt, prompt_pass
@@ -24,9 +24,10 @@ from app.models.education import Education
 from app.models.group import Group
 from app.models.navigation import NavigationEntry
 from app.models.role_model import GroupRole
+from app.models.setting_model import Setting
 from app.models.user import User
 
-init_app()
+init_app(query_settings=False)
 
 migrate = Migrate(app, db)
 versionbump = Manager(
@@ -155,56 +156,55 @@ def jade():
 
 
 @manager.command
-def mysqlinit():
-    """Insert the viaduct user and give it rights for the viaduct db."""
-    mysql_user = prompt("User for mysql database", default="root")
-    cmd = "mysql -u %s " % mysql_user
-    sudo = prompt_bool("Use sudo", default=False)
-    if sudo:
-        cmd = "sudo " + cmd
-    password = prompt_bool("Use password", default=True)
-    if password:
-        cmd += "-p "
-    cmd += "< script/mysqlinit.sql"
-    print(cmd)
-    subprocess.call(cmd, shell=True)
-
-
-@manager.command
 def test():
     """Run all tests in the test folder."""
     subprocess.call("python -m unittest discover -vs test/", shell=True)
 
 
 def _add_group(name):
-    try:
-        db.session.add(Group(name, None))
-        db.session.commit()
-    except sqlalchemy.exc.IntegrityError:
-        db.session.rollback()
+    existing_group = Group.query.filter(Group.name == name).first()
+    if existing_group:
         print("-> Group '{}' already exists.".format(name))
+    else:
+        try:
+            db.session.add(Group(name, None))
+            db.session.commit()
+            print(f"-> Group '{name}' added.")
+        except sqlalchemy.exc.IntegrityError:
+            db.session.rollback()
 
 
-def _add_user(user, catch_error=False, error_msg=None):
+def _add_user(user, error_msg="User already exists"):
+    existing_user = User.query.filter(User.email == user.email).first()
+    if existing_user:
+        print("-> {}.".format(error_msg))
     try:
         db.session.add(user)
         db.session.commit()
+        print(f"-> Group '{user.email}' added.")
     except sqlalchemy.exc.IntegrityError:
         db.session.rollback()
-        if catch_error:
-            print("-> {}.".format(error_msg))
-        else:
-            raise
+        raise
 
 
 def _add_navigation(entries, parent=None):
+
     for pos, (nl_title, en_title, url, activities, children) \
             in enumerate(entries):
-        nav = NavigationEntry(parent, nl_title, en_title, url,
-                              False, activities, pos + 1)
-        db.session.add(nav)
-        db.session.commit()
-        _add_navigation(children, nav)
+        navigation_entry = NavigationEntry.query \
+            .filter(NavigationEntry.en_title == en_title).first()
+
+        if not navigation_entry:
+            print("-> Added {}".format(en_title))
+            navigation_entry = NavigationEntry(
+                parent, nl_title, en_title, url,
+                None, False, activities, pos + 1)
+            db.session.add(navigation_entry)
+            db.session.commit()
+        else:
+            print("-> Navigation entry {} exists".format(en_title))
+
+        _add_navigation(children, navigation_entry)
 
 
 @manager.command
@@ -250,7 +250,11 @@ def createdb():
         "Minor Informatica",
         "Minor Kunstmatige Intelligentie"]
 
-    db.session.bulk_save_objects(Education(name) for name in education_names)
+    for name in education_names:
+        if not Education.query.filter(Education.name == name).first():
+            db.session.add(Education(name=name))
+        else:
+            print("-> Education {} exists".format(name))
     db.session.commit()
 
     # Add some default navigation
@@ -309,8 +313,7 @@ def createdb():
         password=passwd,
         education_id=Education.query.first().id)
     admin.has_paid = True
-    _add_user(admin, True,
-              "A user with email '{}' already exists".format(email))
+    _add_user(admin, "A user with email '{}' already exists".format(email))
 
     # Add admin user to administrators group
     admin_group = Group.query.filter_by(name='administrators').first()
@@ -321,11 +324,49 @@ def createdb():
     for role in Roles:
         group_role = GroupRole()
         group_role.group_id = admin_group.id
-        group_role.role = role
+        group_role.role = role.name
         roles.append(group_role)
 
     # Grant read/write privilege to administrators group on every module
     db.session.bulk_save_objects(roles)
+    db.session.commit()
+
+    print("* Adding default settings")
+
+    settings = {'SECRET_KEY': 'localsecret',
+                "CSRF_ENABLED": "True",
+                "CSRF_SESSION_KEY": "localsession",
+                "RECAPTCHA_PUBLIC_KEY": "",
+                "RECAPTCHA_PRIVATE_KEY": "",
+                "GOOGLE_SERVICE_EMAIL": "test@developer.gserviceaccount.com",
+                "GOOGLE_CALENDAR_ID": "",
+                "ELECTIONS_NOMINATE_START": "2014-12-12",
+                "ELECTIONS_VOTE_START": "2015-01-05",
+                "ELECTIONS_VOTE_END": "2015-01-16",
+                "GITLAB_TOKEN": "",
+                "MOLLIE_URL": "https://api.mollie.nl/v1/payments/",
+                "MOLLIE_KEY": "",
+                "MOLLIE_REDIRECT_URL": "http://localhost",
+                "COPERNICA_ENABLED": "False",
+                "COPERNICA_API_KEY": "",
+                "COPERNICA_DATABASE_ID": "",
+                "COPERNICA_ACTIEPUNTEN": "",
+                "COPERNICA_ACTIVITEITEN": "",
+                "COPERNICA_NEWSLETTER_TOKEN": "",
+                "DOMJUDGE_ADMIN_USERNAME": "viaduct",
+                "DOMJUDGE_ADMIN_PASSWORD": "",
+                "DOMJUDGE_URL": "",
+                "DOMJUDGE_USER_PASSWORD": "",
+                "ENVIRONMENT": "Development",
+                "PRIVACY_POLICY_URL_EN": "/static/via_privacy_policy_nl.pdf",
+                "PRIVACY_POLICY_URL_NL": "/static/via_privacy_policy_en.pdf"}
+    for key, value in settings.items():
+        if Setting.query.filter(Setting.key == key).count() > 1:
+            print(f"-> {key} already exists")
+        else:
+            db.session.add(Setting(key=key, value=value))
+            print(f"-> {key} added to database.")
+
     db.session.commit()
 
     print("Done!")

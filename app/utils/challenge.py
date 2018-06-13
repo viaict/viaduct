@@ -8,8 +8,7 @@ from app.models.page import Page, PageRevision
 from app.models.user import User
 from app.service import page_service
 
-ALLOWED_EXTENSIONS = set(['png', 'gif', 'jpg', 'jpeg'])
-UPLOAD_DIR = 'app/static/files/users/'
+ALLOWED_EXTENSIONS = {'png', 'gif', 'jpg', 'jpeg'}
 
 
 class ChallengeAPI:

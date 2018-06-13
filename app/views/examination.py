@@ -5,7 +5,6 @@ from flask_babel import gettext as _
 from flask_login import current_user
 from fuzzywuzzy import fuzz
 
-from app import app
 from app.decorators import require_role, require_membership
 from app.forms.examination import EditForm
 from app.models.examination import test_types
@@ -14,8 +13,6 @@ from app.service import role_service, examination_service, file_service
 from app.enums import FileCategory
 
 blueprint = Blueprint('examination', __name__, url_prefix='/examination')
-
-UPLOAD_FOLDER = app.config['EXAMINATION_UPLOAD_FOLDER']
 
 
 @blueprint.route('/view/<int:exam_id>/<any(exam,answers):doc_type>/',

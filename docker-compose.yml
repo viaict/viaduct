@@ -4,6 +4,14 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
+      target: development
+    command: bash /app/docker/entrypoint.development.sh
+    volumes:
+      - .:/app
+    ports:
+      - 5000:3031
+    environment:
+      - SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://viaduct:viaduct@db/viaduct
     depends_on:
       - db
 
@@ -15,16 +23,6 @@ services:
       POSTGRES_USER: viaduct
       POSTGRES_DB: viaduct
 
-  db_old:
-    image: mysql:5.5
-    volumes:
-      - db_old:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: viaduct
-      MYSQL_DATABASE: viaduct
-      MYSQL_USER: viaduct
-      MYSQL_PASSWORD: viaduct
-
   adminer:
     image: adminer:latest
     ports:
@@ -32,15 +30,5 @@ services:
     volumes:
       - ./docker/adminer-uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
 
-  migration:
-    image: dimitri/pgloader:latest
-    volumes:
-      - ./docker/migrate.pgloaderfile:/migrate.pgloaderfile
-    depends_on:
-      - db
-      - db_old
-    command: pgloader /migrate.pgloaderfile
-
 volumes:
   db:
-  db_old:

@@ -6,44 +6,44 @@ import sys
 import connexion
 from flask import Flask, request, session
 from flask.json import JSONEncoder as BaseEncoder
-from flask_babel import Babel
 from flask_login import current_user
 from flask_swagger_ui import get_swaggerui_blueprint
 from speaklater import _LazyString  # noqa
 from hashfs import HashFS
 import mimetypes
 
+from app import constants
 from app.exceptions import ResourceNotFoundException, ValidationException, \
     AuthorizationException
 from app.roles import Roles
 from app.utils.import_module import import_module
 from .connexion_app import ConnexionFlaskApp
-from .extensions import db, login_manager, \
-    cache, toolbar, jsglue, oauth, cors, sentry
+from .extensions import (db, login_manager, cache, toolbar, jsglue, oauth,
+                         cors, sentry, babel)
+
+from config import Config
 
 version = 'v2.10.1.0'
 
-app = Flask(__name__)
-app.config.from_object('config.Config')
 
 logging.basicConfig(
     format='[%(asctime)s] %(levelname)7s [%(name)s]: %(message)s',
     stream=sys.stdout,
 )
 
+app = Flask(__name__)
 app.logger_name = 'app.flask'
 app.logger.setLevel(logging.NOTSET)
 
 _logger = logging.getLogger('app')
-_logger.setLevel(app.config['LOG_LEVEL'])
+_logger.setLevel(logging.DEBUG)
 
 logging.getLogger('werkzeug').setLevel(logging.INFO)
+logging.getLogger('config').setLevel(logging.INFO)
 
 
 # Set up Flask Babel, which is used for internationalisation support.
-babel = Babel(app)
-
-hashfs = HashFS(app.config['HASHFS_ROOT_DIR'])
+hashfs = HashFS('app/uploads/')
 mimetypes.init()
 
 app.path = os.path.dirname(os.path.abspath(__file__))
@@ -86,7 +86,7 @@ def register_views(app, path):
 
 @babel.localeselector
 def get_locale():
-    languages = app.config['LANGUAGES'].keys()
+    languages = constants.LANGUAGES.keys()
     # Try to look-up an session set for language
     lang = session.get('lang')
     if lang and lang in languages:
@@ -99,12 +99,19 @@ def get_locale():
     return request.accept_languages.best_match(list(languages), default='nl')
 
 
-# Has to be imported *after* app is created and Babel is initialised
-from app.models.user import AnonymousUser  # noqa
-from app import jinja_env  # noqa
+def init_app(query_settings=True):
+    # Has to be imported *after* app is created and Babel is initialised
+    from app import jinja_env  # noqa
 
+    app.config['SQLALCHEMY_DATABASE_URI'] = \
+        os.environ["SQLALCHEMY_DATABASE_URI"]
 
-def init_app():
+    if query_settings:
+        _logger.info("Loading config")
+        app.config.from_object(Config(app.config['SQLALCHEMY_DATABASE_URI']))
+    else:
+        _logger.info("Skipping config")
+
     app.config['CACHE_TYPE'] = 'filesystem'
     app.config['CACHE_DIR'] = 'cache'
 
@@ -113,6 +120,7 @@ def init_app():
     jsglue.init_app(app)
     oauth.init_app(app)
     cors.init_app(app, resources={r"/api/*": {"origins": "*"}})
+    babel.init_app(app)
     init_oauth()
 
     login_manager.init_app(app)
@@ -173,6 +181,7 @@ def init_app():
 
     register_views(app, os.path.join(app.path, 'views'))
 
+    from app.models.user import AnonymousUser  # noqa
     login_manager.anonymous_user = AnonymousUser
 
     return get_patched_api_app()

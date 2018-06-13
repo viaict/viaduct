@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from flask_login import UserMixin, AnonymousUserMixin
 
-from app import db, app
+from app import db, constants
 from app.models.base_model import BaseEntity
 from app.models.education import Education
 from app.models.group import Group
@@ -17,6 +17,9 @@ class AnonymousUser(AnonymousUserMixin):
 
     Check logged in using:
     >>> from flask_login import login_required
+    >>> from flask import Blueprint
+    >>>
+    >>> blueprint = Blueprint("somemodule", __name__)
     >>> @blueprint.route("/someroute")
     >>> @login_required
 
@@ -41,13 +44,17 @@ class User(db.Model, UserMixin, BaseEntity):
     password = db.Column(db.String(60))
     first_name = db.Column(db.String(256))
     last_name = db.Column(db.String(256))
-    locale = db.Column(db.Enum(*list(app.config['LANGUAGES'].keys())),
+    locale = db.Column(db.Enum(*list(constants.LANGUAGES.keys()),
+                               name='locale'),
                        default="nl")
     has_paid = db.Column(db.Boolean, default=None)
-    shirt_size = db.Column(db.Enum('Small', 'Medium', 'Large'))
+    shirt_size = db.Column(db.Enum('Small', 'Medium', 'Large',
+                                   name='user_shirt_size'))
     allergy = db.Column(db.String(1024))  # Allergy / medication
-    diet = db.Column(db.Enum('Vegetarisch', 'Veganistisch', 'Fruitarier'))
-    gender = db.Column(db.Enum('Man', 'Vrouw', 'Geen info'))
+    diet = db.Column(db.Enum('Vegetarisch', 'Veganistisch', 'Fruitarier',
+                             name='user_diet'))
+    gender = db.Column(db.Enum('Man', 'Vrouw', 'Geen info',
+                               name='user_sex'))
     phone_nr = db.Column(db.String(16))
     emergency_phone_nr = db.Column(db.String(16))
     description = db.Column(db.String(1024))  # Description of user

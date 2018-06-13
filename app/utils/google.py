@@ -12,13 +12,13 @@ from oauth2client.service_account import ServiceAccountCredentials
 from app import app
 
 # google calendar Settings > via_events > id
-calendar_id = app.config['GOOGLE_CALENDAR_ID']
+# calendar_id = app.config['GOOGLE_CALENDAR_ID']
 
 # Google API service account email
-service_email = app.config['GOOGLE_SERVICE_EMAIL']
+# service_email = app.config['GOOGLE_SERVICE_EMAIL']
 
 # name of the private key file
-private_key = app.config['GOOGLE_API_KEY']
+# private_key = app.config['GOOGLE_API_KEY']
 
 domain = 'svia.nl'
 
@@ -28,6 +28,9 @@ _logger = logging.getLogger(__name__)
 
 
 def build_service(service_type, api_version, scope, email):
+    service_email = app.config['GOOGLE_SERVICE_EMAIL']
+    private_key = app.config['GOOGLE_API_KEY']
+
     try:
         credentials = ServiceAccountCredentials.from_p12_keyfile(
             service_account_email=service_email,
@@ -74,6 +77,8 @@ def get_group_members_api():
 # Provide a calendar_id
 def insert_activity(title="", description='', location="VIA kamer", start="",
                     end=""):
+    calendar_id = app.config['GOOGLE_CALENDAR_ID']
+
     service = build_calendar_service()
 
     if service:
@@ -99,6 +104,7 @@ def insert_activity(title="", description='', location="VIA kamer", start="",
 
 def update_activity(event_id, title="", description='', location="VIA Kamer",
                     start="", end=""):
+    calendar_id = app.config['GOOGLE_CALENDAR_ID']
     service = build_calendar_service()
 
     if service:
@@ -122,6 +128,7 @@ def update_activity(event_id, title="", description='', location="VIA Kamer",
 
 # Delete an event
 def delete_activity(event_id):
+    calendar_id = app.config['GOOGLE_CALENDAR_ID']
     service = build_calendar_service()
 
     if service:

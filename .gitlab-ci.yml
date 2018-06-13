@@ -29,8 +29,6 @@ unittest:
   stage: test
 
   script:
-  # TODO convert the entire config to ENV.
-  - ln -sf default_config.py config.py
   - coverage run --source=./app/service -m unittest discover -vs test/
   - coverage report -m
   - coverage html
