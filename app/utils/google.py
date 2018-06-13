@@ -9,7 +9,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from oauth2client.service_account import ServiceAccountCredentials
 
-from app import app
+from app import app, constants
 
 # google calendar Settings > via_events > id
 # calendar_id = app.config['GOOGLE_CALENDAR_ID']
@@ -29,12 +29,11 @@ _logger = logging.getLogger(__name__)
 
 def build_service(service_type, api_version, scope, email):
     service_email = app.config['GOOGLE_SERVICE_EMAIL']
-    private_key = app.config['GOOGLE_API_KEY']
 
     try:
         credentials = ServiceAccountCredentials.from_p12_keyfile(
             service_account_email=service_email,
-            filename=private_key,
+            filename=constants.GOOGLE_API_KEY,
             scopes=[scope]).create_delegated(email)
 
         # Create an authorized http instance
