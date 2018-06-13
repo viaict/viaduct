@@ -30,6 +30,7 @@ py-bcrypt
 pyflakes
 psycopg2
 pymysql
+pyopenssl           # For the p12 decryption in the google library.
 python-dateutil
 python-magic
 raven

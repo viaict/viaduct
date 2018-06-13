@@ -6,7 +6,7 @@ LANGUAGES = {
 MIN_PASSWORD_LENGTH = 6
 
 # Path to Google p12 key file, change for real use
-GOOGLE_API_KEY = './GoogleAPI.pem'
+GOOGLE_API_KEY = './GoogleAPI.p12'
 
 # One date format string to rule them all (use this in strftime)
 DATE_FORMAT = "%d-%m-%Y"
