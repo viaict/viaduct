@@ -1,4 +1,4 @@
-from app import app
+from app import app, constants
 
 from flask import flash
 from flask_babel import _
@@ -9,7 +9,6 @@ import datetime as dt
 
 
 class DOMjudgeAPI:
-    DT_FORMAT = app.config['DT_FORMAT']
     DOMJUDGE_URL = app.config['DOMJUDGE_URL']
 
     @staticmethod
@@ -105,7 +104,7 @@ class DOMjudgeAPI:
             'data[0][members]': member,
             'data[0][categoryid]': categoryid,
             'data[0][comments]': 'Created by Viaduct on {}'.format(
-                dt.datetime.now().strftime(cls.DT_FORMAT)),
+                dt.datetime.now().strftime(constants.DT_FORMAT)),
             'data[0][enabled]': '1',
             'table': 'team',
             'cmd': 'add'
