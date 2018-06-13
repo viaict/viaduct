@@ -9,7 +9,6 @@ import datetime as dt
 
 
 class DOMjudgeAPI:
-    DOMJUDGE_URL = app.config['DOMJUDGE_URL']
 
     @staticmethod
     def flash_error():
@@ -21,7 +20,7 @@ class DOMjudgeAPI:
         if not session:
             session = requests
         try:
-            r = session.get(cls.DOMJUDGE_URL + url, timeout=(5, 5))
+            r = session.get(app.config['DOMJUDGE_URL'] + url, timeout=(5, 5))
         except RequestException:
             DOMjudgeAPI.flash_error()
             return None
@@ -39,7 +38,7 @@ class DOMjudgeAPI:
         if not session:
             session = requests.Session()
         try:
-            r = session.post(cls.DOMJUDGE_URL + url, data=data,
+            r = session.post(app.config['DOMJUDGE_URL'] + url, data=data,
                              files=files, timeout=(5, 5))
         except RequestException as e:
             if flash_on_error:
