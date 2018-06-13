@@ -55,6 +55,7 @@ class Config(object):
         self.DOMJUDGE_USER_PASSWORD = str
 
         # Sentry error capturing
+        self.SENTRY_DSN = str
         self.ENVIRONMENT = str
 
         # Privacy policy
