@@ -32,11 +32,11 @@
                 </div>
                 {% if (news.modified - news.created) >= datetime.timedelta(0, 1) %}
                     <div class='col-md-6'>
-                        {{_('Last modified')}}: <em>{{ news.modified.strftime(app_config['DATE_FORMAT']) }}</em> {{_('at')}} <em>{{ news.modified.strftime(app_config['TIME_FORMAT']) }}</em><br />
+                        {{_('Last modified')}}: <em>{{ news.modified.strftime(constants.DATE_FORMAT) }}</em> {{_('at')}} <em>{{ news.modified.strftime(constants.TIME_FORMAT) }}</em><br />
                     </div>
                 {% endif %}
                 <div class='col-md-6'>
-                    {{_('Published at')}}: <em>{{ news.publish_date.strftime(app_config['DATE_FORMAT']) }}</em>
+                    {{_('Published at')}}: <em>{{ news.publish_date.strftime(constants.DATE_FORMAT) }}</em>
                 </div>
             </div>
             <hr>

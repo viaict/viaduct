@@ -4,7 +4,7 @@ from flask import (flash, redirect, render_template, request, url_for, abort,
                    jsonify, Blueprint, Response)
 from flask_login import current_user
 
-from app import app, db
+from app import db, constants
 from app.decorators import require_role, require_membership
 from app.forms.custom_form import CreateForm
 from app.models.custom_form import CustomForm, CustomFormResult, \
@@ -56,7 +56,7 @@ def view_single(form_id=None):
         data = parse_qs(entry.data)
 
         # Add the entry date
-        time = entry.created.strftime(app.config['DT_FORMAT']) if \
+        time = entry.created.strftime(constants.DT_FORMAT) if \
             entry.created is not None else ""
 
         # Get the total number of attendants including extra attendees

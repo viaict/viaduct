@@ -1,4 +1,4 @@
-from app import app, db
+from app import db, constants
 
 from app.models.base_model import BaseEntity
 from app.models.user import User
@@ -8,8 +8,8 @@ def dump_datetime(value):
     """Deserialize datetime object into string form for JSON processing."""
     if value is None:
         return None
-    return [value.strftime(app.config['DATE_FORMAT']),
-            value.strftime(app.config['TIME_FORMAT'])]
+    return [value.strftime(constants.DATE_FORMAT),
+            value.strftime(constants.TIME_FORMAT)]
 
 
 class Challenge(db.Model, BaseEntity):

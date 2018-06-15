@@ -1,4 +1,4 @@
-from app import app, db, get_locale
+from app import db, get_locale, constants
 from datetime import datetime, timedelta, timezone
 from app.models.base_model import BaseEntity
 from babel.dates import format_timedelta, format_datetime
@@ -70,14 +70,14 @@ class Activity(db.Model, BaseEntity):
 
     def __str__(self):
         if self.start_time.date() == self.end_time.date():
-            end_time_fmt = 'TIME_FORMAT'
+            end_time_fmt = constants.TIME_FORMAT
         else:
-            end_time_fmt = 'DT_FORMAT'
+            end_time_fmt = constants.DT_FORMAT
 
         return "{} ({} - {})".format(
             self.name,
-            self.start_time.strftime(app.config['DT_FORMAT']),
-            self.end_time.strftime(app.config[end_time_fmt]))
+            self.start_time.strftime(constants.DT_FORMAT),
+            self.end_time.strftime(end_time_fmt))
 
     def get_time(self):
         """
@@ -106,8 +106,8 @@ class Activity(db.Model, BaseEntity):
                                     locale=get_locale()).capitalize()
             else:
                 return "%s - %s" % (
-                       self.start_time.strftime(app.config['ACT_DT_FORMAT']),
-                       self.end_time.strftime(app.config['ACT_DT_FORMAT']))
+                       self.start_time.strftime(constants.ACT_DT_FORMAT),
+                       self.end_time.strftime(constants.ACT_DT_FORMAT))
 
     def is_in_future(self):
         return datetime.now(timezone.utc) < self.start_time
@@ -141,7 +141,7 @@ class Activity(db.Model, BaseEntity):
                                 locale=get_locale())
 
     def format_form_time(self, time):
-        return time.strftime(app.config['DT_FORMAT'])
+        return time.strftime(constants.DT_FORMAT)
 
     def till_now(self):
         """Locale based description of datetimedelta till now."""

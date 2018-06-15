@@ -4,7 +4,7 @@ from flask import Blueprint, abort, redirect, url_for
 from flask import flash, render_template, request, jsonify
 from flask_login import current_user
 
-from app import Roles, app
+from app import Roles, constants
 from app.decorators import require_role
 from app.exceptions import ValidationException, ResourceNotFoundException, \
     InvalidMinuteException
@@ -43,9 +43,8 @@ def view_minutes_in_date_range(group_id=None):
     start_date = request.form['start_date']
     end_date = request.form['end_date']
 
-    df = app.config['DATE_FORMAT']
-    start_date = datetime.datetime.strptime(start_date, df)
-    end_date = datetime.datetime.strptime(end_date, df)
+    start_date = datetime.datetime.strptime(start_date, constants.DATE_FORMAT)
+    end_date = datetime.datetime.strptime(end_date, constants.DATE_FORMAT)
 
     if group_id:
         list_items = pimpy_service.get_all_minutes_for_group(group_id, (
@@ -149,9 +148,8 @@ def view_tasks_in_date_range(group_id=None):
     start_date = request.form['start_date']
     end_date = request.form['end_date']
 
-    df = app.config['DATE_FORMAT']
-    start_date = datetime.datetime.strptime(start_date, df)
-    end_date = datetime.datetime.strptime(end_date, df)
+    start_date = datetime.datetime.strptime(start_date, constants.DATE_FORMAT)
+    end_date = datetime.datetime.strptime(end_date, constants.DATE_FORMAT)
 
     date_tuple = (start_date, end_date)
 

@@ -40,7 +40,7 @@ Hier is het overzicht van alle gemaakte formulieren. Je kunt formulieren volgen 
     <td>{{ form.name }}</td>
 
     <td>
-        {% if form.has_activity() %}{{ form.get_closest_activity().end_time.strftime(app_config['DT_FORMAT']) }}
+        {% if form.has_activity() %}{{ form.get_closest_activity().end_time.strftime(constants.DT_FORMAT) }}
         {% else %}Geen activiteit{% endif %}
     </td>
 
@@ -93,7 +93,7 @@ Hier is het overzicht van alle gemaakte formulieren. Je kunt formulieren volgen 
     <td>{{ form.name }}</td>
 
     <td>
-        {% if form.has_activity() %}{{ form.get_closest_activity().end_time.strftime(app_config['DT_FORMAT']) }}
+        {% if form.has_activity() %}{{ form.get_closest_activity().end_time.strftime(constants.DT_FORMAT) }}
         {% else %}Geen activiteit{% endif %}
     </td>
 
@@ -145,7 +145,7 @@ Hier is het overzicht van alle gemaakte formulieren. Je kunt formulieren volgen 
     <td>{{ form.name }}</td>
 
     <td>
-        {% if form.has_activity() %}{{ form.get_closest_activity().end_time.strftime(app_config['DT_FORMAT']) }}
+        {% if form.has_activity() %}{{ form.get_closest_activity().end_time.strftime(constants.DT_FORMAT) }}
         {% else %}Geen activiteit{% endif %}
     </td>
 

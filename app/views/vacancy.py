@@ -54,7 +54,7 @@ def list(page_nr=1):
                                         datetime.utcnow(), Vacancy.end_date >
                                         datetime.utcnow()))
 
-    res = _order_vacancies(res)
+        res = _order_vacancies(res)
 
     vacancies = vacancies.paginate(page_nr, 15, False)
     can_write = role_service.user_has_role(current_user, Roles.VACANCY_WRITE)

@@ -5,7 +5,7 @@ from flask import Markup, render_template
 from flask_login import current_user
 from markdown import markdown
 
-from app import app, static_url, get_locale
+from app import app, static_url, get_locale, constants
 from app.forms.util import FormWrapper  # noqa
 from app.utils import template_filters  # noqa
 from app.utils.category import CategoryAPI  # noqa
@@ -35,6 +35,7 @@ app.jinja_env.globals.update(list=list)
 app.jinja_env.globals.update(static_url=static_url)
 app.jinja_env.globals.update(get_locale=get_locale)
 app.jinja_env.globals.update(app_config=app.config)
+app.jinja_env.globals.update(constants=constants)
 app.jinja_env.globals.update(FormWrapper=FormWrapper)
 app.jinja_env.globals.update(NavigationAPI=NavigationAPI)
 app.jinja_env.globals.update(current_user=current_user)

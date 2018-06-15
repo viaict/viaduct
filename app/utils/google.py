@@ -40,7 +40,8 @@ def build_service(service_type, api_version, scope, email):
         http = httplib2.Http()
         http = credentials.authorize(http)
 
-        return build(service_type, api_version, http=http)
+        return build(service_type, api_version, http=http,
+                     cache_discovery=False)
     except Exception as e:
         _logger.error(e, exc_info=True)
         return None

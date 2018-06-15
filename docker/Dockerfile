@@ -14,16 +14,15 @@ RUN npm install
 
 # Python
 RUN apk add -U postgresql-libs git libmagic libjpeg-turbo bash pcre
-COPY requirements.in requirements.txt ./
-RUN pip install --upgrade pip pip-tools
+RUN pip install --upgrade pip pip-tools uwsgi
 
 # Install a virtual package with build dependencies voor pip install
 RUN apk add -U --virtual build-deps \
     python3-dev build-base linux-headers pcre-dev musl-dev \
     postgresql-dev libffi-dev libjpeg-turbo-dev libressl-dev zlib-dev
 
+COPY requirements.in requirements.txt ./
 RUN pip-sync && \
-    pip install uwsgi && \
     pip install -r requirements.txt && \
     pip install -r requirements.txt
 
