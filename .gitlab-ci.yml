@@ -6,8 +6,6 @@ variables:
 services:
   - docker:dind
 
-image: gitlab/dind
-
 cache:
   paths:
     - "$CI_PROJECT_DIR/pip-cache"
