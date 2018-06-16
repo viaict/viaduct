@@ -99,9 +99,11 @@ def get_locale():
     return request.accept_languages.best_match(list(languages), default='nl')
 
 
-def init_app(query_settings=True):
+def init_app(query_settings=True, debug=False):
     # Has to be imported *after* app is created and Babel is initialised
     from app import jinja_env  # noqa
+
+    app.config['DEBUG'] = debug
 
     app.config['SQLALCHEMY_DATABASE_URI'] = \
         os.environ["SQLALCHEMY_DATABASE_URI"]
