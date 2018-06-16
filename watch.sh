@@ -13,7 +13,7 @@ python manage.py jade &
 PIDS[2]=$!
 
 if [ "$1" != "assets" ]; then
-    python run.py ${UWSGI_PORT} &
+    python run.py &
     PIDS[3]=$!
 fi
 

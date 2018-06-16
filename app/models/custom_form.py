@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from datetime import datetime, timezone
+from datetime import datetime
 
 from flask import url_for
 from flask_login import current_user
@@ -120,7 +120,7 @@ class CustomForm(db.Model, BaseEntity):
 
         latest_activity = \
             self.activities.order_by(Activity.end_time.desc()).first()
-        return datetime.now(timezone.utc) > latest_activity.end_time
+        return datetime.now() > latest_activity.end_time
 
     @property
     def attendants(self):

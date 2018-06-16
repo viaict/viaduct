@@ -89,4 +89,4 @@ urllib3==1.22             # via requests
 validictory==1.1.2
 watchdog==0.8.3
 werkzeug==0.14.1          # via flask, flask-caching, flask-debugtoolbar
-wtforms==2.1
+wtforms==2.2.1

@@ -1,5 +1,6 @@
 config.rb
 client_secrets.json
+GoogleAPI.p12
 
 # Ignore the nodejs package lock file for now, until we update to the newest node on the server.
 package-lock.json
