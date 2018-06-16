@@ -22,14 +22,14 @@ MollieClient = Client()
 def init_mollie(f):
     """Lazy initialization of the mollie client."""
 
-    @wraps
+    @wraps(f)
     def wrapped(*args, **kwargs):
         if app.config['MOLLIE_KEY']:
             MollieClient.set_api_key(app.config['MOLLIE_KEY'])
             _logger.info('Using MOLLIE_KEY: %s', app.config['MOLLIE_KEY'])
         else:
             _logger.info('Using MOLLIE_KEY: NOTSET')
-        return f(args, kwargs)
+        return f(*args, **kwargs)
 
     return wrapped
 
