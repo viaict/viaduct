@@ -23,6 +23,8 @@ build:
     - docker pull $BRANCH_IMAGE || true
     - docker build --cache-from $BRANCH_IMAGE -t $BRANCH_IMAGE -f docker/Dockerfile .
     - docker push $BRANCH_IMAGE
+  tags:
+    - docker
 
 unittest:
   image: $BRANCH_IMAGE
@@ -57,3 +59,5 @@ release:
     - docker push $RELEASE_IMAGE
   only:
     - master
+  tags:
+    - docker
