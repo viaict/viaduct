@@ -209,7 +209,7 @@ def edit(user_id=None):
         db.session.add(user)
         db.session.commit()
 
-        avatar = request.files['avatar']
+        avatar = request.files.get('avatar')
         if avatar:
             UserAPI.upload(avatar, user.id)
 
