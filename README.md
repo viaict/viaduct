@@ -66,32 +66,6 @@ install `docker-compose` with your favourite macOS package manager.
 On Windows, God help you.
 
 
-### Git Flow
-
-For reference of git flow, please see the [Git flow
-cheatsheet](http://danielkummer.github.io/git-flow-cheatsheet/)
-
-We use git flow to streamline the development cycle. Our configuration is as
-follows:
-
- - `Branch name for production releases: [master]`: Just hit enter.
- - `Branch name for "next release" development: [develop]`: Just hit enter.
- - `Feature branches? [feature/]`: Just hit enter.
- - `Release branches? [release/]`: Just hit enter.
- - `Hotfix branches? [hotfix/]`: Just hit enter.
- - `Support branches? [support/]`: Just hit enter.
- - `Version tag prefix? []`: Type `v` and hit enter.
-
-First checkout master, then start the setup of git-flow with the following
-commands. After that, return to develop:
-
-```bash
-git checkout master
-git flow init
-git checkout develop
-```
-
-
 ### Ruby and NodeJS tools
 
 **Note:** Only needed for running outside docker
