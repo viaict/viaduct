@@ -5,4 +5,6 @@ LOAD database
 WITH include drop, create tables, no truncate,
     create indexes, reset sequences, foreign keys
 
+CAST
+    type datetime to timestamp using zero-dates-to-null
 ;

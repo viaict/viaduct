@@ -25,7 +25,7 @@ def view(page_nr=1):
 
     if search:
         pagination = Group.query \
-            .filter(Group.name.like('%{}%'.format(search))) \
+            .filter(Group.name.ilike('%{}%'.format(search))) \
             .order_by(Group.name)\
             .paginate(page_nr, 15, False)
     else:

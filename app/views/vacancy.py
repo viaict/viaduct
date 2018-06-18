@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, \
     flash
 from flask_babel import lazy_gettext as _
 from flask_login import current_user
-from sqlalchemy import or_, and_
+from sqlalchemy import or_, and_, cast, String
 
 from app import db
 from app.decorators import require_role
@@ -13,6 +13,7 @@ from app.models.company import Company
 from app.models.vacancy import Vacancy
 from app.roles import Roles
 from app.service import role_service
+from app.utils.pagination import Pagination
 
 blueprint = Blueprint('vacancy', __name__, url_prefix='/vacancies')
 
@@ -25,10 +26,10 @@ def list(page_nr=1):
 
     if search:
         vacancies = Vacancy.query.join(Company). \
-            filter(or_(Vacancy.title.like('%' + search + '%'),
-                       Company.name.like('%' + search + '%'),
-                       Vacancy.workload.like('%' + search + '%'),
-                       Vacancy.contract_of_service.like(
+            filter(or_(Vacancy.title.ilike('%' + search + '%'),
+                       Company.name.ilike('%' + search + '%'),
+                       Vacancy.workload.ilike('%' + search + '%'),
+                       cast(Vacancy.contract_of_service, String).ilike(
                            '%' + search + '%')))
 
         if not role_service.user_has_role(current_user, Roles.VACANCY_WRITE):
@@ -49,14 +50,14 @@ def list(page_nr=1):
     if role_service.user_has_role(current_user, Roles.VACANCY_WRITE):
         vacancies = Vacancy.query.join(Company)\
                                  .order_by(Vacancy.start_date.desc())
+        vacancies = vacancies.paginate(page_nr, 15, False)
+
     else:
         res = Vacancy.query.filter(and_(Vacancy.start_date <
                                         datetime.utcnow(), Vacancy.end_date >
-                                        datetime.utcnow()))
+                                        datetime.utcnow())).all()
+        vacancies = Pagination(page_nr, 15, len(res), _order_vacancies(res))
 
-        res = _order_vacancies(res)
-
-    vacancies = vacancies.paginate(page_nr, 15, False)
     can_write = role_service.user_has_role(current_user, Roles.VACANCY_WRITE)
 
     return render_template('vacancy/list.htm', vacancies=vacancies,
