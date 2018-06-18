@@ -2,8 +2,9 @@ from flask_babel import lazy_gettext as _
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, BooleanField
 from wtforms.validators import InputRequired
-
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from app.forms.fields import DecimalField, EmailField
+import app.service.user_service as user_service
 
 
 class CreateForm(FlaskForm):
@@ -27,3 +28,11 @@ class CreateForm(FlaskForm):
                                            default=False)
     education_id = SelectField('Opleiding', coerce=int)
     terms = StringField(_('Conditions'))
+
+
+class AddRegistrationForm(FlaskForm):
+    user_id = QuerySelectField(
+        label='Lid selecteren',
+        query_factory=lambda: user_service.find_members(),
+        get_pk=lambda user: user.id,
+        get_label=lambda user: user.name)

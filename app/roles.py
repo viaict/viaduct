@@ -35,6 +35,7 @@ class Roles(Enum):
     USER_WRITE = _("Change user properties")
     VACANCY_READ = _("View vacancy overview")
     VACANCY_WRITE = _("Change vacancies")
+    FINANCIAL_ADMIN = _("Manage financing related tasks")
 
     @classmethod
     def choices(cls):
