@@ -13,6 +13,8 @@ unittest:
     stage: test
 
     script:
+    - apt-get update
+    - apt-get install -y libxmlsec1-dev
     - pip install -r requirements.txt
     - cp default_config.py config.py
     - coverage run --source=./app/service -m unittest discover -vs test/
@@ -27,6 +29,8 @@ flake8:
     image: python:3.6
     stage: test
     script:
+     - apt-get update
+     - apt-get install -y libxmlsec1-dev
      - pip install flake8
      - flake8 ./app
 
@@ -34,6 +38,8 @@ miscellaneous:
     image: python:3.6
     stage: test
     script:
+     - apt-get update
+     - apt-get install -y libxmlsec1-dev
      - pip install -r requirements.txt
      - cp default_config.py config.py
      - "[ -z $(grep -R fuzzy app/translations/) ]"
