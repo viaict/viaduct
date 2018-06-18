@@ -146,6 +146,9 @@ msgid ""
 "more information."
 msgstr ""
 
+msgid "Authentication failed. Please try again."
+msgstr ""
+
 msgid "Authorized callback URLs"
 msgstr ""
 
@@ -807,6 +810,9 @@ msgstr ""
 msgid "Log in"
 msgstr ""
 
+msgid "Log in with UvA-net ID"
+msgstr ""
+
 msgid "Log off"
 msgstr ""
 
@@ -1365,6 +1371,12 @@ msgid "There is already another group with this name."
 msgstr ""
 
 msgid ""
+"There is no via account linked to this UvA account. You must link your "
+"via-account by confirming your student ID before you can log in with your"
+" UvA-net ID."
+msgstr ""
+
+msgid ""
 "These details are taken from your account. You can change them on your "
 "account page."
 msgstr ""
@@ -1460,6 +1472,9 @@ msgid "Users"
 msgstr ""
 
 msgid "Using the bookstore requires an account."
+msgstr ""
+
+msgid "UvA Account"
 msgstr ""
 
 msgid "Vacancy created"

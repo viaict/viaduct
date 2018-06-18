@@ -1,5 +1,6 @@
 import bcrypt
 
+from app import app
 from app.exceptions import ResourceNotFoundException, ValidationException, \
     AuthorizationException
 from app.repository import user_repository
@@ -35,6 +36,25 @@ def get_user_by_id(user_id):
 def find_by_id(user_id):
     """Retrieve the user or return None."""
     return user_repository.find_by_id(user_id)
+
+
+def find_user_by_student_id(student_id):
+    """Retrieve the user or return None."""
+    user = user_repository.find_user_by_student_id(student_id)
+
+    return user
+
+
+def get_user_by_student_id(student_id):
+    """Retrieve the user by id, throw error if not found."""
+    user = find_user_by_student_id(student_id)
+    if not user:
+        raise ResourceNotFoundException("user", student_id)
+
+    if user.disabled:
+        raise AuthorizationException("User is disabled.")
+
+    return user
 
 
 def find_members():

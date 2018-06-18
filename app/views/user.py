@@ -25,7 +25,7 @@ from app.models.education import Education
 from app.models.user import User
 from app.roles import Roles
 from app.service import password_reset_service, user_service, \
-    role_service, mail_service, file_service
+    role_service, mail_service, file_service, saml_service
 from app.utils import copernica
 from app.utils.google import HttpError
 from app.utils.user import UserAPI
@@ -337,6 +337,38 @@ def sign_in():
             flash(_('The password you entered appears to be incorrect.'))
 
     return render_template('user/sign_in.htm', form=form)
+
+
+@blueprint.route('/sign-in/process-saml-response/', methods=['GET'])
+@saml_service.ensure_data_cleared
+def sign_in_saml_response():
+    redir_url = saml_service.get_redirect_url(url_for('home.home'))
+
+    # Redirect the user to the index page if he or she has been authenticated
+    # already.
+    if current_user.is_authenticated:
+        return redirect(redir_url)
+
+    if not saml_service.user_is_authenticated():
+        flash(_('Authentication failed. Please try again.'), 'danger')
+        return redirect(redir_url)
+
+    try:
+        uid = saml_service.get_uid_from_attributes()
+        if not uid:
+            raise ValidationException('uid not found in SAML attributes')
+
+        user = user_service.get_user_by_student_id(uid)
+
+        login_user(user)
+
+        return redirect(redir_url)
+
+    except (ResourceNotFoundException, ValidationException):
+        flash(_('There is no via account linked to this UvA account. '
+                'You must link your via-account by confirming your student ID '
+                'before you can log in with your UvA-net ID.'), 'danger')
+        return redirect(redir_url)
 
 
 @blueprint.route('/sign-out/')

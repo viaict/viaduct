@@ -1,4 +1,5 @@
 {% from "macros/form.htm" import render_field, render_checkbox, render_submit %}
+{% from "macros/user.htm" import render_uvanetid_signin_button %}
     <header>
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
@@ -77,6 +78,11 @@
                             <img class="hidden-xs img-rounded" src="/static/img/user.png" alt="..." id="loginImage">
                           </a>
                           <div class="dropdown-menu" id="loginContainer">
+
+                            {{ render_uvanetid_signin_button(_('Log in with UvA-net ID'), small=True) }}
+
+                            <hr class="hr-small">
+
                             <form method="post" name="sign-in" id="sign-in-menu" action="{{ url_for('user.sign_in') }}">
                             {{ login_form.csrf_token }}
                             {{ render_field(login_form.email) }}
@@ -120,6 +126,9 @@
                     <div class="collapse navbar-collapse loginForMobile" id="bs-example-navbar-collapse-2">
 
                         {% if current_user.is_anonymous %}
+                            {{ render_uvanetid_signin_button(_('Log in with UvA-net ID'), small=True) }}
+
+                            <hr class="hr-small">
                             <form method="post" name="sign-in" id="sign-in-menu-mobile" action="{{ url_for('user.sign_in') }}">
                             {{ login_form.csrf_token }}
                             {{ render_field(login_form.email) }}

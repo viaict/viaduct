@@ -84,3 +84,5 @@ class Config:
 
     PRIVACY_POLICY_URL_NL = '/static/via_privacy_policy_nl.pdf'
     PRIVACY_POLICY_URL_EN = '/static/via_privacy_policy_en.pdf'
+
+    SAML_PATH = './saml'

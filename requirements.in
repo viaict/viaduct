@@ -43,3 +43,4 @@ speaklater
 python-Levenshtein
 -e git://github.com/JelteF/mollie-api-python@dec672784ed35d8f010aba0a5e4b740b6e419aa7#egg=mollie_api_python
 hashfs
+python3-saml

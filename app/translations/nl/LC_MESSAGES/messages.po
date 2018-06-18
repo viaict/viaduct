@@ -150,6 +150,9 @@ msgstr ""
 "Let op: we gebruiken nu een base32 encoding. Lees de handleiding van deze"
 " module voor meer informatie."
 
+msgid "Authentication failed. Please try again."
+msgstr "Authenticatie mislukt. Probeer het opnieuw."
+
 msgid "Authorized callback URLs"
 msgstr "Toegestaande callback URLs"
 
@@ -818,6 +821,9 @@ msgstr "Location opgeslagen."
 msgid "Log in"
 msgstr "Log in"
 
+msgid "Log in with UvA-net ID"
+msgstr "Log in met UvA-net ID"
+
 msgid "Log off"
 msgstr "Uitloggen"
 
@@ -1389,6 +1395,15 @@ msgid "There is already another group with this name."
 msgstr "Er is al een groep met dezelfde naam."
 
 msgid ""
+"There is no via account linked to this UvA account. You must link your "
+"via-account by confirming your student ID before you can log in with your"
+" UvA-net ID."
+msgstr ""
+"Er is geen via-account gelinkt aan dit UvA-account. Je moet je via-"
+"acccount linken door je studentnummer te bevestigen voordat je kan "
+"inloggen met je UvA-net ID."
+
+msgid ""
 "These details are taken from your account. You can change them on your "
 "account page."
 msgstr ""
@@ -1496,6 +1511,9 @@ msgstr "Gebruikers"
 
 msgid "Using the bookstore requires an account."
 msgstr "Voor het gebruik van de boekenwinkel is een account vereist."
+
+msgid "UvA Account"
+msgstr "UvA Account"
 
 msgid "Vacancy created"
 msgstr "Vacature aangemaakt"
