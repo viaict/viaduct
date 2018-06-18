@@ -1,4 +1,5 @@
-{% from "macros/form.htm" import render_form, render_field, render_checkbox, render_submit %}
+{% from "macros/form.htm" import render_form, render_field, render_checkbox,
+    render_checkbox_well, render_submit %}
 
 {% extends "content.htm" %}
 
@@ -15,14 +16,8 @@
 
 {% macro submit_renderer() %}
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="well">
-            {% set link = '<a href="{}" target="_blank">{}</a>'.format(privacy_policy_url, _('Privacy Policy')) | safe %}
-            {{ _('By clicking \'Register\', you agree to our %(link)s.', link=link) }}
-        </div>
-    </div>
-</div>
+{% set link = '<a href="{}" target="_blank">{}</a>'.format(privacy_policy_url, _('Privacy Policy')) | safe %}
+{{ render_checkbox_well(form.agree_with_privacy_policy, label=_('Yes, I agree to the %(link)s.', link=link)) }}
 
 {{ render_submit(_('Register')) }}
 
