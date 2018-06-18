@@ -1,6 +1,5 @@
 import bcrypt
 
-from app import app
 from app.exceptions import ResourceNotFoundException, ValidationException, \
     AuthorizationException
 from app.repository import user_repository
