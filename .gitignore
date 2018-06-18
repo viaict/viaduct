@@ -75,3 +75,8 @@ tags
 # Coverage
 .coverage
 htmlcov/
+
+saml/certs_develop/*
+saml/certs_master/*
+saml/certs
+saml/settings.json

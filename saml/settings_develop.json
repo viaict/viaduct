@@ -1,0 +1,65 @@
+{
+    "strict": true,
+    "debug": true,
+
+    "sp": {
+        "entityId": "https://develop.svia.nl/saml/metadata/",
+        "assertionConsumerService": {
+            "url": "https://develop.svia.nl/saml/acs/",
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+        },
+        "attributeConsumingService": {
+            "serviceName": "Study association via",
+            "serviceDescription": "Website for study association via",
+            "requestedAttributes": [
+                {
+                    "name": "urn:mace:dir:attribute-def:sn",
+                    "nameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+                    "isRequired": true,
+                    "friendlyName": "Surname"
+                },
+                {
+                    "name": "urn:mace:dir:attribute-def:givenName",
+                    "nameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+                    "isRequired": true,
+                    "friendlyName": "Given name"
+                },
+                {
+                    "name": "urn:mace:dir:attribute-def:uid",
+                    "nameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+                    "isRequired": true,
+                    "friendlyName": "uid"
+                },
+                {
+                    "name": "urn:mace:dir:attribute-def:mail",
+                    "nameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+                    "isRequired": true,
+                    "friendlyName": "Email address"
+                },
+                {
+                    "name": "urn:mace:dir:attribute-def:eduPersonAffiliation",
+                    "nameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+                    "isRequired": true,
+                    "friendlyName": "Affiliation"
+                },
+                {
+                    "name": "urn:mace:dir:attribute-def:preferredLanguage",
+                    "nameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+                    "isRequired": false,
+                    "friendlyName": "Preferred language"
+                }
+            ]
+        },
+        "NameIDFormat": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
+    },
+
+    "idp": {
+        "entityId": "https://engine.test.surfconext.nl/authentication/idp/metadata",
+        "singleSignOnService": {
+            "url": "https://engine.test.surfconext.nl/authentication/idp/single-sign-on",
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+        },
+        "certFingerprint": "25:72:85:66:C9:94:22:98:36:84:11:E1:88:C7:AC:40:98:F9:E7:82",
+        "certFingerprintAlgorithm": "sha1"
+    }
+}
