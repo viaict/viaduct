@@ -554,6 +554,7 @@ class TestFileService(unittest.TestCase):
         hashfs_mock.open.return_value = data_reader
 
         pil_img = Mock()
+        pil_img.convert.return_value = pil_img
 
         pil_image_mock.open.return_value = pil_img
 
