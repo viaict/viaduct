@@ -1,4 +1,4 @@
-from flask import request, url_for, redirect
+from flask import request, url_for, redirect as flask_redirect
 from urllib.parse import urlparse, urljoin
 
 
@@ -14,5 +14,5 @@ def redirect_back(default='home.home', **values):
         if not target:
             continue
         if is_safe_url(target):
-            return redirect(target)
-    return redirect(url_for(default, **values))
+            return flask_redirect(target)
+    return flask_redirect(url_for(default, **values))
