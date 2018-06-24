@@ -82,10 +82,10 @@ def get_file_content(_file):
 
 def get_image_with_headers(_file, display_name, picture_type='normal'):
     """
-    Get the specified file as an image, to easily return it from a Flask
-    view function.
-    Returns a tuple with the file content and headers, which can be immediately
-    returned in a Flask view function.
+    Get the specified file as an image.
+
+    Returns a tuple with the file content and headers, which can
+    be immediately returned in a Flask view function.
 
     A thumbnail version of the image is returned when picture_type is equal
     to 'thumbnail'
