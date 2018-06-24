@@ -39,7 +39,6 @@ _logger = logging.getLogger('app')
 _logger.setLevel(logging.DEBUG)
 
 
-# Set up Flask Babel, which is used for internationalisation support.
 hashfs = HashFS('app/uploads/')
 mimetypes.init()
 
@@ -99,7 +98,10 @@ def init_app(query_settings=True, debug=False):
     # Has to be imported *after* app is created and Babel is initialised
     from app import jinja_env  # noqa
 
+    # Workarounds for template reloading
     app.config['DEBUG'] = debug
+    app.jinja_env.auto_reload = debug
+    app.config['TEMPLATES_AUTO_RELOAD'] = debug
 
     app.config['SQLALCHEMY_DATABASE_URI'] = \
         os.environ["SQLALCHEMY_DATABASE_URI"]
