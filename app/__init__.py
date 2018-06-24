@@ -77,7 +77,6 @@ def register_views(app, path):
             blueprint = getattr(import_module(module_name), 'blueprint', None)
 
             if blueprint:
-                _logger.info('"{}" has been imported'.format(module_name))
                 app.register_blueprint(blueprint)
 
 
