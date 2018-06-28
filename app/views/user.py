@@ -340,6 +340,7 @@ def sign_in():
 
 
 @blueprint.route('/sign-in/process-saml-response/', methods=['GET'])
+@response_headers({"X-Frame-Options": "SAMEORIGIN"})
 @saml_service.ensure_data_cleared
 def sign_in_saml_response():
     redir_url = saml_service.get_redirect_url(url_for('home.home'))
@@ -354,21 +355,15 @@ def sign_in_saml_response():
         return redirect(redir_url)
 
     try:
-        uid = saml_service.get_uid_from_attributes()
-        if not uid:
-            raise ValidationException('uid not found in SAML attributes')
-
-        user = user_service.get_user_by_student_id(uid)
-
+        user = saml_service.get_user_by_uid()
         login_user(user)
-
-        return redirect(redir_url)
 
     except (ResourceNotFoundException, ValidationException):
         flash(_('There is no via account linked to this UvA account. '
                 'You must link your via-account by confirming your student ID '
                 'before you can log in with your UvA-net ID.'), 'danger')
-        return redirect(redir_url)
+
+    return redirect(redir_url)
 
 
 @blueprint.route('/sign-out/')

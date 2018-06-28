@@ -50,9 +50,6 @@ def get_user_by_student_id(student_id):
     if not user:
         raise ResourceNotFoundException("user", student_id)
 
-    if user.disabled:
-        raise AuthorizationException("User is disabled.")
-
     return user
 
 

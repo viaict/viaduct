@@ -1,5 +1,6 @@
 from app import app
-from app.exceptions import ValidationException
+from app.exceptions import ValidationException, AuthorizationException
+from app.service import user_service
 
 from flask import session, request
 
@@ -11,7 +12,6 @@ from onelogin.saml2.auth import OneLogin_Saml2_Auth
 from onelogin.saml2.utils import OneLogin_Saml2_Utils
 
 
-saml_path = app.config['SAML_PATH']
 SAMLInfo = namedtuple('SAMLInfo', ['auth', 'req'])
 
 
@@ -26,7 +26,8 @@ def _requires_saml_data(f):
         # Explicitly tell the session that it has been modified,
         # since just adding/removing an item in the session['saml_data']
         # dict is not picked up as no items in the session dict itself
-        # are changed.
+        # are changed. See:
+        # http://flask.pocoo.org/docs/1.0/api/?highlight=session#flask.session
         session.modified = True
 
         return response
@@ -57,6 +58,7 @@ def build_saml_info():
         'https': 'on'
     }
 
+    saml_path = app.config['SAML_PATH']
     saml_auth = OneLogin_Saml2_Auth(saml_req, custom_base_path=saml_path)
 
     return SAMLInfo(saml_auth, saml_req)
@@ -132,9 +134,18 @@ def get_attributes():
     return session['saml_data'].get('attributes', {})
 
 
-def get_uid_from_attributes():
+def get_user_by_uid():
     attributes = get_attributes()
-    return attributes.get('urn:mace:dir:attribute-def:uid')
+    uid = attributes.get('urn:mace:dir:attribute-def:uid')
+    if not uid:
+        raise ValidationException('uid not found in SAML attributes')
+
+    user = user_service.get_user_by_student_id(uid)
+
+    if user.disabled:
+        raise AuthorizationException("User is disabled.")
+
+    return user
 
 
 @_requires_saml_data
