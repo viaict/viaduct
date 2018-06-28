@@ -994,14 +994,14 @@ $DOMJUDGE_LIGHTGREEN:   #7CD449;
     margin-left: 60px;
 }
 
-@media(min-width: 992px) {
+@media(min-width: 768px) {
     .uvanetid-sign-in-text-small {
         font-size: small;
         padding-top: 20px;
     }
 }
 
-@media(max-width: 992px) {
+@media(max-width: 768px) {
     .uvanetid-sign-in-text-small {
         padding-top: 17px;
     }
