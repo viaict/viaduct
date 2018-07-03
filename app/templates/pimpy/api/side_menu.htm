@@ -1,6 +1,6 @@
 {% macro pimpy_side_menu(group_id, personal, type) %}
 
-{%- set format = app_config['DATE_FORMAT']
+{%- set format = constants.DATE_FORMAT
             | replace('%Y', 'yyyy')
             | replace('%m', 'mm')
             | replace('%d', 'dd')
@@ -70,7 +70,7 @@
                                             id="start_date"
                                             name="start_date"
                                             type="text"
-                                            value="{{ datetime.date.today().strftime(app_config['DATE_FORMAT'] )}}">
+                                            value="{{ datetime.date.today().strftime(constants.DATE_FORMAT)}}">
               </div>
             </div>
             <div class="form-group">
@@ -81,7 +81,7 @@
                                             id="end_date"
                                             name="end_date"
                                             type="text"
-                                            value="{{ datetime.date.today().strftime(app_config['DATE_FORMAT'] )}}">
+                                            value="{{ datetime.date.today().strftime(constants.DATE_FORMAT)}}">
               </div>
             </div>
             <button type="submit" class="btn btn-primary">Zoeken</button>

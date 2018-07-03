@@ -1,7 +1,7 @@
 $(document).ready(function() {
-    var keeswildeleteknopje = $(".keeswildeleteknopje");
+    var deleteFormResult = $(".delete-form-result");
 
-    keeswildeleteknopje.click(function() {
+    deleteFormResult.click(function() {
         if (confirm($(this).attr("message"))) {
 
             $.post("/forms/remove/" + this.id);

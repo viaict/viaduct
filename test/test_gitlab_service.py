@@ -4,6 +4,7 @@ from unittest.mock import patch
 
 from requests import Session
 
+from app import app
 from app.repository import gitlab_repository as gitlab_mock_spec
 from app.service import gitlab_service
 
@@ -14,6 +15,7 @@ gitlab_repository_mock = mock.MagicMock(spec=gitlab_mock_spec)
 class TestGitlabService(unittest.TestCase):
 
     def setUp(self):
+        app.config['GITLAB_TOKEN'] = 'MOCKED'
         gitlab_repository_mock.reset_mock()
 
     def test_create_gitlab_session(self):

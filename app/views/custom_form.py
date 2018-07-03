@@ -4,9 +4,10 @@ from flask import (flash, redirect, render_template, request, url_for, abort,
                    jsonify, Blueprint, Response)
 from flask_login import current_user
 
-from app import app, db
+from app import db, constants
 from app.decorators import require_role, require_membership
 from app.forms.custom_form import CreateForm
+from app.forms.custom_form import AddRegistrationForm
 from app.models.custom_form import CustomForm, CustomFormResult, \
     CustomFormFollower
 from app.roles import Roles
@@ -14,6 +15,7 @@ from app.service import role_service
 from app.utils import copernica
 from app.utils.forms import flash_form_errors
 from app.utils.serialize_sqla import serialize_sqla
+import app.service.user_service as user_service
 
 blueprint = Blueprint('custom_form', __name__, url_prefix='/forms')
 
@@ -56,7 +58,7 @@ def view_single(form_id=None):
         data = parse_qs(entry.data)
 
         # Add the entry date
-        time = entry.created.strftime(app.config['DT_FORMAT']) if \
+        time = entry.created.strftime(constants.DT_FORMAT) if \
             entry.created is not None else ""
 
         # Get the total number of attendants including extra attendees
@@ -75,10 +77,17 @@ def view_single(form_id=None):
 
     custom_form.results = results
 
+    can_update_paid = role_service.\
+        user_has_role(current_user, Roles.FINANCIAL_ADMIN)
+
+    add_registration_form = AddRegistrationForm()
+
     return render_template('custom_form/view_results.htm',
+                           add_registration_form=add_registration_form,
                            custom_form=custom_form,
                            xps=CustomForm.exports,
-                           unquote_plus=unquote_plus)
+                           unquote_plus=unquote_plus,
+                           can_update_paid=can_update_paid)
 
 
 @blueprint.route('/export/<int:form_id>/', methods=['POST'])
@@ -265,31 +274,38 @@ def submit(form_id=-1):
     if not custom_form.submittable_by(current_user):
         return "error", 403
 
+    if role_service.user_has_role(current_user, Roles.ACTIVITY_WRITE) and \
+            'user_id' in request.form:
+        user_id = int(request.form['user_id'])
+        user = user_service.find_by_id(user_id)
+    else:
+        user = current_user
+
     # These fields might be there
     try:
         if request.form['phone_nr']:
-            current_user.phone_nr = request.form['phone_nr']
+            user.phone_nr = request.form['phone_nr']
 
         if request.form['noodnummer']:
-            current_user.emergency_phone_nr = request.form['noodnummer']
+            user.emergency_phone_nr = request.form['noodnummer']
 
         if request.form['shirt_maat']:
-            current_user.shirt_size = request.form['shirt maat']
+            user.shirt_size = request.form['shirt maat']
 
         if request.form['dieet[]']:
-            current_user.diet = ', '.join(request.form['dieet[]'])
+            user.diet = ', '.join(request.form['dieet[]'])
 
         if request.form['allergie/medicatie']:
-            current_user.allergy = request.form['allergie/medicatie']
+            user.allergy = request.form['allergie/medicatie']
 
         if request.form['geslacht']:
-            current_user.gender = request.form['geslacht']
+            user.gender = request.form['geslacht']
     except Exception:
         pass
 
     # Test if current user already signed up
     duplicate_test = CustomFormResult.query.filter(
-        CustomFormResult.owner_id == current_user.id,
+        CustomFormResult.owner_id == user.id,
         CustomFormResult.form_id == form_id
     ).first()
 
@@ -305,8 +321,9 @@ def submit(form_id=-1):
         num_introduce = min(int(request.form.get('introductions', 0)),
                             custom_form.introductions)
 
-        result = CustomFormResult(current_user.id, form_id,
+        result = CustomFormResult(user.id, form_id,
                                   request.form['data'],
+                                  has_paid=False,
                                   introductions=num_introduce)
 
         # Check if number attendants allows another registration
@@ -324,9 +341,9 @@ def submit(form_id=-1):
                 "Reserve": "Ja" if response is "reserve" else "Nee",
             }
             copernica.add_subprofile(copernica.SUBPROFILE_ACTIVITY,
-                                     current_user.id, copernica_data)
+                                     user.id, copernica_data)
 
-    db.session.add(current_user)
+    db.session.add(user)
     db.session.commit()
 
     db.session.add(result)
@@ -390,7 +407,7 @@ def unarchive(form_id, page_nr=1):
 
 # Ajax endpoint
 @blueprint.route('/has_paid/<int:submit_id>', methods=['POST'])
-@require_role(Roles.ACTIVITY_WRITE)
+@require_role(Roles.FINANCIAL_ADMIN)
 def has_paid(submit_id=None):
     # Test if user already signed up
     submission = CustomFormResult.query.filter(

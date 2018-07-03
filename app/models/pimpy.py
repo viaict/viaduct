@@ -4,7 +4,7 @@ import baas32 as b32
 from flask_login import current_user
 from jinja2 import escape
 
-from app import app, db
+from app import db, constants
 from app.models.base_model import BaseEntity
 
 # many to many relationship tables
@@ -133,7 +133,7 @@ class Minute(db.Model, BaseEntity):
 
     def get_minute_day(self):
         """Return the date of when the meeting took place in ryyy-mm-dd."""
-        return self.minute_date.strftime(app.config['DATE_FORMAT'])
+        return self.minute_date.strftime(constants.DATE_FORMAT)
 
     def get_title(self):
         return "Van %s" % self.get_minute_day()

@@ -115,11 +115,12 @@ class CustomForm(db.Model, BaseEntity):
         return False
 
     def is_archived(self):
-        latest_activity = (self.activities.order_by(Activity.end_time.desc())
-                           .first())
+        if self.archived:
+            return True
 
-        return self.archived or (latest_activity and
-                                 datetime.now() > latest_activity.end_time)
+        latest_activity = \
+            self.activities.order_by(Activity.end_time.desc()).first()
+        return datetime.now() > latest_activity.end_time
 
     @property
     def attendants(self):

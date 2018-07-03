@@ -6,7 +6,7 @@ from flask_babel import _
 from flask_babel import refresh
 from flask_login import current_user
 
-from app import db, app
+from app import db, constants
 from app.views import redirect_back
 
 blueprint = Blueprint('lang', __name__, url_prefix='/lang')
@@ -14,7 +14,7 @@ blueprint = Blueprint('lang', __name__, url_prefix='/lang')
 
 @blueprint.route('/set/<path:lang>', methods=['GET'])
 def set_user_lang(lang=None):
-    if lang not in app.config['LANGUAGES'].keys():
+    if lang not in constants.LANGUAGES.keys():
         flash(_('Language unsupported on this site') + ': ' + lang, 'warning')
         return redirect(url_for('home.home'))
     if current_user.is_anonymous:
@@ -30,7 +30,7 @@ def set_user_lang(lang=None):
 
 @blueprint.route('/<path:lang>', methods=['GET'])
 def set_lang(lang=None):
-    if lang not in app.config['LANGUAGES'].keys():
+    if lang not in constants.LANGUAGES.keys():
         flash(_('Language unsupported on this site') + ': ' + lang, 'warning')
         return redirect(url_for('home.home'))
 
@@ -38,7 +38,7 @@ def set_lang(lang=None):
     if current_user.is_authenticated:
         msg = _("{} is now set as language for this session. To make this "
                 "setting permanent, <a href='{}'>click here</a>")
-        flash(msg.format(app.config['LANGUAGES'][lang],
+        flash(msg.format(constants.LANGUAGES[lang],
                          url_for('lang.set_user_lang', lang=lang)),
               'safe')
 

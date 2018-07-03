@@ -79,10 +79,6 @@ class SuperRevision(db.Model, BaseEntity):
     comment = db.Column(db.String(1024))
 
     def __init__(self, nl_title, en_title, comment):
-        """
-        Any necessary initialization. Don't forget to call
-        `super().__init__(nl_title, en_title, comment)`!
-        """
         self.title = None
         self.nl_title = nl_title
         self.en_title = en_title

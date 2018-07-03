@@ -1,0 +1,10 @@
+LOAD database
+    from mysql://root:viaduct@db_old/viaduct?sslmode=disable
+    into postgresql://viaduct:viaduct@db/viaduct
+
+WITH include drop, create tables, no truncate,
+    create indexes, reset sequences, foreign keys
+
+CAST
+    type datetime to timestamp using zero-dates-to-null
+;

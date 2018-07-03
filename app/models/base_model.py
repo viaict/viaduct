@@ -1,6 +1,8 @@
-"""Extra functionality that is used by all models. It extends db.Model with
-extra functions."""
+"""
+Extra functionality that is used by all models.
 
+It extends db.Model with extra functions.
+"""
 from app import db
 from app.utils.serialize_sqla import serialize_sqla
 from datetime import datetime

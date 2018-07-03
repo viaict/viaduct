@@ -1,3 +1,5 @@
+from functools import wraps
+
 from app import db, app
 from app.models.mollie import Transaction
 
@@ -12,19 +14,29 @@ from mollie.api.error import Error as MollieError
 import itertools
 import logging
 
-MollieClient = Client()
 _logger = logging.getLogger(__name__)
 
-if app.config.get('MOLLIE_TEST_MODE', False):
-    MollieClient.set_api_key(app.config['MOLLIE_TEST_KEY'])
-    _logger.info('Using MOLLIE_TEST_KEY')
-else:
-    MollieClient.set_api_key(app.config['MOLLIE_KEY'])
-    _logger.info('Using MOLLIE_KEY')
+MollieClient = Client()
 
 
+def init_mollie(f):
+    """Lazy initialization of the mollie client."""
+
+    @wraps(f)
+    def wrapped(*args, **kwargs):
+        if app.config['MOLLIE_KEY']:
+            MollieClient.set_api_key(app.config['MOLLIE_KEY'])
+            _logger.info('Using MOLLIE_KEY: %s', app.config['MOLLIE_KEY'])
+        else:
+            _logger.info('Using MOLLIE_KEY: NOTSET')
+        return f(*args, **kwargs)
+
+    return wrapped
+
+
+@init_mollie
 def create_transaction(amount, description, user=current_user,
-                       callbacks=[]):
+                       callbacks=list()):
     # Only create a new transaction if there is a related form result
     if not isinstance(callbacks, list):
         callbacks = [callbacks]
@@ -70,6 +82,7 @@ def create_transaction(amount, description, user=current_user,
         return False, _('API call failed: %s' % e.message)
 
 
+@init_mollie
 def check_transaction(transaction):
     try:
         payment = MollieClient.payments.get(transaction.mollie_id)
@@ -90,6 +103,7 @@ def check_transaction(transaction):
         return None, _('API call failed: %s' % e.message)
 
 
+@init_mollie
 def get_payments(page=0):
     try:
         payments = MollieClient.payments.all(offset=page * 20, count=20)[0]

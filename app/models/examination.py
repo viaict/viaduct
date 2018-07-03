@@ -34,7 +34,8 @@ class Examination(db.Model, BaseEntity):
                           db.ForeignKey('course.id'))
     education_id = db.Column(db.Integer,
                              db.ForeignKey('education.id'))
-    test_type = db.Column(db.Enum(*test_types.keys()),
+    test_type = db.Column(db.Enum(*list(test_types.keys()),
+                                  name='examination_type'),
                           nullable=False, server_default='Unknown')
     user = db.relationship(User,
                            backref=db.backref('examinations', lazy='dynamic'))

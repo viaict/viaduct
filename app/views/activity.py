@@ -243,9 +243,9 @@ def create(activity_id=None):
 
             db.session.add(activity)
 
-            file = request.files['picture']
+            file = request.files.get('picture')
 
-            if file.filename:
+            if file and file.filename:
                 picture = file_service.add_file(FileCategory.ACTIVITY_PICTURE,
                                                 file, file.filename)
 

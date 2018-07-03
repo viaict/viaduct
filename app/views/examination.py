@@ -5,7 +5,6 @@ from flask_babel import gettext as _
 from flask_login import current_user
 from fuzzywuzzy import fuzz
 
-from app import app
 from app.decorators import require_role, require_membership
 from app.forms.examination import EditForm
 from app.models.examination import test_types
@@ -14,8 +13,6 @@ from app.service import role_service, examination_service, file_service
 from app.enums import FileCategory
 
 blueprint = Blueprint('examination', __name__, url_prefix='/examination')
-
-UPLOAD_FOLDER = app.config['EXAMINATION_UPLOAD_FOLDER']
 
 
 @blueprint.route('/view/<int:exam_id>/<any(exam,answers):doc_type>/',
@@ -53,8 +50,6 @@ def add():
     form.test_type.choices = test_types.items()
 
     if form.validate_on_submit():
-        error = False
-
         exam_file_data = request.files.get('examination', None)
         answer_file_data = request.files.get('answers', None)
 
@@ -65,7 +60,11 @@ def add():
                                               exam_file_data.filename)
         else:
             flash(_('No examination uploaded.'), 'danger')
-            error = True
+            return render_template('examination/edit.htm',
+                                   courses=courses,
+                                   educations=educations,
+                                   form=form,
+                                   test_types=test_types, new_exam=True)
 
         # Answer file is optional
         if answer_file_data is not None:
@@ -73,23 +72,17 @@ def add():
                                                  answer_file_data,
                                                  answer_file_data.filename)
         else:
+            answers_file = None
             flash(_('No answers uploaded.'), 'warning')
 
-        if error:
-            return render_template('examination/edit.htm',
-                                   courses=courses,
-                                   educations=educations,
-                                   form=form,
-                                   test_types=test_types, new_exam=True)
-        else:
-            examination_service.add_examination(
-                exam_file, form.date.data,
-                form.comment.data, form.course.data,
-                form.education.data, form.test_type.data,
-                answers_file)
+        examination_service.add_examination(
+            exam_file, form.date.data,
+            form.comment.data, form.course.data,
+            form.education.data, form.test_type.data,
+            answers_file)
 
-            flash(_('Examination successfully uploaded.'), 'success')
-            return redirect(url_for('examination.view_examination'))
+        flash(_('Examination successfully uploaded.'), 'success')
+        return redirect(url_for('examination.view_examination'))
 
     return render_template('examination/edit.htm',
                            courses=courses,

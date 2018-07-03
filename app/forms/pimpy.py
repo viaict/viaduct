@@ -7,10 +7,8 @@ from wtforms import StringField, TextAreaField, DateTimeField, SelectField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import InputRequired, Optional
 
-from app import app
+from app import constants
 from app.service import group_service, pimpy_service
-
-DATE_FORMAT = app.config['DATE_FORMAT']
 
 
 class AddTaskForm(FlaskForm):
@@ -32,5 +30,5 @@ class AddMinuteForm(FlaskForm):
         query_factory=lambda: group_service.get_groups_for_user(current_user),
         get_label=lambda x: x.name)
 
-    date = DateTimeField(_('Date'), format=DATE_FORMAT,
+    date = DateTimeField(_('Date'), format=constants.DATE_FORMAT,
                          default=datetime.date.today)

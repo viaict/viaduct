@@ -161,7 +161,6 @@ class TestOAuthService(unittest.TestCase):
         scope_dict = oauth_service.get_scope_descriptions()
         self.assertIsInstance(scope_dict, dict)
         all(self.assertIsInstance(scope, str) for scope in scope_dict.keys())
-        print([type(scope) for scope in scope_dict.values()])
         all(self.assertIsInstance(scope, LazyString) for scope in
             scope_dict.values())
 

@@ -83,8 +83,8 @@ def list(page=1):
         search = request.args.get('search')
 
         companies = Company.query.join(Location)\
-            .filter(or_(Company.name.like('%' + search + '%'),
-                        Location.city.like('%' + search + '%')))\
+            .filter(or_(Company.name.ilike('%' + search + '%'),
+                        Location.city.ilike('%' + search + '%')))\
             .order_by(Company.name).order_by(Company.rank)
 
         if not role_service.user_has_role(current_user, Roles.VACANCY_WRITE):

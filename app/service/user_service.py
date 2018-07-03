@@ -9,7 +9,7 @@ from app.enums import FileCategory
 
 def set_password(user_id, password):
     """Set the new password for user with id."""
-    password = bcrypt.hashpw(password, bcrypt.gensalt())
+    password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     user = get_user_by_id(user_id)
     user.password = password
     user_repository.save(user)

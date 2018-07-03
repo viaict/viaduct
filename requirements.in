@@ -20,7 +20,7 @@ coverage
 connexion
 flake8
 flake8-docstrings
-flake8-putty
+# flake8-putty
 alembic
 Markdown
 PyPDF2
@@ -28,7 +28,9 @@ pep8
 pep8-naming
 py-bcrypt
 pyflakes
-PyMySQL
+psycopg2
+pymysql
+pyopenssl           # For the p12 decryption in the google library.
 python-dateutil
 python-magic
 raven
@@ -38,7 +40,7 @@ Unidecode
 validictory
 watchdog
 WTForms
-pyOpenSSL
+# pyOpenSSL
 speaklater
 python-Levenshtein
 -e git://github.com/JelteF/mollie-api-python@dec672784ed35d8f010aba0a5e4b740b6e419aa7#egg=mollie_api_python

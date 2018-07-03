@@ -1,25 +1,35 @@
 from functools import wraps
-from app import app, db
+from app import app, db, constants
 from app.models.user import User
 
 import requests
 import re
 import logging
 
-COPERNICA_ENABLED = app.config['COPERNICA_ENABLED']
-API_TOKEN = app.config['COPERNICA_API_KEY']
-DATABASE_ID = app.config['COPERNICA_DATABASE_ID']
-SUBPROFILE_TASK = app.config['COPERNICA_ACTIEPUNTEN']
-SUBPROFILE_ACTIVITY = app.config['COPERNICA_ACTIVITEITEN']
+API_TOKEN = None
+DATABASE_ID = None
+SUBPROFILE_TASK = None
+SUBPROFILE_ACTIVITY = None
 
 _logger = logging.getLogger(__name__)
-_logger.info('COPERNICA_ENABLED={}'.format(COPERNICA_ENABLED))
 
 
 def copernica_enabled(f):
+
     @wraps(f)
     def wrapped(*args, **kwargs):
-        if not COPERNICA_ENABLED:
+        global API_TOKEN, DATABASE_ID, SUBPROFILE_TASK, SUBPROFILE_ACTIVITY
+
+        API_TOKEN = app.config['COPERNICA_API_KEY']
+        DATABASE_ID = app.config['COPERNICA_DATABASE_ID']
+        SUBPROFILE_TASK = app.config['COPERNICA_ACTIEPUNTEN']
+        SUBPROFILE_ACTIVITY = app.config['COPERNICA_ACTIVITEITEN']
+
+        enabled = app.config['COPERNICA_ENABLED']
+
+        _logger.info(f'COPERNICA_ENABLED={enabled}')
+
+        if not enabled:
             return False
         else:
             f(*args, **kwargs)
@@ -86,7 +96,7 @@ def update_user(user, subscribe=False):
         "Alumnus": "Ja" if user.alumnus else "Nee",
         "VVV": "Ja" if user.favourer else "Nee",
         "Bedrijfsinformatie": "Ja" if user.receive_information else "Nee",
-        "Geboortedatum": (user.birth_date.strftime(app.config['DATE_FORMAT'])
+        "Geboortedatum": (user.birth_date.strftime(constants.DATE_FORMAT)
                           if user.birth_date else "0000-00-00"),
         "WebsiteID": user.id
     }

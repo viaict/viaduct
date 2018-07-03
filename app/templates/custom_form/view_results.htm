@@ -1,9 +1,11 @@
 {% extends "content.htm" %}
 
 {% import 'macros/rubber_form.htm' as rubber %}
+{% from "macros/form.htm" import render_select, render_checkbox, enable_select2 %}
 
 {% block includes %}
     <script src={{static_url("/static/js/custom_form/view_results.js")}}></script>
+    <script src={{static_url("/static/js/custom_form_submission.js")}}></script>
 {% endblock %}
 
 {% block content %}
@@ -15,8 +17,34 @@
 
 <p><em>Gele entries zijn "reserve" inschrijvingen</em>
 
+<div class="accordion" id="add-registration-accordion">
+    <div class="accordion-group">
+        <div class="accordion-heading alert alert-info">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" href="#collapseForm">
+                Lid toevoegen
+            </a>
+        </div>
+
+        <div id="collapseForm" class="accordion-body collapse">
+            <div class="accordion-inner">
+
+                <form id="custom"
+                      action="{{ url_for('custom_form.submit', form_id=custom_form.id) }}"
+                      enctype="multipart/form-data">
+                    {{ enable_select2() }}
+                    {{ render_select(add_registration_form.user_id) }}
+                    {{ custom_form.html | safe }}
+
+                    <button id="custom_form" class="btn btn-success">{{_('Send form')}}</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 {% if custom_form.results %}
-<table class="table">
+<table class="table custom-form-results">
     <thead>
         <tr>
             <th></th>
@@ -24,7 +52,7 @@
             <th>Informatie</th>
             <th>Datum aanmelding</th>
             <th>Introducees</th>
-            <th>Betaald</th>
+            {% if can_update_paid %}<th>Betaald</th>{% endif %}
             <th></th>
         </tr>
     </thead>
@@ -67,8 +95,10 @@
                 </td>
                 <td>{{ result.time }}</td>
                 <td>+{{ result.introductions }}</td>
+                {% if can_update_paid %}
                 <td>
-                    <button id="{{ result.id }}" title="Gebruiker als betaald aan- / afvinken" class="btn btn-sm btn-success has_paid">
+                    {% set paid_class = "btn-success" if result.has_paid else "btn-danger" %}
+                    <button id="{{ result.id }}" title="Gebruiker als betaald aan- / afvinken" class="btn btn-sm has-paid {{ paid_class }}">
                         {% if result.has_paid %}
                             <i class="glyphicon glyphicon-check"></i>
                         {% else %}
@@ -76,7 +106,8 @@
                         {% endif %}
                     </button>
                 </td>
-                <td><button id="{{ result.id }}" title="Inzending verwijderen" message="Hoi {{ current_user.first_name }}, weet je zeker dat je deze wilt verwijderen?" class="btn btn-sm btn-danger keeswildeleteknopje"><i class="glyphicon glyphicon-trash"></i></button></td>
+                {% endif %}
+                <td><button id="{{ result.id }}" title="Inzending verwijderen" message="Hoi {{ current_user.first_name }}, weet je zeker dat je deze wilt verwijderen?" class="btn btn-sm btn-danger delete-form-result"><i class="glyphicon glyphicon-trash"></i></button></td>
             </tr>
         {% endfor %}
     </tbody>
