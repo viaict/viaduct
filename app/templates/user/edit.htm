@@ -1,6 +1,8 @@
 {% from "macros/form.htm" import
 render_form, render_field, render_checkbox,
-render_submit, render_vsplit, render_file %}
+render_submit, render_vsplit, render_file,
+ignore_kwargs %}
+{% from "macros/user.htm" import render_uvanetid_signin_button %}
 
 {% extends "content.htm" %}
 
@@ -56,6 +58,46 @@ $('#remove-avatar').click(function() {
 {% endif %}
 {% endmacro %}
 
+{% macro render_student_id_bottom() %}
+
+{% if not is_admin %}
+<div class="input-group-addon info">
+    {{ _('Linked to UvA account') }}
+</div>
+{% else %}
+<div class="input-group-btn">
+    <a href="{{ url_for('user.edit_student_id_linking', user_id=user.id) }}" class="btn btn-info">
+        {{ _('Linked to UvA account') }}&nbsp;
+        <i class="glyphicon glyphicon-pencil"></i>
+    </a>
+</div>
+{% endif %}
+
+{% endmacro %}
+
+{% macro render_student_id(f) %}
+{{ ignore_kwargs(kwargs) }}
+
+{% if user.student_id_confirmed %}
+    {{ render_field(f, disabled=True, wrap_inputgroup=True,
+        html_bottom=render_student_id_bottom()) }}
+{% else %}
+    <div class="form-group">
+        {% if user.id == current_user.id %}
+        {% set link_url = url_for('saml.link_account') %}
+        {% else %}
+        {% set link_url = url_for('saml.link_other_account', user_id=user.id) %}
+        {% endif %}
+        {{ render_uvanetid_signin_button(_('Link account to UvA account'), href=link_url) }}
+    </div>
+    {% if is_admin %}
+    <a href="{{ url_for('user.edit_student_id_linking', user_id=user.id) }}" class="btn btn-warning">
+        <i class="glyphicon glyphicon-pencil"></i>
+        {{ _('Edit student ID information manually') }}</a>
+    {% endif %}
+{% endif %}
+{% endmacro %}
+
 {% block content %}
 
 {% set autocomplete = 'off' if user.id != current_user.id else 'on' %}
@@ -65,6 +107,7 @@ $('#remove-avatar').click(function() {
                    'FieldVerticalSplit': check_user_admin,
                    'BooleanField': check_user_paid,
                    'FileField': render_avatar,
+                   'StudentIDField': render_student_id
                }, autocomplete=autocomplete) }}
 
 {% endblock %}

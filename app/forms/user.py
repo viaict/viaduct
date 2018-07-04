@@ -17,6 +17,11 @@ from dateutil.relativedelta import relativedelta
 _min_password_length = app.config['MIN_PASSWORD_LENGTH']
 
 
+class StudentIDField(StringField):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+
 class ResetPasswordForm(FlaskForm):
     password = PasswordField(
         _('New password'), validators=[
@@ -36,7 +41,7 @@ class BaseUserForm(FlaskForm):
     email = EmailField(_('E-mail adress'), validators=[InputRequired()])
     first_name = StringField(_('First name'), validators=[InputRequired()])
     last_name = StringField(_('Last name'), validators=[InputRequired()])
-    student_id = StringField(_('Student ID'), validators=[InputRequired()])
+    student_id = StudentIDField(_('Student ID'))
     education_id = SelectField(_('Education'), coerce=int)
     receive_information = BooleanField(_('Would you like to recieve '
                                          'information from companies?'))
@@ -99,8 +104,8 @@ class EditUserForm(BaseUserForm):
 
     register_split = FieldVerticalSplit([
         ['first_name', 'last_name', 'address', 'zip', 'city', 'country'],
-        ['email', 'student_id', 'education_id', 'birth_date',
-         'study_start', 'receive_information']
+        ['email', 'education_id', 'birth_date',
+         'study_start', 'receive_information', 'student_id']
     ], large_spacing=True)
 
     optional_split = FieldVerticalSplit([
@@ -125,7 +130,8 @@ class EditUserInfoForm(BaseUserForm):
 
     register_split = FieldVerticalSplit([
         ['first_name', 'last_name', 'address', 'zip', 'city', 'country'],
-        ['email', 'student_id', 'education_id', 'birth_date', 'study_start']
+        ['email', 'education_id', 'birth_date', 'study_start',
+         'receive_information', 'student_id']
     ], large_spacing=True)
 
     optional_split = FieldVerticalSplit([
@@ -137,12 +143,12 @@ class EditUserInfoForm(BaseUserForm):
 
 
 class SignInForm(FlaskForm):
-    email = EmailField(_('E-mail adress'), validators=[InputRequired()])
+    email = EmailField(_('E-mail address'), validators=[InputRequired()])
     password = PasswordField(_('Password'), validators=[InputRequired()])
 
 
 class RequestPassword(FlaskForm):
-    email = EmailField(_('E-mail adress'), validators=[InputRequired()])
+    email = EmailField(_('E-mail address'), validators=[InputRequired()])
     recaptcha = RecaptchaField(
         validators=[Recaptcha(message='Check Recaptcha')])
 
@@ -156,3 +162,15 @@ class ChangePasswordForm(ResetPasswordForm):
                            length=_min_password_length)),
                 min=_min_password_length)]
     )
+
+
+class EditUvALinkingForm(FlaskForm):
+    student_id = StringField(_('Student ID'), validators=[Optional()])
+    student_id_confirmed = BooleanField(
+        _('Link this account to the corresponding UvA account'))
+
+    def validate_student_id(self, field):
+        if self.student_id_confirmed.data and not field.data:
+            raise ValidationError(_
+                                  ('A student ID is required when this account'
+                                   ' is linked to a UvA account.'))

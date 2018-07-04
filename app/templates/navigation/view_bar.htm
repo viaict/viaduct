@@ -79,7 +79,7 @@
                           </a>
                           <div class="dropdown-menu" id="loginContainer">
 
-                            {{ render_uvanetid_signin_button(_('Log in with UvA-net ID'), small=True) }}
+                            {{ render_uvanetid_signin_button(_('Log in with UvA-net ID'), href=url_for('saml.login'), small=True) }}
 
                             <hr class="hr-small">
 
@@ -126,7 +126,7 @@
                     <div class="collapse navbar-collapse loginForMobile" id="bs-example-navbar-collapse-2">
 
                         {% if current_user.is_anonymous %}
-                            {{ render_uvanetid_signin_button(_('Log in with UvA-net ID'), small=True) }}
+                            {{ render_uvanetid_signin_button(_('Log in with UvA-net ID'), href=url_for('saml.login'), small=True) }}
 
                             <hr class="hr-small">
                             <form method="post" name="sign-in" id="sign-in-menu-mobile" action="{{ url_for('user.sign_in') }}">

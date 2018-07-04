@@ -1,7 +1,10 @@
-from flask import Blueprint, url_for, redirect, request
-from flask_login import current_user
+from flask import Blueprint, url_for, redirect, request, flash
+from flask_login import current_user, login_required
+from flask_babel import _
 
-from app.service import saml_service
+from app.service import saml_service, user_service
+from app.decorators import require_role
+from app.roles import Roles
 
 from functools import wraps
 
@@ -49,12 +52,42 @@ def sign_up():
         saml_info, url_for('user.sign_up_saml_response'), force_authn=True))
 
 
+@blueprint.route('/link-account/', methods=['GET'])
+@login_required
+@saml_route
+def link_account():
+    redirect_to = request.headers.get('Referer', url_for('home.home'))
+
+    if current_user.student_id_confirmed:
+        flash(_('Your account is already linked to a UvA account.'), 'danger')
+        return redirect(redirect_to)
+
+    saml_service.set_redirect_url(redirect_to)
+
+    return redirect(saml_service.initiate_login(
+        saml_info, url_for('user.process_account_linking_saml_response'),
+        force_authn=True))
+
+
+@blueprint.route('/link-account/<int:user_id>/', methods=['GET'])
+@login_required
+@require_role(Roles.USER_WRITE)
+@saml_route
+def link_other_account(user_id):
+    redirect_to = request.headers.get('Referer', url_for('home.home'))
+
+    user = user_service.get_user_by_id(user_id)
+    saml_service.set_linking_user(user)
+    saml_service.set_redirect_url(redirect_to)
+
+    return redirect(saml_service.initiate_login(
+        saml_info, url_for('user.process_account_linking_saml_response'),
+        force_authn=True))
+
+
 @blueprint.route('/acs/', methods=['POST'])
 @saml_route
 def assertion_consumer_service():
-    if current_user.is_authenticated:
-        return redirect(url_for('home.home'))
-
     saml_service.process_response(saml_info)
 
     redirect_url = saml_service.get_relaystate_redirect_url(

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2018-05-07 23:20+0200\n"
+"POT-Creation-Date: 2018-07-04 15:44+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.5.1\n"
+"Generated-By: Babel 2.6.0\n"
 
 #, python-format
 msgid "%(email)s is unknown to our system."
@@ -167,10 +167,6 @@ msgstr "Bijbaan"
 
 msgid "Birthdate"
 msgstr "Geboortedatum"
-
-#, python-format
-msgid "By clicking 'Register', you agree to our %(link)s."
-msgstr "Door op 'Registreer' te klikken ga je akkoord met ons %(link)s."
 
 msgid "By registering you agree with the terms above."
 msgstr ""
@@ -337,6 +333,9 @@ msgstr "Kopiëren naar klembord"
 msgid "Correct"
 msgstr "Correct"
 
+msgid "Could not find the user to link this UvA account to."
+msgstr "Kan het account om het UvA-account aan te koppelen niet vinden."
+
 msgid "Country"
 msgstr "Land"
 
@@ -497,9 +496,6 @@ msgstr "Nederlandse gegevens"
 msgid "Dutch name"
 msgstr "Nederlandse naam"
 
-msgid "Dutch name requires Dutch description and vice versa"
-msgstr "Nederlandse naam vereist Nederlandse beschrijving en vica versa."
-
 msgid "Dutch tags (comma seperated)"
 msgstr "Nederlandse tags (komma gescheiden)"
 
@@ -551,6 +547,9 @@ msgstr "Nieuwsbrief aanpassen"
 msgid "Edit page"
 msgstr "Pagina aanpassen"
 
+msgid "Edit student ID information manually"
+msgstr "Studentnummer-gegevens handmatig aanpassen"
+
 msgid "Edit user permissions"
 msgstr "Wijzig gebruikersrechten"
 
@@ -577,9 +576,6 @@ msgstr "Een Nederlandse of Engelse inhoud is vereist."
 
 msgid "Either Dutch or English description required"
 msgstr "Een Nederlandse of Engelse beschrijving is vereist."
-
-msgid "Either Dutch or English name required"
-msgstr "Een Nederlandse of Engelse naam is vereist."
 
 msgid "Either Dutch or English title required"
 msgstr "Een Nederlandse of Engelse titel is vereist."
@@ -613,9 +609,6 @@ msgstr "Engelse gegevens"
 
 msgid "English name"
 msgstr "Engelse naam"
-
-msgid "English name requires English description and vice versa"
-msgstr "Engelse naam vereist Engelse beschrijving en vica versa."
 
 msgid "English tags (comma seperated)"
 msgstr "Engelse tags (komma gescheiden)"
@@ -797,11 +790,20 @@ msgstr ""
 msgid "Limit read permission to groups"
 msgstr "Limiteer lees rechten tot groepen"
 
+msgid "Link account to UvA account"
+msgstr "Koppel account aan UvA-account"
+
 msgid "Link copied"
 msgstr "Link gekopieerd"
 
+msgid "Link this account to the corresponding UvA account"
+msgstr "Koppel dit account aan het bijbehorende UvA-account"
+
 msgid "Link to file"
 msgstr "Link naar bestand"
+
+msgid "Linked to UvA account"
+msgstr "Gekoppeld aan UvA-account"
 
 msgid "List of activities"
 msgstr "Activiteiten"
@@ -984,6 +986,9 @@ msgstr ""
 
 msgid "Optional data"
 msgstr "Optionele gegevens"
+
+msgid "Order children alphabetically"
+msgstr "Sorteer onderliggende menu-items alfabetisch."
 
 msgid "Owned by: "
 msgstr "Beheerder: "
@@ -1176,6 +1181,9 @@ msgstr "Zoeken"
 msgid "Search Engine Optimization"
 msgstr ""
 
+msgid "Search for group"
+msgstr "Zoek naar een groep"
+
 msgid "Search for title, contact or company"
 msgstr "Zoeken op titel, contact of bedrijf"
 
@@ -1264,6 +1272,13 @@ msgstr "Status"
 msgid "Student ID"
 msgstr "Studentnummer"
 
+#, python-format
+msgid "Student ID information of %(name)s"
+msgstr "Studentnummer-gegevens van %(name)s"
+
+msgid "Student ID information saved."
+msgstr "Studentnummer-gegevens opgeslagen."
+
 msgid "Studentnumber"
 msgstr "Studenten ID"
 
@@ -1308,6 +1323,19 @@ msgstr "Team"
 
 msgid "Terms"
 msgstr "Voorwaarden"
+
+#, python-format
+msgid ""
+"The UvA account corresponding with this student ID is already linked to "
+"another user (%(name)s - %(email)s). Please unlink the account from the "
+"other user first before linking it to this user."
+msgstr ""
+"Het UvA-account dat bij dit studentnummer hoort is al gekoppeld aan een "
+"ander account (%(name)s - %(email)s). Ontkoppel het account eerst van het"
+" andere account voor het te koppelen aan dit account."
+
+msgid "The account is now linked to this UvA account."
+msgstr "Het account is nu gekoppeld aan dit UvA-account."
 
 msgid "The activity has been created."
 msgstr "De activiteit is aangemaakt."
@@ -1387,6 +1415,16 @@ msgstr ""
 
 msgid "The seo settings have been saved"
 msgstr "De seo-instellingen zijn opgeslagen"
+
+msgid "There is already an account linked to this UvA account."
+msgstr "Er is al een account gekoppeld aan dit UvA-account."
+
+msgid ""
+"There is already an account linked to this UvA account. If you are sure "
+"that this is a mistake please send an email to the board."
+msgstr ""
+"Er is al een account gekoppeld aan dit UvA-account. Als je vermoed dat "
+"dit niet klopt, neem dan contact op met het bestuur."
 
 msgid "There is already another group with this e-mail address."
 msgstr "Er is al een groep met hetzelfde emailadres."
@@ -1653,6 +1691,12 @@ msgstr "Je moet ingelogd zijn om je te registeren voor een activiteit."
 msgid "You need to be at least 16 years old."
 msgstr "Je moet ten minste 16 jaar oud zijn."
 
+msgid "You need to be logged in to link an account."
+msgstr "Je moet ingelogd zijn om een account te koppelen."
+
+msgid "You need to be logged in to link your account."
+msgstr "Je moet ingelogd zijn om je account te koppelen."
+
 msgid "You need to be logged in to set a permanent language."
 msgstr "Je moet ingelogd zijn om een permanente taal in te stellen."
 
@@ -1661,6 +1705,12 @@ msgstr ""
 
 msgid "Your account has been disabled, you are not allowed to log in"
 msgstr "Je account is gedeactiveerd, je mag niet inloggen"
+
+msgid "Your account is already linked to a UvA account."
+msgstr "Je account is al gekoppeld aan een UvA-account."
+
+msgid "Your account is now linked to this UvA account."
+msgstr "Je account is nu gekoppeld aan dit UvA-account."
 
 msgid "Your current password does not match."
 msgstr "Huidig wachtwoord klopt niet."
@@ -2302,4 +2352,31 @@ msgstr ""
 
 #~ msgid "Wrong format examination."
 #~ msgstr "Fout formaat tentamen."
+
+#~ msgid "By clicking 'Register', you agree to our %(link)s."
+#~ msgstr "Door op 'Registreer' te klikken ga je akkoord met ons %(link)s."
+
+#~ msgid "Dutch name requires Dutch description and vice versa"
+#~ msgstr "Nederlandse naam vereist Nederlandse beschrijving en vica versa."
+
+#~ msgid "Either Dutch or English name required"
+#~ msgstr "Een Nederlandse of Engelse naam is vereist."
+
+#~ msgid "English name requires English description and vice versa"
+#~ msgstr "Engelse naam vereist Engelse beschrijving en vica versa."
+
+#~ msgid "An unknown error occurred. The IT team has been notified."
+#~ msgstr ""
+
+#~ msgid "Linked to UvA account."
+#~ msgstr ""
+
+#~ msgid "Linked to this UvA account"
+#~ msgstr ""
+
+#~ msgid "Linked to this UvA account."
+#~ msgstr ""
+
+#~ msgid "Unlink"
+#~ msgstr ""
 

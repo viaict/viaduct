@@ -9,7 +9,7 @@
 <div class="row">
     <div class="col-md-4">
         <label>{{ _('UvA Account') }}</label>
-        {{ render_uvanetid_signin_button(_('Log in with UvA-net ID')) }}
+        {{ render_uvanetid_signin_button(_('Log in with UvA-net ID'), href=url_for('saml.login')) }}
     </div>
 
     <div class="col-md-8 email-login-tab">

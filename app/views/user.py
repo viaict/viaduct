@@ -15,10 +15,10 @@ from flask_login import current_user, login_user, logout_user, login_required
 from app import db, login_manager, get_locale
 from app.decorators import require_role, response_headers
 from app.exceptions import ResourceNotFoundException, AuthorizationException, \
-    ValidationException
+    ValidationException, BusinessRuleException
 from app.forms.user import (EditUserForm, EditUserInfoForm, SignUpForm,
                             SignInForm, ResetPasswordForm, RequestPassword,
-                            ChangePasswordForm)
+                            ChangePasswordForm, EditUvALinkingForm)
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult, CustomForm
 from app.models.education import Education
@@ -224,6 +224,52 @@ def edit(user_id=None):
     return edit_page()
 
 
+@blueprint.route('/users/edit/<int:user_id>/student-id-linking',
+                 methods=['GET', 'POST'])
+@login_required
+@require_role(Roles.USER_WRITE)
+def edit_student_id_linking(user_id):
+    user = user_service.get_user_by_id(user_id)
+
+    form = EditUvALinkingForm(request.form, obj=user)
+
+    def edit_page():
+        return render_template('user/edit_student_id.htm',
+                               user=user, form=form)
+
+    if form.validate_on_submit():
+
+        if not form.student_id.data:
+            user_service.remove_student_id(user)
+        elif form.student_id_confirmed.data:
+            other_user = user_service.find_user_by_student_id(
+                form.student_id.data)
+
+            if other_user:
+                error = _('The UvA account corresponding with this student ID '
+                          'is already linked to another user '
+                          '(%(name)s - %(email)s). Please unlink the account '
+                          'from the other user first before linking it '
+                          'to this user.', name=other_user.name,
+                          email=other_user.email)
+
+                form.student_id_confirmed.errors.append(error)
+
+                return edit_page()
+
+            user_service.clear_unconfirmed_student_id_in_all_users(
+                form.student_id.data)
+            user_service.set_confirmed_student_id(user, form.student_id.data)
+        else:
+            user_service.set_unconfirmed_student_id(user, form.student_id.data)
+
+        flash(_('Student ID information saved.'), 'success')
+
+        return redirect(url_for('.edit', user_id=user_id))
+
+    return edit_page()
+
+
 @blueprint.route('/sign-up/', methods=['GET', 'POST'])
 @response_headers({"X-Frame-Options": "SAMEORIGIN"})
 def sign_up():
@@ -378,6 +424,55 @@ def sign_out():
         return redirect(referer)
 
     return redirect(url_for('home.home'))
+
+
+@blueprint.route('/process-account-linking')
+@saml_service.ensure_data_cleared
+def process_account_linking_saml_response():
+    redir_url = saml_service.get_redirect_url(url_for('home.home'))
+
+    # Check whether a user is linking his/her own account
+    # or an someone is linking another account
+    linking_current_user = saml_service.is_linking_user_current_user()
+
+    if not current_user.is_authenticated:
+        if linking_current_user:
+            flash(_('You need to be logged in to link your account.'),
+                  'danger')
+        else:
+            flash(_('You need to be logged in to link an account.'), 'danger')
+
+        return redirect(redir_url)
+
+    if not saml_service.user_is_authenticated():
+        flash(_('Authentication failed. Please try again.'), 'danger')
+        return redirect(redir_url)
+
+    if linking_current_user:
+        try:
+            saml_service.link_uid_to_user(current_user)
+            flash(_('Your account is now linked to this UvA account.'),
+                  'success')
+        except BusinessRuleException:
+            flash(_('There is already an account linked to this UvA account. '
+                    'If you are sure that this is a mistake please send '
+                    'an email to the board.'), 'danger')
+    else:
+        try:
+            link_user = saml_service.get_linking_user()
+            saml_service.link_uid_to_user(link_user)
+
+            flash(_('The account is now linked to this UvA account.'),
+                  'success')
+        except BusinessRuleException:
+            flash(_('There is already an account linked to this UvA account.'),
+                  'danger')
+        except ResourceNotFoundException:
+            # Should not happen normally
+            flash(_('Could not find the user to link this UvA account to.'),
+                  'danger')
+
+    return redirect(redir_url)
 
 
 @blueprint.route('/request_password/', methods=['GET', 'POST'])

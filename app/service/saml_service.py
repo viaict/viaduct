@@ -1,8 +1,10 @@
 from app import app
-from app.exceptions import ValidationException, AuthorizationException
+from app.exceptions import ValidationException, AuthorizationException, \
+    BusinessRuleException
 from app.service import user_service
 
 from flask import session, request
+from flask_login import current_user
 
 from functools import wraps
 from collections import namedtuple
@@ -125,6 +127,26 @@ def get_redirect_url(fallback_url):
 
 
 @_requires_saml_data
+def set_linking_user(user):
+    session['saml_data']['linking_user_id'] = user.id
+
+
+@_requires_saml_data
+def is_linking_user_current_user():
+    user_id = session['saml_data'].get('linking_user_id')
+    return user_id is None or user_id == current_user.id
+
+
+@_requires_saml_data
+def get_linking_user():
+    user_id = session['saml_data'].get('linking_user_id')
+    if not user_id:
+        return current_user
+
+    return user_service.get_user_by_id(user_id)
+
+
+@_requires_saml_data
 def user_is_authenticated():
     return session['saml_data'].get('is_authenticated', False)
 
@@ -134,9 +156,14 @@ def get_attributes():
     return session['saml_data'].get('attributes', {})
 
 
-def get_user_by_uid():
+def get_uid_from_attributes():
     attributes = get_attributes()
-    uid = attributes.get('urn:mace:dir:attribute-def:uid')
+    return attributes.get('urn:mace:dir:attribute-def:uid')
+
+
+def get_user_by_uid():
+    uid = get_uid_from_attributes()
+
     if not uid:
         raise ValidationException('uid not found in SAML attributes')
 
@@ -146,6 +173,19 @@ def get_user_by_uid():
         raise AuthorizationException("User is disabled.")
 
     return user
+
+
+def link_uid_to_user(user):
+    uid = get_uid_from_attributes()
+    other_user = user_service.find_user_by_student_id(uid)
+
+    if other_user is not None:
+        raise BusinessRuleException("uid already linked to other user.")
+
+    # TODO: check if account is student account
+
+    user_service.clear_unconfirmed_student_id_in_all_users(uid)
+    user_service.set_confirmed_student_id(user, uid)
 
 
 @_requires_saml_data

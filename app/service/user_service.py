@@ -45,12 +45,46 @@ def find_user_by_student_id(student_id):
 
 
 def get_user_by_student_id(student_id):
-    """Retrieve the user by id, throw error if not found."""
+    """Retrieve the user by student id, throw error if not found."""
     user = find_user_by_student_id(student_id)
     if not user:
         raise ResourceNotFoundException("user", student_id)
 
     return user
+
+
+def clear_unconfirmed_student_id_in_all_users(student_id):
+    users = user_repository.find_all_users_with_unconfirmed_student_id(
+        student_id)
+
+    for user in users:
+        user.student_id = None
+        user_repository.save(user)
+
+
+def set_confirmed_student_id(user, student_id):
+    # TODO: check if there is not another account with
+    # the same confirmed student id
+    # TODO: maybe merge with method above?
+
+    user.student_id = student_id
+    user.student_id_confirmed = True
+
+    user_repository.save(user)
+
+
+def set_unconfirmed_student_id(user, student_id):
+    user.student_id = student_id
+    user.student_id_confirmed = False
+
+    user_repository.save(user)
+
+
+def remove_student_id(user):
+    user.student_id = None
+    user.student_id_confirmed = False
+
+    user_repository.save(user)
 
 
 def find_members():
