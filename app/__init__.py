@@ -38,6 +38,8 @@ app.logger.setLevel(logging.NOTSET)
 _logger = logging.getLogger('app')
 _logger.setLevel(logging.DEBUG)
 
+logging.getLogger('werkzeug').setLevel(logging.DEBUG)
+
 
 # Set up Flask Babel, which is used for internationalisation support.
 hashfs = HashFS('app/uploads/')

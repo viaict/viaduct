@@ -31,13 +31,9 @@
     <p>
         {{_('Committee members')}}:
         <ul>
-            {% for member in revision.group.users.order_by(User.first_name, User.last_name).all() %}
-                <li>
-                    <a href="{{ url_for('user.view_single', user_id=member.id) }}">
-                        {{member.name}}
-                    </a>
-                </li>
-            {% endfor %}
+            {%- for member in revision.group.users.order_by(User.first_name, User.last_name).all() -%}
+                <li>{{member.name}}</li>
+            {%- endfor -%}
         </ul>
     </p>
 {% endblock %}

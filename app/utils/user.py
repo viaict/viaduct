@@ -39,16 +39,6 @@ class UserAPI:
         return gravatar_url
 
     @staticmethod
-    def upload(f, user_id):
-        """Upload the new avatar.
-
-        Checks if the file type is allowed if so removes any
-        previous uploaded avatars.
-        """
-
-        user_service.set_avatar(user_id, f)
-
-    @staticmethod
     def get_groups_for_user_id(user):
         """Return all the groups the current user belongs in.
 

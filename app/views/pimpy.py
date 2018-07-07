@@ -114,8 +114,8 @@ def view_tasks(group_id=None):
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
-@blueprint.route('/tasks/me/', methods=['GET', 'POST'])
-@blueprint.route('/tasks/me/<int:group_id>/', methods=['GET', 'POST'])
+@blueprint.route('/tasks/self/', methods=['GET', 'POST'])
+@blueprint.route('/tasks/self/<int:group_id>/', methods=['GET', 'POST'])
 @require_role(Roles.PIMPY_READ)
 def view_tasks_personal(group_id=None):
     if group_id is not None and not current_user.member_of_group(group_id):
