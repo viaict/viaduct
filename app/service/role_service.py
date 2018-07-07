@@ -10,7 +10,10 @@ _logger = logging.getLogger(__name__)
 
 
 def user_has_role(user, *roles):
-    return all(role in user.roles for role in roles)
+    if user.is_authenticated:
+        return all(role in user.roles for role in roles)
+    else:
+        return False
 
 
 def find_all_roles_by_group_id(group_id):

@@ -97,7 +97,7 @@ def internal_server_error(_):
 @add_api_error_handler
 def page_not_found(_):
     # Search for file extension.
-    if re.match(r'(?:.*)\.[a-zA-Z]{3,}$', request.path):
+    if re.match(r'(?:.*)\.[a-zA-Z]{2,}$', request.path):
         return '', 404
 
     page = Page(request.path.lstrip('/'))
