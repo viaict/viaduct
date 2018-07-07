@@ -1,71 +1,74 @@
 import unittest
-from unittest.mock import patch, MagicMock, call
-
 from io import StringIO
+from unittest.mock import patch, MagicMock, call, Mock
+
+from PIL import Image
 from hashfs import HashAddress
 
 from app import hashfs
-from app.service import file_service
-from app.repository import file_repository
-from app.exceptions import ResourceNotFoundException
 from app.enums import FileCategory
+from app.exceptions import ResourceNotFoundException
 from app.models.file import File
+from app.repository import file_repository
+from app.service import file_service
 
 file_repository_mock = MagicMock(spec=dir(file_repository))
 hashfs_mock = MagicMock(spec=dir(hashfs))
+pil_image_mock = MagicMock(spec=dir(Image))
 
 
 def search_test_case(filenames, search,
                      expect_in_result,
                      expect_ordering=None):
-        files = []
+    files = []
 
-        for i, fn in enumerate(filenames):
-            [display_name, extension] = fn.split('.')
-            category = FileCategory.UPLOADS
+    for i, fn in enumerate(filenames):
+        [display_name, extension] = fn.split('.')
+        category = FileCategory.UPLOADS
 
-            _hash = '123456789abcdefghiklmnopqrstuvwxyz'
+        _hash = '123456789abcdefghiklmnopqrstuvwxyz'
 
-            _file = MagicMock(spec=dir(File))
-            _file.id = i + 1
-            _file.hash = _hash
-            _file.category = category
-            _file.display_name = display_name
-            _file.extension = extension
+        _file = MagicMock(spec=dir(File))
+        _file.id = i + 1
+        _file.hash = _hash
+        _file.category = category
+        _file.display_name = display_name
+        _file.extension = extension
 
-            _file.full_display_name = fn
+        _file.full_display_name = fn
 
-            files.append(_file)
+        files.append(_file)
 
-        file_repository_mock.find_all_files_by_category.return_value = files
+    file_repository_mock.find_all_files_by_category.return_value = files
 
-        search_results = file_service.search_files_in_uploads(search)
+    search_results = file_service.search_files_in_uploads(search)
 
-        search_results_filenames = [r.full_display_name
-                                    for r in search_results]
+    search_results_filenames = [r.full_display_name
+                                for r in search_results]
 
-        expect_in_result = set(expect_in_result)
-        for fn in filenames:
-            if fn in expect_in_result:
-                assert fn in search_results_filenames, fn
-            else:
-                assert fn not in search_results_filenames, fn
+    expect_in_result = set(expect_in_result)
+    for fn in filenames:
+        if fn in expect_in_result:
+            assert fn in search_results_filenames, fn
+        else:
+            assert fn not in search_results_filenames, fn
 
-        if expect_ordering:
+    if expect_ordering:
 
-            # Test if we have the same ordering in the result
-            prev_index = -1
+        # Test if we have the same ordering in the result
+        prev_index = -1
 
-            for fn in expect_ordering:
-                assert fn in expect_in_result, fn
+        for fn in expect_ordering:
+            assert fn in expect_in_result, fn
 
-                index = search_results_filenames.index(fn)
-                assert index > prev_index, fn
-                prev_index = index
+            index = search_results_filenames.index(fn)
+            assert index > prev_index, fn
+            prev_index = index
 
 
 @patch.object(file_service, 'file_repository', file_repository_mock)
 @patch.object(file_service, 'hashfs', hashfs_mock)
+@patch.object(file_service, 'Image', pil_image_mock)
 class TestFileService(unittest.TestCase):
 
     def setUp(self):
@@ -481,6 +484,92 @@ class TestFileService(unittest.TestCase):
         with self.assertRaises(ResourceNotFoundException):
             file_service.get_file_content(_file)
 
+        hashfs_mock.open.reset_mock(side_effect=True)
+
+    def test_get_image_with_headers_normal(self):
+        # === Initialization ===
+
+        display_name = 'test123'
+        extension = 'png'
+        category = FileCategory.UPLOADS
+        _hash = '123456789abcdefghiklmnopqrstuvwxyz'
+
+        _file = MagicMock(spec=dir(File))
+        _file.id = 1
+        _file.hash = _hash
+        _file.category = category
+        _file.display_name = display_name
+        _file.extension = extension
+
+        # === Service function call ===
+
+        with patch.object(file_service, 'get_file_content'):
+            with patch.object(file_service, 'get_file_content_headers'):
+                file_service.get_image_with_headers(_file, display_name,
+                                                    'normal')
+                file_service.get_file_content.assert_called_once()
+                file_service.get_file_content_headers.assert_called_once()
+
+    def test_get_image_with_headers_thumbnail(self):
+        # === Initialization ===
+
+        display_name = 'test123'
+        extension = 'png'
+        category = FileCategory.UPLOADS
+        _hash = '123456789abcdefghiklmnopqrstuvwxyz'
+
+        _file = MagicMock(spec=dir(File))
+        _file.id = 1
+        _file.hash = _hash
+        _file.category = category
+        _file.display_name = display_name
+        _file.extension = extension
+
+        # === Service function call ===
+
+        with patch.object(file_service, 'get_thumbnail_of_file'):
+            file_service.get_image_with_headers(_file, display_name,
+                                                'thumbnail')
+            file_service.get_thumbnail_of_file.assert_called_once()
+
+    def test_get_thumbnail_of_file(self):
+        # === Initialization ===
+
+        display_name = 'test123'
+        extension = 'png'
+        category = FileCategory.UPLOADS
+        _hash = '123456789abcdefghiklmnopqrstuvwxyz'
+        data = '1eb55d09d99d4d0686581a7fdb8a3346'
+        data_reader = StringIO(data)
+
+        _file = MagicMock(spec=dir(File))
+        _file.id = 1
+        _file.hash = _hash
+        _file.category = category
+        _file.display_name = display_name
+        _file.extension = extension
+
+        # === Set return values ===
+
+        hashfs_mock.open.return_value = data_reader
+
+        pil_img = Mock()
+        pil_img.convert.return_value = pil_img
+
+        pil_image_mock.open.return_value = pil_img
+
+        # === Service function call ===
+
+        with_size = (567, 765)
+
+        file_service.get_thumbnail_of_file(
+            _file, thumbnail_size=with_size)
+
+        # === Assertions ===
+
+        pil_img.thumbnail.assert_called_once_with(with_size)
+        pil_img.save.assert_called_once()
+
     def test_get_file_mimetype_png(self):
         # === Initialization ===
 
@@ -791,7 +880,7 @@ class TestFileService(unittest.TestCase):
                 files_activity_pictures.append(_file)
 
         expected_result = files_activity_pictures[
-            per_page * (page_nr - 1):per_page * page_nr]
+                          per_page * (page_nr - 1):per_page * page_nr]
 
         # === Set return values ===
 
@@ -883,7 +972,7 @@ class TestFileService(unittest.TestCase):
 
         all_files = files_uploads + files_activity_pictures
         expected_result = all_files[
-            per_page * (page_nr - 1):per_page * page_nr]
+                          per_page * (page_nr - 1):per_page * page_nr]
 
         # === Set return values ===
 
