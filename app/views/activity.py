@@ -337,18 +337,16 @@ def rss(locale='en'):
 
 
 @blueprint.route('/picture/<int:activity_id>/')
-def picture(activity_id):
+@blueprint.route('/picture/<int:activity_id>/<picture_type>')
+def picture(activity_id, picture_type=None):
+    if picture_type not in ('normal', 'thumbnail'):
+        picture_type = 'normal'
+
     activity = Activity.query.get_or_404(activity_id)
 
     if activity.picture_file_id is None:
         return redirect('/static/img/via_thumbnail.png')
 
     picture_file = file_service.get_file_by_id(activity.picture_file_id)
-
     fn = 'activity_picture_' + activity.name
-
-    content = file_service.get_file_content(picture_file)
-    headers = file_service.get_file_content_headers(picture_file,
-                                                    display_name=fn)
-
-    return content, headers
+    return file_service.get_image_with_headers(picture_file, fn, picture_type)

@@ -26,6 +26,7 @@ Markdown
 PyPDF2
 pep8
 pep8-naming
+Pillow
 py-bcrypt
 pyflakes
 psycopg2

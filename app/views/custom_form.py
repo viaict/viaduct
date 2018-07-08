@@ -4,7 +4,7 @@ from flask import (flash, redirect, render_template, request, url_for, abort,
                    jsonify, Blueprint, Response)
 from flask_login import current_user
 
-from app import db, constants
+from app import db, constants, app
 from app.decorators import require_role, require_membership
 from app.forms import init_form
 from app.forms.custom_form import CreateForm
@@ -195,7 +195,7 @@ def create(form_id=None):
                             "Reserve": "Nee"
                         }
                         copernica.update_subprofile(
-                            copernica.SUBPROFILE_ACTIVITY, sub.owner_id,
+                            app.config['COPERNICA_ACTIVITEITEN'], sub.owner_id,
                             sub.form_id, copernica_data)
             elif cur_max < prev_max:
                 all_sub = CustomFormResult.query.filter(
@@ -208,7 +208,7 @@ def create(form_id=None):
                             "Reserve": "Ja"
                         }
                         copernica.update_subprofile(
-                            copernica.SUBPROFILE_ACTIVITY, sub.owner_id,
+                            app.config['COPERNICA_ACTIVITEITEN'], sub.owner_id,
                             sub.form_id, copernica_data)
 
         db.session.add(custom_form)
@@ -255,7 +255,7 @@ def remove_response(submit_id=None):
             "Reserve": "Nee"
         }
         copernica.update_subprofile(
-            copernica.SUBPROFILE_ACTIVITY, from_list.owner_id,
+            app.config['COPERNICA_ACTIVITEITEN'], from_list.owner_id,
             from_list.form_id, copernica_data)
 
     return response
@@ -341,7 +341,7 @@ def submit(form_id=-1):
                 "viaductID": form_id,
                 "Reserve": "Ja" if response is "reserve" else "Nee",
             }
-            copernica.add_subprofile(copernica.SUBPROFILE_ACTIVITY,
+            copernica.add_subprofile(app.config['COPERNICA_ACTIVITEITEN'],
                                      user.id, copernica_data)
 
     db.session.add(user)
@@ -429,7 +429,7 @@ def has_paid(submit_id=None):
         "Betaald": "Ja" if submission.has_paid else "Nee",
     }
 
-    copernica.update_subprofile(copernica.SUBPROFILE_ACTIVITY,
+    copernica.update_subprofile(app.config['COPERNICA_ACTIVITEITEN'],
                                 submission.owner_id, submission.form_id,
                                 copernica_data)
 
