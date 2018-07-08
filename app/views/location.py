@@ -1,10 +1,10 @@
-from flask import Blueprint, flash, redirect, render_template, request, \
-    url_for, jsonify
+from flask import Blueprint, flash, redirect, render_template, url_for, jsonify
 from flask_babel import lazy_gettext as _
 from flask_login import current_user
 
 from app import db
 from app.decorators import require_role
+from app.forms import init_form
 from app.forms.location import LocationForm
 from app.models.location import Location
 from app.roles import Roles
@@ -43,7 +43,7 @@ def edit(location_id=None):
     else:
         location = Location()
 
-    form = LocationForm(request.form, obj=location)
+    form = init_form(LocationForm, obj=location)
 
     if form.validate_on_submit():
         form.populate_obj(location)

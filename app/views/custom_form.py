@@ -6,6 +6,7 @@ from flask_login import current_user
 
 from app import db, constants
 from app.decorators import require_role, require_membership
+from app.forms import init_form
 from app.forms.custom_form import CreateForm
 from app.forms.custom_form import AddRegistrationForm
 from app.models.custom_form import CustomForm, CustomFormResult, \
@@ -154,7 +155,7 @@ def create(form_id=None):
     else:
         custom_form = CustomForm()
 
-    form = CreateForm(request.form, obj=custom_form)
+    form = init_form(CreateForm, obj=custom_form)
 
     if request.method == 'POST':
         custom_form.name = form.name.data

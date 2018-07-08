@@ -6,6 +6,7 @@ from flask_login import current_user
 import app.utils.committee as CommitteeAPI
 from app import db
 from app.decorators import require_role
+from app.forms import init_form
 from app.forms.committee import CommitteeForm
 from app.models.committee import CommitteeRevision
 from app.models.group import Group
@@ -31,14 +32,9 @@ def edit_committee(committee=''):
     path = 'commissie/' + committee
 
     page = page_service.get_page_by_path(path)
+    revision = page.get_latest_revision() if page else None
 
-    form = request.form
-    if page:
-        revision = page.get_latest_revision()
-        form = CommitteeForm(form, obj=revision)
-    else:
-        revision = None
-        form = CommitteeForm()
+    form = init_form(CommitteeForm, obj=revision)
 
     try:
         url_group_id = int(request.args.get('group_id', None))

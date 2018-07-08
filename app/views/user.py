@@ -15,6 +15,7 @@ from app import db, login_manager, get_locale
 from app.decorators import require_role, response_headers
 from app.exceptions import ResourceNotFoundException, AuthorizationException, \
     ValidationException
+from app.forms import init_form
 from app.forms.user import (EditUserForm, EditUserInfoForm, SignUpForm,
                             SignInForm, ResetPasswordForm, RequestPassword,
                             ChangePasswordForm)
@@ -116,15 +117,14 @@ def edit(user_id, form_cls):
 
     User and form type are passed based on routes below.
     """
-
     if user_id:
         user = user_service.get_user_by_id(user_id)
     else:
         user = User()
 
     user.avatar = user_service.user_has_avatar(user_id)
-    form = form_cls(request.form, obj=user)
 
+    form = init_form(form_cls, obj=user)
     form.new_user = user.id == 0
 
     # Add education.
@@ -140,6 +140,8 @@ def edit(user_id, form_cls):
 
         # Only new users need a unique email.
         query = User.query.filter(User.email == form.email.data)
+        if user_id:
+            query = query.filter(User.id != user_id)
 
         if query.count() > 0:
             flash(_('A user with this e-mail address already exist.'),

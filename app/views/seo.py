@@ -4,6 +4,7 @@ from flask_babel import _  # gettext
 
 from app import db
 from app.decorators import require_role
+from app.forms import init_form
 from app.forms.seo import SeoForm
 from app.models.seo import SEO
 from app.roles import Roles
@@ -22,7 +23,7 @@ def edit_seo():
     seo = get_seo(module, path)
 
     # Retrieve form info.
-    form = SeoForm(request.form, obj=seo)
+    form = init_form(SeoForm, obj=seo)
 
     # On Seo submit (edit or create)
     if form.validate_on_submit():

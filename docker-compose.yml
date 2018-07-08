@@ -9,7 +9,7 @@ services:
     volumes:
       - .:/app
     ports:
-      - 5000:3031
+      - 5000:5000
     environment:
       - SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://viaduct:viaduct@db/viaduct
     depends_on:
@@ -19,6 +19,8 @@ services:
     image: postgres:alpine
     volumes:
       - db:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
     environment:
       POSTGRES_USER: viaduct
       POSTGRES_DB: viaduct

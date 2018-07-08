@@ -9,6 +9,7 @@ from sqlalchemy import or_, and_
 
 from app import db
 from app.decorators import require_role
+from app.forms import init_form
 from app.forms.company import CompanyForm, NewCompanyForm
 from app.models.company import Company
 from app.models.contact import Contact
@@ -148,7 +149,7 @@ def edit(company_id=None):
     else:
         company = Company()
 
-    form = CompanyForm(request.form, obj=company)
+    form = init_form(CompanyForm, obj=company)
 
     # Add locations.
     locations = Location.query.order_by('address').order_by('city')
@@ -238,7 +239,7 @@ def create(company_id=None):
     data['contact_email'] = contact.email
     data['contact_phone_nr'] = contact.phone_nr
 
-    form = NewCompanyForm(request.form, data=data)
+    form = init_form(NewCompanyForm, data=data)
 
     if form.validate_on_submit():
 

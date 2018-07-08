@@ -8,6 +8,7 @@ from sqlalchemy import or_, and_, cast, String
 
 from app import db
 from app.decorators import require_role
+from app.forms import init_form
 from app.forms.vacancy import VacancyForm
 from app.models.company import Company
 from app.models.vacancy import Vacancy
@@ -82,13 +83,9 @@ def _order_vacancies(vacancies):
 @require_role(Roles.VACANCY_WRITE)
 def edit(vacancy_id=None):
     """Create, view or edit a vacancy."""
-    # Select vacancy.
-    if vacancy_id:
-        vacancy = Vacancy.query.get(vacancy_id)
-    else:
-        vacancy = Vacancy()
 
-    form = VacancyForm(request.form, obj=vacancy)
+    vacancy = Vacancy.query.get(vacancy_id) if vacancy_id else Vacancy()
+    form = init_form(VacancyForm, obj=vacancy)
 
     # Add companies.
     form.company_id.choices = [(c.id, c.name) for c in Company.query

@@ -6,6 +6,7 @@ from flask_login import current_user
 from fuzzywuzzy import fuzz
 
 from app.decorators import require_role, require_membership
+from app.forms import init_form
 from app.forms.examination import EditForm
 from app.models.examination import test_types
 from app.roles import Roles
@@ -98,7 +99,7 @@ def edit(exam_id):
 
     session['examination_edit_id'] = exam_id
 
-    form = EditForm(request.form, obj=exam)
+    form = init_form(EditForm, obj=exam)
 
     courses = examination_service.find_all_courses()
     educations = examination_service.find_all_educations()

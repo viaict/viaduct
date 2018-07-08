@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import BooleanField, StringField, TextAreaField, SubmitField, \
     RadioField
 from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField
-from wtforms.validators import InputRequired, Regexp, Optional
+from wtforms.validators import Optional
 
 from app.forms.fields import CustomFormSelectField
 from app.service import group_service
@@ -66,13 +66,3 @@ class HistoryPageForm(FlaskForm):
     previous = RadioField(_('Previous'), coerce=int)
     current = RadioField(_('Current'), coerce=int)
     compare = SubmitField(_('Compare'))
-
-
-# TODO: This is not used anywhere...
-class ChangePathForm(FlaskForm):
-    path = StringField('Path', [InputRequired(),
-                                Regexp(r'^ */?[\w-]+(/[\w-]+)*/? *$',
-                                       message='You suck at typing '
-                                       'URL paths')])
-    move_only_this = SubmitField('Only this page')
-    move_children = SubmitField('This and its children ')

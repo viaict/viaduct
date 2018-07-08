@@ -1,9 +1,10 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_babel import lazy_gettext as _
 from flask_login import current_user
 
 from app import db
 from app.decorators import require_role
+from app.forms import init_form
 from app.forms.contact import ContactForm
 from app.models.contact import Contact
 from app.models.location import Location
@@ -34,7 +35,7 @@ def edit(contact_id=None):
     else:
         contact = Contact()
 
-    form = ContactForm(request.form, obj=contact)
+    form = init_form(ContactForm, obj=contact)
 
     locations = Location.query.order_by(
         Location.address).order_by(Location.city)
