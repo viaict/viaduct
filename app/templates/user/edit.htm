@@ -35,7 +35,7 @@ render_submit, render_vsplit, render_file %}
 {% if user.avatar %}
 <div id="avatar-container">
     <label>{{ _('Current avatar') }}:</label>
-    <img src="{{UserAPI.avatar(user)}}"></img>
+    <img src="{{ UserAPI.avatar(user) }}"/>
     <a id="remove-avatar" class='btn btn-xs btn-danger'>{{_('Delete avatar')}}</a>
 </div>
 <script>

@@ -9,6 +9,7 @@ from werkzeug.contrib.atom import AtomFeed
 
 from app import db
 from app.decorators import require_role
+from app.forms import init_form
 from app.forms.news import NewsForm
 from app.models.news import News
 from app.roles import Roles
@@ -61,7 +62,7 @@ def edit(news_id=None):
     else:
         news_item = News()
 
-    form = NewsForm(request.form, obj=news_item)
+    form = init_form(NewsForm, obj=news_item)
 
     if form.validate_on_submit():
 

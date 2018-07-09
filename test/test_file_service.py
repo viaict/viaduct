@@ -879,8 +879,8 @@ class TestFileService(unittest.TestCase):
             else:
                 files_activity_pictures.append(_file)
 
-        expected_result = files_activity_pictures[
-                          per_page * (page_nr - 1):per_page * page_nr]
+        expected_result = files_activity_pictures[per_page * (page_nr - 1):
+                                                  per_page * page_nr]
 
         # === Set return values ===
 
@@ -971,8 +971,8 @@ class TestFileService(unittest.TestCase):
                 files_activity_pictures.append(_file)
 
         all_files = files_uploads + files_activity_pictures
-        expected_result = all_files[
-                          per_page * (page_nr - 1):per_page * page_nr]
+        expected_result = all_files[per_page * (page_nr - 1):
+                                    per_page * page_nr]
 
         # === Set return values ===
 

@@ -7,20 +7,19 @@
 {% if custom_form.results %}
 <table class="table">
 	<tr>
-		<th>Gebruiker
-		<th>Email
-		<th>Tel nr.
-		<th>Formulier data
+        <th>Gebruiker</th>
+        <th>Email</th>
+        <th>Tel nr.</th>
+        <th>Formulier data</th>
+    </tr>
 
 	{% for result in custom_form.results %}
 		<tr>
-			<td>
-				<a href="{{ url_for('user.view_single', user_id=result.owner.id) }}">
-					{{ result.owner.first_name[:1] }}. {{ result.owner.last_name }}
-				</a>
-			<td>{{ result.owner.email }}
-			<td>{{ result.owner.phone_nr }}
-			<td>{{ result.form_entry|safe }}
+            <td>{{ result.owner.name }}</td>
+            <td>{{ result.owner.email }}</td>
+            <td>{{ result.owner.phone_nr }}</td>
+            <td>{{ result.form_entry|safe }}</td>
+        </tr>
 	{% endfor %}
 </table>
 

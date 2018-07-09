@@ -8,6 +8,7 @@ from app import Roles, constants
 from app.decorators import require_role
 from app.exceptions import ValidationException, ResourceNotFoundException, \
     InvalidMinuteException
+from app.forms import init_form
 from app.forms.pimpy import AddTaskForm, AddMinuteForm
 from app.models.pimpy import Task
 from app.service import pimpy_service, group_service
@@ -114,8 +115,8 @@ def view_tasks(group_id=None):
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
-@blueprint.route('/tasks/me/', methods=['GET', 'POST'])
-@blueprint.route('/tasks/me/<int:group_id>/', methods=['GET', 'POST'])
+@blueprint.route('/tasks/self/', methods=['GET', 'POST'])
+@blueprint.route('/tasks/self/<int:group_id>/', methods=['GET', 'POST'])
 @require_role(Roles.PIMPY_READ)
 def view_tasks_personal(group_id=None):
     if group_id is not None and not current_user.member_of_group(group_id):
@@ -200,7 +201,7 @@ def add_task(group_id=None):
         group = group_service.get_group_by_id(group_id)
     except ResourceNotFoundException:
         group = None
-    form = AddTaskForm(request.form, group=group)
+    form = init_form(AddTaskForm, group=group)
 
     if form.validate_on_submit():
         try:
@@ -232,7 +233,8 @@ def add_minute(group_id=None):
         group = group_service.get_group_by_id(group_id)
     except ResourceNotFoundException:
         group = None
-    form = AddMinuteForm(request.form, group=group)
+
+    form = init_form(AddMinuteForm, group=group)
 
     if form.validate_on_submit():
         minute_group = group_service.get_group_by_id(form.group.data.id)

@@ -65,9 +65,7 @@
                 <td><img src='{{ UserAPI.avatar(result.owner) }}' class='img-responsive thumbnail' style='width: 50px;' /></td>
                 <td>
                     {% if result.owner.id %}
-                    <a href="{{ url_for('user.view_single', user_id=result.owner.id) }}">
                         {{ result.owner.name }}
-                    </a>
                     {% else %}
                         Verwijderde account
                     {% endif %}

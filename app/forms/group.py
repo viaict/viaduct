@@ -1,8 +1,7 @@
 from flask_babel import lazy_gettext as _
 from flask_wtf import FlaskForm
 from wtforms import Form as UnsafeForm
-from wtforms import FormField, FieldList, SubmitField, \
-    StringField, SelectMultipleField, SelectField
+from wtforms import StringField, SelectMultipleField, SelectField
 from wtforms.validators import InputRequired, StopValidation
 
 from app import Roles
@@ -53,12 +52,3 @@ class CreateGroupForm(EditGroupForm):
 class GroupRolesForm(FlaskForm):
     roles = SelectMultipleField(_("Roles"), choices=Roles.choices(),
                                 coerce=Roles.coerce)
-
-
-class EditGroupPermissionForm(FlaskForm):
-    permissions = FieldList(FormField(EditGroupPermissionEntry))
-    add_module_name = SelectField('Module')
-    add_module_permission = SelectField(None, coerce=int,
-                                        choices=[(0, "Geen"), (1, "Lees"),
-                                                 (2, "Lees/Schrijf")])
-    save_changes = SubmitField('Sla veranderingen op')

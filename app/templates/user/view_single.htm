@@ -1,7 +1,7 @@
 {% extends "content.htm" %}
 
 {% block includes %}
-    <link href="{{static_url("/static/css/user.profile.css")}}" rel="stylesheet"></link>
+    <link href="{{static_url("/static/css/user.profile.css")}}" rel="stylesheet"/>
     <script src="{{static_url("/static/js/user/view_single.js")}}"></script>
 {% endblock %}
 
@@ -16,9 +16,18 @@
                 <div class="col-md-6 no-pad">
                     <div class="user-pad">
                         <h3>{{ user.first_name }} {{ user.last_name }}</h3>
-                        {% if can_write: %}
-                            <a href="{{ url_for('user.edit', user_id=user.id) }}"<button type="button" class="btn btn-labeled btn-info" href="{{ url_for('user.edit', user_id=user.id) }}">
-                                <span class="btn-label"><i class="fa fa-pencil"></i></span>{{ _('Modify') }}</button></a>
+                        {% if can_write %}
+                            <a href="{{ url_for('user.edit_user', user_id=user.id) }}">
+                                <button type="button" class="btn btn-labeled btn-info">
+                                    <span class="btn-label"><i class="fa fa-pencil"></i></span>{{ _('Modify') }}
+                                </button>
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('user.edit_self') }}">
+                                <button type="button" class="btn btn-labeled btn-info">
+                                    <span class="btn-label"><i class="fa fa-pencil"></i></span>{{ _('Modify') }}
+                                </button>
+                            </a>
                         {% endif %}
                     </div>
                 </div>
@@ -61,10 +70,8 @@
                     {{ _('Information') }}
                 </h3>
                 <ul class="user-menu-list">
-                    {% if can_read: %}
-                        <h4> {{ _('Studentnumber') }}: {{ user.student_id }} </h4>
-                        <h4> {{ _('Email') }}: {{user.email}} </h4>
-                    {% endif %}
+                    <h4> {{ _('Studentnumber') }}: {{ user.student_id }} </h4>
+                    <h4> {{ _('Email') }}: {{user.email}} </h4>
                     <h4> {{ _('Study')}}: {{ user.education.name }} </h4>
                     <h4> <i class="glyphicon glyphicon-{% if user.has_paid %}check{% else %}unchecked{% endif %}"></i> {{ _('Member') }} </h4>
                     {% if user.honorary_member %}<h4> <i class="glyphicon glyphicon-check"></i> {{ _('Honorary member') }} </h4>{% endif %}

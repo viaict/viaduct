@@ -38,6 +38,8 @@ app.logger.setLevel(logging.NOTSET)
 _logger = logging.getLogger('app')
 _logger.setLevel(logging.DEBUG)
 
+logging.getLogger('werkzeug').setLevel(logging.DEBUG)
+
 
 hashfs = HashFS('app/uploads/')
 mimetypes.init()

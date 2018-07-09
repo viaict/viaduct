@@ -12,6 +12,7 @@ from werkzeug.contrib.atom import AtomFeed
 import app.utils.google as google
 from app import db
 from app.decorators import require_role
+from app.forms import init_form
 from app.forms.activity import ActivityForm, CreateForm
 from app.forms.user import SignInForm
 from app.models.activity import Activity
@@ -80,7 +81,7 @@ def get_activity(activity_id=0):
     """
     activity = Activity.query.get_or_404(activity_id)
 
-    form = ActivityForm(request.form, obj=current_user)
+    form = init_form(ActivityForm, obj=current_user)
 
     # Add education for activity form
     educations = Education.query.all()
@@ -203,7 +204,7 @@ def create(activity_id=None):
         activity = Activity()
         title = _('Create activity')
 
-    form = CreateForm(request.form, obj=activity)
+    form = init_form(CreateForm, obj=activity)
 
     if request.method == 'POST':
 

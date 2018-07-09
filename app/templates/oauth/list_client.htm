@@ -39,7 +39,7 @@
                 {{ client.name }}<br/>
                 <small>{{ _("Owned by: ") }}
                     {% if client.user %}
-                    <a href="{{ url_for("user.view_single", user_id=client.user_id) }}">{{ client.user.name }}</a>
+                        {{ client.user.name }}
                     {% else %}
                         <strong>via</strong>
                     {% endif %}
