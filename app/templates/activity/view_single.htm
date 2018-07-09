@@ -102,7 +102,7 @@
                                         {{ render_field_disabled(form.last_name) }}
                                         {{ render_field_disabled(form.student_id) }}
                                         {{ render_field_disabled(form.education_id) }}
-                                        <a href="{{ url_for('user.edit', user_id=current_user.id) }}" class="btn btn-info">
+                                        <a href="{{ url_for('user.edit_self') }}" class="btn btn-info">
                                             {{_('To account')}}
                                         </a>
                                     </div>
