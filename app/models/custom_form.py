@@ -1,34 +1,30 @@
 from collections import OrderedDict
-from datetime import datetime
 
+import re
+from datetime import datetime
 from flask import url_for
 from flask_login import current_user
 
 from app import db
 from app.models.activity import Activity
 from app.models.base_model import BaseEntity
-from app.models.mollie import Transaction
 from app.models.page import PageRevision, Page
 from app.models.user import User
 from app.service import page_service
 from app.utils.google import send_email
 
 
-def export_form_data(r):
-    import re
-    return re.sub(r'%[0-9A-F]{2}', '', r.data)
-
-
 class CustomForm(db.Model, BaseEntity):
-    """Custom form model.
+    """
+    Custom form model.
 
     A custom form is a form on which users can register themselves
     (see CustomFormResult) and can be bound to activities.
     """
 
-    __tablename__ = 'custom_form'
+    group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
+    group = db.relationship('Group')
 
-    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     name = db.Column(db.String(256))
     origin = db.Column(db.String(4096))
     html = db.Column(db.UnicodeText())
@@ -36,8 +32,6 @@ class CustomForm(db.Model, BaseEntity):
     max_attendants = db.Column(db.Integer)
     introductions = db.Column(db.Integer)
     price = db.Column(db.Float, default=0)
-    owner = db.relationship('User', backref=db.backref('custom_forms',
-                                                       lazy='dynamic'))
     terms = db.Column(db.String(4096))
 
     archived = db.Column(db.Boolean)
@@ -68,7 +62,7 @@ class CustomForm(db.Model, BaseEntity):
             'on_by_default': True,
         }), ('form', {
             'label': 'Form resultaat',
-            'export': export_form_data,
+            'export': lambda r: re.sub(r'%[0-9A-F]{2}', '', r.data),
             'on_by_default': False,
         }), ('introductions', {
             'label': 'Introducees',
@@ -129,10 +123,14 @@ class CustomForm(db.Model, BaseEntity):
 
     @classmethod
     def aslist(cls, current=None):
-        lst = [
-            ('Gevolgde formulieren', cls.qry_followed().all()),
-            ('Actieve formulieren', cls.qry_active().all()),
-        ]
+        from app.service import custom_form_service
+
+        lst = [('Gevolgde formulieren',
+                custom_form_service.
+                get_active_followed_forms_by_user(current_user.id)),
+               ('Actieve formulieren',
+                custom_form_service.
+                get_active_unfollowed_by_user(current_user.id))]
 
         if current is not None:
             cf = cls.query.get(current)
@@ -142,65 +140,13 @@ class CustomForm(db.Model, BaseEntity):
 
         return lst
 
-    @classmethod
-    def qry_followed(cls):
-        return (
-            cls.query
-            .outerjoin(Activity, cls.id == Activity.form_id)
-            .filter(CustomFormFollower.query
-                    .filter(cls.id == CustomFormFollower.form_id,
-                            CustomFormFollower.owner_id == current_user.id)
-                    .exists(),
-                    db.or_(cls.archived == False, cls.archived == None),
-                    db.or_(Activity.id == None,
-                           db.and_(Activity.id != None,
-                                   db.func.now() < Activity.end_time)))
-            .order_by(cls.modified.desc()))  # noqa
-
-    @classmethod
-    def qry_active(cls):
-        return (
-            cls.query
-            .outerjoin(Activity, cls.id == Activity.form_id)
-            .filter(
-                db.not_(CustomFormFollower.query
-                        .filter(cls.id == CustomFormFollower.form_id,
-                                CustomFormFollower.owner_id == current_user.id)
-                        .exists()),
-                db.or_(cls.archived == False, cls.archived == None),
-                db.or_(Activity.id == None,
-                       db.and_(Activity.id != None,
-                               db.func.now() < Activity.end_time)))
-            .order_by(cls.modified.desc()))  # noqa
-
-    @classmethod
-    def qry_archived(cls):
-        return (
-            cls.query
-            .outerjoin(Activity, cls.id == Activity.form_id)
-            .filter(
-                db.or_(cls.archived == True,
-                       db.and_(Activity.id != None,
-                               db.func.now() >= Activity.end_time)))
-            .order_by(cls.modified.desc()))  # noqa
-
-    @staticmethod
-    def update_payment(transaction_id, paid):
-        transaction = (Transaction.query
-                       .filter(Transaction.id == transaction_id)
-                       .first())
-        if transaction.form_result:
-            transaction.form_result.has_paid = paid
-            db.session.commit()
-
 
 class CustomFormResult(db.Model, BaseEntity):
-    """Custom form results model.
+    """
+    Custom form results model.
 
     The custom form results are the registrations of users on custom forms.
     """
-
-    __tablename__ = 'custom_form_result'
 
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     form_id = db.Column(db.Integer, db.ForeignKey('custom_form.id'))
@@ -249,16 +195,11 @@ class CustomFormResult(db.Model, BaseEntity):
 
 
 class CustomFormFollower(db.Model, BaseEntity):
-    __tablename__ = 'custom_form_follower'
-
     prints = ('owner_id', 'form_id')
 
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    form_id = db.Column(db.Integer)
+    owner = db.relationship('User')
 
-    owner = db.relationship(
-        'User', backref=db.backref('custom_forms_following', lazy='dynamic'))
-
-    def __init__(self, owner_id=None, form_id=None):
-        self.owner_id = owner_id
-        self.form_id = form_id
+    # TODO Actually add the foreign key to the database.
+    form_id = db.Column(db.Integer, db.ForeignKey('custom_form.id'))
+    form = db.relationship('CustomForm')

@@ -1,31 +1,28 @@
-{% from "macros/pagination.htm" import render_pagination %}
-
 {% extends "content.htm" %}
-{% block includes %}
-{% endblock %}
+
+{% from "macros/pagination.htm" import render_pagination %}
 
 {% block content %}
 
 <p>
+    Hier is het overzicht van alle gemaakte formulieren. Je kunt formulieren volgen om ze hier bovenaan de pagina te tonen voor makkelijkere toegang.
+</p>
+<p>
 {% if can_write %}
-    &nbsp;<a href="/forms/create/" class="new-form btn btn-success pull-right">
+    <a href="{{ url_for("custom_form.create") }}" class="pull-right btn btn-success">
         <i class="glyphicon glyphicon-plus"></i>
         Nieuw formulier
     </a>
 {% endif %}
-
-Hier is het overzicht van alle gemaakte formulieren. Je kunt formulieren volgen om ze hier bovenaan de pagina te tonen voor makkelijkere toegang.
 </p>
 
 <h3>Gevolgde formulieren</h3>
 
 {% if not followed_forms %}
-
-<p>Er zijn geen actieve formulieren die je volgt.</p>
-
+    <p>Er zijn geen actieve formulieren die je volgt.</p>
 {% else %}
 
-<table class="table" id="follow_table">
+<table class="table">
 <thead>
 <tr>
 	<th>Naam</th>
@@ -40,8 +37,11 @@ Hier is het overzicht van alle gemaakte formulieren. Je kunt formulieren volgen 
     <td>{{ form.name }}</td>
 
     <td>
-        {% if form.has_activity() %}{{ form.get_closest_activity().end_time.strftime(constants.DT_FORMAT) }}
-        {% else %}Geen activiteit{% endif %}
+        {% if form.has_activity() %}
+            {{ form.get_closest_activity().end_time.strftime(constants.DT_FORMAT) }}
+        {% else %}
+            Geen activiteit
+        {% endif %}
     </td>
 
     <td class="form-buttons">
@@ -74,8 +74,7 @@ Hier is het overzicht van alle gemaakte formulieren. Je kunt formulieren volgen 
 <h3>Actieve formulieren</h3>
 
 {% if not active_forms %}
-<p>Er zijn geen actieve formulier die je niet volgt.</p>
-
+    <p>Er zijn geen actieve formulier die je niet volgt.</p>
 {%else%}
 
 <table class="table">
@@ -126,9 +125,8 @@ Hier is het overzicht van alle gemaakte formulieren. Je kunt formulieren volgen 
 <h3>Gearchiveerde en verlopen formulieren</h3>
 
 {% if not archived_paginate.items %}
-<p>Er zijn geen gearchiveerde formulier.</p>
-
-{%else%}
+    <p>Er zijn geen gearchiveerde formulier.</p>
+{% else %}
 
 <table class="table">
 <thead>

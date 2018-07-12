@@ -1,10 +1,14 @@
 $(document).ready(function() {
-    var deleteFormResult = $(".delete-form-result");
+    "use strict";
 
-    deleteFormResult.click(function() {
+    $(".delete-form-result").click(function() {
+        var self = $(this);
+
         if (confirm($(this).attr("message"))) {
-
-            $.post("/forms/remove/" + this.id);
+            $.post(Flask.url_for("custom_form.remove_response", {
+                form_id: self.data().formId,
+                submission_id: self.data().submissionId
+            }));
             $(this).closest("tr").fadeOut(300);
         }
     });
