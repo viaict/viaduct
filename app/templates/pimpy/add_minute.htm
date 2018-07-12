@@ -9,20 +9,45 @@
 {% block content %}
 
 <div class='col-md-8'>
-    <h2>Nieuwe notulen</h2>
+    <h2>_('New minute')</h2>
 
     <p><em>{{ _('Attention: we now use a base32 encoding. Read this module\'s manual for more information.') }}</em></p>
 
-    {% if invalid_lines is defined %}
+    {% if missing_colon is defined or unknown_tasks is defined or unknown_users is defined %}
         <div class="panel panel-danger">
             <div class="panel-heading">
-                {{ _("Found invalid lines in minutes") }}
+                <strong>{{ _("Found invalid lines in minutes") }}</strong>
             </div>
-            <div class="panel-body">
-                {% for i, line in invalid_lines %}
-                    {{ line }}<br>
-                {% endfor %}
-            </div>
+            {% if missing_colon is defined %}
+                <div class="panel-heading">
+                    {{ _("Lines containing missing colons in ACTIE(s)") }}
+                </div>
+                <div class="panel-body">
+                    {% for i, line in missing_colon %}
+                        {{ "%03d. " | format(i) }}{{ line }}<br>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if unknown_users is defined %}
+                <div class="panel-heading">
+                    {{ _("Lines containing unmatchable names in ACTIE(s)") }}
+                </div>
+                <div class="panel-body">
+                    {% for i, line in missing_colon %}
+                        {{ "%03d. " | format(i) }}{{ line }}<br>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if unknown_tasks is defined %}
+                <div class="panel-heading">
+                    {{ _("Lines containing unknown task ids") }}
+                </div>
+                <div class="panel-body">
+                    {% for i, line in unknown_tasks %}
+                        {{ "%03d. " | format(i) }}{{ line }}<br>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
     {% endif %}
 

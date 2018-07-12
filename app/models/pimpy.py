@@ -1,6 +1,6 @@
-import datetime
-
 import baas32 as b32
+import datetime
+from flask_babel import lazy_gettext as _
 from flask_login import current_user
 from jinja2 import escape
 
@@ -50,8 +50,8 @@ class Task(db.Model, BaseEntity):
     status = db.Column(db.Integer)
 
     status_meanings = [
-        "Niet begonnen", "Begonnen", "Done",
-        "Niet Done", "Gecheckt", "Verwijderd"]
+        _("Not started"), _("Started"), _("Done"),
+        _("Not Done"), _("Checked"), _("Deleted")]
 
     # TODO: no view related code here
     status_colors = [
@@ -65,7 +65,7 @@ class Task(db.Model, BaseEntity):
         """Return a string representing the status."""
         if 0 <= self.status < len(self.status_meanings):
             return self.status_meanings[self.status]
-        return "Onbekend"
+        return _("Unknown")
 
     def update_status(self, status):
         if current_user.member_of_group(self.group_id) \
@@ -136,4 +136,4 @@ class Minute(db.Model, BaseEntity):
         return self.minute_date.strftime(constants.DATE_FORMAT)
 
     def get_title(self):
-        return "Van %s" % self.get_minute_day()
+        return _("From %(day)s", day=self.get_minute_day())
