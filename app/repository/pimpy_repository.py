@@ -15,6 +15,20 @@ def find_task_by_id(task_id):
     return db.session.query(Task).filter(Task.id == task_id).one_or_none()
 
 
+def find_task_in_group_by_id(task_id, group_id):
+    return db.session.query(Task) \
+        .filter(Task.id == task_id,
+                Task.group_id == group_id) \
+        .one_or_none()
+
+
+def find_task_by_name_content_group(name, content, group):
+    return db.session.query(Task).filter(
+        Task.title == name,
+        Task.content == content,
+        Task.group_id == group.id).first()
+
+
 def get_all_minutes_for_user(user):
     res = []
 

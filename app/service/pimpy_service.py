@@ -1,13 +1,12 @@
+import baas32 as b32
 import datetime
 import re
-
-import baas32 as b32
 from fuzzywuzzy import fuzz
 
 from app.enums import PimpyTaskStatus
 from app.exceptions import ValidationException, InvalidMinuteException
 from app.models.pimpy import Task
-from app.repository import pimpy_repository, task_repository
+from app.repository import pimpy_repository
 from app.service import group_service
 
 """
@@ -26,8 +25,10 @@ and have a status.
 
 
 """
-TASK_REGEX = re.compile(r"\s*(?:ACTIE|TASK)\s+(.*):\s*(.*)\s*$")
-TASKS_REGEX = re.compile(r"\s*(?:ACTIES|TASKS)\s+(.*):\s*(.*)\s*$")
+TASK_REGEX = re.compile(
+    r"\s*(?:ACTIE|TASK)(?P<names> .+)?:\s*(?P<task>.*)\s*$")
+TASKS_REGEX = re.compile(
+    r"\s*(?:ACTIES|TASKS)(?P<names> .*)?:\s*(?P<task>.*)\s*$")
 DONE_REGEX = re.compile("\s*(?:DONE) ([^\n\r]*)")
 REMOVE_REGEX = re.compile("\s*(?:REMOVE) ([^\n\r]*)")
 MISSING_COLON_REGEX = re.compile(r"\s*(?:ACTIE|TASK|ACTIES|TASKS)+[^:]*$")
@@ -111,7 +112,7 @@ def add_task_by_user_string(title, content, group_id, users_text, line,
 def _add_task(title, content, group, user_list, line, minute, status):
     # Only check for tasks added not using minute.
     if not minute:
-        task = task_repository.find_task_by_name_content_group(
+        task = pimpy_repository.find_task_by_name_content_group(
             title, content, group)
 
         if task:
@@ -134,12 +135,10 @@ def add_minute(content, date, group):
 
     # Mark existing tasks as done.
     for line, task in done_list:
-        task = pimpy_repository.find_task_by_id(task)
         pimpy_repository.update_status(task, 4)
 
     # Mark existing tasks as removed.
     for line, task in remove_list:
-        task = pimpy_repository.find_task_by_id(task)
         pimpy_repository.update_status(task, 5)
     return minute
 
@@ -225,7 +224,9 @@ def _parse_minute_into_tasks(content, group):
     DONE <task1>, <task2, <taskn>
     This sets the given tasks on 'done'
     """
-    invalid_lines = []
+    missing_colon_lines = []
+    unknown_task_ids = []
+    unknown_user = []
 
     task_list = []
     done_list = []
@@ -234,7 +235,7 @@ def _parse_minute_into_tasks(content, group):
     for i, line in enumerate(content.splitlines()):
         try:
             if MISSING_COLON_REGEX.search(line):
-                invalid_lines.append((i, line))
+                missing_colon_lines.append((i, line))
                 continue
 
             # Single task for multiple users.
@@ -251,18 +252,43 @@ def _parse_minute_into_tasks(content, group):
             # Mark a comma separated list as done.
             for task_id_list in DONE_REGEX.findall(line):
                 for b32_task_id in task_id_list.strip().split(","):
-                    done_list.append((i, b32.decode(b32_task_id.strip())))
+                    b32_task_id = b32_task_id.strip()
+                    try:
+                        task_id = b32.decode(b32_task_id)
+                    except ValueError:
+                        unknown_task_ids.append((i, b32_task_id))
+                        continue
+
+                    task = pimpy_repository. \
+                        find_task_in_group_by_id(task_id, group.id)
+                    if not task:
+                        unknown_task_ids.append((i, b32_task_id))
+                    else:
+                        done_list.append((i, task))
 
             # Mark a comma separated list as removed.
             for task_id_list in REMOVE_REGEX.findall(line):
                 for b32_task_id in task_id_list.strip().split(","):
-                    remove_list.append((i, b32.decode(b32_task_id.strip())))
+                    b32_task_id = b32_task_id.strip()
+                    try:
+                        task_id = b32.decode(b32_task_id)
+                    except ValueError:
+                        unknown_task_ids.append((i, b32_task_id))
+                        continue
 
-        # Catch invalid user and incorrect b32 task_id.
-        except (ValidationException, ValueError):
-            invalid_lines.append((i, line))
+                    task = pimpy_repository. \
+                        find_task_in_group_by_id(task_id, group.id)
+                    if not task:
+                        unknown_task_ids.append((i, b32_task_id))
+                    else:
+                        remove_list.append((i, task))
 
-    if len(invalid_lines):
-        raise InvalidMinuteException(invalid_lines)
+        # Catch invalid user.
+        except ValidationException:
+            unknown_user.append((i, line))
+
+    if len(missing_colon_lines) or len(unknown_task_ids) or len(unknown_user):
+        raise InvalidMinuteException(missing_colon_lines, unknown_task_ids,
+                                     unknown_user)
 
     return task_list, done_list, remove_list
