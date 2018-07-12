@@ -23,7 +23,7 @@ from .extensions import (db, login_manager, cache, toolbar, jsglue, oauth,
 
 from config import Config
 
-version = 'v2.10.1.0'
+version = 'v2.11.0.0'
 
 
 logging.basicConfig(
