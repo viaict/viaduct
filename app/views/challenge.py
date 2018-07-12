@@ -5,6 +5,7 @@ from flask import Blueprint, render_template, request, \
 from flask_login import login_required, current_user
 
 from app.decorators import require_role, require_membership
+from app.forms import init_form
 from app.forms.challenge import ChallengeForm
 from app.models.challenge import Challenge
 from app.roles import Roles
@@ -17,9 +18,9 @@ blueprint = Blueprint('challenge', __name__, url_prefix='/challenge')
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/dashboard/', methods=['GET', 'POST'])
 @require_membership
-def view_list(page=1):
+def view_list():
     challenge = Challenge()
-    form = ChallengeForm(request.form, obj=challenge)
+    form = init_form(ChallengeForm, obj=challenge)
 
     challenges = ChallengeAPI.fetch_all_challenges_user(current_user.id)
     approved_challenges = \

@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
+import bcrypt
 import json
 import re
 from csv import writer
 from datetime import datetime
-from io import StringIO
-
-import bcrypt
 from flask import Blueprint
 from flask import flash, redirect, render_template, request, url_for, abort, \
     session
 from flask_babel import _
 from flask_login import current_user, login_user, logout_user, login_required
+from io import StringIO
 
 from app import db, login_manager, get_locale
 from app.decorators import require_role, response_headers
 from app.exceptions import ResourceNotFoundException, AuthorizationException, \
     ValidationException
+from app.forms import init_form
 from app.forms.user import (EditUserForm, EditUserInfoForm, SignUpForm,
                             SignInForm, ResetPasswordForm, RequestPassword,
                             ChangePasswordForm)
@@ -47,33 +47,12 @@ def unauthorized_handler():
                 next=url_for("oauth.authorize", **request.args)))
 
 
-@blueprint.route('/users/view/', methods=['GET'])
-@blueprint.route('/users/view/<int:user_id>', methods=['GET'])
-@login_required
-def view_single(user_id=None):
-    if user_id is None:
-        if current_user.is_authenticated:
-            return redirect(url_for('user.view_single',
-                                    user_id=current_user.id))
-        return redirect(url_for('user.view'))
+def view_single(user_id):
+    """
+    View user for admins and edit for admins and users.
 
-    can_read = False
-    can_write = False
-
-    # Unpaid members cannot view other profiles
-    if current_user.id != user_id and not current_user.has_paid:
-        return abort(403)
-    # A user can always view his own profile
-    if current_user.id == user_id:
-        can_write = True
-        can_read = True
-    # group rights
-    if role_service.user_has_role(current_user, Roles.USER_READ):
-        can_read = True
-    if role_service.user_has_role(current_user, Roles.USER_WRITE):
-        can_write = True
-        can_read = True
-
+    User is passed based on routes below.
+    """
     user = user_service.get_user_by_id(user_id)
     user.avatar = UserAPI.avatar(user)
     user.groups = UserAPI.get_groups_for_user_id(user)
@@ -99,14 +78,28 @@ def view_single(user_id=None):
         .filter(Activity.end_time < datetime.today()).distinct() \
         .order_by(Activity.start_time.desc())
 
+    can_write = role_service.user_has_role(current_user, Roles.USER_WRITE)
+
     return render_template('user/view_single.htm', user=user,
                            new_activities=new_activities,
                            old_activities=old_activities,
-                           can_read=can_read,
                            can_write=can_write)
 
 
-@blueprint.route('/users/remove_avatar/<int:user_id>', methods=['DELETE'])
+@blueprint.route('/users/view/self/', methods=['GET'])
+@login_required
+def view_single_self():
+    return view_single(current_user.id)
+
+
+@blueprint.route('/users/view/<int:user_id>/', methods=['GET'])
+@require_role(Roles.USER_READ)
+@login_required
+def view_single_user(user_id):
+    return view_single(user_id=user_id)
+
+
+@blueprint.route('/users/remove_avatar/<int:user_id>/', methods=['DELETE'])
 @login_required
 @require_role(Roles.USER_WRITE)
 def remove_avatar(user_id=None):
@@ -118,21 +111,12 @@ def remove_avatar(user_id=None):
     return "", 200
 
 
-@blueprint.route('/users/create/', methods=['GET', 'POST'])
-@blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
-@login_required
-def edit(user_id=None):
-    """Create user for admins and edit for admins and users."""
+def edit(user_id, form_cls):
+    """
+    Create user for admins and edit for admins and users.
 
-    # TODO: Split the edit my own user and edit other user routes.
-    # We cannot check the rights using the decorator because normal
-    # users also change their profile using this route.
-
-    if (user_id is not None and current_user.id != user_id and
-            not role_service.user_has_role(current_user, Roles.USER_WRITE)):
-        abort(403)
-
-    # Select user
+    User and form type are passed based on routes below.
+    """
     if user_id:
         user = user_service.get_user_by_id(user_id)
     else:
@@ -140,13 +124,7 @@ def edit(user_id=None):
 
     user.avatar = user_service.user_has_avatar(user_id)
 
-    if role_service.user_has_role(current_user, Roles.USER_WRITE):
-        form = EditUserForm(request.form, obj=user)
-        is_admin = True
-    else:
-        form = EditUserInfoForm(request.form, obj=user)
-        is_admin = False
-
+    form = init_form(form_cls, obj=user)
     form.new_user = user.id == 0
 
     # Add education.
@@ -154,6 +132,7 @@ def edit(user_id=None):
     form.education_id.choices = [(e.id, e.name) for e in educations]
 
     def edit_page():
+        is_admin = role_service.user_has_role(current_user, Roles.USER_WRITE)
         return render_template('user/edit.htm', form=form, user=user,
                                is_admin=is_admin)
 
@@ -211,7 +190,7 @@ def edit(user_id=None):
 
         avatar = request.files.get('avatar')
         if avatar:
-            UserAPI.upload(avatar, user.id)
+            user_service.set_avatar(user.id, avatar)
 
         if user_id:
             copernica.update_user(user)
@@ -219,9 +198,27 @@ def edit(user_id=None):
         else:
             copernica.update_user(user, subscribe=True)
             flash(_('Profile succesfully created'))
-        return redirect(url_for('user.view_single', user_id=user.id))
+
+        if current_user.id == user_id:
+            return redirect(url_for('user.view_single_self'))
+        else:
+            return redirect(url_for('user.view_single_user', user_id=user.id))
 
     return edit_page()
+
+
+@blueprint.route('/users/edit/self/', methods=['GET', 'POST'])
+@login_required
+def edit_self():
+    return edit(current_user.id, EditUserInfoForm)
+
+
+@blueprint.route('/users/create/', methods=['GET', 'POST'])
+@blueprint.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+@require_role(Roles.USER_WRITE)
+def edit_user(user_id=None):
+    return edit(user_id, EditUserForm)
 
 
 @blueprint.route('/sign-up/', methods=['GET', 'POST'])
@@ -359,7 +356,7 @@ def sign_out():
 def request_password():
     """Create a ticket and send a email with link to reset_password page."""
     if current_user.is_authenticated:
-        return redirect(url_for('user.view_single', user_id=current_user.id))
+        return redirect(url_for('user.view_single_self'))
 
     form = RequestPassword(request.form)
 

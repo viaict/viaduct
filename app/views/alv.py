@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, url_for, redirect, abort
 from flask_login import current_user
 
 from app.decorators import require_role, require_membership
+from app.forms import init_form
 from app.forms.alv import AlvForm, AlvDocumentForm, AlvMinutesForm
 from app.models.alv_model import Alv
 from app.roles import Roles
@@ -83,7 +84,7 @@ def create_edit(alv_id=None):
     else:
         alv = Alv()
 
-    form = AlvForm(request.form, obj=alv)
+    form = init_form(AlvForm, obj=alv)
 
     if form.validate_on_submit():
         form.populate_obj(alv)

@@ -1,14 +1,22 @@
 from flask_babel import lazy_gettext as _
+from flask_login import current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, BooleanField
-from wtforms.validators import InputRequired
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from app.forms.fields import DecimalField, EmailField
+from wtforms.validators import InputRequired
+
 import app.service.user_service as user_service
+from app.forms.fields import DecimalField, EmailField
+from app.service import group_service
 
 
 class CreateForm(FlaskForm):
     name = StringField(_('Form name'), validators=[InputRequired()])
+    group = QuerySelectField(
+        _('Owner group '),
+        query_factory=lambda: group_service.get_groups_for_user(current_user),
+        get_pk=lambda group: group.id,
+        get_label=lambda group: group.name)
     max_attendants = StringField(_('Max number of attendants'))
     introductions = SelectField(_('Number of extra attendants allowed'),
                                 choices=[(0, _('None'))] +

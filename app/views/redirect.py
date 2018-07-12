@@ -1,8 +1,8 @@
-from flask import Blueprint, render_template, request, redirect, \
-    flash, url_for
+from flask import Blueprint, render_template, redirect, flash, url_for
 
 from app import db
 from app.decorators import require_role
+from app.forms import init_form
 from app.forms.redirect import RedirectForm
 from app.models.redirect import Redirect
 from app.roles import Roles
@@ -16,10 +16,7 @@ blueprint = Blueprint('redirect', __name__, url_prefix='/redirect')
 def view(redirect_id=None):
     redirection = Redirect.query.get(redirect_id) if redirect_id else None
 
-    if redirection:
-        form = RedirectForm(request.form, obj=redirection)
-    else:
-        form = RedirectForm(request.form)
+    form = init_form(RedirectForm, obj=redirection)
 
     if form.validate_on_submit():
 

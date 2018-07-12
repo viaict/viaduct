@@ -1,7 +1,6 @@
-from functools import wraps
-
 from flask import abort, make_response
 from flask_login import current_user
+from functools import wraps
 
 from app.service import role_service
 
@@ -31,7 +30,10 @@ def require_membership(f):
     return wrapper
 
 
-def response_headers(headers={}):
+def response_headers(headers=None):
+    if headers is None:
+        headers = dict()
+
     def decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):

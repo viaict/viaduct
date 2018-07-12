@@ -1,6 +1,6 @@
-{% from "macros/form.htm" import render_field, render_button, render_submit, render_checkbox %}
-
 {% extends "content.htm" %}
+
+{% from "macros/form.htm" import render_field, render_button, render_submit, render_checkbox, enable_select2 %}
 
 {% block includes %}
     <script src={{static_url("/static/js/formbuilder.js")}}></script>
@@ -36,6 +36,8 @@
     <hr>
 
     {{ render_field(form.name) }}
+    {{ render_field(form.group) }}
+    {{ enable_select2() }}
     {{ render_field(form.max_attendants) }}
     {{ render_field(form.introductions) }}
     {{ render_field(form.price) }}

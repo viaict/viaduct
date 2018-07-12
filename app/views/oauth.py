@@ -5,6 +5,7 @@ from flask_login import login_required, current_user
 
 from app import oauth, version
 from app.decorators import response_headers
+from app.forms import init_form
 from app.forms.oauth_forms import OAuthClientForm
 from app.oauth_scopes import Scopes
 from app.service import oauth_service
@@ -101,7 +102,7 @@ def reset_client_secret(client_id):
 @blueprint.route("/clients/edit/<string:client_id>/", methods=["GET", "POST"])
 def edit(client_id=None):
     client = oauth_service.get_client_by_id(client_id=client_id)
-    form = OAuthClientForm(request.form, obj=client)
+    form = init_form(OAuthClientForm, obj=client)
 
     if form.redirect_uri.data is None and client:
         form.redirect_uri.data = ', '.join(client.redirect_uris)

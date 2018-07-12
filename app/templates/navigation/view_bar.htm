@@ -99,7 +99,7 @@
                                 <h4 class="username">{{ current_user.name }}</h4>
                                 <p>{{ current_user.email }}</p>
                                 <p>
-                                    <a href="{{ url_for('user.view_single', user_id=current_user.id) }}">{{ _("Show profile") }}</a>
+                                    <a href="{{ url_for('user.view_single_self') }}">{{ _("Show profile") }}</a>
                                 </p>
                                 <p>
                                     <a href="{{ url_for('user.change_password', user_id=current_user.id) }}">{{ _("Change password") }}</a>
@@ -139,7 +139,7 @@
                                 <h4 class="username">{{ current_user.name }}</h4>
                                 <p>{{ current_user.email }}</p>
                                 <p>
-                                    <a href="{{ url_for('user.view_single', user_id=current_user.id) }}">{{ _("Show profile") }}</a>
+                                    <a href="{{ url_for('user.view_single_self') }}">{{ _("Show profile") }}</a>
                                 </p>
                                 <p>
                                     <a href="{{ url_for('user.change_password', user_id=current_user.id) }}">{{ _("Change password") }}</a>

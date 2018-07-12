@@ -11,7 +11,7 @@ $(document).ready(function() {
     /* Enable user profile selection */
     $('#datatable').on('click', 'tr', function () {
         window.open(
-            Flask.url_for('user.view_single', {
+            Flask.url_for('user.view_single_user', {
                 user_id: table.row(this).data()[0]
             })
         );

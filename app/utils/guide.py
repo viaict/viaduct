@@ -14,6 +14,8 @@ class GuideAPI:
     @staticmethod
     def get_current_user_guide():
         module_name = request.blueprint
+        if not module_name:
+            return ''
 
         """ Get the user guide for a specific module """
         user_guide = page_service.get_page_by_path(
@@ -42,6 +44,8 @@ class GuideAPI:
     @staticmethod
     def get_current_admin_guide():
         module_name = request.blueprint
+        if not module_name:
+            return ''
 
         admin_guide = page_service.get_page_by_path(
             'guides/admin/' + module_name)

@@ -3,7 +3,7 @@ from flask import Blueprint, redirect, render_template, url_for, request, \
 from flask_login import current_user
 
 from math import ceil
-from datetime import date
+from datetime import datetime
 
 from app import db, app
 from app.decorators import require_role, require_membership
@@ -15,13 +15,13 @@ blueprint = Blueprint('elections', __name__, url_prefix='/verkiezing')
 
 
 def can_nominate():
-    td = date.today()
+    td = datetime.today()
     return td >= app.config['ELECTIONS_NOMINATE_START'] and \
         td < app.config['ELECTIONS_VOTE_START']
 
 
 def can_vote():
-    td = date.today()
+    td = datetime.today()
     return td >= app.config['ELECTIONS_VOTE_START'] and \
         td <= app.config['ELECTIONS_VOTE_END']
 

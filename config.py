@@ -82,7 +82,7 @@ class Config(object):
         session = scoped_session(sessionmaker(bind=engine))
 
         settings = {s[0]: s[1] for s in
-                    session.execute("SELECT key, value FROM viaduct.setting")}
+                    session.execute("SELECT key, value FROM setting")}
 
         for key in dir(self):
             if not key.isupper():

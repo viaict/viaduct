@@ -82,6 +82,12 @@ def remove_avatar(user_id):
 
 
 def set_avatar(user_id, file_data):
+    """
+    Upload the new avatar.
+
+    Checks if the file type is allowed if so removes any
+    previous uploaded avatars.
+    """
     user = get_user_by_id(user_id)
 
     # Remove old avatar

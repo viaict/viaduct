@@ -7,6 +7,7 @@ from flask_login import current_user
 
 from app import db
 from app.decorators import require_role
+from app.forms import init_form
 from app.forms.navigation import NavigationEntryForm
 from app.models.navigation import NavigationEntry
 from app.models.page import Page
@@ -35,7 +36,7 @@ def view():
 @require_role(Roles.NAVIGATION_WRITE)
 def edit(entry_id=None, parent_id=None):
     entry = NavigationEntry.query.get_or_404(entry_id) if entry_id else None
-    form = NavigationEntryForm(request.form, obj=entry)
+    form = init_form(NavigationEntryForm, obj=entry)
     form.page_id.choices = [(-1, '-- {} --'.format(_('Custom URL')))] + \
         db.session.query(Page.id, Page.path).all()
 

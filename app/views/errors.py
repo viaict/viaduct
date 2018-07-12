@@ -1,6 +1,4 @@
 import re
-from functools import wraps
-
 import werkzeug.exceptions
 from connexion.apis.flask_api import FlaskApi
 from connexion.exceptions import ProblemException
@@ -9,9 +7,11 @@ from flask import flash, request, url_for, render_template, redirect, \
     session, jsonify
 from flask_babel import _
 from flask_login import current_user
+from functools import wraps
 
 from app import app, login_manager
-from app.exceptions import ResourceNotFoundException, DetailedException
+from app.exceptions import ResourceNotFoundException, DetailedException, \
+    AuthorizationException
 from app.models.page import Page
 from app.roles import Roles
 from app.service import role_service
@@ -64,6 +64,8 @@ def connexion_problem_exception_handler(e):
 def default_detailed_exception_handler(e):
     if isinstance(e, ResourceNotFoundException):
         return page_not_found(e)
+    if isinstance(e, AuthorizationException):
+        return permission_denied(e)
 
     return internal_server_error(e)
 
@@ -97,7 +99,7 @@ def internal_server_error(_):
 @add_api_error_handler
 def page_not_found(_):
     # Search for file extension.
-    if re.match(r'(?:.*)\.[a-zA-Z]{3,}$', request.path):
+    if re.match(r'(?:.*)\.[a-zA-Z]{2,}$', request.path):
         return '', 404
 
     page = Page(request.path.lstrip('/'))

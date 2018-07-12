@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-05-07 23:20+0200\n"
+"POT-Creation-Date: 2018-07-12 15:58+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -77,6 +77,9 @@ msgid "Address"
 msgstr ""
 
 msgid "Admin data"
+msgstr ""
+
+msgid "All"
 msgstr ""
 
 msgid "All companies"
@@ -211,6 +214,9 @@ msgid "Change user properties"
 msgstr ""
 
 msgid "Change vacancies"
+msgstr ""
+
+msgid "Checked"
 msgstr ""
 
 msgid "City"
@@ -389,6 +395,9 @@ msgstr ""
 msgid "Create pages"
 msgstr ""
 
+msgid "Create task"
+msgstr ""
+
 msgid "Create user"
 msgstr ""
 
@@ -437,6 +446,9 @@ msgstr ""
 msgid "Delete page:"
 msgstr ""
 
+msgid "Deleted"
+msgstr ""
+
 msgid "Description"
 msgstr ""
 
@@ -470,6 +482,9 @@ msgstr ""
 msgid "Document"
 msgstr ""
 
+msgid "Done"
+msgstr ""
+
 msgid "Dutch"
 msgstr ""
 
@@ -486,9 +501,6 @@ msgid "Dutch details"
 msgstr ""
 
 msgid "Dutch name"
-msgstr ""
-
-msgid "Dutch name requires Dutch description and vice versa"
 msgstr ""
 
 msgid "Dutch tags (comma seperated)"
@@ -569,9 +581,6 @@ msgstr ""
 msgid "Either Dutch or English description required"
 msgstr ""
 
-msgid "Either Dutch or English name required"
-msgstr ""
-
 msgid "Either Dutch or English title required"
 msgstr ""
 
@@ -603,9 +612,6 @@ msgid "English details"
 msgstr ""
 
 msgid "English name"
-msgstr ""
-
-msgid "English name requires English description and vice versa"
 msgstr ""
 
 msgid "English tags (comma seperated)"
@@ -668,6 +674,9 @@ msgstr ""
 msgid "Files"
 msgstr ""
 
+msgid "Filter"
+msgstr ""
+
 msgid "First name"
 msgstr ""
 
@@ -684,6 +693,13 @@ msgid "Form name"
 msgstr ""
 
 msgid "Found invalid lines in minutes"
+msgstr ""
+
+msgid "From"
+msgstr ""
+
+#, python-format
+msgid "From %(day)s"
 msgstr ""
 
 msgid "Fullscreen"
@@ -783,6 +799,15 @@ msgstr ""
 msgid "Limit read permission to groups"
 msgstr ""
 
+msgid "Lines containing missing colons in ACTIE(s)"
+msgstr ""
+
+msgid "Lines containing unknown task ids"
+msgstr ""
+
+msgid "Lines containing unmatchable names in ACTIE(s)"
+msgstr ""
+
 msgid "Link copied"
 msgstr ""
 
@@ -819,6 +844,9 @@ msgstr ""
 msgid "Mailing list"
 msgstr ""
 
+msgid "Manage financing related tasks"
+msgstr ""
+
 msgid "Max number of attendants"
 msgstr ""
 
@@ -830,6 +858,9 @@ msgstr ""
 
 #, python-format
 msgid "Minimal password length: %(length)d"
+msgstr ""
+
+msgid "Minute"
 msgstr ""
 
 msgid "Minute content"
@@ -848,6 +879,9 @@ msgid "My applications"
 msgstr ""
 
 msgid "My submissions"
+msgstr ""
+
+msgid "Myself"
 msgstr ""
 
 msgid "Name"
@@ -953,7 +987,13 @@ msgstr ""
 msgid "None"
 msgstr ""
 
+msgid "Not Done"
+msgstr ""
+
 msgid "Not found!"
+msgstr ""
+
+msgid "Not started"
 msgstr ""
 
 msgid "Number of extra attendants"
@@ -968,7 +1008,13 @@ msgstr ""
 msgid "Optional data"
 msgstr ""
 
+msgid "Order children alphabetically"
+msgstr ""
+
 msgid "Owned by: "
+msgstr ""
+
+msgid "Owner"
 msgstr ""
 
 msgid "Page"
@@ -1154,6 +1200,9 @@ msgstr ""
 msgid "Search Engine Optimization"
 msgstr ""
 
+msgid "Search for group"
+msgstr ""
+
 msgid "Search for title, contact or company"
 msgstr ""
 
@@ -1173,6 +1222,9 @@ msgid "Send an email"
 msgstr ""
 
 msgid "Send form"
+msgstr ""
+
+msgid "Show"
 msgstr ""
 
 msgid "Show activities in the archive"
@@ -1231,6 +1283,9 @@ msgstr ""
 msgid "Start time must be before end time"
 msgstr ""
 
+msgid "Started"
+msgstr ""
+
 msgid "Starting year study"
 msgstr ""
 
@@ -1277,6 +1332,21 @@ msgstr ""
 
 #, python-format
 msgid "Successfully updated client '%s'"
+msgstr ""
+
+msgid "Task"
+msgstr ""
+
+msgid "Task does not exist"
+msgstr ""
+
+msgid "Task has successfully been created"
+msgstr ""
+
+msgid "Task not specified"
+msgstr ""
+
+msgid "Tasks"
 msgstr ""
 
 msgid "Team"
@@ -1426,6 +1496,12 @@ msgstr ""
 msgid "Unknown OAuth error"
 msgstr ""
 
+msgid "Unknown property"
+msgstr ""
+
+msgid "Until"
+msgstr ""
+
 msgid "Untried"
 msgstr ""
 
@@ -1490,6 +1566,9 @@ msgid "View Pimpy"
 msgstr ""
 
 msgid "View groups"
+msgstr ""
+
+msgid "View minute"
 msgstr ""
 
 msgid "View mollie transactions"
@@ -2284,5 +2363,17 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Wrong format examination."
+#~ msgstr ""
+
+#~ msgid "Dutch name requires Dutch description and vice versa"
+#~ msgstr ""
+
+#~ msgid "Either Dutch or English name required"
+#~ msgstr ""
+
+#~ msgid "English name requires English description and vice versa"
+#~ msgstr ""
+
+#~ msgid "Create new task"
 #~ msgstr ""
 

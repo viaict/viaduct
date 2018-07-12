@@ -28,8 +28,7 @@ constraint_naming_convention = {
 
 # Custom SQLAlchemy object that uses naming conventions.
 # https://stackoverflow.com/questions/29153930/
-db = SQLAlchemy(metadata=MetaData(
-    naming_convention=constraint_naming_convention,
-    schema='viaduct'))
+metadata = MetaData(naming_convention=constraint_naming_convention)
+db = SQLAlchemy(metadata=metadata)
 
 login_manager = LoginManager()
