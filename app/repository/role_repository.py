@@ -41,3 +41,10 @@ def insert_roles_by_group(group_id, added_roles):
 
     db.session.add_all(roles)
     db.session.commit()
+
+
+def get_groups_with_role(role):
+    return db.session.query(Group) \
+        .join(GroupRole) \
+        .filter(GroupRole.role == role.name) \
+        .all()

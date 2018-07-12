@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2018-05-07 23:20+0200\n"
+"POT-Creation-Date: 2018-07-12 15:58+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language: nl\n"
@@ -78,6 +78,9 @@ msgstr "Adres"
 
 msgid "Admin data"
 msgstr "Administrator data"
+
+msgid "All"
+msgstr "Alle"
 
 msgid "All companies"
 msgstr "Alle bedrijven"
@@ -218,6 +221,9 @@ msgstr "Gebruikers eigenschappen aanpassen"
 
 msgid "Change vacancies"
 msgstr "Vacaturen aanpassen"
+
+msgid "Checked"
+msgstr "Gecheckt"
 
 msgid "City"
 msgstr "Plaats"
@@ -395,6 +401,9 @@ msgstr "Nieuwsbrief aanmaken"
 msgid "Create pages"
 msgstr "Paginas aanmaken"
 
+msgid "Create task"
+msgstr "Taak aanmaken"
+
 msgid "Create user"
 msgstr "Gebruiker aanmaken"
 
@@ -443,6 +452,9 @@ msgstr "Verwijder nieuwsbericht"
 msgid "Delete page:"
 msgstr "Pagina verwijderen:"
 
+msgid "Deleted"
+msgstr "Verwijderd"
+
 msgid "Description"
 msgstr "Beschrijving"
 
@@ -476,6 +488,9 @@ msgstr "Heb je een idee voor een activiteit?"
 msgid "Document"
 msgstr "Document"
 
+msgid "Done"
+msgstr "Done"
+
 msgid "Dutch"
 msgstr "Nederlands"
 
@@ -493,9 +508,6 @@ msgstr "Nederlandse gegevens"
 
 msgid "Dutch name"
 msgstr "Nederlandse naam"
-
-msgid "Dutch name requires Dutch description and vice versa"
-msgstr "Nederlandse naam vereist Nederlandse beschrijving en vica versa."
 
 msgid "Dutch tags (comma seperated)"
 msgstr "Nederlandse tags (komma gescheiden)"
@@ -575,9 +587,6 @@ msgstr "Een Nederlandse of Engelse inhoud is vereist."
 msgid "Either Dutch or English description required"
 msgstr "Een Nederlandse of Engelse beschrijving is vereist."
 
-msgid "Either Dutch or English name required"
-msgstr "Een Nederlandse of Engelse naam is vereist."
-
 msgid "Either Dutch or English title required"
 msgstr "Een Nederlandse of Engelse titel is vereist."
 
@@ -610,9 +619,6 @@ msgstr "Engelse gegevens"
 
 msgid "English name"
 msgstr "Engelse naam"
-
-msgid "English name requires English description and vice versa"
-msgstr "Engelse naam vereist Engelse beschrijving en vica versa."
 
 msgid "English tags (comma seperated)"
 msgstr "Engelse tags (komma gescheiden)"
@@ -674,6 +680,9 @@ msgstr "Bestandsnaam"
 msgid "Files"
 msgstr "Bestanden"
 
+msgid "Filter"
+msgstr "Filter"
+
 msgid "First name"
 msgstr "Voornaam"
 
@@ -691,6 +700,13 @@ msgstr "Formulier naam"
 
 msgid "Found invalid lines in minutes"
 msgstr "Ongeldige regel gevonden in notulen"
+
+msgid "From"
+msgstr "Van"
+
+#, python-format
+msgid "From %(day)s"
+msgstr "Van %(day)s"
 
 msgid "Fullscreen"
 msgstr "Schermvullend"
@@ -794,6 +810,15 @@ msgstr ""
 msgid "Limit read permission to groups"
 msgstr "Limiteer lees rechten tot groepen"
 
+msgid "Lines containing missing colons in ACTIE(s)"
+msgstr "Regels met missende dubbele punt in ACTIE(s)"
+
+msgid "Lines containing unknown task ids"
+msgstr "Regels met onbekende taak ids"
+
+msgid "Lines containing unmatchable names in ACTIE(s)"
+msgstr "Regels met onmatchbare namen in ACTIE(s)"
+
 msgid "Link copied"
 msgstr "Link gekopieerd"
 
@@ -830,6 +855,9 @@ msgstr "Op zoek naar nieuwe leden"
 msgid "Mailing list"
 msgstr "Mailinglijst"
 
+msgid "Manage financing related tasks"
+msgstr ""
+
 msgid "Max number of attendants"
 msgstr "Maximaal aantal aanwezigen"
 
@@ -842,6 +870,9 @@ msgstr "Deeltentamen"
 #, python-format
 msgid "Minimal password length: %(length)d"
 msgstr "Minimum lengte van wachtwoord: %(length)d "
+
+msgid "Minute"
+msgstr "Notulen"
 
 msgid "Minute content"
 msgstr "Inhoud notulen"
@@ -860,6 +891,9 @@ msgstr "Mijn applicaties"
 
 msgid "My submissions"
 msgstr "Mijn inzendingen"
+
+msgid "Myself"
+msgstr "Zelf"
 
 msgid "Name"
 msgstr "Naam"
@@ -964,8 +998,14 @@ msgstr "Geen valide ticket gevonden"
 msgid "None"
 msgstr "Geen"
 
+msgid "Not Done"
+msgstr "Niet Done"
+
 msgid "Not found!"
 msgstr "Niet gevonden!"
+
+msgid "Not started"
+msgstr "Niet begonnen"
 
 msgid "Number of extra attendants"
 msgstr "Aantal introducees"
@@ -979,8 +1019,14 @@ msgstr ""
 msgid "Optional data"
 msgstr "Optionele gegevens"
 
+msgid "Order children alphabetically"
+msgstr ""
+
 msgid "Owned by: "
 msgstr "Beheerder: "
+
+msgid "Owner"
+msgstr "Eigenaar"
 
 msgid "Page"
 msgstr "Pagina"
@@ -1167,6 +1213,9 @@ msgstr "Zoeken"
 msgid "Search Engine Optimization"
 msgstr ""
 
+msgid "Search for group"
+msgstr ""
+
 msgid "Search for title, contact or company"
 msgstr "Zoeken op titel, contact of bedrijf"
 
@@ -1187,6 +1236,9 @@ msgstr "Stuur een mail"
 
 msgid "Send form"
 msgstr "Verstuur formulier"
+
+msgid "Show"
+msgstr "Toon"
 
 msgid "Show activities in the archive"
 msgstr "Toon activiteiten in het archief"
@@ -1246,6 +1298,9 @@ msgstr "Starttijd"
 msgid "Start time must be before end time"
 msgstr "Starttijd moet voor eindtijd zijn"
 
+msgid "Started"
+msgstr "Begonnen"
+
 msgid "Starting year study"
 msgstr "Beginjaar studie"
 
@@ -1293,6 +1348,21 @@ msgstr "Token voor client '%s' is ingetrokken"
 #, python-format
 msgid "Successfully updated client '%s'"
 msgstr "Client '%s' succesvol geupdate"
+
+msgid "Task"
+msgstr "Taak"
+
+msgid "Task does not exist"
+msgstr "Taak bestaat niet"
+
+msgid "Task has successfully been created"
+msgstr "Taak is succesvol aangemaakt"
+
+msgid "Task not specified"
+msgstr "Taak niet gespecificeerd"
+
+msgid "Tasks"
+msgstr "Taken"
 
 msgid "Team"
 msgstr "Team"
@@ -1461,6 +1531,12 @@ msgstr "Onbekend"
 msgid "Unknown OAuth error"
 msgstr "Onbekende OAuth foutmelding"
 
+msgid "Unknown property"
+msgstr "Onbekende eigenschap"
+
+msgid "Until"
+msgstr "Tot"
+
 msgid "Untried"
 msgstr "Niet geprobeerd"
 
@@ -1526,6 +1602,9 @@ msgstr "Pimpy weergeven"
 
 msgid "View groups"
 msgstr "Groepen weergeven"
+
+msgid "View minute"
+msgstr "Bekijk notulen"
 
 msgid "View mollie transactions"
 msgstr "Mollie betalingen weergeven"
@@ -2277,4 +2356,13 @@ msgstr ""
 
 #~ msgid "Wrong format examination."
 #~ msgstr "Fout formaat tentamen."
+
+#~ msgid "Dutch name requires Dutch description and vice versa"
+#~ msgstr "Nederlandse naam vereist Nederlandse beschrijving en vica versa."
+
+#~ msgid "Either Dutch or English name required"
+#~ msgstr "Een Nederlandse of Engelse naam is vereist."
+
+#~ msgid "English name requires English description and vice versa"
+#~ msgstr "Engelse naam vereist Engelse beschrijving en vica versa."
 

@@ -18,6 +18,10 @@ def find_all_roles_by_group_id(group_id):
     return role_repository.find_all_roles_by_group_id(group_id)
 
 
+def get_groups_with_role(role):
+    return role_repository.get_groups_with_role(role)
+
+
 @app.before_request
 def load_user_roles():
     if current_user.is_authenticated:
