@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-07-12 15:58+0200\n"
+"POT-Creation-Date: 2018-07-12 23:32+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -921,6 +921,9 @@ msgstr ""
 msgid "New location"
 msgstr ""
 
+msgid "New minute"
+msgstr ""
+
 msgid "New password"
 msgstr ""
 
@@ -1015,6 +1018,9 @@ msgid "Owned by: "
 msgstr ""
 
 msgid "Owner"
+msgstr ""
+
+msgid "Owner group "
 msgstr ""
 
 msgid "Page"
@@ -1563,6 +1569,9 @@ msgid "View"
 msgstr ""
 
 msgid "View Pimpy"
+msgstr ""
+
+msgid "View all available forms"
 msgstr ""
 
 msgid "View groups"

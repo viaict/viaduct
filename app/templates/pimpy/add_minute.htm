@@ -9,7 +9,7 @@
 {% block content %}
 
 <div class='col-md-8'>
-    <h2>_('New minute')</h2>
+    <h2>{{ _('New minute') }}</h2>
 
     <p><em>{{ _('Attention: we now use a base32 encoding. Read this module\'s manual for more information.') }}</em></p>
 
@@ -18,7 +18,7 @@
             <div class="panel-heading">
                 <strong>{{ _("Found invalid lines in minutes") }}</strong>
             </div>
-            {% if missing_colon is defined %}
+            {% if missing_colon is defined and missing_colon %}
                 <div class="panel-heading">
                     {{ _("Lines containing missing colons in ACTIE(s)") }}
                 </div>
@@ -28,17 +28,17 @@
                     {% endfor %}
                 </div>
             {% endif %}
-            {% if unknown_users is defined %}
+            {% if unknown_users is defined and unknown_users %}
                 <div class="panel-heading">
                     {{ _("Lines containing unmatchable names in ACTIE(s)") }}
                 </div>
                 <div class="panel-body">
-                    {% for i, line in missing_colon %}
+                    {% for i, line in unknown_users %}
                         {{ "%03d. " | format(i) }}{{ line }}<br>
                     {% endfor %}
                 </div>
             {% endif %}
-            {% if unknown_tasks is defined %}
+            {% if unknown_tasks is defined and unknown_tasks %}
                 <div class="panel-heading">
                     {{ _("Lines containing unknown task ids") }}
                 </div>
