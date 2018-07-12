@@ -112,6 +112,10 @@ def toggle_form_submission_paid(form_id, submission_id):
 def check_user_can_access_form(form_id, user):
     """Permission check for a user accessing a form."""
 
+    # Probably a create function
+    if form_id is None:
+        return True
+
     if role_service.user_has_role(user, Roles.FORM_ADMIN):
         return True
 

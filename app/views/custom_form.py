@@ -29,7 +29,7 @@ def require_form_access(f):
     """
 
     @wraps(f)
-    def wrapper(form_id, *args, **kwargs):
+    def wrapper(form_id=None, *args, **kwargs):
         if form_id:
             custom_form_service. \
                 check_user_can_access_form(form_id, current_user)
