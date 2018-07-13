@@ -1,4 +1,4 @@
-FROM python:alpine AS development
+FROM python:3.6-alpine AS development
 WORKDIR /app
 
 # Ruby
