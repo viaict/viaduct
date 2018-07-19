@@ -4,9 +4,7 @@ from flask_failsafe import failsafe
 @failsafe
 def create_app():
     from app import init_app
-    connexion_patched_app = init_app(debug=True)
-
-    return connexion_patched_app
+    return init_app(debug=True)
 
 
 if __name__ == '__main__':

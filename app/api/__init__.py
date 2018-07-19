@@ -2,11 +2,6 @@ from app import api
 from app.api.pimpy.minutes import MinuteResource, GroupMinuteResource
 from app.api.pimpy.tasks import TaskListResource, TaskResource, \
     GroupTaskListResource
-from .course import CourseAPI
-from .education import EducationAPI
-
-CourseAPI.register()
-EducationAPI.register()
 
 # Pimpy Tasks
 api.add_resource(TaskListResource,
