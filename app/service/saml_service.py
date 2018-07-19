@@ -9,12 +9,15 @@ from flask_login import current_user
 from functools import wraps
 from collections import namedtuple
 from urllib.parse import urlparse
+from datetime import datetime as dt, timedelta
 
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
 from onelogin.saml2.utils import OneLogin_Saml2_Utils
 
 
 SAMLInfo = namedtuple('SAMLInfo', ['auth', 'req'])
+
+SIGN_UP_SESSION_TIMEOUT = timedelta(minutes=5)
 
 
 def _requires_saml_data(f):
@@ -23,16 +26,29 @@ def _requires_saml_data(f):
         if 'saml_data' not in session:
             session['saml_data'] = {}
 
-        response = f(*args, **kwargs)
+        try:
+            return f(*args, **kwargs)
+        finally:
+            # Explicitly tell the session that it has been modified,
+            # since just adding/removing an item in the session['saml_data']
+            # dict is not picked up as no items in the session dict itself
+            # are changed. See:
+            # http://flask.pocoo.org/docs/1.0/api/?highlight=session#flask.session
+            session.modified = True
 
-        # Explicitly tell the session that it has been modified,
-        # since just adding/removing an item in the session['saml_data']
-        # dict is not picked up as no items in the session dict itself
-        # are changed. See:
-        # http://flask.pocoo.org/docs/1.0/api/?highlight=session#flask.session
-        session.modified = True
+    return wrapper
 
-        return response
+
+def _requires_active_sign_up_session(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if not sign_up_session_active():
+            raise BusinessRuleException('No SAML sign up session active.')
+
+        try:
+            return f(*args, **kwargs)
+        finally:
+            session.modified = True
 
     return wrapper
 
@@ -158,7 +174,7 @@ def get_attributes():
 
 def get_uid_from_attributes():
     attributes = get_attributes()
-    return attributes.get('urn:mace:dir:attribute-def:uid')
+    return attributes.get('urn:mace:dir:attribute-def:uid')[0]
 
 
 def get_user_by_uid():
@@ -175,14 +191,38 @@ def get_user_by_uid():
     return user
 
 
+def uid_is_linked_to_other_user():
+    uid = get_uid_from_attributes()
+    if not uid:
+        raise ValidationException('uid not found in SAML attributes')
+
+    other_user = user_service.find_user_by_student_id(uid)
+    return other_user is not None
+
+
+def user_is_student():
+    attributes = get_attributes()
+    affiliation = attributes.get(
+        'urn:mace:dir:attribute-def:eduPersonAffiliation')
+
+    if not affiliation:
+        return False
+
+    return 'student' in affiliation
+
+
 def link_uid_to_user(user):
     uid = get_uid_from_attributes()
+    if not uid:
+        raise ValidationException('uid not found in SAML attributes')
+
     other_user = user_service.find_user_by_student_id(uid)
 
     if other_user is not None:
         raise BusinessRuleException("uid already linked to other user.")
 
-    # TODO: check if account is student account
+    if not user_is_student():
+        raise BusinessRuleException("Authenticated user is not a student.")
 
     user_service.clear_unconfirmed_student_id_in_all_users(uid)
     user_service.set_confirmed_student_id(user, uid)
@@ -196,3 +236,61 @@ def get_nameid():
 @_requires_saml_data
 def clear_saml_data():
     del session['saml_data']
+
+
+def fill_sign_up_form_with_saml_attributes(form):
+    attributes = get_attributes()
+
+    given_name = attributes.get('urn:mace:dir:attribute-def:givenName')
+    surname = attributes.get('urn:mace:dir:attribute-def:sn')
+    student_id = attributes.get('urn:mace:dir:attribute-def:uid')
+    email = attributes.get('urn:mace:dir:attribute-def:mail')
+    preferred_language = \
+        attributes.get('urn:mace:dir:attribute-def:preferredLanguage')
+
+    if given_name:
+        form.first_name.data = given_name[0]
+    if surname:
+        form.last_name.data = surname[0]
+    if student_id:
+        form.student_id.data = student_id[0]
+    if email:
+        form.email.data = email[0]
+    if preferred_language and \
+            preferred_language[0] in app.config['LANGUAGES'].keys():
+        form.locale.data = preferred_language[0]
+
+
+def start_sign_up_session():
+    uid = get_uid_from_attributes()
+    if not uid:
+        raise ValidationException('uid not found in SAML attributes')
+
+    session['saml_sign_up_session'] = {
+        'time_touched': dt.now(),
+        'linking_student_id': uid
+    }
+
+
+def sign_up_session_active():
+    if 'saml_sign_up_session' in session:
+        if dt.now() - session['saml_sign_up_session']['time_touched'] \
+                < SIGN_UP_SESSION_TIMEOUT:
+            return True
+
+    return False
+
+
+@_requires_active_sign_up_session
+def update_sign_up_session_timestamp():
+    session['saml_sign_up_session']['time_touched'] = dt.now()
+
+
+@_requires_active_sign_up_session
+def get_sign_up_session_linking_student_id():
+    return session['saml_sign_up_session']['linking_student_id']
+
+
+@_requires_active_sign_up_session
+def end_sign_up_session():
+    del session['saml_sign_up_session']

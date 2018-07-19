@@ -4,6 +4,12 @@ from app import db
 from app.models.user import User
 
 
+def create_user():
+    user = User('_')
+    user.email = None
+    return user
+
+
 def save(user):
     db.session.add(user)
     db.session.commit()
