@@ -1,3 +1,4 @@
+from authlib.flask.oauth2 import ResourceProtector
 from flask import abort, make_response
 from flask_login import current_user
 from functools import wraps
@@ -46,3 +47,7 @@ def response_headers(headers=None):
         return wrapper
 
     return decorator
+
+
+# TODO Check.
+require_oauth = ResourceProtector()

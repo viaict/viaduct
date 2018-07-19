@@ -8,15 +8,15 @@
         <img src="/static/img/via.png" alt="via"
              class="img-responsive center-block"/>
 
-        <h1>{{ _("%s is requesting access to your account" % client.name) }}</h1>
+        <h1>{{ _("%s is requesting access to your account" % grant.client.client_name) }}</h1>
         {{ _("Click 'confirm' to allow the application to do the following:") }}
     </div>
     <div class="col-md-offset-4 col-md-4 col-sm-offset-3 col-sm- col-xs-12">
         <p>
         <ul>
             <li>{{ _("Access to your name and e-mail") }}</li>
-            {% for scope in scopes %}
-                <li>{{ descriptions[scope] }}</li>
+            {% for scope in grant.request.scopes %}
+                <li>{{ scopes[scope] }}</li>
             {% endfor %}
         </ul>
         </p>
@@ -26,12 +26,12 @@
         <form action="/oauth/authorize/" method="POST">
             <p>Allow access?</p>
             <input type="hidden" name="client_id"
-                   value="{{ client.client_id }}">
-            <input type="hidden" name="scope" value="{{ scopes|join(' ') }}">
+                   value="{{ grant.client.client_id }}">
+            <input type="hidden" name="scope" value="{{ grant.request.scopes | join('+') }}">
             <input type="hidden" name="response_type"
-                   value="{{ response_type }}">
+                   value="{{ grant.request.response_type }}">
             <input type="hidden" name="redirect_uri"
-                   value="{{ redirect_uri }}">
+                   value="{{ grant.request.redirect_uri }}">
             {% if state %}
                 <input type="hidden" name="state" value="{{ state }}">
             {% endif %}

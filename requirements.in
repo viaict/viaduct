@@ -12,6 +12,7 @@ Flask-Script
 Flask-SQLAlchemy
 Flask-Swagger-UI
 Flask-WTF
+authlib
 SQLAlchemy
 fuzzywuzzy
 google-api-python-client
