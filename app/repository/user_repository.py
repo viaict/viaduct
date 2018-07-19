@@ -15,6 +15,11 @@ def save(user):
     db.session.commit()
 
 
+def save_all(users):
+    db.session.add_all(users)
+    db.session.commit()
+
+
 def find_members():
     return db.session.query(User) \
         .filter_by(has_paid=True) \

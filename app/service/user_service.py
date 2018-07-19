@@ -188,11 +188,18 @@ def register_new_user(email, password, first_name, last_name, student_id,
     user.country = country
     user.locale = locale
 
+    users = [user]
+
     if link_student_id:
         user.student_id_confirmed = True
-        # TODO: clear unconfirmed users with same student id
+        unconfirmed_users = user_repository. \
+            find_all_users_with_unconfirmed_student_id(user.student_id)
 
-    user_repository.save(user)
+        for u in unconfirmed_users:
+            u.student_id = None
+            users.append(u)
+
+    user_repository.save_all(users)
 
     copernica.update_user(user)
 
