@@ -179,7 +179,7 @@ def init_app(query_settings=True, debug=False):
     app.json_encoder = JSONEncoder
 
     from app import api  # noqa
-    print(api)
+
     register_views(app, os.path.join(app.path, 'views'))
 
     from app.models.user import AnonymousUser  # noqa
