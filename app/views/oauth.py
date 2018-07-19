@@ -1,6 +1,6 @@
 from authlib.specs.rfc6749 import OAuth2Error
 from flask import request, Blueprint, render_template, url_for, redirect, \
-    flash
+    flash, abort
 from flask_babel import _
 from flask_login import login_required, current_user
 
@@ -15,22 +15,6 @@ from app.service import oauth_service
 blueprint = Blueprint('oauth', __name__, url_prefix='/oauth')
 
 
-def token_info(_):
-    # TODO Token introspection
-    # https://docs.authlib.org/en/latest/specs/rfc7662.html#register-introspection-endpoint  # noqa
-    # valid, req = oauth.verify_request([])
-    # if valid:
-    #     return {"active": "true",
-    #             "scope": req.access_token.scopes,
-    #             "username": req.user.email,
-    #             "expires": req.access_token.expires,
-    #             "client_id": req.client.client_id,
-    #             "first_name": req.user.first_name,
-    #             "last_name": req.user.last_name
-    #             }
-    return None
-
-
 @blueprint.route('/authorize', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
 @response_headers({"X-Frame-Options": "SAMEORIGIN"})
@@ -40,8 +24,9 @@ def authorize():
             grant = oauth_server.validate_consent_request(
                 end_user=current_user)
         except OAuth2Error as error:
-            # TODO better error responses for OAuth2Error
-            return error.error
+            flash(_("OAuth authorize request was invalid. ") +
+                  error.get_error_description(), 'danger')
+            return redirect(url_for("home.home"))
 
         if grant.client.auto_approve:
             return oauth_server.create_authorization_response(current_user)
@@ -121,6 +106,9 @@ def reset_client_secret(client_id):
 @blueprint.route("/clients/register/", methods=["GET", "POST"])
 @blueprint.route("/clients/edit/<string:client_id>/", methods=["GET", "POST"])
 def edit(client_id=None):
+    # This is temporary until we allow dynamic client registration.
+    abort(404)
+
     client = oauth_service.get_client_by_id(client_id=client_id)
     form = init_form(OAuthClientForm, obj=client)
 
