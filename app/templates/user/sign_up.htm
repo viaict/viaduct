@@ -1,5 +1,5 @@
 {% from "macros/form.htm" import render_form, render_field, render_checkbox,
-    render_checkbox_well, render_submit %}
+    render_checkbox_well, render_submit, ignore_kwargs %}
 
 {% extends "content.htm" %}
 
@@ -23,9 +23,20 @@
 
 {% endmacro %}
 
+{% macro render_student_id_field(f) %}
+
+{{ ignore_kwargs(kwargs) }}
+{% set disabled = disable_student_id is defined and disable_student_id %}
+{{ render_field(f, disabled=disabled) }}
+
+{% endmacro %}
+
 {% block content %}
 
 {{ render_form(form, form_name="sign_up",
-    render_before_hook=render_before_hook, submit_renderer=submit_renderer) }}
+    render_before_hook=render_before_hook, submit_renderer=submit_renderer,
+    extra_field_renderers={
+        'StudentIDField': render_student_id_field
+    }) }}
 
 {% endblock %}

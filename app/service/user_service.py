@@ -1,10 +1,12 @@
 import bcrypt
+from flask_babel import _
 
 from app.exceptions import ResourceNotFoundException, ValidationException, \
-    AuthorizationException
+    AuthorizationException, BusinessRuleException
 from app.repository import user_repository
-from app.service import file_service
+from app.service import file_service, mail_service
 from app.enums import FileCategory
+from app.utils import copernica
 
 
 def set_password(user_id, password):
@@ -16,9 +18,15 @@ def set_password(user_id, password):
     return user
 
 
+def find_user_by_email(email):
+    """Retrieve the user by email or return None."""
+    user = user_repository.find_user_by_email(email)
+    return user
+
+
 def get_user_by_email(email):
     """Retrieve the user by email, throw error if not found."""
-    user = user_repository.find_user_by_email(email)
+    user = find_user_by_email(email)
     if not user:
         raise ResourceNotFoundException("user", email)
     return user
@@ -150,3 +158,58 @@ def set_avatar(user_id, file_data):
         file_service.delete_file(old_file)
 
     user_repository.save(user)
+
+
+def register_new_user(email, password, first_name, last_name, student_id,
+                      education_id, birth_date, study_start,
+                      receive_information, phone_nr, address,
+                      zip, city, country, locale, link_student_id=False):
+
+    if find_user_by_email(email) is not None:
+        raise BusinessRuleException(
+            'A user with the same email address already exists.')
+
+    user = user_repository.create_user()
+
+    user.email = email
+
+    user.password = bcrypt.hashpw(password, bcrypt.gensalt())
+    user.first_name = first_name
+    user.last_name = last_name
+    user.student_id = student_id
+    user.education_id = education_id
+    user.birth_date = birth_date
+    user.study_start = study_start
+    user.receive_information = receive_information
+    user.phone_nr = phone_nr
+    user.address = address
+    user.zip = zip
+    user.city = city
+    user.country = country
+    user.locale = locale
+
+    users = [user]
+
+    if link_student_id:
+        user.student_id_confirmed = True
+        unconfirmed_users = user_repository. \
+            find_all_users_with_unconfirmed_student_id(user.student_id)
+
+        for u in unconfirmed_users:
+            u.student_id = None
+            users.append(u)
+
+    user_repository.save_all(users)
+
+    copernica.update_user(user)
+
+    if locale == 'nl':
+        mail_template = 'email/sign_up_nl.html'
+    else:
+        mail_template = 'email/sign_up_en.html'
+
+    mail_service.send_mail(
+        user.email, _('Welcome to via, %(name)s', name=user.first_name),
+        mail_template, user=user)
+
+    return user
