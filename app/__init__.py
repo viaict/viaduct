@@ -1,27 +1,26 @@
-import datetime
-import logging
-import os
 import sys
 
 import connexion
+import datetime
+import logging
+import mimetypes
+import os
+from authlib.flask.oauth2 import ResourceProtector
+from authlib.specs.rfc6749 import grants, ClientAuthentication
 from flask import Flask, request, session
 from flask.json import JSONEncoder as BaseEncoder
 from flask_login import current_user
 from flask_swagger_ui import get_swaggerui_blueprint
-from speaklater import _LazyString  # noqa
 from hashfs import HashFS
-import mimetypes
+from speaklater import _LazyString  # noqa
 
 from app import constants
-from app.exceptions import ResourceNotFoundException, ValidationException, \
-    AuthorizationException
 from app.roles import Roles
 from app.utils.import_module import import_module
-from .connexion_app import ConnexionFlaskApp
-from .extensions import (db, login_manager, cache, toolbar, jsglue, oauth,
-                         cors, sentry, babel)
-
 from config import Config
+from .connexion_app import ConnexionFlaskApp
+from .extensions import (db, login_manager, cache, toolbar, jsglue,
+                         oauth_server, cors, sentry, babel)
 
 version = 'v2.11.1.1'
 
@@ -39,6 +38,7 @@ _logger = logging.getLogger('app')
 _logger.setLevel(logging.DEBUG)
 
 logging.getLogger('werkzeug').setLevel(logging.DEBUG)
+logging.getLogger('authlib').setLevel(logging.DEBUG)
 
 
 hashfs = HashFS('app/uploads/')
@@ -120,7 +120,6 @@ def init_app(query_settings=True, debug=False):
     cache.init_app(app)
     toolbar.init_app(app)
     jsglue.init_app(app)
-    oauth.init_app(app)
     cors.init_app(app, resources={r"/api/*": {"origins": "*"}})
     babel.init_app(app)
     init_oauth()
@@ -190,38 +189,25 @@ def init_app(query_settings=True, debug=False):
 
 
 def init_oauth():
-    from app.service import user_service, oauth_service
+    from app.service import oauth_service
 
-    @oauth.clientgetter
-    def oauth_clientgetter(client_id):
-        return oauth_service.get_client_by_id(client_id)
+    oauth_server.init_app(app,
+                          query_client=oauth_service.get_client_by_id,
+                          save_token=oauth_service.create_token)
 
-    @oauth.grantgetter
-    def oauth_grantgetter(client_id, code):
-        return oauth_service.get_grant_by_client_id_and_code(client_id, code)
+    # TODO Remove in authlib 0.9, fixed lazy initialization
+    # of client authentication.
+    # See https://github.com/lepture/authlib/commit/afa9e43544a3575b06d97df27971d5698152bbac#diff-762725de53e7f2765188055295ed51da  # noqa
+    oauth_server.authenticate_client = ClientAuthentication(
+        oauth_service.get_client_by_id)
 
-    @oauth.grantsetter
-    def oauth_grantsetter(client_id, code, request, *_, **__):
-        return oauth_service.create_grant(
-            client_id, code, current_user.id, request)
+    oauth_server.register_grant(oauth_service.AuthorizationCodeGrant)
+    oauth_server.register_grant(grants.ImplicitGrant)
+    oauth_server.register_endpoint(oauth_service.RevocationEndpoint)
+    oauth_server.register_endpoint(oauth_service.IntrospectionEndpoint)
 
-    @oauth.tokengetter
-    def oauth_tokengetter(access_token=None, refresh_token=None):
-        return oauth_service.get_token(access_token, refresh_token)
-
-    @oauth.tokensetter
-    def oauth_tokensetter(token, request, *_, **__):
-        user_id = request.user.id if request.user else current_user.id
-        return oauth_service.create_token(token, user_id, request)
-
-    @oauth.usergetter
-    def oauth_usergetter(email, password, *_, **__):
-        try:
-            return user_service.get_user_by_login(
-                email=email, password=password)
-        except (ResourceNotFoundException, AuthorizationException,
-                ValidationException):
-            return None
+    ResourceProtector.register_token_validator(
+        oauth_service.BearerTokenValidator())
 
 
 def get_patched_api_app():

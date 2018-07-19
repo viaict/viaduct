@@ -1,12 +1,11 @@
 from sqlalchemy.orm import raiseload, joinedload
+from typing import Optional
 
 from app import db
-from app.models.oauth.client import OAuthClient, OAuthClientScope, \
-    OAuthClientRedirect
-from app.models.oauth.grant import OAuthGrant, OAuthGrantScope
-from app.models.oauth.token import OAuthToken, OAuthTokenScope
+from app.models.oauth.client import OAuthClient
+from app.models.oauth.code import OAuthAuthorizationCode
+from app.models.oauth.token import OAuthToken
 from app.models.user import User
-from app.oauth_scopes import Scopes
 
 
 def get_client_by_id(client_id):
@@ -15,58 +14,49 @@ def get_client_by_id(client_id):
         .one_or_none()
 
 
-def get_client_by_secret(client_secret):
-    return db.session.query(OAuthClient) \
-        .filter_by(client_secret=client_secret) \
-        .one_or_none()
+def create_token(client_id, user_id, **token):
+    token = OAuthToken(client_id=client_id, user_id=user_id, **token)
+    db.session.add(token)
+    db.session.commit()
 
 
-def get_grant_by_client_id_and_code(client_id, code):
-    return db.session.query(OAuthGrant) \
+def get_authorization_code_by_client_id_and_code(client_id, code):
+    return db.session.query(OAuthAuthorizationCode) \
         .filter_by(client_id=client_id, code=code) \
         .one_or_none()
 
 
-def create_grant(client_id, code, redirect_uri, scopes, user_id, expires):
-    grants = [OAuthGrantScope(scope=scope) for scope in scopes]
-    grant = OAuthGrant(client_id=client_id, code=code,
-                       redirect_uri=redirect_uri,
-                       user_id=user_id, expires=expires)
-    db.session.add_all(grants)
-    db.session.add(grant)
-    db.session.commit()
-    return grant
-
-
-def get_token_by_access_token(access_token):
-    return db.session.query(OAuthToken) \
-        .filter_by(access_token=access_token) \
-        .one_or_none()
-
-
-def get_token_by_refresh_token(refresh_token):
-    return db.session.query(OAuthToken) \
-        .filter_by(refresh_token=refresh_token) \
-        .one_or_none()
-
-
-def create_token(access_token, refresh_token, token_type, scopes, expires,
-                 client_id, user_id):
-    new_scopes = [OAuthTokenScope(scope=scope) for scope in scopes]
-    tok = OAuthToken(access_token=access_token, refresh_token=refresh_token,
-                     token_type=token_type, _scopes=new_scopes,
-                     expires=expires, client_id=client_id, user_id=user_id)
-    db.session.add_all(new_scopes)
-    db.session.add(tok)
+def create_authorization_code(code, client_id, redirect_uri, scope, user_id):
+    auth_code = OAuthAuthorizationCode(
+        code=code,
+        client_id=client_id,
+        redirect_uri=redirect_uri,
+        scope=scope,
+        user_id=user_id)
+    db.session.add(auth_code)
     db.session.commit()
 
-    return tok
+
+def get_token_by_access_token(access_token: str, client_id: str = None) \
+        -> Optional[OAuthToken]:
+    q = db.session.query(OAuthToken) \
+        .filter_by(access_token=access_token)
+    if client_id:
+        q = q.filter_by(client_id=client_id)
+    return q.one_or_none()
 
 
-def delete_grant(grant_id):
-    db.session.query(OAuthGrant).filter_by(
-        id=grant_id
-    ).delete(synchronize_session=False)
+def get_token_by_refresh_token(refresh_token: str, client_id: str = None) \
+        -> Optional[OAuthToken]:
+    q = db.session.query(OAuthToken) \
+        .filter_by(refresh_token=refresh_token)
+    if client_id:
+        q = q.filter_by(client_id=client_id)
+    return q.one_or_none()
+
+
+def delete_authorization_code(authorization_code):
+    db.session.delete(authorization_code)
     db.session.commit()
 
 
@@ -79,42 +69,27 @@ def delete_token(token_id):
 
 def get_approved_clients_by_user_id(user_id):
     return db.session.query(OAuthClient) \
-        .join(OAuthToken).filter_by(user_id=user_id) \
-        .order_by(OAuthClient.name) \
+        .join(OAuthToken, OAuthToken.client_id == OAuthClient.client_id) \
+        .filter(OAuthToken.user_id == user_id,
+                OAuthToken.revoked == False) \
+        .order_by(OAuthClient.client_name) \
         .options(joinedload(OAuthClient.user)
                  .load_only(User.first_name, User.last_name),
                  raiseload("*")) \
-        .all()
+        .all()  # noqa
 
 
 def get_owned_clients_by_user_id(user_id):
     return db.session.query(OAuthClient) \
-        .order_by(OAuthClient.name) \
+        .order_by(OAuthClient.client_name) \
         .filter_by(user_id=user_id, auto_approve=False).all()
 
 
-def delete_user_tokens_by_client_id(user_id, client_id):
+def revoke_user_tokens_by_client_id(user_id, client_id):
     db.session.query(OAuthToken).filter_by(
         user_id=user_id, client_id=client_id
-    ).delete(synchronize_session=False)
+    ).update(dict(revoked=True))
     db.session.commit()
-
-
-def create_client(client_id, client_secret, name, description, redirect_uris,
-                  user_id, confidential, default_scopes):
-    scopes = [OAuthClientScope(scope=scope) for scope in default_scopes]
-    redirect_uris = [OAuthClientRedirect(redirect_uri=redirect_uri)
-                     for redirect_uri in redirect_uris]
-
-    client = OAuthClient(client_id=client_id, client_secret=client_secret,
-                         user_id=user_id, name=name, description=description,
-                         confidential=confidential, _default_scopes=scopes,
-                         _redirect_uris=redirect_uris)
-    db.session.add_all(scopes)
-    db.session.add_all(redirect_uris)
-    db.session.add(client)
-    db.session.commit()
-    return client
 
 
 def update_client_secret(client_id, client_secret):
@@ -124,53 +99,7 @@ def update_client_secret(client_id, client_secret):
     db.session.commit()
 
 
-def update_client_details(client_id, name, description):
-    db.session.query(OAuthClient) \
-        .filter_by(client_id=client_id) \
-        .update(dict(name=name, description=description))
-    db.session.commit()
-
-
-def get_redirect_uris_by_client_id(client_id):
-    uris = db.session.query(OAuthClientRedirect) \
-        .filter_by(client_id=client_id).all()
-    return [uri.redirect_uri for uri in uris]
-
-
-def delete_redirect_uris(client_id, redirect_uri_list):
-    db.session.query(OAuthClientRedirect) \
-        .filter(OAuthClientRedirect.client_id == client_id,
-                OAuthClientRedirect.redirect_uri.in_(redirect_uri_list)) \
-        .delete(synchronize_session=False)
-    db.session.commit()
-
-
-def insert_redirect_uris(client_id, redirect_uri_list):
-    redirect_uris = [OAuthClientRedirect(client_id=client_id,
-                                         redirect_uri=redirect_uri)
-                     for redirect_uri in redirect_uri_list]
-    db.session.add_all(redirect_uris)
-    db.session.commit()
-
-
-def get_scopes_by_client_id(client_id):
-    scopes = db.session.query(OAuthClientScope) \
-        .filter_by(client_id=client_id).all()
-    return [Scopes[scope.scope] for scope in scopes]
-
-
-def delete_scopes(client_id, scopes_list):
-    scopes = [scope.name for scope in scopes_list]
-    db.session.query(OAuthClientScope) \
-        .filter(OAuthClientScope.client_id == client_id,
-                OAuthClientScope.scope.in_(scopes)) \
-        .delete(synchronize_session=False)
-    db.session.commit()
-
-
-def insert_scopes(client_id, scopes_list):
-    scopes = [OAuthClientScope(client_id=client_id,
-                               scope=scope.name)
-              for scope in scopes_list]
-    db.session.add_all(scopes)
+def revoke_token(token):
+    token.revoked = True
+    db.session.add(token)
     db.session.commit()

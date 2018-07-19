@@ -1,4 +1,5 @@
-from app import ResourceNotFoundException, app, Roles, AuthorizationException
+from app import app, Roles
+from app.exceptions import ResourceNotFoundException, AuthorizationException
 from app.repository import custom_form_repository
 from app.service import role_service, group_service
 from app.utils import copernica

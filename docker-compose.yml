@@ -12,6 +12,7 @@ services:
       - 5000:5000
     environment:
       - SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://viaduct:viaduct@db/viaduct
+      - AUTHLIB_INSECURE_TRANSPORT=true
     depends_on:
       - db
 

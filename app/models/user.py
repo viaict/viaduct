@@ -110,6 +110,10 @@ class User(db.Model, UserMixin, BaseEntity):
     def __str__(self):
         return self.name
 
+    def get_user_id(self):
+        """Retrieve the unique id of the user for authlib."""
+        return self.id
+
     def update_email(self, new_email):
         if self.email == new_email:
             return
