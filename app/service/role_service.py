@@ -1,15 +1,20 @@
 import logging
-from flask_login import current_user
 
-from app import app
 from app.repository import role_repository
 
 _logger = logging.getLogger(__name__)
 
 
 def user_has_role(user, *roles):
+    if not user:
+        return False
+
     if user.is_authenticated:
-        return all(role in user.roles for role in roles)
+        if user.disabled:
+            return False
+
+        user_roles = role_repository.load_user_roles(user.id)
+        return all(role in user_roles for role in roles)
     else:
         return False
 
@@ -20,12 +25,6 @@ def find_all_roles_by_group_id(group_id):
 
 def get_groups_with_role(role):
     return role_repository.get_groups_with_role(role)
-
-
-@app.before_request
-def load_user_roles():
-    if current_user.is_authenticated:
-        current_user.roles = role_repository.load_user_roles(current_user.id)
 
 
 def set_roles_for_group(group_id, new_roles):

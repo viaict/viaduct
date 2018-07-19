@@ -18,7 +18,9 @@ pimpy_service_add_task_mock = Mock(pimpy_service._add_task)
 
 task_mock = Mock(Task)
 abc_task_mock = Mock(Task)
+abc_task_mock.id = 10604
 def_task_mock = Mock(Task)
+def_task_mock.id = 13775
 
 group_mock = Mock(Group)
 group_mock.id = 20
@@ -306,25 +308,9 @@ class TestPimpyService(unittest.TestCase):
         status = PimpyTaskStatus.NOT_STARTED.value
         mock_user.member_of_group.return_value = True
 
-        pimpy_service.set_task_status(mock_user, mock_task, status)
+        pimpy_service.set_task_status(mock_task, status)
         pimpy_repository_mock.update_status.assert_called_once_with(
             mock_task, status)
-
-    def test_set_task_status_member_not_group_not_owner(self):
-        mock_user = Mock(User)
-        mock_task = Mock(Task)
-        mock_task.users = []
-
-        status = PimpyTaskStatus.NOT_STARTED.value
-
-        pimpy_service.set_task_status(mock_user, mock_task, status)
-        pimpy_repository_mock.update_status.assert_called_once_with(
-            mock_task, status)
-
-        with self.assertRaises(ValidationException):
-            mock_user.member_of_group.return_value = False
-            pimpy_service.set_task_status(mock_user, mock_task, status)
-            pimpy_repository_mock.update_status.assert_not_called()
 
     def test_set_task_status_not_group_but_owner(self):
         mock_user = Mock(User)
@@ -335,7 +321,7 @@ class TestPimpyService(unittest.TestCase):
 
         mock_user.member_of_group.return_value = False
 
-        pimpy_service.set_task_status(mock_user, mock_task, status)
+        pimpy_service.set_task_status(mock_task, status)
         pimpy_repository_mock.update_status.assert_called_once_with(
             mock_task, status)
 
@@ -349,7 +335,7 @@ class TestPimpyService(unittest.TestCase):
         mock_user.member_of_group.return_value = False
 
         with self.assertRaises(ValidationException):
-            pimpy_service.set_task_status(mock_user, mock_task, status)
+            pimpy_service.set_task_status(mock_task, status)
 
     def test_add_task_by_user_string_invalid_group(self):
         with self.assertRaises(ResourceNotFoundException):
@@ -420,8 +406,7 @@ class TestPimpyService(unittest.TestCase):
 
     def test_edit_task_property_content(self):
         value = 'val'
-        pimpy_service.edit_task_property(Mock(User), existing_task_id,
-                                         content=value)
+        pimpy_service.edit_task_property(abc_task_mock, content=value)
 
         pimpy_repository_mock.edit_task_content.assert_called_once_with(
             abc_task_mock, value)
@@ -429,8 +414,7 @@ class TestPimpyService(unittest.TestCase):
     def test_edit_task_property_title(self):
         value = 'val'
 
-        pimpy_service.edit_task_property(Mock(User), existing_task_id,
-                                         title=value)
+        pimpy_service.edit_task_property(abc_task_mock, title=value)
 
         pimpy_repository_mock.edit_task_title.assert_called_once_with(
             abc_task_mock, value)
@@ -440,21 +424,10 @@ class TestPimpyService(unittest.TestCase):
 
         with patch.object(pimpy_service, 'get_list_of_users_from_string',
                           lambda group_id, userlist: [mock_user]):
-            pimpy_service.edit_task_property(
-                mock_user, existing_task_id, users_property=[mock_user])
+            pimpy_service.edit_task_property(abc_task_mock,
+                                             users_property=[mock_user])
             pimpy_repository_mock.edit_task_users.assert_called_once_with(
                 abc_task_mock, [mock_user])
-
-    def test_edit_task_property_invalid_group(self):
-        mock_user = Mock(User)
-        mock_task = Mock(Task)
-        pimpy_repository_mock.find_task_by_id.return_value = mock_task
-
-        mock_user.member_of_group = Mock(return_value=False)
-
-        with self.assertRaises(ValidationException):
-            pimpy_service.edit_task_property(
-                mock_user, existing_task_id, content='val')
 
     @patch.object(pimpy_service, 'get_list_of_users_from_string',
                   mock_get_list_of_users_from_string)

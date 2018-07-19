@@ -1,10 +1,10 @@
 import bcrypt
 
+from app.enums import FileCategory
 from app.exceptions import ResourceNotFoundException, ValidationException, \
     AuthorizationException
 from app.repository import user_repository
 from app.service import file_service
-from app.enums import FileCategory
 
 
 def set_password(user_id, password):

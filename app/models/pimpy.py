@@ -58,7 +58,8 @@ class Task(db.Model, BaseEntity):
         "btn-info", "btn-warning", "btn-success",
         "btn-danger", "btn-success", "btn-inverse"]
 
-    def base32_id(self):
+    @property
+    def b32_id(self):
         return b32.encode(self.id)
 
     def get_status_string(self):

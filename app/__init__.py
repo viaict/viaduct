@@ -10,6 +10,7 @@ from authlib.specs.rfc6749 import grants, ClientAuthentication
 from flask import Flask, request, session
 from flask.json import JSONEncoder as BaseEncoder
 from flask_login import current_user
+from flask_restful import Api
 from flask_swagger_ui import get_swaggerui_blueprint
 from hashfs import HashFS
 from speaklater import _LazyString  # noqa
@@ -33,6 +34,7 @@ logging.basicConfig(
 app = Flask(__name__)
 app.logger_name = 'app.flask'
 app.logger.setLevel(logging.NOTSET)
+api = Api(app=app)
 
 _logger = logging.getLogger('app')
 _logger.setLevel(logging.DEBUG)
@@ -180,6 +182,8 @@ def init_app(query_settings=True, debug=False):
             return BaseEncoder.default(self, o)
     app.json_encoder = JSONEncoder
 
+    from app import api  # noqa
+
     register_views(app, os.path.join(app.path, 'views'))
 
     from app.models.user import AnonymousUser  # noqa
@@ -215,8 +219,7 @@ def get_patched_api_app():
     swagger_url = '/api/docs'
 
     # The API url defined by connexion.
-    api_urls = [{"name": "pimpy", "url": "/api/pimpy/swagger.json"},
-                {"name": "token", "url": "/api/token/swagger.json"}]
+    api_urls = [{"name": "token", "url": "/api/token/swagger.json"}]
 
     swaggerui_blueprint = get_swaggerui_blueprint(
         swagger_url,
@@ -250,6 +253,5 @@ def get_patched_api_app():
     connexion_app = ConnexionFlaskApp(
         __name__, app, specification_dir='swagger/', swagger_ui=False)
 
-    add_api(connexion_app, "pimpy")
     add_api(connexion_app, "token")
     return connexion_app

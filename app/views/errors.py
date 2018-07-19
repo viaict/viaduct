@@ -38,14 +38,14 @@ def add_api_error_handler(f):
 
 
 def handle_api_error(e):
-    if not isinstance(e, werkzeug.exceptions.HTTPException):
-        e = werkzeug.exceptions.InternalServerError()
-
     if isinstance(e, DetailedException):
         return jsonify({"title": e.title,
                         "status": e.status,
                         "detail": str(e),
                         "type": e.type_}), e.status
+
+    if not isinstance(e, werkzeug.exceptions.HTTPException):
+        e = werkzeug.exceptions.InternalServerError()
 
     response = problem(title=e.name,
                        detail=e.description,

@@ -1,11 +1,15 @@
+import baas32
 import baas32 as b32
 import datetime
+import logging
 import re
 from fuzzywuzzy import fuzz
+from typing import List
 
 from app.enums import PimpyTaskStatus
-from app.exceptions import ValidationException, InvalidMinuteException
-from app.models.pimpy import Task
+from app.exceptions import ValidationException, InvalidMinuteException, \
+    ResourceNotFoundException, AuthorizationException
+from app.models.pimpy import Task, TaskUserRel
 from app.repository import pimpy_repository
 from app.service import group_service
 
@@ -33,9 +37,18 @@ DONE_REGEX = re.compile("\s*(?:DONE) ([^\n\r]*)")
 REMOVE_REGEX = re.compile("\s*(?:REMOVE) ([^\n\r]*)")
 MISSING_COLON_REGEX = re.compile(r"\s*(?:ACTIE|TASK|ACTIES|TASKS)+[^:]*$")
 
+_logger = logging.getLogger(__name__)
+
 
 def find_minute_by_id(minute_id):
     return pimpy_repository.find_minute_by_id(minute_id)
+
+
+def get_minute_by_id(minute_id):
+    minute = find_minute_by_id(minute_id)
+    if not minute:
+        raise ResourceNotFoundException("minute", minute_id)
+    return minute
 
 
 def find_task_by_id(task_id):
@@ -58,10 +71,35 @@ def check_date_range(date_range):
                 "First date should be smaller then second")
 
 
+def get_task_by_b32_id(b32_task_id: str) -> Task:
+    task = find_task_by_b32_id(b32_task_id)
+    if not task:
+        raise ResourceNotFoundException("task", b32_task_id)
+    return task
+
+
+def find_task_by_b32_id(b32_task_id: str) -> Task:
+    try:
+        task_id = baas32.decode(b32_task_id)
+        return pimpy_repository.find_task_by_id(task_id)
+    except ValueError:
+        return None
+
+
+# TODO Remove this in favor of non dict-wrapped function.
 def get_all_minutes_for_group(group_id, date_range=None):
+    _logger.warning("get_all_minutes_for_group is deprecated")
+
     check_date_range(date_range)
     group = group_service.get_group_by_id(group_id)
     return pimpy_repository.get_all_minutes_for_group(group, date_range)
+
+
+def get_minutes_for_group(group_id, date_range=None):
+    check_date_range(date_range)
+
+    group = group_service.get_group_by_id(group_id)
+    return pimpy_repository.get_minutes_for_group(group, date_range)
 
 
 def get_all_tasks_for_user(user, date_range=None):
@@ -69,7 +107,8 @@ def get_all_tasks_for_user(user, date_range=None):
     return pimpy_repository.get_all_tasks_for_user(user, date_range)
 
 
-def get_all_tasks_for_group(group_id, date_range=None, user=None):
+def get_all_tasks_for_group(group_id, date_range=None, user=None) \
+        -> List[TaskUserRel]:
     check_date_range(date_range)
     group = group_service.get_group_by_id(group_id)
     return pimpy_repository.get_all_tasks_for_group(group, date_range, user)
@@ -81,10 +120,23 @@ def get_all_tasks_for_users_in_groups_of_user(user, date_range=None):
     return pimpy_repository.get_all_tasks_for_users_in_groups(groups)
 
 
-def set_task_status(user, task, status):
-    if not user.member_of_group(task.group_id) and user not in task.users:
-        raise ValidationException('User not member of group of task')
+def check_user_can_access_task(user, task):
+    if user.member_of_group(task.group_id):
+        return
+    if user in task.users:
+        return
 
+    raise AuthorizationException('User not member of group of task')
+
+
+def check_user_can_access_minute(user, minute):
+    if user.member_of_group(minute.group_id):
+        return
+
+    raise AuthorizationException('User not member of group of minute')
+
+
+def set_task_status(task, status):
     valid = (PimpyTaskStatus.NOT_STARTED.value <= status <=
              PimpyTaskStatus.MAX.value)
     if not valid:
@@ -104,9 +156,9 @@ def add_task_by_user_string(title, content, group_id, users_text, line,
     group = group_service.get_group_by_id(group_id)
     user_list = get_list_of_users_from_string(group_id, users_text)
 
-    _add_task(title=title, content=content, group=group,
-              user_list=user_list, minute=minute, line=line,
-              status=status)
+    return _add_task(title=title, content=content, group=group,
+                     user_list=user_list, minute=minute, line=line,
+                     status=status)
 
 
 def _add_task(title, content, group, user_list, line, minute, status):
@@ -117,9 +169,9 @@ def _add_task(title, content, group, user_list, line, minute, status):
 
         if task:
             raise ValidationException("This task already exists")
-    pimpy_repository.add_task(title=title, content=content, group=group,
-                              users=user_list, minute=minute, line=line,
-                              status=status)
+    return pimpy_repository.add_task(title=title, content=content, group=group,
+                                     users=user_list, minute=minute, line=line,
+                                     status=status)
 
 
 def add_minute(content, date, group):
@@ -143,12 +195,7 @@ def add_minute(content, date, group):
     return minute
 
 
-def edit_task_property(user, task_id, content=None, title=None,
-                       users_property=None):
-    task = find_task_by_id(task_id)
-
-    if not user.member_of_group(task.group_id):
-        raise ValidationException('User not member of group of task')
+def edit_task_property(task, content=None, title=None, users_property=None):
     if content is not None:
         pimpy_repository.edit_task_content(task, content)
 
