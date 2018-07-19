@@ -119,10 +119,9 @@ def edit(user_id, form_cls):
     """
     if user_id:
         user = user_service.get_user_by_id(user_id)
+        user.avatar = user_service.user_has_avatar(user_id)
     else:
         user = User()
-
-    user.avatar = user_service.user_has_avatar(user_id)
 
     form = init_form(form_cls, obj=user)
     form.new_user = user.id == 0

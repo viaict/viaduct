@@ -9,6 +9,13 @@ def get_group_by_id(group_id):
     return group
 
 
+def get_group_by_name(group_name):
+    group = group_repository.get_group_by_name(group_name)
+    if not group:
+        raise ResourceNotFoundException("group", group_name)
+    return group
+
+
 def find_groups():
     return group_repository.find_groups()
 

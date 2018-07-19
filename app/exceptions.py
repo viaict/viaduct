@@ -10,7 +10,7 @@ class DetailedException(Exception):
 class ResourceNotFoundException(DetailedException):
     def __init__(self, resource, identifier, **kwargs):
         super(ResourceNotFoundException, self).__init__(
-            id=1, status=464, title="Not Found", **kwargs)
+            id=1, status=404, title="Not Found", **kwargs)
         self.resource = resource
         self.identifier = identifier
 
@@ -75,4 +75,4 @@ class InvalidMinuteException(ValidationException):
             'unknown_users': unknown_users
         }
 
-        super(ValidationException, self).__init__(details, **kwargs)
+        super().__init__(details, **kwargs)
