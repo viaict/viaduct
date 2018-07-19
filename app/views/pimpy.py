@@ -6,8 +6,9 @@ from flask_login import current_user
 
 from app import Roles, constants
 from app.decorators import require_role
-from app.exceptions import ValidationException, ResourceNotFoundException, \
-    InvalidMinuteException, AuthorizationException
+from app.exceptions.base import ValidationException, \
+    ResourceNotFoundException, AuthorizationException
+from app.exceptions.pimpy import InvalidMinuteException
 from app.forms import init_form
 from app.forms.pimpy import AddTaskForm, AddMinuteForm
 from app.models.pimpy import Task

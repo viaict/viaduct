@@ -5,7 +5,7 @@ from marshmallow import Schema, fields, pre_dump, RAISE, validate, \
 
 from app import Roles
 from app.decorators import require_oauth, require_role, json_schema
-from app.exceptions import InvalidMinuteException
+from app.exceptions.pimpy import InvalidMinuteException
 from app.oauth_scopes import Scopes
 from app.service import pimpy_service, group_service
 

@@ -13,8 +13,8 @@ from io import StringIO
 
 from app import db, login_manager, get_locale
 from app.decorators import require_role, response_headers
-from app.exceptions import ResourceNotFoundException, AuthorizationException, \
-    ValidationException
+from app.exceptions.base import ResourceNotFoundException, \
+    AuthorizationException, ValidationException
 from app.forms import init_form
 from app.forms.user import (EditUserForm, EditUserInfoForm, SignUpForm,
                             SignInForm, ResetPasswordForm, RequestPassword,

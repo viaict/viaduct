@@ -1,4 +1,4 @@
-from app.exceptions import ResourceNotFoundException
+from app.exceptions.base import ResourceNotFoundException
 from app.repository import group_repository
 
 

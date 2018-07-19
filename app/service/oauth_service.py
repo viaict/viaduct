@@ -4,7 +4,8 @@ from authlib.specs.rfc6749 import grants
 from flask import url_for
 from oauthlib.common import generate_token
 
-from app.exceptions import BusinessRuleException, ResourceNotFoundException
+from app.exceptions.base import BusinessRuleException, \
+    ResourceNotFoundException
 from app.oauth_scopes import Scopes
 from app.repository import oauth_repository
 from app.service import user_service

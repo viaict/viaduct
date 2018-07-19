@@ -10,8 +10,8 @@ from flask_login import current_user
 from functools import wraps
 
 from app import app, login_manager
-from app.exceptions import ResourceNotFoundException, DetailedException, \
-    AuthorizationException
+from app.exceptions.base import ResourceNotFoundException, \
+    ApplicationException, AuthorizationException
 from app.models.page import Page
 from app.roles import Roles
 from app.service import role_service
@@ -38,7 +38,7 @@ def add_api_error_handler(f):
 
 
 def handle_api_error(e):
-    if isinstance(e, DetailedException):
+    if isinstance(e, ApplicationException):
         return jsonify({"title": e.title,
                         "status": e.status,
                         "detail": str(e),
@@ -59,7 +59,7 @@ def connexion_problem_exception_handler(e):
     return FlaskApi.get_response(e.to_problem())
 
 
-@app.errorhandler(DetailedException)
+@app.errorhandler(ApplicationException)
 @add_api_error_handler
 def default_detailed_exception_handler(e):
     if isinstance(e, ResourceNotFoundException):

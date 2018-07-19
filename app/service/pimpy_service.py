@@ -7,8 +7,9 @@ from fuzzywuzzy import fuzz
 from typing import List
 
 from app.enums import PimpyTaskStatus
-from app.exceptions import ValidationException, InvalidMinuteException, \
+from app.exceptions.base import ValidationException, \
     ResourceNotFoundException, AuthorizationException
+from app.exceptions.pimpy import InvalidMinuteException
 from app.models.pimpy import Task, TaskUserRel
 from app.repository import pimpy_repository
 from app.service import group_service

@@ -1,8 +1,8 @@
 import bcrypt
 
 from app.enums import FileCategory
-from app.exceptions import ResourceNotFoundException, ValidationException, \
-    AuthorizationException
+from app.exceptions.base import ResourceNotFoundException, \
+    ValidationException, AuthorizationException
 from app.repository import user_repository
 from app.service import file_service
 

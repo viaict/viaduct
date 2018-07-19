@@ -6,7 +6,7 @@ from flask_login import login_required, current_user
 
 from app import oauth_server
 from app.decorators import response_headers
-from app.exceptions import BusinessRuleException
+from app.exceptions.base import BusinessRuleException
 from app.forms import init_form
 from app.forms.oauth_forms import OAuthClientForm
 from app.oauth_scopes import Scopes
