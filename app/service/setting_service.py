@@ -1,5 +1,5 @@
 from app.repository import setting_repository
-from app.views.errors import ResourceNotFoundException
+from app.exceptions.base import ResourceNotFoundException
 
 
 def save_setting(setting):

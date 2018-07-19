@@ -46,7 +46,7 @@ jinja2==2.10              # via flask, flask-babel
 mako==1.0.7               # via alembic
 markdown==2.6.11
 markupsafe==1.0           # via jinja2, mako
-marshmallow==2.15.3
+marshmallow==3.0.0b12
 mccabe==0.6.1             # via flake8
 oauth2client==4.1.2       # via google-api-python-client
 oauthlib==2.0.6           # via flask-oauthlib, requests-oauthlib

@@ -30,7 +30,7 @@ logging.basicConfig(
 app = Flask(__name__)
 app.logger_name = 'app.flask'
 app.logger.setLevel(logging.NOTSET)
-api = Api(app=app)
+rest_api = Api(app=app)
 
 _logger = logging.getLogger('app')
 _logger.setLevel(logging.DEBUG)
@@ -179,7 +179,7 @@ def init_app(query_settings=True, debug=False):
     app.json_encoder = JSONEncoder
 
     from app import api  # noqa
-
+    print(api)
     register_views(app, os.path.join(app.path, 'views'))
 
     from app.models.user import AnonymousUser  # noqa
