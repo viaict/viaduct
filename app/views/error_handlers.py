@@ -36,18 +36,16 @@ def add_api_error_handler(f):
 
 def handle_api_error(e):
     if isinstance(e, ApplicationException):
-        return jsonify({"title": e.title,
-                        "status": e.status,
-                        "detail": str(e),
-                        "type": e.type_}), e.status
+        return jsonify(e.ErrorSchema().dump(e)), e.status
 
     if not isinstance(e, werkzeug.exceptions.HTTPException):
         e = werkzeug.exceptions.InternalServerError()
 
-    return jsonify({'title': e.name,
-                    "detail": e.description,
-                    "status": e.code,
-                    "type": "about:blank"}), e.code
+    return jsonify(ApplicationException.ErrorSchema().dump(
+        {'title': e.name,
+         "_message": e.description,
+         "status": e.code,
+         "type_": "about:blank"})), e.code
 
 
 @app.errorhandler(ApplicationException)

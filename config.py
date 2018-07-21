@@ -77,6 +77,8 @@ class Config(object):
         self.DEBUG_TB_INTERCEPT_REDIRECTS = False
         self.SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+        self.JSON_SORT_KEYS = False
+
     def load_config(self, database_url):
         engine = create_engine(database_url)
         session = scoped_session(sessionmaker(bind=engine))

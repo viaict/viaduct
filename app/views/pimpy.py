@@ -1,5 +1,5 @@
 import datetime
-from flask import Blueprint, abort, redirect, url_for
+from flask import Blueprint, redirect, url_for
 from flask import flash, render_template, request, jsonify
 from flask_babel import _
 from flask_login import current_user
@@ -21,10 +21,8 @@ blueprint = Blueprint('pimpy', __name__, url_prefix='/pimpy')
 @blueprint.route('/minutes/<int:group_id>', methods=['GET', 'POST'])
 @require_role(Roles.PIMPY_READ)
 def view_minutes(group_id=None):
-    if group_id is not None and not current_user.member_of_group(group_id):
-        return abort(403)
-
     if group_id:
+        group_service.check_user_member_of_group(current_user, group_id)
         list_items = pimpy_service.get_all_minutes_for_group(group_id)
     else:
         list_items = pimpy_service.get_all_minutes_for_user(current_user)
@@ -39,9 +37,6 @@ def view_minutes(group_id=None):
 @blueprint.route('/archive/<int:group_id>', methods=['POST'])
 @require_role(Roles.PIMPY_READ)
 def view_minutes_in_date_range(group_id=None):
-    if group_id is not None and not current_user.member_of_group(group_id):
-        return abort(403)
-
     start_date = request.form.get('start_date')
     end_date = request.form.get('end_date')
 
@@ -49,6 +44,8 @@ def view_minutes_in_date_range(group_id=None):
     end_date = datetime.datetime.strptime(end_date, constants.DATE_FORMAT)
 
     if group_id:
+        group_service.check_user_member_of_group(current_user, group_id)
+
         list_items = pimpy_service.get_all_minutes_for_group(group_id, (
             start_date, end_date))
     else:
@@ -64,9 +61,7 @@ def view_minutes_in_date_range(group_id=None):
 @blueprint.route('/minutes/single/<int:minute_id>/<int:line_number>')
 @require_role(Roles.PIMPY_READ)
 def view_minute(minute_id=0, line_number=-1):
-    minute = pimpy_service.find_minute_by_id(minute_id)
-    if not minute:
-        abort(404)
+    minute = pimpy_service.get_minute_by_id(minute_id)
 
     list_items = [{
         'group_name': minute.group.name,
@@ -84,9 +79,7 @@ def view_minute(minute_id=0, line_number=-1):
 @blueprint.route('/minutes/single/<int:minute_id>/raw')
 @require_role(Roles.PIMPY_READ)
 def view_minute_raw(minute_id):
-    minute = pimpy_service.find_minute_by_id(minute_id)
-    if not minute:
-        abort(404)
+    minute = pimpy_service.get_minute_by_id(minute_id)
 
     return minute.content, {'Content-Type': 'text/plain; charset=utf-8'}
 
@@ -95,12 +88,11 @@ def view_minute_raw(minute_id):
 @blueprint.route('/tasks/<int:group_id>/', methods=['GET', 'POST'])
 @require_role(Roles.PIMPY_READ)
 def view_tasks(group_id=None):
-    if group_id is not None and not current_user.member_of_group(group_id):
-        return abort(403)
-
     status_meanings = Task.get_status_meanings()
 
     if group_id is not None:
+        group_service.check_user_member_of_group(current_user, group_id)
+
         tasks_rel = pimpy_service.get_all_tasks_for_group(group_id)
     else:
         tasks_rel = pimpy_service.get_all_tasks_for_users_in_groups_of_user(
@@ -120,12 +112,12 @@ def view_tasks(group_id=None):
 @blueprint.route('/tasks/self/<int:group_id>/', methods=['GET', 'POST'])
 @require_role(Roles.PIMPY_READ)
 def view_tasks_personal(group_id=None):
-    if group_id is not None and not current_user.member_of_group(group_id):
-        return abort(403)
 
     status_meanings = Task.get_status_meanings()
 
     if group_id is not None:
+        group_service.check_user_member_of_group(current_user, group_id)
+
         tasks_rel = pimpy_service.get_all_tasks_for_group(group_id,
                                                           user=current_user)
     else:
@@ -144,9 +136,6 @@ def view_tasks_personal(group_id=None):
 @blueprint.route('/task_archive/<int:group_id>', methods=['POST'])
 @require_role(Roles.PIMPY_READ)
 def view_tasks_in_date_range(group_id=None):
-    if group_id is not None and not current_user.member_of_group(group_id):
-        return abort(403)
-
     start_date = request.form['start_date']
     end_date = request.form['end_date']
 
@@ -158,6 +147,8 @@ def view_tasks_in_date_range(group_id=None):
     status_meanings = Task.get_status_meanings()
 
     if group_id is not None:
+        group_service.check_user_member_of_group(current_user, group_id)
+
         tasks_rel = pimpy_service.get_all_tasks_for_group(group_id, date_tuple)
     else:
         tasks_rel = pimpy_service.get_all_tasks_for_user(current_user,
@@ -186,12 +177,12 @@ def update_task_status():
         try:
             pimpy_service.check_user_can_access_task(current_user, task)
         except AuthorizationException as e:
-            return jsonify(success=False, message=e.details), 403
+            return jsonify(success=False, message=str(e)), 403
 
         try:
             pimpy_service.set_task_status(task, new_status)
         except ValidationException as e:
-            return jsonify(success=False, message=e.details), 400
+            return jsonify(success=False, message=str(e)), 400
 
     return jsonify(success=True, status=task.get_status_color())
 
@@ -200,8 +191,8 @@ def update_task_status():
 @blueprint.route('/tasks/add/<int:group_id>', methods=['GET', 'POST'])
 @require_role(Roles.PIMPY_WRITE)
 def add_task(group_id=None):
-    if group_id is not None and not current_user.member_of_group(group_id):
-        return abort(403)
+    if group_id:
+        group_service.check_user_member_of_group(current_user, group_id)
 
     # Set the group as default
     try:
@@ -221,7 +212,7 @@ def add_task(group_id=None):
                                     group_id=form.group.data.id))
         except ValidationException as e:
             # TODO fix translations outside of service.
-            flash(e.details)
+            flash(str(e))
 
     return render_template('pimpy/add_task.htm', group=group,
                            group_id=group_id, type='tasks', form=form,
@@ -232,8 +223,8 @@ def add_task(group_id=None):
 @blueprint.route('/minutes/add/<int:group_id>', methods=['GET', 'POST'])
 @require_role(Roles.PIMPY_WRITE)
 def add_minute(group_id=None):
-    if group_id is not None and not current_user.member_of_group(group_id):
-        return abort(403)
+    if group_id:
+        group_service.check_user_member_of_group(current_user, group_id)
 
     # Set the current group as default.
     try:
