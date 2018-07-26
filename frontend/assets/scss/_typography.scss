@@ -8,9 +8,31 @@ html {
 
 body {
     font-family: 'Source Sans Pro', sans-serif;
-    font-weight: 300;
+    font-weight: normal;
     font-size: 16px;
-    padding-top: 100px;
-    background-size: cover;
-    overflow-y: scroll;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: normal;
+}
+
+p {
+    line-height: 25px;
+}
+
+img {
+    max-width: 100%;
+}
+
+form label {
+    font-weight: bold;
+}
+
+form p {
+    margin: 20px 0;
 }

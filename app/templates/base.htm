@@ -41,9 +41,6 @@
 
         <!-- TODO Remove when fully ported to webpack -->
         {% if not vue %}
-            <link href="{{static_url("/static/css/custom.css")}}" rel="stylesheet" />
-            <link href="{{static_url("/static/css/navigation.css")}}" rel="stylesheet" />
-
             <script src="{{static_url("/static/js/global.js")}}"></script>
             <script src="{{static_url("/jsglue.js")}}"></script>
             {% else %}

@@ -1,12 +1,16 @@
 @import 'variables';
 @import 'bootstrap';
 
+@import 'default';
 @import 'typography';
 
 // Components
 @import 'header';
+@import 'home';
+@import 'navigation';
 @import 'carousel';
 @import 'pimpy';
 @import 'profile';
 
+@import 'custom';
 @import 'select2.sortable';
