@@ -20,8 +20,9 @@ from app.roles import Roles
 from app.utils.import_module import import_module
 from config import Config
 from .connexion_app import ConnexionFlaskApp
-from .extensions import (db, login_manager, cache, toolbar, jsglue,
-                         oauth_server, cors, sentry, babel)
+from .extensions import (db, login_manager, cache, jsglue, oauth_server, cors,
+                         sentry, babel)
+# from .exceptions import toolbar
 
 version = 'v2.11.1.1'
 
@@ -120,7 +121,7 @@ def init_app(query_settings=True, debug=False):
     app.config['CACHE_DIR'] = 'cache'
 
     cache.init_app(app)
-    toolbar.init_app(app)
+    # toolbar.init_app(app)
     jsglue.init_app(app)
     cors.init_app(app, resources={r"/api/*": {"origins": "*"}})
     babel.init_app(app)

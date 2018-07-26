@@ -2,22 +2,38 @@
   "name": "viaduct",
   "version": "0.0.0",
   "description": "Via CMS",
-  "dependencies": {},
+  "dependencies": {
+    "vue": "^2.5.16",
+    "vue-router": "^3.0.1"
+  },
   "devDependencies": {
+    "clientjade": "^0.1.1",
+    "css-loader": "^1.0.0",
+    "file-loader": "^1.1.11",
+    "font-awesome": "^4.7.0",
     "grunt": "^0.4.2",
-    "grunt-contrib-concat": "^0.3.0",
-    "grunt-contrib-uglify": "^0.4.0",
-    "grunt-contrib-copy": "^0.5.0",
     "grunt-contrib-clean": "^0.5.0",
+    "grunt-contrib-concat": "^0.3.0",
+    "grunt-contrib-copy": "^0.5.0",
+    "grunt-contrib-uglify": "^0.4.0",
     "grunt-contrib-watch": "^0.5.3",
-    "clientjade": "^0.1.1"
+    "mini-css-extract-plugin": "^0.4.1",
+    "node-sass": "^4.9.2",
+    "sass-loader": "^7.0.3",
+    "url-loader": "^1.0.1",
+    "vue-loader": "^15.2.6",
+    "vue-template-compiler": "^2.5.16",
+    "webpack": "^4.16.2",
+    "webpack-cli": "^3.1.0"
   },
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "dev": "webpack --mode development --watch",
+    "build": "webpack --mode production"
   },
   "repository": {
     "type": "git",
-    "url": "git:https://github.com/viaict/viaduct"
+    "url": "ssh://git@gitlab.com:studieverenigingvia/viaduct.git "
   },
   "author": "",
   "bugs": {
