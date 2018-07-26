@@ -1,3 +1,79 @@
+
+.pimpy-btn-group {
+    margin-bottom: 8px;
+}
+
+.pimpy-menu {
+    width: 75px;
+}
+
+.pimpy-menu-group {
+    width: 150px;
+}
+
+.pimpy-group-head-td {
+    border: none !important;
+    padding: 0 !important;
+}
+
+.pimpy-group-head-td:hover {
+    background: none !important;
+}
+
+.pimpy-user-head-td {
+    border: none !important;
+    padding: 0 !important;
+}
+
+.pimpy-user-head-td:hover {
+    background: none !important;
+}
+
+.pimpy_task {
+    padding-left: 0;
+    padding-right: 0;
+    width: 50px;
+}
+
+.pimpy_task_task {
+    max-width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pimpy_task_users {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pimpy_line_number {
+    width: 6%;
+    float: left;
+    padding-top: 8px;
+    font-size: 10px;
+    font-style: oblique;
+}
+
+.pimpy_minute_styled {
+    padding: 10px;
+    font-family: sans-serif;
+}
+
+a.pimpy_minute_line{
+    display: block;
+    color: black;
+    padding: 2px 0px;
+    text-decoration: none;
+    border-bottom: 1px solid #efecec;
+}
+
+.logo.pimpy {
+    float: right;
+    margin-top: 13px;
+    height: 100px;
+}
+
 #inbox {
     position: fixed;
     bottom: 0;
@@ -33,8 +109,8 @@
     }
 
     .dropdown-menu-right {
-        right: 0 !Important;
-        left: auto !Important;
+        right: 0 !important;
+        left: auto !important;
     }
 
     .dropdown-menu {
@@ -50,13 +126,13 @@
         font-size: 14px;
         text-align: center;
         list-style: none;
-        background-color: rgba(255, 255, 255, 0) !Important;
+        background-color: rgba(255, 255, 255, 0) !important;
         -webkit-background-clip: padding-box;
         background-clip: padding-box;
         border: none;
         border-radius: 0px;
-        -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0) !Important;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0) !Important;
+        -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0) !important;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0) !important;
     }
 
     .fa-iox{

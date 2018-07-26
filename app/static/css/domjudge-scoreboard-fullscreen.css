@@ -1,0 +1,33 @@
+/* line 1, ../../../sass/domjudge-scoreboard-fullscreen.scss */
+body {
+  padding: 0; }
+
+/* line 5, ../../../sass/domjudge-scoreboard-fullscreen.scss */
+.container {
+  width: 90%;
+  font-size: 150%; }
+
+/* line 10, ../../../sass/domjudge-scoreboard-fullscreen.scss */
+h1 {
+  font-weight: bold;
+  font-size: 200%;
+  text-align: center;
+  padding-bottom: 10px;
+  border-bottom: 5px solid #a8a8a8; }
+
+/* line 18, ../../../sass/domjudge-scoreboard-fullscreen.scss */
+#domjudge-time-table {
+  font-size: 120%; }
+
+/* line 22, ../../../sass/domjudge-scoreboard-fullscreen.scss */
+#domjudge-scoreboard-table {
+  margin-top: 10px; }
+
+/* line 26, ../../../sass/domjudge-scoreboard-fullscreen.scss */
+.domjudge-legend-list {
+  font-size: 120%;
+  font-weight: bold; }
+
+/* line 31, ../../../sass/domjudge-scoreboard-fullscreen.scss */
+#domjudge-legend-label {
+  font-size: 120%; }

@@ -31,6 +31,7 @@ app/uploads
 app/static/files/*
 app/static/css/*
 app/static/js
+app/static
 venv/*
 venv3
 .vimrc
