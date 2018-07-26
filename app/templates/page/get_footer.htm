@@ -1,8 +1,8 @@
 <br />
 <div class="row">
     <script>
-        $(document).ready(function(){
-            $('.carousel[data-type="multi"] .item').each(function(){
+        document.addEventListener('DOMContentLoaded', function(){
+            document.querySelectorAll('.carousel[data-type="multi"] .item').forEach(function(){
                 var next = $(this).next();
                 if (!next.length) {
                     next = $(this).siblings(':first');
@@ -18,7 +18,7 @@
                     next.children(':first-child').clone().appendTo($(this));
                 }
             });
-        });
+        }, false);
     </script>
 
     <div class="carousel slide" data-ride="carousel" data-type="multi" data-interval="4000">
