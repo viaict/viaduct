@@ -7,7 +7,7 @@ COPY Gemfile /app
 RUN bundle install
 
 # Node
-RUN apk add -U nodejs
+RUN apk add -U nodejs npm
 COPY package.json /app
 RUN npm install -g grunt-cli clientjade jshint
 RUN npm install

@@ -1,0 +1,16 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,700);
+@import '~font-awesome/scss/font-awesome';
+
+html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    padding-top: 100px;
+    background-size: cover;
+    overflow-y: scroll;
+}
