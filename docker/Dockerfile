@@ -1,8 +1,8 @@
-FROM python:3.6-alpine AS development
+FROM python:3.6-alpine3.7 AS development
 WORKDIR /app
 
 # Node
-RUN apk add -U nodejs npm
+RUN apk add -U nodejs
 COPY package.json /app
 RUN npm install -g grunt-cli clientjade jshint
 RUN npm install
