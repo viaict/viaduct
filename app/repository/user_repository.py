@@ -36,10 +36,14 @@ def find_user_by_email(email):
 
 
 def find_user_by_student_id(student_id):
-    return db.session.query(User).filter_by(
-        student_id=student_id, student_id_confirmed=True).one_or_none()
+    return db.session.query(User) \
+        .filter_by(student_id=student_id,
+                   student_id_confirmed=True) \
+        .one_or_none()
 
 
 def find_all_users_with_unconfirmed_student_id(student_id):
-    return db.session.query(User).filter_by(
-        student_id=student_id, student_id_confirmed=False).all()
+    return db.session.query(User) \
+        .filter_by(student_id=student_id,
+                   student_id_confirmed=False) \
+        .all()

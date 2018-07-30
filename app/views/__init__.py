@@ -11,9 +11,14 @@ def is_safe_url(target):
 
 
 def redirect_back(default='home.home', **values):
+    return flask.redirect(get_safe_redirect_url(default, **values))
+
+
+def get_safe_redirect_url(default='home.home', **values):
     for target in request.values.get('next'), request.referrer:
         if not target:
             continue
         if is_safe_url(target):
-            return flask.redirect(target)
-    return flask.redirect(url_for(default, **values))
+            return target
+
+    return url_for(default, **values)

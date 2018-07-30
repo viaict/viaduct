@@ -256,8 +256,6 @@ def edit_student_id_linking(user_id):
 
                 return edit_page()
 
-            user_service.clear_unconfirmed_student_id_in_all_users(
-                form.student_id.data)
             user_service.set_confirmed_student_id(user, form.student_id.data)
         else:
             user_service.set_unconfirmed_student_id(user, form.student_id.data)
@@ -303,7 +301,7 @@ def sign_up_manual():
                 receive_information=form.receive_information.data,
                 phone_nr=form.phone_nr.data,
                 address=form.address.data,
-                zip=form.zip.data,
+                zip_=form.zip.data,
                 city=form.city.data,
                 country=form.country.data,
                 locale=get_locale())
@@ -403,7 +401,7 @@ def sign_up_saml_response():
                 receive_information=form.receive_information.data,
                 phone_nr=form.phone_nr.data,
                 address=form.address.data,
-                zip=form.zip.data,
+                zip_=form.zip.data,
                 city=form.city.data,
                 country=form.country.data,
                 locale=get_locale(),

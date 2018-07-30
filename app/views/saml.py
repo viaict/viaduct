@@ -1,26 +1,20 @@
-from flask import Blueprint, url_for, redirect, request, flash
+from flask import Blueprint, url_for, redirect, flash
 from flask_login import current_user, login_required
 from flask_babel import _
 
+from app.views import get_safe_redirect_url, redirect_back
 from app.service import saml_service, user_service
-from app.decorators import require_role
+from app.decorators import require_role, response_headers
 from app.roles import Roles
-
-from functools import wraps
 
 
 blueprint = Blueprint('saml', __name__, url_prefix='/saml')
 
 
-def saml_route(f):
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        global saml_info
-        saml_info = saml_service.build_saml_info()
-
-        return f(*args, **kwargs)
-
-    return wrapper
+@blueprint.before_request
+def build_saml_info():
+    global saml_info
+    saml_info = saml_service.build_saml_info()
 
 
 @blueprint.route('/', methods=['GET'])
@@ -29,9 +23,8 @@ def root():
 
 
 @blueprint.route('/sign-in/', methods=['GET'])
-@saml_route
 def login():
-    redirect_to = request.headers.get('Referer', url_for('home.home'))
+    redirect_to = get_safe_redirect_url()
 
     if current_user.is_authenticated:
         return redirect(redirect_to)
@@ -43,10 +36,9 @@ def login():
 
 
 @blueprint.route('/sign-up/', methods=['GET'])
-@saml_route
 def sign_up():
     if current_user.is_authenticated:
-        return redirect(url_for('home.home'))
+        return redirect_back()
 
     return redirect(saml_service.initiate_login(
         saml_info, url_for('user.sign_up_saml_response'), force_authn=True))
@@ -54,9 +46,8 @@ def sign_up():
 
 @blueprint.route('/link-account/', methods=['GET'])
 @login_required
-@saml_route
 def link_account():
-    redirect_to = request.headers.get('Referer', url_for('home.home'))
+    redirect_to = get_safe_redirect_url()
 
     if current_user.student_id_confirmed:
         flash(_('Your account is already linked to a UvA account.'), 'danger')
@@ -72,9 +63,8 @@ def link_account():
 @blueprint.route('/link-account/<int:user_id>/', methods=['GET'])
 @login_required
 @require_role(Roles.USER_WRITE)
-@saml_route
 def link_other_account(user_id):
-    redirect_to = request.headers.get('Referer', url_for('home.home'))
+    redirect_to = get_safe_redirect_url()
 
     user = user_service.get_user_by_id(user_id)
     saml_service.set_linking_user(user)
@@ -86,7 +76,6 @@ def link_other_account(user_id):
 
 
 @blueprint.route('/acs/', methods=['POST'])
-@saml_route
 def assertion_consumer_service():
     saml_service.process_response(saml_info)
 
@@ -97,6 +86,7 @@ def assertion_consumer_service():
 
 
 @blueprint.route('/metadata/', methods=['GET'])
-@saml_route
+@response_headers({'Content-Type': 'application/xml',
+                   'Content-Disposition': 'inline; filename="metadata.xml"'})
 def metadata():
     return saml_service.build_metadata(saml_info)

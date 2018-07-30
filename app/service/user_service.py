@@ -20,8 +20,7 @@ def set_password(user_id, password):
 
 def find_user_by_email(email):
     """Retrieve the user by email or return None."""
-    user = user_repository.find_user_by_email(email)
-    return user
+    return user_repository.find_user_by_email(email)
 
 
 def get_user_by_email(email):
@@ -47,9 +46,7 @@ def find_by_id(user_id):
 
 def find_user_by_student_id(student_id):
     """Retrieve the user or return None."""
-    user = user_repository.find_user_by_student_id(student_id)
-
-    return user
+    return user_repository.find_user_by_student_id(student_id)
 
 
 def get_user_by_student_id(student_id):
@@ -61,24 +58,28 @@ def get_user_by_student_id(student_id):
     return user
 
 
-def clear_unconfirmed_student_id_in_all_users(student_id):
-    users = user_repository.find_all_users_with_unconfirmed_student_id(
+def set_confirmed_student_id(user, student_id):
+    # Check if there is not another account with the same student ID
+    # that is already confirmed
+
+    other_user = find_user_by_student_id(student_id)
+    if other_user is not None:
+        raise BusinessRuleException("Student ID already linked to other user.")
+
+    # Find all users with the same student ID (unconfirmed)
+    # and set it to None
+    other_users = user_repository.find_all_users_with_unconfirmed_student_id(
         student_id)
 
-    for user in users:
+    for user in other_users:
         user.student_id = None
-        user_repository.save(user)
 
-
-def set_confirmed_student_id(user, student_id):
-    # TODO: check if there is not another account with
-    # the same confirmed student id
-    # TODO: maybe merge with method above?
-
+    # Set the confirmed student ID of the user
     user.student_id = student_id
     user.student_id_confirmed = True
 
-    user_repository.save(user)
+    # Save everything at once
+    user_repository.save_all(other_users + [user])
 
 
 def set_unconfirmed_student_id(user, student_id):
@@ -163,7 +164,7 @@ def set_avatar(user_id, file_data):
 def register_new_user(email, password, first_name, last_name, student_id,
                       education_id, birth_date, study_start,
                       receive_information, phone_nr, address,
-                      zip, city, country, locale, link_student_id=False):
+                      zip_, city, country, locale, link_student_id=False):
 
     if find_user_by_email(email) is not None:
         raise BusinessRuleException(
@@ -183,7 +184,7 @@ def register_new_user(email, password, first_name, last_name, student_id,
     user.receive_information = receive_information
     user.phone_nr = phone_nr
     user.address = address
-    user.zip = zip
+    user.zip = zip_
     user.city = city
     user.country = country
     user.locale = locale
