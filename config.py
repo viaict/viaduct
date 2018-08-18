@@ -58,6 +58,9 @@ class Config(object):
         self.SENTRY_DSN = str
         self.ENVIRONMENT = str
 
+        # URL for Athenaeum order page
+        self.ATHENAEUM_URL = str
+
         # Privacy policy
         self.PRIVACY_POLICY_URL_EN = str
         self.PRIVACY_POLICY_URL_NL = str
