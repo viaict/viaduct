@@ -1,5 +1,6 @@
-config.py
 config.rb
+client_secrets.json
+GoogleAPI.p12
 
 # Ignore the nodejs package lock file for now, until we update to the newest node on the server.
 package-lock.json
@@ -36,6 +37,7 @@ venv3
 .ackrc
 
 .sass-cache/
+.mypy_cache/
 node_modules/
 dist/
 
@@ -80,3 +82,7 @@ saml/certs_develop/*
 saml/certs_master/*
 saml/certs
 saml/settings.json
+
+### VisualStudioCode ###
+.vscode/*
+.history

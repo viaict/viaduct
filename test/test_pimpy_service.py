@@ -1,5 +1,6 @@
 import datetime
 import unittest
+from flask_babel import lazy_gettext as _
 from unittest.mock import patch, Mock, ANY
 
 from app.enums import PimpyTaskStatus
@@ -8,19 +9,21 @@ from app.exceptions import ValidationException, ResourceNotFoundException, \
 from app.models.group import Group
 from app.models.pimpy import Task
 from app.models.user import User
-from app.repository import pimpy_repository, group_repository, task_repository
+from app.repository import pimpy_repository, group_repository
 from app.service import pimpy_service, group_service
 
 pimpy_repository_mock = Mock(pimpy_repository)
 group_repository_mock = Mock(group_repository)
-task_repository_mock = Mock(task_repository)
 pimpy_service_add_task_mock = Mock(pimpy_service._add_task)
 
 task_mock = Mock(Task)
 abc_task_mock = Mock(Task)
+abc_task_mock.id = 10604
 def_task_mock = Mock(Task)
+def_task_mock.id = 13775
 
 group_mock = Mock(Group)
+group_mock.id = 20
 
 foo_user_mock = Mock(User)
 foo_user_mock.configure_mock(first_name='Foo', last_name='Oof', name='Foo Oof')
@@ -51,20 +54,20 @@ valid_minute_parse_response = \
       (2, "Do something 2", [foo_user_mock, bar_user_mock]),
       (3, "Do something 3", [foo_user_mock]),
       (3, "Do something 3", [bar_user_mock])],
-     [(4, existing_task_id)],
-     [(5, existing_task_id2)])
+     [(4, abc_task_mock)],
+     [(5, def_task_mock)])
 
 valid_minute_multiple_remove = """
 REMOVE ABC, DEF
 """
 valid_minute_multiple_remove_parse_response = \
-    ([], [], [(1, existing_task_id), (1, existing_task_id2)])
+    ([], [], [(1, abc_task_mock), (1, def_task_mock)])
 
 valid_minute_multiple_done = """
 DONE ABC, DEF
 """
 valid_minute_multiple_done_parse_response = \
-    ([], [(1, existing_task_id), (1, existing_task_id2)], [])
+    ([], [(1, abc_task_mock), (1, def_task_mock)], [])
 
 invalid_minute_no_colon_task = """
 TASK Foo do something
@@ -78,7 +81,7 @@ invalid_minute_no_b32_id = """
 DONE #B5, %2G
 """
 invalid_minute_no_b32_id_error_response = \
-    [(1, "DONE #B5, %2G")]
+    [(1, "#B5"), (1, "%2G")]
 
 
 def mock_find_group_id(group_id):
@@ -92,11 +95,11 @@ group_repository_mock.find_by_id.side_effect = mock_find_group_id
 
 
 def mock_get_list_of_users_from_string(group_id, value):
-    if value.lower() == 'foo,bar' or value.lower().strip() == '':
+    if value.lower().strip() == 'foo,bar' or value.lower().strip() == '':
         return [foo_user_mock, bar_user_mock]
-    if value.lower() == 'foo':
+    if value.lower().strip() == 'foo':
         return [foo_user_mock]
-    if value.lower() == 'bar':
+    if value.lower().strip() == 'bar':
         return [bar_user_mock]
     else:
         raise ValidationException("")
@@ -109,7 +112,7 @@ def mock_find_task_by_name_content_group(name, content, group):
         return None
 
 
-task_repository_mock.find_task_by_name_content_group.side_effect = \
+pimpy_repository_mock.find_task_by_name_content_group.side_effect = \
     mock_find_task_by_name_content_group
 
 
@@ -122,10 +125,10 @@ def mock_parse_minute_into_tasks(content, group):
         return valid_minute_multiple_remove_parse_response
     if content == invalid_minute_no_colon_task:
         raise InvalidMinuteException(
-            invalid_minute_no_colon_task_error_response)
+            invalid_minute_no_colon_task_error_response, [], [])
     if content == invalid_minute_no_b32_id:
         raise InvalidMinuteException(
-            invalid_minute_no_b32_id_error_response)
+            [], invalid_minute_no_b32_id_error_response, [])
 
 
 def mock_find_task_by_id(task_id):
@@ -136,7 +139,17 @@ def mock_find_task_by_id(task_id):
     raise ResourceNotFoundException('task', task_id)
 
 
+def mock_find_task_in_group_by_id(task_id, group_id):
+    if task_id == existing_task_id:
+        return abc_task_mock
+    if task_id == existing_task_id2:
+        return def_task_mock
+    return None
+
+
 pimpy_repository_mock.find_task_by_id.side_effect = mock_find_task_by_id
+pimpy_repository_mock.find_task_in_group_by_id.side_effect = \
+    mock_find_task_in_group_by_id
 
 task_mock.status_meanings = Task.status_meanings
 
@@ -150,13 +163,11 @@ def reset_mock(mock):
 
 @patch.object(group_service, 'group_repository', group_repository_mock)
 @patch.object(pimpy_service, 'pimpy_repository', pimpy_repository_mock)
-@patch.object(pimpy_service, 'task_repository', task_repository_mock)
 @patch.object(pimpy_service, 'Task', task_mock)
 class TestPimpyService(unittest.TestCase):
     def setUp(self):
         reset_mock(pimpy_repository_mock)
         reset_mock(group_repository_mock)
-        reset_mock(task_repository_mock)
         reset_mock(group_mock)
 
     def test_find_minute_by_id(self):
@@ -233,8 +244,8 @@ class TestPimpyService(unittest.TestCase):
 
     def test_get_task_status_choices(self):
         actual = pimpy_service.get_task_status_choices()
-        expected = [(0, 'Niet begonnen'), (1, 'Begonnen'), (2, 'Done'),
-                    (3, 'Niet Done'), (4, 'Gecheckt'), (5, 'Verwijderd')]
+        expected = [(0, _("Not started")), (1, _("Started")), (2, _("Done")),
+                    (3, _("Not Done")), (4, _("Checked")), (5, _("Deleted"))]
         self.assertEqual(actual, expected)
 
     def test_get_list_of_users_from_string(self):
@@ -297,25 +308,9 @@ class TestPimpyService(unittest.TestCase):
         status = PimpyTaskStatus.NOT_STARTED.value
         mock_user.member_of_group.return_value = True
 
-        pimpy_service.set_task_status(mock_user, mock_task, status)
+        pimpy_service.set_task_status(mock_task, status)
         pimpy_repository_mock.update_status.assert_called_once_with(
             mock_task, status)
-
-    def test_set_task_status_member_not_group_not_owner(self):
-        mock_user = Mock(User)
-        mock_task = Mock(Task)
-        mock_task.users = []
-
-        status = PimpyTaskStatus.NOT_STARTED.value
-
-        pimpy_service.set_task_status(mock_user, mock_task, status)
-        pimpy_repository_mock.update_status.assert_called_once_with(
-            mock_task, status)
-
-        with self.assertRaises(ValidationException):
-            mock_user.member_of_group.return_value = False
-            pimpy_service.set_task_status(mock_user, mock_task, status)
-            pimpy_repository_mock.update_status.assert_not_called()
 
     def test_set_task_status_not_group_but_owner(self):
         mock_user = Mock(User)
@@ -326,7 +321,7 @@ class TestPimpyService(unittest.TestCase):
 
         mock_user.member_of_group.return_value = False
 
-        pimpy_service.set_task_status(mock_user, mock_task, status)
+        pimpy_service.set_task_status(mock_task, status)
         pimpy_repository_mock.update_status.assert_called_once_with(
             mock_task, status)
 
@@ -340,7 +335,7 @@ class TestPimpyService(unittest.TestCase):
         mock_user.member_of_group.return_value = False
 
         with self.assertRaises(ValidationException):
-            pimpy_service.set_task_status(mock_user, mock_task, status)
+            pimpy_service.set_task_status(mock_task, status)
 
     def test_add_task_by_user_string_invalid_group(self):
         with self.assertRaises(ResourceNotFoundException):
@@ -395,10 +390,6 @@ class TestPimpyService(unittest.TestCase):
         pimpy_service_add_task_mock.assert_any_call(
             'Do something 3', '', group_mock, [bar_user_mock], 3, ANY, 0)
 
-        pimpy_repository_mock.find_task_by_id.assert_any_call(
-            existing_task_id)
-        pimpy_repository_mock.find_task_by_id.assert_any_call(
-            existing_task_id2)
         pimpy_repository_mock.update_status.assert_any_call(abc_task_mock, 4)
         pimpy_repository_mock.update_status.assert_any_call(def_task_mock, 5)
 
@@ -415,8 +406,7 @@ class TestPimpyService(unittest.TestCase):
 
     def test_edit_task_property_content(self):
         value = 'val'
-        pimpy_service.edit_task_property(Mock(User), existing_task_id,
-                                         content=value)
+        pimpy_service.edit_task_property(abc_task_mock, content=value)
 
         pimpy_repository_mock.edit_task_content.assert_called_once_with(
             abc_task_mock, value)
@@ -424,8 +414,7 @@ class TestPimpyService(unittest.TestCase):
     def test_edit_task_property_title(self):
         value = 'val'
 
-        pimpy_service.edit_task_property(Mock(User), existing_task_id,
-                                         title=value)
+        pimpy_service.edit_task_property(abc_task_mock, title=value)
 
         pimpy_repository_mock.edit_task_title.assert_called_once_with(
             abc_task_mock, value)
@@ -435,21 +424,10 @@ class TestPimpyService(unittest.TestCase):
 
         with patch.object(pimpy_service, 'get_list_of_users_from_string',
                           lambda group_id, userlist: [mock_user]):
-            pimpy_service.edit_task_property(
-                mock_user, existing_task_id, users_property=[mock_user])
+            pimpy_service.edit_task_property(abc_task_mock,
+                                             users_property=[mock_user])
             pimpy_repository_mock.edit_task_users.assert_called_once_with(
                 abc_task_mock, [mock_user])
-
-    def test_edit_task_property_invalid_group(self):
-        mock_user = Mock(User)
-        mock_task = Mock(Task)
-        pimpy_repository_mock.find_task_by_id.return_value = mock_task
-
-        mock_user.member_of_group = Mock(return_value=False)
-
-        with self.assertRaises(ValidationException):
-            pimpy_service.edit_task_property(
-                mock_user, existing_task_id, content='val')
 
     @patch.object(pimpy_service, 'get_list_of_users_from_string',
                   mock_get_list_of_users_from_string)
@@ -463,13 +441,16 @@ class TestPimpyService(unittest.TestCase):
             valid_minute_multiple_done, group_mock),
             valid_minute_multiple_done_parse_response)
 
+        # Unknown task
         with self.assertRaises(InvalidMinuteException) as e1:
             pimpy_service._parse_minute_into_tasks(
                 invalid_minute_no_b32_id, group_mock)
         self.assertEqual(invalid_minute_no_b32_id_error_response,
-                         e1.exception.details)
+                         e1.exception.unknown_task_lines)
+
+        # Missing colon
         with self.assertRaises(InvalidMinuteException) as e2:
             pimpy_service._parse_minute_into_tasks(
                 invalid_minute_no_colon_task, group_mock)
         self.assertEqual(invalid_minute_no_colon_task_error_response,
-                         e2.exception.details)
+                         e2.exception.missing_colon_lines)

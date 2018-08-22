@@ -11,6 +11,7 @@ from wtforms.fields import StringField
 
 from app import db
 from app.decorators import require_role
+from app.forms import init_form
 from app.forms.page import PageForm, HistoryPageForm
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult
@@ -124,10 +125,10 @@ def edit_page(path=''):
             page)
         revision.needs_paid = page.needs_paid
         revision.custom_read_permission = page.custom_read_permission
-
-        form = PageForm(request.form, obj=revision)
     else:
-        form = PageForm()
+        revision = None
+
+    form = init_form(PageForm, obj=revision)
 
     if form.validate_on_submit():
         # if there was no page we want to create an entire new page (and not

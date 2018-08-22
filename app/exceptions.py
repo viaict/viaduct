@@ -10,7 +10,7 @@ class DetailedException(Exception):
 class ResourceNotFoundException(DetailedException):
     def __init__(self, resource, identifier, **kwargs):
         super(ResourceNotFoundException, self).__init__(
-            id=1, status=464, title="Not Found", **kwargs)
+            id=1, status=404, title="Not Found", **kwargs)
         self.resource = resource
         self.identifier = identifier
 
@@ -63,4 +63,16 @@ class AuthorizationException(DetailedException):
 
 
 class InvalidMinuteException(ValidationException):
-    pass
+    def __init__(self, missing_colon_lines, unknown_task_lines, unknown_users,
+                 **kwargs):
+        self.unknown_task_lines = unknown_task_lines
+        self.missing_colon_lines = missing_colon_lines
+        self.unknown_users = unknown_users
+
+        details = {
+            'missing_colon': missing_colon_lines,
+            'unknown_task': unknown_task_lines,
+            'unknown_users': unknown_users
+        }
+
+        super().__init__(details, **kwargs)

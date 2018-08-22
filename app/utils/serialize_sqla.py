@@ -1,7 +1,8 @@
 def serialize_sqla(data, serialize_date=True):
     """
-    Serialiation function to serialize any dicts or lists containing sqlalchemy
-    objects. This is needed for conversion to JSON format.
+    Serialiation function to serialize any dicts or lists.
+
+    This is needed for conversion of sqlalchemy objects to JSON format.
     """
     # If has to_dict this is asumed working and it is used
     if hasattr(data, 'to_dict'):

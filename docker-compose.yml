@@ -1,2 +1,37 @@
-app:
-    build: .
+version: "3.4"
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: development
+    command: bash /app/docker/entrypoint.development.sh
+    volumes:
+      - .:/app
+    ports:
+      - 5000:5000
+    environment:
+      - SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://viaduct:viaduct@db/viaduct
+      - AUTHLIB_INSECURE_TRANSPORT=true
+    depends_on:
+      - db
+
+  db:
+    image: postgres:alpine
+    volumes:
+      - db:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: viaduct
+      POSTGRES_DB: viaduct
+
+  adminer:
+    image: adminer:latest
+    ports:
+      - 8201:8080
+    volumes:
+      - ./docker/adminer-uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+
+volumes:
+  db:

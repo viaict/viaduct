@@ -1,4 +1,4 @@
-from app import app, db
+from app import db, constants
 
 from app.models.base_model import BaseEntity
 from app.models.user import User
@@ -8,8 +8,8 @@ def dump_datetime(value):
     """Deserialize datetime object into string form for JSON processing."""
     if value is None:
         return None
-    return [value.strftime(app.config['DATE_FORMAT']),
-            value.strftime(app.config['TIME_FORMAT'])]
+    return [value.strftime(constants.DATE_FORMAT),
+            value.strftime(constants.TIME_FORMAT)]
 
 
 class Challenge(db.Model, BaseEntity):
@@ -23,7 +23,7 @@ class Challenge(db.Model, BaseEntity):
     parent_id = db.Column(db.Integer)
     weight = db.Column(db.Integer)
     answer = db.Column(db.Text())
-    type = db.Column(db.Enum('Text', 'Image', 'Custom'))
+    type = db.Column(db.Enum('Text', 'Image', 'Custom', name='challenge_type'))
 
     def __init__(self, name='', description='', hint=None,
                  start_date=None, end_date=None, parent_id=None,

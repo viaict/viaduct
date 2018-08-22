@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-07-04 15:44+0200\n"
+"POT-Creation-Date: 2018-08-22 17:52+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -33,6 +33,9 @@ msgstr ""
 
 #, python-format
 msgid "API call failed: %s"
+msgstr ""
+
+msgid "Access to your Pimpy data"
 msgstr ""
 
 msgid "Access to your name and e-mail"
@@ -77,6 +80,9 @@ msgid "Address"
 msgstr ""
 
 msgid "Admin data"
+msgstr ""
+
+msgid "All"
 msgstr ""
 
 msgid "All companies"
@@ -210,6 +216,9 @@ msgid "Change user properties"
 msgstr ""
 
 msgid "Change vacancies"
+msgstr ""
+
+msgid "Checked"
 msgstr ""
 
 msgid "City"
@@ -370,9 +379,6 @@ msgstr ""
 msgid "Create activity"
 msgstr ""
 
-msgid "Create application"
-msgstr ""
-
 msgid "Create form"
 msgstr ""
 
@@ -389,6 +395,9 @@ msgid "Create newsletter"
 msgstr ""
 
 msgid "Create pages"
+msgstr ""
+
+msgid "Create task"
 msgstr ""
 
 msgid "Create user"
@@ -439,6 +448,9 @@ msgstr ""
 msgid "Delete page:"
 msgstr ""
 
+msgid "Deleted"
+msgstr ""
+
 msgid "Description"
 msgstr ""
 
@@ -470,6 +482,9 @@ msgid "Do you have an idea for an activity?"
 msgstr ""
 
 msgid "Document"
+msgstr ""
+
+msgid "Done"
 msgstr ""
 
 msgid "Dutch"
@@ -664,6 +679,9 @@ msgstr ""
 msgid "Files"
 msgstr ""
 
+msgid "Filter"
+msgstr ""
+
 msgid "First name"
 msgstr ""
 
@@ -680,6 +698,13 @@ msgid "Form name"
 msgstr ""
 
 msgid "Found invalid lines in minutes"
+msgstr ""
+
+msgid "From"
+msgstr ""
+
+#, python-format
+msgid "From %(day)s"
 msgstr ""
 
 msgid "Fullscreen"
@@ -779,6 +804,15 @@ msgstr ""
 msgid "Limit read permission to groups"
 msgstr ""
 
+msgid "Lines containing missing colons in ACTIE(s)"
+msgstr ""
+
+msgid "Lines containing unknown task ids"
+msgstr ""
+
+msgid "Lines containing unmatchable names in ACTIE(s)"
+msgstr ""
+
 msgid "Link account to UvA account"
 msgstr ""
 
@@ -827,6 +861,12 @@ msgstr ""
 msgid "Mailing list"
 msgstr ""
 
+msgid "Manage financing related tasks"
+msgstr ""
+
+msgid "Manually enter your information"
+msgstr ""
+
 msgid "Max number of attendants"
 msgstr ""
 
@@ -838,6 +878,9 @@ msgstr ""
 
 #, python-format
 msgid "Minimal password length: %(length)d"
+msgstr ""
+
+msgid "Minute"
 msgstr ""
 
 msgid "Minute content"
@@ -856,6 +899,9 @@ msgid "My applications"
 msgstr ""
 
 msgid "My submissions"
+msgstr ""
+
+msgid "Myself"
 msgstr ""
 
 msgid "Name"
@@ -893,6 +939,9 @@ msgid "New item"
 msgstr ""
 
 msgid "New location"
+msgstr ""
+
+msgid "New minute"
 msgstr ""
 
 msgid "New password"
@@ -961,7 +1010,13 @@ msgstr ""
 msgid "None"
 msgstr ""
 
+msgid "Not Done"
+msgstr ""
+
 msgid "Not found!"
+msgstr ""
+
+msgid "Not started"
 msgstr ""
 
 msgid "Number of extra attendants"
@@ -980,6 +1035,12 @@ msgid "Order children alphabetically"
 msgstr ""
 
 msgid "Owned by: "
+msgstr ""
+
+msgid "Owner"
+msgstr ""
+
+msgid "Owner group "
 msgstr ""
 
 msgid "Page"
@@ -1072,6 +1133,9 @@ msgstr ""
 msgid "Profile succesfully updated"
 msgstr ""
 
+msgid "Public clients have no secret."
+msgstr ""
+
 msgid "Publish date"
 msgstr ""
 
@@ -1082,9 +1146,6 @@ msgid "RSS feed"
 msgstr ""
 
 msgid "Rank"
-msgstr ""
-
-msgid "Read access to your Pimpy data"
 msgstr ""
 
 msgid "Read files"
@@ -1192,6 +1253,9 @@ msgstr ""
 msgid "Send form"
 msgstr ""
 
+msgid "Show"
+msgstr ""
+
 msgid "Show activities in the archive"
 msgstr ""
 
@@ -1217,6 +1281,12 @@ msgid "Show upcoming activities"
 msgstr ""
 
 msgid "Sign In"
+msgstr ""
+
+msgid "Sign up"
+msgstr ""
+
+msgid "Sign up with UvA-net ID"
 msgstr ""
 
 msgid "Solved"
@@ -1246,6 +1316,9 @@ msgid "Start time"
 msgstr ""
 
 msgid "Start time must be before end time"
+msgstr ""
+
+msgid "Started"
 msgstr ""
 
 msgid "Starting year study"
@@ -1301,6 +1374,21 @@ msgstr ""
 
 #, python-format
 msgid "Successfully updated client '%s'"
+msgstr ""
+
+msgid "Task"
+msgstr ""
+
+msgid "Task does not exist"
+msgstr ""
+
+msgid "Task has successfully been created"
+msgstr ""
+
+msgid "Task not specified"
+msgstr ""
+
+msgid "Tasks"
 msgstr ""
 
 msgid "Team"
@@ -1474,6 +1562,12 @@ msgstr ""
 msgid "Unknown OAuth error"
 msgstr ""
 
+msgid "Unknown property"
+msgstr ""
+
+msgid "Until"
+msgstr ""
+
 msgid "Untried"
 msgstr ""
 
@@ -1540,7 +1634,13 @@ msgstr ""
 msgid "View Pimpy"
 msgstr ""
 
+msgid "View all available forms"
+msgstr ""
+
 msgid "View groups"
+msgstr ""
+
+msgid "View minute"
 msgstr ""
 
 msgid "View mollie transactions"
@@ -1594,9 +1694,6 @@ msgstr ""
 msgid "Would you like to recieve information from companies?"
 msgstr ""
 
-msgid "Write access to your Pimpy data"
-msgstr ""
-
 msgid "Written by"
 msgstr ""
 
@@ -1631,6 +1728,9 @@ msgid ""
 msgstr ""
 
 msgid "You have to be logged in to fill in a form"
+msgstr ""
+
+msgid "You must authenticate with a student UvA account to register."
 msgstr ""
 
 msgid "You must be logged in to view this page."
@@ -2395,5 +2495,17 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Link account to UvA account."
+#~ msgstr ""
+
+#~ msgid "Create new task"
+#~ msgstr ""
+
+#~ msgid "Create application"
+#~ msgstr ""
+
+#~ msgid "Read access to your Pimpy data"
+#~ msgstr ""
+
+#~ msgid "Write access to your Pimpy data"
 #~ msgstr ""
 

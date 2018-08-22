@@ -1,11 +1,13 @@
-from app import app, db
+import logging
+
+from app import db
 from app.enums import PimpyTaskStatus
 from app.exceptions import BusinessRuleException
 from app.models.group import Group
 from app.models.pimpy import Minute, Task, TaskUserRel
 from app.models.user import User
 
-_date_format = app.config['DATE_FORMAT']
+_logger = logging.getLogger(__name__)
 
 
 def find_minute_by_id(minute_id):
@@ -15,6 +17,20 @@ def find_minute_by_id(minute_id):
 
 def find_task_by_id(task_id):
     return db.session.query(Task).filter(Task.id == task_id).one_or_none()
+
+
+def find_task_in_group_by_id(task_id, group_id):
+    return db.session.query(Task) \
+        .filter(Task.id == task_id,
+                Task.group_id == group_id) \
+        .one_or_none()
+
+
+def find_task_by_name_content_group(name, content, group):
+    return db.session.query(Task).filter(
+        Task.title == name,
+        Task.content == content,
+        Task.group_id == group.id).first()
 
 
 def get_all_minutes_for_user(user):
@@ -34,7 +50,21 @@ def get_all_minutes_for_user(user):
     return res
 
 
+def get_minutes_for_group(group, date_range):
+    q = db.session.query(Minute) \
+        .filter(Minute.group == group) \
+        .order_by(Minute.minute_date.desc())
+
+    if date_range:
+        q = q.filter(date_range[0] <= Minute.minute_date,
+                     Minute.minute_date <= date_range[1])
+    return q.all()
+
+
+# TODO Remove this in favor of non dict-wrapped function.
 def get_all_minutes_for_group(group, date_range=None):
+    _logger.warning("get_all_minutes_for_group is deprecated")
+
     res = []
 
     query = db.session.query(Minute).filter(Minute.group == group). \

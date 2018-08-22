@@ -38,7 +38,7 @@
 </table>
 
 <div class='btn-group'>
-    <a href='{{ url_for('user.edit') }}' class='btn btn-success'>
+    <a href='{{ url_for('user.edit_user', user_id=None) }}' class='btn btn-success'>
         <i class='glyphicon glyphicon-user'></i> {{ _('Create user') }}
     </a>
     <a style='display:none;' id='delete' class='btn btn-danger'>

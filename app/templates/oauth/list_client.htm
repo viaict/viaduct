@@ -4,42 +4,46 @@
 
 {% block content %}
     <h1>{{ _("My applications") }}</h1>
-    <a href="{{ url_for("oauth.edit") }}" class="btn btn-success">
+    {# <a href="{{ url_for("oauth.edit") }}" class="btn btn-success">
         {{ _("Create application") }}
-    </a>
+    </a> #}
     <hr>
     {% for client in owned_clients %}
         <div class="row">
             <div class="col-md-8">
-                {{ client.name }}<br/>
+                {{ client.client_name }}<br/>
                 <small>Client ID: {{ client.client_id }}</small>
                 <br/>
+                {% if client.client_secret %}
                 <small>Client Secret: {{ client.client_secret }}</small>
+                {% endif %}
             </div>
             <div class="col-md-4">
-                <a class='btn btn-warning'
+                {# <a class='btn btn-warning'
                    href="{{ url_for("oauth.edit", client_id=client.client_id) }}">
                     {{ _("Edit") }}
-                </a>
+                </a> #}
+                {% if client.client_secret %}
                 {{ render_post_btn(url_for("oauth.reset_client_secret", client_id=client.client_id),
-                        _("Are you sure you want to reset %s client secret" % client.name),
+                        _("Are you sure you want to reset %s client secret" % client.client_name),
                         _("Reset secret")) }}
+                {% endif %}
             </div>
         </div>
         <hr>
     {% endfor %}
 
     <h1>{{ _("Connected applications") }}</h1>
-    <p>{{ _("You have granted %d applications access to your account." % len(clients)) }}</p>
+    <p>{{ _("You have granted %d applications access to your account." % len(approved_clients)) }}</p>
 
     <hr>
-    {%- for client in clients -%}
+    {%- for client in approved_clients -%}
         <div class="row">
             <div class="col-md-8">
-                {{ client.name }}<br/>
+                {{ client.client_name }}<br/>
                 <small>{{ _("Owned by: ") }}
                     {% if client.user %}
-                    <a href="{{ url_for("user.view_single", user_id=client.user_id) }}">{{ client.user.name }}</a>
+                        {{ client.user.name }}
                     {% else %}
                         <strong>via</strong>
                     {% endif %}
@@ -48,7 +52,7 @@
             </div>
             <div class="col-md-4">
                 {{ render_post_btn(url_for("oauth.revoke_client_token", client_id=client.client_id),
-                        _("Are you sure you want to revoke %s token?" % client.name),
+                        _("Are you sure you want to revoke %s token?" % client.client_name),
                         _("Revoke")) }}
             </div>
         </div>

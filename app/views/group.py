@@ -7,6 +7,7 @@ from flask_login import current_user
 
 from app import db
 from app.decorators import require_role
+from app.forms import init_form
 from app.forms.group import CreateGroupForm, EditGroupForm, GroupRolesForm
 from app.models.group import Group
 from app.models.user import User
@@ -25,7 +26,7 @@ def view(page_nr=1):
 
     if search:
         pagination = Group.query \
-            .filter(Group.name.like('%{}%'.format(search))) \
+            .filter(Group.name.ilike('%{}%'.format(search))) \
             .order_by(Group.name)\
             .paginate(page_nr, 15, False)
     else:
@@ -93,7 +94,7 @@ def create():
 def edit(group_id):
     group = Group.by_id(group_id)
 
-    form = EditGroupForm(request.form, obj=group)
+    form = init_form(EditGroupForm, obj=group)
 
     if form.validate_on_submit():
         name = form.name.data.strip()

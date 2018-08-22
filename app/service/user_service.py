@@ -1,17 +1,17 @@
 import bcrypt
 from flask_babel import _
 
+from app.enums import FileCategory
 from app.exceptions import ResourceNotFoundException, ValidationException, \
     AuthorizationException, BusinessRuleException
 from app.repository import user_repository
 from app.service import file_service, mail_service
-from app.enums import FileCategory
 from app.utils import copernica
 
 
 def set_password(user_id, password):
     """Set the new password for user with id."""
-    password = bcrypt.hashpw(password, bcrypt.gensalt())
+    password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     user = get_user_by_id(user_id)
     user.password = password
     user_repository.save(user)
@@ -141,6 +141,12 @@ def remove_avatar(user_id):
 
 
 def set_avatar(user_id, file_data):
+    """
+    Upload the new avatar.
+
+    Checks if the file type is allowed if so removes any
+    previous uploaded avatars.
+    """
     user = get_user_by_id(user_id)
 
     # Remove old avatar

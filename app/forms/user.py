@@ -7,14 +7,12 @@ from wtforms import StringField, PasswordField, BooleanField, \
 from wtforms.validators import (InputRequired, EqualTo, Length,
                                 Optional, ValidationError)
 
-from app import app
+from app import constants
 from app.forms.fields import EmailField
 from app.forms.util import FieldVerticalSplit
 
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-
-_min_password_length = app.config['MIN_PASSWORD_LENGTH']
 
 
 class StudentIDField(StringField):
@@ -27,8 +25,8 @@ class ResetPasswordForm(FlaskForm):
         _('New password'), validators=[
             InputRequired(),
             Length(message=(_('Minimal password length: %(length)d',
-                              length=_min_password_length)),
-                   min=_min_password_length)]
+                              length=constants.MIN_PASSWORD_LENGTH)),
+                   min=constants.MIN_PASSWORD_LENGTH)]
     )
     password_repeat = PasswordField(
         _('Repeat new password'), validators=[
@@ -59,7 +57,7 @@ class BaseUserForm(FlaskForm):
 
     # Optional fields
     locale = SelectField(_('Language'), validators=[
-        Optional()], choices=list(app.config['LANGUAGES'].items()))
+        Optional()], choices=list(constants.LANGUAGES.items()))
     phone_nr = StringField(_('Phone'), validators=[Optional()])
     avatar = FileField('Avatar', validators=[Optional()])
 
@@ -159,8 +157,8 @@ class ChangePasswordForm(ResetPasswordForm):
             InputRequired(),
             Length(
                 message=(_('Minimal password length: %(length)d',
-                           length=_min_password_length)),
-                min=_min_password_length)]
+                           length=constants.MIN_PASSWORD_LENGTH)),
+                min=constants.MIN_PASSWORD_LENGTH)]
     )
 
 

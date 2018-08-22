@@ -1,3 +1,0 @@
-[submodule "secrets"]
-	path = secrets
-	url = git@true.svia.nl:secrets

@@ -107,7 +107,7 @@ class NavigationAPI:
                 entry.activities = []
                 activities = db.session.query(Activity)\
                     .filter(Activity.end_time > datetime.datetime.now())\
-                    .order_by("activity_start_time").all()
+                    .order_by("start_time").all()
 
                 for activity in activities:
                     url = url_for('activity.get_activity',

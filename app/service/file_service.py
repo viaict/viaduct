@@ -1,15 +1,20 @@
+import io
 import mimetypes
 import re
+import logging
+
+from PIL import Image
 from fuzzywuzzy import fuzz
 from werkzeug.utils import secure_filename
 
 from app import hashfs
 from app.enums import FileCategory
-from app.repository import file_repository
 from app.exceptions import ResourceNotFoundException
-
+from app.repository import file_repository
 
 FILENAME_REGEX = re.compile(r'(.+)\.([^\s.]+)')
+
+_logger = logging.getLogger(__name__)
 
 
 def add_file(category, data, filename):
@@ -72,6 +77,60 @@ def get_file_content(_file):
 
         return content
     except IOError:
+        raise ResourceNotFoundException('file content', _file.hash)
+
+
+def get_image_with_headers(_file, display_name, picture_type='normal'):
+    """
+    Get the specified file as an image.
+
+    Returns a tuple with the file content and headers, which can
+    be immediately returned in a Flask view function.
+
+    A thumbnail version of the image is returned when picture_type is equal
+    to 'thumbnail'
+
+    :param _file: file to load, a File model.
+    :param display_name: When picture_type is not 'thumbnail', the user-visible
+    name of the image.
+    :param picture_type: either 'normal' or 'thumbnail'. When equal to
+    'thumbnail', returns a thumbnail version of the image.
+    :return: a tuple with both the image content and headers, which can be
+    returned form a Flask view function.
+    :raises: ResourceNotFoundException if there was an IOError loading the
+    file.
+    """
+
+    if picture_type == 'normal':
+        content = get_file_content(_file)
+        headers = get_file_content_headers(_file, display_name)
+    elif picture_type == 'thumbnail':
+        content = get_thumbnail_of_file(_file)
+        headers = {
+            'Content-Type': mimetypes.types_map['.jpg']
+        }
+    else:
+        raise Exception()
+
+    return content, headers
+
+
+def get_thumbnail_of_file(_file, thumbnail_size=None):
+    if not thumbnail_size:
+        thumbnail_size = (400, 400)
+
+    try:
+        with hashfs.open(_file.hash) as f:
+            im = Image.open(f)
+
+            im = im.convert("RGB")
+            im.thumbnail(thumbnail_size)
+
+            out = io.BytesIO()
+            im.save(out, format='jpeg')
+            return out.getvalue()
+    except IOError:
+        _logger.error('Error processing thumbnail', exc_info=True)
         raise ResourceNotFoundException('file content', _file.hash)
 
 

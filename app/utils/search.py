@@ -14,16 +14,14 @@ class SearchAPI:
 
     @staticmethod
     def search(stack, needle, case_insensitive=True):
-        """Generic search on specified database tables and columns.
+        """
+        Search generically on specified database tables and columns.
 
-        Parameters:
-        * stack is a list of (table, [columns]) tuples.
-        * needle is a string which will be split for seperate words.
-        * case_insensitive a boolean indicating case sensitive or insensitive
+        :param stack is a list of (table, [columns]) tuples.
+        :param needle is a string which will be split for seperate words.
+        :param case_insensitive indicates case sensitive or insensitive
             search, default is True
-
-        Returns:
-            A set of db.models that have matched the queries
+        :returns A set of db.models that have matched the queries
 
         Example:
             > stack = [ (Examination, [Examination.title]),
@@ -34,7 +32,6 @@ class SearchAPI:
             set([<app.models.education.Education object at
                 0x7f4f5c2ac650>, <app.models.education.Education object
                 at 0x7f4f5c2ac710>])
-            # (this should contain Informatica and Informatiekunde)
         """
         result_list = []
 

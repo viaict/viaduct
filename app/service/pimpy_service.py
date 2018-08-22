@@ -1,13 +1,16 @@
-import datetime
-import re
-
+import baas32
 import baas32 as b32
+import datetime
+import logging
+import re
 from fuzzywuzzy import fuzz
+from typing import List
 
 from app.enums import PimpyTaskStatus
-from app.exceptions import ValidationException, InvalidMinuteException
-from app.models.pimpy import Task
-from app.repository import pimpy_repository, task_repository
+from app.exceptions import ValidationException, InvalidMinuteException, \
+    ResourceNotFoundException, AuthorizationException
+from app.models.pimpy import Task, TaskUserRel
+from app.repository import pimpy_repository
 from app.service import group_service
 
 """
@@ -26,15 +29,26 @@ and have a status.
 
 
 """
-TASK_REGEX = re.compile(r"\s*(?:ACTIE|TASK)\s+(.*):\s*(.*)\s*$")
-TASKS_REGEX = re.compile(r"\s*(?:ACTIES|TASKS)\s+(.*):\s*(.*)\s*$")
+TASK_REGEX = re.compile(
+    r"\s*(?:ACTIE|TASK)(?P<names> .+)?:\s*(?P<task>.*)\s*$")
+TASKS_REGEX = re.compile(
+    r"\s*(?:ACTIES|TASKS)(?P<names> .*)?:\s*(?P<task>.*)\s*$")
 DONE_REGEX = re.compile("\s*(?:DONE) ([^\n\r]*)")
 REMOVE_REGEX = re.compile("\s*(?:REMOVE) ([^\n\r]*)")
 MISSING_COLON_REGEX = re.compile(r"\s*(?:ACTIE|TASK|ACTIES|TASKS)+[^:]*$")
 
+_logger = logging.getLogger(__name__)
+
 
 def find_minute_by_id(minute_id):
     return pimpy_repository.find_minute_by_id(minute_id)
+
+
+def get_minute_by_id(minute_id):
+    minute = find_minute_by_id(minute_id)
+    if not minute:
+        raise ResourceNotFoundException("minute", minute_id)
+    return minute
 
 
 def find_task_by_id(task_id):
@@ -57,10 +71,35 @@ def check_date_range(date_range):
                 "First date should be smaller then second")
 
 
+def get_task_by_b32_id(b32_task_id: str) -> Task:
+    task = find_task_by_b32_id(b32_task_id)
+    if not task:
+        raise ResourceNotFoundException("task", b32_task_id)
+    return task
+
+
+def find_task_by_b32_id(b32_task_id: str) -> Task:
+    try:
+        task_id = baas32.decode(b32_task_id)
+        return pimpy_repository.find_task_by_id(task_id)
+    except ValueError:
+        return None
+
+
+# TODO Remove this in favor of non dict-wrapped function.
 def get_all_minutes_for_group(group_id, date_range=None):
+    _logger.warning("get_all_minutes_for_group is deprecated")
+
     check_date_range(date_range)
     group = group_service.get_group_by_id(group_id)
     return pimpy_repository.get_all_minutes_for_group(group, date_range)
+
+
+def get_minutes_for_group(group_id, date_range=None):
+    check_date_range(date_range)
+
+    group = group_service.get_group_by_id(group_id)
+    return pimpy_repository.get_minutes_for_group(group, date_range)
 
 
 def get_all_tasks_for_user(user, date_range=None):
@@ -68,7 +107,8 @@ def get_all_tasks_for_user(user, date_range=None):
     return pimpy_repository.get_all_tasks_for_user(user, date_range)
 
 
-def get_all_tasks_for_group(group_id, date_range=None, user=None):
+def get_all_tasks_for_group(group_id, date_range=None, user=None) \
+        -> List[TaskUserRel]:
     check_date_range(date_range)
     group = group_service.get_group_by_id(group_id)
     return pimpy_repository.get_all_tasks_for_group(group, date_range, user)
@@ -80,10 +120,23 @@ def get_all_tasks_for_users_in_groups_of_user(user, date_range=None):
     return pimpy_repository.get_all_tasks_for_users_in_groups(groups)
 
 
-def set_task_status(user, task, status):
-    if not user.member_of_group(task.group_id) and user not in task.users:
-        raise ValidationException('User not member of group of task')
+def check_user_can_access_task(user, task):
+    if user.member_of_group(task.group_id):
+        return
+    if user in task.users:
+        return
 
+    raise AuthorizationException('User not member of group of task')
+
+
+def check_user_can_access_minute(user, minute):
+    if user.member_of_group(minute.group_id):
+        return
+
+    raise AuthorizationException('User not member of group of minute')
+
+
+def set_task_status(task, status):
     valid = (PimpyTaskStatus.NOT_STARTED.value <= status <=
              PimpyTaskStatus.MAX.value)
     if not valid:
@@ -103,22 +156,22 @@ def add_task_by_user_string(title, content, group_id, users_text, line,
     group = group_service.get_group_by_id(group_id)
     user_list = get_list_of_users_from_string(group_id, users_text)
 
-    _add_task(title=title, content=content, group=group,
-              user_list=user_list, minute=minute, line=line,
-              status=status)
+    return _add_task(title=title, content=content, group=group,
+                     user_list=user_list, minute=minute, line=line,
+                     status=status)
 
 
 def _add_task(title, content, group, user_list, line, minute, status):
     # Only check for tasks added not using minute.
     if not minute:
-        task = task_repository.find_task_by_name_content_group(
+        task = pimpy_repository.find_task_by_name_content_group(
             title, content, group)
 
         if task:
             raise ValidationException("This task already exists")
-    pimpy_repository.add_task(title=title, content=content, group=group,
-                              users=user_list, minute=minute, line=line,
-                              status=status)
+    return pimpy_repository.add_task(title=title, content=content, group=group,
+                                     users=user_list, minute=minute, line=line,
+                                     status=status)
 
 
 def add_minute(content, date, group):
@@ -134,22 +187,15 @@ def add_minute(content, date, group):
 
     # Mark existing tasks as done.
     for line, task in done_list:
-        task = pimpy_repository.find_task_by_id(task)
         pimpy_repository.update_status(task, 4)
 
     # Mark existing tasks as removed.
     for line, task in remove_list:
-        task = pimpy_repository.find_task_by_id(task)
         pimpy_repository.update_status(task, 5)
     return minute
 
 
-def edit_task_property(user, task_id, content=None, title=None,
-                       users_property=None):
-    task = find_task_by_id(task_id)
-
-    if not user.member_of_group(task.group_id):
-        raise ValidationException('User not member of group of task')
+def edit_task_property(task, content=None, title=None, users_property=None):
     if content is not None:
         pimpy_repository.edit_task_content(task, content)
 
@@ -225,7 +271,9 @@ def _parse_minute_into_tasks(content, group):
     DONE <task1>, <task2, <taskn>
     This sets the given tasks on 'done'
     """
-    invalid_lines = []
+    missing_colon_lines = []
+    unknown_task_ids = []
+    unknown_user = []
 
     task_list = []
     done_list = []
@@ -234,7 +282,7 @@ def _parse_minute_into_tasks(content, group):
     for i, line in enumerate(content.splitlines()):
         try:
             if MISSING_COLON_REGEX.search(line):
-                invalid_lines.append((i, line))
+                missing_colon_lines.append((i, line))
                 continue
 
             # Single task for multiple users.
@@ -251,18 +299,43 @@ def _parse_minute_into_tasks(content, group):
             # Mark a comma separated list as done.
             for task_id_list in DONE_REGEX.findall(line):
                 for b32_task_id in task_id_list.strip().split(","):
-                    done_list.append((i, b32.decode(b32_task_id.strip())))
+                    b32_task_id = b32_task_id.strip()
+                    try:
+                        task_id = b32.decode(b32_task_id)
+                    except ValueError:
+                        unknown_task_ids.append((i, b32_task_id))
+                        continue
+
+                    task = pimpy_repository. \
+                        find_task_in_group_by_id(task_id, group.id)
+                    if not task:
+                        unknown_task_ids.append((i, b32_task_id))
+                    else:
+                        done_list.append((i, task))
 
             # Mark a comma separated list as removed.
             for task_id_list in REMOVE_REGEX.findall(line):
                 for b32_task_id in task_id_list.strip().split(","):
-                    remove_list.append((i, b32.decode(b32_task_id.strip())))
+                    b32_task_id = b32_task_id.strip()
+                    try:
+                        task_id = b32.decode(b32_task_id)
+                    except ValueError:
+                        unknown_task_ids.append((i, b32_task_id))
+                        continue
 
-        # Catch invalid user and incorrect b32 task_id.
-        except (ValidationException, ValueError):
-            invalid_lines.append((i, line))
+                    task = pimpy_repository. \
+                        find_task_in_group_by_id(task_id, group.id)
+                    if not task:
+                        unknown_task_ids.append((i, b32_task_id))
+                    else:
+                        remove_list.append((i, task))
 
-    if len(invalid_lines):
-        raise InvalidMinuteException(invalid_lines)
+        # Catch invalid user.
+        except ValidationException:
+            unknown_user.append((i, line))
+
+    if len(missing_colon_lines) or len(unknown_task_ids) or len(unknown_user):
+        raise InvalidMinuteException(missing_colon_lines, unknown_task_ids,
+                                     unknown_user)
 
     return task_list, done_list, remove_list

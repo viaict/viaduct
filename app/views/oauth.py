@@ -1,10 +1,13 @@
+from authlib.specs.rfc6749 import OAuth2Error
 from flask import request, Blueprint, render_template, url_for, redirect, \
     flash
 from flask_babel import _
 from flask_login import login_required, current_user
 
-from app import oauth, version
+from app import oauth_server
 from app.decorators import response_headers
+from app.exceptions import BusinessRuleException
+from app.forms import init_form
 from app.forms.oauth_forms import OAuthClientForm
 from app.oauth_scopes import Scopes
 from app.service import oauth_service
@@ -13,56 +16,71 @@ blueprint = Blueprint('oauth', __name__, url_prefix='/oauth')
 
 
 def token_info(_):
-    valid, req = oauth.verify_request([])
-    if valid:
-        return {"active": "true",
-                "scope": req.access_token.scopes,
-                "username": req.user.email,
-                "expires": req.access_token.expires,
-                "client_id": req.client.client_id,
-                "first_name": req.user.first_name,
-                "last_name": req.user.last_name
-                }
+    # TODO Token introspection
+    # https://docs.authlib.org/en/latest/specs/rfc7662.html#register-introspection-endpoint  # noqa
+    # valid, req = oauth.verify_request([])
+    # if valid:
+    #     return {"active": "true",
+    #             "scope": req.access_token.scopes,
+    #             "username": req.user.email,
+    #             "expires": req.access_token.expires,
+    #             "client_id": req.client.client_id,
+    #             "first_name": req.user.first_name,
+    #             "last_name": req.user.last_name
+    #             }
     return None
 
 
-@blueprint.route('/authorize/', methods=['GET', 'POST'])
+@blueprint.route('/authorize', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
 @response_headers({"X-Frame-Options": "SAMEORIGIN"})
-@oauth.authorize_handler
-def authorize(*__, **kwargs):
+def authorize():
     if request.method == 'GET':
-        client_id = kwargs.get('client_id')
-        client = oauth_service.get_client_by_id(client_id=client_id)
-        if client.auto_approve:
-            return True
+        try:
+            grant = oauth_server.validate_consent_request(
+                end_user=current_user)
+        except OAuth2Error as error:
+            # TODO better error responses for OAuth2Error
+            return error.error
+
+        if grant.client.auto_approve:
+            return oauth_server.create_authorization_response(current_user)
 
         if oauth_service.user_has_approved_client(
-                user_id=current_user.id, client=client):
-            return True
+                user_id=current_user.id, client=grant.client):
+            return oauth_server.create_authorization_response(current_user)
 
-        kwargs['client'] = client
-        kwargs['user'] = current_user
-        kwargs['descriptions'] = oauth_service.get_scope_descriptions()
+        kwargs = {'grant': grant,
+                  'user': current_user,
+                  'scopes': oauth_service.get_scope_descriptions()}
         return render_template('oauth/oauthorize.html', **kwargs)
 
-    confirm = request.form.get('confirm', 'no')
-    return confirm == _("Confirm")
+    confirm = request.form.get('confirm', False)
+    if confirm:
+        # granted by resource owner
+        return oauth_server.create_authorization_response(current_user)
+    # denied by resource owner
+    return oauth_server.create_authorization_response(None)
 
 
-@blueprint.route('/token/', methods=['GET', 'POST'])
-@oauth.token_handler
-def access_token():
-    return {'version': version}
+@blueprint.route('/token', methods=['POST'], strict_slashes=True)
+def issue_token():
+    return oauth_server.create_token_response()
 
 
-@blueprint.route('/revoke/', methods=['POST'])
-@oauth.revoke_handler
+@blueprint.route('/revoke', methods=['POST'], strict_slashes=True)
 def revoke_token():
-    pass
+    return oauth_server.create_endpoint_response(
+        oauth_service.RevocationEndpoint.ENDPOINT_NAME)
 
 
-@blueprint.route("/errors/", methods=['GET'])
+@blueprint.route('/introspect', methods=['POST'], strict_slashes=True)
+def introspect_token():
+    return oauth_server.create_endpoint_response(
+        oauth_service.IntrospectionEndpoint.ENDPOINT_NAME)
+
+
+@blueprint.route("/errors", methods=['GET'])
 def errors():
     error = request.args.get("error", _("Unknown OAuth error"))
     error_description = request.args.get("error_description",
@@ -76,24 +94,27 @@ def errors():
 def list_clients():
     owned_clients = oauth_service.get_owned_clients_by_user_id(
         user_id=current_user.id)
-    clients = oauth_service.get_approved_clients_by_user_id(
+    approved_clients = oauth_service.get_approved_clients_by_user_id(
         user_id=current_user.id)
     return render_template('oauth/list_client.htm',
                            owned_clients=owned_clients,
-                           clients=clients)
+                           approved_clients=approved_clients)
 
 
 @blueprint.route("/clients/revoke/<string:client_id>/", methods=['POST'])
 def revoke_client_token(client_id=None):
-    client = oauth_service.delete_user_tokens_by_client_id(
+    client = oauth_service.revoke_user_tokens_by_client_id(
         user_id=current_user.id, client_id=client_id)
-    flash(_("Successfully revoked token for client '%s'" % client.name))
+    flash(_("Successfully revoked token for client '%s'" % client.client_name))
     return redirect(url_for("oauth.list_clients"))
 
 
 @blueprint.route("/clients/reset/<string:client_id>/", methods=["POST"])
 def reset_client_secret(client_id):
-    oauth_service.reset_client_secret(client_id)
+    try:
+        oauth_service.reset_client_secret(client_id)
+    except BusinessRuleException:
+        flash(_("Public clients have no secret."), 'danger')
     return redirect(url_for("oauth.list_clients"))
 
 
@@ -101,7 +122,7 @@ def reset_client_secret(client_id):
 @blueprint.route("/clients/edit/<string:client_id>/", methods=["GET", "POST"])
 def edit(client_id=None):
     client = oauth_service.get_client_by_id(client_id=client_id)
-    form = OAuthClientForm(request.form, obj=client)
+    form = init_form(OAuthClientForm, obj=client)
 
     if form.redirect_uri.data is None and client:
         form.redirect_uri.data = ', '.join(client.redirect_uris)

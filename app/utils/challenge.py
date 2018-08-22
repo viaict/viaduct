@@ -8,8 +8,7 @@ from app.models.page import Page, PageRevision
 from app.models.user import User
 from app.service import page_service
 
-ALLOWED_EXTENSIONS = set(['png', 'gif', 'jpg', 'jpeg'])
-UPLOAD_DIR = 'app/static/files/users/'
+ALLOWED_EXTENSIONS = {'png', 'gif', 'jpg', 'jpeg'}
 
 
 class ChallengeAPI:
@@ -201,7 +200,7 @@ class ChallengeAPI:
 
     @staticmethod
     def get_challenge_description():
-        """ Get the description page for challenges """
+        """Get the description page for challenges."""
         page = page_service.get_page_by_path(
             Page.strip_path("challenge_description"))
 

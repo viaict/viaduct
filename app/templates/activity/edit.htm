@@ -13,7 +13,7 @@
 
 {% block content %}
 
-    {% if activity.id: %}
+    {% if activity.id %}
         <form method="post" class="pull-right"
             action="{{ url_for('activity.remove_activity', activity_id=activity.id) }}">
             <button class="confirmation btn btn-danger btn-xs" type="submit">

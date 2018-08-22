@@ -1,49 +1,49 @@
-import datetime
-import logging
-import os
 import sys
 
 import connexion
+import datetime
+import logging
+import mimetypes
+import os
+from authlib.flask.oauth2 import ResourceProtector
+from authlib.specs.rfc6749 import grants, ClientAuthentication
 from flask import Flask, request, session
 from flask.json import JSONEncoder as BaseEncoder
-from flask_babel import Babel
 from flask_login import current_user
+from flask_restful import Api
 from flask_swagger_ui import get_swaggerui_blueprint
-from speaklater import _LazyString  # noqa
 from hashfs import HashFS
-import mimetypes
+from speaklater import _LazyString  # noqa
 
-from app.exceptions import ResourceNotFoundException, ValidationException, \
-    AuthorizationException
+from app import constants
 from app.roles import Roles
 from app.utils.import_module import import_module
+from config import Config
 from .connexion_app import ConnexionFlaskApp
-from .extensions import db, login_manager, \
-    cache, toolbar, jsglue, sentry, oauth, cors
+from .extensions import (db, login_manager, cache, toolbar, jsglue,
+                         oauth_server, cors, sentry, babel)
 
-version = 'v2.10.0.8'
+version = 'v2.11.1.2'
 
-app = Flask(__name__)
-app.config.from_object('config.Config')
 
 logging.basicConfig(
     format='[%(asctime)s] %(levelname)7s [%(name)s]: %(message)s',
     stream=sys.stdout,
 )
 
+app = Flask(__name__)
 app.logger_name = 'app.flask'
 app.logger.setLevel(logging.NOTSET)
+api = Api(app=app)
 
 _logger = logging.getLogger('app')
-_logger.setLevel(app.config['LOG_LEVEL'])
+_logger.setLevel(logging.DEBUG)
 
-logging.getLogger('werkzeug').setLevel(logging.INFO)
+logging.getLogger('werkzeug').setLevel(logging.DEBUG)
+logging.getLogger('authlib').setLevel(logging.DEBUG)
 
 
-# Set up Flask Babel, which is used for internationalisation support.
-babel = Babel(app)
-
-hashfs = HashFS(app.config['HASHFS_ROOT_DIR'])
+hashfs = HashFS('app/uploads/')
 mimetypes.init()
 
 app.path = os.path.dirname(os.path.abspath(__file__))
@@ -80,13 +80,12 @@ def register_views(app, path):
             blueprint = getattr(import_module(module_name), 'blueprint', None)
 
             if blueprint:
-                _logger.info('"{}" has been imported'.format(module_name))
                 app.register_blueprint(blueprint)
 
 
 @babel.localeselector
 def get_locale():
-    languages = app.config['LANGUAGES'].keys()
+    languages = constants.LANGUAGES.keys()
     # Try to look-up an session set for language
     lang = session.get('lang')
     if lang and lang in languages:
@@ -99,20 +98,32 @@ def get_locale():
     return request.accept_languages.best_match(list(languages), default='nl')
 
 
-# Has to be imported *after* app is created and Babel is initialised
-from app.models.user import AnonymousUser  # noqa
-from app import jinja_env  # noqa
+def init_app(query_settings=True, debug=False):
+    # Has to be imported *after* app is created and Babel is initialised
+    from app import jinja_env  # noqa
 
+    # Workarounds for template reloading
+    app.config['DEBUG'] = debug
+    app.jinja_env.auto_reload = debug
+    app.config['TEMPLATES_AUTO_RELOAD'] = debug
 
-def init_app():
+    app.config['SQLALCHEMY_DATABASE_URI'] = \
+        os.environ["SQLALCHEMY_DATABASE_URI"]
+
+    if query_settings:
+        _logger.info("Loading config")
+        app.config.from_object(Config(app.config['SQLALCHEMY_DATABASE_URI']))
+    else:
+        _logger.info("Skipping config")
+
     app.config['CACHE_TYPE'] = 'filesystem'
     app.config['CACHE_DIR'] = 'cache'
 
     cache.init_app(app)
     toolbar.init_app(app)
     jsglue.init_app(app)
-    oauth.init_app(app)
     cors.init_app(app, resources={r"/api/*": {"origins": "*"}})
+    babel.init_app(app)
     init_oauth()
 
     login_manager.init_app(app)
@@ -171,46 +182,36 @@ def init_app():
             return BaseEncoder.default(self, o)
     app.json_encoder = JSONEncoder
 
+    from app import api  # noqa
+
     register_views(app, os.path.join(app.path, 'views'))
 
+    from app.models.user import AnonymousUser  # noqa
     login_manager.anonymous_user = AnonymousUser
 
     return get_patched_api_app()
 
 
 def init_oauth():
-    from app.service import user_service, oauth_service
+    from app.service import oauth_service
 
-    @oauth.clientgetter
-    def oauth_clientgetter(client_id):
-        return oauth_service.get_client_by_id(client_id)
+    oauth_server.init_app(app,
+                          query_client=oauth_service.get_client_by_id,
+                          save_token=oauth_service.create_token)
 
-    @oauth.grantgetter
-    def oauth_grantgetter(client_id, code):
-        return oauth_service.get_grant_by_client_id_and_code(client_id, code)
+    # TODO Remove in authlib 0.9, fixed lazy initialization
+    # of client authentication.
+    # See https://github.com/lepture/authlib/commit/afa9e43544a3575b06d97df27971d5698152bbac#diff-762725de53e7f2765188055295ed51da  # noqa
+    oauth_server.authenticate_client = ClientAuthentication(
+        oauth_service.get_client_by_id)
 
-    @oauth.grantsetter
-    def oauth_grantsetter(client_id, code, request, *_, **__):
-        return oauth_service.create_grant(
-            client_id, code, current_user.id, request)
+    oauth_server.register_grant(oauth_service.AuthorizationCodeGrant)
+    oauth_server.register_grant(grants.ImplicitGrant)
+    oauth_server.register_endpoint(oauth_service.RevocationEndpoint)
+    oauth_server.register_endpoint(oauth_service.IntrospectionEndpoint)
 
-    @oauth.tokengetter
-    def oauth_tokengetter(access_token=None, refresh_token=None):
-        return oauth_service.get_token(access_token, refresh_token)
-
-    @oauth.tokensetter
-    def oauth_tokensetter(token, request, *_, **__):
-        user_id = request.user.id if request.user else current_user.id
-        return oauth_service.create_token(token, user_id, request)
-
-    @oauth.usergetter
-    def oauth_usergetter(email, password, *_, **__):
-        try:
-            return user_service.get_user_by_login(
-                email=email, password=password)
-        except (ResourceNotFoundException, AuthorizationException,
-                ValidationException):
-            return None
+    ResourceProtector.register_token_validator(
+        oauth_service.BearerTokenValidator())
 
 
 def get_patched_api_app():
@@ -218,8 +219,7 @@ def get_patched_api_app():
     swagger_url = '/api/docs'
 
     # The API url defined by connexion.
-    api_urls = [{"name": "pimpy", "url": "/api/pimpy/swagger.json"},
-                {"name": "token", "url": "/api/token/swagger.json"}]
+    api_urls = [{"name": "token", "url": "/api/token/swagger.json"}]
 
     swaggerui_blueprint = get_swaggerui_blueprint(
         swagger_url,
@@ -253,6 +253,5 @@ def get_patched_api_app():
     connexion_app = ConnexionFlaskApp(
         __name__, app, specification_dir='swagger/', swagger_ui=False)
 
-    add_api(connexion_app, "pimpy")
     add_api(connexion_app, "token")
     return connexion_app

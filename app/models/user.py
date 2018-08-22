@@ -1,8 +1,7 @@
 from datetime import datetime
-
 from flask_login import UserMixin, AnonymousUserMixin
 
-from app import db, app
+from app import db, constants
 from app.models.base_model import BaseEntity
 from app.models.education import Education
 from app.models.group import Group
@@ -18,6 +17,9 @@ class AnonymousUser(AnonymousUserMixin):
 
     Check logged in using:
     >>> from flask_login import login_required
+    >>> from flask import Blueprint
+    >>>
+    >>> blueprint = Blueprint("somemodule", __name__)
     >>> @blueprint.route("/someroute")
     >>> @login_required
 
@@ -42,19 +44,23 @@ class User(db.Model, UserMixin, BaseEntity):
     password = db.Column(db.String(60))
     first_name = db.Column(db.String(256))
     last_name = db.Column(db.String(256))
-    locale = db.Column(db.Enum(*list(app.config['LANGUAGES'].keys())),
+    locale = db.Column(db.Enum(*list(constants.LANGUAGES.keys()),
+                               name='locale'),
                        default="nl")
     has_paid = db.Column(db.Boolean, default=None)
-    shirt_size = db.Column(db.Enum('Small', 'Medium', 'Large'))
+    shirt_size = db.Column(db.Enum('Small', 'Medium', 'Large',
+                                   name='user_shirt_size'))
     allergy = db.Column(db.String(1024))  # Allergy / medication
-    diet = db.Column(db.Enum('Vegetarisch', 'Veganistisch', 'Fruitarier'))
-    gender = db.Column(db.Enum('Man', 'Vrouw', 'Geen info'))
+    diet = db.Column(db.Enum('Vegetarisch', 'Veganistisch', 'Fruitarier',
+                             name='user_diet'))
+    gender = db.Column(db.Enum('Man', 'Vrouw', 'Geen info',
+                               name='user_sex'))
     phone_nr = db.Column(db.String(16))
     emergency_phone_nr = db.Column(db.String(16))
     description = db.Column(db.String(1024))  # Description of user
     student_id = db.Column(db.String(256))
     education_id = db.Column(db.Integer, db.ForeignKey('education.id'))
-    created = db.Column(db.DateTime, default=datetime.now())
+    created = db.Column(db.DateTime, default=datetime.now)
     honorary_member = db.Column(db.Boolean, default=False)
     favourer = db.Column(db.Boolean, default=False)
     paid_date = db.Column(db.DateTime)
@@ -98,11 +104,17 @@ class User(db.Model, UserMixin, BaseEntity):
         Because of legacy code and sqlalchemy we do it this way
         """
         if name == 'has_paid' and value:
-            super(User, self).__setattr__("paid_date", datetime.now())
+            super(User, self).__setattr__(
+                "paid_date", datetime.now())
+
         super(User, self).__setattr__(name, value)
 
     def __str__(self):
         return self.name
+
+    def get_user_id(self):
+        """Retrieve the unique id of the user for authlib."""
+        return self.id
 
     def update_email(self, new_email):
         if self.email == new_email:

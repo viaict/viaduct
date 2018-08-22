@@ -23,7 +23,8 @@ class Group(db.Model, BaseEntity):
                                                order_by='Group.name'),
                             lazy='dynamic')
 
-    mailtype = db.Column(db.Enum('none', 'mailinglist', 'mailbox'),
+    mailtype = db.Column(db.Enum('none', 'mailinglist', 'mailbox',
+                                 name='group_mailing_type'),
                          nullable=False)
     maillist = db.Column(db.String(100), unique=True)
 

@@ -1,9 +1,10 @@
+from authlib.flask.oauth2 import AuthorizationServer
+from flask_babel import Babel
 from flask_caching import Cache
 from flask_cors import CORS
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_jsglue import JSGlue
 from flask_login import LoginManager
-from flask_oauthlib.provider import OAuth2Provider
 from flask_sqlalchemy import SQLAlchemy
 from raven.contrib.flask import Sentry
 from sqlalchemy import MetaData
@@ -13,7 +14,8 @@ cors = CORS()
 toolbar = DebugToolbarExtension()
 jsglue = JSGlue()
 sentry = Sentry()
-oauth = OAuth2Provider()
+oauth_server = AuthorizationServer()
+babel = Babel()
 
 # Set up the database.
 constraint_naming_convention = {
@@ -26,7 +28,7 @@ constraint_naming_convention = {
 
 # Custom SQLAlchemy object that uses naming conventions.
 # https://stackoverflow.com/questions/29153930/
-db = SQLAlchemy(metadata=MetaData(
-    naming_convention=constraint_naming_convention))
+metadata = MetaData(naming_convention=constraint_naming_convention)
+db = SQLAlchemy(metadata=metadata)
 
 login_manager = LoginManager()

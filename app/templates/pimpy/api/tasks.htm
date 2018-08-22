@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="col-md-8">
-        Filter:
+        {{ _('Filter') }}:
         <div class="btn-group" data-toggle="buttons-checkbox">
             {% for status_meaning in status_meanings %}
                 <button type="button" class="btn btn-filter btn-primary active" data-hide='{{ status_meaning[0] | replace(" ","_")}}'> {{ status_meaning[0] }}</button>
@@ -15,7 +15,6 @@
 
             {% if ns.prev_group != tr.task.group_id %}
                 {% set ns.prev_group = tr.task.group_id %}
-
                 <tr>
                 <td colspan="3" class="pimpy-group-head-td">
                 <h1>
@@ -41,7 +40,7 @@
             <tr id="pimpy_task_row_{{ t.id }}" class='pimpy_task_row pimpy_status_{{ t.get_status_string() | replace(" ","_")}}' data-toggle="collapse" data-target='#{{ t.id }}_{{ tr.user.name | replace(" ","_") }}' data-task-id='{{ t.id }}'>
                 <td>
                     <div class="btn-group" style="margin-bottom: 8px;">
-                        <a id="pimpy_task{{ t.id }}" class="pimpy_task btn dropdown-toggle {{ t.get_status_color() }} " data-toggle="dropdown" href="#"> {{ t.base32_id() }} </a>
+                        <a id="pimpy_task{{ t.id }}" class="pimpy_task btn dropdown-toggle {{ t.get_status_color() }} " data-toggle="dropdown" href="#"> {{ t.b32_id }} </a>
                         <ul class="dropdown-menu">
                             {% for status_meaning in status_meanings %}
                                 <li>
@@ -61,20 +60,20 @@
                 <div class="collapse" id='{{ t.id }}_{{ tr.user.name | replace(" ","_") }}'>
                     <div class="well well-small">
                         <dl>
-                            <dt>Taak:</dt>
+                            <dt>{{ _('Task') }}:</dt>
                             <dd>
                                 <p class="pimpy_editable" id="title" data-pk="{{ t.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ t.id }}" data-title="Task Content">{{ t.title }}</p>
-                                <button class="btn pimpy_editable_toggle" style="float: right;">Aanpassen</button>
+                                <button class="btn pimpy_editable_toggle" style="float: right;">{{ _('Edit') }}</button>
                             </dd>
-                            <dt>Gebruikers:</dt>
+                            <dt>{{ _('Users') }}:</dt>
                             <dd>
                                 <p class="pimpy_editable" id="users" data-pk="{{ t.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ t.id }}" data-title="Task Content">{{ t.get_users(True) | safe }}</p>
                             </dd>
-                            <dt>Beschrijving:</dt>
+                            <dt>{{ _('Description') }}:</dt>
                             <dd>
                                 <p class="pimpy_editable" id="content" data-pk="{{ t.id }}" data-type="textarea" data-url="/pimpy/tasks/edit/{{ t.id }}" data-title="Task Content">{{ t.content }}</p>
                             </dd>
-                            <dt>Aangemaakt op:</dt>
+                            <dt>{{ _('Created') }}:</dt>
                             <dd>
                                 {{t.timestamp }}
                             </dd>
@@ -82,7 +81,7 @@
                         {% if t.minute_id %}
                         <a href="{{ url_for('pimpy.view_minute',
                             minute_id=t.minute_id,
-                            line_number=t.line) }}">Ga naar Notulen!</a>
+                            line_number=t.line) }}">{{ _('View minute') }}</a>
                         {% endif %}
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-from app import app
+from app import app, constants
 
 from flask import flash
 from flask_babel import _
@@ -7,24 +7,20 @@ import requests
 from requests.exceptions import RequestException
 import datetime as dt
 
-DOMJUDGE_URL = app.config['DOMJUDGE_URL']
-DOMJUDGE_ADMIN_USERNAME = app.config['DOMJUDGE_ADMIN_USERNAME']
-DOMJUDGE_ADMIN_PASSWORD = app.config['DOMJUDGE_ADMIN_PASSWORD']
-
-DT_FORMAT = app.config['DT_FORMAT']
-
 
 class DOMjudgeAPI:
+
     @staticmethod
     def flash_error():
         flash(_("Request to DOMjudge server failed"), 'danger')
 
-    @staticmethod
-    def request_get(url, session=None):
+    @classmethod
+    def request_get(cls, url, session=None):
+
         if not session:
             session = requests
         try:
-            r = session.get(DOMJUDGE_URL + url, timeout=(5, 5))
+            r = session.get(app.config['DOMJUDGE_URL'] + url, timeout=(5, 5))
         except RequestException:
             DOMjudgeAPI.flash_error()
             return None
@@ -35,13 +31,14 @@ class DOMjudgeAPI:
 
         return r
 
-    @staticmethod
-    def request_post(url, data, files={},
+    @classmethod
+    def request_post(cls, url, data, files={},
                      session=None, flash_on_error=True):
+
         if not session:
             session = requests.Session()
         try:
-            r = session.post(DOMJUDGE_URL + url, data=data,
+            r = session.post(app.config['DOMJUDGE_URL'] + url, data=data,
                              files=files, timeout=(5, 5))
         except RequestException as e:
             if flash_on_error:
@@ -98,14 +95,15 @@ class DOMjudgeAPI:
             return r
         return None
 
-    @staticmethod
-    def add_team(name, member, categoryid, session):
+    @classmethod
+    def add_team(cls, name, member, categoryid, session):
+
         form_data = {
             'data[0][name]': name,
             'data[0][members]': member,
             'data[0][categoryid]': categoryid,
             'data[0][comments]': 'Created by Viaduct on {}'.format(
-                dt.datetime.now().strftime(DT_FORMAT)),
+                dt.datetime.now().strftime(constants.DT_FORMAT)),
             'data[0][enabled]': '1',
             'table': 'team',
             'cmd': 'add'

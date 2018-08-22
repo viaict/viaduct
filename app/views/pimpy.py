@@ -1,13 +1,14 @@
 import datetime
-
 from flask import Blueprint, abort, redirect, url_for
 from flask import flash, render_template, request, jsonify
+from flask_babel import _
 from flask_login import current_user
 
-from app import Roles, app
+from app import Roles, constants
 from app.decorators import require_role
 from app.exceptions import ValidationException, ResourceNotFoundException, \
-    InvalidMinuteException
+    InvalidMinuteException, AuthorizationException
+from app.forms import init_form
 from app.forms.pimpy import AddTaskForm, AddMinuteForm
 from app.models.pimpy import Task
 from app.service import pimpy_service, group_service
@@ -40,12 +41,11 @@ def view_minutes_in_date_range(group_id=None):
     if group_id is not None and not current_user.member_of_group(group_id):
         return abort(403)
 
-    start_date = request.form['start_date']
-    end_date = request.form['end_date']
+    start_date = request.form.get('start_date')
+    end_date = request.form.get('end_date')
 
-    df = app.config['DATE_FORMAT']
-    start_date = datetime.datetime.strptime(start_date, df)
-    end_date = datetime.datetime.strptime(end_date, df)
+    start_date = datetime.datetime.strptime(start_date, constants.DATE_FORMAT)
+    end_date = datetime.datetime.strptime(end_date, constants.DATE_FORMAT)
 
     if group_id:
         list_items = pimpy_service.get_all_minutes_for_group(group_id, (
@@ -115,8 +115,8 @@ def view_tasks(group_id=None):
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
-@blueprint.route('/tasks/me/', methods=['GET', 'POST'])
-@blueprint.route('/tasks/me/<int:group_id>/', methods=['GET', 'POST'])
+@blueprint.route('/tasks/self/', methods=['GET', 'POST'])
+@blueprint.route('/tasks/self/<int:group_id>/', methods=['GET', 'POST'])
 @require_role(Roles.PIMPY_READ)
 def view_tasks_personal(group_id=None):
     if group_id is not None and not current_user.member_of_group(group_id):
@@ -149,9 +149,8 @@ def view_tasks_in_date_range(group_id=None):
     start_date = request.form['start_date']
     end_date = request.form['end_date']
 
-    df = app.config['DATE_FORMAT']
-    start_date = datetime.datetime.strptime(start_date, df)
-    end_date = datetime.datetime.strptime(end_date, df)
+    start_date = datetime.datetime.strptime(start_date, constants.DATE_FORMAT)
+    end_date = datetime.datetime.strptime(end_date, constants.DATE_FORMAT)
 
     date_tuple = (start_date, end_date)
 
@@ -180,10 +179,16 @@ def update_task_status():
 
     task = pimpy_service.find_task_by_id(task_id)
     if not task:
-        return jsonify(success=False, message="Task does not exist"), 404
+        return jsonify(success=False, message=_("Task does not exist")), 404
     else:
+
         try:
-            pimpy_service.set_task_status(current_user, task, new_status)
+            pimpy_service.check_user_can_access_task(current_user, task)
+        except AuthorizationException as e:
+            return jsonify(success=False, message=e.details), 403
+
+        try:
+            pimpy_service.set_task_status(task, new_status)
         except ValidationException as e:
             return jsonify(success=False, message=e.details), 400
 
@@ -202,7 +207,7 @@ def add_task(group_id=None):
         group = group_service.get_group_by_id(group_id)
     except ResourceNotFoundException:
         group = None
-    form = AddTaskForm(request.form, group=group)
+    form = init_form(AddTaskForm, group=group)
 
     if form.validate_on_submit():
         try:
@@ -210,7 +215,7 @@ def add_task(group_id=None):
                 form.name.data, form.content.data, form.group.data.id,
                 form.users.data, None, None, form.status.data)
 
-            flash('De taak is succesvol aangemaakt!', 'success')
+            flash(_('Task has successfully been created'), 'success')
             return redirect(url_for('pimpy.view_tasks',
                                     group_id=form.group.data.id))
         except ValidationException as e:
@@ -234,7 +239,8 @@ def add_minute(group_id=None):
         group = group_service.get_group_by_id(group_id)
     except ResourceNotFoundException:
         group = None
-    form = AddMinuteForm(request.form, group=group)
+
+    form = init_form(AddMinuteForm, group=group)
 
     if form.validate_on_submit():
         minute_group = group_service.get_group_by_id(form.group.data.id)
@@ -246,7 +252,9 @@ def add_minute(group_id=None):
         except InvalidMinuteException as e:
             return render_template('pimpy/add_minute.htm', group_id=group_id,
                                    type='minutes', form=form, title='PimPy',
-                                   invalid_lines=e.details)
+                                   missing_colon=e.missing_colon_lines,
+                                   unknown_users=e.unknown_users,
+                                   unknown_tasks=e.unknown_task_lines)
         return redirect(url_for("pimpy.view_minute", minute_id=minute.id))
 
     return render_template('pimpy/add_minute.htm', group_id=group_id,
@@ -259,20 +267,23 @@ def add_minute(group_id=None):
 def edit_task(task_id=-1):
     """Ajax method for updating a task."""
     if task_id is '' or task_id is -1:
-        flash('Taak niet gespecificeerd.')
+        flash(_('Task not specified'))
         return redirect(url_for('pimpy.view_tasks', group_id=None))
 
-    name = request.form['name']
-    value = request.form['value']
+    task = pimpy_service.find_task_by_id(task_id)
+
+    pimpy_service.check_user_can_access_task(current_user, task)
+
+    name = request.form.get('name')
+    value = request.form.get('value')
 
     if name == 'content':
-        pimpy_service.edit_task_property(current_user, task_id, content=value)
+        pimpy_service.edit_task_property(task, content=value)
     elif name == 'title':
-        pimpy_service.edit_task_property(current_user, task_id, title=value)
+        pimpy_service.edit_task_property(task, title=value)
     elif name == 'users':
-        pimpy_service.edit_task_property(current_user, task_id,
-                                         users_property=value)
+        pimpy_service.edit_task_property(task, users_property=value)
     else:
-        jsonify(result=400, message='Unknown property'), 400
+        jsonify(result=400, message=_('Unknown property')), 400
 
     return jsonify(result=200, message='ok'), 200

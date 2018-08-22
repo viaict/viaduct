@@ -7,7 +7,6 @@ Create Date: 2018-03-14 15:35:30.841219
 """
 from alembic import op
 import sqlalchemy as sa
-from sqlalchemy.dialects import mysql
 from app.models.base_model import BaseEntity
 from app.enums import FileCategory
 
@@ -30,7 +29,8 @@ class File(db.Model, BaseEntity):
     hash = db.Column(db.String(200), nullable=False)
     extension = db.Column(db.String(20), nullable=False)
 
-    category = db.Column(db.Enum(FileCategory), nullable=False)
+    category = db.Column(db.Enum(FileCategory, name='file_category'),
+                         nullable=False)
     display_name = db.Column(db.String(200))
 
 

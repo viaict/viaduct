@@ -8,8 +8,7 @@ from flask_login import current_user
 
 from app.service import user_service
 
-ALLOWED_EXTENSIONS = set(['png', 'gif', 'jpg', 'jpeg'])
-UPLOAD_DIR = 'app/static/files/users/'
+ALLOWED_EXTENSIONS = {'png', 'gif', 'jpg', 'jpeg'}
 
 
 class UserAPI:
@@ -28,9 +27,9 @@ class UserAPI:
             return url_for('user.view_avatar', user_id=user.id)
 
         # Set default values gravatar
-        email = user.email or ''
         default = 'identicon'
         size = 100
+        email = user.email or ''
 
         # Construct the url
         gravatar_url = 'https://www.gravatar.com/avatar/' + \
@@ -38,16 +37,6 @@ class UserAPI:
                            email.lower().encode('utf-8')).hexdigest() + '?'
         gravatar_url += urllib.parse.urlencode({'d': default, 's': str(size)})
         return gravatar_url
-
-    @staticmethod
-    def upload(f, user_id):
-        """Upload the new avatar.
-
-        Checks if the file type is allowed if so removes any
-        previous uploaded avatars.
-        """
-
-        user_service.set_avatar(user_id, f)
 
     @staticmethod
     def get_groups_for_user_id(user):

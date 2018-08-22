@@ -1,6 +1,6 @@
 {% macro pimpy_side_menu(group_id, personal, type) %}
 
-{%- set format = app_config['DATE_FORMAT']
+{%- set format = constants.DATE_FORMAT
             | replace('%Y', 'yyyy')
             | replace('%m', 'mm')
             | replace('%d', 'dd')
@@ -12,37 +12,37 @@
 {%- set personal_suffix = '_personal' if  personal else '' %}
 
 <div class="col-xs-3">
-        Bekijk
+        {{ _('Show') }}
         <ul class="nav nav-pills">
           <li class="pimpy-menu {% if type == 'minutes' %} active {% endif %} ">
             <a href="{{ url_for("pimpy.view_minutes", group_id=group_id) }}">
-              Notulen
+            {{ _('Minute') }}
             </a>
           </li>
           <li class="pimpy-menu {% if type == 'tasks' %} active {% endif %} ">
             <a href="{{ url_for('pimpy.view_tasks' + personal_suffix, group_id=group_id) }}">
-              Taken
+            {{ _('Tasks') }}
             </a>
           </li>
         </ul>
       {% if type == 'tasks' %}
-        Van
+        {{ _('Owner') }}
         <ul class="nav nav-pills">
           <li class="pimpy-menu {% if personal %} active {% endif %} ">
-            <a href="{{ url_for('pimpy.view_tasks_personal', group_id=group_id) }}">Zelf</a>
+            <a href="{{ url_for('pimpy.view_tasks_personal', group_id=group_id) }}">{{ _('Myself') }}</a>
           </li>
           <li class="pimpy-menu {% if not personal %} active {% endif %} ">
-            <a href="{{ url_for('pimpy.view_tasks', group_id=group_id) }}">Alle</a>
+            <a href="{{ url_for('pimpy.view_tasks', group_id=group_id) }}">{{ _('All') }}</a>
           </li>
         </ul>
       {% endif %}
-        Groepen
+        {{ _('Groups') }}
         <ul class="nav nav-pills nav-stacked pimpy-menu-group">
           <li {% if group_id == None %} class="active" {% endif %}>
           {% if type == 'tasks' %}
-              <a href="{{ url_for('pimpy.view_tasks' + personal_suffix) }}">Alle</a>
+              <a href="{{ url_for('pimpy.view_tasks' + personal_suffix) }}">{{ _('All') }}</a>
           {% else %}
-              <a href="{{ url_for('pimpy.view_minutes') }}">Alle</a>
+              <a href="{{ url_for('pimpy.view_minutes') }}">{{ _('All') }}</a>
           {% endif %}
           </li>
           {% for group in current_user.groups %}
@@ -55,7 +55,7 @@
           </li>
           {% endfor %}
         </ul>
-      Datum
+      {{ _('Date') }}
         <ul class="nav nav-pills nav-stacked pimpy-menu-group">
         {% if type == 'tasks' %}
           <form action="{{ url_for("pimpy.view_tasks_in_date_range", group_id=group_id) }}" method="post">
@@ -63,28 +63,28 @@
           <form action="{{ url_for("pimpy.view_minutes_in_date_range", group_id=group_id) }}" method="post">
         {% endif %}
             <div class="form-group">
-              <label for="start_date">Van</label>
+              <label for="start_date">{{ _('From') }}</label>
               <div class="input-group date" id="start_date">
                 <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                 <input class="form-control" data-date-format="{{ format }}"
                                             id="start_date"
                                             name="start_date"
                                             type="text"
-                                            value="{{ datetime.date.today().strftime(app_config['DATE_FORMAT'] )}}">
+                                            value="{{ datetime.date.today().strftime(constants.DATE_FORMAT)}}">
               </div>
             </div>
             <div class="form-group">
-              <label for="end_date">Tot</label>
+              <label for="end_date">{{ _('Until') }}</label>
               <div class="input-group date" id="end_date">
                 <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                 <input class="form-control" data-date-format="{{ format }}"
                                             id="end_date"
                                             name="end_date"
                                             type="text"
-                                            value="{{ datetime.date.today().strftime(app_config['DATE_FORMAT'] )}}">
+                                            value="{{ datetime.date.today().strftime(constants.DATE_FORMAT)}}">
               </div>
             </div>
-            <button type="submit" class="btn btn-primary">Zoeken</button>
+            <button type="submit" class="btn btn-primary">{{ _('Search') }}</button>
           </form>
 
           <script>$('#start_date').datetimepicker({ format: '{{ format }}' });</script>
