@@ -215,6 +215,10 @@ def edit_student_id_linking(user_id):
 
     form = EditUvALinkingForm(request.form, obj=user)
 
+    # Fix student_id_confirmed not being set...
+    if request.method == 'GET':
+        form.student_id_confirmed.data = user.student_id_confirmed
+
     def edit_page():
         return render_template('user/edit_student_id.htm',
                                user=user, form=form)
@@ -227,7 +231,7 @@ def edit_student_id_linking(user_id):
             other_user = user_service.find_user_by_student_id(
                 form.student_id.data)
 
-            if other_user:
+            if other_user is not None and other_user != user:
                 error = _('The UvA account corresponding with this student ID '
                           'is already linked to another user '
                           '(%(name)s - %(email)s). Please unlink the account '

@@ -63,7 +63,7 @@ def set_confirmed_student_id(user, student_id):
     # that is already confirmed
 
     other_user = find_user_by_student_id(student_id)
-    if other_user is not None:
+    if other_user is not None and other_user != user:
         raise BusinessRuleException("Student ID already linked to other user.")
 
     # Find all users with the same student ID (unconfirmed)
