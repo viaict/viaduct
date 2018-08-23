@@ -245,7 +245,7 @@ def edit_student_id_linking(user_id):
 
         flash(_('Student ID information saved.'), 'success')
 
-        return redirect(url_for('.edit', user_id=user_id))
+        return redirect(url_for('.edit_user', user_id=user_id))
 
     return edit_page()
 
