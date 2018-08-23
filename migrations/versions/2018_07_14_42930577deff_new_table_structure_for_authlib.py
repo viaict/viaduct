@@ -124,8 +124,8 @@ def upgrade():
                     nullable=True)
     op.create_index(op.f('ix_oauth_token_refresh_token'), 'oauth_token',
                     ['refresh_token'], unique=False)
-    op.drop_constraint('uq_oauth_token_refresh_token', 'oauth_token',
-                       type_='unique')
+    # op.drop_constraint('uq_oauth_token_refresh_token', 'oauth_token',
+    #                    type_='unique')
     op.drop_constraint('fk_oauth_token_client_id_oauth_client', 'oauth_token',
                        type_='foreignkey')
     op.drop_column('oauth_token', 'expires')
