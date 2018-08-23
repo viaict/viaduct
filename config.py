@@ -65,6 +65,9 @@ class Config(object):
         self.PRIVACY_POLICY_URL_EN = str
         self.PRIVACY_POLICY_URL_NL = str
 
+        # Path for SAML config and certificates
+        self.SAML_PATH = str
+
         self.load_config(database_url=database_url)
 
         # These must be defined after `load_config`, since they are not
