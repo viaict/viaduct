@@ -78,6 +78,8 @@ class User(db.Model, UserMixin, BaseEntity):
     copernica_id = db.Column(db.Integer(), nullable=True)
     avatar_file_id = db.Column(db.Integer, db.ForeignKey('file.id'))
 
+    student_id_confirmed = db.Column(db.Boolean, default=False, nullable=False)
+
     def __init__(self, email=None, password=None, first_name=None,
                  last_name=None, student_id=None, education_id=None,
                  birth_date=None, study_start=None, receive_information=None):

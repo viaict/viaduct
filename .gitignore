@@ -78,8 +78,9 @@ tags
 .coverage
 htmlcov/
 
+saml/develop/certs/*
+saml/master/certs/*
 
 ### VisualStudioCode ###
 .vscode/*
 .history
-

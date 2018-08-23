@@ -8,14 +8,29 @@
 {% macro ignore_kwargs(_kwargs) %}
 {% endmacro %}
 
-{% macro _render_field_with_errors(field, field_input_html, show_cross=True) %}
+{% macro _render_field_with_errors(field, field_input_html,
+        show_cross=True, render_label=True, html_bottom=None, wrap_inputgroup=False) %}
     {{ ignore_kwargs(kwargs) }}
     <div class="form-group{% if field.errors %} has-error has-feedback{% endif %}">
+        {% if render_label %}
         {{ field.label }}
+        {% endif %}
+
         {%- if field.description -%}
             <small> {{ field.description }}</small>
         {%- endif -%}
+
+        {% if wrap_inputgroup %}
+        <div class="input-group">
+        {% endif %}
         {{ field_input_html }}
+
+        {%- if html_bottom -%}
+        {{ html_bottom }}
+        {%- endif -%}
+        {% if wrap_inputgroup %}
+        </div>
+        {% endif %}
 
         {%- if field.errors -%}
             {%- if show_cross -%}
@@ -26,21 +41,17 @@
             {%- endfor -%}
         {%- endif -%}
     </div>
-    {% endmacro %}
+{% endmacro %}
 
 {% macro render_field_disabled(field) %}
-    {{ ignore_kwargs(kwargs) }}
-    <div class="form-group">
-        {{ field.label }}
-        {{ field(placeholder=field.label.text, class='form-control', disabled='') }}
-    </div>
+    {{ render_field(field, disabled=True, **kwargs) }}
 {% endmacro %}
 
 
-{% macro render_field(field, autocomplete='on') %}
+{% macro render_field(field, autocomplete='on', disabled=False) %}
     {{ ignore_kwargs(kwargs) }}
     {{ _render_field_with_errors(field, field(placeholder=field.label.text, class='form-control',
-                                              autocomplete=autocomplete)) }}
+                                              autocomplete=autocomplete, disabled=disabled), **kwargs) }}
 {% endmacro %}
 
 {# TODO Check if still used #}
@@ -68,14 +79,42 @@
     </div>
 {% endmacro %}
 
+{% macro _render_checkbox_input_html(field) %}
+    <div class="checkbox">
+        <label>
+            {{ field }}
+            {{ field.label.text }}
+        </label>
+    </div>
+{% endmacro %}
+
 {% macro render_checkbox(field) %}
     {{ ignore_kwargs(kwargs) }}
-    <div class="form-group">
-        <div class="checkbox">
-            <label>
-                {{ field }}
-                {{ field.label.text }}
-            </label>
+    {{ _render_field_with_errors(field, _render_checkbox_input_html(field),
+        render_label=False, show_cross=False) }}
+{% endmacro %}
+
+{% macro render_checkbox_well(field, label=None) %}
+    {{ ignore_kwargs(kwargs) }}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="well{% if field.errors %} has-error has-feedback{% endif %}">
+                <label style="font-weight: unset">
+                    {{ field }}
+                    {% if label %}
+                    {{ label }}
+                    {% else %}
+                    {{ field.label.text }}
+                    {% endif %}
+                </label>
+
+                {%- if field.errors -%}
+                    {%- for error in field.errors -%}
+                        <p class="help-block">{{ error }}</p>
+                    {%- endfor -%}
+                {%- endif -%}
+            </div>
         </div>
     </div>
 {% endmacro %}
@@ -244,6 +283,27 @@
     {{ _render_field_with_errors(field, _render_email_list_input(field, domain), False) }}
 {% endmacro %}
 
+{% macro render_submit_full(submit_text, back_button_url, back_button_text) %}
+    {% if not back_button_url %}
+    <div class="form-group">
+        <button class='btn btn-primary' data-loading-text={{_('Loading...')}}
+            type='submit'>{{ submit_text }}</button>
+    </div>
+    {% else %}
+    <div class="form-group">
+        <div class="btn-group">
+            <a href="{{ back_button_url }}" class="btn btn-success">
+                <i class="glyphicon glyphicon-arrow-left"></i>
+                {{ back_button_text | default(_('Back'), True) }}</a>
+            <button class='btn btn-primary' data-loading-text={{_('Loading...')}} type='submit'>
+                <i class="glyphicon glyphicon-ok"></i>
+                {{ submit_text }}
+            </button>
+        </div>
+    </div>
+    {% endif %}
+{% endmacro %}
+
 {% macro render_tabs(field) %}
 {# We use this group id in the ids of the tabs, to make them unique for this group #}
 {%- set group_id = field.hex_id -%}
@@ -345,9 +405,9 @@
 
 {% macro render_form(form, action,
                      form_id='', form_name='', form_class='',
-                     submit_id='', submit_text='',
-                     extra_field_renderers={}, submit_renderer=None,
-                     render_before_hook=None, render_after_hook=None) %}
+                     submit_text='', back_button_url=None,
+                     back_button_text='', extra_field_renderers={},
+                     submit_renderer=None, render_before_hook=None, render_after_hook=None) %}
 
 {%- set form_wrapped = FormWrapper(form) -%}
 <form method="POST" action="{{ action }}" enctype="multipart/form-data" class="{{ form_class }}" name="{{ form_name }}">
@@ -364,7 +424,7 @@
     {%- if submit_renderer -%}
     {{ submit_renderer() }}
     {%- else -%}
-    {{ render_submit(submit_text) }}
+    {{ render_submit_full(submit_text, back_button_url, back_button_text) }}
     {%- endif -%}
     {%- endif -%}
     {%- if form_wrapped.has_select_fields -%}
