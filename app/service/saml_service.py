@@ -116,6 +116,13 @@ def build_saml_info():
         'https': 'on'
     }
 
+    # This is the base path for all SAML config files and certificates
+    # It is equal to "saml/{develop,master}" and is structured as follows:
+    # saml/{develop,master}/
+    #   settings.json:              General settings
+    #   advanced_settings.json:     Some extra settings
+    #   certs/sp.{key,crt}          Certificate and private key
+
     saml_path = app.config['SAML_PATH']
     saml_auth = OneLogin_Saml2_Auth(saml_req, custom_base_path=saml_path)
 
