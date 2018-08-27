@@ -1,4 +1,4 @@
-from app import app
+from app import app, constants
 from app.exceptions import ValidationException, AuthorizationException, \
     BusinessRuleException
 from app.service import user_service
@@ -306,7 +306,7 @@ def fill_sign_up_form_with_saml_attributes(form):
     if email:
         form.email.data = email[0]
     if preferred_language and \
-            preferred_language[0] in app.config['LANGUAGES'].keys():
+            preferred_language[0] in constants.LANGUAGES.keys():
         form.locale.data = preferred_language[0]
 
 
