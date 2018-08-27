@@ -7,7 +7,7 @@ from flask_login import current_user
 from app import Roles, constants
 from app.decorators import require_role
 from app.exceptions import ValidationException, ResourceNotFoundException, \
-    InvalidMinuteException
+    InvalidMinuteException, AuthorizationException
 from app.forms import init_form
 from app.forms.pimpy import AddTaskForm, AddMinuteForm
 from app.models.pimpy import Task
@@ -181,8 +181,14 @@ def update_task_status():
     if not task:
         return jsonify(success=False, message=_("Task does not exist")), 404
     else:
+
         try:
-            pimpy_service.set_task_status(current_user, task, new_status)
+            pimpy_service.check_user_can_access_task(current_user, task)
+        except AuthorizationException as e:
+            return jsonify(success=False, message=e.details), 403
+
+        try:
+            pimpy_service.set_task_status(task, new_status)
         except ValidationException as e:
             return jsonify(success=False, message=e.details), 400
 
@@ -264,16 +270,19 @@ def edit_task(task_id=-1):
         flash(_('Task not specified'))
         return redirect(url_for('pimpy.view_tasks', group_id=None))
 
+    task = pimpy_service.find_task_by_id(task_id)
+
+    pimpy_service.check_user_can_access_task(current_user, task)
+
     name = request.form.get('name')
     value = request.form.get('value')
 
     if name == 'content':
-        pimpy_service.edit_task_property(current_user, task_id, content=value)
+        pimpy_service.edit_task_property(task, content=value)
     elif name == 'title':
-        pimpy_service.edit_task_property(current_user, task_id, title=value)
+        pimpy_service.edit_task_property(task, title=value)
     elif name == 'users':
-        pimpy_service.edit_task_property(current_user, task_id,
-                                         users_property=value)
+        pimpy_service.edit_task_property(task, users_property=value)
     else:
         jsonify(result=400, message=_('Unknown property')), 400
 

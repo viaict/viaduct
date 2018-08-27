@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-07-12 23:32+0200\n"
+"POT-Creation-Date: 2018-08-27 12:01+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.5.1\n"
+"Generated-By: Babel 2.6.0\n"
 
 #, python-format
 msgid "%(email)s is unknown to our system."
@@ -33,6 +33,9 @@ msgstr ""
 
 #, python-format
 msgid "API call failed: %s"
+msgstr ""
+
+msgid "Access to your Pimpy data"
 msgstr ""
 
 msgid "Access to your name and e-mail"
@@ -149,6 +152,9 @@ msgid ""
 "more information."
 msgstr ""
 
+msgid "Authentication failed. Please try again."
+msgstr ""
+
 msgid "Authorized callback URLs"
 msgstr ""
 
@@ -162,10 +168,6 @@ msgid "Bijbaan"
 msgstr ""
 
 msgid "Birthdate"
-msgstr ""
-
-#, python-format
-msgid "By clicking 'Register', you agree to our %(link)s."
 msgstr ""
 
 msgid "By registering you agree with the terms above."
@@ -334,6 +336,9 @@ msgstr ""
 msgid "Correct"
 msgstr ""
 
+msgid "Could not find the user to link this UvA account to."
+msgstr ""
+
 msgid "Country"
 msgstr ""
 
@@ -372,9 +377,6 @@ msgid "Create activities"
 msgstr ""
 
 msgid "Create activity"
-msgstr ""
-
-msgid "Create application"
 msgstr ""
 
 msgid "Create form"
@@ -552,6 +554,9 @@ msgid "Edit newsletter"
 msgstr ""
 
 msgid "Edit page"
+msgstr ""
+
+msgid "Edit student ID information manually"
 msgstr ""
 
 msgid "Edit user permissions"
@@ -808,10 +813,19 @@ msgstr ""
 msgid "Lines containing unmatchable names in ACTIE(s)"
 msgstr ""
 
+msgid "Link account to UvA account"
+msgstr ""
+
 msgid "Link copied"
 msgstr ""
 
+msgid "Link this account to the corresponding UvA account"
+msgstr ""
+
 msgid "Link to file"
+msgstr ""
+
+msgid "Linked to UvA account"
 msgstr ""
 
 msgid "List of activities"
@@ -832,6 +846,9 @@ msgstr ""
 msgid "Log in"
 msgstr ""
 
+msgid "Log in with UvA-net ID"
+msgstr ""
+
 msgid "Log off"
 msgstr ""
 
@@ -845,6 +862,9 @@ msgid "Mailing list"
 msgstr ""
 
 msgid "Manage financing related tasks"
+msgstr ""
+
+msgid "Manually enter your information"
 msgstr ""
 
 msgid "Max number of attendants"
@@ -1056,6 +1076,9 @@ msgstr ""
 msgid "Phone"
 msgstr ""
 
+msgid "Please agree with our Privacy Policy."
+msgstr ""
+
 msgid "Please fill in"
 msgstr ""
 
@@ -1110,6 +1133,9 @@ msgstr ""
 msgid "Profile succesfully updated"
 msgstr ""
 
+msgid "Public clients have no secret."
+msgstr ""
+
 msgid "Publish date"
 msgstr ""
 
@@ -1120,9 +1146,6 @@ msgid "RSS feed"
 msgstr ""
 
 msgid "Rank"
-msgstr ""
-
-msgid "Read access to your Pimpy data"
 msgstr ""
 
 msgid "Read files"
@@ -1260,6 +1283,12 @@ msgstr ""
 msgid "Sign In"
 msgstr ""
 
+msgid "Sign up"
+msgstr ""
+
+msgid "Sign up with UvA-net ID"
+msgstr ""
+
 msgid "Solved"
 msgstr ""
 
@@ -1299,6 +1328,13 @@ msgid "Status"
 msgstr ""
 
 msgid "Student ID"
+msgstr ""
+
+#, python-format
+msgid "Student ID information of %(name)s"
+msgstr ""
+
+msgid "Student ID information saved."
 msgstr ""
 
 msgid "Studentnumber"
@@ -1359,6 +1395,16 @@ msgid "Team"
 msgstr ""
 
 msgid "Terms"
+msgstr ""
+
+#, python-format
+msgid ""
+"The UvA account corresponding with this student ID is already linked to "
+"another user (%(name)s - %(email)s). Please unlink the account from the "
+"other user first before linking it to this user."
+msgstr ""
+
+msgid "The account is now linked to this UvA account."
 msgstr ""
 
 msgid "The activity has been created."
@@ -1431,10 +1477,23 @@ msgstr ""
 msgid "The seo settings have been saved"
 msgstr ""
 
+msgid "There is already an account linked to this UvA account."
+msgstr ""
+
+msgid ""
+"There is already an account linked to this UvA account. If you are sure "
+"that this is a mistake please send an email to the board."
+msgstr ""
+
 msgid "There is already another group with this e-mail address."
 msgstr ""
 
 msgid "There is already another group with this name."
+msgstr ""
+
+msgid ""
+"There is no via account linked to this UvA account. On this page you can "
+"create a new via account that is linked to your UvA account."
 msgstr ""
 
 msgid ""
@@ -1541,6 +1600,9 @@ msgstr ""
 msgid "Using the bookstore requires an account."
 msgstr ""
 
+msgid "UvA Account"
+msgstr ""
+
 msgid "Vacancy created"
 msgstr ""
 
@@ -1631,9 +1693,6 @@ msgstr ""
 msgid "Would you like to recieve information from companies?"
 msgstr ""
 
-msgid "Write access to your Pimpy data"
-msgstr ""
-
 msgid "Written by"
 msgstr ""
 
@@ -1641,6 +1700,10 @@ msgid "Wrong Answer"
 msgstr ""
 
 msgid "Yes"
+msgstr ""
+
+#, python-format
+msgid "Yes, I agree to the %(link)s."
 msgstr ""
 
 msgid "Yes, I have finished studying"
@@ -1666,6 +1729,9 @@ msgstr ""
 msgid "You have to be logged in to fill in a form"
 msgstr ""
 
+msgid "You must authenticate with a student UvA account to register."
+msgstr ""
+
 msgid "You must be logged in to view this page."
 msgstr ""
 
@@ -1675,6 +1741,12 @@ msgstr ""
 msgid "You need to be at least 16 years old."
 msgstr ""
 
+msgid "You need to be logged in to link an account."
+msgstr ""
+
+msgid "You need to be logged in to link your account."
+msgstr ""
+
 msgid "You need to be logged in to set a permanent language."
 msgstr ""
 
@@ -1682,6 +1754,12 @@ msgid "You need to be member of via to obtain a discount card."
 msgstr ""
 
 msgid "Your account has been disabled, you are not allowed to log in"
+msgstr ""
+
+msgid "Your account is already linked to a UvA account."
+msgstr ""
+
+msgid "Your account is now linked to this UvA account."
 msgstr ""
 
 msgid "Your current password does not match."
@@ -2374,6 +2452,9 @@ msgstr ""
 #~ msgid "Wrong format examination."
 #~ msgstr ""
 
+#~ msgid "By clicking 'Register', you agree to our %(link)s."
+#~ msgstr ""
+
 #~ msgid "Dutch name requires Dutch description and vice versa"
 #~ msgstr ""
 
@@ -2383,6 +2464,55 @@ msgstr ""
 #~ msgid "English name requires English description and vice versa"
 #~ msgstr ""
 
+#~ msgid "Log in with UvAnetID"
+#~ msgstr ""
+
+#~ msgid "An unknown error occurred. The IT team has been notified."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "There is no via-account linked to"
+#~ " this UvA-account. You must link "
+#~ "your via-account by confirming your "
+#~ "student ID before you can log in"
+#~ " with your UvA-net ID."
+#~ msgstr ""
+
+#~ msgid "Linked to UvA account."
+#~ msgstr ""
+
+#~ msgid "Linked to this UvA account"
+#~ msgstr ""
+
+#~ msgid "Linked to this UvA account."
+#~ msgstr ""
+
+#~ msgid "Unlink"
+#~ msgstr ""
+
+#~ msgid "Edit student ID manually"
+#~ msgstr ""
+
+#~ msgid "Link account to UvA account."
+#~ msgstr ""
+
 #~ msgid "Create new task"
+#~ msgstr ""
+
+#~ msgid "Create application"
+#~ msgstr ""
+
+#~ msgid "Read access to your Pimpy data"
+#~ msgstr ""
+
+#~ msgid "Write access to your Pimpy data"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "There is no via account linked to"
+#~ " this UvA account. You must link "
+#~ "your via-account by confirming your "
+#~ "student ID before you can log in"
+#~ " with your UvA-net ID."
 #~ msgstr ""
 

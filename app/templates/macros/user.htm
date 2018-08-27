@@ -1,0 +1,8 @@
+{% macro render_uvanetid_signin_button(label, href, small=False) %}
+    <a href="{{ href }}" class="btn btn-primary uvanetid-sign-in-btn{% if small %}-small{% endif %}">
+        <div class="uvanetid-sign-in-hover"></div>
+        <img src="{{ static_url('/static/img/uvalogo_tag_d.svg') }}" class="uvanetid-sign-in-tag{% if small %}-small{% endif %}"/>
+        <span class="uvanetid-sign-in-text{% if small %}-small{% endif %}">{{ label }}</span>
+        <div class="uvanetid-sign-in-text-bg{% if small %}-small{% endif %}"></div>
+    </a>
+{% endmacro %}

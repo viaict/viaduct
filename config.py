@@ -1,6 +1,6 @@
 import dateutil.parser
 import distutils.util
-from flask import logging
+import logging
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
@@ -11,7 +11,7 @@ class Config(object):
 
     def __init__(self, database_url):
         """
-        Initialize the config
+        Initialize the config.
 
         Load the config values from the environment and do dynamic conversion.
         """
@@ -64,6 +64,9 @@ class Config(object):
         # Privacy policy
         self.PRIVACY_POLICY_URL_EN = str
         self.PRIVACY_POLICY_URL_NL = str
+
+        # Path for SAML config and certificates
+        self.SAML_PATH = str
 
         self.load_config(database_url=database_url)
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2018-07-12 23:32+0200\n"
+"POT-Creation-Date: 2018-08-27 12:01+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.5.1\n"
+"Generated-By: Babel 2.6.0\n"
 
 #, python-format
 msgid "%(email)s is unknown to our system."
@@ -34,6 +34,9 @@ msgstr ""
 #, python-format
 msgid "API call failed: %s"
 msgstr "API call mislukt: %s"
+
+msgid "Access to your Pimpy data"
+msgstr ""
 
 msgid "Access to your name and e-mail"
 msgstr "Toegang tot je naam en e-mail"
@@ -153,6 +156,9 @@ msgstr ""
 "Let op: we gebruiken nu een base32 encoding. Lees de handleiding van deze"
 " module voor meer informatie."
 
+msgid "Authentication failed. Please try again."
+msgstr "Authenticatie mislukt. Probeer het opnieuw."
+
 msgid "Authorized callback URLs"
 msgstr "Toegestaande callback URLs"
 
@@ -167,10 +173,6 @@ msgstr "Bijbaan"
 
 msgid "Birthdate"
 msgstr "Geboortedatum"
-
-#, python-format
-msgid "By clicking 'Register', you agree to our %(link)s."
-msgstr "Door op 'Registreer' te klikken ga je akkoord met ons %(link)s."
 
 msgid "By registering you agree with the terms above."
 msgstr ""
@@ -340,6 +342,9 @@ msgstr "Kopiëren naar klembord"
 msgid "Correct"
 msgstr "Correct"
 
+msgid "Could not find the user to link this UvA account to."
+msgstr "Kan het account om het UvA-account aan te koppelen niet vinden."
+
 msgid "Country"
 msgstr "Land"
 
@@ -379,9 +384,6 @@ msgstr "Activiteiten aanmaken"
 
 msgid "Create activity"
 msgstr "Activiteit aanmaken"
-
-msgid "Create application"
-msgstr "Applicatie aanmaken"
 
 msgid "Create form"
 msgstr "Formulier aanmaken"
@@ -559,6 +561,9 @@ msgstr "Nieuwsbrief aanpassen"
 
 msgid "Edit page"
 msgstr "Pagina aanpassen"
+
+msgid "Edit student ID information manually"
+msgstr "Studentnummer-gegevens handmatig aanpassen"
 
 msgid "Edit user permissions"
 msgstr "Wijzig gebruikersrechten"
@@ -819,11 +824,20 @@ msgstr "Regels met onbekende taak ids"
 msgid "Lines containing unmatchable names in ACTIE(s)"
 msgstr "Regels met onmatchbare namen in ACTIE(s)"
 
+msgid "Link account to UvA account"
+msgstr "Koppel account aan UvA-account"
+
 msgid "Link copied"
 msgstr "Link gekopieerd"
 
+msgid "Link this account to the corresponding UvA account"
+msgstr "Koppel dit account aan het bijbehorende UvA-account"
+
 msgid "Link to file"
 msgstr "Link naar bestand"
+
+msgid "Linked to UvA account"
+msgstr "Gekoppeld aan UvA-account"
 
 msgid "List of activities"
 msgstr "Activiteiten"
@@ -843,6 +857,9 @@ msgstr "Location opgeslagen."
 msgid "Log in"
 msgstr "Log in"
 
+msgid "Log in with UvA-net ID"
+msgstr "Log in met UvA-net ID"
+
 msgid "Log off"
 msgstr "Uitloggen"
 
@@ -856,6 +873,9 @@ msgid "Mailing list"
 msgstr "Mailinglijst"
 
 msgid "Manage financing related tasks"
+msgstr ""
+
+msgid "Manually enter your information"
 msgstr ""
 
 msgid "Max number of attendants"
@@ -1023,13 +1043,16 @@ msgid "Optional data"
 msgstr "Optionele gegevens"
 
 msgid "Order children alphabetically"
-msgstr ""
+msgstr "Sorteer onderliggende menu-items alfabetisch."
 
 msgid "Owned by: "
 msgstr "Beheerder: "
 
 msgid "Owner"
 msgstr "Eigenaar"
+
+msgid "Owner group "
+msgstr ""
 
 msgid "Page"
 msgstr "Pagina"
@@ -1065,6 +1088,9 @@ msgstr "Rechten"
 
 msgid "Phone"
 msgstr "Telefoonnummer"
+
+msgid "Please agree with our Privacy Policy."
+msgstr "Je moet akkoord gaan met het Privacybeleid."
 
 msgid "Please fill in"
 msgstr "Alstublieft invullen"
@@ -1120,6 +1146,9 @@ msgstr "Profiel aanmaken gelukt"
 msgid "Profile succesfully updated"
 msgstr "Profiel bewerken gelukt"
 
+msgid "Public clients have no secret."
+msgstr ""
+
 msgid "Publish date"
 msgstr "Publiceerdatum"
 
@@ -1131,9 +1160,6 @@ msgstr ""
 
 msgid "Rank"
 msgstr "Rang"
-
-msgid "Read access to your Pimpy data"
-msgstr "Lees rechten tot je Pimpy data"
 
 msgid "Read files"
 msgstr "Lezen bestanden"
@@ -1217,7 +1243,7 @@ msgid "Search Engine Optimization"
 msgstr ""
 
 msgid "Search for group"
-msgstr ""
+msgstr "Zoek naar een groep"
 
 msgid "Search for title, contact or company"
 msgstr "Zoeken op titel, contact of bedrijf"
@@ -1270,6 +1296,12 @@ msgstr "Toon aankomende activiteiten"
 msgid "Sign In"
 msgstr "Inloggen"
 
+msgid "Sign up"
+msgstr ""
+
+msgid "Sign up with UvA-net ID"
+msgstr ""
+
 msgid "Solved"
 msgstr "Opgelost"
 
@@ -1312,6 +1344,13 @@ msgstr "Status"
 
 msgid "Student ID"
 msgstr "Studentnummer"
+
+#, python-format
+msgid "Student ID information of %(name)s"
+msgstr "Studentnummer-gegevens van %(name)s"
+
+msgid "Student ID information saved."
+msgstr "Studentnummer-gegevens opgeslagen."
 
 msgid "Studentnumber"
 msgstr "Studenten ID"
@@ -1372,6 +1411,19 @@ msgstr "Team"
 
 msgid "Terms"
 msgstr "Voorwaarden"
+
+#, python-format
+msgid ""
+"The UvA account corresponding with this student ID is already linked to "
+"another user (%(name)s - %(email)s). Please unlink the account from the "
+"other user first before linking it to this user."
+msgstr ""
+"Het UvA-account dat bij dit studentnummer hoort is al gekoppeld aan een "
+"ander account (%(name)s - %(email)s). Ontkoppel het account eerst van het"
+" andere account voor het te koppelen aan dit account."
+
+msgid "The account is now linked to this UvA account."
+msgstr "Het account is nu gekoppeld aan dit UvA-account."
 
 msgid "The activity has been created."
 msgstr "De activiteit is aangemaakt."
@@ -1452,11 +1504,28 @@ msgstr ""
 msgid "The seo settings have been saved"
 msgstr "De seo-instellingen zijn opgeslagen"
 
+msgid "There is already an account linked to this UvA account."
+msgstr "Er is al een account gekoppeld aan dit UvA-account."
+
+msgid ""
+"There is already an account linked to this UvA account. If you are sure "
+"that this is a mistake please send an email to the board."
+msgstr ""
+"Er is al een account gekoppeld aan dit UvA-account. Als je vermoed dat "
+"dit niet klopt, neem dan contact op met het bestuur."
+
 msgid "There is already another group with this e-mail address."
 msgstr "Er is al een groep met hetzelfde emailadres."
 
 msgid "There is already another group with this name."
 msgstr "Er is al een groep met dezelfde naam."
+
+msgid ""
+"There is no via account linked to this UvA account. On this page you can "
+"create a new via account that is linked to your UvA account."
+msgstr ""
+"Er is geen via-account gelinkt aan dit UvA-account. Op deze pagina kan je"
+" een nieuw via-account aanmaken dat gelinkt is aan je UvA-account."
 
 msgid ""
 "These details are taken from your account. You can change them on your "
@@ -1573,6 +1642,9 @@ msgstr "Gebruikers"
 msgid "Using the bookstore requires an account."
 msgstr "Voor het gebruik van de boekenwinkel is een account vereist."
 
+msgid "UvA Account"
+msgstr "UvA Account"
+
 msgid "Vacancy created"
 msgstr "Vacature aangemaakt"
 
@@ -1602,6 +1674,9 @@ msgstr "Weergeven"
 
 msgid "View Pimpy"
 msgstr "Pimpy weergeven"
+
+msgid "View all available forms"
+msgstr ""
 
 msgid "View groups"
 msgstr "Groepen weergeven"
@@ -1663,9 +1738,6 @@ msgstr "Wil je bij de commissie?"
 msgid "Would you like to recieve information from companies?"
 msgstr "Wil je informatie van bedrijven ontvangen?"
 
-msgid "Write access to your Pimpy data"
-msgstr "Schrijf rechten tot je Pimpy data"
-
 msgid "Written by"
 msgstr "Geschreven door"
 
@@ -1674,6 +1746,10 @@ msgstr "Verkeerd antwoord"
 
 msgid "Yes"
 msgstr "Ja"
+
+#, python-format
+msgid "Yes, I agree to the %(link)s."
+msgstr "Ja, ik ga akkoord met het %(link)s."
 
 msgid "Yes, I have finished studying"
 msgstr "Ja, ik ben klaar met studeren"
@@ -1701,6 +1777,9 @@ msgstr ""
 msgid "You have to be logged in to fill in a form"
 msgstr "Je moet ingelogd zijn om een formulier in te vullen."
 
+msgid "You must authenticate with a student UvA account to register."
+msgstr ""
+
 msgid "You must be logged in to view this page."
 msgstr "Je moet ingelogd zijn om deze pagina te bekijken."
 
@@ -1710,6 +1789,12 @@ msgstr "Je moet ingelogd zijn om je te registeren voor een activiteit."
 msgid "You need to be at least 16 years old."
 msgstr "Je moet ten minste 16 jaar oud zijn."
 
+msgid "You need to be logged in to link an account."
+msgstr "Je moet ingelogd zijn om een account te koppelen."
+
+msgid "You need to be logged in to link your account."
+msgstr "Je moet ingelogd zijn om je account te koppelen."
+
 msgid "You need to be logged in to set a permanent language."
 msgstr "Je moet ingelogd zijn om een permanente taal in te stellen."
 
@@ -1718,6 +1803,12 @@ msgstr ""
 
 msgid "Your account has been disabled, you are not allowed to log in"
 msgstr "Je account is gedeactiveerd, je mag niet inloggen"
+
+msgid "Your account is already linked to a UvA account."
+msgstr "Je account is al gekoppeld aan een UvA-account."
+
+msgid "Your account is now linked to this UvA account."
+msgstr "Je account is nu gekoppeld aan dit UvA-account."
 
 msgid "Your current password does not match."
 msgstr "Huidig wachtwoord klopt niet."
@@ -2360,6 +2451,9 @@ msgstr ""
 #~ msgid "Wrong format examination."
 #~ msgstr "Fout formaat tentamen."
 
+#~ msgid "By clicking 'Register', you agree to our %(link)s."
+#~ msgstr "Door op 'Registreer' te klikken ga je akkoord met ons %(link)s."
+
 #~ msgid "Dutch name requires Dutch description and vice versa"
 #~ msgstr "Nederlandse naam vereist Nederlandse beschrijving en vica versa."
 
@@ -2368,4 +2462,41 @@ msgstr ""
 
 #~ msgid "English name requires English description and vice versa"
 #~ msgstr "Engelse naam vereist Engelse beschrijving en vica versa."
+
+#~ msgid "An unknown error occurred. The IT team has been notified."
+#~ msgstr ""
+
+#~ msgid "Linked to UvA account."
+#~ msgstr ""
+
+#~ msgid "Linked to this UvA account"
+#~ msgstr ""
+
+#~ msgid "Linked to this UvA account."
+#~ msgstr ""
+
+#~ msgid "Unlink"
+#~ msgstr ""
+
+#~ msgid "Create application"
+#~ msgstr "Applicatie aanmaken"
+
+#~ msgid "Read access to your Pimpy data"
+#~ msgstr "Lees rechten tot je Pimpy data"
+
+#~ msgid "Write access to your Pimpy data"
+#~ msgstr "Schrijf rechten tot je Pimpy data"
+
+#~ msgid ""
+#~ "There is no via account linked to"
+#~ " this UvA account. You must link "
+#~ "your via-account by confirming your "
+#~ "student ID before you can log in"
+#~ " with your UvA-net ID."
+#~ msgstr ""
+#~ "Er is geen via-account gelinkt aan"
+#~ " dit UvA-account. Je moet je "
+#~ "via-acccount linken door je studentnummer"
+#~ " te bevestigen voordat je kan "
+#~ "inloggen met je UvA-net ID."
 
