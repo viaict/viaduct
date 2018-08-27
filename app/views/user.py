@@ -482,29 +482,37 @@ def sign_in():
 
 @blueprint.route('/sign-in/process-saml-response/', methods=['GET'])
 @response_headers({"X-Frame-Options": "SAMEORIGIN"})
-@saml_service.ensure_data_cleared
 def sign_in_saml_response():
+    redirect_to_sign_up = False
+
     redir_url = saml_service.get_redirect_url(url_for('home.home'))
 
-    # Redirect the user to the index page if he or she has been authenticated
-    # already.
-    if current_user.is_authenticated:
-        return redirect(redir_url)
-
-    if not saml_service.user_is_authenticated():
-        flash(_('Authentication failed. Please try again.'), 'danger')
-        return redirect(redir_url)
-
     try:
-        user = saml_service.get_user_by_uid()
-        login_user(user)
+        # Redirect the user to the index page if he or she has been
+        # authenticated already.
+        if current_user.is_authenticated:
+            return redirect(redir_url)
 
-    except (ResourceNotFoundException, ValidationException):
-        flash(_('There is no via account linked to this UvA account. '
-                'You must link your via-account by confirming your student ID '
-                'before you can log in with your UvA-net ID.'), 'danger')
+        if not saml_service.user_is_authenticated():
+            flash(_('Authentication failed. Please try again.'), 'danger')
+            return redirect(redir_url)
 
-    return redirect(redir_url)
+        try:
+            user = saml_service.get_user_by_uid()
+            login_user(user)
+
+        except (ResourceNotFoundException, ValidationException):
+            flash(_('There is no via account linked to this UvA account. '
+                    'On this page you can create a new via account that '
+                    'is linked to your UvA account.'))
+            redirect_to_sign_up = True
+            return redirect(url_for('user.sign_up_saml_response'))
+
+        return redirect(redir_url)
+    finally:
+        # Only clear the SAML data when we did not redirect to the sign up page
+        if not redirect_to_sign_up:
+            saml_service.clear_saml_data()
 
 
 @blueprint.route('/sign-out/')
