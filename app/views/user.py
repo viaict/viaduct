@@ -3,7 +3,6 @@ import json
 import re
 from csv import writer
 from datetime import datetime
-
 from flask import Blueprint
 from flask import flash, redirect, render_template, request, url_for, abort, \
     session
@@ -154,6 +153,7 @@ def edit(user_id, form_cls):
         if not user_id:
             user = User('_')
 
+        # TODO Move this into the service call.
         try:
             user.update_email(form.email.data.strip())
         except HttpError as e:
@@ -163,6 +163,7 @@ def edit(user_id, form_cls):
                 return edit_page()
             raise e
 
+        # Note: student id is updated separately.
         user.first_name = form.first_name.data.strip()
         user.last_name = form.last_name.data.strip()
         user.locale = form.locale.data
@@ -172,7 +173,6 @@ def edit(user_id, form_cls):
             user.favourer = form.favourer.data
             user.disabled = form.disabled.data
             user.alumnus = form.alumnus.data
-        user.student_id = form.student_id.data.strip()
         user.education_id = form.education_id.data
         user.birth_date = form.birth_date.data
         user.study_start = form.study_start.data
