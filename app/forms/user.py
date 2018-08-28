@@ -1,4 +1,6 @@
 # coding=utf-8
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from flask_babel import lazy_gettext as _  # noqa
 from flask_wtf import FlaskForm
 from flask_wtf.recaptcha import RecaptchaField, Recaptcha
@@ -11,13 +13,9 @@ from app import constants
 from app.forms.fields import EmailField
 from app.forms.util import FieldVerticalSplit
 
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
-
 
 class StudentIDField(StringField):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    pass
 
 
 class ResetPasswordForm(FlaskForm):
