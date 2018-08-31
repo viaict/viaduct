@@ -71,8 +71,8 @@ def set_confirmed_student_id(user, student_id):
     other_users = user_repository.find_all_users_with_unconfirmed_student_id(
         student_id)
 
-    for user in other_users:
-        user.student_id = None
+    for other_user in other_users:
+        other_user.student_id = None
 
     # Set the confirmed student ID of the user
     user.student_id = student_id
