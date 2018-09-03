@@ -127,10 +127,10 @@ class CustomForm(db.Model, BaseEntity):
 
         lst = [('Gevolgde formulieren',
                 custom_form_service.
-                get_active_followed_forms_by_user(current_user.id)),
+                get_active_followed_forms_by_user(current_user)),
                ('Actieve formulieren',
                 custom_form_service.
-                get_active_unfollowed_by_user(current_user.id))]
+                get_active_unfollowed_by_user(current_user))]
 
         if current is not None:
             cf = cls.query.get(current)
