@@ -38,6 +38,9 @@ class AuthorizationCodeGrant(grants.AuthorizationCodeGrant):
 
 
 class RefreshTokenGrant(grants.RefreshTokenGrant):
+
+    TOKEN_ENDPOINT_AUTH_METHODS = ['client_secret_basic', 'client_secret_post']
+
     def authenticate_refresh_token(self, refresh_token: str):
         item = oauth_repository.get_token_by_refresh_token(refresh_token)
         # define is_refresh_token_expired by yourself
