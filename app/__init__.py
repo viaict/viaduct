@@ -23,7 +23,7 @@ from .connexion_app import ConnexionFlaskApp
 from .extensions import (db, login_manager, cache, toolbar, jsglue,
                          oauth_server, cors, sentry, babel)
 
-version = 'v2.12.0.3'
+version = 'v2.12.0.4'
 
 
 logging.basicConfig(
