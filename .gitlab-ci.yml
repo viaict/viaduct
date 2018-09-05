@@ -53,6 +53,7 @@ miscellaneous:
    - "[ $(python manage.py db heads 2>/dev/null | grep head | wc -l) -lt 2 ]"
 
 release:
+  stage: release
   script:
     - docker pull $BRANCH_IMAGE
     - docker tag $BRANCH_IMAGE $RELEASE_IMAGE
