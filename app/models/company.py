@@ -8,7 +8,7 @@ class Company(db.Model, BaseEntity):
     __tablename__ = 'company'
 
     name = db.Column(db.String(200), unique=True)
-    description = db.Column(db.String(1024))
+    description = db.Column(db.Text())
     logo_file_id = db.Column(db.Integer, db.ForeignKey('file.id'),
                              nullable=True)
     website = db.Column(db.String(256))
