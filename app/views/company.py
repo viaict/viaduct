@@ -1,31 +1,40 @@
 import json
 from datetime import datetime
-
 from flask import Blueprint, flash, redirect, render_template, request, \
     url_for, abort
 from flask_babel import lazy_gettext as _
 from flask_login import current_user
 from sqlalchemy import or_, and_
+from typing import List
 
 from app import db
 from app.decorators import require_role
+from app.enums import FileCategory
 from app.forms import init_form
 from app.forms.company import CompanyForm, NewCompanyForm
 from app.models.company import Company
 from app.models.contact import Contact
 from app.models.location import Location
 from app.roles import Roles
-from app.service import role_service, file_service
+from app.service import role_service, file_service, company_service
 from app.utils.forms import flash_form_errors
-from app.enums import FileCategory
 
 blueprint = Blueprint('company', __name__, url_prefix='/companies')
+
+
+def get_company_url(company: Company) -> str:
+    if company.website:
+        return company.website
+    else:
+        return url_for('company.view', company_id=company.id)
 
 
 @blueprint.route('/get_companies/', methods=['GET'])
 def get_companies():
     vacancy_write = role_service.user_has_role(current_user,
                                                Roles.VACANCY_WRITE)
+
+    companies: List[Company]
     if not vacancy_write:
         companies = Company.query\
             .filter(and_(Company.contract_start_date < datetime.utcnow(),
@@ -65,7 +74,7 @@ def get_companies():
                 },
                 "expired": company.expired,
                 "logo": logo_url,
-                "view": url_for('company.view', company_id=company.id),
+                "view": get_company_url(company),
                 "contact": {
                     "email": company.contact.email,
                     "phone_nr": company.contact.phone_nr
@@ -132,7 +141,7 @@ def list(page=1):
 def view(company_id=None):
     """View a company."""
 
-    company = Company.query.get_or_404(company_id)
+    company = company_service.get_company_by_id(company_id)
     can_write = role_service.user_has_role(current_user, Roles.VACANCY_WRITE)
     return render_template('company/view.htm', company=company,
                            can_write=can_write)
@@ -141,11 +150,11 @@ def view(company_id=None):
 @blueprint.route('/create/', methods=['GET', 'POST'])
 @blueprint.route('/edit/<int:company_id>/', methods=['GET', 'POST'])
 @require_role(Roles.VACANCY_WRITE)
-def edit(company_id=None):
+def edit(company_id: int = None):
     """Create, view or edit a company."""
     # Select company.
     if company_id:
-        company = Company.query.get(company_id)
+        company = company_service.find_company_by_id(company_id)
     else:
         company = Company()
 
@@ -304,8 +313,8 @@ def create(company_id=None):
 
 
 @blueprint.route('/view_logo/<int:company_id>/', methods=['GET'])
-def view_logo(company_id):
-    company = Company.query.get_or_404(company_id)
+def view_logo(company_id: int):
+    company = company_service.get_company_by_id(company_id)
 
     if company.logo_file_id is None:
         return abort(404)
