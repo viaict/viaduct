@@ -1,5 +1,6 @@
 """
 This module contains a set of basic application errors.
+
 Any custom extensions of the exceptions should be a subclass of any of these
 classes.
 """

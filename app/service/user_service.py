@@ -3,7 +3,7 @@ from flask_babel import _
 
 from app.enums import FileCategory
 from app.exceptions.base import ResourceNotFoundException, \
-    ValidationException, AuthorizationException
+    ValidationException, AuthorizationException, BusinessRuleException
 from app.repository import user_repository
 from app.service import file_service, mail_service
 from app.utils import copernica
