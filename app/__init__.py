@@ -207,6 +207,8 @@ def init_oauth():
 
     oauth_server.register_grant(oauth_service.AuthorizationCodeGrant)
     oauth_server.register_grant(oauth_service.RefreshTokenGrant)
+    oauth_server.register_grant(oauth_service.PasswordGrant)
+
     oauth_server.register_grant(grants.ImplicitGrant)
     oauth_server.register_endpoint(oauth_service.RevocationEndpoint)
     oauth_server.register_endpoint(oauth_service.IntrospectionEndpoint)
