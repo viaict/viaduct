@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import bcrypt
 import json
 import re
 from csv import writer
@@ -18,14 +17,14 @@ from app.exceptions.base import ResourceNotFoundException, \
 from app.forms import init_form
 from app.forms.user import (EditUserForm, EditUserInfoForm, SignUpForm,
                             SignInForm, ResetPasswordForm, RequestPassword,
-                            ChangePasswordForm)
+                            ChangePasswordForm, EditUvALinkingForm)
 from app.models.activity import Activity
 from app.models.custom_form import CustomFormResult, CustomForm
 from app.models.education import Education
 from app.models.user import User
 from app.roles import Roles
 from app.service import password_reset_service, user_service, \
-    role_service, mail_service, file_service
+    role_service, file_service, saml_service
 from app.utils import copernica
 from app.utils.google import HttpError
 from app.utils.user import UserAPI
@@ -38,13 +37,6 @@ def load_user(user_id):
     # The hook used by the login manager to get the user from the database by
     # user ID.
     return user_service.get_user_by_id(user_id)
-
-
-@login_manager.unauthorized_handler
-def unauthorized_handler():
-    return redirect(
-        url_for("user.sign_in",
-                next=url_for("oauth.authorize", **request.args)))
 
 
 def view_single(user_id):
@@ -154,6 +146,7 @@ def edit(user_id, form_cls):
         if not user_id:
             user = User('_')
 
+        # TODO Move this into the service call.
         try:
             user.update_email(form.email.data.strip())
         except HttpError as e:
@@ -163,6 +156,7 @@ def edit(user_id, form_cls):
                 return edit_page()
             raise e
 
+        # Note: student id is updated separately.
         user.first_name = form.first_name.data.strip()
         user.last_name = form.last_name.data.strip()
         user.locale = form.locale.data
@@ -172,7 +166,6 @@ def edit(user_id, form_cls):
             user.favourer = form.favourer.data
             user.disabled = form.disabled.data
             user.alumnus = form.alumnus.data
-        user.student_id = form.student_id.data.strip()
         user.education_id = form.education_id.data
         user.birth_date = form.birth_date.data
         user.study_start = form.study_start.data
@@ -206,6 +199,54 @@ def edit(user_id, form_cls):
     return edit_page()
 
 
+@blueprint.route('/users/edit/<int:user_id>/student-id-linking',
+                 methods=['GET', 'POST'])
+@login_required
+@require_role(Roles.USER_WRITE)
+def edit_student_id_linking(user_id):
+    user = user_service.get_user_by_id(user_id)
+
+    form = EditUvALinkingForm(request.form, obj=user)
+
+    # Fix student_id_confirmed not being set...
+    if request.method == 'GET':
+        form.student_id_confirmed.data = user.student_id_confirmed
+
+    def edit_page():
+        return render_template('user/edit_student_id.htm',
+                               user=user, form=form)
+
+    if form.validate_on_submit():
+
+        if not form.student_id.data:
+            user_service.remove_student_id(user)
+        elif form.student_id_confirmed.data:
+            other_user = user_service.find_user_by_student_id(
+                form.student_id.data)
+
+            if other_user is not None and other_user != user:
+                error = _('The UvA account corresponding with this student ID '
+                          'is already linked to another user '
+                          '(%(name)s - %(email)s). Please unlink the account '
+                          'from the other user first before linking it '
+                          'to this user.', name=other_user.name,
+                          email=other_user.email)
+
+                form.student_id_confirmed.errors.append(error)
+
+                return edit_page()
+
+            user_service.set_confirmed_student_id(user, form.student_id.data)
+        else:
+            user_service.set_unconfirmed_student_id(user, form.student_id.data)
+
+        flash(_('Student ID information saved.'), 'success')
+
+        return redirect(url_for('.edit_user', user_id=user_id))
+
+    return edit_page()
+
+
 @blueprint.route('/users/edit/self/', methods=['GET', 'POST'])
 @login_required
 def edit_self():
@@ -223,6 +264,12 @@ def edit_user(user_id=None):
 @blueprint.route('/sign-up/', methods=['GET', 'POST'])
 @response_headers({"X-Frame-Options": "SAMEORIGIN"})
 def sign_up():
+    return render_template('user/sign_up_chooser.htm')
+
+
+@blueprint.route('/sign-up/manual/', methods=['GET', 'POST'])
+@response_headers({"X-Frame-Options": "SAMEORIGIN"})
+def sign_up_manual():
     # Redirect the user to the index page if he or she has been authenticated
     # already.
     if current_user.is_authenticated:
@@ -235,51 +282,141 @@ def sign_up():
     form.education_id.choices = [(e.id, e.name) for e in educations]
 
     if form.validate_on_submit():
-        query = User.query.filter(User.email == form.email.data)
+        try:
+            user = user_service.register_new_user(
+                email=form.email.data,
+                password=form.password.data,
+                first_name=form.first_name.data,
+                last_name=form.last_name.data,
+                student_id=form.student_id.data,
+                education_id=form.education_id.data,
+                birth_date=form.birth_date.data,
+                study_start=form.study_start.data,
+                receive_information=form.receive_information.data,
+                phone_nr=form.phone_nr.data,
+                address=form.address.data,
+                zip_=form.zip.data,
+                city=form.city.data,
+                country=form.country.data,
+                locale=get_locale())
 
-        if query.count() > 0:
+            login_user(user)
+
+            flash(_('Welcome %(name)s! Your profile has been succesfully '
+                    'created and you have been logged in!',
+                    name=current_user.first_name), 'success')
+
+            return redirect(url_for('home.home'))
+
+        except BusinessRuleException:
             flash(_('A user with this e-mail address already exists'),
                   'danger')
-            return render_template('user/sign_up.htm', form=form)
-
-        user = User(form.email.data,
-                    bcrypt.hashpw(form.password.data.encode('utf-8'),
-                                  bcrypt.gensalt()),
-                    form.first_name.data,
-                    form.last_name.data, form.student_id.data,
-                    form.education_id.data, form.birth_date.data,
-                    form.study_start.data, form.receive_information.data)
-        user.phone_nr = form.phone_nr.data
-        user.address = form.address.data
-        user.zip = form.zip.data
-        user.city = form.city.data
-        user.country = form.country.data
-
-        db.session.add(user)
-        db.session.commit()
-
-        db.session.commit()
-
-        copernica.update_user(user, subscribe=True)
-
-        if get_locale() == 'nl':
-            mail_template = 'email/sign_up_nl.html'
-        else:
-            mail_template = 'email/sign_up_en.html'
-
-        mail_service.send_mail(
-            user.email, _('Welcome to via, %(name)s', name=user.first_name),
-            mail_template, user=user)
-
-        login_user(user)
-
-        flash(_('Welcome %(name)s! Your profile has been succesfully '
-                'created and you have been logged in!',
-                name=current_user.first_name), 'success')
-
-        return redirect(url_for('home.home'))
 
     return render_template('user/sign_up.htm', form=form)
+
+
+@blueprint.route('/sign-up/process-saml-response/', methods=['GET', 'POST'])
+@saml_service.ensure_data_cleared
+def sign_up_saml_response():
+    redir_url = saml_service.get_redirect_url(url_for('home.home'))
+
+    # Redirect the user to the index page if he or she has been authenticated
+    # already.
+    if current_user.is_authenticated:
+
+        # End the sign up session when it is still there somehow
+        if saml_service.sign_up_session_active():
+            saml_service.end_sign_up_session()
+
+        return redirect(redir_url)
+
+    if saml_service.sign_up_session_active():
+
+        # Delete the old sign up session when
+        # the user re-authenticates
+        if saml_service.user_is_authenticated():
+            saml_service.end_sign_up_session()
+
+        # Otherwise, refresh the timeout timestamp of the session
+        else:
+            saml_service.update_sign_up_session_timestamp()
+
+    form = SignUpForm(request.form)
+
+    # Add education.
+    educations = Education.query.all()
+    form.education_id.choices = [(e.id, e.name) for e in educations]
+
+    if not saml_service.sign_up_session_active():
+
+        if not saml_service.user_is_authenticated():
+            flash(_('Authentication failed. Please try again.'), 'danger')
+            return redirect(redir_url)
+
+        if not saml_service.user_is_student():
+            flash(_('You must authenticate with a student '
+                    'UvA account to register.'), 'danger')
+            return redirect(redir_url)
+
+        if saml_service.uid_is_linked_to_other_user():
+            flash(_('There is already an account linked to this UvA account. '
+                    'If you are sure that this is a mistake please send '
+                    'an email to the board.'), 'danger')
+            return redirect(redir_url)
+
+        # Start a new sign up session and pre-fill the form
+        saml_service.start_sign_up_session()
+        saml_service.fill_sign_up_form_with_saml_attributes(
+            form)
+
+    # When we encounter a GET request but a session is already active,
+    # this means that the user did a refresh without submitting the form.
+    # We redirect him/her to the SAML sign up, since otherwise all
+    # pre-filled data would be gone.
+    elif request.method == 'GET':
+        return redirect(url_for('saml.sign_up'))
+
+    else:
+        # Make sure that it is not possible to change the student id
+        form.student_id.data = \
+            saml_service.get_sign_up_session_linking_student_id()
+
+    if form.validate_on_submit():
+        try:
+            user = user_service.register_new_user(
+                email=form.email.data,
+                password=form.password.data,
+                first_name=form.first_name.data,
+                last_name=form.last_name.data,
+                student_id=form.student_id.data,
+                education_id=form.education_id.data,
+                birth_date=form.birth_date.data,
+                study_start=form.study_start.data,
+                receive_information=form.receive_information.data,
+                phone_nr=form.phone_nr.data,
+                address=form.address.data,
+                zip_=form.zip.data,
+                city=form.city.data,
+                country=form.country.data,
+                locale=get_locale(),
+                link_student_id=True)
+
+            login_user(user)
+
+            saml_service.end_sign_up_session()
+
+            flash(_('Welcome %(name)s! Your profile has been succesfully '
+                    'created and you have been logged in!',
+                    name=current_user.first_name), 'success')
+
+            return redirect(redir_url)
+
+        except BusinessRuleException:
+            flash(_('A user with this e-mail address already exists'),
+                  'danger')
+
+    return render_template('user/sign_up.htm', form=form,
+                           disable_student_id=True)
 
 
 @blueprint.route('/sign-in/', methods=['GET', 'POST'])
@@ -311,8 +448,9 @@ def sign_in():
             referer = request.headers.get('Referer', '')
 
             denied = (
-                re.match(r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),
-                         referer) is not None)
+                    re.match(
+                        r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),
+                        referer) is not None)
             denied_from = session.get('denied_from')
 
             if not denied:
@@ -336,18 +474,100 @@ def sign_in():
     return render_template('user/sign_in.htm', form=form)
 
 
+@blueprint.route('/sign-in/process-saml-response/', methods=['GET'])
+@response_headers({"X-Frame-Options": "SAMEORIGIN"})
+def sign_in_saml_response():
+    redirect_to_sign_up = False
+
+    redir_url = saml_service.get_redirect_url(url_for('home.home'))
+
+    try:
+        # Redirect the user to the index page if he or she has been
+        # authenticated already.
+        if current_user.is_authenticated:
+            return redirect(redir_url)
+
+        if not saml_service.user_is_authenticated():
+            flash(_('Authentication failed. Please try again.'), 'danger')
+            return redirect(redir_url)
+
+        try:
+            user = saml_service.get_user_by_uid()
+            login_user(user)
+
+        except (ResourceNotFoundException, ValidationException):
+            flash(_('There is no via account linked to this UvA account. '
+                    'On this page you can create a new via account that '
+                    'is linked to your UvA account.'))
+            redirect_to_sign_up = True
+            return redirect(url_for('user.sign_up_saml_response'))
+
+        return redirect(redir_url)
+    finally:
+        # Only clear the SAML data when we did not redirect to the sign up page
+        if not redirect_to_sign_up:
+            saml_service.clear_saml_data()
+
+
 @blueprint.route('/sign-out/')
 def sign_out():
     # Notify the login manager that the user has been signed out.
     logout_user()
-
-    flash(_('Captain\'s log succesfully ended.'), 'success')
 
     referer = request.headers.get('Referer')
     if referer:
         return redirect(referer)
 
     return redirect(url_for('home.home'))
+
+
+@blueprint.route('/process-account-linking')
+@saml_service.ensure_data_cleared
+def process_account_linking_saml_response():
+    redir_url = saml_service.get_redirect_url(url_for('home.home'))
+
+    # Check whether a user is linking his/her own account
+    # or an someone is linking another account
+    linking_current_user = saml_service.is_linking_user_current_user()
+
+    if not current_user.is_authenticated:
+        if linking_current_user:
+            flash(_('You need to be logged in to link your account.'),
+                  'danger')
+        else:
+            flash(_('You need to be logged in to link an account.'), 'danger')
+
+        return redirect(redir_url)
+
+    if not saml_service.user_is_authenticated():
+        flash(_('Authentication failed. Please try again.'), 'danger')
+        return redirect(redir_url)
+
+    if linking_current_user:
+        try:
+            saml_service.link_uid_to_user(current_user)
+            flash(_('Your account is now linked to this UvA account.'),
+                  'success')
+        except BusinessRuleException:
+            flash(_('There is already an account linked to this UvA account. '
+                    'If you are sure that this is a mistake please send '
+                    'an email to the board.'), 'danger')
+    else:
+        try:
+            link_user = saml_service.get_linking_user()
+            saml_service.link_uid_to_user(link_user)
+
+            flash(_('The account is now linked to this UvA account.'),
+                  'success')
+        except BusinessRuleException:
+            flash(_('There is already an account linked to this UvA account.'),
+                  'danger')
+        except ResourceNotFoundException:
+            # Should not happen normally
+            flash(_('Could not find the user to link this UvA account to.'),
+                  'danger')
+
+    return redirect(redir_url)
 
 
 @blueprint.route('/request_password/', methods=['GET', 'POST'])

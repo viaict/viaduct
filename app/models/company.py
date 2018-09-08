@@ -1,14 +1,14 @@
 from app import db
-from app.models.location import Location
-from app.models.contact import Contact
 from app.models.base_model import BaseEntity
+from app.models.contact import Contact
+from app.models.location import Location
 
 
 class Company(db.Model, BaseEntity):
     __tablename__ = 'company'
 
     name = db.Column(db.String(200), unique=True)
-    description = db.Column(db.String(1024))
+    description = db.Column(db.Text())
     logo_file_id = db.Column(db.Integer, db.ForeignKey('file.id'),
                              nullable=True)
     website = db.Column(db.String(256))
@@ -21,3 +21,5 @@ class Company(db.Model, BaseEntity):
                                lazy='dynamic'))
     contact = db.relationship(Contact, backref=db.backref('companies',
                               lazy='dynamic'))
+
+    expired: bool

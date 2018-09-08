@@ -1,9 +1,14 @@
 from app.exceptions.base import ResourceNotFoundException, \
     AuthorizationException
+from app.models.group import Group
 from app.repository import group_repository
 
 
-def get_group_by_id(group_id):
+def find_group_by_id(group_id: int) -> Group:
+    return group_repository.find_by_id(group_id)
+
+
+def get_group_by_id(group_id: int) -> Group:
     group = group_repository.find_by_id(group_id)
     if not group:
         raise ResourceNotFoundException("group", group_id)

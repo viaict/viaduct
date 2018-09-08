@@ -1,4 +1,4 @@
-FROM python:3.6-alpine AS development
+FROM python:3.6-alpine3.7 AS development
 WORKDIR /app
 
 # Ruby
@@ -13,13 +13,15 @@ RUN npm install -g grunt-cli clientjade jshint
 RUN npm install
 
 # Python
-RUN apk add -U postgresql-libs git libmagic libjpeg-turbo bash pcre
+RUN apk add -U postgresql-libs git libmagic libjpeg-turbo bash pcre \
+    libxml2 libxslt xmlsec
 RUN pip install --upgrade pip pip-tools
 
 # Install a virtual package with build dependencies voor pip install
 RUN apk add -U --virtual build-deps \
     python3-dev build-base linux-headers pcre-dev musl-dev \
-    postgresql-dev libffi-dev libjpeg-turbo-dev libressl-dev zlib-dev
+    postgresql-dev libffi-dev libjpeg-turbo-dev libressl-dev zlib-dev \
+    libxml2-dev libxslt-dev xmlsec-dev
 
 COPY requirements.in requirements.txt ./
 RUN pip-sync && \

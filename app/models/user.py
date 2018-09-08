@@ -4,6 +4,7 @@ from flask_login import UserMixin, AnonymousUserMixin
 from app import db, constants
 from app.models.base_model import BaseEntity
 from app.models.education import Education
+from app.service import group_service
 
 
 class AnonymousUser(AnonymousUserMixin):
@@ -77,6 +78,8 @@ class User(db.Model, UserMixin, BaseEntity):
     copernica_id = db.Column(db.Integer(), nullable=True)
     avatar_file_id = db.Column(db.Integer, db.ForeignKey('file.id'))
 
+    student_id_confirmed = db.Column(db.Boolean, default=False, nullable=False)
+
     def __init__(self, email=None, password=None, first_name=None,
                  last_name=None, student_id=None, education_id=None,
                  birth_date=None, study_start=None, receive_information=None):
@@ -127,6 +130,12 @@ class User(db.Model, UserMixin, BaseEntity):
             group.add_email_to_maillist(new_email)
 
         self.email = new_email
+
+    def member_of_group(self, group_id: int) -> bool:
+        group = group_service.find_group_by_id(group_id)
+        if group:
+            return group.has_user(self)
+        return False
 
     @property
     def name(self):

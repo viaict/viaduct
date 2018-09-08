@@ -20,7 +20,7 @@ from config import Config
 from .extensions import (db, login_manager, cache, toolbar, jsglue,
                          oauth_server, cors, sentry, babel)
 
-version = 'v2.11.1.1'
+version = 'v2.12.0.5'
 
 logging.basicConfig(
     format='[%(asctime)s] %(levelname)7s [%(name)s]: %(message)s',
@@ -202,6 +202,9 @@ def init_oauth():
         oauth_service.get_client_by_id)
 
     oauth_server.register_grant(oauth_service.AuthorizationCodeGrant)
+    oauth_server.register_grant(oauth_service.RefreshTokenGrant)
+    oauth_server.register_grant(oauth_service.PasswordGrant)
+
     oauth_server.register_grant(grants.ImplicitGrant)
     oauth_server.register_endpoint(oauth_service.RevocationEndpoint)
     oauth_server.register_endpoint(oauth_service.IntrospectionEndpoint)

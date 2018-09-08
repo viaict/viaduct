@@ -1,0 +1,11 @@
+{% from "macros/form.htm" import render_form %}
+
+{% extends "content.htm" %}
+
+{% block content %}
+
+<legend>{{ _('Student ID information of %(name)s', name=user.name) }}</legend>
+{{ render_form(form, back_button_url=url_for('user.edit_user', user_id=user.id)) }}
+
+{% endblock %}
+

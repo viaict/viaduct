@@ -1,4 +1,6 @@
 # coding=utf-8
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from flask_babel import lazy_gettext as _  # noqa
 from flask_wtf import FlaskForm
 from flask_wtf.recaptcha import RecaptchaField, Recaptcha
@@ -11,8 +13,9 @@ from app import constants
 from app.forms.fields import EmailField
 from app.forms.util import FieldVerticalSplit
 
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
+
+class StudentIDField(StringField):
+    pass
 
 
 class ResetPasswordForm(FlaskForm):
@@ -34,15 +37,16 @@ class BaseUserForm(FlaskForm):
     email = EmailField(_('E-mail adress'), validators=[InputRequired()])
     first_name = StringField(_('First name'), validators=[InputRequired()])
     last_name = StringField(_('Last name'), validators=[InputRequired()])
-    student_id = StringField(_('Student ID'), validators=[InputRequired()])
+    student_id = StudentIDField(_('Student ID'))
     education_id = SelectField(_('Education'), coerce=int)
     receive_information = BooleanField(_('Would you like to recieve '
                                          'information from companies?'))
 
-    address = StringField(_('Address'))
-    zip = StringField(_('Zip code'))
-    city = StringField(_('City'))
-    country = StringField(_('Country'), default='Nederland')
+    address = StringField(_('Address'), validators=[InputRequired()])
+    zip = StringField(_('Zip code'), validators=[InputRequired()])
+    city = StringField(_('City'), validators=[InputRequired()])
+    country = StringField(_('Country'), default='Nederland',
+                          validators=[InputRequired()])
 
     # Dates
     birth_date = DateField(_('Birthdate'), validators=[InputRequired()])
@@ -63,6 +67,8 @@ class SignUpForm(BaseUserForm, ResetPasswordForm):
         InputRequired()])
     recaptcha = RecaptchaField(
         validators=[Recaptcha(message='Check Recaptcha')])
+    agree_with_privacy_policy = BooleanField(validators=[
+        InputRequired(_('Please agree with our Privacy Policy.'))])
 
     register_split = FieldVerticalSplit([
         ['first_name', 'last_name', 'birth_date', 'address', 'zip', 'city',
@@ -71,7 +77,8 @@ class SignUpForm(BaseUserForm, ResetPasswordForm):
          'study_start', 'receive_information']
     ], large_spacing=True)
 
-    _RenderIgnoreFields = ['locale', 'phone_nr', 'avatar']
+    _RenderIgnoreFields = ['locale', 'phone_nr',
+                           'avatar', 'agree_with_privacy_policy']
 
     def validate_birth_date(self, field):
         sixteen_years_ago = datetime.now().date() - relativedelta(years=16)
@@ -93,8 +100,8 @@ class EditUserForm(BaseUserForm):
 
     register_split = FieldVerticalSplit([
         ['first_name', 'last_name', 'address', 'zip', 'city', 'country'],
-        ['email', 'student_id', 'education_id', 'birth_date',
-         'study_start', 'receive_information']
+        ['email', 'education_id', 'birth_date',
+         'study_start', 'receive_information', 'student_id']
     ], large_spacing=True)
 
     optional_split = FieldVerticalSplit([
@@ -119,7 +126,8 @@ class EditUserInfoForm(BaseUserForm):
 
     register_split = FieldVerticalSplit([
         ['first_name', 'last_name', 'address', 'zip', 'city', 'country'],
-        ['email', 'student_id', 'education_id', 'birth_date', 'study_start']
+        ['email', 'education_id', 'birth_date', 'study_start',
+         'receive_information', 'student_id']
     ], large_spacing=True)
 
     optional_split = FieldVerticalSplit([
@@ -131,12 +139,12 @@ class EditUserInfoForm(BaseUserForm):
 
 
 class SignInForm(FlaskForm):
-    email = EmailField(_('E-mail adress'), validators=[InputRequired()])
+    email = EmailField(_('E-mail address'), validators=[InputRequired()])
     password = PasswordField(_('Password'), validators=[InputRequired()])
 
 
 class RequestPassword(FlaskForm):
-    email = EmailField(_('E-mail adress'), validators=[InputRequired()])
+    email = EmailField(_('E-mail address'), validators=[InputRequired()])
     recaptcha = RecaptchaField(
         validators=[Recaptcha(message='Check Recaptcha')])
 
@@ -150,3 +158,15 @@ class ChangePasswordForm(ResetPasswordForm):
                            length=constants.MIN_PASSWORD_LENGTH)),
                 min=constants.MIN_PASSWORD_LENGTH)]
     )
+
+
+class EditUvALinkingForm(FlaskForm):
+    student_id = StringField(_('Student ID'), validators=[Optional()])
+    student_id_confirmed = BooleanField(
+        _('Link this account to the corresponding UvA account'))
+
+    def validate_student_id(self, field):
+        if self.student_id_confirmed.data and not field.data:
+            raise ValidationError(_
+                                  ('A student ID is required when this account'
+                                   ' is linked to a UvA account.'))
