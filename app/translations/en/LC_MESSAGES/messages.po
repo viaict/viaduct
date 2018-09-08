@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-08-27 12:01+0200\n"
+"POT-Creation-Date: 2018-09-08 16:05+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -767,8 +767,8 @@ msgid "Invalid language."
 msgstr ""
 
 msgid ""
-"It appears that account does not exist. Try again, or contact the website"
-" administration at ict (at) svia (dot) nl."
+"It appears that this account does not exist. Try again, or contact the "
+"website administration at ict (at) svia (dot) nl."
 msgstr ""
 
 msgid "Judging"
@@ -1465,6 +1465,9 @@ msgstr ""
 msgid "The password you entered appears to be incorrect."
 msgstr ""
 
+msgid "The response from SURFconext was invalid."
+msgstr ""
+
 msgid "The roles have been updated."
 msgstr ""
 
@@ -1472,6 +1475,22 @@ msgid "The scopes required by your application"
 msgstr ""
 
 msgid "The seo settings have been saved"
+msgstr ""
+
+#, python-format
+msgid ""
+"The student ID '%(student_id)s' corresponds with multiple via accounts, "
+"but is not yet confirmed. Please login with your email address and "
+"password to prove that you own one of these accounts and to confirm your "
+"student ID."
+msgstr ""
+
+#, python-format
+msgid ""
+"The student ID '%(student_id)s' corresponds with via account %(email)s, "
+"but is not yet confirmed. Please login with your email address and "
+"password to prove that you own this account and to confirm your student "
+"ID."
 msgstr ""
 
 msgid "There is already an account linked to this UvA account."
@@ -1496,6 +1515,10 @@ msgstr ""
 msgid ""
 "These details are taken from your account. You can change them on your "
 "account page."
+msgstr ""
+
+#, python-format
+msgid "This account's student ID does not match student ID '%(student_id)s'"
 msgstr ""
 
 msgid "This field is required."
