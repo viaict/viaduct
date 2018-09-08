@@ -462,22 +462,24 @@ def sign_in():
 
         except ResourceNotFoundException:
             flash(_(
-                'It appears that account does not exist. Try again, or contact'
-                ' the website administration at ict (at) svia (dot) nl.'))
+                'It appears that this account does not exist. Try again, or '
+                'contact the website administration at '
+                'ict (at) svia (dot) nl.'))
         except AuthorizationException:
             flash(_('Your account has been disabled, you are not allowed '
                     'to log in'), 'danger')
         except ValidationException:
-            flash(_('The password you entered appears to be incorrect.'))
+            flash(_('The password you entered appears to be incorrect.'),
+                  'danger')
 
-    return render_template('user/sign_in.htm', form=form)
+    return render_template('user/sign_in.htm', form=form,
+                           show_uvanetid_login=True)
 
 
 @blueprint.route('/sign-in/process-saml-response/', methods=['GET'])
 @response_headers({"X-Frame-Options": "SAMEORIGIN"})
 def sign_in_saml_response():
-    redirect_to_sign_up = False
-
+    has_redirected = False
     redir_url = saml_service.get_redirect_url(url_for('home.home'))
 
     try:
@@ -491,21 +493,108 @@ def sign_in_saml_response():
             return redirect(redir_url)
 
         try:
-            user = saml_service.get_user_by_uid()
-            login_user(user)
+            user = saml_service.get_user_by_uid(needs_confirmed=False)
+
+            if user.student_id_confirmed:
+                login_user(user)
+            else:
+                has_redirected = True
+                return redirect(url_for('user.sign_in_confirm_student_id'))
 
         except (ResourceNotFoundException, ValidationException):
             flash(_('There is no via account linked to this UvA account. '
                     'On this page you can create a new via account that '
                     'is linked to your UvA account.'))
-            redirect_to_sign_up = True
+            has_redirected = True
             return redirect(url_for('user.sign_up_saml_response'))
 
         return redirect(redir_url)
     finally:
         # Only clear the SAML data when we did not redirect to the sign up page
-        if not redirect_to_sign_up:
+        if not has_redirected:
             saml_service.clear_saml_data()
+
+
+@blueprint.route('/sign-in/confirm-student-id/', methods=['GET', 'POST'])
+@response_headers({"X-Frame-Options": "SAMEORIGIN"})
+def sign_in_confirm_student_id():
+    redir_url = saml_service.get_redirect_url(url_for('home.home'))
+
+    # Redirect the user if he or she has been authenticated already.
+    if current_user.is_authenticated:
+        return redirect(redir_url)
+
+    if not saml_service.user_is_authenticated():
+        flash(_('Authentication failed. Please try again.'), 'danger')
+        return redirect(redir_url)
+
+    student_id = saml_service.get_uid_from_attributes()
+
+    try:
+        users = user_service.get_all_users_with_unconfirmed_student_id(
+            student_id)
+    except ResourceNotFoundException:
+        saml_service.clear_saml_data()
+        return redirect(url_for('user.sign_in'))
+
+    form = SignInForm(request.form)
+
+    if form.validate_on_submit():
+
+        try:
+            user = user_service.get_user_by_login(form.email.data,
+                                                  form.password.data)
+
+            if user.student_id != student_id:
+                flash(_('This account\'s student ID does not match '
+                        'student ID \'%(student_id)s\'',
+                        student_id=student_id), 'danger')
+            else:
+                user_service.set_confirmed_student_id(user, student_id)
+
+                flash(_('Your account is now linked to this UvA account.'),
+                      'success')
+
+                # Notify the login manager that the user has been signed in.
+                login_user(user)
+
+                saml_service.clear_saml_data()
+
+                return redirect(redir_url)
+
+        except ResourceNotFoundException:
+            flash(_(
+                'It appears that this account does not exist. Try again, '
+                'or contact the website administration at '
+                'ict (at) svia (dot) nl.'))
+        except AuthorizationException:
+            flash(_('Your account has been disabled, you are not allowed '
+                    'to log in'), 'danger')
+        except ValidationException:
+            flash(_('The password you entered appears to be incorrect.'),
+                  'danger')
+
+    if len(users) == 1:
+        user = users[0]
+        [local_part, domain_part] = user.email.split('@')
+        local_part_hidden = re.sub(r'(?<=.{2}).(?=.{2})', '*', local_part)
+        domain_part_hidden = re.sub(r'(?<=.{2}).(?=.{3})', '*', domain_part)
+        email_hidden = '{}@{}'.format(local_part_hidden, domain_part_hidden)
+
+        flash(_('The student ID \'%(student_id)s\' corresponds with via '
+                'account %(email)s, but is not yet confirmed. Please login '
+                'with your email address and password to prove that you own '
+                'this account and to confirm your student ID.',
+                student_id=student_id, email=email_hidden))
+    else:
+        flash(_('The student ID \'%(student_id)s\' corresponds with '
+                'multiple via accounts, but is not yet confirmed. '
+                'Please login with your email address and password to prove '
+                'that you own one of these accounts and '
+                'to confirm your student ID.', student_id=student_id))
+
+    return render_template('user/sign_in.htm', form=form,
+                           show_uvanetid_login=False)
 
 
 @blueprint.route('/sign-out/')

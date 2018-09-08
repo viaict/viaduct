@@ -1,4 +1,4 @@
-from flask import Blueprint, url_for, redirect, flash
+from flask import Blueprint, url_for, redirect, flash, session, request
 from flask_login import current_user, login_required
 from flask_babel import _
 
@@ -7,8 +7,26 @@ from app.service import saml_service, user_service
 from app.decorators import require_role, response_headers
 from app.roles import Roles
 
+import re
+
 
 blueprint = Blueprint('saml', __name__, url_prefix='/saml')
+
+
+def get_redirect_url():
+    # If referer is empty for some reason (browser policy, user entered
+    # address in address bar, etc.), use empty string
+    referer = request.headers.get('Referer', '')
+
+    denied = (
+        re.match(r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),
+                 referer) is not None)
+    denied_from = session.get('denied_from')
+
+    if denied and denied_from:
+        return denied_from
+
+    return get_safe_redirect_url()
 
 
 @blueprint.before_request
@@ -24,7 +42,7 @@ def root():
 
 @blueprint.route('/sign-in/', methods=['GET'])
 def login():
-    redirect_to = get_safe_redirect_url()
+    redirect_to = get_redirect_url()
 
     if current_user.is_authenticated:
         return redirect(redirect_to)
@@ -47,7 +65,7 @@ def sign_up():
 @blueprint.route('/link-account/', methods=['GET'])
 @login_required
 def link_account():
-    redirect_to = get_safe_redirect_url()
+    redirect_to = get_redirect_url()
 
     if current_user.student_id_confirmed:
         flash(_('Your account is already linked to a UvA account.'), 'danger')
@@ -64,7 +82,7 @@ def link_account():
 @login_required
 @require_role(Roles.USER_WRITE)
 def link_other_account(user_id):
-    redirect_to = get_safe_redirect_url()
+    redirect_to = get_redirect_url()
 
     user = user_service.get_user_by_id(user_id)
     saml_service.set_linking_user(user)

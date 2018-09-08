@@ -35,11 +35,29 @@ def find_user_by_email(email):
     return db.session.query(User).filter_by(email=email).one_or_none()
 
 
-def find_user_by_student_id(student_id):
+def find_all_users_by_student_id(student_id):
     return db.session.query(User) \
-        .filter_by(student_id=student_id,
-                   student_id_confirmed=True) \
-        .one_or_none()
+        .filter_by(student_id=student_id) \
+        .all()
+
+
+def find_user_by_student_id(student_id, needs_confirmed=True):
+
+    def query_user(confirm_status):
+        return db.session.query(User) \
+            .filter_by(
+                student_id=student_id,
+                student_id_confirmed=confirm_status) \
+            .first()
+
+    confirmed_user = query_user(True)
+
+    # If we allow unconfirmed and did not find a confirmed user,
+    # try to find an unconfirmed user
+    if not needs_confirmed and not confirmed_user:
+        return query_user(False)
+
+    return confirmed_user
 
 
 def find_all_users_with_unconfirmed_student_id(student_id):

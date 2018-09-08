@@ -230,13 +230,13 @@ def get_uid_from_attributes():
     return value[0]
 
 
-def get_user_by_uid():
+def get_user_by_uid(needs_confirmed=True):
     uid = get_uid_from_attributes()
 
     if not uid:
         raise ValidationException('uid not found in SAML attributes')
 
-    user = user_service.get_user_by_student_id(uid)
+    user = user_service.get_user_by_student_id(uid, needs_confirmed)
 
     if user.disabled:
         raise AuthorizationException("User is disabled.")
