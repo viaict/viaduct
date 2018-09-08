@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2018-09-08 15:30+0200\n"
+"POT-Creation-Date: 2018-09-08 16:05+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language: nl\n"
@@ -1494,6 +1494,9 @@ msgstr "De pagina die je probeerde te verwijderen bestaat niet"
 
 msgid "The password you entered appears to be incorrect."
 msgstr "Het opgegeven wachtwoord lijkt incorrect."
+
+msgid "The response from SURFconext was invalid."
+msgstr "De response van SURFconext was ongeldig."
 
 msgid "The roles have been updated."
 msgstr "De rollen zijn geupdate."

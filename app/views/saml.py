@@ -6,6 +6,7 @@ from app.views import get_safe_redirect_url, redirect_back
 from app.service import saml_service, user_service
 from app.decorators import require_role, response_headers
 from app.roles import Roles
+from app.exceptions import ValidationException
 
 import re
 
@@ -95,7 +96,12 @@ def link_other_account(user_id):
 
 @blueprint.route('/acs/', methods=['POST'])
 def assertion_consumer_service():
-    saml_service.process_response(saml_info)
+    try:
+        saml_service.process_response(saml_info)
+    except ValidationException:
+        flash(_('The response from SURFconext was invalid.'), 'danger')
+
+        return redirect(saml_service.get_redirect_url(url_for('home.home')))
 
     redirect_url = saml_service.get_relaystate_redirect_url(
         saml_info, url_for('home.home'))
