@@ -7,12 +7,15 @@
 <legend>{{_('Log in')}}</legend>
 
 <div class="row">
+    {% if show_uvanetid_login %}
     <div class="col-md-4">
         <label>{{ _('UvA Account') }}</label>
         {{ render_uvanetid_signin_button(_('Log in with UvA-net ID'), href=url_for('saml.login')) }}
     </div>
-
     <div class="col-md-8 email-login-tab">
+    {% else %}
+    <div class="col-md-12">
+    {% endif %}
     {{ render_form(form) }}
     <ul class='list-unstyled' id='dropmenu-list'>
         <li><a href="{{ url_for('user.sign_up')}}">{{_('Register new user')}}</a></li>

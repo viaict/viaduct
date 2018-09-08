@@ -44,18 +44,41 @@ def find_by_id(user_id):
     return user_repository.find_by_id(user_id)
 
 
-def find_user_by_student_id(student_id):
+def find_user_by_student_id(student_id, needs_confirmed=True):
     """Retrieve the user or return None."""
-    return user_repository.find_user_by_student_id(student_id)
+    return user_repository.find_user_by_student_id(
+        student_id, needs_confirmed)
 
 
-def get_user_by_student_id(student_id):
+def get_user_by_student_id(student_id, needs_confirmed=True):
     """Retrieve the user by student id, throw error if not found."""
-    user = find_user_by_student_id(student_id)
+    user = find_user_by_student_id(student_id, needs_confirmed)
     if not user:
         raise ResourceNotFoundException("user", student_id)
 
     return user
+
+
+def find_all_users_with_unconfirmed_student_id(student_id):
+    """Retrieve all users with an unconfirmed student id."""
+    return user_repository.find_all_users_with_unconfirmed_student_id(
+        student_id)
+
+
+def get_all_users_with_unconfirmed_student_id(student_id):
+    """
+    Retrieve all users with an unconfirmed student id.
+
+    throw error if not found.
+    """
+
+    users = user_repository.find_all_users_with_unconfirmed_student_id(
+        student_id)
+
+    if len(users) == 0:
+        raise ResourceNotFoundException("users", student_id)
+
+    return users
 
 
 def set_confirmed_student_id(user, student_id):
