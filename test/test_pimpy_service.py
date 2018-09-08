@@ -4,8 +4,8 @@ from flask_babel import lazy_gettext as _
 from unittest.mock import patch, Mock, ANY
 
 from app.enums import PimpyTaskStatus
-from app.exceptions import ValidationException, ResourceNotFoundException, \
-    InvalidMinuteException
+from app.exceptions.base import ValidationException, ResourceNotFoundException
+from app.exceptions.pimpy import InvalidMinuteException
 from app.models.group import Group
 from app.models.pimpy import Task
 from app.models.user import User

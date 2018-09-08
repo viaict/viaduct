@@ -4,7 +4,8 @@ from unittest.mock import patch, MagicMock
 import bcrypt
 from io import StringIO
 
-from app.exceptions import ResourceNotFoundException, AuthorizationException, \
+from app.exceptions.base import ResourceNotFoundException, \
+    AuthorizationException, \
     ValidationException
 from app.models.user import User
 from app.models.file import File

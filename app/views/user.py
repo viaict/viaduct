@@ -12,8 +12,8 @@ from io import StringIO
 
 from app import db, login_manager, get_locale
 from app.decorators import require_role, response_headers
-from app.exceptions import ResourceNotFoundException, AuthorizationException, \
-    ValidationException, BusinessRuleException
+from app.exceptions.base import ResourceNotFoundException, \
+    AuthorizationException, ValidationException, BusinessRuleException
 from app.forms import init_form
 from app.forms.user import (EditUserForm, EditUserInfoForm, SignUpForm,
                             SignInForm, ResetPasswordForm, RequestPassword,
@@ -355,7 +355,7 @@ def sign_up_saml_response():
 
         if not saml_service.user_is_student():
             flash(_('You must authenticate with a student '
-                  'UvA account to register.'), 'danger')
+                    'UvA account to register.'), 'danger')
             return redirect(redir_url)
 
         if saml_service.uid_is_linked_to_other_user():
@@ -447,9 +447,9 @@ def sign_in():
             # address in address bar, etc.), use empty string
             referer = request.headers.get('Referer', '')
 
-            denied = (
-                re.match(r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),
-                         referer) is not None)
+            denied = (re.match(
+                r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),
+                referer) is not None)
             denied_from = session.get('denied_from')
 
             if not denied:

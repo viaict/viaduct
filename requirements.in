@@ -18,7 +18,6 @@ Flask-Restful
 Flask-OAuthlib
 Flask-Script
 Flask-SQLAlchemy
-Flask-Swagger-UI
 Flask-WTF
 authlib
 fuzzywuzzy
@@ -32,7 +31,6 @@ Pillow
 psycopg2
 py-bcrypt
 pyflakes
-pymysql
 pyopenssl           # For the p12 decryption in the google library.
 PyPDF2
 python-dateutil
@@ -44,7 +42,6 @@ requests
 speaklater
 SQLAlchemy
 Unidecode
-validictory
 watchdog
 WTForms
 python3-saml

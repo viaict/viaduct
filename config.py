@@ -83,6 +83,8 @@ class Config(object):
         self.DEBUG_TB_INTERCEPT_REDIRECTS = False
         self.SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+        self.JSON_SORT_KEYS = False
+
         # Authlib
         self.OAUTH2_REFRESH_TOKEN_GENERATOR = True
 

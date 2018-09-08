@@ -1,11 +1,10 @@
 from authlib.flask.oauth2 import current_token
-from flask_restful import Resource, abort
+from flask_restful import Resource
 from marshmallow import Schema, fields, RAISE, pre_dump, validate, \
     ValidationError
 
 from app import Roles
 from app.decorators import require_oauth, require_role, json_schema
-from app.exceptions import ValidationException
 from app.oauth_scopes import Scopes
 from app.service import pimpy_service, group_service
 
@@ -106,25 +105,21 @@ class TaskListResource(Resource):
     @require_role(Roles.PIMPY_WRITE)
     @json_schema(schema_post)
     def post(self, task: dict):
+        group_id = task['group_id']
 
-        # Check group permissions
-        group = group_service.get_group_by_id(task['group_id'])
-        if group not in group_service.get_groups_for_user(current_token.user):
-            # TODO Centralize the errors in the application.
-            abort(403, error=f'User not in group identified with {group.name}')
+        group_service.check_user_member_of_group(current_token.user, group_id)
 
-        try:
-            new_task = pimpy_service.add_task_by_user_string(
-                title=task['title'],
-                content=task['content'],
-                group_id=group.id,
-                users_text=','.join(task['users_names']),
-                line=None,
-                minute=None,
-                status=task['status'])
-            return self.schema_post.dump(new_task), 201
-        except ValidationException as e:
-            abort(409, errors=e.details)
+        group = group_service.get_group_by_id(group_id)
+
+        new_task = pimpy_service.add_task_by_user_string(
+            title=task['title'],
+            content=task['content'],
+            group_id=group.id,
+            users_text=','.join(task['users_names']),
+            line=None,
+            minute=None,
+            status=task['status'])
+        return self.schema_post.dump(new_task), 201
 
 
 class GroupTaskListResource(Resource):
@@ -133,9 +128,7 @@ class GroupTaskListResource(Resource):
     @require_oauth(Scopes.pimpy)
     @require_role(Roles.PIMPY_READ)
     def get(self, group_id):
-        if not current_token.user.member_of_group(group_id):
-            # TODO Centralize the errors in the application.
-            abort(403, error=f'user not in group identified with {group_id}')
+        group_service.check_user_member_of_group(current_token.user, group_id)
 
         tasks = pimpy_service.get_all_tasks_for_group(group_id)
         tasks = [task.task for task in tasks]

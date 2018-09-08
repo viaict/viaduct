@@ -30,7 +30,7 @@ logging.basicConfig(
 app = Flask(__name__)
 app.logger_name = 'app.flask'
 app.logger.setLevel(logging.NOTSET)
-api = Api(app=app)
+rest_api = Api(app=app)
 
 _logger = logging.getLogger('app')
 _logger.setLevel(logging.DEBUG)

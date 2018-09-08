@@ -1,24 +1,21 @@
+from collections import namedtuple
+
+import logging
+from datetime import datetime as dt, timedelta
+from flask import session, request
+from flask_login import current_user
+from functools import wraps
+from onelogin.saml2.auth import OneLogin_Saml2_Auth
+from onelogin.saml2.utils import OneLogin_Saml2_Utils
+from urllib.parse import urlparse
+
 from app import app, constants
-from app.exceptions import ValidationException, AuthorizationException, \
+from app.exceptions.base import ValidationException, AuthorizationException, \
     BusinessRuleException
 from app.service import user_service
 
-from flask import session, request
-from flask_login import current_user
-
-from functools import wraps
-from collections import namedtuple
-from urllib.parse import urlparse
-from datetime import datetime as dt, timedelta
-import logging
-
-from onelogin.saml2.auth import OneLogin_Saml2_Auth
-from onelogin.saml2.utils import OneLogin_Saml2_Utils
-
-
 _logger = logging.getLogger(__name__)
 SAMLInfo = namedtuple('SAMLInfo', ['auth', 'req'])
-
 
 # Session keys
 
@@ -140,7 +137,7 @@ def process_response(saml_info):
 
     if errors:
         msg = 'One or more errors occurred during SAML response processing: ' \
-            + saml_auth.get_last_error_reason()
+              + saml_auth.get_last_error_reason()
 
         _logger.error(msg)
         raise ValidationException(msg)
@@ -327,8 +324,8 @@ def start_sign_up_session():
 
 def sign_up_session_active():
     if SESSION_SAML_SIGN_UP_SESSION in session:
-        if dt.now() - session[SESSION_SAML_SIGN_UP_SESSION][
-                SIGN_UP_SESSION_TIME_TOUCHED] < SIGN_UP_SESSION_TIMEOUT:
+        if (dt.now() - session[SESSION_SAML_SIGN_UP_SESSION][
+                SIGN_UP_SESSION_TIME_TOUCHED] < SIGN_UP_SESSION_TIMEOUT):
             return True
 
     return False

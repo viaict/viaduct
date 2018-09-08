@@ -2,8 +2,8 @@ import bcrypt
 from flask_babel import _
 
 from app.enums import FileCategory
-from app.exceptions import ResourceNotFoundException, ValidationException, \
-    AuthorizationException, BusinessRuleException
+from app.exceptions.base import ResourceNotFoundException, \
+    ValidationException, AuthorizationException, BusinessRuleException
 from app.repository import user_repository
 from app.service import file_service, mail_service
 from app.utils import copernica
@@ -194,7 +194,6 @@ def register_new_user(email, password, first_name, last_name, student_id,
                       education_id, birth_date, study_start,
                       receive_information, phone_nr, address,
                       zip_, city, country, locale, link_student_id=False):
-
     if find_user_by_email(email) is not None:
         raise BusinessRuleException(
             'A user with the same email address already exists.')

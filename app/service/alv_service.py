@@ -1,6 +1,6 @@
 from app.enums import FileCategory
 from app.repository import alv_repository
-from app.views.errors import ResourceNotFoundException
+from app.exceptions.base import ResourceNotFoundException
 from app.service import file_service
 
 from werkzeug.utils import secure_filename
