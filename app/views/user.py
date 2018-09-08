@@ -447,10 +447,9 @@ def sign_in():
             # address in address bar, etc.), use empty string
             referer = request.headers.get('Referer', '')
 
-            denied = (
-                    re.match(
-                        r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),
-                        referer) is not None)
+            denied = (re.match(
+                r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),
+                referer) is not None)
             denied_from = session.get('denied_from')
 
             if not denied:
