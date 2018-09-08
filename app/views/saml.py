@@ -43,6 +43,9 @@ def root():
 
 @blueprint.route('/sign-in/', methods=['GET'])
 def login():
+    """
+    Initiate a login with SURFconext
+    """
     redirect_to = get_redirect_url()
 
     if current_user.is_authenticated:
@@ -56,6 +59,13 @@ def login():
 
 @blueprint.route('/sign-up/', methods=['GET'])
 def sign_up():
+    """
+    Initiate a sign-up session with SURFconext.
+
+    Initiate a sign-up session by first letting the user log in via SURFconext
+    to partially pre-fill the sign-up form.
+    """
+
     if current_user.is_authenticated:
         return redirect_back()
 
@@ -66,6 +76,13 @@ def sign_up():
 @blueprint.route('/link-account/', methods=['GET'])
 @login_required
 def link_account():
+    """
+    Let a user link his/her account.
+
+    Let the currently logged in user log in in SURFconext to
+    link his/her via account to his UvA account.
+    """
+
     redirect_to = get_redirect_url()
 
     if current_user.student_id_confirmed:
@@ -83,6 +100,13 @@ def link_account():
 @login_required
 @require_role(Roles.USER_WRITE)
 def link_other_account(user_id):
+    """
+    Link the account of another user
+
+    Let a user log in via SURFconext to link that UvA account to the via
+    account with id user_id.
+    """
+
     redirect_to = get_redirect_url()
 
     user = user_service.get_user_by_id(user_id)
@@ -96,6 +120,14 @@ def link_other_account(user_id):
 
 @blueprint.route('/acs/', methods=['POST'])
 def assertion_consumer_service():
+    """
+    The Assertion Consumer Service endpoint for SAML IDP responses.
+
+    This endpoint receives and processes the SAML response from SURFconext
+    and then redirects to the handler set by initiate_login
+    (which saves it in the RelayState parameter of the SAML request).
+    """
+
     try:
         saml_service.process_response(saml_info)
     except ValidationException:
@@ -113,4 +145,8 @@ def assertion_consumer_service():
 @response_headers({'Content-Type': 'application/xml',
                    'Content-Disposition': 'inline; filename="metadata.xml"'})
 def metadata():
+    """
+    Builds the metadata XML and outputs it.
+    """
+
     return saml_service.build_metadata(saml_info)
