@@ -35,12 +35,6 @@ def find_user_by_email(email):
     return db.session.query(User).filter_by(email=email).one_or_none()
 
 
-def find_all_users_by_student_id(student_id):
-    return db.session.query(User) \
-        .filter_by(student_id=student_id) \
-        .all()
-
-
 def find_user_by_student_id(student_id, needs_confirmed=True):
 
     def query_user(confirm_status):
