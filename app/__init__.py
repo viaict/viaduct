@@ -1,6 +1,5 @@
 import sys
 
-import connexion
 import datetime
 import logging
 import mimetypes
@@ -11,7 +10,6 @@ from flask import Flask, request, session
 from flask.json import JSONEncoder as BaseEncoder
 from flask_login import current_user
 from flask_restful import Api
-from flask_swagger_ui import get_swaggerui_blueprint
 from hashfs import HashFS
 from speaklater import _LazyString  # noqa
 
@@ -19,12 +17,10 @@ from app import constants
 from app.roles import Roles
 from app.utils.import_module import import_module
 from config import Config
-from .connexion_app import ConnexionFlaskApp
 from .extensions import (db, login_manager, cache, toolbar, jsglue,
                          oauth_server, cors, sentry, babel)
 
-version = 'v2.12.0.4'
-
+version = 'v2.12.0.5'
 
 logging.basicConfig(
     format='[%(asctime)s] %(levelname)7s [%(name)s]: %(message)s',
@@ -41,7 +37,6 @@ _logger.setLevel(logging.DEBUG)
 
 logging.getLogger('werkzeug').setLevel(logging.DEBUG)
 logging.getLogger('authlib').setLevel(logging.DEBUG)
-
 
 hashfs = HashFS('app/uploads/')
 mimetypes.init()
@@ -180,6 +175,7 @@ def init_app(query_settings=True, debug=False):
                 return o.isoformat()
 
             return BaseEncoder.default(self, o)
+
     app.json_encoder = JSONEncoder
 
     from app import api  # noqa
@@ -189,7 +185,7 @@ def init_app(query_settings=True, debug=False):
     from app.models.user import AnonymousUser  # noqa
     login_manager.anonymous_user = AnonymousUser
 
-    return get_patched_api_app()
+    return app
 
 
 def init_oauth():
@@ -207,52 +203,11 @@ def init_oauth():
 
     oauth_server.register_grant(oauth_service.AuthorizationCodeGrant)
     oauth_server.register_grant(oauth_service.RefreshTokenGrant)
+    oauth_server.register_grant(oauth_service.PasswordGrant)
+
     oauth_server.register_grant(grants.ImplicitGrant)
     oauth_server.register_endpoint(oauth_service.RevocationEndpoint)
     oauth_server.register_endpoint(oauth_service.IntrospectionEndpoint)
 
     ResourceProtector.register_token_validator(
         oauth_service.BearerTokenValidator())
-
-
-def get_patched_api_app():
-    # URL for exposing Swagger UI (without trailing '/')
-    swagger_url = '/api/docs'
-
-    # The API url defined by connexion.
-    api_urls = [{"name": "token", "url": "/api/token/swagger.json"}]
-
-    swaggerui_blueprint = get_swaggerui_blueprint(
-        swagger_url,
-        api_urls[0]["url"],
-        config={  # Swagger UI config overrides
-            'app_name': "Study Association via - Public API documentation",
-            'urls': api_urls
-        },
-        oauth_config={
-            'clientId': "swagger",
-        }
-    )
-    app.register_blueprint(swaggerui_blueprint, url_prefix=swagger_url)
-
-    def add_api(patched_app, name):
-        kwargs = {
-            "protocol": "http" if patched_app.app.debug else "https",
-        }
-        with open("./app/swagger/swagger-{}.yaml".format(name), "w") as f:
-            a = patched_app.app.jinja_env \
-                .get_template("swagger/{}.yaml"
-                              .format(name)).render(**kwargs)
-            f.write(a)
-
-        patched_app.add_api(
-            './swagger-{}.yaml'.format(name),
-            base_path="/api/{}".format(name), validate_responses=True,
-            resolver=connexion.RestyResolver('app.api.{}'.format(name)),
-            pythonic_params=True, strict_validation=True)
-
-    connexion_app = ConnexionFlaskApp(
-        __name__, app, specification_dir='swagger/', swagger_ui=False)
-
-    add_api(connexion_app, "token")
-    return connexion_app

@@ -1,13 +1,17 @@
+import logging
 from authlib.specs import rfc6750, rfc7662
 from authlib.specs import rfc7009
 from authlib.specs.rfc6749 import grants
 from flask import url_for
 from oauthlib.common import generate_token
 
-from app.exceptions import BusinessRuleException, ResourceNotFoundException
+from app.exceptions import BusinessRuleException, ResourceNotFoundException, \
+    DetailedException
 from app.oauth_scopes import Scopes
 from app.repository import oauth_repository
 from app.service import user_service
+
+_logger = logging.getLogger(__name__)
 
 
 class AuthorizationCodeGrant(grants.AuthorizationCodeGrant):
@@ -38,7 +42,6 @@ class AuthorizationCodeGrant(grants.AuthorizationCodeGrant):
 
 
 class RefreshTokenGrant(grants.RefreshTokenGrant):
-
     TOKEN_ENDPOINT_AUTH_METHODS = ['client_secret_basic', 'client_secret_post']
 
     def authenticate_refresh_token(self, refresh_token: str):
@@ -62,6 +65,17 @@ class BearerTokenValidator(rfc6750.BearerTokenValidator):
         return token.revoked
 
 
+class PasswordGrant(grants.ResourceOwnerPasswordCredentialsGrant):
+    TOKEN_ENDPOINT_AUTH_METHODS = ['client_secret_basic', 'client_secret_post']
+
+    def authenticate_user(self, email, password):
+        try:
+            return user_service.get_user_by_login(
+                email=email, password=password)
+        except DetailedException as e:
+            _logger.info("Invalid credentials for password grant.", e)
+
+
 def _query_token(token, token_type_hint, client):
     if token_type_hint == 'access_token':
         return oauth_repository.get_token_by_access_token(
@@ -80,7 +94,6 @@ def _query_token(token, token_type_hint, client):
 
 
 class RevocationEndpoint(rfc7009.RevocationEndpoint):
-
     CLIENT_AUTH_METHODS = ['none', 'client_secret_post', 'client_secret_basic']
 
     def query_token(self, token, token_type_hint, client):
@@ -91,7 +104,6 @@ class RevocationEndpoint(rfc7009.RevocationEndpoint):
 
 
 class IntrospectionEndpoint(rfc7662.IntrospectionEndpoint):
-
     CLIENT_AUTH_METHODS = ['none', 'client_secret_post', 'client_secret_basic']
 
     def query_token(self, token, token_type_hint, client):

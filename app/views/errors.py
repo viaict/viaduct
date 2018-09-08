@@ -1,8 +1,5 @@
 import re
 import werkzeug.exceptions
-from connexion.apis.flask_api import FlaskApi
-from connexion.exceptions import ProblemException
-from connexion.problem import problem
 from flask import flash, request, url_for, render_template, redirect, \
     session, jsonify
 from flask_babel import _
@@ -47,16 +44,10 @@ def handle_api_error(e):
     if not isinstance(e, werkzeug.exceptions.HTTPException):
         e = werkzeug.exceptions.InternalServerError()
 
-    response = problem(title=e.name,
-                       detail=e.description,
-                       status=e.code)
-
-    return FlaskApi.get_response(response)
-
-
-@app.errorhandler(ProblemException)
-def connexion_problem_exception_handler(e):
-    return FlaskApi.get_response(e.to_problem())
+    return jsonify({"title": e.name,
+                    "status": e.code,
+                    "detail": e.description,
+                    "type": "about:blank"}), e.code
 
 
 @app.errorhandler(DetailedException)

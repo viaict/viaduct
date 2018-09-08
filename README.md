@@ -1,4 +1,4 @@
-# Viaduct v2.12.0.4
+# Viaduct v2.12.0.5
 Versioning works as follows: vSYSTEM.FEATURE.IMPROVEMENT.BUG-/HOTFIX
 
 ## Tutorial

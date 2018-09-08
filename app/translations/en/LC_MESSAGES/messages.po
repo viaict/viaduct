@@ -179,9 +179,6 @@ msgstr ""
 msgid "Cannot find parent navigation entry."
 msgstr ""
 
-msgid "Captain's log succesfully ended."
-msgstr "."
-
 msgid "Chairman"
 msgstr ""
 
