@@ -43,9 +43,7 @@ def root():
 
 @blueprint.route('/sign-in/', methods=['GET'])
 def login():
-    """
-    Initiate a login with SURFconext
-    """
+    """Initiate a login with SURFconext."""
     redirect_to = get_redirect_url()
 
     if current_user.is_authenticated:
@@ -101,7 +99,7 @@ def link_account():
 @require_role(Roles.USER_WRITE)
 def link_other_account(user_id):
     """
-    Link the account of another user
+    Link the account of another user.
 
     Let a user log in via SURFconext to link that UvA account to the via
     account with id user_id.
@@ -145,8 +143,6 @@ def assertion_consumer_service():
 @response_headers({'Content-Type': 'application/xml',
                    'Content-Disposition': 'inline; filename="metadata.xml"'})
 def metadata():
-    """
-    Builds the metadata XML and outputs it.
-    """
+    """Build the metadata XML and output it."""
 
     return saml_service.build_metadata(saml_info)
