@@ -185,9 +185,6 @@ msgstr ""
 msgid "Cannot find parent navigation entry."
 msgstr "Het bovenligende menu item kan niet gevonden worden."
 
-msgid "Captain's log succesfully ended."
-msgstr "Captain's log afsluiten gelukt."
-
 msgid "Chairman"
 msgstr "Voorzitter"
 

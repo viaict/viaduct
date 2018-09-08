@@ -513,8 +513,6 @@ def sign_out():
     # Notify the login manager that the user has been signed out.
     logout_user()
 
-    flash(_('Captain\'s log succesfully ended.'), 'success')
-
     referer = request.headers.get('Referer')
     if referer:
         return redirect(referer)
