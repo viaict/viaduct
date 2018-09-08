@@ -39,13 +39,6 @@ def load_user(user_id):
     return user_service.get_user_by_id(user_id)
 
 
-@login_manager.unauthorized_handler
-def unauthorized_handler():
-    return redirect(
-        url_for("user.sign_in",
-                next=url_for("oauth.authorize", **request.args)))
-
-
 def view_single(user_id):
     """
     View user for admins and edit for admins and users.
