@@ -43,7 +43,7 @@ def handle_api_error(e):
 
     return jsonify(ApplicationException.ErrorSchema().dump(
         {'title': e.name,
-         "message_": e.description,
+         "_message": e.description,
          "status": e.code,
          "type_": "about:blank"})), e.code
 

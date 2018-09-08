@@ -18,7 +18,7 @@ class ApplicationException(Exception):
         status = fields.Integer()
         title = fields.String()
         type = fields.Url(attribute='type_')
-        detail = fields.String(attribute='message_')
+        detail = fields.String(attribute='_message')
 
     status = 500
     title = "Internal Server Error"
