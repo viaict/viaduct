@@ -1,15 +1,13 @@
-from flask import Blueprint, url_for, redirect, flash, session, request
-from flask_login import current_user, login_required
-from flask_babel import _
-
-from app.views import get_safe_redirect_url, redirect_back
-from app.service import saml_service, user_service
-from app.decorators import require_role, response_headers
-from app.roles import Roles
-from app.exceptions import ValidationException
-
 import re
+from flask import Blueprint, url_for, redirect, flash, session, request
+from flask_babel import _
+from flask_login import current_user, login_required
 
+from app.decorators import require_role, response_headers
+from app.exceptions.base import ValidationException
+from app.roles import Roles
+from app.service import saml_service, user_service
+from app.views import get_safe_redirect_url, redirect_back
 
 blueprint = Blueprint('saml', __name__, url_prefix='/saml')
 
@@ -19,9 +17,8 @@ def get_redirect_url():
     # address in address bar, etc.), use empty string
     referer = request.headers.get('Referer', '')
 
-    denied = (
-        re.match(r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),
-                 referer) is not None)
+    denied = (re.match(r'(?:https?://[^/]+)%s$' % (url_for('user.sign_in')),
+                       referer) is not None)
     denied_from = session.get('denied_from')
 
     if denied and denied_from:
