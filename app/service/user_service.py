@@ -5,7 +5,7 @@ from app.enums import FileCategory
 from app.exceptions.base import ResourceNotFoundException, \
     ValidationException, AuthorizationException, BusinessRuleException
 from app.repository import user_repository
-from app.service import file_service, mail_service
+from app.service import file_service, mail_service, oauth_service
 from app.utils import copernica
 
 
@@ -15,6 +15,8 @@ def set_password(user_id, password):
     user = get_user_by_id(user_id)
     user.password = password
     user_repository.save(user)
+
+    oauth_service.revoke_user_tokens_by_user_id(user_id)
     return user
 
 

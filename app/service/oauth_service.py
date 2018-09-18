@@ -154,6 +154,10 @@ def get_owned_clients_by_user_id(user_id):
     return oauth_repository.get_owned_clients_by_user_id(user_id=user_id)
 
 
+def revoke_user_tokens_by_user_id(user_id: int):
+    oauth_repository.revoke_user_tokens_by_user_id(user_id)
+
+
 def revoke_user_tokens_by_client_id(user_id, client_id):
     client = oauth_repository.get_client_by_id(client_id=client_id)
     if not client:
