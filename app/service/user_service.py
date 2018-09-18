@@ -139,6 +139,9 @@ def get_user_by_login(email, password):
 
 
 def validate_password(user, password):  # type: (User, str) -> bool
+    if user.password is None:
+        return False
+
     submitted_hash = bcrypt.hashpw(password, user.password)
     if submitted_hash == user.password:
         return True
