@@ -129,3 +129,10 @@ def check_user_can_access_form(form_id, user):
 
     error = "User has no form admin role and is not member of form's group"
     raise AuthorizationException(error)
+
+
+def get_available_owner_groups_for_user(user):
+    if role_service.user_has_role(user, Roles.FORM_ADMIN):
+        return group_service.find_groups()
+    else:
+        return group_service.get_groups_for_user(user)
