@@ -29,7 +29,7 @@
                                 <td>{{ revision.user.first_name }} {{ revision.user.last_name }}</td>
                                 <td>{{ previous }}</td>
                                 <td>{{ current }}</td>
-                                <td>{{ revision.created }}</td>
+                                <td>{{ revision.created.strftime(constants.DT_FORMAT) }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
