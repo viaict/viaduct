@@ -28,7 +28,6 @@ class Examination(db.Model, BaseEntity):
                                     nullable=False)
     answers_file_id = db.Column(db.Integer, db.ForeignKey('file.id'))
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     timestamp = db.Column(db.DateTime)
     course_id = db.Column(db.Integer,
                           db.ForeignKey('course.id'))
@@ -37,8 +36,6 @@ class Examination(db.Model, BaseEntity):
     test_type = db.Column(db.Enum(*list(test_types.keys()),
                                   name='examination_type'),
                           nullable=False, server_default='Unknown')
-    user = db.relationship(User,
-                           backref=db.backref('examinations', lazy='dynamic'))
     course = db.relationship(Course,
                              backref=db.backref('examinations', lazy='dynamic')
                              )
