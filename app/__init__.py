@@ -20,7 +20,7 @@ from config import Config
 from .extensions import (db, login_manager, cache, toolbar, jsglue,
                          oauth_server, cors, sentry, babel)
 
-version = 'v2.12.0.5'
+version = 'v2.12.1.0'
 
 logging.basicConfig(
     format='[%(asctime)s] %(levelname)7s [%(name)s]: %(message)s',
