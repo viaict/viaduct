@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2018-09-19 21:26+0200\n"
+"POT-Creation-Date: 2018-09-19 21:51+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language: nl\n"
@@ -21,6 +21,9 @@ msgstr ""
 #, python-format
 msgid "%(email)s is unknown to our system."
 msgstr "%(email)s is niet bekend in ons systeem."
+
+msgid "(Markdown)"
+msgstr ""
 
 msgid "A user with this e-mail address already exist."
 msgstr "Er bestaat al een gebruiker met dat emailadres."
