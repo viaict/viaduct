@@ -1,20 +1,20 @@
+import bcrypt
 import unittest
+from io import StringIO
 from unittest.mock import patch, MagicMock
 
-import bcrypt
-from io import StringIO
-
+from app.enums import FileCategory
 from app.exceptions.base import ResourceNotFoundException, \
     AuthorizationException, \
     ValidationException
-from app.models.user import User
 from app.models.file import File
+from app.models.user import User
 from app.repository import user_repository
-from app.service import user_service, file_service
-from app.enums import FileCategory
+from app.service import user_service, file_service, oauth_service
 
 user_repository_mock = MagicMock(spec=dir(user_repository))
 file_service_mock = MagicMock(spec=dir(file_service))
+oauth_service_mock = MagicMock(spec=dir(oauth_service))
 
 avatar_file_data = StringIO('fake avatar file data')
 avatar_file_data.filename = 'avatar.png'
@@ -22,6 +22,7 @@ avatar_file_data.filename = 'avatar.png'
 
 @patch.object(user_service, 'user_repository', user_repository_mock)
 @patch.object(user_service, 'file_service', file_service_mock)
+@patch.object(user_service, 'oauth_service', oauth_service_mock)
 class TestUserService(unittest.TestCase):
 
     def setUp(self):
@@ -39,6 +40,8 @@ class TestUserService(unittest.TestCase):
         user_repository_mock.find_by_id.assert_called_once_with(1)
         self.assertNotEqual(u.password, password)
         user_repository_mock.save.assert_called_once_with(user)
+        oauth_service_mock.revoke_user_tokens_by_user_id \
+            .assert_called_once_with(1)
 
     def test_find_by_id(self):
         user_id = 1
