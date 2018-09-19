@@ -1,12 +1,10 @@
 alembic
 authlib
 baas32
-connexion
 coverage
 -e git://github.com/JelteF/mollie-api-python@dec672784ed35d8f010aba0a5e4b740b6e419aa7#egg=mollie_api_python
 flake8
 flake8-docstrings
-flake8-putty
 Flask
 Flask-Babel
 Flask-Caching
@@ -20,7 +18,6 @@ Flask-Restful
 Flask-OAuthlib
 Flask-Script
 Flask-SQLAlchemy
-Flask-Swagger-UI
 Flask-WTF
 authlib
 fuzzywuzzy
@@ -34,7 +31,6 @@ Pillow
 psycopg2
 py-bcrypt
 pyflakes
-pymysql
 pyopenssl           # For the p12 decryption in the google library.
 PyPDF2
 python-dateutil
@@ -46,7 +42,6 @@ requests
 speaklater
 SQLAlchemy
 Unidecode
-validictory
 watchdog
 WTForms
 python3-saml

@@ -4,7 +4,7 @@ from flask_login import UserMixin, AnonymousUserMixin
 from app import db, constants
 from app.models.base_model import BaseEntity
 from app.models.education import Education
-from app.models.group import Group
+from app.service import group_service
 
 
 class AnonymousUser(AnonymousUserMixin):
@@ -131,8 +131,11 @@ class User(db.Model, UserMixin, BaseEntity):
 
         self.email = new_email
 
-    def member_of_group(self, group_id):
-        return Group.query.get(group_id).has_user(self)
+    def member_of_group(self, group_id: int) -> bool:
+        group = group_service.find_group_by_id(group_id)
+        if group:
+            return group.has_user(self)
+        return False
 
     @property
     def name(self):

@@ -1,22 +1,21 @@
+from collections import namedtuple
+
+import logging
+from datetime import datetime as dt, timedelta
+from flask import session, request
+from flask_login import current_user
+from functools import wraps
+from onelogin.saml2.auth import OneLogin_Saml2_Auth
+from onelogin.saml2.utils import OneLogin_Saml2_Utils
+from urllib.parse import urlparse
+
 from app import app, constants
-from app.exceptions import ValidationException, AuthorizationException, \
+from app.exceptions.base import ValidationException, AuthorizationException, \
     BusinessRuleException
 from app.service import user_service
 
-from flask import session, request
-from flask_login import current_user
-
-from functools import wraps
-from collections import namedtuple
-from urllib.parse import urlparse
-from datetime import datetime as dt, timedelta
-
-from onelogin.saml2.auth import OneLogin_Saml2_Auth
-from onelogin.saml2.utils import OneLogin_Saml2_Utils
-
-
+_logger = logging.getLogger(__name__)
 SAMLInfo = namedtuple('SAMLInfo', ['auth', 'req'])
-
 
 # Session keys
 
@@ -137,9 +136,11 @@ def process_response(saml_info):
     errors = saml_auth.get_errors()
 
     if errors:
-        raise ValidationException(
-            'One or more errors occurred during SAML response processing: {}'
-            .format(saml_auth.get_last_error_reason()))
+        msg = 'One or more errors occurred during SAML response processing: ' \
+              + saml_auth.get_last_error_reason()
+
+        _logger.error(msg)
+        raise ValidationException(msg)
 
     if saml_auth.is_authenticated():
         session[SESSION_SAML_DATA][SAML_DATA_IS_AUTHENTICATED] = True
@@ -230,13 +231,13 @@ def get_uid_from_attributes():
     return value[0]
 
 
-def get_user_by_uid():
+def get_user_by_uid(needs_confirmed=True):
     uid = get_uid_from_attributes()
 
     if not uid:
         raise ValidationException('uid not found in SAML attributes')
 
-    user = user_service.get_user_by_student_id(uid)
+    user = user_service.get_user_by_student_id(uid, needs_confirmed)
 
     if user.disabled:
         raise AuthorizationException("User is disabled.")
@@ -323,8 +324,8 @@ def start_sign_up_session():
 
 def sign_up_session_active():
     if SESSION_SAML_SIGN_UP_SESSION in session:
-        if dt.now() - session[SESSION_SAML_SIGN_UP_SESSION][
-                SIGN_UP_SESSION_TIME_TOUCHED] < SIGN_UP_SESSION_TIMEOUT:
+        if (dt.now() - session[SESSION_SAML_SIGN_UP_SESSION][
+                SIGN_UP_SESSION_TIME_TOUCHED] < SIGN_UP_SESSION_TIMEOUT):
             return True
 
     return False

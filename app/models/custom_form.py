@@ -114,7 +114,10 @@ class CustomForm(db.Model, BaseEntity):
 
         latest_activity = \
             self.activities.order_by(Activity.end_time.desc()).first()
-        return datetime.now() > latest_activity.end_time
+        if latest_activity:
+            return datetime.now() > latest_activity.end_time
+        else:
+            False
 
     @property
     def attendants(self):

@@ -2,10 +2,10 @@ import bcrypt
 from flask_babel import _
 
 from app.enums import FileCategory
-from app.exceptions import ResourceNotFoundException, ValidationException, \
-    AuthorizationException, BusinessRuleException
+from app.exceptions.base import ResourceNotFoundException, \
+    ValidationException, AuthorizationException, BusinessRuleException
 from app.repository import user_repository
-from app.service import file_service, mail_service
+from app.service import file_service, mail_service, oauth_service
 from app.utils import copernica
 
 
@@ -15,6 +15,8 @@ def set_password(user_id, password):
     user = get_user_by_id(user_id)
     user.password = password
     user_repository.save(user)
+
+    oauth_service.revoke_user_tokens_by_user_id(user_id)
     return user
 
 
@@ -44,18 +46,41 @@ def find_by_id(user_id):
     return user_repository.find_by_id(user_id)
 
 
-def find_user_by_student_id(student_id):
+def find_user_by_student_id(student_id, needs_confirmed=True):
     """Retrieve the user or return None."""
-    return user_repository.find_user_by_student_id(student_id)
+    return user_repository.find_user_by_student_id(
+        student_id, needs_confirmed)
 
 
-def get_user_by_student_id(student_id):
+def get_user_by_student_id(student_id, needs_confirmed=True):
     """Retrieve the user by student id, throw error if not found."""
-    user = find_user_by_student_id(student_id)
+    user = find_user_by_student_id(student_id, needs_confirmed)
     if not user:
         raise ResourceNotFoundException("user", student_id)
 
     return user
+
+
+def find_all_users_with_unconfirmed_student_id(student_id):
+    """Retrieve all users with an unconfirmed student id."""
+    return user_repository.find_all_users_with_unconfirmed_student_id(
+        student_id)
+
+
+def get_all_users_with_unconfirmed_student_id(student_id):
+    """
+    Retrieve all users with an unconfirmed student id.
+
+    throw error if not found.
+    """
+
+    users = user_repository.find_all_users_with_unconfirmed_student_id(
+        student_id)
+
+    if len(users) == 0:
+        raise ResourceNotFoundException("users", student_id)
+
+    return users
 
 
 def set_confirmed_student_id(user, student_id):
@@ -116,6 +141,9 @@ def get_user_by_login(email, password):
 
 
 def validate_password(user, password):  # type: (User, str) -> bool
+    if user.password is None:
+        return False
+
     submitted_hash = bcrypt.hashpw(password, user.password)
     if submitted_hash == user.password:
         return True
@@ -171,7 +199,6 @@ def register_new_user(email, password, first_name, last_name, student_id,
                       education_id, birth_date, study_start,
                       receive_information, phone_nr, address,
                       zip_, city, country, locale, link_student_id=False):
-
     if find_user_by_email(email) is not None:
         raise BusinessRuleException(
             'A user with the same email address already exists.')

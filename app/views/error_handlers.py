@@ -1,8 +1,5 @@
 import re
 import werkzeug.exceptions
-from connexion.apis.flask_api import FlaskApi
-from connexion.exceptions import ProblemException
-from connexion.problem import problem
 from flask import flash, request, url_for, render_template, redirect, \
     session, jsonify
 from flask_babel import _
@@ -10,8 +7,8 @@ from flask_login import current_user
 from functools import wraps
 
 from app import app, login_manager
-from app.exceptions import ResourceNotFoundException, DetailedException, \
-    AuthorizationException
+from app.exceptions.base import ResourceNotFoundException, \
+    ApplicationException, AuthorizationException
 from app.models.page import Page
 from app.roles import Roles
 from app.service import role_service
@@ -20,7 +17,7 @@ from app.service import role_service
 @login_manager.unauthorized_handler
 def unauthorized():
     # Save the path the user was rejected from.
-    session['denied_from'] = request.path
+    session['denied_from'] = url_for(request.url_rule.endpoint, **request.args)
 
     flash(_('You must be logged in to view this page.'), 'danger')
     return redirect(url_for('user.sign_in'))
@@ -38,28 +35,20 @@ def add_api_error_handler(f):
 
 
 def handle_api_error(e):
-    if isinstance(e, DetailedException):
-        return jsonify({"title": e.title,
-                        "status": e.status,
-                        "detail": str(e),
-                        "type": e.type_}), e.status
+    if isinstance(e, ApplicationException):
+        return jsonify(e.ErrorSchema().dump(e)), e.status
 
     if not isinstance(e, werkzeug.exceptions.HTTPException):
         e = werkzeug.exceptions.InternalServerError()
 
-    response = problem(title=e.name,
-                       detail=e.description,
-                       status=e.code)
-
-    return FlaskApi.get_response(response)
-
-
-@app.errorhandler(ProblemException)
-def connexion_problem_exception_handler(e):
-    return FlaskApi.get_response(e.to_problem())
+    return jsonify(ApplicationException.ErrorSchema().dump(
+        {'title': e.name,
+         "_message": e.description,
+         "status": e.code,
+         "type_": "about:blank"})), e.code
 
 
-@app.errorhandler(DetailedException)
+@app.errorhandler(ApplicationException)
 @add_api_error_handler
 def default_detailed_exception_handler(e):
     if isinstance(e, ResourceNotFoundException):

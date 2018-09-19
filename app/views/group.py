@@ -22,7 +22,7 @@ blueprint = Blueprint('group', __name__)
 @blueprint.route('/groups/<int:page_nr>/', methods=['GET', 'POST'])
 @require_role(Roles.GROUP_READ)
 def view(page_nr=1):
-    search = request.args.get('search')
+    search = request.args.get('search', '')
 
     if search:
         pagination = Group.query \

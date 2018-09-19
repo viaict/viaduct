@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 
 from app import hashfs
 from app.enums import FileCategory
-from app.exceptions import ResourceNotFoundException
+from app.exceptions.base import ResourceNotFoundException
 from app.repository import file_repository
 
 FILENAME_REGEX = re.compile(r'(.+)\.([^\s.]+)')

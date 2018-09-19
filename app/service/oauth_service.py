@@ -5,8 +5,8 @@ from authlib.specs.rfc6749 import grants
 from flask import url_for
 from oauthlib.common import generate_token
 
-from app.exceptions import BusinessRuleException, ResourceNotFoundException, \
-    DetailedException
+from app.exceptions.base import BusinessRuleException, \
+    ResourceNotFoundException, ApplicationException
 from app.oauth_scopes import Scopes
 from app.repository import oauth_repository
 from app.service import user_service
@@ -72,7 +72,7 @@ class PasswordGrant(grants.ResourceOwnerPasswordCredentialsGrant):
         try:
             return user_service.get_user_by_login(
                 email=email, password=password)
-        except DetailedException as e:
+        except ApplicationException as e:
             _logger.info("Invalid credentials for password grant.", e)
 
 
@@ -152,6 +152,10 @@ def user_has_approved_client(user_id, client):
 
 def get_owned_clients_by_user_id(user_id):
     return oauth_repository.get_owned_clients_by_user_id(user_id=user_id)
+
+
+def revoke_user_tokens_by_user_id(user_id: int):
+    oauth_repository.revoke_user_tokens_by_user_id(user_id)
 
 
 def revoke_user_tokens_by_client_id(user_id, client_id):

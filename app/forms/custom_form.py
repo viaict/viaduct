@@ -7,14 +7,15 @@ from wtforms.validators import InputRequired
 
 import app.service.user_service as user_service
 from app.forms.fields import DecimalField, EmailField
-from app.service import group_service
+from app.service import custom_form_service
 
 
 class CreateForm(FlaskForm):
     name = StringField(_('Form name'), validators=[InputRequired()])
     group = QuerySelectField(
         _('Owner group '),
-        query_factory=lambda: group_service.get_groups_for_user(current_user),
+        query_factory=lambda:
+        custom_form_service.get_available_owner_groups_for_user(current_user),
         get_pk=lambda group: group.id,
         get_label=lambda group: group.name)
     max_attendants = StringField(_('Max number of attendants'))

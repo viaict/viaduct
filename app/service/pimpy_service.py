@@ -7,8 +7,9 @@ from fuzzywuzzy import fuzz
 from typing import List
 
 from app.enums import PimpyTaskStatus
-from app.exceptions import ValidationException, InvalidMinuteException, \
+from app.exceptions.base import ValidationException, \
     ResourceNotFoundException, AuthorizationException
+from app.exceptions.pimpy import InvalidMinuteException
 from app.models.pimpy import Task, TaskUserRel
 from app.repository import pimpy_repository
 from app.service import group_service
@@ -121,7 +122,7 @@ def get_all_tasks_for_users_in_groups_of_user(user, date_range=None):
 
 
 def check_user_can_access_task(user, task):
-    if user.member_of_group(task.group_id):
+    if group_service.user_member_of_group(user, task.group_id):
         return
     if user in task.users:
         return
@@ -130,7 +131,7 @@ def check_user_can_access_task(user, task):
 
 
 def check_user_can_access_minute(user, minute):
-    if user.member_of_group(minute.group_id):
+    if group_service.user_member_of_group(user, minute.group_id):
         return
 
     raise AuthorizationException('User not member of group of minute')

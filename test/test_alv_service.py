@@ -4,7 +4,7 @@ from unittest.mock import patch
 from werkzeug.datastructures import FileStorage
 
 from app.enums import FileCategory
-from app.exceptions import ResourceNotFoundException
+from app.exceptions.base import ResourceNotFoundException
 from app.models.alv_model import Alv, AlvDocument
 from app.repository import alv_repository
 from app.service import alv_service, file_service

@@ -2,7 +2,7 @@ import random
 import string
 from datetime import datetime
 
-from app.exceptions import ResourceNotFoundException
+from app.exceptions.base import ResourceNotFoundException
 from app.repository import password_reset_repository
 from app.service import user_service, mail_service
 
