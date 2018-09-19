@@ -5,7 +5,6 @@ from app import db
 
 from app.models.course import Course
 from app.models.education import Education
-from app.models.user import User
 from app.models.file import File
 from app.models.base_model import BaseEntity
 
