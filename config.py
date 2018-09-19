@@ -38,7 +38,6 @@ class Config(object):
         # Mollie payment provider config.
         self.MOLLIE_URL = str
         self.MOLLIE_KEY = str
-        self.MOLLIE_REDIRECT_URL = str
 
         # Copernica e-mailing synchronization configuration.
         self.COPERNICA_ENABLED = distutils.util.strtobool
