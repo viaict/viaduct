@@ -2,7 +2,8 @@ import unittest
 from flask_babel import LazyString
 from unittest.mock import patch, MagicMock
 
-from app.exceptions import ResourceNotFoundException, BusinessRuleException
+from app.exceptions.base import ResourceNotFoundException, \
+    BusinessRuleException
 from app.models.oauth.client import OAuthClient
 from app.models.oauth.token import OAuthToken
 from app.repository import oauth_repository as mock_spec  # rename for safety

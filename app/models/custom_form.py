@@ -32,7 +32,7 @@ class CustomForm(db.Model, BaseEntity):
     max_attendants = db.Column(db.Integer)
     introductions = db.Column(db.Integer)
     price = db.Column(db.Float, default=0)
-    terms = db.Column(db.String(4096))
+    terms = db.Column(db.Text())
 
     archived = db.Column(db.Boolean)
     requires_direct_payment = db.Column(db.Boolean, default=False,
@@ -114,7 +114,10 @@ class CustomForm(db.Model, BaseEntity):
 
         latest_activity = \
             self.activities.order_by(Activity.end_time.desc()).first()
-        return datetime.now() > latest_activity.end_time
+        if latest_activity:
+            return datetime.now() > latest_activity.end_time
+        else:
+            False
 
     @property
     def attendants(self):
@@ -127,10 +130,10 @@ class CustomForm(db.Model, BaseEntity):
 
         lst = [('Gevolgde formulieren',
                 custom_form_service.
-                get_active_followed_forms_by_user(current_user.id)),
+                get_active_followed_forms_by_user(current_user)),
                ('Actieve formulieren',
                 custom_form_service.
-                get_active_unfollowed_by_user(current_user.id))]
+                get_active_unfollowed_by_user(current_user))]
 
         if current is not None:
             cf = cls.query.get(current)

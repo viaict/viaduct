@@ -1,7 +1,6 @@
 import baas32 as b32
 import datetime
 from flask_babel import lazy_gettext as _
-from flask_login import current_user
 from jinja2 import escape
 
 from app import db, constants
@@ -67,14 +66,6 @@ class Task(db.Model, BaseEntity):
         if 0 <= self.status < len(self.status_meanings):
             return self.status_meanings[self.status]
         return _("Unknown")
-
-    def update_status(self, status):
-        if current_user.member_of_group(self.group_id) \
-                and 0 <= status <= len(self.status_meanings):
-            self.status = status
-            return True
-
-        return False
 
     def get_status_color(self):
         """Return a string representing the status."""

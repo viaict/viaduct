@@ -7,7 +7,7 @@ from hashfs import HashAddress
 
 from app import hashfs
 from app.enums import FileCategory
-from app.exceptions import ResourceNotFoundException
+from app.exceptions.base import ResourceNotFoundException
 from app.models.file import File
 from app.repository import file_repository
 from app.service import file_service

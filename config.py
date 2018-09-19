@@ -1,6 +1,6 @@
 import dateutil.parser
 import distutils.util
-from flask import logging
+import logging
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
@@ -11,7 +11,7 @@ class Config(object):
 
     def __init__(self, database_url):
         """
-        Initialize the config
+        Initialize the config.
 
         Load the config values from the environment and do dynamic conversion.
         """
@@ -38,7 +38,6 @@ class Config(object):
         # Mollie payment provider config.
         self.MOLLIE_URL = str
         self.MOLLIE_KEY = str
-        self.MOLLIE_REDIRECT_URL = str
 
         # Copernica e-mailing synchronization configuration.
         self.COPERNICA_ENABLED = distutils.util.strtobool
@@ -58,9 +57,15 @@ class Config(object):
         self.SENTRY_DSN = str
         self.ENVIRONMENT = str
 
+        # URL for Athenaeum order page
+        self.ATHENAEUM_URL = str
+
         # Privacy policy
         self.PRIVACY_POLICY_URL_EN = str
         self.PRIVACY_POLICY_URL_NL = str
+
+        # Path for SAML config and certificates
+        self.SAML_PATH = str
 
         self.load_config(database_url=database_url)
 
@@ -76,6 +81,11 @@ class Config(object):
         # Miscellaneous.
         self.DEBUG_TB_INTERCEPT_REDIRECTS = False
         self.SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+        self.JSON_SORT_KEYS = False
+
+        # Authlib
+        self.OAUTH2_REFRESH_TOKEN_GENERATOR = True
 
     def load_config(self, database_url):
         engine = create_engine(database_url)

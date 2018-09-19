@@ -6,8 +6,10 @@ from app.utils import google
 
 user_group = db.Table(
     'user_group',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('group_id', db.Integer, db.ForeignKey('group.id'))
+    db.Column('user_id', db.Integer,
+              db.ForeignKey('user.id'), nullable=False),
+    db.Column('group_id', db.Integer,
+              db.ForeignKey('group.id'), nullable=False)
 )
 
 

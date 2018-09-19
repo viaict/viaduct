@@ -2,6 +2,7 @@ import sys
 
 from flask_babel import lazy_gettext as _
 from sqlalchemy import event
+from typing import Dict, Any
 
 from app import db, get_locale
 from app.models.base_model import BaseEntity
@@ -72,7 +73,7 @@ class SuperRevision(db.Model, BaseEntity):
     __abstract__ = True
 
     # Things needed in template context.
-    context = {}
+    context: Dict[str, Any] = {}
 
     nl_title = db.Column(db.String(128))
     en_title = db.Column(db.String(128))
@@ -114,8 +115,9 @@ class PageRevision(SuperRevision):
                                                       lazy='dynamic',
                                                       cascade='all,delete'))
 
-    def __init__(self, page, nl_title, en_title, comment, user, nl_content,
-                 en_content, filter_html=True, custom_form_id=None):
+    def __init__(self, page: Page, nl_title, en_title, comment, user,
+                 nl_content, en_content, filter_html=True,
+                 custom_form_id=None) -> None:
         super(PageRevision, self).__init__(nl_title, en_title, comment)
 
         self.page = page

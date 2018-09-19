@@ -4,8 +4,9 @@ from flask import flash, session, redirect, render_template, request, \
 from flask_babel import _
 
 from app import constants
+from app.exceptions.base import BusinessRuleException, \
+    DuplicateResourceException
 from app.forms.examination import EducationForm
-from app.exceptions import BusinessRuleException, DuplicateResourceException
 from app.roles import Roles
 from app.decorators import require_role
 from app.service import examination_service
@@ -97,7 +98,7 @@ def edit_education(education_id):
             session['examination_edit_id'])
 
     education = examination_service.get_education_by_id(education_id)
-    exam_count = examination_service.\
+    exam_count = examination_service. \
         count_examinations_by_education(education_id)
 
     if 'delete' in request.args:

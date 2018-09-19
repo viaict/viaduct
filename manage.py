@@ -346,7 +346,6 @@ def createdb():
                 "GITLAB_TOKEN": "",
                 "MOLLIE_URL": "https://api.mollie.nl/v1/payments/",
                 "MOLLIE_KEY": "",
-                "MOLLIE_REDIRECT_URL": "http://localhost",
                 "COPERNICA_ENABLED": "False",
                 "COPERNICA_API_KEY": "",
                 "COPERNICA_DATABASE_ID": "",

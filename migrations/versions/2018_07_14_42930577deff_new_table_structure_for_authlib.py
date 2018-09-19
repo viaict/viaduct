@@ -65,13 +65,16 @@ def upgrade():
     op.add_column('oauth_client',
                   sa.Column('contact', sa.Text(), nullable=True))
     op.add_column('oauth_client',
-                  sa.Column('expires_at', sa.Integer(), nullable=False))
+                  sa.Column('expires_at', sa.Integer(), nullable=False,
+                            server_default='0'))
     op.add_column('oauth_client',
-                  sa.Column('grant_type', sa.Text(), nullable=False))
+                  sa.Column('grant_type', sa.Text(), nullable=False,
+                            server_default=''))
     op.add_column('oauth_client',
                   sa.Column('i18n_metadata', sa.Text(), nullable=True))
     op.add_column('oauth_client',
-                  sa.Column('issued_at', sa.Integer(), nullable=False))
+                  sa.Column('issued_at', sa.Integer(), nullable=False,
+                            server_default='0'))
     op.add_column('oauth_client',
                   sa.Column('jwks_text', sa.Text(), nullable=True))
     op.add_column('oauth_client',
@@ -81,11 +84,14 @@ def upgrade():
     op.add_column('oauth_client',
                   sa.Column('policy_uri', sa.Text(), nullable=True))
     op.add_column('oauth_client',
-                  sa.Column('redirect_uri', sa.Text(), nullable=False))
+                  sa.Column('redirect_uri', sa.Text(), nullable=False,
+                            server_default=''))
     op.add_column('oauth_client',
-                  sa.Column('response_type', sa.Text(), nullable=False))
+                  sa.Column('response_type', sa.Text(), nullable=False,
+                            server_default=''))
     op.add_column('oauth_client',
-                  sa.Column('scope', sa.Text(), nullable=False))
+                  sa.Column('scope', sa.Text(), nullable=False,
+                            server_default=''))
     op.add_column('oauth_client',
                   sa.Column('software_id', sa.String(length=36),
                             nullable=True))
@@ -102,22 +108,24 @@ def upgrade():
     op.drop_column('oauth_client', 'name')
     op.drop_column('oauth_client', 'description')
     op.add_column('oauth_token',
-                  sa.Column('expires_in', sa.Integer(), nullable=False))
+                  sa.Column('expires_in', sa.Integer(), nullable=False,
+                            server_default='0'))
     op.add_column('oauth_token',
-                  sa.Column('issued_at', sa.Integer(), nullable=False))
+                  sa.Column('issued_at', sa.Integer(), nullable=False,
+                            server_default='0'))
     op.add_column('oauth_token',
                   sa.Column('revoked', sa.Boolean(), nullable=True))
     op.add_column('oauth_token', sa.Column('scope', sa.Text(), nullable=True))
     op.alter_column('oauth_token', 'access_token',
                     existing_type=sa.VARCHAR(length=255),
-                    nullable=False)
+                    nullable=False, server_default='')
     op.alter_column('oauth_token', 'client_id',
                     existing_type=sa.VARCHAR(length=64),
                     nullable=True)
     op.create_index(op.f('ix_oauth_token_refresh_token'), 'oauth_token',
                     ['refresh_token'], unique=False)
-    op.drop_constraint('uq_oauth_token_refresh_token', 'oauth_token',
-                       type_='unique')
+    # op.drop_constraint('uq_oauth_token_refresh_token', 'oauth_token',
+    #                    type_='unique')
     op.drop_constraint('fk_oauth_token_client_id_oauth_client', 'oauth_token',
                        type_='foreignkey')
     op.drop_column('oauth_token', 'expires')

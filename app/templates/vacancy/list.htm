@@ -65,7 +65,11 @@
                         <hr>
                         <div class="col-md-4">
                             <blockquote>
-                                <a href="{{ url_for('company.view', company_id=vacancy.company.id) }}">
+                                {% if vacancy.company.website %}
+                                    <a href="{{ vacancy.company.website }}">
+                                {% else %}
+                                    <a href="{{ url_for('company.view', company_id=vacancy.company.id) }}">
+                                {% endif %}
 
                                     {% if vacancy.company.logo_file_id %}
                                         <img class="img-rounded" style="max-width:250px; max-height:100px;"

@@ -92,6 +92,13 @@ def revoke_user_tokens_by_client_id(user_id, client_id):
     db.session.commit()
 
 
+def revoke_user_tokens_by_user_id(user_id: int):
+    db.session.query(OAuthToken).filter_by(
+        user_id=user_id
+    ).update(dict(revoked=True))
+    db.session.commit()
+
+
 def update_client_secret(client_id, client_secret):
     db.session.query(OAuthClient) \
         .filter_by(client_id=client_id) \

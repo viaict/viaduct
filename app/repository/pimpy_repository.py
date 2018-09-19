@@ -2,7 +2,7 @@ import logging
 
 from app import db
 from app.enums import PimpyTaskStatus
-from app.exceptions import BusinessRuleException
+from app.exceptions.base import BusinessRuleException
 from app.models.group import Group
 from app.models.pimpy import Minute, Task, TaskUserRel
 from app.models.user import User

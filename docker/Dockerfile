@@ -8,22 +8,23 @@ RUN npm install -g grunt-cli clientjade jshint
 RUN npm install
 
 # Python
-RUN apk add -U postgresql-libs git libmagic libjpeg-turbo bash pcre
+RUN apk add -U postgresql-libs git libmagic libjpeg-turbo bash pcre \
+    libxml2 libxslt xmlsec
 RUN pip install --upgrade pip pip-tools
 
+COPY requirements.in requirements.txt ./
+
 # Install a virtual package with build dependencies voor pip install
+# run pip install and remove build dependencies.
 RUN apk add -U --virtual build-deps \
     python3-dev build-base linux-headers pcre-dev musl-dev \
-    postgresql-dev libffi-dev libjpeg-turbo-dev libressl-dev zlib-dev
-
-COPY requirements.in requirements.txt ./
-RUN pip-sync && \
+    postgresql-dev libffi-dev libjpeg-turbo-dev libressl-dev zlib-dev \
+    libxml2-dev libxslt-dev xmlsec-dev && \
+    pip-sync && \
     pip install uwsgi && \
     pip install -r requirements.txt && \
-    pip install -r requirements.txt
-
-# Remove virtual package
-RUN apk del build-deps
+    pip install -r requirements.txt && \
+    apk del build-deps
 
 
 FROM development AS production

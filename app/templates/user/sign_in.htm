@@ -1,15 +1,28 @@
 {% from "macros/form.htm" import render_form %}
+{% from "macros/user.htm" import render_uvanetid_signin_button %}
 
 {% extends "content.htm" %}
 
 {% block content %}
 <legend>{{_('Log in')}}</legend>
 
-{{ render_form(form) }}
+<div class="row">
+    {% if show_uvanetid_login %}
+    <div class="col-md-4">
+        <label>{{ _('UvA Account') }}</label>
+        {{ render_uvanetid_signin_button(_('Log in with UvA-net ID'), href=url_for('saml.login')) }}
+    </div>
+    <div class="col-md-8 email-login-tab">
+    {% else %}
+    <div class="col-md-12">
+    {% endif %}
+    {{ render_form(form) }}
+    <ul class='list-unstyled' id='dropmenu-list'>
+        <li><a href="{{ url_for('user.sign_up')}}">{{_('Register new user')}}</a></li>
+        <li><a href="{{ url_for('user.request_password')}}">{{_('Forgot password?')}}</a></li>
+    </ul>
+    </div>
 
-<ul class='list-unstyled' id='dropmenu-list'>
-    <li><a href="{{ url_for('user.sign_up')}}">{{_('Register new user')}}</a></li>
-    <li><a href="{{ url_for('user.request_password')}}">{{_('Forgot password?')}}</a></li>
-</ul>
+</div>
 
 {% endblock %}

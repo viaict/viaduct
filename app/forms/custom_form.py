@@ -1,20 +1,21 @@
 from flask_babel import lazy_gettext as _
 from flask_login import current_user
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, BooleanField
+from wtforms import StringField, SelectField, BooleanField, TextAreaField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import InputRequired
 
 import app.service.user_service as user_service
 from app.forms.fields import DecimalField, EmailField
-from app.service import group_service
+from app.service import custom_form_service
 
 
 class CreateForm(FlaskForm):
     name = StringField(_('Form name'), validators=[InputRequired()])
     group = QuerySelectField(
         _('Owner group '),
-        query_factory=lambda: group_service.get_groups_for_user(current_user),
+        query_factory=lambda:
+        custom_form_service.get_available_owner_groups_for_user(current_user),
         get_pk=lambda group: group.id,
         get_label=lambda group: group.name)
     max_attendants = StringField(_('Max number of attendants'))
@@ -35,7 +36,7 @@ class CreateForm(FlaskForm):
     requires_direct_payment = BooleanField(_('Requires direct payment'),
                                            default=False)
     education_id = SelectField('Opleiding', coerce=int)
-    terms = StringField(_('Conditions'))
+    terms = TextAreaField(_('Conditions'), description=_('(Markdown)'))
 
 
 class AddRegistrationForm(FlaskForm):

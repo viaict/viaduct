@@ -25,7 +25,6 @@ Thumbs.db
 *.sublime-*
 *.swp
 
-app/swagger
 app/uploads
 !app/static/img/*.png
 app/static/files/*
@@ -79,8 +78,9 @@ tags
 .coverage
 htmlcov/
 
+saml/develop/certs/*
+saml/master/certs/*
 
 ### VisualStudioCode ###
 .vscode/*
 .history
-

@@ -7,6 +7,10 @@ from app.models.seo import SEO
 from app.service import page_service
 
 
+###
+# TODO PLEASE REFACTOR THIS TO DRY CODE
+###
+
 def get_seo_fields(language='nl', module_name=None, request_path=None):
     """Get the seo fields as dict."""
     # Check if the module and path are set.
@@ -16,21 +20,19 @@ def get_seo_fields(language='nl', module_name=None, request_path=None):
     if request_path is None:
         request_path = request.path
 
+    seo = None
+
     # Check which type of seo fields should be retrieved, based on
     # the module name.
     if module_name == "activity":
         # Get activity id
         activity_id = re.search(r'\/([0-9]+)\/', request_path)
 
-        # Check seo existance
+        # If activity id found, get the seo object of an activity
         if activity_id is not None:
-            # Get the seo object of an activity
             seo = SEO.get_by_activity(activity_id.group(1))
-        else:
-            # No seo was found for this activity
-            seo = None
 
-    elif module_name == "page":
+    if module_name == "page":
         # Retrieve the page for its id
         path = request_path[1:]
         page = page_service.get_page_by_path(path)
@@ -38,9 +40,8 @@ def get_seo_fields(language='nl', module_name=None, request_path=None):
         # Retrieve the revision by page id
         if page is not None:
             seo = SEO.get_by_page(page.id)
-        else:
-            seo = None
-    else:
+
+    if seo is None:
         # Retrieve seo fields based on the module name.
         seo = SEO.get_by_url(module_name)
 
@@ -76,21 +77,19 @@ def get_seo(module_name=None, request_path=None):
     if request_path is None:
         request_path = request.path
 
+    seo = None
+
     # Check which type of seo fields should be retrieved, based on
     # the module name.
     if module_name == "activity":
         # Get activity id
         activity_id = re.search(r'\/([0-9]+)\/', request_path)
 
-        # Check seo existance
+        # Get the seo object of an activity
         if activity_id is not None:
-            # Get the seo object of an activity
             return SEO.get_by_activity(activity_id.group(1))
-        else:
-            # No seo was found for this activity
-            return None
 
-    elif module_name == "page":
+    if module_name == "page":
         # Retrieve the page for its id
         path = request_path[1:]
         page = page_service.get_page_by_path(path)
@@ -98,9 +97,8 @@ def get_seo(module_name=None, request_path=None):
         # Retrieve the revision by page id
         if page is not None:
             return SEO.get_by_page(page.id)
-        else:
-            return None
-    else:
+
+    if seo is None:
         # Retrieve seo fields based on the module name.
         seo = SEO.get_by_url(module_name)
 
@@ -125,25 +123,30 @@ def get_resources(module_name=None, request_path=None):
     # Check which type of seo fields should be retrieved, based on
     # the module name.
     if module_name == "activity":
+
         # Regex search for acitivity id
         activity_result = re.search(r'\/([0-9]+)\/', request_path)
 
-        # Fetch id from regex
-        activity_id = activity_result.group(1)
+        # Could be overview page.
+        if activity_result:
 
-        # Find activity
-        activity = Activity.query.filter(Activity.id ==
-                                         activity_id).first()
+            # Fetch id from regex
+            activity_id = activity_result.group(1)
 
-    elif module_name == "page":
+            # Find activity
+            activity = Activity.query.filter(Activity.id ==
+                                             activity_id).first()
+
+    if module_name == "page":
         # Retrieve the page for its id
-        path = request_path[1:]
+        path = request_path.strip('/')
         page = page_service.get_page_by_path(path)
 
         # Retrieve the revision by page id
         if page is not None:
             page_id = page.id
-    else:
+
+    if path is None:
         # Retrieve seo fields based on the module name.
         path = module_name
 

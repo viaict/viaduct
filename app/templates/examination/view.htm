@@ -126,7 +126,7 @@
                             {% endif %}
                         </td>
                         <td>
-                            <a href='{{ url_for('examination.view', exam_id=examination.id, doc_type='exam') }}' style="white-space: nowrap">
+                            <a href='{{ url_for('examination.view', exam_id=examination.id, doc_type='exam') }}' target="_blank" style="white-space: nowrap">
                                 <i class='glyphicon glyphicon-cloud-download'></i>
                                 {% if examination.date %}
                                     {{ examination.date }}
@@ -142,7 +142,7 @@
                         </td>
                         <td>
                             {% if examination.answers_file %}
-                            <a href='{{url_for('examination.view', exam_id=examination.id, doc_type='answers') }}' >
+                            <a href='{{url_for('examination.view', exam_id=examination.id, doc_type='answers') }}' target="_blank"  >
                                 <i class='glyphicon glyphicon-file'></i>{{ _('Answers') }}</a>
                             {% else %}
                                 N/A

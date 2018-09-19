@@ -1,0 +1,19 @@
+{% from "macros/form.htm" import render_form %}
+{% from "macros/user.htm" import render_uvanetid_signin_button %}
+
+{% extends "content.htm" %}
+
+{% block content %}
+<legend>{{_('Sign up')}}</legend>
+
+<div class="row">
+    <div class="col-md-12">
+        {{ render_uvanetid_signin_button(_('Sign up with UvA-net ID'), href=url_for('saml.sign_up')) }}
+        <a class="btn btn-primary" id="btn-sign-up-manual" href="{{ url_for('user.sign_up_manual')}}">
+            {{_('Manually enter your information')}}
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}

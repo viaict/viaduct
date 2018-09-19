@@ -5,7 +5,8 @@ from flask_babel import _
 
 from app.forms.examination import CourseForm
 from app.service import examination_service
-from app.exceptions import BusinessRuleException, DuplicateResourceException
+from app.exceptions.base import BusinessRuleException, \
+    DuplicateResourceException
 from app.roles import Roles
 from app.decorators import require_role
 import json

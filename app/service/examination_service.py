@@ -1,7 +1,8 @@
-from app.repository import examination_repository
-from app.exceptions import ResourceNotFoundException, BusinessRuleException, \
-    DuplicateResourceException
 import datetime
+
+from app.exceptions.base import ResourceNotFoundException, \
+    BusinessRuleException, DuplicateResourceException
+from app.repository import examination_repository
 
 
 def get_examination_by_id(examination_id):
@@ -40,7 +41,7 @@ def find_all_examinations_by_course(course_id):
 
 def find_all_examinations_by_education(education_id):
     get_education_by_id(education_id)
-    return examination_repository\
+    return examination_repository \
         .find_all_examinations_by_education(education_id)
 
 
@@ -49,7 +50,7 @@ def find_all_examinations(page_nr, per_page):
 
 
 def search_examinations_by_courses(courses, page_nr, per_page):
-    return examination_repository\
+    return examination_repository \
         .search_examinations_by_courses(courses, page_nr, per_page)
 
 
@@ -153,7 +154,7 @@ def count_examinations_by_course(course_id):
 
 
 def count_examinations_by_education(education_id):
-    exams = examination_repository.\
+    exams = examination_repository. \
         find_all_examinations_by_education(education_id)
     return len(exams)
 

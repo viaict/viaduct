@@ -3,28 +3,30 @@ Extra functionality that is used by all models.
 
 It extends db.Model with extra functions.
 """
-from app import db
-from app.utils.serialize_sqla import serialize_sqla
+import dateutil.parser
 from datetime import datetime
 from sqlalchemy.exc import SQLAlchemyError
-import dateutil.parser
+from typing import Any, Tuple
+
+from app import db
+from app.utils.serialize_sqla import serialize_sqla
 
 
 class BaseEntity(object):
-    __table_args__ = {'sqlite_autoincrement': True}
+    __table_args__: Any = {'sqlite_autoincrement': True}
 
     # Columns (in order) to be printed when an instance of the object is
     # printed
-    prints = ('id',)
+    prints: Tuple[str, ...] = ('id',)
 
     # Columns to be shown when the to_dict function is used. This should only
     # be changed when certain values should not be shown in the dictionary.
     # Relationships should be added when a relationship is supposed to be in
     # the dictionary as well.
-    json_excludes = tuple()
+    json_excludes: Tuple[str, ...] = tuple()
     jsons = None
     json_relationships = None
-    json_relationship_ids = tuple()
+    json_relationship_ids: Tuple[str, ...] = tuple()
 
     # Columns that every model needs
     id = db.Column(db.Integer, primary_key=True)

@@ -1,0 +1,43 @@
+{
+    "security": {
+        "nameIdEncrypted": false,
+        "authnRequestsSigned": true,
+        "logoutRequestSigned": false,
+        "logoutResponseSigned": false,
+        "signMetadata": true,
+        "wantMessagesSigned": false,
+        "wantAssertionsSigned": true,
+        "wantNameId": true,
+        "wantNameIdEncrypted": false,
+        "wantAssertionsEncrypted": false,
+        "signatureAlgorithm": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
+        "digestAlgorithm": "http://www.w3.org/2000/09/xmldsig#sha1"
+    },
+
+    "contactPerson": {
+        "technical": {
+            "givenName": "VIA ICT Committee",
+            "emailAddress": "ict@svia.nl"
+        },
+        "administrative": {
+            "givenName": "VIA Board",
+            "emailAddress": "bestuur@svia.nl"
+        },
+        "support": {
+            "givenName": "VIA ICT Committee",
+            "emailAddress": "ict@svia.nl"
+        }
+    },
+    "organization": {
+        "nl": {
+            "name": "via",
+            "displayname": "Studievereniging via",
+            "url": "https://svia.nl/"
+        },
+        "en": {
+            "name": "via",
+            "displayname": "Study association via",
+            "url": "https://svia.nl/"
+        }
+    }
+}
