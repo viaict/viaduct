@@ -31,6 +31,9 @@ app/static/files/*
 app/static/css/*
 app/static/js
 app/static
+app/static/main.js
+app/static/styles.css
+
 venv/*
 venv3
 .vimrc
