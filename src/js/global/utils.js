@@ -4,7 +4,7 @@ var utils = function() { // jshint ignore:line
     utils.datatables =  {};
 
     var datatable_language;
-    if (viaduct.locale == 'nl') {
+    if (window.viaduct.locale === 'nl') {
         // If Dutch override english defaults. Translations taken from:
         // https://github.com/DataTables/Plugins/blob/master/i18n/Dutch.lang
         datatable_language = {
@@ -109,7 +109,7 @@ var utils = function() { // jshint ignore:line
     };
 
     utils.form.button_loading = function($button) {
-        if (viaduct.locale == 'en') {
+        if (window.viaduct.locale === 'en') {
             $button.button({loadingText: 'Loading...'});
         }
         else {

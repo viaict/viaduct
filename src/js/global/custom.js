@@ -1,34 +1,6 @@
 $(document).ready(function() {
     'use strict';
 
-    /* sponsor carousel */
-    $(function() {
-
-        var $c = $('#carousel');
-
-        $c.carouFredSel({
-            height: 180,
-            align: false,
-            items: 6,
-            scroll: {
-                items: 1,
-                duration: 4000,
-                timeoutDuration: 0,
-                easing: 'linear',
-                pauseOnHover: 'immediate'
-            }
-        });
-
-
-        /*$w.bind('resize.example', function() {
-            var nw = $w.width();
-
-            $c.width(nw * 3);
-            $c.parent().width(nw);
-
-        }).trigger('resize.example');*/
-    });
-
     /* This is done like this because these entries are added to the page
      * dynamically. Otherwise, we would have to assign this event every time
      * an entry is added to the page. */

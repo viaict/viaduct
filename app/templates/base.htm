@@ -39,37 +39,29 @@
         <link href="/static/img/via.png" rel="image_src" />
         <link href="{{static_url("/static/styles.css")}}" rel="stylesheet" />
 
-
-        <!-- TODO Remove when fully ported to webpack -->
-        {% if not vue %}
-            <script src="{{static_url("/static/js/global.js")}}"></script>
-            <script src="{{static_url("/jsglue.js")}}"></script>
-            {% else %}
-        {% endif %}
-
         <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
         })(window,document,'script','dataLayer','GTM-PKHM7J9');</script>
 
-        <!-- TODO move the global js -->
-        <script src="https://cdn.ravenjs.com/3.20.0/raven.min.js" crossorigin="anonymous"></script>
-
         {% if data is defined %}
             <script>
-                var viaduct = {{json.dumps(serialize_sqla(data))|safe}};
+                window.viaduct = {{json.dumps(serialize_sqla(data))|safe}};
             </script>
         {% else %}
-            <script>var viaduct = {};</script>
+            <script>window.viaduct = {};</script>
+        {% endif %}
+
+        <!-- TODO Remove when fully ported to webpack -->
+        {% if not vue %}
+            <script src="{{static_url("/static/js/global.js")}}"></script>
+            <script src="{{static_url("/jsglue.js")}}"></script>
+        {% else %}
         {% endif %}
 
         <!-- TODO move to global js -->
-        <script>
-            viaduct.locale = "{{get_locale()}}";
-
-            {#Raven.config('{{ app_config['SENTRY_PUBLIC_DSN'] }}').install();#}
-        </script>
+        <script>window.viaduct.locale = "{{get_locale()}}";</script>
         <script src="{{ url_for("static", filename="main.js") }}"></script>
 
         {% block includes %}
