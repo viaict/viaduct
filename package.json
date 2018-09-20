@@ -4,7 +4,9 @@
   "description": "Via CMS",
   "dependencies": {
     "vue": "^2.5.16",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vue-property-decorator": "latest",
+    "@sentry/node": "latest"
   },
   "devDependencies": {
     "bootstrap": "^4.1.3",
@@ -12,6 +14,7 @@
     "css-loader": "^1.0.0",
     "file-loader": "^1.1.11",
     "font-awesome": "^4.7.0",
+    "friendly-errors-webpack-plugin": "^1.7.0",
     "grunt": "^0.4.2",
     "grunt-contrib-clean": "^0.5.0",
     "grunt-contrib-concat": "^0.3.0",
@@ -21,6 +24,9 @@
     "mini-css-extract-plugin": "^0.4.1",
     "node-sass": "^4.9.2",
     "sass-loader": "^7.0.3",
+    "source-map-loader": "^0.2.3",
+    "ts-loader": "^4.1.0",
+    "typescript": "^2.8.1",
     "url-loader": "^1.0.1",
     "vue-loader": "^15.2.6",
     "vue-template-compiler": "^2.5.16",

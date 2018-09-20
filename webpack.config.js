@@ -3,18 +3,29 @@ var styles = path.resolve(__dirname, './frontend/assets/scss/app.scss');
 
 const { VueLoaderPlugin } = require('vue-loader');
 const CssExtractPlugin = require("mini-css-extract-plugin");
+const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin")
+
 
 module.exports = {
-    entry: ['./frontend/main.js', styles],
+    entry: ['./frontend/index.ts', styles],
     output: {
         path: path.resolve(__dirname, './app/static/'),
         publicPath: '/static/',
+    },
+    resolve: {
+        extensions: [".js", ".json", ".ts", ".tsx", ".js", ".vue"],
+        alias: {
+            vue: 'vue/dist/vue.js'
+        }
     },
     module: {
         rules: [
             {
                 test: /\.vue$/,
-                use: 'vue-loader'
+                loader: 'vue-loader',
+                options: {
+                    esModule: true
+                },
             },
             {
                 test: /\.scss$/,
@@ -24,6 +35,19 @@ module.exports = {
                     'css-loader',
                     'sass-loader'
                 ],
+            },
+            {
+                test: /\.js$/,
+                enforce: "pre",
+                loader: "source-map-loader"
+            },
+            {
+                test: /\.tsx?$/,
+                loader: "ts-loader",
+                exclude: /node_modules/,
+                options: {
+                    appendTsSuffixTo: [/\.vue$/],
+                },
             },
             {
                 test: /\.(png|jpg|gif)$/,
@@ -53,15 +77,12 @@ module.exports = {
             }
         ]
     },
-    resolve: {
-        alias: {
-            vue: 'vue/dist/vue.js'
-        }
-    },
     plugins: [
         new VueLoaderPlugin(),
+        new FriendlyErrorsWebpackPlugin(),
         new CssExtractPlugin({
             filename: "styles.css",
         })
-    ]
-}
+    ],
+    devtool: "inline-source-map"
+};
