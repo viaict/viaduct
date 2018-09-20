@@ -50,6 +50,10 @@ module.exports = {
                 },
             },
             {
+                test: /\.pug$/,
+                loader: "pug-plain-loader",
+            },
+            {
                 test: /\.(png|jpg|gif)$/,
                 loader: 'file-loader',
                 options: {
