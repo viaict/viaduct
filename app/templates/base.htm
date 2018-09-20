@@ -39,6 +39,7 @@
         <link href="/static/img/via.png" rel="image_src" />
         <link href="{{static_url("/static/styles.css")}}" rel="stylesheet" />
 
+
         <!-- TODO Remove when fully ported to webpack -->
         {% if not vue %}
             <script src="{{static_url("/static/js/global.js")}}"></script>
@@ -55,7 +56,7 @@
         <!-- TODO move the global js -->
         <script src="https://cdn.ravenjs.com/3.20.0/raven.min.js" crossorigin="anonymous"></script>
 
-        {% if data %}
+        {% if data is defined %}
             <script>
                 var viaduct = {{json.dumps(serialize_sqla(data))|safe}};
             </script>
@@ -67,8 +68,9 @@
         <script>
             viaduct.locale = "{{get_locale()}}";
 
-            Raven.config('{{ app_config['SENTRY_PUBLIC_DSN'] }}').install();
+            {#Raven.config('{{ app_config['SENTRY_PUBLIC_DSN'] }}').install();#}
         </script>
+        <script src="{{ url_for("static", filename="main.js") }}"></script>
 
         {% block includes %}
         {% endblock %}
