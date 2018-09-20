@@ -1,7 +1,6 @@
 <template lang="pug">
-.login
-    form.form
-        h3(style="color: rgb(9, 77, 151)") Inloggen
+.div
+| Hello world
 </template>
 
 <script lang="ts">
