@@ -14,10 +14,11 @@ def get_client_by_id(client_id):
         .one_or_none()
 
 
-def create_token(client_id, user_id, **token):
+def create_token(client_id: str, user_id: int, **token) -> OAuthToken:
     token = OAuthToken(client_id=client_id, user_id=user_id, **token)
     db.session.add(token)
     db.session.commit()
+    return token
 
 
 def get_authorization_code_by_client_id_and_code(client_id, code):
@@ -35,6 +36,13 @@ def create_authorization_code(code, client_id, redirect_uri, scope, user_id):
         user_id=user_id)
     db.session.add(auth_code)
     db.session.commit()
+
+
+def get_token_by_user_id(user_id: int, client_id: str) -> Optional[OAuthToken]:
+    return db.session.query(OAuthToken) \
+        .filter_by(client_id=client_id, user_id=user_id) \
+        .order_by(OAuthToken.id.desc()) \
+        .first()
 
 
 def get_token_by_access_token(access_token: str, client_id: str = None) \

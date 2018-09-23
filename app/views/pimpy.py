@@ -1,5 +1,5 @@
 import datetime
-from flask import Blueprint, redirect, url_for
+from flask import Blueprint, redirect, url_for, Response
 from flask import flash, render_template, request, jsonify
 from flask_babel import _
 from flask_login import current_user
@@ -12,9 +12,17 @@ from app.exceptions.pimpy import InvalidMinuteException
 from app.forms import init_form
 from app.forms.pimpy import AddTaskForm, AddMinuteForm
 from app.models.pimpy import Task
-from app.service import pimpy_service, group_service
+from app.oauth_scopes import Scopes
+from app.service import pimpy_service, group_service, oauth_service
 
 blueprint = Blueprint('pimpy', __name__, url_prefix='/pimpy')
+
+
+@blueprint.after_app_request
+def set_auth_cookie(response: Response):
+    token = oauth_service.get_manual_token(current_user.id, scope=Scopes.pimpy)
+    response.set_cookie('access_token', token.access_token)
+    return response
 
 
 @blueprint.route('/minutes/', methods=['GET', 'POST'])
