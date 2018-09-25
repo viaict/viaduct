@@ -19,4 +19,3 @@ class OAuthToken(db.Model, sqla.OAuth2TokenMixin):
     def is_refresh_token_expired(self):
         """Refresh tokens expire within a month."""
         return (self.issued_at + 2592000) < time.time()
-

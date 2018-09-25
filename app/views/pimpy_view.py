@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, abort
+from flask import Blueprint, render_template
 
 blueprint = Blueprint('pimpy2', __name__, url_prefix='/pimpy2')
 
