@@ -1,5 +1,7 @@
 import Vue from "vue"
 import App from "./components/app.vue"
+import PimpyTask from "./components/pimpy_task.vue"
+
 
 import {init as SentryInit, Integrations} from "@sentry/browser/dist";
 
@@ -20,4 +22,19 @@ if (document.querySelector('#app')) {
         el: '#app',
         render: h => h(App)
     });
+}
+
+// Pimpy version, cannot use render function yet as we define custom element in
+// Jinja e.g. <tr is="pimpy-task" :id="..." ...></tr>.
+if (document.querySelector('#pimpy_app')) {
+    console.log("Pimpy app has been detected.");
+
+    new Vue({
+        el: '#pimpy_app',
+        components: {
+            'pimpy-task': PimpyTask
+        },
+        // render: h => h(PimpyApp)
+
+    })
 }

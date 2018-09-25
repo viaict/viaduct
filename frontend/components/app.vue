@@ -5,7 +5,6 @@
 <script lang="ts">
     import Vue from "vue"
     import {Component} from "vue-property-decorator"
-    import {captureException} from "@sentry/browser/dist"
 
     @Component
     export default class App extends Vue {

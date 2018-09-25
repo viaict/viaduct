@@ -78,11 +78,13 @@ class TaskResource(Resource):
 
         pimpy_service.check_user_can_access_task(current_token.user, task)
 
+        users = ','.join(task_update.get('users_names', list())) or None
+
         pimpy_service.edit_task_property(
             task=task,
             content=task_update.get('content'),
             title=task_update.get('title'),
-            users_property=','.join(task_update.get('users_names')))
+            users_property=users)
 
         if 'status' in task_update:
             pimpy_service.set_task_status(task, task_update['status'])

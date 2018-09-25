@@ -1,14 +1,10 @@
 {% extends "base.htm" %}
 
 {% block page %}
-    <p>TEST</p>
     <div id="app"></div>
     <noscript>
         <div class="alert alart-error">{{ _("This page is only available using Javascript. So you better turn it on.") }}</div>
     </noscript>
-
-    {# TODO move to body include end. #}
-    <script src="{{ url_for("static", filename="main.js") }}"></script>
 {% endblock %}
 
 {% block includes %}

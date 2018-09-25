@@ -57,12 +57,10 @@
         {% if not vue %}
             <script src="{{static_url("/static/js/global.js")}}"></script>
             <script src="{{static_url("/jsglue.js")}}"></script>
-        {% else %}
         {% endif %}
 
         <!-- TODO move to global js -->
         <script>window.viaduct.locale = "{{get_locale()}}";</script>
-        <script src="{{ url_for("static", filename="main.js") }}"></script>
 
         {% block includes %}
         {% endblock %}
@@ -152,4 +150,5 @@
         </div>
         <!-- End guide modal -->
     </body>
+    <script src="{{ url_for("static", filename="main.js") }}"></script>
 </html>

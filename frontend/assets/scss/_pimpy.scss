@@ -29,24 +29,6 @@
     background: none !important;
 }
 
-.pimpy_task {
-    padding-left: 0;
-    padding-right: 0;
-    width: 50px;
-}
-
-.pimpy_task_task {
-    max-width: 400px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.pimpy_task_users {
-    max-width: 150px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
 .pimpy_line_number {
     width: 6%;
     float: left;
@@ -156,29 +138,5 @@ a.pimpy_minute_line{
         border-radius: 50px;
         font-size: 21px;
         box-shadow: 0px 3px 7px 0px rgba(203, 203, 203, 0.72);
-    }
-
-    .dropdown-menu > li:first-child>a {
-        background: #6E4320 !important;
-        color: #fff !important;
-    }
-
-    .dropdown-menu > li:last-child>a {
-        background: #D3A516;
-        color: #fff;
-    }
-
-    .dropdown-menu > li:nth-child(3)>a {
-        background: #3C80F6;
-        color: #fff;
-    }
-
-    .dropdown-menu > li:nth-child(2)>a {
-        background: #2CAC26;
-        color: #fff;
-    }
-
-    .fa-iosm{
-        margin-top: 7px;
     }
 }

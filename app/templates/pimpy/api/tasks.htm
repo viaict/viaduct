@@ -1,92 +1,57 @@
 {% extends "pimpy/base.htm" %}
 
 {% block content %}
-    <div class="col-md-8">
-        {{ _('Filter') }}:
-        <div class="btn-group" data-toggle="buttons-checkbox">
-            {% for status_meaning in status_meanings %}
-                <button type="button" class="btn btn-filter btn-primary active" data-hide='{{ status_meaning[0] | replace(" ","_")}}'> {{ status_meaning[0] }}</button>
-            {% endfor %}
-        </div>
+    <div class="col-md-8" id="pimpy_app">
+{#  TODO This current does not work, as the tasks are currently using vue.
+    TODO Re-enable when using vue to retrieve the list of events. #}
+{#        {{ _('Filter') }}:#}
+{#        <div class="btn-group" data-toggle="buttons-checkbox">#}
+{#            {% for status_meaning in status_meanings %}#}
+{#                <button type="button" class="btn btn-filter btn-primary active" data-hide='{{ status_meaning[0] | replace(" ","_")}}'> {{ status_meaning[0] }}</button>#}
+{#            {% endfor %}#}
+{#        </div>#}
         <table class="table table-hover">
-        <tbody>
-        {% set ns = namespace(prev_group=None, prev_user=None) %}
-        {% for i, tr in enumerate(tasks_rel) %}
+            <tbody >
+            {% set ns = namespace(prev_group=None, prev_user=None) %}
+            {% for i, tr in enumerate(tasks_rel) %}
 
             {% if ns.prev_group != tr.task.group_id %}
                 {% set ns.prev_group = tr.task.group_id %}
                 <tr>
-                <td colspan="3" class="pimpy-group-head-td">
-                <h1>
-                    <a href="{% if personal %}{{ url_for('pimpy.view_tasks_personal', group_id=tr.task.group.id) }}{% else %}{{ url_for('pimpy.view_tasks', group_id=tr.task.group.id) }}{% endif %}">{{ tr.task.group.name }}</a>
-                </h1>
-                </td>
+                    <td colspan="3" class="pimpy-group-head-td">
+                        <h1>
+                            <a href="{% if personal %}{{ url_for('pimpy.view_tasks_personal', group_id=tr.task.group.id) }}{% else %}{{ url_for('pimpy.view_tasks', group_id=tr.task.group.id) }}{% endif %}">
+                                {{ tr.task.group.name }}
+                            </a>
+                        </h1>
+                    </td>
                 </tr>
             {% endif %}
 
             {% if not personal %}
                 {% if ns.prev_user != tr.user_id %}
                     {% set ns.prev_user = tr.user_id %}
-                <tr>
-                <td colspan="3" class="pimpy-user-head-td">
-                    <h3> {{ tr.user.name }} </h3>
-                </td>
-                </tr>
+                    <tr>
+                        <td colspan="3" class="pimpy-user-head-td">
+                            <h3> {{ tr.user.name }} </h3>
+                        </td>
+                    </tr>
                 {% endif %}
             {% endif %}
 
             {% set t = tr.task %}
+            <tr is="pimpy-task"
+                    :id="{{ t.id }}"
+                    :b32id="'{{ t.b32_id }}'"
+                    :timestamp="'{{ t.timestamp }}'"
+                    :title='{{ t.title | tojson }}'
+                    :content='{{ t.content | tojson }}'
+                    :minute_id="{{ t.minute_id if t.minute_id else "null"}}"
+                    :users="'{{ t.get_users() | safe }}'"
+                    :status="'{{ t.status_raw }}'"
+                    :line="{{ t.line if t.line else "null" }}">
+            </tr>
 
-            <tr id="pimpy_task_row_{{ t.id }}" class='pimpy_task_row pimpy_status_{{ t.get_status_string() | replace(" ","_")}}' data-toggle="collapse" data-target='#{{ t.id }}_{{ tr.user.name | replace(" ","_") }}' data-task-id='{{ t.id }}'>
-                <td>
-                    <div class="btn-group" style="margin-bottom: 8px;">
-                        <a id="pimpy_task{{ t.id }}" class="pimpy_task btn dropdown-toggle {{ t.get_status_color() }} " data-toggle="dropdown" href="#"> {{ t.b32_id }} </a>
-                        <ul class="dropdown-menu">
-                            {% for status_meaning in status_meanings %}
-                                <li>
-                                    <a href="#" data-toggle="dropdown" data-task-id="{{ t.id }}" data-status-id="{{ status_meaning[2] }}" class="pimpy_status {{ status_meaning[1] }}"> {{ status_meaning[0] }}</a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </td><td>
-                {{ t.title }}
-                </td><td class="pimpy-user-col">
-                    {{ t.get_users(True) | safe }}
-                </td>
-            </tr>
-            <tr class='pimpy_status_{{ t.get_status_string() | replace(" ","_")}}'>
-                <td colspan="3" style="padding: 0px;">
-                <div class="collapse" id='{{ t.id }}_{{ tr.user.name | replace(" ","_") }}'>
-                    <div class="well well-small">
-                        <dl>
-                            <dt>{{ _('Task') }}:</dt>
-                            <dd>
-                                <p class="pimpy_editable" id="title" data-pk="{{ t.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ t.id }}" data-title="Task Content">{{ t.title }}</p>
-                                <button class="btn pimpy_editable_toggle" style="float: right;">{{ _('Edit') }}</button>
-                            </dd>
-                            <dt>{{ _('Users') }}:</dt>
-                            <dd>
-                                <p class="pimpy_editable" id="users" data-pk="{{ t.id }}" data-type="text" data-url="/pimpy/tasks/edit/{{ t.id }}" data-title="Task Content">{{ t.get_users(True) | safe }}</p>
-                            </dd>
-                            <dt>{{ _('Description') }}:</dt>
-                            <dd>
-                                <p class="pimpy_editable" id="content" data-pk="{{ t.id }}" data-type="textarea" data-url="/pimpy/tasks/edit/{{ t.id }}" data-title="Task Content">{{ t.content }}</p>
-                            </dd>
-                            <dt>{{ _('Created') }}:</dt>
-                            <dd>
-                                {{t.timestamp }}
-                            </dd>
-                        </dl>
-                        {% if t.minute_id %}
-                        <a href="{{ url_for('pimpy.view_minute',
-                            minute_id=t.minute_id,
-                            line_number=t.line) }}">{{ _('View minute') }}</a>
-                        {% endif %}
-                    </div>
-                </div>
-                </td>
-            </tr>
         {% endfor %}
         </tbody></table>
     </div>

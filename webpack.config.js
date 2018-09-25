@@ -28,6 +28,18 @@ module.exports = {
                 },
             },
             {
+                test: /\.sass$/,
+                use: [
+                    "style-loader",
+                    "css-loader",
+                    {
+                        loader: "sass-loader",
+                        options: {indentedSyntax: true}
+                    },
+                ]
+
+            },
+            {
                 test: /\.scss$/,
                 exclude: styles,
                 use: [
