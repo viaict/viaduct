@@ -2,22 +2,49 @@
   "name": "viaduct",
   "version": "0.0.0",
   "description": "Via CMS",
-  "dependencies": {},
+  "dependencies": {
+    "vue": "^2.5.16",
+    "vue-router": "^3.0.1",
+    "vue-property-decorator": "latest"
+  },
   "devDependencies": {
+    "@sentry/browser": "latest",
+    "axios": "^0.18.0",
+    "bootstrap": "^4.1.3",
+    "clientjade": "^0.1.1",
+    "css-loader": "^1.0.0",
+    "file-loader": "^1.1.11",
+    "font-awesome": "^4.7.0",
+    "friendly-errors-webpack-plugin": "^1.7.0",
     "grunt": "^0.4.2",
-    "grunt-contrib-concat": "^0.3.0",
-    "grunt-contrib-uglify": "^0.4.0",
-    "grunt-contrib-copy": "^0.5.0",
     "grunt-contrib-clean": "^0.5.0",
+    "grunt-contrib-concat": "^0.3.0",
+    "grunt-contrib-copy": "^0.5.0",
+    "grunt-contrib-uglify": "^0.4.0",
     "grunt-contrib-watch": "^0.5.3",
-    "clientjade": "^0.1.1"
+    "mini-css-extract-plugin": "^0.4.1",
+    "node-sass": "^4.9.2",
+    "pug": "^2.0.3",
+    "pug-plain-loader": "^1.0.0",
+    "sass-loader": "^7.0.3",
+    "source-map-loader": "^0.2.3",
+    "style-loader": "^0.23.0",
+    "ts-loader": "^4.1.0",
+    "typescript": "^2.8.1",
+    "url-loader": "^1.0.1",
+    "vue-loader": "^15.2.6",
+    "vue-template-compiler": "^2.5.16",
+    "webpack": "^4.16.2",
+    "webpack-cli": "^3.1.0"
   },
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "dev": "webpack --mode development --watch",
+    "build": "webpack --mode production"
   },
   "repository": {
     "type": "git",
-    "url": "git:https://github.com/viaict/viaduct"
+    "url": "ssh://git@gitlab.com:studieverenigingvia/viaduct.git "
   },
   "author": "",
   "bugs": {

@@ -1,0 +1,46 @@
+/* line 3, ../../../sass/domjudge-scoreboard-embed.scss */
+body {
+  background: none; }
+
+/* line 7, ../../../sass/domjudge-scoreboard-embed.scss */
+.container {
+  font-size: 175%; }
+
+/* line 11, ../../../sass/domjudge-scoreboard-embed.scss */
+h1 {
+  display: none; }
+
+/* line 15, ../../../sass/domjudge-scoreboard-embed.scss */
+#domjudge-time-table {
+  display: none; }
+
+/* line 19, ../../../sass/domjudge-scoreboard-embed.scss */
+#domjudge-scoreboard-table {
+  color: #0ca4e8; }
+
+/* line 23, ../../../sass/domjudge-scoreboard-embed.scss */
+#domjudge-scoreboard-table table thead tr {
+  border-bottom: 4px solid #0ca4e8; }
+
+/* line 27, ../../../sass/domjudge-scoreboard-embed.scss */
+#domjudge-scoreboard-table table tbody tr {
+  border-bottom: 2px solid #0ca4e8; }
+
+/* line 31, ../../../sass/domjudge-scoreboard-embed.scss */
+.domjudge-problem-title {
+  background: none !important;
+  border: none; }
+
+/* line 36, ../../../sass/domjudge-scoreboard-embed.scss */
+td {
+  background: none !important; }
+
+/* line 40, ../../../sass/domjudge-scoreboard-embed.scss */
+.domjudge-problem-solved-cell {
+  background: none !important;
+  color: #0ca4e8; }
+
+/* line 45, ../../../sass/domjudge-scoreboard-embed.scss */
+.domjudge-problem-incorrect-cell {
+  background: none !important;
+  color: #0ca4e8; }

@@ -28,13 +28,13 @@ fi
 
 # Check for JSHint errors in changed files except for minified files since
 # these are not created by us, ignore deleted files.
-js_files=$(git $gitparams --name-status | grep ^[^D].*.js\$ | cut -d'	' -f2- | grep --invert-match '\.min\.' | grep --invert-match 'Gruntfile.js')
-if [[ $? -eq 0 ]]; then
-  echo $js_files | xargs jshint
-  if [ $? -ne 0 ]; then
-      error=1
-  fi
-fi
+#js_files=$(git $gitparams --name-status | grep ^[^D].*.js\$ | cut -d'	' -f2- | grep --invert-match '\.min\.' | grep --invert-match 'Gruntfile.js')
+#if [[ $? -eq 0 ]]; then
+#  echo $js_files | xargs jshint
+#  if [ $? -ne 0 ]; then
+#      error=1
+#  fi
+#fi
 
 # Exit on any error
 set -e

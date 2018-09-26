@@ -57,9 +57,16 @@ class Task(db.Model, BaseEntity):
         "btn-info", "btn-warning", "btn-success",
         "btn-danger", "btn-success", "btn-inverse"]
 
+    _status_raw = ["new", "started", "done",
+                   "remove", "finished", "deleted"]
+
     @property
     def b32_id(self):
         return b32.encode(self.id)
+
+    @property
+    def status_raw(self):
+        return self._status_raw[self.status]
 
     def get_status_string(self):
         """Return a string representing the status."""
