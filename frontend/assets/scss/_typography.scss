@@ -1,0 +1,38 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,700);
+@import '~font-awesome/scss/font-awesome';
+
+html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: normal;
+    font-size: 16px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: normal;
+}
+
+p {
+    line-height: 25px;
+}
+
+img {
+    max-width: 100%;
+}
+
+form label {
+    font-weight: bold;
+}
+
+form p {
+    margin: 20px 0;
+}

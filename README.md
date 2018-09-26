@@ -13,8 +13,8 @@ See [tutorial](TUTORIAL.md).
 
 ### Python environment
 
-Development can be done using only `docker` and `docker-compose`, then you can 
- skip this step and the ruby and node setup.
+Development can be done using only `docker` and `docker-compose`, then you can
+ skip this step and the node setup.
 
 For the Python dependencies, usage of virtual environments is recommended.
 All dependencies are listed in `requirements.in`.
@@ -41,7 +41,7 @@ docker-compose run --rm backend python manage.py createdb
 To check that all code has been written in a correct style, we have server side
 hooks installed. To mirror these hooks client side, the hooks need to be
 installed. Next to coding style checks, there are also hooks for automatically
-compiling translations, updating submodules and compiling Ruby config.
+compiling translations and updating submodules.
 
 Finally, set up the awesome hooks:
 
@@ -66,16 +66,11 @@ install `docker-compose` with your favourite macOS package manager.
 On Windows, God help you.
 
 
-### Ruby and NodeJS tools
+### NodeJS tools
 
 **Note:** Only needed for running outside docker
 
-Build dependencies are for ruby and npm:
-* Install Ruby gems
-    - `gem install bundler`
-    - `bundle install` (if that does not work try this:
-      http://guides.rubygems.org/faqs/#user-install)
-
+Build dependencies are npm:
 * Install Grunt build dependencies and install JSHint:
     - `sudo npm install -g grunt-cli`
     - `sudo npm install -g jshint`

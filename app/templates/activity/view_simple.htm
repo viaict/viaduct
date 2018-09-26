@@ -3,20 +3,20 @@
 </a>
 {% for activity in activities.items %}
     <div class="activity">
-            <h3>
-                <a class="overflow-dots" href="{{ url_for('activity.get_activity', activity_id=activity.id)}}">{{ activity.name }}</a>
-            </h3>
-            <ul>
-                <li class="overflow-dots"><i class="glyphicon glyphicon-calendar"></i>
-                {{ activity.get_time() }}</li>
+        <h3>
+            <a class="overflow-dots" href="{{ url_for('activity.get_activity', activity_id=activity.id)}}">{{ activity.name }}</a>
+        </h3>
+        <ul>
+            <li class="overflow-dots"><i class="glyphicon glyphicon-calendar"></i>
+            {{ activity.get_time() }}</li>
 
-                <li class="overflow-dots"><i class="glyphicon glyphicon-home"></i>
-                {{ activity.location }}</li>
-            </ul>
-            <span>
-                {{ activity.till_now() }}
-            </span>
-    </div> {# activity-simple #}
+            <li class="overflow-dots"><i class="glyphicon glyphicon-home"></i>
+            {{ activity.location }}</li>
+        </ul>
+        <span>
+            {{ activity.till_now() }}
+        </span>
+    </div>
 {% endfor %}
 
 <address>

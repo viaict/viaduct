@@ -3,7 +3,7 @@
 
 grunt dev
 
-compass watch . &
+npm run dev &
 PIDS[0]=$!
 
 grunt watch &

@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "lib": [
+      "dom",
+      "es2015"
+    ],
+
+    "sourceMap": true,
+
+    "module": "es6",
+    "moduleResolution": "node",
+    "target": "es5",
+
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "strictNullChecks": true,
+
+    "experimentalDecorators": true,
+
+    "allowJs": true
+  }
+}
+
