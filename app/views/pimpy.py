@@ -21,7 +21,8 @@ blueprint = Blueprint('pimpy', __name__, url_prefix='/pimpy')
 @blueprint.after_app_request
 def set_auth_cookie(response: Response):
     if current_user.is_authenticated:
-        token = oauth_service.get_manual_token(current_user.id, scope=Scopes.pimpy)
+        token = oauth_service.get_manual_token(current_user.id,
+                                               scope=Scopes.pimpy)
         response.set_cookie('access_token', token.access_token)
     return response
 
