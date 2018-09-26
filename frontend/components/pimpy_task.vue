@@ -49,6 +49,7 @@
     import Vue from "vue"
     import {Component, Prop} from "vue-property-decorator"
     import instance from "../utils/axios";
+    import Flask from "../utils/flask";
 
     interface PimpyTaskEditableValues {
         users: string;
@@ -79,11 +80,9 @@
         private isStatusLoading: boolean = false;
         private isFieldLoading: boolean = false;
         private editField: string = "";
-
+        private baseTaskUrl = Flask.url_for("api.tasks", {'task_id': this.b32id});
         private editValues: PimpyTaskEditableValues;
-        private baseMinuteUrl: string = "/pimpy/minutes/single/{minute_id}/{line}";
 
-        private baseTaskUrl: string = "/api/tasks/" + this.b32id;
         private statusDetails: object = {
             "new": <PimpyTaskStatusDetails> {
                 text: "Not started",
@@ -120,9 +119,10 @@
         }
 
         get minuteUrl() {
-            return this.baseMinuteUrl
-                .replace("{minute_id}", this.minute_id.toString())
-                .replace("{line}", this.line.toString())
+            return Flask.url_for("pimpy.view_minute", {
+                'minute_id': this.minute_id,
+                'line_number': this.line
+            });
         }
 
 

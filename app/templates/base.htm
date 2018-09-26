@@ -60,7 +60,14 @@
         {% endif %}
 
         <!-- TODO move to global js -->
-        <script>window.viaduct.locale = "{{get_locale()}}";</script>
+        <script>
+            window.viaduct.locale = "{{get_locale()}}";
+            SentryConfig = {
+                dsn: "{{ app_config["SENTRY_DSN_FRONTEND"] }}",
+                release: "{{ app_version }}",
+                environment: "{{ app_config['ENVIRONMENT'] }}",
+            }
+        </script>
 
         {% block includes %}
         {% endblock %}

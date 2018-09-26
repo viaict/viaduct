@@ -55,6 +55,7 @@ class Config(object):
 
         # Sentry error capturing
         self.SENTRY_DSN = str
+        self.SENTRY_DSN_FRONTEND = str
         self.ENVIRONMENT = str
 
         # URL for Athenaeum order page
