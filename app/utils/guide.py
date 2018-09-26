@@ -12,14 +12,15 @@ from app.service import role_service, page_service
 class GuideAPI:
 
     @staticmethod
-    def get_current_user_guide():
+    def get_current_user_guide() -> PageRevision:
+        """Get the user guide for a specific module."""
         module_name = request.blueprint
         if not module_name:
-            return ''
-
-        """ Get the user guide for a specific module """
-        user_guide = page_service.get_page_by_path(
-            'guides/user/' + module_name)
+            user_guide = None
+            module_name = 'static'
+        else:
+            user_guide = page_service.get_page_by_path(
+                'guides/user/' + module_name)
 
         if not user_guide:
             user_revision = PageRevision(None, None, None, None, None, None,
@@ -42,13 +43,14 @@ class GuideAPI:
         return user_revision
 
     @staticmethod
-    def get_current_admin_guide():
+    def get_current_admin_guide() -> PageRevision:
         module_name = request.blueprint
         if not module_name:
-            return ''
-
-        admin_guide = page_service.get_page_by_path(
-            'guides/admin/' + module_name)
+            admin_guide = None
+            module_name = 'static'
+        else:
+            admin_guide = page_service.get_page_by_path(
+                'guides/admin/' + module_name)
 
         if not admin_guide:
             admin_revision = PageRevision(None, None, None, None, None, None,
