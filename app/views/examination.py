@@ -55,7 +55,7 @@ def add():
         answer_file_data = request.files.get('answers', None)
 
         # Exam file is required
-        if len(exam_file_data.name) > 0:
+        if exam_file_data is not None and len(exam_file_data.name) > 0:
             exam_file = file_service.add_file(FileCategory.EXAMINATION,
                                               exam_file_data,
                                               exam_file_data.filename)
@@ -68,7 +68,7 @@ def add():
                                    test_types=test_types, new_exam=True)
 
         # Answer file is optional
-        if len(answer_file_data.name) > 0:
+        if answer_file_data is not None and len(answer_file_data.name) > 0:
             answers_file = file_service.add_file(FileCategory.EXAMINATION,
                                                  answer_file_data,
                                                  answer_file_data.filename)
