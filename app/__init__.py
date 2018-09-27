@@ -20,7 +20,6 @@ from config import Config
 from .extensions import (db, login_manager, cache, toolbar, jsglue,
                          oauth_server, cors, sentry, babel)
 
-from flask.app import Flask
 version = 'v2.12.1.0'
 
 logging.basicConfig(
