@@ -72,9 +72,8 @@
 {% endmacro %}
 
 {% macro render_submit(text) %}
-    {{ ignore_kwargs(kwargs) }}
     <div class="form-group">
-        <button class='btn btn-primary' data-loading-text={{_('Loading...')}}
+        <button class='btn btn-primary {{ kwargs.get('class') }}' data-loading-text={{_('Loading...')}}
             type='submit'>{{ text }}</button>
     </div>
 {% endmacro %}

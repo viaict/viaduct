@@ -20,6 +20,7 @@ from config import Config
 from .extensions import (db, login_manager, cache, toolbar, jsglue,
                          oauth_server, cors, sentry, babel)
 
+from flask.app import Flask
 version = 'v2.12.1.0'
 
 logging.basicConfig(
@@ -48,7 +49,7 @@ def static_url(url):
     return url + '?v=' + version
 
 
-def is_module(path):
+def is_module(path: str) -> bool:
     init_path = os.path.join(path, '__init__.py')
 
     if os.path.isdir(path) and os.path.exists(init_path):
@@ -59,7 +60,7 @@ def is_module(path):
     return False
 
 
-def register_views(app, path):
+def register_views(app: Flask, path: str) -> None:
     app_path = os.path.dirname(os.path.abspath(app.root_path))
 
     for filename in os.listdir(path):
@@ -93,7 +94,7 @@ def get_locale():
     return request.accept_languages.best_match(list(languages), default='nl')
 
 
-def init_app(query_settings=True, debug=False):
+def init_app(query_settings: bool = True, debug: bool = False) -> Flask:
     # Has to be imported *after* app is created and Babel is initialised
     from app import jinja_env  # noqa
 
@@ -188,7 +189,7 @@ def init_app(query_settings=True, debug=False):
     return app
 
 
-def init_oauth():
+def init_oauth() -> None:
     from app.service import oauth_service
 
     oauth_server.init_app(app,

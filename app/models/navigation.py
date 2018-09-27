@@ -59,7 +59,7 @@ class NavigationEntry(db.Model, BaseEntity):
 
     @property
     def href(self):
-        if self.external:
+        if self.external and self.url:
             return 'https://' + self.url
         else:
             return self.url if self.url else '/' + self.page.path

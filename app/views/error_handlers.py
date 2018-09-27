@@ -17,7 +17,7 @@ from app.service import role_service
 @login_manager.unauthorized_handler
 def unauthorized():
     # Save the path the user was rejected from.
-    session['denied_from'] = url_for(request.url_rule.endpoint, **request.args)
+    session['denied_from'] = request.path
 
     flash(_('You must be logged in to view this page.'), 'danger')
     return redirect(url_for('user.sign_in'))

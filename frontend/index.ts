@@ -8,6 +8,7 @@ SentryConfig.integrations = [new Sentry.Integrations.Vue()];
 
 Sentry.init(SentryConfig);
 
+
 // Pimpy version, cannot use render function yet as we define custom element in
 // Jinja e.g. <tr is="pimpy-task" :id="..." ...></tr>.
 if (document.querySelector('#pimpy_app')) {
