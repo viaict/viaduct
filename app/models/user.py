@@ -1,9 +1,11 @@
 from datetime import datetime
 from flask_login import UserMixin, AnonymousUserMixin
+from typing import List
 
 from app import db, constants
 from app.models.base_model import BaseEntity
 from app.models.education import Education
+from app.models.group import Group
 from app.service import group_service
 
 
@@ -29,7 +31,7 @@ class AnonymousUser(AnonymousUserMixin):
 
     id = 0
     has_paid = False
-    groups = []
+    groups: List[Group] = []
 
 
 class User(db.Model, UserMixin, BaseEntity):

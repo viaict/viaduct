@@ -38,7 +38,6 @@ class Config(object):
         # Mollie payment provider config.
         self.MOLLIE_URL = str
         self.MOLLIE_KEY = str
-        self.MOLLIE_REDIRECT_URL = str
 
         # Copernica e-mailing synchronization configuration.
         self.COPERNICA_ENABLED = distutils.util.strtobool
@@ -56,6 +55,7 @@ class Config(object):
 
         # Sentry error capturing
         self.SENTRY_DSN = str
+        self.SENTRY_DSN_FRONTEND = str
         self.ENVIRONMENT = str
 
         # URL for Athenaeum order page

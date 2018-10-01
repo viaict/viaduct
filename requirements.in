@@ -25,6 +25,7 @@ google-api-python-client
 hashfs
 Markdown
 marshmallow
+mypy
 pep8
 pep8-naming
 Pillow

@@ -1,7 +1,7 @@
 from flask_babel import lazy_gettext as _
 from flask_login import current_user
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, BooleanField
+from wtforms import StringField, SelectField, BooleanField, TextAreaField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import InputRequired
 
@@ -36,7 +36,7 @@ class CreateForm(FlaskForm):
     requires_direct_payment = BooleanField(_('Requires direct payment'),
                                            default=False)
     education_id = SelectField('Opleiding', coerce=int)
-    terms = StringField(_('Conditions'))
+    terms = TextAreaField(_('Conditions'), description=_('(Markdown)'))
 
 
 class AddRegistrationForm(FlaskForm):

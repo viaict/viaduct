@@ -4,6 +4,7 @@ from flask_babel import _
 from app.enums import FileCategory
 from app.exceptions.base import ResourceNotFoundException, \
     ValidationException, AuthorizationException, BusinessRuleException
+from app.models.user import User
 from app.repository import user_repository
 from app.service import file_service, mail_service, oauth_service
 from app.utils import copernica
@@ -140,7 +141,7 @@ def get_user_by_login(email, password):
     return user
 
 
-def validate_password(user, password):  # type: (User, str) -> bool
+def validate_password(user: User, password: str) -> bool:
     if user.password is None:
         return False
 
@@ -151,7 +152,7 @@ def validate_password(user, password):  # type: (User, str) -> bool
         return False
 
 
-def user_has_avatar(user_id):
+def user_has_avatar(user_id: int):
     user = get_user_by_id(user_id)
 
     return user.avatar_file_id is not None

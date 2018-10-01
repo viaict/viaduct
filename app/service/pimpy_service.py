@@ -4,7 +4,7 @@ import datetime
 import logging
 import re
 from fuzzywuzzy import fuzz
-from typing import List
+from typing import List, Optional
 
 from app.enums import PimpyTaskStatus
 from app.exceptions.base import ValidationException, \
@@ -79,7 +79,7 @@ def get_task_by_b32_id(b32_task_id: str) -> Task:
     return task
 
 
-def find_task_by_b32_id(b32_task_id: str) -> Task:
+def find_task_by_b32_id(b32_task_id: str) -> Optional[Task]:
     try:
         task_id = baas32.decode(b32_task_id)
         return pimpy_repository.find_task_by_id(task_id)

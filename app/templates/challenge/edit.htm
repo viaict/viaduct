@@ -1,0 +1,16 @@
+{% from "macros/form.htm" import render_form %}
+
+{% extends "content.htm" %}
+{% block content %}
+
+<legend>
+    {%- if challenge_id is defined and challenge_id != None -%}
+    {{ _('Edit challenge') }}
+    {%- else -%}
+    {{ _('Create challenge') }}
+    {%- endif -%}
+</legend>
+
+{{ render_form(form) }}
+
+{% endblock %}

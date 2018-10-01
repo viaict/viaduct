@@ -32,7 +32,7 @@ class CustomForm(db.Model, BaseEntity):
     max_attendants = db.Column(db.Integer)
     introductions = db.Column(db.Integer)
     price = db.Column(db.Float, default=0)
-    terms = db.Column(db.String(4096))
+    terms = db.Column(db.Text())
 
     archived = db.Column(db.Boolean)
     requires_direct_payment = db.Column(db.Boolean, default=False,

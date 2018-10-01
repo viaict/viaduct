@@ -3,6 +3,8 @@ from app import db, constants
 from app.models.base_model import BaseEntity
 from app.models.user import User
 
+import datetime
+
 
 def dump_datetime(value):
     """Deserialize datetime object into string form for JSON processing."""
@@ -54,6 +56,11 @@ class Challenge(db.Model, BaseEntity):
             'weight': self.weight,
             'type': self.type,
         }
+
+    @property
+    def is_open(self):
+        now = datetime.date.today()
+        return self.start_date <= now <= self.end_date
 
 
 class Submission(db.Model, BaseEntity):

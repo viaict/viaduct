@@ -7,6 +7,7 @@ from oauthlib.common import generate_token
 
 from app.exceptions.base import BusinessRuleException, \
     ResourceNotFoundException, ApplicationException
+from app.models.oauth.token import OAuthToken
 from app.oauth_scopes import Scopes
 from app.repository import oauth_repository
 from app.service import user_service
@@ -139,6 +140,22 @@ def create_token(token, request):
 
     return oauth_repository.create_token(client_id=client_id, user_id=user_id,
                                          **token)
+
+
+def get_manual_token(user_id: int, scope: Scopes) -> OAuthToken:
+    client_id = 'VIADUCT'
+    token = oauth_repository.get_token_by_user_id(user_id, client_id)
+
+    if token is not None and not token.is_access_token_expired():
+        return token
+
+    token_val = generate_token(42)
+    return oauth_repository.create_token(client_id=client_id, user_id=user_id,
+                                         **{'access_token': token_val,
+                                            'expires_in': 3600,
+                                            'refresh_token': None,
+                                            'scope': scope.name,
+                                            'token_type': 'Bearer'})
 
 
 def get_approved_clients_by_user_id(user_id):

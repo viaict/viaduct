@@ -1,0 +1,12 @@
+
+body {
+    padding-top: 100px;
+    background-size: cover;
+    overflow-y: scroll;
+}
+
+@media(max-width: 767px){
+    body {
+        padding: 0;
+    }
+}

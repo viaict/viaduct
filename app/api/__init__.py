@@ -5,14 +5,19 @@ from app.api.pimpy.tasks import TaskListResource, TaskResource, \
 
 # Pimpy Tasks
 rest_api.add_resource(TaskListResource,
-                      '/api/tasks/')
+                      '/api/tasks/',
+                      endpoint="api.task")
 rest_api.add_resource(TaskResource,
-                      '/api/tasks/<string:task_id>')
+                      '/api/tasks/<string:task_id>',
+                      endpoint="api.tasks")
 rest_api.add_resource(GroupTaskListResource,
-                      '/api/groups/<int:group_id>/tasks')
+                      '/api/groups/<int:group_id>/tasks',
+                      endpoint="api.groups.tasks")
 
 # Pimpy Minutes
 rest_api.add_resource(MinuteResource,
-                      "/api/minutes/<int:minute_id>")
+                      "/api/minutes/<int:minute_id>",
+                      endpoint="api.minute")
 rest_api.add_resource(GroupMinuteResource,
-                      "/api/groups/<int:group_id>/minutes")
+                      "/api/groups/<int:group_id>/minutes",
+                      endpoint="api.groups.minutes")

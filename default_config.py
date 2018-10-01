@@ -61,7 +61,6 @@ class Config:
     MOLLIE_URL = 'https://api.mollie.nl/v1/payments/'
     MOLLIE_TEST_KEY = 'test_SOMEAPIKEY'
     MOLLIE_KEY = ''
-    MOLLIE_REDIRECT_URL = 'https://svia.nl/mollie/check/'
     MOLLIE_TEST_MODE = True
 
     COPERNICA_ENABLED = False

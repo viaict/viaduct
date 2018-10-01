@@ -104,8 +104,8 @@ def edit(entry_id=None, parent_id=None):
                            parents=parents.all())
 
 
-@blueprint.route('/delete/<int:entry_id>/', methods=['GET'])
-@blueprint.route('/delete/<int:entry_id>/<int:inc_page>', methods=['GET'])
+@blueprint.route('/delete/<int:entry_id>/', methods=['POST'])
+@blueprint.route('/delete/<int:entry_id>/<int:inc_page>', methods=['POST'])
 @require_role(Roles.NAVIGATION_WRITE)
 def delete(entry_id, inc_page=0):
     if inc_page and not role_service.user_has_role(current_user,

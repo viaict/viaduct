@@ -45,6 +45,14 @@ flake8:
   script:
    - flake8 ./app
 
+mypy:
+  image: $BRANCH_IMAGE
+  stage: test
+  script:
+    - mypy -m app
+  allow_failure: true
+
+
 miscellaneous:
   image: $BRANCH_IMAGE
   stage: test

@@ -1,4 +1,4 @@
-{% from "macros/form.htm" import render_form %}
+{% from "macros/form.htm" import render_form, render_submit %}
 
 {% extends "content.htm" %}
 
@@ -24,19 +24,23 @@
 
         </fieldset>
     </form>
-
+    <div class="row">
     {% if entry and entry.children.count() == 0 %}
-        <a class="btn btn-danger" href="{{ url_for('navigation.delete',
-            entry_id=entry.id) }}">
-            {{_('Delete')}}
-        </a>
+        <div class="col-md-2">
+            <form action="{{ url_for('navigation.delete', entry_id=entry.id) }}"
+                  method="post">
+                {{ render_submit(_('Delete'), class='btn-danger') }}
+            </form>
+        </div>
         {% if not entry.external and not entry.activity_list %}
-            <a class="btn btn-danger"
-                href="{{ url_for('navigation.delete', entry_id=entry.id, inc_page=1) }}">
-                {{_('Delete menu item and pagina')}}
-            </a>
+            <div class="col-md-10">
+                <form action="{{ url_for('navigation.delete', entry_id=entry.id, inc_page=1) }}" method="post">
+                    {{ render_submit(_('Delete menu item and pagina'), class='btn-danger') }}
+                </form>
+            </div>
         {% endif %}
     {% endif %}
+    </div>
 
     <script>
         function updateURLBoxState(pageID) {

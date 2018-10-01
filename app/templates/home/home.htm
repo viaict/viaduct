@@ -1,10 +1,5 @@
 {% extends 'base.htm' %}
 
-{% block includes %}
-<link href="{{static_url("/static/css/home.css")}}" rel="stylesheet" />
-{% endblock %}
-
-
 {% block below_menu %}
     <div id="jumbotron" style="background-image: url()">
         <div class="container">
@@ -42,7 +37,7 @@
             {% endfor %}
         </div>
         {% for revision in revisions %}
-            <div class="col-md-5 activities-simple">
+            <div class="col-md-5 home-activities-simple">
                 {% if revision.activity %}
                     {{ revision.activity | safe }}
                 {% else %}

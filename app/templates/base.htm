@@ -37,9 +37,7 @@
         <meta name="theme-color" content="#004b99">
 
         <link href="/static/img/via.png" rel="image_src" />
-
-        <link href="{{static_url("/static/css/custom.css")}}" rel="stylesheet" />
-        <link href="{{static_url("/static/css/navigation.css")}}" rel="stylesheet" />
+        <link href="{{static_url("/static/styles.css")}}" rel="stylesheet" />
 
         <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -47,24 +45,29 @@
             'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
         })(window,document,'script','dataLayer','GTM-PKHM7J9');</script>
 
-        <script src="https://cdn.ravenjs.com/3.20.0/raven.min.js" crossorigin="anonymous"></script>
-
-        {% if data %}
+        {% if data is defined %}
             <script>
-                var viaduct = {{json.dumps(serialize_sqla(data))|safe}};
+                window.viaduct = {{json.dumps(serialize_sqla(data))|safe}};
             </script>
         {% else %}
-            <script>var viaduct = {};</script>
+            <script>window.viaduct = {};</script>
         {% endif %}
+
+        <!-- TODO Remove when fully ported to webpack -->
+        {% if not vue %}
+            <script src="{{static_url("/static/js/global.js")}}"></script>
+            <script src="{{static_url("/jsglue.js")}}"></script>
+        {% endif %}
+
+        <!-- TODO move to global js -->
         <script>
-            viaduct.locale = "{{get_locale()}}";
-
-            Raven.config('{{ app_config['SENTRY_PUBLIC_DSN'] }}').install();
+            window.viaduct.locale = "{{get_locale()}}";
+            SentryConfig = {
+                dsn: "{{ app_config["SENTRY_DSN_FRONTEND"] }}",
+                release: "{{ app_version }}",
+                environment: "{{ app_config['ENVIRONMENT'] }}",
+            }
         </script>
-
-        <script src="{{static_url("/static/js/global.js")}}"></script>
-        <script src="{{static_url("/jsglue.js")}}"></script>
-
 
         {% block includes %}
         {% endblock %}
@@ -154,4 +157,5 @@
         </div>
         <!-- End guide modal -->
     </body>
+    <script src="{{ url_for("static", filename="main.js") }}"></script>
 </html>

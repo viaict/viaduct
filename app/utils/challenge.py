@@ -128,7 +128,7 @@ class ChallengeAPI:
         return Challenge.query.all()
 
     @staticmethod
-    def fetch_all_challenges_user(user_id):
+    def fetch_all_challenges_user(user_id, include_not_open=False):
         """
 
         """
@@ -136,10 +136,15 @@ class ChallengeAPI:
             .filter(and_(Submission.user_id == user_id,
                          Submission.approved == True)).all()  # noqa
         ids = map(lambda x: x[0], ids)
-        return Challenge.query\
-            .filter(~Challenge.id.in_(ids),
-                    Challenge.start_date <= datetime.date.today(),
-                    Challenge.end_date >= datetime.date.today()).all()
+
+        if include_not_open:
+            return Challenge.query\
+                .filter(~Challenge.id.in_(ids)).all()
+        else:
+            return Challenge.query\
+                .filter(~Challenge.id.in_(ids),
+                        Challenge.start_date <= datetime.date.today(),
+                        Challenge.end_date >= datetime.date.today()).all()
 
     @staticmethod
     def fetch_all_approved_challenges_user(user_id):
