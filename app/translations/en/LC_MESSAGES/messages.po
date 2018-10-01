@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-09-19 21:51+0200\n"
+"POT-Creation-Date: 2018-09-28 12:31+0200\n"
 "PO-Revision-Date: 2015-04-12 18:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.5.1\n"
+"Generated-By: Babel 2.6.0\n"
 
 #, python-format
 msgid "%(email)s is unknown to our system."
@@ -70,6 +70,9 @@ msgstr ""
 msgid "Add document"
 msgstr ""
 
+msgid "Add manual submission: "
+msgstr ""
+
 msgid "Add minutes"
 msgstr ""
 
@@ -88,6 +91,9 @@ msgstr ""
 msgid "All"
 msgstr ""
 
+msgid "All challenges"
+msgstr ""
+
 msgid "All companies"
 msgstr ""
 
@@ -101,6 +107,9 @@ msgid "All submissions"
 msgstr ""
 
 msgid "All vacancies"
+msgstr ""
+
+msgid "Already added a submission for this user, or the challenge is not open."
 msgstr ""
 
 msgid "Already exists in the database"
@@ -117,6 +126,9 @@ msgstr ""
 
 #, python-format
 msgid "An email has been sent to %(email)s with further instructions."
+msgstr ""
+
+msgid "Answer"
 msgstr ""
 
 msgid "Answers"
@@ -185,6 +197,9 @@ msgstr ""
 msgid "Chairman"
 msgstr ""
 
+msgid "Challenge saved successfully."
+msgstr ""
+
 msgid "Change SEO properties"
 msgstr ""
 
@@ -228,6 +243,9 @@ msgid "Click 'confirm' to allow the application to do the following:"
 msgstr ""
 
 msgid "Click to expand"
+msgstr ""
+
+msgid "Closed"
 msgstr ""
 
 msgid "Comma separated, regex allowed"
@@ -379,10 +397,16 @@ msgstr ""
 msgid "Create activity"
 msgstr ""
 
+msgid "Create challenge"
+msgstr ""
+
 msgid "Create form"
 msgstr ""
 
 msgid "Create group"
+msgstr ""
+
+msgid "Create new challenge"
 msgstr ""
 
 msgid "Create news articles"
@@ -535,6 +559,9 @@ msgstr ""
 msgid "Edit GA"
 msgstr ""
 
+msgid "Edit challenge"
+msgstr ""
+
 msgid "Edit course"
 msgstr ""
 
@@ -679,9 +706,6 @@ msgstr ""
 msgid "Files"
 msgstr ""
 
-msgid "Filter"
-msgstr ""
-
 msgid "First name"
 msgstr ""
 
@@ -723,6 +747,9 @@ msgid "Groups with read permission"
 msgstr ""
 
 msgid "Has paid"
+msgstr ""
+
+msgid "Hint"
 msgstr ""
 
 msgid "Honorary member"
@@ -1028,6 +1055,9 @@ msgstr ""
 msgid "OAuth authorize request was invalid. "
 msgstr ""
 
+msgid "Open challenges"
+msgstr ""
+
 msgid "Open for new members"
 msgstr ""
 
@@ -1094,6 +1124,9 @@ msgstr ""
 msgid "Please verify that you are not a robot."
 msgstr ""
 
+msgid "Points"
+msgstr ""
+
 msgid "Position vacant"
 msgstr ""
 
@@ -1149,6 +1182,9 @@ msgid "RSS feed"
 msgstr ""
 
 msgid "Rank"
+msgstr ""
+
+msgid "Ranking"
 msgstr ""
 
 msgid "Read files"
@@ -1352,6 +1388,9 @@ msgstr ""
 msgid "Study course"
 msgstr ""
 
+msgid "Submission saved successfully."
+msgstr ""
+
 msgid "Submission successful."
 msgstr ""
 
@@ -1377,9 +1416,6 @@ msgstr ""
 
 #, python-format
 msgid "Successfully updated client '%s'"
-msgstr ""
-
-msgid "Task"
 msgstr ""
 
 msgid "Task does not exist"
@@ -1545,6 +1581,9 @@ msgstr ""
 msgid "This news item does not exist"
 msgstr ""
 
+msgid "This page is only available using Javascript. So you better turn it on."
+msgstr ""
+
 msgid "Time"
 msgstr ""
 
@@ -1663,9 +1702,6 @@ msgid "View all available forms"
 msgstr ""
 
 msgid "View groups"
-msgstr ""
-
-msgid "View minute"
 msgstr ""
 
 msgid "View mollie transactions"
@@ -2540,5 +2576,14 @@ msgstr ""
 #~ "your via-account by confirming your "
 #~ "student ID before you can log in"
 #~ " with your UvA-net ID."
+#~ msgstr ""
+
+#~ msgid "Filter"
+#~ msgstr ""
+
+#~ msgid "Task"
+#~ msgstr ""
+
+#~ msgid "View minute"
 #~ msgstr ""
 

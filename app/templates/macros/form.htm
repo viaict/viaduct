@@ -121,7 +121,7 @@
 {% macro render_textarea(field) %}
     {{ ignore_kwargs(kwargs) }}
     {{ _render_field_with_errors(field, field(placeholder=field.label.text, class='form-control',
-                cols='50', rows='50')) }}
+                cols='50', rows='10')) }}
 {% endmacro %}
 
 {% macro _render_number_input(field, step) %}
