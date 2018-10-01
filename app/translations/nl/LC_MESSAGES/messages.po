@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.2.0.3\n"
 "Report-Msgid-Bugs-To: bestuur@svia.nl\n"
-"POT-Creation-Date: 2018-09-19 21:51+0200\n"
+"POT-Creation-Date: 2018-09-28 12:31+0200\n"
 "PO-Revision-Date: 2015-07-21 11:57+0200\n"
 "Last-Translator: Maico Timmerman <maicotimmerman@gmail.com>\n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.5.1\n"
+"Generated-By: Babel 2.6.0\n"
 
 #, python-format
 msgid "%(email)s is unknown to our system."
@@ -70,6 +70,9 @@ msgstr "Toevoegen"
 msgid "Add document"
 msgstr "Voeg document toe"
 
+msgid "Add manual submission: "
+msgstr ""
+
 msgid "Add minutes"
 msgstr "Notulen toevoegen"
 
@@ -88,6 +91,9 @@ msgstr "Administrator data"
 msgid "All"
 msgstr "Alle"
 
+msgid "All challenges"
+msgstr ""
+
 msgid "All companies"
 msgstr "Alle bedrijven"
 
@@ -102,6 +108,9 @@ msgstr "Alle inzendingen"
 
 msgid "All vacancies"
 msgstr "Alle vacatures"
+
+msgid "Already added a submission for this user, or the challenge is not open."
+msgstr ""
 
 msgid "Already exists in the database"
 msgstr "Bestaat al in de database."
@@ -118,6 +127,9 @@ msgstr "Aantal opgelost"
 #, python-format
 msgid "An email has been sent to %(email)s with further instructions."
 msgstr "Er is een email verstuurd naar %(email)s met verdere instructies."
+
+msgid "Answer"
+msgstr "Antwoord"
 
 msgid "Answers"
 msgstr "Antwoorden"
@@ -183,13 +195,16 @@ msgstr ""
 "bovenstaande voorwaarden."
 
 msgid "Cancel"
-msgstr ""
+msgstr "Annuleren"
 
 msgid "Cannot find parent navigation entry."
 msgstr "Het bovenligende menu item kan niet gevonden worden."
 
 msgid "Chairman"
 msgstr "Voorzitter"
+
+msgid "Challenge saved successfully."
+msgstr "Challenge opgeslagen."
 
 msgid "Change SEO properties"
 msgstr "SEO properties aanpassen"
@@ -235,6 +250,9 @@ msgstr "Click 'bevestigen' om de applicatie rechten geven tot het volgende:"
 
 msgid "Click to expand"
 msgstr "Klik om uit te klappen"
+
+msgid "Closed"
+msgstr "Gesloten"
 
 msgid "Comma separated, regex allowed"
 msgstr "Komma gescheiden, regex toegestaan"
@@ -385,11 +403,17 @@ msgstr "Activiteiten aanmaken"
 msgid "Create activity"
 msgstr "Activiteit aanmaken"
 
+msgid "Create challenge"
+msgstr "Challenge aanmaken"
+
 msgid "Create form"
 msgstr "Formulier aanmaken"
 
 msgid "Create group"
 msgstr "Groep aanmaken"
+
+msgid "Create new challenge"
+msgstr "Nieuwe challenge aanmaken"
 
 msgid "Create news articles"
 msgstr "Nieuwsberichten aanmaken"
@@ -541,6 +565,9 @@ msgstr "Aanpassen"
 msgid "Edit GA"
 msgstr "ALV aanpassen"
 
+msgid "Edit challenge"
+msgstr "Challenge aanpassen"
+
 msgid "Edit course"
 msgstr "Vak aanpassen"
 
@@ -685,9 +712,6 @@ msgstr "Bestandsnaam"
 msgid "Files"
 msgstr "Bestanden"
 
-msgid "Filter"
-msgstr "Filter"
-
 msgid "First name"
 msgstr "Voornaam"
 
@@ -730,6 +754,9 @@ msgstr "Groepen met lees rechten"
 
 msgid "Has paid"
 msgstr "Heeft betaald"
+
+msgid "Hint"
+msgstr "Hint"
 
 msgid "Honorary member"
 msgstr "Erelid"
@@ -1039,6 +1066,9 @@ msgstr "Aantal introducees toegestaan"
 msgid "OAuth authorize request was invalid. "
 msgstr "OAuth authorize request was niet geldig. "
 
+msgid "Open challenges"
+msgstr "Open challenges"
+
 msgid "Open for new members"
 msgstr "Open voor nieuwe leden"
 
@@ -1107,6 +1137,9 @@ msgstr ""
 msgid "Please verify that you are not a robot."
 msgstr "Verifieer dat je geen robot bent."
 
+msgid "Points"
+msgstr "Punten"
+
 msgid "Position vacant"
 msgstr "Positie openstaand"
 
@@ -1117,7 +1150,7 @@ msgid "Postoffice Box"
 msgstr "Postbus"
 
 msgid "Presidium:"
-msgstr ""
+msgstr "Presidium:"
 
 msgid "Previous"
 msgstr "Vorige"
@@ -1163,6 +1196,9 @@ msgstr ""
 
 msgid "Rank"
 msgstr "Rang"
+
+msgid "Ranking"
+msgstr "Ranglijst"
 
 msgid "Read files"
 msgstr "Lezen bestanden"
@@ -1367,6 +1403,9 @@ msgstr "Studievereniging"
 msgid "Study course"
 msgstr "Studie"
 
+msgid "Submission saved successfully."
+msgstr "Submission opgeslagen."
+
 msgid "Submission successful."
 msgstr "Inzending succesvol."
 
@@ -1393,9 +1432,6 @@ msgstr "Token voor client '%s' is ingetrokken"
 #, python-format
 msgid "Successfully updated client '%s'"
 msgstr "Client '%s' succesvol geupdate"
-
-msgid "Task"
-msgstr "Taak"
 
 msgid "Task does not exist"
 msgstr "Taak bestaat niet"
@@ -1595,6 +1631,9 @@ msgstr ""
 msgid "This news item does not exist"
 msgstr "Dit nieuwsbericht bestaat niet."
 
+msgid "This page is only available using Javascript. So you better turn it on."
+msgstr ""
+
 msgid "Time"
 msgstr "Tijd"
 
@@ -1716,9 +1755,6 @@ msgstr ""
 
 msgid "View groups"
 msgstr "Groepen weergeven"
-
-msgid "View minute"
-msgstr "Bekijk notulen"
 
 msgid "View mollie transactions"
 msgstr "Mollie betalingen weergeven"
@@ -2535,4 +2571,13 @@ msgstr ""
 #~ "via-acccount linken door je studentnummer"
 #~ " te bevestigen voordat je kan "
 #~ "inloggen met je UvA-net ID."
+
+#~ msgid "Filter"
+#~ msgstr "Filter"
+
+#~ msgid "Task"
+#~ msgstr "Taak"
+
+#~ msgid "View minute"
+#~ msgstr "Bekijk notulen"
 

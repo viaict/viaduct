@@ -1,12 +1,14 @@
 import datetime
 
 from flask import Blueprint, render_template, request, \
-    jsonify
+    jsonify, abort, flash, url_for, redirect
 from flask_login import login_required, current_user
+from flask_babel import _  # gettext
 
+from app import db
 from app.decorators import require_role, require_membership
 from app.forms import init_form
-from app.forms.challenge import ChallengeForm
+from app.forms.challenge import ChallengeForm, ManualSubmissionForm
 from app.models.challenge import Challenge
 from app.roles import Roles
 from app.service import role_service
@@ -22,21 +24,93 @@ def view_list():
     challenge = Challenge()
     form = init_form(ChallengeForm, obj=challenge)
 
-    challenges = ChallengeAPI.fetch_all_challenges_user(current_user.id)
+    can_write = role_service.user_has_role(current_user, Roles.CHALLENGE_WRITE)
+
+    challenges = ChallengeAPI.fetch_all_challenges_user(
+        current_user.id, include_not_open=can_write)
+
     approved_challenges = \
         ChallengeAPI.fetch_all_approved_challenges_user(current_user.id)
     user_points = ChallengeAPI.get_points(current_user.id)
+    if user_points is None:
+        user_points = 0
+
     ranking = ChallengeAPI.get_ranking()
 
     challenge_description = ChallengeAPI.get_challenge_description()
-
-    can_write = role_service.user_has_role(current_user, Roles.CHALLENGE_WRITE)
 
     return render_template('challenge/dashboard.htm', challenges=challenges,
                            user_points=user_points, ranking=ranking,
                            approved_challenges=approved_challenges, form=form,
                            challenge_description=challenge_description,
                            can_write=can_write)
+
+
+@blueprint.route('/create/', methods=['GET', 'POST'])
+@blueprint.route('/edit/<int:challenge_id>/', methods=['GET', 'POST'])
+@require_role(Roles.CHALLENGE_WRITE)
+def edit(challenge_id=None):
+    challenge = ChallengeAPI.fetch_challenge(challenge_id) \
+        if challenge_id else Challenge()
+
+    if challenge is None:
+        return abort(404)
+
+    form = init_form(ChallengeForm, obj=challenge)
+
+    if form.validate_on_submit():
+        form.populate_obj(challenge)
+
+        challenge.parent_id = 0
+        challenge.type = 'Text'
+
+        db.session.add(challenge)
+        db.session.commit()
+
+        flash(_('Challenge saved successfully.'), 'success')
+
+        return redirect(url_for('.view_list'))
+
+    return render_template("challenge/edit.htm",
+                           form=form, challenge_id=challenge_id)
+
+
+@blueprint.route('/add-manual-submission/<int:challenge_id>/',
+                 methods=['GET', 'POST'])
+@require_role(Roles.CHALLENGE_WRITE)
+def add_manual_submission(challenge_id):
+    challenge = ChallengeAPI.fetch_challenge(challenge_id)
+    if challenge is None:
+        return abort(404)
+
+    form = init_form(ManualSubmissionForm)
+
+    if form.validate_on_submit():
+        new_submission = ChallengeAPI.create_submission(
+            challenge_id=challenge.id,
+            user_id=form.user.data.id,
+            submission=None,
+            image_path=None)
+
+        if new_submission is False:
+            flash(_("Already added a submission for this user, "
+                    "or the challenge is not open."), 'danger')
+            return render_template('challenge/add_manual_submission.htm',
+                                   form=form, challenge=challenge)
+
+        new_submission.approved = True
+        ChallengeAPI.assign_points_to_user(challenge.weight,
+                                           new_submission.user_id)
+
+        db.session.add(new_submission)
+        db.session.commit()
+
+        flash(_('Submission saved successfully.'), 'success')
+
+        return redirect(url_for('.view_list'))
+
+    return render_template('challenge/add_manual_submission.htm',
+                           form=form, challenge=challenge)
 
 
 # API's

@@ -1,0 +1,10 @@
+{% from "macros/form.htm" import render_form %}
+
+{% extends "content.htm" %}
+{% block content %}
+
+<legend>{{ _('Add manual submission: ') + challenge.name }}</legend>
+
+{{ render_form(form) }}
+
+{% endblock %}
