@@ -37,6 +37,15 @@ def view_list():
 
     ranking = ChallengeAPI.get_ranking()
 
+    ranking_place = 0
+    last_score = -1
+    for r in ranking:
+        if last_score == -1 or last_score > r.points:
+            ranking_place += 1
+            last_score = r.points
+
+        r.place = ranking_place
+
     challenge_description = ChallengeAPI.get_challenge_description()
 
     return render_template('challenge/dashboard.htm', challenges=challenges,
