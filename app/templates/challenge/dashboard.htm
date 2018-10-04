@@ -164,11 +164,10 @@
                 </div>
 
                 <ul class="list-group" id="contact-list">
-	                {% set counter = 1 -%}
 					{% for user in ranking %}
                     <li class="list-group-item">
                         <div class="col-xs-12 col-sm-2">
-                            <h2>{{counter}}</h2>
+                            <h2>{{user.place}}</h2>
                         </div>
                         <div class="col-xs-12 col-sm-8">
                             <h3 class="name">{{user.user.name}}</h3><br/>
@@ -178,7 +177,6 @@
                         </div>
                         <div class="clearfix"></div>
                     </li>
-		                {% set counter = counter + 1 %}
 					{% endfor %}
 
                 </ul>
