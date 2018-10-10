@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
 import re
-
 from flask import render_template, request, url_for
 from flask_login import current_user
 
@@ -45,9 +44,7 @@ class NavigationAPI:
             parent = me.parent if me else None
 
         if parent:
-            entries = db.session.query(NavigationEntry)\
-                .filter_by(parent_id=parent.id)\
-                .order_by(NavigationEntry.position).all()
+            entries = parent.get_children()
         else:
             entries = [me] if me else []
 
