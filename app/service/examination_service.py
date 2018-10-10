@@ -1,7 +1,9 @@
 import datetime
+from flask_sqlalchemy import Pagination
 
 from app.exceptions.base import ResourceNotFoundException, \
     BusinessRuleException, DuplicateResourceException
+from app.models.course import Course
 from app.repository import examination_repository
 
 
@@ -19,7 +21,7 @@ def get_education_by_id(education_id):
     return education
 
 
-def get_course_by_id(course_id):
+def get_course_by_id(course_id: int) -> Course:
     course = examination_repository.find_course_by_id(course_id)
     if not course:
         raise ResourceNotFoundException("Course", course_id)
@@ -30,8 +32,18 @@ def find_all_courses():
     return examination_repository.find_all_courses()
 
 
+def paginated_search_courses(search: str, page: int) -> Pagination:
+    return examination_repository.paginated_search_all_courses(
+        search=search, page=page)
+
+
 def find_all_educations():
     return examination_repository.find_all_educations()
+
+
+def paginated_search_educations(search: str, page: int) -> Pagination:
+    return examination_repository.paginated_search_all_educations(
+        search=search, page=page)
 
 
 def find_all_examinations_by_course(course_id):
@@ -148,8 +160,8 @@ def delete_examination(examination_id):
     examination_repository.delete_examination(examination_id)
 
 
-def count_examinations_by_course(course_id):
-    exams = examination_repository.find_all_examinations_by_course(course_id)
+def count_examinations_by_course(course: Course):
+    exams = examination_repository.find_all_examinations_by_course(course.id)
     return len(exams)
 
 
@@ -166,8 +178,9 @@ def delete_education(education_id):
         examination_repository.delete_education(education_id)
 
 
-def delete_course(course_id):
-    if count_examinations_by_course(course_id) >= 1:
+def delete_course(course_id: int):
+    course = get_course_by_id(course_id)
+    if count_examinations_by_course(course) >= 1:
         raise BusinessRuleException("Course has examinations")
     else:
-        examination_repository.delete_course(course_id)
+        examination_repository.delete_course(course)

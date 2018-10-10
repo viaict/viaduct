@@ -1,41 +1,5 @@
 {% extends 'content.htm' %}
 
-{% block includes %}
-        <script src="{{static_url("/static/js/education/view.js") }}"></script>
-{% endblock %}
-
-
 {% block content %}
-<h1>{{ _('Education overview') }}</h1>
-<div class="row">
-    <div class="col-md-4">
-        <div class='form-group btn-group'>
-            <a href='{{ url_for('education.add_education') }}?redir=educations' class='btn btn-success'>
-                <i class='glyphicon glyphicon-pencil'></i> {{ _('New education') }}
-            </a>
-        </div>
-    </div>
-</div>
-<div class='row'>
-	<div class='col-md-12'>
-        <table id="datatable" class='table table-striped'>
-            <thead>
-                <tr>
-                    <th>{{ _('ID') }}</th>
-                    <th>{{ _('Title') }}</th>
-                    <th>{{ _('Created') }}</th>
-                    <th>{{ _('Modified') }}</th>
-                </tr>
-            </thead>
-            <tfoot>
-                <tr>
-                    <th>{{ _('ID') }}</th>
-                    <th>{{ _('Title') }}</th>
-                    <th>{{ _('Created') }}</th>
-                    <th>{{ _('Modified') }}</th>
-                </tr>
-            </tfoot>
-        </table>
-	</div>
-</div>
+    <div id="vue-education-overview"></div>
 {% endblock %}

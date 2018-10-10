@@ -33,6 +33,7 @@ app/static/js
 app/static
 app/static/main.js
 app/static/styles.css
+src/js/global/flask.js
 
 venv/*
 venv3

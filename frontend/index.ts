@@ -2,6 +2,8 @@ import Vue from "vue"
 import PimpyTask from "./components/pimpy_task.vue"
 import UserOverview from "./components/user_overview.vue"
 import GroupUserOverview from "./components/group_user_overview.vue"
+import CourseOverview from "./components/course_overview.vue"
+import EducationOverview from "./components/education_overview.vue"
 import * as Sentry from '@sentry/browser';
 
 declare var SentryConfig: Sentry.BrowserOptions;
@@ -34,13 +36,15 @@ if (document.querySelector('#vue-group-user-overview')) {
     })
 }
 
-function loadRenderedVueIfAvailable(el) {
+function loadRenderedVueIfAvailable(el, renderer) {
     if (document.querySelector(el)) {
         new Vue({
             el: el,
-            render: h => h(UserOverview)
+            render: h => h(renderer)
         })
     }
 }
 
-loadRenderedVueIfAvailable("#vue-user-overview");
+loadRenderedVueIfAvailable("#vue-user-overview", UserOverview);
+loadRenderedVueIfAvailable("#vue-course-overview", CourseOverview);
+loadRenderedVueIfAvailable("#vue-education-overview", EducationOverview);

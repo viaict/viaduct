@@ -1,4 +1,7 @@
 from app import rest_api
+from app.api.examination.course import CourseListResource, CourseResource
+from app.api.examination.education import EducationListResource, \
+    EducationResource
 from app.api.group.users import GroupUserListResource
 from app.api.pimpy.minutes import MinuteResource, GroupMinuteResource
 from app.api.pimpy.tasks import TaskListResource, TaskResource, \
@@ -37,6 +40,22 @@ rest_api.add_resource(UserResource,
 rest_api.add_resource(GroupUserListResource,
                       "/groups/<int:group_id>/users/",
                       endpoint="api.groups.users")
+
+# Coures
+rest_api.add_resource(CourseListResource,
+                      "/api/courses/",
+                      endpoint="api.courses")
+rest_api.add_resource(CourseResource,
+                      "/api/courses/<int:course_id>/",
+                      endpoint="api.course")
+
+# Education
+rest_api.add_resource(EducationListResource,
+                      "/api/educations/",
+                      endpoint="api.educations")
+rest_api.add_resource(EducationResource,
+                      "/api/educations/<int:education_id>/",
+                      endpoint="api.education")
 
 # TODO discuss routes, maybe put in single nested response.
 rest_api.add_resource(UserAddressResource,

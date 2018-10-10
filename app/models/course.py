@@ -9,8 +9,6 @@ education_course = db.Table(
 
 
 class Course(db.Model, BaseEntity):
-    __tablename__ = 'course'
-
     name = db.Column(db.String(128), nullable=False)
     description = db.Column(db.String(256), nullable=False)
 
