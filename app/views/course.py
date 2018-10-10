@@ -3,14 +3,11 @@ from flask import flash, session, redirect, render_template, request, \
     url_for
 from flask_babel import _
 
-from app.forms.examination import CourseForm
-from app.service import examination_service
-from app.exceptions.base import BusinessRuleException, \
-    DuplicateResourceException
-from app.roles import Roles
 from app.decorators import require_role
-import json
-
+from app.exceptions.base import DuplicateResourceException
+from app.forms.examination import CourseForm
+from app.roles import Roles
+from app.service import examination_service
 
 blueprint = Blueprint('course', __name__, url_prefix='/courses')
 
@@ -25,22 +22,6 @@ REDIR_PAGES = {'view': 'examination.view_examination',
 @require_role(Roles.EXAMINATION_WRITE)
 def view_courses():
     return render_template('course/view.htm')
-
-
-@blueprint.route('/api/get/', methods=['GET'])
-@require_role(Roles.EXAMINATION_WRITE)
-def get_courses():
-    courses = examination_service.find_all_courses()
-    courses_list = []
-
-    for course in courses:
-        courses_list.append(
-            [course.id,
-             course.name,
-             course.description if course.description != "" else "N/A"
-             ])
-
-    return json.dumps({"data": courses_list})
 
 
 @blueprint.route('/add/', methods=['GET', 'POST'])
@@ -88,26 +69,7 @@ def edit_course(course_id):
             session['examination_edit_id'])
 
     course = examination_service.get_course_by_id(course_id)
-    exam_count = examination_service.count_examinations_by_course(course_id)
-    if 'delete' in request.args:
-        try:
-            examination_service.delete_course(course_id)
-            flash(_('Course successfully deleted.'), 'success')
-        except BusinessRuleException as e:
-            flash(_(e.detail), 'danger')
-
-            form = CourseForm(title=course.name,
-                              description=course.description)
-            return render_template('course/edit.htm', new=False,
-                                   form=form,
-                                   course=course, redir=r,
-                                   exam_count=exam_count)
-
-        if 'origin' in session:
-            redir = session['origin']
-        else:
-            redir = url_for('examination.add')
-        return redirect(redir)
+    exam_count = examination_service.count_examinations_by_course(course)
 
     form = CourseForm(request.form)
     if form.validate_on_submit():

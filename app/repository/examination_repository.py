@@ -1,3 +1,6 @@
+from flask_sqlalchemy import Pagination
+from sqlalchemy import or_
+
 from app import db
 from app.models.course import Course
 from app.models.education import Education
@@ -40,10 +43,29 @@ def find_all_courses():
         .all()
 
 
+def paginated_search_all_courses(page: int, page_size: int = 15,
+                                 search: str = "") -> Pagination:
+    q = db.session.query(Course) \
+        .order_by(Course.name.asc())
+    if search is not "":
+        q = q.filter(or_(Course.name.ilike(f"%{search}%"),
+                         Course.description.ilike(f"%{search}%")))
+    return q.paginate(page, page_size, False)
+
+
 def find_all_educations():
     return db.session.query(Education)\
         .order_by(Education.name)\
         .all()
+
+
+def paginated_search_all_educations(page: int, page_size: int = 15,
+                                    search: str = "") -> Pagination:
+    q = db.session.query(Education) \
+        .order_by(Education.name.asc())
+    if search is not "":
+        q = q.filter(or_(Education.name.ilike(f"%{search}%")))
+    return q.paginate(page, page_size, False)
 
 
 def find_all_examinations(page_nr=1, per_page=15):
@@ -100,9 +122,7 @@ def delete_education(education_id):
     db.session.commit()
 
 
-def delete_course(course_id):
-    course = db.session.query(Course)\
-        .filter_by(id=course_id).first()
+def delete_course(course: Course):
     db.session.delete(course)
     db.session.commit()
 
