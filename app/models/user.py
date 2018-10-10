@@ -6,7 +6,6 @@ from app import db, constants
 from app.models.base_model import BaseEntity
 from app.models.education import Education
 from app.models.group import Group
-from app.service import group_service
 
 
 class AnonymousUser(AnonymousUserMixin):
@@ -49,31 +48,48 @@ class User(db.Model, UserMixin, BaseEntity):
     locale = db.Column(db.Enum(*list(constants.LANGUAGES.keys()),
                                name='locale'),
                        default="nl")
+
+    # Membership status
+    # TODO Rename to member
     has_paid = db.Column(db.Boolean, default=None)
+    paid_date = db.Column(db.DateTime)
+    honorary_member = db.Column(db.Boolean, default=False)
+    favourer = db.Column(db.Boolean, default=False)
+
+    # TODO REMOVE
     shirt_size = db.Column(db.Enum('Small', 'Medium', 'Large',
                                    name='user_shirt_size'))
+    # TODO REMOVE
     allergy = db.Column(db.String(1024))  # Allergy / medication
+    # TODO REMOVE
     diet = db.Column(db.Enum('Vegetarisch', 'Veganistisch', 'Fruitarier',
                              name='user_diet'))
+    # TODO REMOVE
     gender = db.Column(db.Enum('Man', 'Vrouw', 'Geen info',
                                name='user_sex'))
     phone_nr = db.Column(db.String(16))
+
+    # TODO REMOVE
     emergency_phone_nr = db.Column(db.String(16))
+
+    # TODO REMOVE not used.
     description = db.Column(db.String(1024))  # Description of user
+
+    # Study
     student_id = db.Column(db.String(256))
     education_id = db.Column(db.Integer, db.ForeignKey('education.id'))
-    created = db.Column(db.DateTime, default=datetime.now)
-    honorary_member = db.Column(db.Boolean, default=False)
-    favourer = db.Column(db.Boolean, default=False)
-    paid_date = db.Column(db.DateTime)
+
     birth_date = db.Column(db.Date)
     study_start = db.Column(db.Date)
     receive_information = db.Column(db.Boolean, default=False)
     disabled = db.Column(db.Boolean, default=False)
+
+    # Location
     address = db.Column(db.String(256))
     zip = db.Column(db.String(8))
     city = db.Column(db.String(256))
     country = db.Column(db.String(256), default='Nederland')
+
     alumnus = db.Column(db.Boolean, default=False)
     education = db.relationship(Education,
                                 backref=db.backref('user', lazy='dynamic'))
@@ -132,12 +148,6 @@ class User(db.Model, UserMixin, BaseEntity):
             group.add_email_to_maillist(new_email)
 
         self.email = new_email
-
-    def member_of_group(self, group_id: int) -> bool:
-        group = group_service.find_group_by_id(group_id)
-        if group:
-            return group.has_user(self)
-        return False
 
     @property
     def name(self):

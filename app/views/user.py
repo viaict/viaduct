@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import json
 import re
 from csv import writer
 from datetime import datetime
@@ -728,7 +727,7 @@ def change_password(user_id):
     return render_template("user/change_password.htm", form=form)
 
 
-@blueprint.route('/users/', methods=['GET', 'POST'])
+@blueprint.route('/users/', methods=['GET'])
 @require_role(Roles.USER_READ)
 def view():
     return render_template('user/view.htm')
@@ -782,33 +781,3 @@ def view_avatar(user_id=None):
         avatar_file, display_name=fn)
 
     return content, headers
-
-
-###
-# Here starts the public api for users
-###
-@blueprint.route('/users/get_users/', methods=['GET'])
-@require_role(Roles.USER_READ)
-def get_users():
-    users = User.query.all()
-    user_list = []
-
-    for user in users:
-        user_list.append(
-            [user.id,
-             user.email,
-             user.first_name,
-             user.last_name,
-             user.student_id,
-             user.education.name
-             if user.education else "",
-             "<i class='glyphicon glyphicon-ok'></i>"
-             if user.has_paid else "",
-             "<i class='glyphicon glyphicon-ok'></i>"
-             if user.honorary_member else "",
-             "<i class='glyphicon glyphicon-ok'></i>"
-             if user.favourer else "",
-             "<i class='glyphicon glyphicon-ok'></i>"
-             if user.alumnus else ""
-             ])
-    return json.dumps({"data": user_list})

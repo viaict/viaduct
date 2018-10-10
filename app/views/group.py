@@ -162,23 +162,6 @@ def view_users(group_id):
                            title='%s users' % (group.name))
 
 
-@blueprint.route('/groups/<int:group_id>/get_users/', methods=['GET'])
-@require_role(Roles.GROUP_READ)
-def get_group_users(group_id):
-    group = Group.query.filter(Group.id == group_id).first()
-    if not group:
-        flash('There is no such group.')
-        return redirect(url_for('group.view'))
-
-    users = group.users.all()
-
-    user_list = [[user.id, user.name]
-                 for user in users]
-    user_list.sort()
-
-    return json.dumps({"data": user_list})
-
-
 @blueprint.route('/groups/<int:group_id>/delete_users/', methods=['DELETE'])
 @require_role(Roles.GROUP_WRITE)
 def delete_group_users(group_id):
@@ -237,19 +220,3 @@ def group_api_get_users(group_id):
 
     res = [{'val': user.id, 'label': user.name} for user in users]
     return jsonify(users=res)
-
-
-@blueprint.route('/groups/<int:group_id>/users/add_users/', methods=['PUT'])
-@require_role(Roles.GROUP_WRITE)
-def group_api_add_users(group_id):
-    group = Group.query.get(group_id)
-
-    user_ids = request.get_json()['selected_ids']
-    add_users = User.query.filter(User.id.in_(user_ids)).all()
-
-    for user in add_users:
-        group.add_user(user)
-
-    db.session.add(group)
-    db.session.commit()
-    return "testestetsetset", 200

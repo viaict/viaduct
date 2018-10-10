@@ -6,7 +6,7 @@ import mimetypes
 import os
 from authlib.flask.oauth2 import ResourceProtector
 from authlib.specs.rfc6749 import grants, ClientAuthentication
-from flask import Flask, request, session
+from flask import Flask, request, session, Response
 from flask.json import JSONEncoder as BaseEncoder
 from flask_login import current_user
 from flask_restful import Api
@@ -30,7 +30,7 @@ logging.basicConfig(
 app = Flask(__name__)
 app.logger_name = 'app.flask'
 app.logger.setLevel(logging.NOTSET)
-rest_api = Api(app=app)
+rest_api = Api(app=app, prefix="/api")
 
 _logger = logging.getLogger('app')
 _logger.setLevel(logging.DEBUG)
@@ -153,6 +153,15 @@ def init_app(query_settings: bool = True, debug: bool = False) -> Flask:
             url = app.config['PRIVACY_POLICY_URL_EN']
 
         return dict(privacy_policy_url=url)
+
+    @app.after_request
+    def set_auth_cookie(response: Response):
+        from app.service import oauth_service
+
+        if current_user.is_authenticated:
+            token = oauth_service.get_manual_token(current_user.id)
+            response.set_cookie('access_token', token.access_token)
+        return response
 
     class JSONEncoder(BaseEncoder):
         """Custom JSON encoding."""

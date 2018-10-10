@@ -18,7 +18,7 @@ function getCookie(cname) {
 
 let instance = Axios.create({
     baseURL: window.location.origin,
-    timeout: 10000,
+    timeout: 100000,
     headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + getCookie('access_token')

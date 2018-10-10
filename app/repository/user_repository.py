@@ -1,3 +1,5 @@
+from flask_sqlalchemy import Pagination
+from sqlalchemy import or_
 from sqlalchemy.orm import raiseload
 
 from app import db
@@ -33,6 +35,17 @@ def find_by_id(user_id):
 
 def find_user_by_email(email):
     return db.session.query(User).filter_by(email=email).one_or_none()
+
+
+def paginated_search_all_users(page: int, page_size: int = 15,
+                               search: str = "") -> Pagination:
+    q = db.session.query(User).order_by(User.id.asc())
+    if search is not "":
+        q = q.filter(or_(User.email.ilike(f"%{search}%"),
+                         User.first_name.ilike(f"%{search}%"),
+                         User.last_name.ilike(f"%{search}%"),
+                         User.student_id.ilike(f"%{search}%")))
+    return q.paginate(page, page_size, False)
 
 
 def find_user_by_student_id(student_id, needs_confirmed=True):

@@ -302,11 +302,9 @@ class TestPimpyService(unittest.TestCase):
                 existing_group_id, 'foo,#,bar')
 
     def test_set_task_status(self):
-        mock_user = Mock(User)
         mock_task = Mock(Task)
 
         status = PimpyTaskStatus.NOT_STARTED.value
-        mock_user.member_of_group.return_value = True
 
         pimpy_service.set_task_status(mock_task, status)
         pimpy_repository_mock.update_status.assert_called_once_with(
@@ -319,8 +317,6 @@ class TestPimpyService(unittest.TestCase):
 
         status = PimpyTaskStatus.NOT_STARTED.value
 
-        mock_user.member_of_group.return_value = False
-
         pimpy_service.set_task_status(mock_task, status)
         pimpy_repository_mock.update_status.assert_called_once_with(
             mock_task, status)
@@ -331,8 +327,6 @@ class TestPimpyService(unittest.TestCase):
         mock_task.users = [mock_user]
 
         status = PimpyTaskStatus.MAX.value + 1
-
-        mock_user.member_of_group.return_value = False
 
         with self.assertRaises(ValidationException):
             pimpy_service.set_task_status(mock_task, status)

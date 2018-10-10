@@ -5,7 +5,9 @@ from flask_babel import lazy_gettext as _
 
 @unique
 class Scopes(Enum):
-    pimpy = _("Access to your Pimpy data")
+    pimpy = _("Access to your Pimpy")
+    user = _("Access to all users data")
+    group = _("Access to all groups data")
 
     @classmethod
     def choices(cls):
