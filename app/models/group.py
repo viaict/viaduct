@@ -4,23 +4,20 @@ from app import db
 from app.models.base_model import BaseEntity
 from app.utils import google
 
-user_group = db.Table(
-    'user_group',
-    db.Column('user_id', db.Integer,
-              db.ForeignKey('user.id'), nullable=False),
-    db.Column('group_id', db.Integer,
-              db.ForeignKey('group.id'), nullable=False)
-)
+
+class UserGroup(db.Model):
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
+                        primary_key=True, nullable=False)
+    group_id = db.Column(db.Integer, db.ForeignKey('group.id'),
+                         primary_key=True, nullable=False)
 
 
 class Group(db.Model, BaseEntity):
-    __tablename__ = 'group'
-
     prints = ('id', 'name')
 
     name = db.Column(db.String(200), unique=True)
 
-    users = db.relationship('User', secondary=user_group,
+    users = db.relationship('User', secondary='user_group',
                             backref=db.backref('groups', lazy='joined',
                                                order_by='Group.name'),
                             lazy='dynamic')
@@ -53,7 +50,7 @@ class Group(db.Model, BaseEntity):
         if not user:
             return False
         else:
-            return self.users.filter(user_group.c.user_id == user.id)\
+            return self.users.filter(UserGroup.user_id == user.id)\
                 .count() > 0
 
     def add_user(self, user):

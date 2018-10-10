@@ -1,37 +1,8 @@
 {% extends "content.htm" %}
 
-{% block includes %}
-    <script>var group_id = "{{group.id}}";</script>
-    <script src="{{static_url("/static/js/group/view_users.js")}}"></script>
-{% endblock %}
-
-{%block content %}
-<h1>{{ group.name }} {{_('Users')}}</h1>
-<table id="datatable" class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>{{_('Name')}}</th>
-        </tr>
-    </thead>
-    <tfoot>
-        <tr>
-            <th>ID</th>
-            <th>{{_('Name')}}</th>
-        </tr>
-    </tfoot>
-</table>
-
-<div class="btn-group">
-    <a href="{{ url_for('group.add_users', group_id=group.id) }}"
-       class="btn btn-success">
-        <i class="glyphicon glyphicon-plus"></i> {{_('Add')}}
-    </a>
-    <a id="delete" class="btn btn-danger">
-        <i class="glyphicon glyphicon-remove"></i> {{_('Delete')}}
-    </a>
-    <a href="{{ url_for('group.view') }}" class="btn btn-primary">
-        <i class="glyphicon glyphicon-arrow-left"/></i> {{_('Back')}}
-    </a>
-</div>
+{% block content %}
+    <div id="vue-group-user-overview">
+        <group-user-overview :group-id="{{ group.id }}" :group-name="'{{ group.name }}'"></group-user-overview>
+    </div>
+ 
 {% endblock %}

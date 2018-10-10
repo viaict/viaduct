@@ -142,19 +142,21 @@ def create_token(token, request):
                                          **token)
 
 
-def get_manual_token(user_id: int, scope: Scopes) -> OAuthToken:
+def get_manual_token(user_id: int) -> OAuthToken:
     client_id = 'VIADUCT'
     token = oauth_repository.get_token_by_user_id(user_id, client_id)
 
     if token is not None and not token.is_access_token_expired():
         return token
 
+    scopes = ' '.join([scope.name for scope in Scopes])
+
     token_val = generate_token(42)
     return oauth_repository.create_token(client_id=client_id, user_id=user_id,
                                          **{'access_token': token_val,
                                             'expires_in': 3600,
                                             'refresh_token': None,
-                                            'scope': scope.name,
+                                            'scope': scopes,
                                             'token_type': 'Bearer'})
 
 

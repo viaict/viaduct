@@ -1,6 +1,6 @@
 from authlib.flask.oauth2 import ResourceProtector
 from authlib.flask.oauth2 import current_token
-from flask import make_response
+from flask import make_response, logging
 from flask import request
 from flask_login import current_user
 from flask_restful import abort
@@ -8,6 +8,8 @@ from functools import wraps
 from marshmallow import ValidationError
 
 from app.service import role_service
+
+_logger = logging.getLogger(__name__)
 
 
 def require_role(*roles):
@@ -21,6 +23,7 @@ def require_role(*roles):
             if role_service.user_has_role(user, *roles):
                 return f(*args, **kwargs)
             else:
+                _logger.debug("Denied, missing " + ' '.join(roles))
                 abort(403)
 
         return wrapper
@@ -74,6 +77,21 @@ def json_schema(schema):
     return real_decorator
 
 
+def query_parameter_schema(schema):
+    def real_decorator(f):
+        @wraps(f)
+        def wrapper(self, *args, **kwargs):
+            try:
+                query_parameters = schema.load(request.args)
+                return f(self, *args, **query_parameters, **kwargs)
+            except ValidationError as e:
+                abort(400, errors=e.messages)
+
+        return wrapper
+
+    return real_decorator
+
+
 _require_oauth = ResourceProtector()
 
 
@@ -81,7 +99,8 @@ def require_oauth(scope=None):
     def decorator(f):
         @wraps(f)
         def wrapped(*args, **kwargs):
-            return _require_oauth(scope=scope.name)(f)(*args, **kwargs)
+            scope_name = scope.name if scope else scope
+            return _require_oauth(scope=scope_name)(f)(*args, **kwargs)
 
         return wrapped
 

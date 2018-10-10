@@ -1,5 +1,6 @@
 import bcrypt
-from flask_babel import _
+from flask_babel import lazy_gettext as _
+from flask_sqlalchemy import Pagination
 
 from app.enums import FileCategory
 from app.exceptions.base import ResourceNotFoundException, \
@@ -34,7 +35,7 @@ def get_user_by_email(email):
     return user
 
 
-def get_user_by_id(user_id):
+def get_user_by_id(user_id: int) -> User:
     """Retrieve the user by id, throw error if not found."""
     user = find_by_id(user_id)
     if not user:
@@ -125,6 +126,11 @@ def remove_student_id(user):
 def find_members():
     """Find all users which are marked as member."""
     return user_repository.find_members()
+
+
+def paginated_search_all_users(search: str, page: int) -> Pagination:
+    """Get all users with search and pagination."""
+    return user_repository.paginated_search_all_users(page, search=search)
 
 
 def get_user_by_login(email, password):
