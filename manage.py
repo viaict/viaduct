@@ -359,7 +359,12 @@ def createdb():
                 "SENTRY_DSN": "DUMMY",
                 "ENVIRONMENT": "Development",
                 "PRIVACY_POLICY_URL_EN": "/static/via_privacy_policy_nl.pdf",
-                "PRIVACY_POLICY_URL_NL": "/static/via_privacy_policy_en.pdf"}
+                "PRIVACY_POLICY_URL_NL": "/static/via_privacy_policy_en.pdf",
+                "ATHENAEUM_URL":
+                "https://www.athenaeum.nl/studieboeken/studieverenigingen/#A-48;36",
+                "SAML_PATH": "saml/develop/",
+                "SENTRY_DSN_FRONTEND":
+                "https://d20fbd1634454649bd8877942ebb5657@sentry.io/1285048"}
     for key, value in settings.items():
         if Setting.query.filter(Setting.key == key).count() > 1:
             print(f"-> {key} already exists")
