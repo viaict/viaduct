@@ -1,4 +1,4 @@
-import Axios from "axios";
+import Axios, { AxiosError } from "axios";
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -24,5 +24,14 @@ let instance = Axios.create({
         'Authorization': 'Bearer ' + getCookie('access_token')
     }
 });
+
+instance.interceptors.response.use(
+    response => response,
+    (error: AxiosError) => {
+        if (error.response && error.response.status == 401) {
+            alert("Token is expired. Please refresh the page.");
+        }
+    }
+);
 
 export default instance;

@@ -154,7 +154,7 @@ def get_manual_token(user_id: int) -> OAuthToken:
     token_val = generate_token(42)
     return oauth_repository.create_token(client_id=client_id, user_id=user_id,
                                          **{'access_token': token_val,
-                                            'expires_in': 3600,
+                                            'expires_in': 86400,
                                             'refresh_token': None,
                                             'scope': scopes,
                                             'token_type': 'Bearer'})
