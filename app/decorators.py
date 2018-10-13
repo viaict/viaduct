@@ -23,7 +23,8 @@ def require_role(*roles):
             if role_service.user_has_role(user, *roles):
                 return f(*args, **kwargs)
             else:
-                _logger.debug("Denied, missing " + ' '.join(roles))
+                _logger.debug("Denied, missing " + ' '.join(
+                    str(r) for r in roles))
                 abort(403)
 
         return wrapper

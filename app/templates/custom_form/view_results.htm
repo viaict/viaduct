@@ -52,7 +52,7 @@
             <th>Informatie</th>
             <th>Datum aanmelding</th>
             <th>Introducees</th>
-            {% if can_update_paid %}<th>Betaald</th>{% endif %}
+            <th>Betaald</th>
             <th></th>
         </tr>
     </thead>
@@ -93,10 +93,9 @@
                 </td>
                 <td>{{ result.time }}</td>
                 <td>+{{ result.introductions }}</td>
-                {% if can_update_paid %}
                 <td>
                     {% set paid_class = "btn-success" if result.has_paid else "btn-danger" %}
-                    <button title="Gebruiker als betaald aan- / afvinken" class="btn btn-sm has-paid {{ paid_class }}" data-form-id="{{ custom_form.id }}" data-submission-id="{{ result.id }}">
+                    <button title="Gebruiker als betaald aan- / afvinken" {% if not can_update_paid %} disabled {% endif %} class="btn btn-sm has-paid {{ paid_class }}" data-form-id="{{ custom_form.id }}" data-submission-id="{{ result.id }}">
                         {% if result.has_paid %}
                             <i class="glyphicon glyphicon-check"></i>
                         {% else %}
@@ -104,7 +103,6 @@
                         {% endif %}
                     </button>
                 </td>
-                {% endif %}
                 <td><button data-form-id="{{ custom_form.id }}" data-submission-id="{{ result.id }}" title="Inzending verwijderen" message="Hoi {{ current_user.first_name }}, weet je zeker dat je deze wilt verwijderen?" class="btn btn-sm btn-danger delete-form-result"><i class="glyphicon glyphicon-trash"></i></button></td>
             </tr>
         {% endfor %}

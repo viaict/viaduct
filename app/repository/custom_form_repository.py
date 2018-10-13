@@ -31,7 +31,7 @@ def get_active_followed_forms_by_user(user_id, group_ids):
     if group_ids is not None:
         q = q.filter(CustomForm.group_id.in_(group_ids))
 
-    return q.order_by(CustomForm.modified.desc()) \
+    return q.order_by(CustomForm.id.desc()) \
         .all()
 
 
@@ -52,7 +52,7 @@ def get_active_unfollowed_by_user(user_id, group_ids):
     if group_ids is not None:
         q = q.filter(CustomForm.group_id.in_(group_ids))
 
-    return q.order_by(CustomForm.modified.desc()) \
+    return q.order_by(CustomForm.id.desc()) \
         .all()
 
 
@@ -65,7 +65,7 @@ def get_inactive_forms(group_ids):
     if group_ids is not None:
         q = q.filter(CustomForm.group_id.in_(group_ids))
 
-    return q.order_by(CustomForm.modified.desc()) \
+    return q.order_by(CustomForm.id.desc()) \
         .all()
 
 
