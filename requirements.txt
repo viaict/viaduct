@@ -5,93 +5,93 @@
 #    pip-compile --output-file requirements.txt requirements.in
 #
 -e git+git://github.com/JelteF/mollie-api-python@dec672784ed35d8f010aba0a5e4b740b6e419aa7#egg=mollie_api_python
-alembic==0.9.6
+alembic==0.9.6            # via -r requirements.in, flask-migrate
 aniso8601==3.0.2          # via flask-restful
 argh==0.26.2              # via watchdog
 asn1crypto==0.24.0        # via cryptography
-authlib==0.8
-baas32==0.3.2
+authlib==0.8              # via -r requirements.in
+baas32==0.3.2             # via -r requirements.in
 babel==2.5.1              # via flask-babel
 blinker==1.4              # via flask-debugtoolbar
 certifi==2018.4.16        # via requests
 cffi==1.11.5              # via cryptography
 chardet==3.0.4            # via requests
 click==6.7                # via flask
-coverage==4.4.2
+coverage==4.4.2           # via -r requirements.in
 cryptography==2.2.2       # via authlib, pyopenssl
 defusedxml==0.5.0         # via python3-saml
-flake8-docstrings==1.3.0
+flake8-docstrings==1.3.0  # via -r requirements.in
 flake8-polyfill==1.0.2    # via flake8-docstrings, pep8-naming
-flake8==3.5.0
-flask-babel==0.11.2
-flask-caching==1.3.3
-flask-cors==3.0.3
-flask-debugtoolbar==0.10.1
-flask-failsafe==0.2
-flask-jsglue==0.3.1
-flask-login==0.4.1
-flask-migrate==2.1.1
-flask-oauthlib==0.9.4
-flask-restful==0.3.6
-flask-script==2.0.6
-flask-sqlalchemy==2.3.2
-flask-wtf==0.14.2
-flask==0.12.2
-fuzzywuzzy==0.16.0
-google-api-python-client==1.6.4
-hashfs==0.7.0
-httplib2==0.10.3          # via google-api-python-client, oauth2client
+flake8==3.5.0             # via -r requirements.in, flake8-docstrings, flake8-polyfill
+flask-babel==0.11.2       # via -r requirements.in
+flask-caching==1.3.3      # via -r requirements.in
+flask-cors==3.0.3         # via -r requirements.in
+flask-debugtoolbar==0.10.1  # via -r requirements.in
+flask-failsafe==0.2       # via -r requirements.in
+flask-jsglue==0.3.1       # via -r requirements.in
+flask-login==0.4.1        # via -r requirements.in
+flask-migrate==2.1.1      # via -r requirements.in
+flask-oauthlib==0.9.4     # via -r requirements.in
+flask-restful==0.3.6      # via -r requirements.in
+flask-script==2.0.6       # via -r requirements.in
+flask-sqlalchemy==2.3.2   # via -r requirements.in, flask-migrate
+flask-wtf==0.14.2         # via -r requirements.in
+flask==0.12.2             # via -r requirements.in, flask-babel, flask-caching, flask-cors, flask-debugtoolbar, flask-failsafe, flask-jsglue, flask-login, flask-migrate, flask-oauthlib, flask-restful, flask-script, flask-sqlalchemy, flask-wtf
+fuzzywuzzy==0.16.0        # via -r requirements.in
+google-api-python-client==1.6.4  # via -r requirements.in
+hashfs==0.7.0             # via -r requirements.in
+httplib2==0.18.0          # via google-api-python-client, oauth2client
 idna==2.6                 # via cryptography, requests
 isodate==0.6.0            # via python3-saml
 itsdangerous==0.24        # via flask, flask-debugtoolbar
 jinja2==2.10              # via flask, flask-babel
 lxml==4.2.4               # via xmlsec
 mako==1.0.7               # via alembic
-markdown==2.6.11
+markdown==2.6.11          # via -r requirements.in
 markupsafe==1.0           # via jinja2, mako
-marshmallow==3.0.0b12
+marshmallow==3.6.0        # via -r requirements.in
 mccabe==0.6.1             # via flake8
 mypy-extensions==0.4.1    # via mypy
-mypy==0.630
+mypy==0.630               # via -r requirements.in
 oauth2client==4.1.2       # via google-api-python-client
 oauthlib==2.0.6           # via flask-oauthlib, requests-oauthlib
 pathtools==0.1.2          # via watchdog
-pep8-naming==0.5.0
-pep8==1.7.1
-pillow==5.0.0
+pep8-naming==0.5.0        # via -r requirements.in
+pep8==1.7.1               # via -r requirements.in
+pillow==5.0.0             # via -r requirements.in, reportlab
 pkgconfig==1.4.0          # via xmlsec
-psycopg2==2.7.3.2
-py-bcrypt==0.4
+psycopg2==2.7.3.2         # via -r requirements.in
+py-bcrypt==0.4            # via -r requirements.in
 pyasn1-modules==0.2.1     # via oauth2client
 pyasn1==0.4.2             # via oauth2client, pyasn1-modules, rsa
 pycodestyle==2.3.0        # via flake8
 pycparser==2.18           # via cffi
 pydocstyle==2.1.1         # via flake8-docstrings
-pyflakes==1.6.0
-pyopenssl==18.0.0
-pypdf2==1.26.0
-python-dateutil==2.6.1
+pyflakes==1.6.0           # via -r requirements.in, flake8
+pyopenssl==18.0.0         # via -r requirements.in
+pypdf2==1.26.0            # via -r requirements.in
+python-dateutil==2.6.1    # via -r requirements.in, alembic
 python-editor==1.0.3      # via alembic
-python-levenshtein==0.12.0
-python-magic==0.4.15
-python3-saml==1.4.1
+python-levenshtein==0.12.0  # via -r requirements.in
+python-magic==0.4.15      # via -r requirements.in
+python3-saml==1.4.1       # via -r requirements.in
 pytz==2017.3              # via babel, flask-restful
 pyyaml==3.12              # via watchdog
-raven==6.4.0
-reportlab==3.4.0
+raven==6.4.0              # via -r requirements.in
+reportlab==3.4.0          # via -r requirements.in
 requests-oauthlib==0.8.0  # via flask-oauthlib
-requests==2.18.4
+requests==2.18.4          # via -r requirements.in, authlib, requests-oauthlib
 rsa==3.4.2                # via oauth2client
 scandir==1.7              # via hashfs
 six==1.11.0               # via cryptography, flask-cors, flask-restful, google-api-python-client, isodate, oauth2client, pydocstyle, pyopenssl, python-dateutil
 snowballstemmer==1.2.1    # via pydocstyle
-speaklater==1.3
-sqlalchemy==1.2.0
+speaklater==1.3           # via -r requirements.in
+sqlalchemy==1.2.0         # via -r requirements.in, alembic, flask-sqlalchemy
 typed-ast==1.1.0          # via mypy
-unidecode==1.0.22
+unidecode==1.0.22         # via -r requirements.in
 uritemplate==3.0.0        # via google-api-python-client
 urllib3==1.22             # via requests
-watchdog==0.8.3
+watchdog==0.8.3           # via -r requirements.in
 werkzeug==0.14.1          # via flask, flask-caching, flask-debugtoolbar
-wtforms==2.2.1
+wtforms==2.2.1            # via -r requirements.in, flask-wtf
 xmlsec==1.3.3             # via python3-saml
